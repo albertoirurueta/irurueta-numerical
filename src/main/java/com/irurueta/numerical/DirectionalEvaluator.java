@@ -1,0 +1,135 @@
+/**
+ * @file
+ * This file contains implementation of
+ * com.irurueta.numerical.DirectionalEvaluator
+ * 
+ * @author Alberto Irurueta (alberto@irurueta.com)
+ * @date May 1, 2012
+ */
+package com.irurueta.numerical;
+
+/**
+ * This class evaluates a multidimensional function along a line, such line is
+ * defined by an input point and a given direction.
+ * Using provided input point and direction, the multidimensional function's 
+ * input parameters are determined so they all lay on a line.
+ */
+public class DirectionalEvaluator {
+    
+    /**
+     * Listener to evaluate a multidimensional function.
+     */
+    protected MultiDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Point used as a reference to determine the function's input parameters
+     * along a line.
+     */
+    protected double[] point;
+    
+    /**
+     * Vector indicating the direction of the line where the function is
+     * evaluated.
+     */
+    protected double[] direction;
+    
+    /**
+     * Point currently being evaluated in the multidimensional function.
+     * This is used internally
+     */
+    protected double[] p;
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a multidimensional function
+     * @param point Point used as a reference to determine the function's input
+     * parameters along a line.
+     * @param direction Vector indicating the direction of the line where the 
+     * function is evaluated.
+     * @throws IllegalArgumentException Raised if point and direction don't have
+     * the same length
+     */
+    public DirectionalEvaluator(
+            MultiDimensionFunctionEvaluatorListener listener, double[] point, 
+            double[] direction) throws IllegalArgumentException{
+        
+        setPointAndDirection(point, direction);
+        this.listener = listener;        
+        p = new double[point.length];
+    }
+    
+    /**
+     * Returns listener to evaluate a multidimensional function.
+     * @return Listener to evaluate a multidimensional function.
+     */
+    public MultiDimensionFunctionEvaluatorListener getListener(){
+        return listener;
+    }
+    
+    /**
+     * Sets listener to evaluate a multidimensional function
+     * @param listener  Listener to evaluate a multidimensional function
+     */
+    public void setListener(MultiDimensionFunctionEvaluatorListener listener){
+        this.listener = listener;
+    }
+    
+    /**
+     * Returns point used as a reference to determine the function's input
+     * parameters along a line.
+     * @return Point used as a reference to determine the function's input
+     * parameters along a line
+     */
+    public double[] getPoint(){
+        return point;
+    }
+    
+    /**
+     * Returns array indicating the direction of the line where the function is 
+     * evaluated.
+     * @return Array indicating the direction of the line where the function is
+     * evaluated.
+     */
+    public double[] getDirection(){
+        return direction;
+    }
+        
+    /**
+     * Sets point used as a reference to determine the function's input 
+     * parameters along a line and the direction of the line where the 
+     * function is evaluated.
+     * @param point Point used as a reference to determine the function's input
+     * parameters along a line.
+     * @param direction Array indicating the direction of the line where the
+     * function is evaluated.
+     * @throws IllegalArgumentException Raised if point and direction don't have
+     * the same length
+     */
+    public final void setPointAndDirection(double[] point, double[] direction) 
+            throws IllegalArgumentException{
+        if(point.length != direction.length) 
+            throw new IllegalArgumentException();
+        
+        this.point = point;
+        this.direction = direction;
+    }
+    
+    /**
+     * Evaluates a function using current listener at a distance x from current
+     * point using current direction
+     * @param x Distance from provided point using provided direction where 
+     * function is being evaluated
+     * @return Result of evaluating the function
+     * @throws EvaluationException Thrown if function evaluation fails
+     */
+    public double evaluateAt(double x) throws EvaluationException{        
+        for(int i = 0; i < point.length; i++){
+            p[i] = point[i] + x * direction[i];
+        }
+        try{
+            return listener.evaluate(p);
+        }catch(Throwable t){
+            throw new EvaluationException(t);
+        }
+    }    
+}

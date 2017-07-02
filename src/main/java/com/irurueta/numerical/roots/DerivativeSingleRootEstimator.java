@@ -1,0 +1,221 @@
+/**
+ * @file
+ * This file contains implementation of
+ * com.irurueta.numerical.roots.DerivativeSingleRootEstimator
+ * 
+ * @author Alberto Irurueta (alberto@irurueta.com)
+ * @date May 12, 2012
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Abstract class to find function roots of a single dimension function using
+ * also its derivative information.
+ * This class is meant to be extended by final implementations.
+ */
+public abstract class DerivativeSingleRootEstimator 
+    extends BracketedSingleRootEstimator{
+    
+    /**
+     * Listener to evaluate a function's derivative. If the function's 
+     * derivative is not known (e.g. a closed expression is not available), then
+     * a DerivativeEstimator can be used inside the derivative listener 
+     * implementation.
+     */
+    protected SingleDimensionFunctionEvaluatorListener derivativeListener;
+    
+    /**
+     * Constructor
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     * root will be searched.
+     * @param maxEvalPoint Largest value inside the bracket of values where the
+     * root will be searched.
+     * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
+     * maxEvalPoint
+     */
+    public DerivativeSingleRootEstimator(double minEvalPoint, 
+            double maxEvalPoint) throws InvalidBracketRangeException{
+        super(minEvalPoint, maxEvalPoint);
+        derivativeListener = null;
+    }
+    
+    /**
+     * Constructor
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     * root will be searched. The largest value inside the bracket will be
+     * Double.MAX_VALUE
+     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
+     * the maximum value a double can contain, which is Double.MAX_VALUE
+     */    
+    public DerivativeSingleRootEstimator(double minEvalPoint)
+            throws InvalidBracketRangeException{
+        super(minEvalPoint);
+        derivativeListener = null;
+    }
+    
+    /**
+     * Empty constructor
+     */    
+    public DerivativeSingleRootEstimator(){
+        super();
+        derivativeListener = null;
+    }
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a single dimension function f(x)
+     * to find its roots.
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     * root will be searched.
+     * @param maxEvalPoint Largest value inside the bracket of values where the
+     * root will be searched.
+     * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
+     * maxEvalPoint
+     */    
+    public DerivativeSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener, 
+            double minEvalPoint, double maxEvalPoint)
+            throws InvalidBracketRangeException{
+        super(listener, minEvalPoint, maxEvalPoint);
+        derivativeListener = null;
+    }
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a single dimension function f(x)
+     * to find its roots.
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     * root will be searched. The largest value inside the bracket will be
+     * Double.MAX_VALUE
+     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
+     * the maximum value a double can contain, which is Double.MAX_VALUE
+     */    
+    public DerivativeSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener,
+            double minEvalPoint) throws InvalidBracketRangeException{
+        super(listener, minEvalPoint);
+        derivativeListener = null;
+    }
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a single dimension function f(x)
+     * to find its roots.
+     */    
+    public DerivativeSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener){
+        super(listener);
+        derivativeListener = null;
+    }
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a single dimension function f(x)
+     * to find its roots.
+     * @param derivativeListener Listener to evaluate the function's derivative
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     * root will be searched.
+     * @param maxEvalPoint Largest value inside the bracket of values where the
+     * root will be searched.
+     * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
+     * maxEvalPoint
+     */        
+    public DerivativeSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener,
+            SingleDimensionFunctionEvaluatorListener derivativeListener,
+            double minEvalPoint, double maxEvalPoint)
+            throws InvalidBracketRangeException{
+        super(listener, minEvalPoint, maxEvalPoint);
+        this.derivativeListener = derivativeListener;
+    }
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a single dimension function f(x)
+     * to find its roots.
+     * @param derivativeListener Listener to evaluate the function's derivative
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     * root will be searched. The largest value inside the bracket will be
+     * Double.MAX_VALUE
+     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
+     * the maximum value a double can contain, which is Double.MAX_VALUE
+     */        
+    public DerivativeSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener,
+            SingleDimensionFunctionEvaluatorListener derivativeListener,
+            double minEvalPoint)
+            throws InvalidBracketRangeException{
+        super(listener, minEvalPoint);
+        this.derivativeListener = derivativeListener;
+    }
+    
+    /**
+     * Constructor
+     * @param listener Listener to evaluate a single dimension function f(x)
+     * to find its roots.
+     * @param derivativeListener Listener to evaluate the function's derivative
+     */    
+    public DerivativeSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener,
+            SingleDimensionFunctionEvaluatorListener derivativeListener){
+        super(listener);
+        this.derivativeListener = derivativeListener;
+    }
+    
+    /**
+     * Returns derivative listener to evaluate a function's derivative. 
+     * If the function's derivative is not known (e.g. a closed expression is 
+     * not available), then a DerivativeEstimator can be used inside the 
+     * derivative listener implementation.
+     * @return Derivative listener
+     * @throws NotAvailableException if listener is not available for retrieval.
+     */
+    public SingleDimensionFunctionEvaluatorListener getDerivativeListener()
+            throws NotAvailableException{
+        if(!isDerivativeListenerAvailable()) throw new NotAvailableException();
+        return derivativeListener;
+    }
+    
+    /**
+     * Sets derivative listener to evaluate a function's derivative.
+     * If the function's derivative is not known (e.g. a closed expression is 
+     * not available), then a DerivativeEstimator can be used inside the 
+     * derivative listener implementation.
+     * @param derivativeListener Derivative listener to be set.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setDerivativeListener(
+            SingleDimensionFunctionEvaluatorListener derivativeListener)
+            throws LockedException{
+        if(isLocked()) throw new LockedException();
+        this.derivativeListener = derivativeListener;
+    }
+    
+    /**
+     * Returns boolean indicating whether the derivative listener has been 
+     * provided and is available for retrieval.
+     * @return true if derivative listener is available, false otherwise
+     */
+    public boolean isDerivativeListenerAvailable(){
+        return derivativeListener != null;
+    }
+    
+    /**
+     * Returns boolean indicating whether enough parameters have been provided
+     * in order to start the estimation of the roots of a function.
+     * An instance of this class is assumed to be ready when a listener, a
+     * derivative listener and a bracket have been provided or computed.
+     * @return True if this instance is ready to start the root estimation,
+     * false otherwise.
+     */
+    @Override
+    public boolean isReady(){
+        return isListenerAvailable() && isBracketAvailable() &&
+                isDerivativeListenerAvailable();
+    }
+}
