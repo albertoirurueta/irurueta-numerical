@@ -714,8 +714,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             
             boolean improved;    //indicates if result improved            
             boolean continueIteration = true;
-            /*while(((inliersBest < inliersMin) || (currentIter < kNStar)) &&
-                    (nIters > currentIter) && (currentIter < mMaxIterations))*/
+
             //iterate until the expected number of inliers or the estimated
             //number of iterations is reached                  
             while (continueIteration) {
@@ -919,9 +918,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             listener.onEstimateEnd(this);
             
             return bestResult;
-        } catch (SubsetSelectorException e) {
-            throw new RobustEstimatorException(e);
-        } catch (SortingException e) {
+        } catch (SubsetSelectorException | SortingException e) {
             throw new RobustEstimatorException(e);
         } finally {
             mLocked = false;
