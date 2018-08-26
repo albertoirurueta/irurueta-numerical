@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.numerical.robust.PROMedSRobustEstimator
@@ -41,6 +41,7 @@ import java.util.List;
  * known beforehand although one can be provided as well.
  * @param <T> type of object to be estimated.
  */
+@SuppressWarnings("WeakerAccess")
 public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Constant defining default confidence of the estimated result, which is
@@ -158,7 +159,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * are inliers.
      */
     public static final double MIN_INLER_THRESHOLD = 0.0;
-    
+
     /**
      * Indicates whether the inlier threshold will be used to find inliers along
      * with their median of residuals.
@@ -169,7 +170,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * Constant to estimate standard deviation of residuals based on their 
      * median.
      */
-    public static final double STD_CONSTANT = 1.4826;    
+    public static final double STD_CONSTANT = 1.4826;
     
     /**
      * Chi squared.
@@ -679,7 +680,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             int sampleSizeStar = totalSamples; //termination length
             int inliersNStar = 0;   //number of inliers found within the first
                                     //nStar data points
-            int inliersBest = 0;    //best number of inliers found so far
+            int inliersBest = -1;    //best number of inliers found so far
                                     //(store the model that goes with it)
             double threshold = Double.MAX_VALUE; //threshold to stop algorithm
             int inliersMin = (int)((1.0 - mMaxOutliersProportion) * 
@@ -798,6 +799,8 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                             bestResult = iterResult;                        
 
                             keepInliersData(inliersData, totalSamples);
+                            //create new instance after keeping inlier data
+                            inliersData = inliersData.createCopy();
 
                             //select new termination length sampleSizeStar if possible
                             //only when a new sample is better than the others found
@@ -1234,7 +1237,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * Constructor.
          * @param totalSamples total number of samples.
          */
-        protected PROMedSInliersData(int totalSamples) {
+        PROMedSInliersData(int totalSamples) {
             mBestMedianResidual = mStandardDeviation = mMedianResidual = 
                     mEstimatedThreshold = Double.MAX_VALUE;
             mInliersLmeds = new BitSet(totalSamples);
@@ -1244,51 +1247,45 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             mNumInliers = 0;     
             mMedianResidualImproved = false;
         }
-        
+
         /**
-         * Updates data contained in this instance.
-         * @param bestMedianResidual best median of error found so far taking 
-         * into account all provided samples.
-         * @param standardDeviation standard deviation of error among all 
-         * provided samples respect to currently estimated result.
-         * @param inliersLmeds stores which samples are considered inliers when
-         * LMedS inlier model is used.
-         * @param inliersMsac stores which samples are considered inliers when
-         * MSAC inlier model is used.
-         * @param lmedsInlierModelEnabled indicates whether the LMedS or MSAC
-         * inlier model is used.
-         * @param residuals residuals obtained for each sample of data.
-         * @param numInliers number of inliers found on current iteration.
-         * @param medianResidual median of error found on current iteration 
-         * among all provided samples.
-         * @param estimatedThreshold estimated threshold to determine whether 
-         * samples are inliers or not.
-         * @param medianResidualImproved indicates whether median residual 
-         * computed in current iteration has improved respect to previous
-         * iteration.
+         * Returns efficient array indicating which samples are considered
+         * inliers and which ones aren't.
+         * @return array indicating which samples are considered inliers and
+         * which ones aren't.
          */
-        protected void update(double bestMedianResidual, double standardDeviation,
-                BitSet inliersLmeds, BitSet inliersMsac, 
-                boolean lmedsInlierModelEnabled, double[] residuals, 
-                int numInliers, double medianResidual, 
-                double estimatedThreshold, boolean medianResidualImproved) {
-            mBestMedianResidual = bestMedianResidual;
-            mStandardDeviation = standardDeviation;
-            mLmedsInlierModelEnabled = lmedsInlierModelEnabled;
-            mResiduals = residuals;
-            mNumInliers = numInliers;
-            mMedianResidual = medianResidual;
-            mEstimatedThreshold = estimatedThreshold;
-            mMedianResidualImproved = medianResidualImproved;
+        @Override
+        public BitSet getInliers() {
+            return mLmedsInlierModelEnabled ? mInliersLmeds : mInliersMsac;
         }
-        
+
+        /**
+         * Creates a copy of inlier data.
+         * @return copy of inlier data.
+         */
+        PROMedSInliersData createCopy() {
+            PROMedSInliersData result = new PROMedSInliersData(mResiduals.length);
+            result.mBestMedianResidual = mBestMedianResidual;
+            result.mStandardDeviation = mStandardDeviation;
+            result.mMedianResidual = mMedianResidual;
+            result.mEstimatedThreshold = mEstimatedThreshold;
+            result.mInliersLmeds = (BitSet)mInliersLmeds.clone();
+            result.mInliersMsac = (BitSet)mInliersMsac.clone();
+            result.mLmedsInlierModelEnabled = mLmedsInlierModelEnabled;
+            result.mResiduals = Arrays.copyOf(mResiduals, mResiduals.length);
+            result.mNumInliers = mNumInliers;
+            result.mMedianResidualImproved = mMedianResidualImproved;
+
+            return result;
+        }
+
         /**
          * Returns best median of error found so far taking into account all 
          * provided samples.
          * @return best median of error found so far taking into account all
          * provided samples.
          */
-        public double getBestMedianResidual() {
+        double getBestMedianResidual() {
             return mBestMedianResidual;
         }
         
@@ -1298,26 +1295,15 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return standard deviation of error among all provided samples
          * respect to currently estimated result.
          */
-        public double getStandardDeviation() {
+        double getStandardDeviation() {
             return mStandardDeviation;
-        }
-
-        /**
-         * Returns efficient array indicating which samples are considered 
-         * inliers and which ones aren't.
-         * @return array indicating which samples are considered inliers and 
-         * which ones aren't.
-         */
-        @Override
-        public BitSet getInliers() {
-            return mLmedsInlierModelEnabled ? mInliersLmeds : mInliersMsac;
         }
 
         /**
          * Returns inliers considering LMedS model.
          * @return inliers considering LMedS model.
          */
-        protected BitSet getInliersLMedS() {
+        BitSet getInliersLMedS() {
             return mInliersLmeds;
         }
 
@@ -1325,7 +1311,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * Returns inliers considering MSAC model.
          * @return inliers considering MSAC model.
          */
-        protected BitSet getInliersMSAC() {
+        BitSet getInliersMSAC() {
             return mInliersMsac;
         }
 
@@ -1335,7 +1321,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * if false only median of residuals was used.
          * @return true if LMedS model is used, false if MSAC model is used.
          */
-        public boolean isLMedSInlierModelEnabled() {
+        boolean isLMedSInlierModelEnabled() {
             return mLmedsInlierModelEnabled;
         }
         
@@ -1364,8 +1350,45 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * current iteration has improved respect to previous iterations.
          * @return true if median residual improved, false otherwise.
          */
-        public boolean isMedianResidualImproved() {
+        boolean isMedianResidualImproved() {
             return mMedianResidualImproved;
+        }
+
+        /**
+         * Updates data contained in this instance.
+         * @param bestMedianResidual best median of error found so far taking
+         * into account all provided samples.
+         * @param standardDeviation standard deviation of error among all
+         * provided samples respect to currently estimated result.
+         * @param inliersLmeds stores which samples are considered inliers when
+         * LMedS inlier model is used.
+         * @param inliersMsac stores which samples are considered inliers when
+         * MSAC inlier model is used.
+         * @param lmedsInlierModelEnabled indicates whether the LMedS or MSAC
+         * inlier model is used.
+         * @param residuals residuals obtained for each sample of data.
+         * @param numInliers number of inliers found on current iteration.
+         * @param medianResidual median of error found on current iteration
+         * among all provided samples.
+         * @param estimatedThreshold estimated threshold to determine whether
+         * samples are inliers or not.
+         * @param medianResidualImproved indicates whether median residual
+         * computed in current iteration has improved respect to previous
+         * iteration.
+         */
+        protected void update(double bestMedianResidual, double standardDeviation,
+                              BitSet inliersLmeds, BitSet inliersMsac,
+                              boolean lmedsInlierModelEnabled, double[] residuals,
+                              int numInliers, double medianResidual,
+                              double estimatedThreshold, boolean medianResidualImproved) {
+            mBestMedianResidual = bestMedianResidual;
+            mStandardDeviation = standardDeviation;
+            mLmedsInlierModelEnabled = lmedsInlierModelEnabled;
+            mResiduals = residuals;
+            mNumInliers = numInliers;
+            mMedianResidual = medianResidual;
+            mEstimatedThreshold = estimatedThreshold;
+            mMedianResidualImproved = medianResidualImproved;
         }
     }
     
