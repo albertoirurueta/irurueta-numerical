@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.HistogramMaximumLikelihoostEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 5, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -20,8 +27,9 @@ import java.util.Arrays;
  * samples as a series of Gaussian functions with a small sigma and centered at 
  * the exact value of the sample.
  */
+@SuppressWarnings("WeakerAccess")
 public class HistogramMaximumLikelihoodEstimator 
-    extends MaximumLikelihoodEstimator{
+    extends MaximumLikelihoodEstimator {
     
     /**
      * Default number of bins to be used on the histogram.
@@ -64,9 +72,9 @@ public class HistogramMaximumLikelihoodEstimator
     private double[] gaussian;
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public HistogramMaximumLikelihoodEstimator(){
+    public HistogramMaximumLikelihoodEstimator() {
         super();
         numberOfBins = DEFAULT_NUMBER_OF_BINS;
         bins = null;
@@ -74,7 +82,7 @@ public class HistogramMaximumLikelihoodEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @param numberOfBins Number of bins to be used on the histogram.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
@@ -82,7 +90,7 @@ public class HistogramMaximumLikelihoodEstimator
      * minimum allowed number of bins.
      */
     public HistogramMaximumLikelihoodEstimator(double gaussianSigma,
-            int numberOfBins) throws IllegalArgumentException{
+            int numberOfBins) throws IllegalArgumentException {
         super(gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -90,7 +98,7 @@ public class HistogramMaximumLikelihoodEstimator
     }
             
     /**
-     * Constructor
+     * Constructor.
      * @param inputData Array containing input data where most likely value must
      * be estimated from.
      * @param gaussianSigma Gaussian sigma to be used on each sample.
@@ -101,7 +109,7 @@ public class HistogramMaximumLikelihoodEstimator
      */    
     public HistogramMaximumLikelihoodEstimator(double[] inputData,
             double gaussianSigma, int numberOfBins) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputData, gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -109,7 +117,7 @@ public class HistogramMaximumLikelihoodEstimator
     }
 
     /**
-     * Constructor
+     * Constructor.
      * @param minValue Minimum value assumed to be contained within input data
      * array.
      * @param maxValue Maximum value assumed to be contained within input data
@@ -124,7 +132,7 @@ public class HistogramMaximumLikelihoodEstimator
      */        
     public HistogramMaximumLikelihoodEstimator(double minValue,
             double maxValue, double[] inputData, double gaussianSigma,
-            int numberOfBins) throws IllegalArgumentException{
+            int numberOfBins) throws IllegalArgumentException {
         super(minValue, maxValue, inputData, gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -135,7 +143,7 @@ public class HistogramMaximumLikelihoodEstimator
     /**
      * Returns method to be used for maximum likelihood estimation, which for
      * this class is MaximumLikelihoodEstimatorMethod.
-     * HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR
+     * HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR.
      * @return Method for maximum likelihood estimation.
      */    
     @Override
@@ -165,9 +173,10 @@ public class HistogramMaximumLikelihoodEstimator
      * the allowed minimum.
      */
     private void internalSetNumberOfBins(int numberOfBins)
-            throws IllegalArgumentException{
-        if(numberOfBins < MIN_NUMBER_OF_BINS) 
+            throws IllegalArgumentException {
+        if (numberOfBins < MIN_NUMBER_OF_BINS) {
             throw new IllegalArgumentException();
+        }
         
         this.numberOfBins = numberOfBins;
     }
@@ -185,8 +194,10 @@ public class HistogramMaximumLikelihoodEstimator
      * the allowed minimum.
      */
     public void setNumberOfBins(int numberOfBins) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetNumberOfBins(numberOfBins);
     }
 
@@ -198,27 +209,33 @@ public class HistogramMaximumLikelihoodEstimator
      * This method can only be executed when computations finish and this
      * instance becomes unlocked.
      * @throws NotReadyException Exception raised if this instance is not yet
-     * ready
+     * ready.
      * @see #isReady()
      */    
     @Override
     public double estimate() throws LockedException, NotReadyException {
         
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         
-        if(!areMinMaxAvailable) computeMinMaxValues();
+        if (!areMinMaxAvailable) {
+            computeMinMaxValues();
+        }
         
-        if((maxValue - minValue) < EPS){
+        if ((maxValue - minValue) < EPS) {
             //min-max limits are almost equal, so we return it as the solution
             locked = false;
             return (minValue + maxValue) * 0.5;
         }
         
         //Create histogram (initialized to 0.0)
-        if(bins == null || bins.length != numberOfBins){
+        if (bins == null || bins.length != numberOfBins) {
             bins = new double[numberOfBins];            
         }
         Arrays.fill(bins, 0.0);
@@ -227,7 +244,7 @@ public class HistogramMaximumLikelihoodEstimator
         //Vector contianing gaussians being added to histogram
         //Data is added to histogram as if it was convoluted with a gaussian
         //to add smoothness to results
-        if(gaussian == null || gaussian.length != numberOfBins){
+        if (gaussian == null || gaussian.length != numberOfBins) {
             gaussian = new double[numberOfBins];
         }
         
@@ -237,10 +254,10 @@ public class HistogramMaximumLikelihoodEstimator
         //iterate over input data to add data to histogram
         int nDataElems = inputData.length;
         double gaussianCenterPos;
-        for(int i = 0; i < nDataElems; i++){
-            gaussianCenterPos = (inputData[i] - minValue) / delta;
+        for (double data : inputData) {
+            gaussianCenterPos = (data - minValue) / delta;
             computeGaussian(gaussian, gaussianCenterPos);
-            
+
             //add gaussian centered at input data value to histogram bins
             ArrayUtils.sum(bins, gaussian, bins);
             //line above is equal to:
@@ -252,8 +269,8 @@ public class HistogramMaximumLikelihoodEstimator
         //find location of maximum in histogram
         double maxBin = 0.0, maxFuncValue;
         int maxPos = 0;
-        for(int i = 0; i < numberOfBins; i++){
-            if(bins[i] > maxBin){
+        for (int i = 0; i < numberOfBins; i++) {
+            if (bins[i] > maxBin) {
                 maxBin = bins[i];
                 maxPos = i;
             }
@@ -272,11 +289,11 @@ public class HistogramMaximumLikelihoodEstimator
      * @param gaussian Array containing Gaussian values
      * @param centerPos Value where Gaussian is centered
      */
-    protected void computeGaussian(double[] gaussian, double centerPos){
+    protected void computeGaussian(double[] gaussian, double centerPos) {
         int length = gaussian.length;
         
         double x;
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             x = ((double)i) - centerPos;
             gaussian[i] = Math.exp(-x * x / 
                     (2.0 * gaussianSigma * gaussianSigma)) / 

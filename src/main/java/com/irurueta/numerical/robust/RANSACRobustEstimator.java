@@ -1,15 +1,23 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.robust.RANSACRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date April 9, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -26,6 +34,7 @@ import java.util.List;
  * results.
  * @param <T> type of object to be estimated.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
     
     /**
@@ -330,7 +339,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
             int currentIter = 0;
             //reusable list that will contain preliminar solutions on each 
             //iteration
-            List<T> iterResults = new ArrayList<T>();            
+            List<T> iterResults = new ArrayList<>();
             bestResult = null;
             int currentInliers;
             float previousProgress = 0.0f, progress;
@@ -367,76 +376,76 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                 //compute solution for current iteration
                 listener.estimatePreliminarSolutions(subsetIndices, 
                         iterResults);
-                
-                if (iterResults != null) {
-                    for (T iterResult : iterResults) {
-                        //compute number of inliers
-                        currentInliers = 0;
-                        for (int i = 0; i < totalSamples; i++) {
-                            double error = listener.computeResidual(iterResult, 
-                                    i);
-                            if(error <= threshold) {
-                                currentInliers++;
-                                //keep inlier data if needed
-                                if (inliers != null) {
-                                    inliers.set(i);
-                                }                                
-                            } else {
-                                //outlier
-                                if (inliers != null) {
-                                    inliers.clear(i);
-                                }
+
+                for (T iterResult : iterResults) {
+                    //compute number of inliers
+                    currentInliers = 0;
+                    for (int i = 0; i < totalSamples; i++) {
+                        double error = listener.computeResidual(iterResult,
+                                i);
+                        if(error <= threshold) {
+                            currentInliers++;
+                            //keep inlier data if needed
+                            if (inliers != null) {
+                                inliers.set(i);
                             }
-                            
-                            if (residuals != null) {
-                                residuals[i] = error;
+                        } else {
+                            //outlier
+                            if (inliers != null) {
+                                inliers.clear(i);
                             }
                         }
 
-                        //save result that produces the largest number of inliers 
-                        //and update number of iterations
-                        if (currentInliers > bestNumInliers) {
-                            //update best number of inliers
-                            bestNumInliers = currentInliers;
-                            //keep current result
-                            bestResult = iterResult;
-                            
-                            //update best inlier data
-                            if(mBestInliersData != null) {
-                                mBestInliersData.update(inliers, residuals, 
-                                        bestNumInliers);
-                            }
-                            
-                            //recompute number of times the algorithm needs to be 
-                            //executed depending on current number of inliers to 
-                            //achieve with probability mConfidence that we have 
-                            //inliers and probability 1 - mConfidence that we have 
-                            //outliers
-                            double probSubsetAllInliers = Math.pow(
-                                    (double)bestNumInliers / (double)totalSamples, 
-                                    (double)subsetSize);
+                        if (residuals != null) {
+                            residuals[i] = error;
+                        }
+                    }
 
-                            if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                                    Double.isNaN(probSubsetAllInliers)) {
+                    //save result that produces the largest number of inliers
+                    //and update number of iterations
+                    if (currentInliers > bestNumInliers) {
+                        //update best number of inliers
+                        bestNumInliers = currentInliers;
+                        //keep current result
+                        bestResult = iterResult;
+
+                        //update best inlier data
+                        if(mBestInliersData != null) {
+                            mBestInliersData.update(inliers, residuals,
+                                    bestNumInliers);
+                        }
+
+                        //recompute number of times the algorithm needs to be
+                        //executed depending on current number of inliers to
+                        //achieve with probability mConfidence that we have
+                        //inliers and probability 1 - mConfidence that we have
+                        //outliers
+                        double probSubsetAllInliers = Math.pow(
+                                (double)bestNumInliers / (double)totalSamples,
+                                (double)subsetSize);
+
+                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
+                                Double.isNaN(probSubsetAllInliers)) {
+                            newNIters = Integer.MAX_VALUE;
+                        } else {
+                            double logProbSomeOutliers =
+                                    Math.log(1.0 - probSubsetAllInliers);
+                            if (Math.abs(logProbSomeOutliers) <
+                                    Double.MIN_VALUE ||
+                                    Double.isNaN(logProbSomeOutliers)) {
                                 newNIters = Integer.MAX_VALUE;
                             } else {
-                                double logProbSomeOutliers = 
-                                        Math.log(1.0 - probSubsetAllInliers);
-                                if (Math.abs(logProbSomeOutliers) < 
-                                        Double.MIN_VALUE ||
-                                        Double.isNaN(logProbSomeOutliers)) {
-                                    newNIters = Integer.MAX_VALUE;
-                                } else {
-                                    newNIters = (int)Math.ceil(Math.abs(
-                                            Math.log(1.0 - mConfidence) / 
-                                            logProbSomeOutliers));
-                                }
+                                newNIters = (int)Math.ceil(Math.abs(
+                                        Math.log(1.0 - mConfidence) /
+                                        logProbSomeOutliers));
                             }
-                            if(newNIters < nIters) nIters = newNIters;                    
+                        }
+                        if (newNIters < nIters) {
+                            nIters = newNIters;
                         }
                     }
                 }
-                
+
                 if (nIters > 0) {
                     progress = Math.min((float)currentIter / (float)nIters, 
                             1.0f);
@@ -453,7 +462,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
             }
             
             //no solution could be found after completing all iterations
-            if(bestResult == null) {
+            if (bestResult == null) {
                 throw new RobustEstimatorException();
             }
                         
@@ -538,18 +547,14 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                     mInliers.set(i, inliers.get(i));
                     mResiduals[i] = residuals[i];
                 }
-            } else if ((mInliers != null && inliers != null) && 
-                    (mResiduals == null || residuals == null)) {
+            } else if (mInliers != null && inliers != null) {
                 //update inliers but not the residuals
                 for (int i = 0; i < totalSamples; i++) {
                     mInliers.set(i, inliers.get(i));
                 }
-            } else if ((mInliers == null || inliers == null) && 
-                    (mResiduals != null && residuals != null)) {
+            } else if (mResiduals != null && residuals != null) {
                 //update residuals but not inliers
-                for (int i = 0; i < totalSamples; i++) {
-                    mResiduals[i] = residuals[i];
-                }
+                System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);
             }
             mNumInliers = numInliers;
         }

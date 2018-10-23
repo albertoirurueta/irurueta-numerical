@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.signal.processing.KalmanFilter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 11, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.signal.processing;
 
@@ -12,6 +19,7 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
@@ -49,34 +57,35 @@ import java.io.Serializable;
  * current system state neighborhood, in this case A, B, H (and, probably, 
  * Q and R) should be updated on every step.
  */
+@SuppressWarnings("WeakerAccess")
 public class KalmanFilter implements Serializable {
     
     /**
      * Independent process noise variance assumed when no process noise 
      * covariance matrix is provided.
      * The lower the process variance the smoother the estimated state will 
-     * typically be
+     * typically be.
      */
     public static final double DEFAULT_PROCESS_NOISE_VARIANCE = 1e-6;
     
     /**
      * Independent measurement noise variance assumed when no measurement noise
-     * covariance matrix is provided
+     * covariance matrix is provided.
      */
     public static final double DEFAULT_MEASUREMENT_NOISE_VARIANCE = 1e-1;
     
     /**
-     * Number of measurement vector dimensions (measure parameters)
+     * Number of measurement vector dimensions (measure parameters).
      */
     private int mp;
     
     /**
-     * Number of state vector dimensions (dynamic parameters)
+     * Number of state vector dimensions (dynamic parameters).
      */
     private int dp;
     
     /**
-     * Number of control vector dimensions (control parameters)
+     * Number of control vector dimensions (control parameters).
      */
     private int cp;
  
@@ -91,27 +100,27 @@ public class KalmanFilter implements Serializable {
     private Matrix statePost;
     
     /**
-     * State transition matrix (A)
+     * State transition matrix (A).
      */
     private Matrix transitionMatrix;
     
     /**
-     * Control matrix (B) (it is not used if there is no control)
+     * Control matrix (B) (it is not used if there is no control).
      */
     private Matrix controlMatrix;
     
     /**
-     * Measurement matrix (H)
+     * Measurement matrix (H).
      */
     private Matrix measurementMatrix;
     
     /**
-     * Process noise covariance matrix (Q)
+     * Process noise covariance matrix (Q).
      */
     private Matrix processNoiseCov;
     
     /**
-     * Measurement noise covariance matrix (R)
+     * Measurement noise covariance matrix (R).
      */
     private Matrix measurementNoiseCov;
     
@@ -133,66 +142,66 @@ public class KalmanFilter implements Serializable {
     //temporary matrices to be reused to avoid unnecessary reallocations
     
     /**
-     * Temporary matrix 1
+     * Temporary matrix 1.
      */
     private Matrix temp1;
     
     /**
-     * Temporary matrix 2
+     * Temporary matrix 2.
      */
     private Matrix temp2;
     
     /**
-     * Temporary matrix 3
+     * Temporary matrix 3.
      */
     private Matrix temp3;
     
     /**
-     * Temporary matrix 4
+     * Temporary matrix 4.
      */
     private Matrix temp4;
     
     /**
-     * Temporary matrix 5
+     * Temporary matrix 5.
      */
     private Matrix temp5;
     
     /**
-     * Temporary matrix 6
+     * Temporary matrix 6.
      */
     private Matrix temp6;
     
     /**
-     * Temporary matrix 7
+     * Temporary matrix 7.
      */
     private Matrix temp7;
     
     /**
-     * Temporary matrix 8
+     * Temporary matrix 8.
      */
     private Matrix temp8;
     
     /**
-     * Allocates a Kalman filter and all its matrices and initializes them
-     * @param dynamParams number of dynamic parameters (state vector dimensions)
+     * Allocates a Kalman filter and all its matrices and initializes them.
+     * @param dynamParams number of dynamic parameters (state vector dimensions).
      * @param measureParams number of measurement parameters (measurement vector 
-     * dimensions)
-     * @param controlParams number of control parameters (control vector 
+     * dimensions).
+     * @param controlParams number of control parameters (control vector.
      * dimensions). If zero, no control parameters are used. If less than zero, 
-     * it is assumed that this is equal to the number of dynamic parameters
+     * it is assumed that this is equal to the number of dynamic parameters.
      * @throws IllegalArgumentException if either the number of dynamic or 
-     * measurement parameters is zero or negative
-     * @throws SignalProcessingException if something else fails
+     * measurement parameters is zero or negative.
+     * @throws SignalProcessingException if something else fails.
      */
     public KalmanFilter(int dynamParams, int measureParams, int controlParams)
-            throws IllegalArgumentException, SignalProcessingException{
+            throws IllegalArgumentException, SignalProcessingException {
         
-        if(dynamParams <= 0 || measureParams <= 0){
+        if (dynamParams <= 0 || measureParams <= 0) {
             throw new IllegalArgumentException(
                     "Kalman filter: Illegal dimensions");
         }
         
-        if(controlParams < 0){
+        if (controlParams < 0) {
             controlParams = dynamParams;
         }
         
@@ -201,7 +210,7 @@ public class KalmanFilter implements Serializable {
         mp = measureParams;
         cp = controlParams;
         
-        try{
+        try {
             statePre = new Matrix(dp, 1);
         
             //following variables must be initialized properly in advance
@@ -221,9 +230,9 @@ public class KalmanFilter implements Serializable {
             
             gain = new Matrix(dp, mp);
             
-            if(cp > 0){
+            if (cp > 0) {
                 controlMatrix = new Matrix(dp, cp);
-            }else{
+            } else {
                 controlMatrix = null; //no control parameters
             }
             
@@ -233,38 +242,38 @@ public class KalmanFilter implements Serializable {
             temp4 = new Matrix(mp, dp);
             temp5 = new Matrix(mp, 1);
             
-            if(cp > 0){
+            if (cp > 0) {
                 temp6 = new Matrix(dp, 1);
             }
             
             temp7 = new Matrix(dp, dp);
             temp8 = new Matrix(dp, mp);
-        }catch(AlgebraException ex){
+        } catch (AlgebraException ex) {
             throw new SignalProcessingException(ex);
         }
     }
     
     /**
-     * Constructor in case of no control parameters
-     * @param dynamParams number of dynamic parameters (state vector dimensions)
+     * Constructor in case of no control parameters.
+     * @param dynamParams number of dynamic parameters (state vector dimensions).
      * @param measureParams number of measurement parameters (measurement vector 
-     * dimensions)
+     * dimensions).
      * @throws IllegalArgumentException if either the number of dynamic or 
-     * measurement parameters is zero or negative
-     * @throws SignalProcessingException if something else fails
+     * measurement parameters is zero or negative.
+     * @throws SignalProcessingException if something else fails.
      */
     public KalmanFilter(int dynamParams, int measureParams)
-            throws IllegalArgumentException, SignalProcessingException{
+            throws IllegalArgumentException, SignalProcessingException {
         this(dynamParams, measureParams, 0);
     }
     
     /**
      * Estimates subsequent model state without control parameteres.
-     * @return estimated state
+     * @return estimated state.
      * @see #predict(Matrix)
-     * @throws SignalProcessingException if something fails
+     * @throws SignalProcessingException if something fails.
      */
-    public Matrix predict() throws SignalProcessingException{
+    public Matrix predict() throws SignalProcessingException {
         return predict(null);
     }
     
@@ -296,14 +305,14 @@ public class KalmanFilter implements Serializable {
      * SignalProcessingException will be raised.
      * @return estimated state as a 1 column matrix having dp rows (where dp = 
      * number of dynamic parameters).
-     * @throws SignalProcessingException if something fails
+     * @throws SignalProcessingException if something fails.
      */
-    public Matrix predict(Matrix control) throws SignalProcessingException{
-        try{
+    public Matrix predict(Matrix control) throws SignalProcessingException {
+        try {
             //(1) Project the state ahead
             //update the state: x'(k) = A*x(k)
             transitionMatrix.multiply(statePost, statePre);
-            if(control != null && cp > 0){
+            if (control != null && cp > 0) {
                 //x'(k) = x'(k) + B*u(k)
                 controlMatrix.multiply(control, temp6);
                 statePre.add(temp6);
@@ -319,7 +328,7 @@ public class KalmanFilter implements Serializable {
             errorCovPre = temp1;
             
             return statePre;
-        }catch(AlgebraException e){
+        } catch(AlgebraException e) {
             throw new SignalProcessingException(e);
         }
     }
@@ -342,12 +351,12 @@ public class KalmanFilter implements Serializable {
      * The function stores adjusted state at <code>statePost</code> and returns
      * it on output.
      * @param measurement matrix containing the measurement vector. Matrix must 
-     * have 1 column and mp rows (mp = measurement paramenters)
-     * @return adjusted model state
-     * @throws SignalProcessingException if something fails
+     * have 1 column and mp rows (mp = measurement paramenters).
+     * @return adjusted model state.
+     * @throws SignalProcessingException if something fails.
      */
-    public Matrix correct(Matrix measurement) throws SignalProcessingException{
-        try{
+    public Matrix correct(Matrix measurement) throws SignalProcessingException {
+        try {
             // (1) compute the Kalman gain
             //temp2 = H*P'(k)
             measurementMatrix.multiply(errorCovPre, temp2);
@@ -383,7 +392,7 @@ public class KalmanFilter implements Serializable {
             errorCovPost.add(errorCovPre);
             
             return statePost;
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new SignalProcessingException(e);
         }
     }
@@ -392,7 +401,7 @@ public class KalmanFilter implements Serializable {
      * Obtains the number of measurement vector dimensions (measure parameters).
      * @return number of measurement vector dimensions (measure parameters)
      */
-    public int getMeasureParameters(){
+    public int getMeasureParameters() {
         return mp;
     }
     
@@ -437,7 +446,7 @@ public class KalmanFilter implements Serializable {
      * Obtains the number of state vector dimensions (dynamic parameters).
      * @return number of state vector dimensions (dynamic parameters)
      */
-    public int getDynamicParameters(){
+    public int getDynamicParameters() {
         return dp;
     }
 
@@ -445,7 +454,7 @@ public class KalmanFilter implements Serializable {
      * Obtains the number of control vector dimensions (control parameters).
      * @return number of control vector dimensions (control parameters)
      */
-    public int getControlParameters(){
+    public int getControlParameters() {
         return cp;
     }
     
@@ -455,7 +464,7 @@ public class KalmanFilter implements Serializable {
      * number of dynamic parameters
      * @return predicted state
      */
-    public Matrix getStatePre(){
+    public Matrix getStatePre() {
         return statePre;
     }
     
@@ -469,7 +478,7 @@ public class KalmanFilter implements Serializable {
      * columnd and dp rows
      */
     public void setStatePre(Matrix statePre) throws IllegalArgumentException{
-        if(statePre.getColumns() != 1 || statePre.getRows() != dp){
+        if (statePre.getColumns() != 1 || statePre.getRows() != dp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
         this.statePre = statePre;
@@ -481,7 +490,7 @@ public class KalmanFilter implements Serializable {
      * number of dynamic parameters
      * @return corrected state
      */
-    public Matrix getStatePost(){
+    public Matrix getStatePost() {
         return statePost;
     }
     
@@ -494,8 +503,8 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have 1
      * columnd and dp rows
      */
-    public void setStatePost(Matrix statePost) throws IllegalArgumentException{
-        if(statePost.getColumns() != 1 || statePost.getRows() != dp){
+    public void setStatePost(Matrix statePost) throws IllegalArgumentException {
+        if (statePost.getColumns() != 1 || statePost.getRows() != dp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
         this.statePost = statePost;
@@ -509,7 +518,7 @@ public class KalmanFilter implements Serializable {
      * previous state. It is used for prediction purposes
      * @return state transition matrix
      */
-    public Matrix getTransitionMatrix(){
+    public Matrix getTransitionMatrix() {
         return transitionMatrix;
     }
     
@@ -525,10 +534,10 @@ public class KalmanFilter implements Serializable {
      * and columns
      */
     public void setTransitionMatrix(Matrix transitionMatrix) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         
-        if(transitionMatrix.getRows() != dp || 
-                transitionMatrix.getColumns() != dp){
+        if (transitionMatrix.getRows() != dp ||
+                transitionMatrix.getColumns() != dp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
         this.transitionMatrix = transitionMatrix;
@@ -540,7 +549,7 @@ public class KalmanFilter implements Serializable {
      * dynamic parameters and cp is the number of control parameters.
      * @return control matrix
      */
-    public Matrix getControlMatrix(){
+    public Matrix getControlMatrix() {
         return controlMatrix;
     }
     
@@ -556,13 +565,13 @@ public class KalmanFilter implements Serializable {
      * rows and cp columns
      */
     public void setControlMatrix(Matrix controlMatrix) 
-            throws IllegalArgumentException{
-        if(cp > 0){
-            if(controlMatrix == null || (controlMatrix.getRows() != dp || 
-                controlMatrix.getColumns() != cp)){
+            throws IllegalArgumentException {
+        if (cp > 0) {
+            if (controlMatrix == null || (controlMatrix.getRows() != dp ||
+                controlMatrix.getColumns() != cp)) {
                 throw new IllegalArgumentException("Wrong matrix size");
             }
-        }else{
+        } else {
             //control matrix cannot be set
             throw new IllegalArgumentException("Control matrix cannot be set");
         }
@@ -580,7 +589,7 @@ public class KalmanFilter implements Serializable {
      * identity.
      * @return measurement matrix
      */
-    public Matrix getMeasurementMatrix(){
+    public Matrix getMeasurementMatrix() {
         return measurementMatrix;
     }
     
@@ -599,9 +608,9 @@ public class KalmanFilter implements Serializable {
      * and dp columns.
      */
     public void setMeasurementMatrix(Matrix measurementMatrix) 
-            throws IllegalArgumentException{
-        if(measurementMatrix.getRows() != mp || 
-                measurementMatrix.getColumns() != dp){
+            throws IllegalArgumentException {
+        if (measurementMatrix.getRows() != mp ||
+                measurementMatrix.getColumns() != dp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
         this.measurementMatrix = measurementMatrix;
@@ -615,7 +624,7 @@ public class KalmanFilter implements Serializable {
      * the number of dynamic parameters containing the system state.
      * @return the process noise covariance matrix
      */
-    public Matrix getProcessNoiseCov(){
+    public Matrix getProcessNoiseCov() {
         return processNoiseCov;
     }
     
@@ -640,10 +649,10 @@ public class KalmanFilter implements Serializable {
      * rows and columns or it is not symmetric
      */
     public void setProcessNoiseCov(Matrix processNoiseCov) 
-            throws IllegalArgumentException{
-        if(processNoiseCov.getRows() != dp || 
+            throws IllegalArgumentException {
+        if (processNoiseCov.getRows() != dp ||
                 processNoiseCov.getColumns() != dp || 
-                !Utils.isSymmetric(processNoiseCov)){
+                !Utils.isSymmetric(processNoiseCov)) {
             throw new IllegalArgumentException(
                     "Wrong matrix size or matrix is not symmetric");
         }
@@ -664,7 +673,7 @@ public class KalmanFilter implements Serializable {
      * data.
      * @return the measurement noise covariance matrix
      */
-    public Matrix getMeasurementNoiseCov(){
+    public Matrix getMeasurementNoiseCov() {
         return measurementNoiseCov;
     }
     
@@ -685,10 +694,10 @@ public class KalmanFilter implements Serializable {
      * rows and columns or it is not symmetric
      */
     public void setMeasurementNoiseCov(Matrix measurementNoiseCov) 
-            throws IllegalArgumentException{
-        if(measurementNoiseCov.getRows() != mp ||
+            throws IllegalArgumentException {
+        if (measurementNoiseCov.getRows() != mp ||
                 measurementNoiseCov.getColumns() != mp ||
-                !Utils.isSymmetric(measurementNoiseCov)){
+                !Utils.isSymmetric(measurementNoiseCov)) {
             throw new IllegalArgumentException(
                     "Wrong matrix size or matrix is not symmetric");
         }
@@ -703,7 +712,7 @@ public class KalmanFilter implements Serializable {
      * is the number of dynamic parameters of the system state
      * @return the priori error estimate covariance matrix
      */
-    public Matrix getErrorCovPre(){
+    public Matrix getErrorCovPre() {
         return errorCovPre;
     }
     
@@ -722,9 +731,9 @@ public class KalmanFilter implements Serializable {
      * and columns or it is not symmetric
      */
     public void setErrorCovPre(Matrix errorCovPre) 
-            throws IllegalArgumentException{
-        if(errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||
-                !Utils.isSymmetric(errorCovPre)){
+            throws IllegalArgumentException {
+        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||
+                !Utils.isSymmetric(errorCovPre)) {
             throw new IllegalArgumentException(
                     "Wrong matrix size or matrix is not symmetric");
         }
@@ -740,7 +749,7 @@ public class KalmanFilter implements Serializable {
      * dynamic parameters and mp is the number of measure parameters.
      * @return the Kalman gain matrix
      */
-    public Matrix getGain(){
+    public Matrix getGain() {
         return gain;
     }
     
@@ -759,8 +768,8 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp rows
      * and mp columns
      */
-    public void setGain(Matrix gain) throws IllegalArgumentException{
-        if(gain.getRows() != dp || gain.getColumns() != mp){
+    public void setGain(Matrix gain) throws IllegalArgumentException {
+        if (gain.getRows() != dp || gain.getColumns() != mp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
         this.gain = gain;
@@ -773,7 +782,7 @@ public class KalmanFilter implements Serializable {
      * is the number of dynamic parameters of the system state
      * @return the priori error estimate covariance matrix
      */
-    public Matrix getErrorCovPost(){
+    public Matrix getErrorCovPost() {
         return errorCovPost;
     }
     
@@ -792,9 +801,9 @@ public class KalmanFilter implements Serializable {
      * and columns or it is not symmetric
      */
     public void setErrorCovPost(Matrix errorCovPost) 
-            throws IllegalArgumentException{
-        if(errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||
-                !Utils.isSymmetric(errorCovPost)){
+            throws IllegalArgumentException {
+        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||
+                !Utils.isSymmetric(errorCovPost)) {
             throw new IllegalArgumentException(
                     "Wrong matrix size or matrix is not symmetric");
         }

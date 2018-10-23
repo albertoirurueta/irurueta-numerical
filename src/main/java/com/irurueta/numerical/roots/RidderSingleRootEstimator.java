@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.RidderSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 12, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -19,22 +26,23 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * and maximum evaluation points.
  * This class searches for REAL roots only!
  * This implementation is based on Numerical Recipes 3rd ed. Secion 9.2.1, page
- * 452
+ * 452.
  */
-public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
+@SuppressWarnings("WeakerAccess")
+public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
    
     /**
-     * Maximum number of iterations
+     * Maximum number of iterations.
      */    
     public static final int MAXIT = 60;
     
     /**
-     * Constant defining default accuracy of the estimated root
+     * Constant defining default accuracy of the estimated root.
      */    
     public static final double DEFAULT_TOLERANCE = 1e-6;
     
     /**
-     * Constant defining minimum allowed tolerance
+     * Constant defining minimum allowed tolerance.
      */     
     public static final double MIN_TOLERANCE = 0.0;
     
@@ -46,31 +54,31 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
     private double tolerance;
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */    
-    public RidderSingleRootEstimator(){
+    public RidderSingleRootEstimator() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
      * root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
      * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root
+     * @param tolerance Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
-     * @throws IllegalArgumentException Raised if tolerance is negative
+     * maxEvalPoint.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
      */     
     public RidderSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint,
             double tolerance) throws InvalidBracketRangeException,
-            IllegalArgumentException{
+            IllegalArgumentException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -79,10 +87,10 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
-     * the tolerance value
+     * the tolerance value.
      * @return Tolerance value.
      */       
-    public double getTolerance(){
+    public double getTolerance() {
         return tolerance;
     }
     
@@ -97,8 +105,10 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
      * negative.
      */        
     private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException{
-        if(tolerance < MIN_TOLERANCE) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
         this.tolerance = tolerance;
     }
     
@@ -113,8 +123,10 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
      * negative.
      */       
     public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetTolerance(tolerance);
     }
     
@@ -131,9 +143,13 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
      */         
     @Override
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+            RootEstimationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
                 
@@ -141,89 +157,89 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
         double x2 = maxEvalPoint;
         double xacc = tolerance;
         double fl, fh;
-        try{
+        try {
             fl = listener.evaluate(x1);
             fh = listener.evaluate(x2);
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new RootEstimationException(t);
         }
         
         double ans;
         boolean found = false;
-        if((fl > 0.0 && fh < 0.0) || (fl < 0.0 && fh > 0.0)){
+        if ((fl > 0.0 && fh < 0.0) || (fl < 0.0 && fh > 0.0)) {
             double xl = x1;
             double xh = x2;
             ans = -9.99e99;
-            try{
-                for(int j = 0; j < MAXIT; j++){
+            try {
+                for (int j = 0; j < MAXIT; j++) {
                     double xm = 0.5 * (xl + xh);
                     double fm = listener.evaluate(xm);
                     double s = Math.sqrt(fm * fm - fl * fh);
-                    if(s == 0.0){
+                    if (s == 0.0) {
                         found = true;
                         break;
                     }
                     double xnew = xm + (xm - xl) * ((fl >= fh ? 1.0 : -1.0) * 
                             fm / s);
-                    if(Math.abs(xnew - ans) <= xacc){
+                    if (Math.abs(xnew - ans) <= xacc) {
                         //result found
                         found = true;
                         break;
                     }
                     ans = xnew;
                     double fnew = listener.evaluate(ans);
-                    if(sign(fm, fnew) != fm){
+                    if (sign(fm, fnew) != fm) {
                         xl = xm;
                         fl = fm;
                         xh = ans;
                         fh = fnew;
-                    }else if(sign(fl, fnew) != fl){
+                    } else if (sign(fl, fnew) != fl) {
                         xh = ans;
                         fh = fnew;
-                    }else if(sign(fh, fnew) != fh){
+                    } else if (sign(fh, fnew) != fh) {
                         xl = ans;
                         fl = fnew;
-                    }else{
+                    } else {
                         //never get here
                         locked = false;
                         throw new RootEstimationException();
                     }
-                    if(Math.abs(xh - xl) <= xacc){
+                    if (Math.abs(xh - xl) <= xacc) {
                         //result found
                         found = true;
                         break;
                     }
                 
                 }
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 throw new RootEstimationException(t);
             }
-            if(!found){
+            if (!found) {
                 //too many iterations and error exceeds desired tolerance
                 locked = false;
                 throw new RootEstimationException();
             }
-        }else{
-            if(fl == 0.0){
+        } else {
+            if (fl == 0.0) {
                 //result found
                 found = true;
                 ans = x1;
-            }else if(fh == 0.0){
+            } else if (fh == 0.0) {
                 //result found
                 found = true;
                 ans = x2;
-            }else{
+            } else {
                 locked = false;
                 throw new RootEstimationException();
             }
         }
-        if(found){
+        if (found) {
             //result found
             root = ans;
             rootAvailable = true;
             locked = false;
             
-        }else{
+        } else {
             locked = false;
             throw new RootEstimationException();
         }
@@ -237,7 +253,7 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator{
      * @return True if this instance is ready, false otherwise.
      */      
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
     }
 }

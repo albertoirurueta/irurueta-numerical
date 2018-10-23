@@ -1,22 +1,26 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.Polynomial
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 2, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials;
 
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Complex;
 import com.irurueta.numerical.NumericalException;
-import com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator;
-import com.irurueta.numerical.roots.LaguerrePolynomialRootsEstimator;
-import com.irurueta.numerical.roots.PolynomialRootsEstimator;
-import com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator;
-import com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator;
+import com.irurueta.numerical.roots.*;
 import com.irurueta.numerical.signal.processing.Convolver1D;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,7 @@ import java.util.List;
  * Contains a polynomial and common operations done with polynomials.
  * This implementation only supports polynomials with real parameters.
  */
+@SuppressWarnings("WeakerAccess")
 public class Polynomial implements Serializable {
     
     /**
@@ -63,7 +68,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if number of parameters is less than 1.
      */
     public Polynomial(int numberOfParameters) throws IllegalArgumentException {
-        if(numberOfParameters < MIN_VALID_POLY_PARAMS_LENGTH) {
+        if (numberOfParameters < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException(
                     "at least 1 parameter is required");
         }
@@ -103,7 +108,7 @@ public class Polynomial implements Serializable {
      */
     public final void setPolyParams(double... polyParams) 
             throws IllegalArgumentException {
-        if(polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
+        if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException("must have at least length 1");
         }
         
@@ -135,7 +140,7 @@ public class Polynomial implements Serializable {
         int minLength = Math.min(mPolyParams.length, other.mPolyParams.length);
         
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != maxLength) {
+        if (resultPolyParams.length != maxLength) {
             resultPolyParams = new double[maxLength];
         }
         
@@ -143,18 +148,18 @@ public class Polynomial implements Serializable {
             resultPolyParams[i] = mPolyParams[i] + other.mPolyParams[i];
         }
         
-        if(mPolyParams.length > other.mPolyParams.length) {
-            if(result != this) {
+        if (mPolyParams.length > other.mPolyParams.length) {
+            if (result != this) {
                 //this is longer than other
-                for (int i = minLength; i < maxLength; i++) {
-                    resultPolyParams[i] = mPolyParams[i];
-                }
+                if (maxLength - minLength >= 0)
+                    System.arraycopy(mPolyParams, minLength, resultPolyParams,
+                            minLength, maxLength - minLength);
             }
         } else {
             //other is longer than this
-            for (int i = minLength; i < maxLength; i++) {
-                resultPolyParams[i] = other.mPolyParams[i];
-            }            
+            if (maxLength - minLength >= 0)
+                System.arraycopy(other.mPolyParams, minLength, resultPolyParams,
+                        minLength, maxLength - minLength);
         }
         
         result.mPolyParams = resultPolyParams;
@@ -193,7 +198,7 @@ public class Polynomial implements Serializable {
         int minLength = Math.min(mPolyParams.length, other.mPolyParams.length);
         
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != maxLength) {
+        if (resultPolyParams.length != maxLength) {
             resultPolyParams = new double[maxLength];
         }
                 
@@ -201,12 +206,12 @@ public class Polynomial implements Serializable {
             resultPolyParams[i] = mPolyParams[i] - other.mPolyParams[i];
         }
         
-        if(mPolyParams.length > other.mPolyParams.length) {
-            if(result != this) {
+        if (mPolyParams.length > other.mPolyParams.length) {
+            if (result != this) {
                 //this is longer than other
-                for (int i = minLength; i < maxLength; i++) {
-                    resultPolyParams[i] = mPolyParams[i];
-                }
+                if (maxLength - minLength >= 0)
+                    System.arraycopy(mPolyParams, minLength, resultPolyParams,
+                            minLength, maxLength - minLength);
             }
         } else {
             //other is longer than this
@@ -249,7 +254,7 @@ public class Polynomial implements Serializable {
         int thisLength = mPolyParams.length;
         int otherLength = other.mPolyParams.length;
         int resultLength = thisLength + otherLength - 1;
-        if(result.mPolyParams.length != resultLength || result == this) {
+        if (result.mPolyParams.length != resultLength || result == this) {
             //if length does not match or result is stored in this polynomial, 
             //create new polynomial array of parameters
             result.mPolyParams = Convolver1D.convolve(mPolyParams, 
@@ -293,7 +298,7 @@ public class Polynomial implements Serializable {
      */
     public void multiplyByScalar(double scalar, Polynomial result) {
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != mPolyParams.length || result == this) {
+        if (resultPolyParams.length != mPolyParams.length || result == this) {
             resultPolyParams = new double[mPolyParams.length];
         }
         ArrayUtils.multiplyByScalar(mPolyParams, scalar, resultPolyParams);
@@ -353,7 +358,7 @@ public class Polynomial implements Serializable {
 
                 //copy real parameters into complex values
                 Complex[] polyParams = new Complex[mPolyParams.length];
-                for(int i = 0; i < mPolyParams.length; i++) {
+                for (int i = 0; i < mPolyParams.length; i++) {
                     polyParams[i] = new Complex(mPolyParams[i]);
                 }   estimator = new LaguerrePolynomialRootsEstimator(polyParams);
                 break;
@@ -371,8 +376,8 @@ public class Polynomial implements Serializable {
     public double evaluate(double x) {
         double result = 0.0;
         double powX = 1.0;
-        for(int i = 0; i < mPolyParams.length; i++) {
-            result += mPolyParams[i] * powX;
+        for (double polyParam : mPolyParams) {
+            result += polyParam * powX;
             powX *= x;
         }
         
@@ -388,12 +393,14 @@ public class Polynomial implements Serializable {
         int resultLength2 = Math.max(resultLength, 1);
         
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != resultLength2 || result == this) {
+        if (resultPolyParams.length != resultLength2 || result == this) {
             resultPolyParams = new double[resultLength2];
         }
-        if(resultLength == 0) resultPolyParams[0] = 0.0;
+        if (resultLength == 0) {
+            resultPolyParams[0] = 0.0;
+        }
         
-        for(int i = 0, j = 1; i < resultLength; i++, j++) {
+        for (int i = 0, j = 1; i < resultLength; i++, j++) {
             resultPolyParams[i] = j*mPolyParams[j];
         }
         
@@ -426,7 +433,7 @@ public class Polynomial implements Serializable {
     public double evaluateDerivative(double x) {        
         double result = 0.0;
         double powX = 1.0;
-        for(int j = 1; j < mPolyParams.length; j++) {
+        for (int j = 1; j < mPolyParams.length; j++) {
             result += j*mPolyParams[j] * powX;
             powX *= x;
         }
@@ -443,12 +450,14 @@ public class Polynomial implements Serializable {
         int resultLength2 = Math.max(resultLength, 1);
         
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != resultLength2 || result == this) {
+        if (resultPolyParams.length != resultLength2 || result == this) {
             resultPolyParams = new double[resultLength2];
         }
-        if(resultLength == 0) resultPolyParams[0] = 0.0;
+        if (resultLength == 0) {
+            resultPolyParams[0] = 0.0;
+        }
         
-        for(int i = 0, j = 2, k = 1; i < resultLength; i++, j++, k++) {
+        for (int i = 0, j = 2, k = 1; i < resultLength; i++, j++, k++) {
             resultPolyParams[i] = j*k*mPolyParams[j];
         }
         
@@ -481,7 +490,7 @@ public class Polynomial implements Serializable {
     public double evaluateSecondDerivative(double x) {        
         double result = 0.0;
         double powX = 1.0;
-        for(int j = 2, k = 1; j < mPolyParams.length; j++, k++) {
+        for (int j = 2, k = 1; j < mPolyParams.length; j++, k++) {
             result += j*k*mPolyParams[j] * powX;
             powX *= x;
         }
@@ -498,7 +507,7 @@ public class Polynomial implements Serializable {
      */
     public void nthDerivative(int order, Polynomial result) 
             throws IllegalArgumentException {
-        if(order < MIN_ORDER) {
+        if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
         }
         
@@ -506,12 +515,12 @@ public class Polynomial implements Serializable {
         int resultLength2 = Math.max(resultLength, 1);
         
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != resultLength2 || result == this) {
+        if (resultPolyParams.length != resultLength2 || result == this) {
             resultPolyParams = new double[resultLength2];
         }
-        if(resultLength == 0) resultPolyParams[0] = 0.0;
+        if (resultLength == 0) resultPolyParams[0] = 0.0;
         
-        for(int i = 0, j = order; i < resultLength; i++, j++) {
+        for (int i = 0, j = order; i < resultLength; i++, j++) {
             int param = j;
             for(int k = 1; k < order; k++) {
                 param *= j - k;
@@ -554,13 +563,13 @@ public class Polynomial implements Serializable {
      */
     public double evaluateNthDerivative(double x, int order) 
             throws IllegalArgumentException {
-        if(order < MIN_ORDER) {
+        if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
         }
         
         double result = 0.0;
         double powX = 1.0;
-        for(int i = order; i < mPolyParams.length; i++) {
+        for (int i = order; i < mPolyParams.length; i++) {
             int param = i;
             for(int j = 1; j < order; j++) {
                 param *= i - j;
@@ -582,12 +591,12 @@ public class Polynomial implements Serializable {
     public void integration(Polynomial result, double constant) {
         int resultLength = mPolyParams.length + 1;
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != resultLength || result == this) {
+        if (resultPolyParams.length != resultLength || result == this) {
             resultPolyParams = new double[resultLength];
         }
         
         resultPolyParams[0] = constant;
-        for(int i = 0, j = 1; i < mPolyParams.length; i++, j++) {
+        for (int i = 0, j = 1; i < mPolyParams.length; i++, j++) {
             resultPolyParams[j] = mPolyParams[i] / (double)j;
         }
         
@@ -654,7 +663,7 @@ public class Polynomial implements Serializable {
         double powStartX = startX;
         double powEndX = endX;
         double polyParam;
-        for(int i = 0, j = 1; i < mPolyParams.length; i++, j++) {
+        for (int i = 0, j = 1; i < mPolyParams.length; i++, j++) {
             polyParam = mPolyParams[i] / (double)j;
             resultStart += polyParam * powStartX;
             powStartX *= startX;
@@ -679,23 +688,23 @@ public class Polynomial implements Serializable {
      */
     public void nthIntegration(int order, Polynomial result, double[] constants) 
             throws IllegalArgumentException {
-        if(order < MIN_ORDER) {
+        if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
         }
-        if(constants != null && constants.length != order) {
+        if (constants != null && constants.length != order) {
             throw new IllegalArgumentException(
                     "length of constants must be order");
         }
         int resultLength = mPolyParams.length + order;
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != resultLength || result == this) {
+        if (resultPolyParams.length != resultLength || result == this) {
             resultPolyParams = new double[resultLength];
         }
 
-        for(int i = 0; i < order; i++) {
+        for (int i = 0; i < order; i++) {
             if (constants != null) {
                 int param = 1;
-                for(int k = 1; k <= i; k++) {
+                for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
                 resultPolyParams[i] = constants[i] / (double)param;
@@ -703,9 +712,9 @@ public class Polynomial implements Serializable {
                 resultPolyParams[i] = 0.0;
             }
         }
-        for(int i = 0, j = order; i < mPolyParams.length; i++, j++) {
+        for (int i = 0, j = order; i < mPolyParams.length; i++, j++) {
             int param = j;
-            for(int k = 1; k < order; k++) {
+            for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
             resultPolyParams[j] = mPolyParams[i] / (double)param;
@@ -791,10 +800,10 @@ public class Polynomial implements Serializable {
      */
     public double nthOrderIntegrateInterval(double startX, double endX, 
             int order, double[] constants) throws IllegalArgumentException {
-        if(order < MIN_ORDER) {
+        if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
         }
-        if(constants != null && constants.length != order) {
+        if (constants != null && constants.length != order) {
             throw new IllegalArgumentException(
                     "length of constants must be order");
         }
@@ -804,10 +813,10 @@ public class Polynomial implements Serializable {
         double powStartX = 1.0;
         double powEndX = 1.0;
         double polyParam;
-        for(int i = 0; i < order; i++) {
-            if(constants != null) {
+        for (int i = 0; i < order; i++) {
+            if (constants != null) {
                 int param = 1;
-                for(int k = 1; k <= i; k++) {
+                for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
                 polyParam = constants[i] / (double) param;
@@ -818,9 +827,9 @@ public class Polynomial implements Serializable {
             powEndX *= endX;
         }
         
-        for(int i = 0, j = order; i < mPolyParams.length; i++, j++) {
+        for (int i = 0, j = order; i < mPolyParams.length; i++, j++) {
             int param = j;
-            for(int k = 1; k < order; k++) {
+            for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
             polyParam = mPolyParams[i] / (double)param;
@@ -856,7 +865,7 @@ public class Polynomial implements Serializable {
         int resultLength = degree + 1;
         
         double[] resultPolyParams;
-        if(result.mPolyParams.length != resultLength) {
+        if (result.mPolyParams.length != resultLength) {
             resultPolyParams = new double[resultLength];
         } else {
             resultPolyParams = result.mPolyParams;
@@ -894,7 +903,7 @@ public class Polynomial implements Serializable {
      */
     public void normalize(Polynomial result) {
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != mPolyParams.length) {
+        if (resultPolyParams.length != mPolyParams.length) {
             resultPolyParams = new double[mPolyParams.length];
         }
         ArrayUtils.normalize(mPolyParams, resultPolyParams);
@@ -933,7 +942,7 @@ public class Polynomial implements Serializable {
         int degree = getDegree();
         double term = mPolyParams[degree];
         double[] resultPolyParams = result.mPolyParams;
-        if(resultPolyParams.length != mPolyParams.length) {
+        if (resultPolyParams.length != mPolyParams.length) {
             resultPolyParams = new double[mPolyParams.length];
         }
         ArrayUtils.multiplyByScalar(mPolyParams, 1.0 / term, resultPolyParams);
@@ -981,7 +990,7 @@ public class Polynomial implements Serializable {
      */
     public double[] getMaxima(double threshold) throws NumericalException,
             IllegalArgumentException {
-        if(threshold < 0.0) {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -989,17 +998,17 @@ public class Polynomial implements Serializable {
         
         //roots of derivative contains either minima or máxima.
         Complex[] derivativeRoots = derivative.getRoots();
-        List<Complex> maxima = new ArrayList<Complex>();
-        if(derivativeRoots != null) {
-            for(Complex derivativeRoot : derivativeRoots) {
-                if(Math.abs(derivativeRoot.getImaginary()) > threshold) {
+        List<Complex> maxima = new ArrayList<>();
+        if (derivativeRoots != null) {
+            for (Complex derivativeRoot : derivativeRoots) {
+                if (Math.abs(derivativeRoot.getImaginary()) > threshold) {
                     //root is imaginary (not allowed)
                     continue;
                 }
                 
                 double x = derivativeRoot.getReal();
                 double secondDerivativeEval = evaluateSecondDerivative(x);
-                if(secondDerivativeEval < 0.0) {
+                if (secondDerivativeEval < 0.0) {
                     //is maxima
                     maxima.add(derivativeRoot);
                 }
@@ -1008,11 +1017,13 @@ public class Polynomial implements Serializable {
         
         //return real parts of maxima, since we only allow real roots of first
         //derivative
-        if(maxima.isEmpty()) return null;
+        if (maxima.isEmpty()) {
+            return null;
+        }
         
         double[] result = new double[maxima.size()];
         int i = 0;
-        for(Complex m : maxima) {
+        for (Complex m : maxima) {
             result[i] = m.getReal();
             i++;
         }
@@ -1042,7 +1053,7 @@ public class Polynomial implements Serializable {
      */
     public double[] getMinima(double threshold) throws NumericalException,
             IllegalArgumentException {
-        if(threshold < 0.0) {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -1050,17 +1061,17 @@ public class Polynomial implements Serializable {
         
         //roots of derivative contains either minima or máxima.
         Complex[] derivativeRoots = derivative.getRoots();
-        List<Complex> minima = new ArrayList<Complex>();
-        if(derivativeRoots != null) {
-            for(Complex derivativeRoot : derivativeRoots) {
-                if(Math.abs(derivativeRoot.getImaginary()) > threshold) {
+        List<Complex> minima = new ArrayList<>();
+        if (derivativeRoots != null) {
+            for (Complex derivativeRoot : derivativeRoots) {
+                if (Math.abs(derivativeRoot.getImaginary()) > threshold) {
                     //root is imaginary (not allowed)
                     continue;
                 }
                 
                 double x = derivativeRoot.getReal();
                 double secondDerivativeEval = evaluateSecondDerivative(x);
-                if(secondDerivativeEval >= 0.0) {
+                if (secondDerivativeEval >= 0.0) {
                     //is minima
                     minima.add(derivativeRoot);
                 }
@@ -1069,11 +1080,13 @@ public class Polynomial implements Serializable {
         
         //return real parts of minima, since we only allow real roots of first
         //derivative
-        if(minima.isEmpty()) return null;
+        if (minima.isEmpty()) {
+            return null;
+        }
         
         double[] result = new double[minima.size()];
         int i = 0;
-        for(Complex m : minima) {
+        for (Complex m : minima) {
             result[i] = m.getReal();
             i++;
         }
@@ -1105,7 +1118,7 @@ public class Polynomial implements Serializable {
      */
     public double[] getExtrema(double threshold) 
             throws NumericalException, IllegalArgumentException {
-        if(threshold < 0.0) {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -1113,10 +1126,10 @@ public class Polynomial implements Serializable {
         
         //roots of derivative contains either minima or máxima.
         Complex[] derivativeRoots = derivative.getRoots();
-        List<Complex> minimaOrMaxima = new ArrayList<Complex>();
-        if(derivativeRoots != null) {
-            for(Complex derivativeRoot : derivativeRoots) {
-                if(Math.abs(derivativeRoot.getImaginary()) > threshold) {
+        List<Complex> minimaOrMaxima = new ArrayList<>();
+        if (derivativeRoots != null) {
+            for (Complex derivativeRoot : derivativeRoots) {
+                if (Math.abs(derivativeRoot.getImaginary()) > threshold) {
                     //root is imaginary (not allowed)
                     continue;
                 }
@@ -1127,17 +1140,17 @@ public class Polynomial implements Serializable {
         
         //return real parts of roots, since we only allow real roots of first
         //derivative
-        if(minimaOrMaxima.isEmpty()) return null;
+        if (minimaOrMaxima.isEmpty()) {
+            return null;
+        }
         
         double[] result = new double[minimaOrMaxima.size()];
         int i = 0;
-        for(Complex m : minimaOrMaxima) {
+        for (Complex m : minimaOrMaxima) {
             result[i] = m.getReal();
             i++;
         }
         
         return result;        
-    }    
-            
-    //TODO: estimate from evaluations    
+    }
 }

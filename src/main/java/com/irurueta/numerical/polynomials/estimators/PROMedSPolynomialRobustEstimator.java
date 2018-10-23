@@ -1,27 +1,32 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 15, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
-import com.irurueta.numerical.robust.PROMedSRobustEstimator;
-import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Finds the best polynomial using PROMedS algorithm.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {    
     
     /**
@@ -336,7 +341,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @return stop threshold to stop the algorithm prematurely when a certain
      * accuracy has been reached
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -362,10 +367,13 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * estimation is already in progress
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }
@@ -376,7 +384,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @return quality scores corresponding to each point
      */
     @Override
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return mQualityScores;
     }
     
@@ -391,8 +399,10 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     @Override
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetQualityScores(qualityScores);
     }
     
@@ -403,7 +413,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @return true if estimator is ready, false otherwise
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return super.isReady() && mQualityScores != null && 
                 mQualityScores.length == mEvaluations.size();
     }      
@@ -421,16 +431,20 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         PROMedSRobustEstimator<Polynomial> innerEstimator =
-                new PROMedSRobustEstimator<Polynomial>(
-                new PROMedSRobustEstimatorListener<Polynomial>(){
+                new PROMedSRobustEstimator<>(
+                new PROMedSRobustEstimatorListener<Polynomial>() {
                     
             //subset of evaluations picked on each iteration
             private List<PolynomialEvaluation> mSubsetEvaluations =
-                    new ArrayList<PolynomialEvaluation>();
+                    new ArrayList<>();
                     
             @Override
             public double getThreshold() {
@@ -451,8 +465,8 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List<Polynomial> solutions) {
                 mSubsetEvaluations.clear();
-                for(int i = 0; i < samplesIndices.length; i++) {
-                    mSubsetEvaluations.add(mEvaluations.get(samplesIndices[i]));
+                for (int samplesIndex : samplesIndices) {
+                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));
                 }
                 
                 try {
@@ -546,7 +560,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * smaller than required minimum size.
      */
     private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         if(qualityScores.length < 
                 mPolynomialEstimator.getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();

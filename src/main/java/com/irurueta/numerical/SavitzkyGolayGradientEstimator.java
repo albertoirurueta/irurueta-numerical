@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.SavitzkyGolayGradientEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 8, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -24,18 +31,19 @@ import com.irurueta.algebra.*;
  * polynomials, this method might be less accurate when large values are 
  * involved due to limited machine precision.
  */
-public class SavitzkyGolayGradientEstimator extends GradientEstimator{
+@SuppressWarnings("WeakerAccess")
+public class SavitzkyGolayGradientEstimator extends GradientEstimator {
     /**
-     * Number of required point to evaluate to compute derivative
+     * Number of required point to evaluate to compute derivative.
      */    
     public static final int N_POINTS = 3;
     
     /**
-     * Constructor
-     * @param listener Listener to evaluate a multidimensional functin
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional functin.
      */    
     public SavitzkyGolayGradientEstimator(
-            MultiDimensionFunctionEvaluatorListener listener){
+            MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
     
@@ -43,84 +51,91 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator{
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
-     * array can be reused and hence is more memory efficient
-     * @param point Input point
+     * array can be reused and hence is more memory efficient.
+     * @param point Input point.
      * @param result Output parameter containing estimated array. This parameter
-     * must be an array of length equal to point
-     * @throws EvaluationException Raised if function cannot be evaluated
+     * must be an array of length equal to point.
+     * @throws EvaluationException Raised if function cannot be evaluated.
      * @throws IllegalArgumentException Raised if length of result and point are
      * not equal.
      */    
     @Override
     public void gradient(double[] point, double[] result) 
-            throws EvaluationException, IllegalArgumentException{
+            throws EvaluationException, IllegalArgumentException {
         int n = point.length;
-        if(result.length != n) throw new IllegalArgumentException();
+        if (result.length != n) {
+            throw new IllegalArgumentException();
+        }
         
         double[] xh1 = new double[n];
         double[] xh2 = new double[n];
         
         double f;
-        try{
+        try {
             f = listener.evaluate(point);
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new EvaluationException(t);
         }
         System.arraycopy(point, 0, xh1, 0, n);
         System.arraycopy(point, 0, xh2, 0, n);
         
-        Matrix a = null;
-        try{
+        Matrix a;
+        try {
             a = new Matrix(N_POINTS, N_POINTS);
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException e) {
+            throw new EvaluationException(e);
+        }
+
         double[] b = new double[N_POINTS];
         
         SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
         
-        for(int j = 0; j < n; j++){
+        for (int j = 0; j < n; j++) {
             double temp = point[j];
             double h = EPS * Math.abs(temp);
-            if(h == 0.0) h = EPS; //Trick to reduce finite-precision error
+            if (h == 0.0) {
+                h = EPS; //Trick to reduce finite-precision error
+            }
             
             double p1 = xh1[j] = temp + h;
             double p2 = xh2[j] = temp - h;
             
             double fh1, fh2;
-            try{
+            try {
                 fh1 = listener.evaluate(xh1);
                 fh2 = listener.evaluate(xh2);
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 throw new EvaluationException(t);
             }
             
             xh1[j] = temp;
             xh2[j] = temp;
-            
+
             a.setElementAt(0, 0, temp * temp);
             a.setElementAt(1, 0, p1 * p1);
             a.setElementAt(2, 0, p2 * p2);
-        
+
             a.setElementAt(0, 1, temp);
             a.setElementAt(1, 1, p1);
             a.setElementAt(2, 1, p2);
-        
+
             a.setElementAt(0, 2, 1.0);
             a.setElementAt(1, 2, 1.0);
             a.setElementAt(2, 2, 1.0);
-            
+
             //noralize to increase accuracy
             double normA = Utils.normF(a);
             a.multiplyByScalar(1.0 / normA);
-            
+
             b[0] = f;
             b[1] = fh1;
             b[2] = fh2;
-            
+
             //normalize to increase accuracy
             ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);
-                                    
+
             double aParam, bParam;
-            try{
+            try {
                 decomposer.setInputMatrix(a);
                 decomposer.decompose();
 
@@ -137,9 +152,8 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator{
                 //partial derivative on dimension j is:
                 //2.0 * a * x + b , therefore:
                 result[j] = 2.0 * aParam * temp + bParam;
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 result[j] = Double.NaN;
-                continue;
             }                        
         }
     }

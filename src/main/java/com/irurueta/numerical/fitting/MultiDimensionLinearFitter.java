@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.fitting.MultiDimensionLinearFitter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 26, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.fitting;
 
@@ -16,9 +23,10 @@ import com.irurueta.algebra.Matrix;
  * to a function made of a linear combination of functions used as a basis
  * (i.e. f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...).
  * Where f0, f1, ... is the function basis which ideally should be formed by
- * orthogonal functions
+ * orthogonal functions.
  */
-public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
+public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
     
     /**
      * Evaluator of functions
@@ -39,7 +47,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
     /**
      * Constructor
      */
-    MultiDimensionLinearFitter(){
+    MultiDimensionLinearFitter() {
         super();
     }
     
@@ -54,7 +62,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      * don't have the same length
      */
     public MultiDimensionLinearFitter(Matrix x, double[] y, double[] sig)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(x, y, sig);
     }
 
@@ -70,7 +78,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      * don't have the same length
      */
     public MultiDimensionLinearFitter(Matrix x, double[] y, double sig)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(x, y, sig);
     }
     
@@ -81,7 +89,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      * @throws FittingException if evaluation fails
      */
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException{
+            throws FittingException {
         super();
         internalSetFunctionEvaluator(evaluator);
     }
@@ -101,7 +109,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      */
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
             Matrix x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException{
+            throws FittingException, IllegalArgumentException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }
@@ -122,7 +130,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      */    
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
             Matrix x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException{
+            throws FittingException, IllegalArgumentException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }     
@@ -132,7 +140,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      * obtain the evaluation of function basis at such point
      * @return function evaluator
      */    
-    public LinearFitterMultiDimensionFunctionEvaluator getFunctionEvaluator(){
+    public LinearFitterMultiDimensionFunctionEvaluator getFunctionEvaluator() {
         return evaluator;
     }
     
@@ -143,7 +151,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      * @throws FittingException if evaluation fails
      */
     public void setFunctionEvaluator(LinearFitterMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException{
+            throws FittingException {
         internalSetFunctionEvaluator(evaluator);
     }
     
@@ -154,18 +162,18 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter{
      * @throws FittingException if evaluation fails
      */    
     private void internalSetFunctionEvaluator(LinearFitterMultiDimensionFunctionEvaluator evaluator) 
-            throws FittingException{
+            throws FittingException {
         
-        try{
+        try {
             this.evaluator = evaluator;    
         
-            if(evaluator != null){
+            if (evaluator != null) {
                 afunc = evaluator.createResultArray();
                 ma = afunc.length;
                 a = new double[ma];
                 covar = new Matrix(ma, ma);
             }
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new FittingException(e);
         }
     }

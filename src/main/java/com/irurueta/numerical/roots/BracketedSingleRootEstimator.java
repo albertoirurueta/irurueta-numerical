@@ -1,25 +1,29 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.BracketedSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of 
  * values, in other words, root will only be searched within provided minimum
  * and maximum evaluation points.
  */
-public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
+@SuppressWarnings("WeakerAccess")
+public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
     
     /**
      * Number tries to automatically compute a bracket of values for a given
@@ -33,69 +37,69 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
     public static final double FACTOR = 1.6;
     
     /**
-     * Default minimum evaluation point
+     * Default minimum evaluation point.
      */
     public static final double DEFAULT_MIN_EVAL_POINT = -Double.MAX_VALUE;
     
     /**
-     * Default maximum evaluation point
+     * Default maximum evaluation point.
      */
     public static final double DEFAULT_MAX_EVAL_POINT = Double.MAX_VALUE;
     
     /**
      * Constant defining the value by which the largest bracket evaluation value
-     * is increased respect the minimum
+     * is increased respect the minimum.
      */
     public static final double BRACKET_EPS = 1e-8;
     
     /**
-     * Minimum evaluation point
+     * Minimum evaluation point.
      */
     protected double minEvalPoint;
     
     /**
-     * Maximum evaluation point
+     * Maximum evaluation point.
      */
     protected double maxEvalPoint;
     
     /**
-     * Boolean indicating whether a bracket has been computed and is available
+     * Boolean indicating whether a bracket has been computed and is available.
      */
     protected boolean bracketAvailable;
     
     /**
-     * Constructor
+     * Constructor.
      * @param minEvalPoint Smallest value inside the bracket of values where the
      * root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
      * root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
+     * maxEvalPoint.
      */
     public BracketedSingleRootEstimator(double minEvalPoint, 
-            double maxEvalPoint) throws InvalidBracketRangeException{
+            double maxEvalPoint) throws InvalidBracketRangeException {
         super();
         internalSetBracket(minEvalPoint, maxEvalPoint);
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param minEvalPoint Smallest value inside the bracket of values where the
      * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE
+     * Double.MAX_VALUE.
      * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE
+     * the maximum value a double can contain, which is Double.MAX_VALUE.
      */
     public BracketedSingleRootEstimator(double minEvalPoint) 
-            throws InvalidBracketRangeException{
+            throws InvalidBracketRangeException {
         super();
         internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);
     }
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public BracketedSingleRootEstimator(){
+    public BracketedSingleRootEstimator() {
         super();
         minEvalPoint = DEFAULT_MIN_EVAL_POINT;
         maxEvalPoint = DEFAULT_MAX_EVAL_POINT;
@@ -103,7 +107,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
@@ -111,40 +115,40 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @param maxEvalPoint Largest value inside the bracket of values where the
      * root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
+     * maxEvalPoint.
      */
     public BracketedSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint) 
-            throws InvalidBracketRangeException{
+            throws InvalidBracketRangeException {
         super(listener);
         internalSetBracket(minEvalPoint, maxEvalPoint);
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
      * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE
+     * Double.MAX_VALUE.
      * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE
+     * the maximum value a double can contain, which is Double.MAX_VALUE.
      */
     public BracketedSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint) throws InvalidBracketRangeException{
+            double minEvalPoint) throws InvalidBracketRangeException {
         super(listener);
         internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      */
     public BracketedSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener){
+            SingleDimensionFunctionEvaluatorListener listener) {
         super(listener);
         minEvalPoint = DEFAULT_MIN_EVAL_POINT;
         maxEvalPoint = DEFAULT_MAX_EVAL_POINT;
@@ -161,11 +165,13 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @throws LockedException Raised if this instance is locked while doing
      * some computations.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
+     * maxEvalPoint.
      */
     public void setBracket(double minEvalPoint, double maxEvalPoint)
-            throws LockedException, InvalidBracketRangeException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, InvalidBracketRangeException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetBracket(minEvalPoint, maxEvalPoint);
     }
     
@@ -177,12 +183,13 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @param maxEvalPoint Largest value inside the bracket of values where the
      * root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
+     * maxEvalPoint.
      */
     private void internalSetBracket(double minEvalPoint, double maxEvalPoint)
-            throws InvalidBracketRangeException{
-        if(minEvalPoint >= maxEvalPoint) 
+            throws InvalidBracketRangeException {
+        if (minEvalPoint >= maxEvalPoint) {
             throw new InvalidBracketRangeException();
+        }
         
         this.minEvalPoint = minEvalPoint;
         this.maxEvalPoint = maxEvalPoint;
@@ -193,7 +200,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * Returns boolean indicating whether bracket has been set or not.
      * @return True if bracket has been set, false otherwise.
      */
-    public boolean isBracketAvailable(){
+    public boolean isBracketAvailable() {
         return bracketAvailable;
     }
     
@@ -203,8 +210,10 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @return Smallest value inside the bracket.
      * @throws NotAvailableException Raised if bracket has not been set.
      */
-    public double getMinEvaluationPoint() throws NotAvailableException{
-        if(!isBracketAvailable()) throw new NotAvailableException();
+    public double getMinEvaluationPoint() throws NotAvailableException {
+        if (!isBracketAvailable()) {
+            throw new NotAvailableException();
+        }
         return minEvalPoint;
     }
     
@@ -214,8 +223,10 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @return Largest values inside the bracket.
      * @throws NotAvailableException Raised if bracket has not been set.
      */
-    public double getMaxEvaluationPoint() throws NotAvailableException{
-        if(!isBracketAvailable()) throw new NotAvailableException();
+    public double getMaxEvaluationPoint() throws NotAvailableException {
+        if (!isBracketAvailable()) {
+            throw new NotAvailableException();
+        }
         return maxEvalPoint;
     }
     
@@ -243,12 +254,17 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      */
     public void computeBracket(double minEvalPoint, double maxEvalPoint)
             throws LockedException, NotReadyException, 
-            InvalidBracketRangeException, RootEstimationException{
+            InvalidBracketRangeException, RootEstimationException {
         
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
-        if(minEvalPoint >= maxEvalPoint) 
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
+        if (minEvalPoint >= maxEvalPoint) {
             throw new InvalidBracketRangeException();
+        }
         
         locked = true;
         
@@ -256,32 +272,33 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
         double x1 = minEvalPoint;
         double x2 = maxEvalPoint;
         double f1, f2;
-        try{
+        try {
             f1 = listener.evaluate(x1);
             f2 = listener.evaluate(x2);
-        }catch(Throwable t){
+        } catch (Throwable t) {
             locked = false;
             throw new RootEstimationException(t);
         }
         
         boolean found = false;
-        try{
-            for(int j = 0; j < NTRY; j++){
-                if(f1 * f2 < 0.0){
+        try {
+            for (int j = 0; j < NTRY; j++) {
+                if (f1 * f2 < 0.0) {
                     found = true;
                     break;
                 }
-                if(Math.abs(f1) < Math.abs(f2))
+                if (Math.abs(f1) < Math.abs(f2)) {
                     f1 = listener.evaluate(x1 += FACTOR * (x1 - x2));
-                else
+                } else {
                     f2 = listener.evaluate(x2 += FACTOR * (x2 - x1));
+                }
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             locked = false;
             throw new RootEstimationException(t);
         }
         
-        if(!found){
+        if (!found) {
             locked = false;
             throw new RootEstimationException();
         }
@@ -306,16 +323,16 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @throws LockedException Raised if this instance is locked while doing
      * some computations.
      * @throws NotReadyException Raised if this instance is not ready (e.g. a
-     * listener has not yet been provided, etc.)
+     * listener has not yet been provided, etc.).
      * @throws InvalidBracketRangeException Raised if point is close to 
-     * Double.MAX_VALUE
+     * Double.MAX_VALUE.
      * @throws RootEstimationException Raised if a bracket couldn't be found
      * inside the provided limits because no zero crossing was present or
      * convergence was not achieved.
      */    
     public void computeBracket(double point) throws LockedException,
             NotReadyException, InvalidBracketRangeException, 
-            RootEstimationException{
+            RootEstimationException {
         computeBracket(point, FACTOR * point + BRACKET_EPS);
     }
 
@@ -329,25 +346,25 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
      * @throws LockedException Raised if this instance is locked while doing
      * some computations.
      * @throws NotReadyException Raised if this instance is not ready (e.g. a
-     * listener has not yet been provided, etc.)
+     * listener has not yet been provided, etc.).
      * @throws RootEstimationException Raised if a bracket couldn't be found
      * inside the provided limits because no zero crossing was present or
      * convergence was not achieved.
      */        
     public void computeBracket() throws LockedException, NotReadyException,
-            RootEstimationException{
-        try{
+            RootEstimationException {
+        try {
             computeBracket(0.0, BRACKET_EPS);
-        }catch(InvalidBracketRangeException ignore){}
+        } catch (InvalidBracketRangeException ignore) { }
     }
     
     /**
      * Internal method to swap two values. Value inside a[0] will be swapped 
-     * with value provided in b[0]
-     * @param a Value to be swapped
-     * @param b Value to be swapped
+     * with value provided in b[0].
+     * @param a Value to be swapped.
+     * @param b Value to be swapped.
      */
-    protected void swap(double[] a, double[] b){
+    protected void swap(double[] a, double[] b) {
         double tmp = a[0];
         a[0] = b[0];
         b[0] = tmp;
@@ -355,11 +372,11 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator{
     
     /**
      * Internal method to determine whether a and b have the same sign.
-     * @param a Value to be compared
-     * @param b Value to be compared
+     * @param a Value to be compared.
+     * @param b Value to be compared.
      * @return Returns a if a and b have the same sign or -a otherwise.
      */
-    protected double sign(double a, double b){
+    protected double sign(double a, double b) {
         return b >= 0.0 ? (a >= 0.0 ? a : -a) : (a >= 0.0 ? -a : a);
     }
 }

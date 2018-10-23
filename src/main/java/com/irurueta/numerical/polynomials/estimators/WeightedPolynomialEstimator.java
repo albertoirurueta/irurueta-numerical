@@ -1,21 +1,29 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 9, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
-import com.irurueta.numerical.robust.WeightSelection;
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.WeightSelection;
 import com.irurueta.sorting.SortingException;
+
 import java.util.List;
 
 /**
@@ -26,7 +34,8 @@ import java.util.List;
  * correctly weighted, since as the number of evaluations increase so do the
  * rounding errors.
  */
-public class WeightedPolynomialEstimator extends PolynomialEstimator{
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
+public class WeightedPolynomialEstimator extends PolynomialEstimator {
     
     /**
      * Default number of evaluations to be weighted and taken into account.
@@ -166,12 +175,11 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
      * This method override always throws an IllegalArgumentException because it
      * is expected to provide both evaluations and their weights.
      * @param evaluations collection of polynomial evaluations.
-     * @throws LockedException if this instance is locked.
      * @throws IllegalArgumentException always thrown.
      */
     @Override
     public void setEvaluations(List<PolynomialEvaluation> evaluations) 
-            throws LockedException, IllegalArgumentException {
+            throws IllegalArgumentException {
         throw new IllegalArgumentException(
                 "evaluations and weights must be provided at once");
     }    
@@ -189,7 +197,9 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
      */
     public void setEvaluationsAndWeights(List<PolynomialEvaluation> evaluations,
             double[] weights) throws LockedException, IllegalArgumentException {
-        if(isLocked()) throw new LockedException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
     
@@ -254,8 +264,10 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
      */
     public void setMaxEvaluations(int maxEvaluations) 
             throws IllegalArgumentException, LockedException {
-        if(isLocked()) throw new LockedException();
-        if(maxEvaluations < getMinNumberOfEvaluations()) {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (maxEvaluations < getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();
         }
         mMaxEvaluations = maxEvaluations;
@@ -278,7 +290,9 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
      */
     public void setSortWeightsEnabled(boolean sortWeights)
             throws LockedException {
-        if(isLocked()) throw new LockedException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
         
         mSortWeights = sortWeights;
     }
@@ -304,12 +318,16 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException, 
             PolynomialEstimationException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         try {
             mLocked = true;
-            if(mListener != null) {
+            if (mListener != null) {
                 mListener.onEstimateStart(this);
             }
             
@@ -324,11 +342,11 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
             
             int index = 0, counter = 0;
             double weight;
-            for(PolynomialEvaluation evaluation : mEvaluations) {
-                if(selected[index]) {
+            for (PolynomialEvaluation evaluation : mEvaluations) {
+                if (selected[index]) {
                     weight = mWeights[index];
                     
-                    switch(evaluation.getType()) {
+                    switch (evaluation.getType()) {
                         case DIRECT_EVALUATION:
                             fillDirectEvaluation(
                                     (DirectPolynomialEvaluation)evaluation, a, 
@@ -364,14 +382,12 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
             
             Polynomial result = new Polynomial(params.toArray());
             
-            if(mListener != null) {
+            if (mListener != null) {
                 mListener.onEstimateEnd(this);
             }
             
             return result;            
-        } catch (AlgebraException e) {
-            throw new PolynomialEstimationException(e);
-        } catch (SortingException e) {
+        } catch (AlgebraException | SortingException e) {
             throw new PolynomialEstimationException(e);
         } finally {
             mLocked = false;
@@ -397,7 +413,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
      */
     private void normalize(Matrix a, Matrix b, int row, double weight) {
         double sqrNorm = 0.0;
-        for(int i = 0; i < a.getColumns(); i++) {
+        for (int i = 0; i < a.getColumns(); i++) {
             sqrNorm += Math.pow(a.getElementAt(row, i), 2.0);
         }
         sqrNorm += Math.pow(b.getElementAtIndex(row), 2.0);
@@ -405,7 +421,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
         double norm = Math.sqrt(sqrNorm);
         double factor = weight / norm;
         
-        for(int i = 0; i < a.getColumns(); i++) {
+        for (int i = 0; i < a.getColumns(); i++) {
             a.setElementAt(row, i, a.getElementAt(row, i) * factor);
         }
         b.setElementAtIndex(row, b.getElementAtIndex(row) * factor);
@@ -421,7 +437,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator{
     private void internalSetEvaluationsAndWeights(
             List<PolynomialEvaluation> evaluations, double[] weights) 
             throws IllegalArgumentException  {
-        if(weights == null || evaluations == null ||
+        if (weights == null || evaluations == null ||
                 weights.length != evaluations.size()) {
             throw new IllegalArgumentException();
         }

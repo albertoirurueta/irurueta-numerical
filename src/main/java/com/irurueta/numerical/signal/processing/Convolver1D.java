@@ -1,16 +1,24 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.signal.processing.Convolver1D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 1, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.signal.processing;
 
 /**
  * Convolves a 1D signal with a 1D kernel.
  */
+@SuppressWarnings("WeakerAccess")
 public class Convolver1D {
     
     /**
@@ -135,7 +143,7 @@ public class Convolver1D {
      * @throws IllegalArgumentException if provided position is negative.
      */
     public void setKernelCenter(int kernelCenter) throws IllegalArgumentException {
-        if(kernelCenter < 0) {
+        if (kernelCenter < 0) {
             throw new IllegalArgumentException("kernel center must be zero " + 
                     "or greater and within kernel's boundaries");
         }
@@ -267,7 +275,7 @@ public class Convolver1D {
     public static void convolve(double[] signal, double[] kernel, 
             double[] result) throws IllegalArgumentException {
         convolve(signal, kernel, DEFAULT_KERNEL_CENTER, result, 
-                (Convolver1DListener)null);
+                null);
     }
     
     /**
@@ -343,7 +351,7 @@ public class Convolver1D {
             int kernelCenter, double[] result) 
             throws IllegalArgumentException {
         convolve(signal, kernel, kernelCenter, result, 
-                (Convolver1DListener)null);
+                null);
     }
     
     /**
@@ -429,7 +437,7 @@ public class Convolver1D {
             int kernelCenter, ConvolverEdgeMethod edgeMethod, double[] result) 
             throws IllegalArgumentException {
         convolve(signal, kernel, kernelCenter, edgeMethod, result, 
-                (Convolver1DListener)null);
+                null);
     }
     
     /**
@@ -520,7 +528,7 @@ public class Convolver1D {
     public static void convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
             double constantValue, double[] result) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         convolve(signal, kernel, kernelCenter, edgeMethod, constantValue, 
                 result, null);
     }
@@ -544,18 +552,18 @@ public class Convolver1D {
     public static void convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
             double constantValue, double[] result, Convolver1DListener listener) 
-            throws IllegalArgumentException{
-        if(kernelCenter < 0 || kernelCenter >= kernel.length) {
+            throws IllegalArgumentException {
+        if (kernelCenter < 0 || kernelCenter >= kernel.length) {
             throw new IllegalArgumentException(
                     "kernel center must be within kernel boundaries");
         }
-        if(result.length != signal.length + kernel.length - 1) {
+        if (result.length != signal.length + kernel.length - 1) {
             throw new IllegalArgumentException("result array must have a " + 
                     "length equal to the sum of signal and kernel lengths " + 
                     "minus one");
         }
         
-        switch(edgeMethod) {
+        switch (edgeMethod) {
             case MIRROR_EDGE:
                 internalConvolveMirror(signal, kernel, kernelCenter, result, 
                         listener);
@@ -591,28 +599,28 @@ public class Convolver1D {
         double accum;
         int signalPos;
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onStartConvolution();
         }
         
-        for(int i = 0; i < resultLength; i++) {
+        for (int i = 0; i < resultLength; i++) {
             
             accum = 0.0;
             signalPos = i - kernelCenter;
-            for(int j = 0; j < kernelLength; j++) {
+            for (int j = 0; j < kernelLength; j++) {
                 double signalValue = getSignalValueZero(signal, signalPos - j);
                 accum += signalValue * kernel[j];
             }
             
             result[i] = accum;
             
-            if(listener != null) {
+            if (listener != null) {
                 float progress = (float)i / (float)resultLength;
                 listener.onConvolveProgressChange(progress);
             }            
         }   
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onFinishConvolution();
         }
     }
@@ -626,7 +634,7 @@ public class Convolver1D {
      * otherwise.
      */
     protected static double getSignalValueZero(double[] signal, int pos) {
-        if(pos >= 0 && pos < signal.length) {
+        if (pos >= 0 && pos < signal.length) {
             return signal[pos];
         } else {
             return 0.0;
@@ -652,15 +660,15 @@ public class Convolver1D {
         double accum;
         int signalPos;
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onStartConvolution();
         }
         
-        for(int i = 0; i < resultLength; i++) {
+        for (int i = 0; i < resultLength; i++) {
             
             accum = 0.0;
             signalPos = i - kernelCenter;
-            for(int j = 0; j < kernelLength; j++) {
+            for (int j = 0; j < kernelLength; j++) {
                 double signalValue = getSignalValueConstant(signal, 
                         signalPos - j, constantValue);
                 accum += signalValue * kernel[j];
@@ -668,13 +676,13 @@ public class Convolver1D {
             
             result[i] = accum;
             
-            if(listener != null) {
+            if (listener != null) {
                 float progress = (float)i / (float)resultLength;
                 listener.onConvolveProgressChange(progress);
             }            
         }  
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onFinishConvolution();
         }        
     }
@@ -691,7 +699,7 @@ public class Convolver1D {
      */
     protected static double getSignalValueConstant(double[] signal, int pos, 
             double constantValue) {
-        if(pos >= 0 && pos < signal.length) {
+        if (pos >= 0 && pos < signal.length) {
             return signal[pos];
         } else {
             return constantValue;
@@ -713,15 +721,15 @@ public class Convolver1D {
         double accum;
         int signalPos;
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onStartConvolution();
         }
         
-        for(int i = 0; i < resultLength; i++) {
+        for (int i = 0; i < resultLength; i++) {
             
             accum = 0.0;
             signalPos = i - kernelCenter;
-            for(int j = 0; j < kernelLength; j++) {
+            for (int j = 0; j < kernelLength; j++) {
                 double signalValue = getSignalValueRepeat(signal, 
                         signalPos - j);
                 accum += signalValue * kernel[j];
@@ -729,13 +737,13 @@ public class Convolver1D {
             
             result[i] = accum;
             
-            if(listener != null) {
+            if (listener != null) {
                 float progress = (float)i / (float)resultLength;
                 listener.onConvolveProgressChange(progress);
             }            
         }     
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onFinishConvolution();
         }        
     }
@@ -751,7 +759,7 @@ public class Convolver1D {
     protected static double getSignalValueRepeat(double[] signal, int pos) {
         int signalLength = signal.length;
         pos = pos % signalLength;
-        if(pos < 0) {
+        if (pos < 0) {
             pos += signalLength;
         }
         return signal[pos];
@@ -772,15 +780,15 @@ public class Convolver1D {
         double accum;
         int signalPos;
         
-        if(listener != null) {
+        if (listener != null) {
             listener.onStartConvolution();
         }
         
-        for(int i = 0; i < resultLength; i++) {
+        for (int i = 0; i < resultLength; i++) {
             
             accum = 0.0;
             signalPos = i - kernelCenter;
-            for(int j = 0; j < kernelLength; j++) {
+            for (int j = 0; j < kernelLength; j++) {
                 double signalValue = getSignalValueMirror(signal, 
                         signalPos - j);
                 accum += signalValue * kernel[j];
@@ -788,13 +796,13 @@ public class Convolver1D {
             
             result[i] = accum;
             
-            if(listener != null) {
+            if (listener != null) {
                 float progress = (float)i / (float)resultLength;
                 listener.onConvolveProgressChange(progress);
             }
         }
 
-        if(listener != null) {
+        if (listener != null) {
             listener.onFinishConvolution();
         }        
     }
@@ -811,7 +819,7 @@ public class Convolver1D {
         int signalLength = signal.length;
         int times = pos / signalLength;
         
-        if(pos < 0) {
+        if (pos < 0) {
             times = Math.abs(times);
             if(times == 0) times = 1;
             pos = 2*signalLength*times + pos;
@@ -821,7 +829,7 @@ public class Convolver1D {
         boolean reversed = (times % 2 != 0);
         
         pos = pos % signalLength;
-        if(pos < 0) {
+        if (pos < 0) {
             pos += signalLength;
         } else {        
             if(reversed) {

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.SingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -21,7 +28,8 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * Usually root estimators will only find a single root around an initial 
  * coarsely estimated solution.
  */
-public abstract class SingleRootEstimator extends RootEstimator{
+@SuppressWarnings("WeakerAccess")
+public abstract class SingleRootEstimator extends RootEstimator {
     
     /**
      * Listener that evaluates a single dimension function in order to find its
@@ -36,14 +44,14 @@ public abstract class SingleRootEstimator extends RootEstimator{
     protected boolean rootAvailable;
     
     /**
-     * Root that has been found
+     * Root that has been found.
      */
     protected double root;
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public SingleRootEstimator(){
+    public SingleRootEstimator() {
         super();
         listener = null;
         rootAvailable = false;
@@ -51,12 +59,12 @@ public abstract class SingleRootEstimator extends RootEstimator{
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener that evaluates a single dimension function in
      * order to find its root.
      */
     public SingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener){
+            SingleDimensionFunctionEvaluatorListener listener) {
         super();
         this.listener = listener;
         rootAvailable = false;
@@ -66,33 +74,37 @@ public abstract class SingleRootEstimator extends RootEstimator{
     /**
      * Returns listener that evaluates a single dimension function in order to
      * find its root.
-     * @return Listener that evaluates a single dimension function
+     * @return Listener that evaluates a single dimension function.
      * @throws NotAvailableException Raised if listener has not yet been 
      * provided.
      */
     public SingleDimensionFunctionEvaluatorListener getListener()
-            throws NotAvailableException{
-        if(!isListenerAvailable()) throw new NotAvailableException();        
+            throws NotAvailableException {
+        if (!isListenerAvailable()) {
+            throw new NotAvailableException();
+        }
         return listener;
     }
     
     /**
      * Sets listener that evaluates a single dimension function in order to find
      * its root.
-     * @param listener Listener that evaluates a single dimension function
+     * @param listener Listener that evaluates a single dimension function.
      * @throws LockedException Raised if this instance is already locked.
      */
     public void setListener(SingleDimensionFunctionEvaluatorListener listener)
-            throws LockedException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         this.listener = listener;
     }
     
     /**
-     * Returns boolean indicating whether a listener has been provided
-     * @return True if listener is available, false otherwise
+     * Returns boolean indicating whether a listener has been provided.
+     * @return True if listener is available, false otherwise.
      */
-    public boolean isListenerAvailable(){
+    public boolean isListenerAvailable() {
         return listener != null;
     }
     
@@ -103,7 +115,7 @@ public abstract class SingleRootEstimator extends RootEstimator{
      * false otherwise.
      */    
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return isListenerAvailable();
     }
     
@@ -112,7 +124,7 @@ public abstract class SingleRootEstimator extends RootEstimator{
      * available for retrieval.
      * @return True if root is available, false otherwise.
      */
-    public boolean isRootAvailable(){
+    public boolean isRootAvailable() {
         return rootAvailable;
     }
     
@@ -122,8 +134,10 @@ public abstract class SingleRootEstimator extends RootEstimator{
      * @return Estimated root.
      * @throws NotAvailableException Raised if root has not yet been estimated.
      */
-    public double getRoot() throws NotAvailableException{
-        if(!isRootAvailable()) throw new NotAvailableException();
+    public double getRoot() throws NotAvailableException {
+        if (!isRootAvailable()) {
+            throw new NotAvailableException();
+        }
         return root;
     }
 }

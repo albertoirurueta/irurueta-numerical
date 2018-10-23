@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.SecondDegreePolynomialRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 21, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -22,11 +29,12 @@ import com.irurueta.numerical.NotReadyException;
  * This class is based on:
  * http://en.wikipedia.org/wiki/Quadratic_function
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class SecondDegreePolynomialRootsEstimator 
-    extends PolynomialRootsEstimator{
+    extends PolynomialRootsEstimator {
     
     /**
-     * Constant defining machine precision
+     * Constant defining machine precision.
      */    
     public static final double EPS = 1e-10;
     
@@ -37,26 +45,26 @@ public class SecondDegreePolynomialRootsEstimator
     public static final int VALID_POLY_PARAMS_LENGTH = 3;
     
     /**
-     * Array containing parameters of a second degree polynomial
+     * Array containing parameters of a second degree polynomial.
      */    
     private double[] realPolyParams;    
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */    
-    public SecondDegreePolynomialRootsEstimator(){
+    public SecondDegreePolynomialRootsEstimator() {
         super();
         realPolyParams = null;                 
     }
     
     /**
-     * Constructor
-     * @param polyParams Array containing polynomial parameters
+     * Constructor.
+     * @param polyParams Array containing polynomial parameters.
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */    
     public SecondDegreePolynomialRootsEstimator(double[] polyParams)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         internalSetPolynomialParameters(polyParams);
     }
@@ -66,14 +74,16 @@ public class SecondDegreePolynomialRootsEstimator
      * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and 
      * the array must be provided as [c, b, a].
      * Note: This class only supports real polynomial parameters
-     * @param polyParams Array containing polynomial parameters
-     * @throws LockedException Raised if this instance is locked
+     * @param polyParams Array containing polynomial parameters.
+     * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if the length of the provided
      * array is not valid.
      */
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetPolynomialParameters(polyParams);
     }
     
@@ -83,15 +93,18 @@ public class SecondDegreePolynomialRootsEstimator
      * the array must be provided as [c, b, a].
      * Note: This class only supports real polynomial parameters
      * This method does not check if this instance is locked.
-     * @param polyParams Array containing polynomial parameters
+     * @param polyParams Array containing polynomial parameters.
      * @throws IllegalArgumentException Raised if the length of the provided
      * array is not valid.
      */    
     private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException{
-        if(polyParams.length < VALID_POLY_PARAMS_LENGTH)
+            throws IllegalArgumentException {
+        if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
-        if(!isSecondDegree(polyParams)) throw new IllegalArgumentException();
+        }
+        if (!isSecondDegree(polyParams)) {
+            throw new IllegalArgumentException();
+        }
         
         this.realPolyParams = polyParams;
     }
@@ -105,9 +118,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @throws NotAvailableException Raised if polynomial parameter have not yet
      * been provided
      */    
-    public double[] getRealPolynomialParameters() throws NotAvailableException{
-        if(!arePolynomialParametersAvailable()) 
+    public double[] getRealPolynomialParameters() throws NotAvailableException {
+        if (!arePolynomialParametersAvailable()) {
             throw new NotAvailableException();
+        }
         return realPolyParams;
     }
     
@@ -118,7 +132,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if available, false otherwise
      */    
     @Override
-    public boolean arePolynomialParametersAvailable(){
+    public boolean arePolynomialParametersAvailable() {
         return realPolyParams != null;
     }
 
@@ -130,7 +144,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @deprecated
      */    
     @Override
-    public Complex[] getPolynomialParameters() throws NotAvailableException{
+    public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
     
@@ -158,10 +172,14 @@ public class SecondDegreePolynomialRootsEstimator
      */    
     @Override
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
+            RootEstimationException {
         
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         
@@ -175,16 +193,16 @@ public class SecondDegreePolynomialRootsEstimator
         Complex x2 = new Complex();
         solveQuadratic(a, b, c, x1, x2);
         
-        if(Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||
-                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary())){
+        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||
+                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary())) {
             locked = false;
             throw new RootEstimationException();
         }
-        if(x1.getReal() < x2.getReal()){
+        if (x1.getReal() < x2.getReal()) {
             //x1 goes first
             roots[0] = x1;
             roots[1] = x2;
-        }else{
+        } else {
             //x2 goes first
             roots[0] = x2;
             roots[1] = x1;
@@ -202,12 +220,14 @@ public class SecondDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return True if is a second degree polynomial, false otherwise
      */    
-    public static boolean isSecondDegree(double[] polyParams){
+    public static boolean isSecondDegree(double[] polyParams) {
         int length = polyParams.length;
-        if(length >= VALID_POLY_PARAMS_LENGTH){
-            if(Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS){
-                for(int i = VALID_POLY_PARAMS_LENGTH; i < length; i++){
-                    if(Math.abs(polyParams[i]) > EPS) return false;
+        if (length >= VALID_POLY_PARAMS_LENGTH) {
+            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+                for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+                    if (Math.abs(polyParams[i]) > EPS) {
+                        return false;
+                    }
                 }
                 return true;
             }
@@ -225,8 +245,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @throws NotReadyException Raised if this instance is not ready because
      * an array of polynomial parameters has not yet been provided.
      */    
-    public boolean isSecondDegree() throws NotReadyException{
-        if(!isReady()) throw new NotReadyException();
+    public boolean isSecondDegree() throws NotReadyException {
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         return isSecondDegree(realPolyParams);
     }
     
@@ -239,9 +261,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return True if roots are distinct and real, false otherwise
      */
-    public boolean hasTwoDistinctRealRoots(double[] polyParams){
-        if(polyParams.length >= VALID_POLY_PARAMS_LENGTH)
+    public boolean hasTwoDistinctRealRoots(double[] polyParams) {
+        if (polyParams.length >= VALID_POLY_PARAMS_LENGTH) {
             return getDiscriminant(polyParams) > EPS;
+        }
         return false;
     }
     
@@ -256,7 +279,9 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided
      */
     public boolean hasTwoDistinctRealRoots() throws NotReadyException{
-        if(!isReady()) throw new NotReadyException();
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         return hasTwoDistinctRealRoots(realPolyParams);
     }
     
@@ -269,8 +294,9 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if it has double root, false otherwise
      */
     public static boolean hasDoubleRoot(double[] polyParams){
-        if(polyParams.length >= VALID_POLY_PARAMS_LENGTH)
+        if (polyParams.length >= VALID_POLY_PARAMS_LENGTH) {
             return Math.abs(getDiscriminant(polyParams)) <= EPS;
+        }
         return false;
     }
     
@@ -284,7 +310,9 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided.
      */
     public boolean hasDoubleRoot() throws NotReadyException{
-        if(!isReady()) throw new NotReadyException();
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         return hasDoubleRoot(realPolyParams);
     }
     
@@ -298,8 +326,9 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if roots are complex conjugate, false otherwise
      */
     public static boolean hasTwoComplexConjugateRoots(double[] polyParams){
-        if(polyParams.length >= VALID_POLY_PARAMS_LENGTH)
+        if (polyParams.length >= VALID_POLY_PARAMS_LENGTH) {
             return getDiscriminant(polyParams) < -EPS;
+        }
         return false;
     }
     
@@ -314,7 +343,9 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided
      */    
     public boolean hasTwoComplexConjugateRoots() throws NotReadyException{
-        if(!isReady()) throw new NotReadyException();
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         return hasTwoComplexConjugateRoots(realPolyParams);
     }
     
@@ -325,7 +356,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return Value of discriminant
      */
-    private static double getDiscriminant(double[] polyParams){
+    private static double getDiscriminant(double[] polyParams) {
 
         double c = polyParams[0];
         double b = polyParams[1];
@@ -343,17 +374,17 @@ public class SecondDegreePolynomialRootsEstimator
      * @param x2 2nd root (output parameter)
      */
     private void solveQuadratic(double a, double b, double c, Complex x1,
-            Complex x2){
+            Complex x2) {
         
         double discriminant = b * b - 4.0 * a * c;
         
-        if(discriminant >= 0.0){
+        if (discriminant >= 0.0) {
             //real solutions (double or distinct)
             x1.setRealAndImaginary((-b + Math.sqrt(discriminant)) / (2.0 * a), 
                     0.0);
             x2.setRealAndImaginary((-b - Math.sqrt(discriminant)) / (2.0 * a), 
                     0.0);            
-        }else{
+        } else {
             //complex conjugate solutions
             double real = -b / (2.0 * a);
             double imag = Math.sqrt(Math.abs(discriminant)) / (2.0 * a);

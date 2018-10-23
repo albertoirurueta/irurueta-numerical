@@ -1,46 +1,54 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.InvalidBracketRangeException
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 1, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
 /**
- * Exception raised when provided bracket of values is not valid
+ * Exception raised when provided bracket of values is not valid.
  */
-public class InvalidBracketRangeException extends NumericalException{
+public class InvalidBracketRangeException extends NumericalException {
+
     /**
-     * Constructor
+     * Constructor.
      */    
-    public InvalidBracketRangeException(){
+    public InvalidBracketRangeException() {
         super();
     }
     
     /**
-     * Constructor with String containing message
-     * @param message Message indicating the cause of the exception
+     * Constructor with String containing message.
+     * @param message Message indicating the cause of the exception.
      */    
-    public InvalidBracketRangeException(String message){
+    public InvalidBracketRangeException(String message) {
         super(message);
     }
     
     /**
-     * Constructor with message and cause
-     * @param message Message describing the cause of the exception
-     * @param cause Instance containing the cause of the exception
+     * Constructor with message and cause.
+     * @param message Message describing the cause of the exception.
+     * @param cause Instance containing the cause of the exception.
      */    
-    public InvalidBracketRangeException(String message, Throwable cause){
+    public InvalidBracketRangeException(String message, Throwable cause) {
         super(message, cause);
     }
     
     /**
-     * Constructor with cause
-     * @param cause Instance containing the cause of the exception
+     * Constructor with cause.
+     * @param cause Instance containing the cause of the exception.
      */    
-    public InvalidBracketRangeException(Throwable cause){
+    public InvalidBracketRangeException(Throwable cause) {
         super(cause);
     }    
 }

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.SecantSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -21,20 +28,21 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This implementation is based on Numerical Recipes 3rd ed. Secion 9.2, page
  * 449
  */
-public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
+@SuppressWarnings("WeakerAccess")
+public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**
-     * Maximum number of iterations
+     * Maximum number of iterations.
      */
     public static final int MAXIT = 30;
     
     /**
-     * Constant defining default accuracy of the estimated root
+     * Constant defining default accuracy of the estimated root.
      */
     public static final double DEFAULT_TOLERANCE = 1e-6;
     
     /**
-     * Constant defining minimum allowed tolerance
+     * Constant defining minimum allowed tolerance.
      */    
     public static final double MIN_TOLERANCE = 0.0;
     
@@ -46,30 +54,30 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
     private double tolerance;
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public SecantSingleRootEstimator(){
+    public SecantSingleRootEstimator() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
      * root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
      * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root
+     * @param tolerance Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
-     * @throws IllegalArgumentException Raised if tolerance is negative
+     * maxEvalPoint.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
      */    
     public SecantSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException{
+            throws InvalidBracketRangeException, IllegalArgumentException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -78,10 +86,10 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
-     * the tolerance value
+     * the tolerance value.
      * @return Tolerance value.
      */    
-    public double getTolerance(){
+    public double getTolerance() {
         return tolerance;
     }
     
@@ -96,8 +104,10 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
      * negative.
      */    
     private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException{
-        if(tolerance < MIN_TOLERANCE) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
         this.tolerance = tolerance;
     }
     
@@ -112,8 +122,10 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
      * negative.
      */    
     public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetTolerance(tolerance);
     }
     
@@ -130,14 +142,18 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
      */       
     @Override
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+            RootEstimationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         rootAvailable = false;
         
-        try{
+        try {
             double x1 = minEvalPoint;
             double x2 = maxEvalPoint;
             double xacc = tolerance;
@@ -147,7 +163,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
             double[] v1 = new double[1];
             double[] v2 = new double[1];
         
-            if(Math.abs(fl) < Math.abs(f)){
+            if (Math.abs(fl) < Math.abs(f)) {
                 rts = x1;
                 xl = x2;
                 v1[0] = fl;
@@ -155,17 +171,17 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
                 swap(v1, v2);
                 fl = v1[0];
                 f = v2[0];
-            }else{
+            } else {
                 xl = x1;
                 rts = x2;
             }
-            for(int j = 0; j < MAXIT; j++){
+            for (int j = 0; j < MAXIT; j++) {
                 double dx = (xl - rts) * f / (f - fl);
                 xl = rts;
                 fl = f;
                 rts += dx;
                 f = listener.evaluate(rts);
-                if(Math.abs(dx) < xacc || f == 0.0){
+                if (Math.abs(dx) < xacc || f == 0.0) {
                     //Result obtained
                     root = rts;
                     rootAvailable = true;
@@ -173,7 +189,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
                     return;
                 }
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             locked = false;
             throw new RootEstimationException(t);
         }
@@ -190,7 +206,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator{
      * @return True if this instance is ready, false otherwise.
      */        
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
     }
 }

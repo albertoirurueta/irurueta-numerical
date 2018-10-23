@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 13, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -22,21 +29,22 @@ import com.irurueta.numerical.NotReadyException;
  * This class is based on:
  * http://en.wikipedia.org/wiki/Cubic_function
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class ThirdDegreePolynomialRootsEstimator 
-    extends PolynomialRootsEstimator{
+        extends PolynomialRootsEstimator {
 
     /**
-     * Constant defining machine precision
+     * Constant defining machine precision.
      */        
     public static final double EPS = 1e-10;
     
     /**
-     * Constant defining one third
+     * Constant defining one third.
      */
     public static final double THIRD = 1.0 / 3.0;
     
     /**
-     * Constant defining the squared root of three
+     * Constant defining the squared root of three.
      */
     public static double ROOTTHREE = Math.sqrt(3.0);
     
@@ -47,26 +55,26 @@ public class ThirdDegreePolynomialRootsEstimator
     public static final int VALID_POLY_PARAMS_LENGTH = 4;
     
     /**
-     * Array containing parameters of a second degree polynomial
+     * Array containing parameters of a second degree polynomial.
      */        
     private double[] realPolyParams;
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */        
-    public ThirdDegreePolynomialRootsEstimator(){
+    public ThirdDegreePolynomialRootsEstimator() {
         super();
         realPolyParams = null;
     }
     
     /**
-     * Constructor
-     * @param polyParams Array containing polynomial parameters
+     * Constructor.
+     * @param polyParams Array containing polynomial parameters.
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */        
     public ThirdDegreePolynomialRootsEstimator(double[] polyParams) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();      
         internalSetPolynomialParameters(polyParams);
     }
@@ -82,8 +90,10 @@ public class ThirdDegreePolynomialRootsEstimator
      * array is not valid.
      */    
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetPolynomialParameters(polyParams);
     }
     
@@ -98,10 +108,13 @@ public class ThirdDegreePolynomialRootsEstimator
      * array is not valid.
      */        
     private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException{
-        if(polyParams.length < VALID_POLY_PARAMS_LENGTH)
+            throws IllegalArgumentException {
+        if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
-        if(!isThirdDegree(polyParams)) throw new IllegalArgumentException();
+        }
+        if (!isThirdDegree(polyParams)) {
+            throw new IllegalArgumentException();
+        }
         
         this.realPolyParams = polyParams;
     }
@@ -110,45 +123,46 @@ public class ThirdDegreePolynomialRootsEstimator
      * Returns array of third degree polynomial parameters.
      * A third degree polynomial is defined by p(x) = a * x^3 + b * x^2 + c * x 
      * + d, and the array is returned as [d, c, b, a].
-     * Note: This class only supports real polynomial parameters
-     * @return Array of first degree polynomial parameters
+     * Note: This class only supports real polynomial parameters.
+     * @return Array of first degree polynomial parameters.
      * @throws NotAvailableException Raised if polynomial parameter have not yet
-     * been provided
+     * been provided.
      */        
-    public double[] getRealPolynomialParameters() throws NotAvailableException{
-        if(!arePolynomialParametersAvailable()) 
+    public double[] getRealPolynomialParameters() throws NotAvailableException {
+        if (!arePolynomialParametersAvailable()) {
             throw new NotAvailableException();
+        }
         return realPolyParams;
     }
     
     /**
      * Returns boolean indicating whether REAL polynomial parameters have been 
      * provided and is available for retrieval.
-     * Note: This class only supports real polynomial parameters
-     * @return True if available, false otherwise
+     * Note: This class only supports real polynomial parameters.
+     * @return True if available, false otherwise.
      */        
     @Override
-    public boolean arePolynomialParametersAvailable(){
+    public boolean arePolynomialParametersAvailable() {
         return realPolyParams != null;
     }
 
     /**
      * This method will always raise a NotAvailableException because this class
-     * only supports REAL polynomial parameters
-     * @return this method always throws an exception
+     * only supports REAL polynomial parameters.
+     * @return this method always throws an exception.
      * @throws com.irurueta.numerical.NotAvailableException always thrown
-     * @deprecated
-     */        
+     */
+    @Deprecated
     @Override
-    public Complex[] getPolynomialParameters() throws NotAvailableException{
+    public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
     
 
     /**
      * This method will always raise an IllegalArgumentException because this
-     * class only supports REAL polynomial parameters
-     * @throws IllegalArgumentException always thrown
+     * class only supports REAL polynomial parameters.
+     * @throws IllegalArgumentException always thrown.
      * @deprecated 
      */        
     @Override
@@ -163,15 +177,19 @@ public class ThirdDegreePolynomialRootsEstimator
      * @throws LockedException Raised if this instance is locked estimating 
      * roots.
      * @throws NotReadyException Raised if this instance is not ready because
-     * polynomial parameters have not been provided
+     * polynomial parameters have not been provided.
      * @throws RootEstimationException Raised if roots cannot be estimated for
-     * some reason
+     * some reason.
      */        
     @Override
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+            RootEstimationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         
@@ -187,46 +205,46 @@ public class ThirdDegreePolynomialRootsEstimator
         Complex x3 = new Complex();
         solveCubic(a, b, c, d, x1, x2, x3);
         
-        if(Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||
+        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||
            Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary()) ||
-           Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())){
+           Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())) {
 
             locked = false;
             throw new RootEstimationException();
         }
 
-        if(x1.getReal() < x2.getReal() && x1.getReal() < x3.getReal()){
+        if (x1.getReal() < x2.getReal() && x1.getReal() < x3.getReal()) {
             //x1 goes first
             roots[0] = x1;
-            if(x2.getReal() < x3.getReal()){
+            if (x2.getReal() < x3.getReal()) {
                 //x2 goes second and x3 goes third
                 roots[1] = x2;
                 roots[2] = x3;
-            }else{
+            } else {
                 //x3 goes second and x2 goes third
                 roots[1] = x3;
                 roots[2] = x2;
             }
-        }else if(x2.getReal() < x1.getReal() && x2.getReal() < x3.getReal()){
+        } else if (x2.getReal() < x1.getReal() && x2.getReal() < x3.getReal()) {
             //x2 goes first
             roots[0] = x2;
-            if(x1.getReal() < x3.getReal()){
+            if (x1.getReal() < x3.getReal()) {
                 //x1 goes second and x3 goes third
                 roots[1] = x1;
                 roots[2] = x3;
-            }else{
+            } else {
                 //x3 goes second and x1 goes third
                 roots[1] = x3;
                 roots[2] = x1;
             }
-        }else{
+        } else {
             //x3 goes first
             roots[0] = x3;
-            if(x1.getReal() < x2.getReal()){
+            if (x1.getReal() < x2.getReal()) {
                 //x1 goes second and x2 goes third
                 roots[1] = x1;
                 roots[2] = x2;
-            }else{
+            } else {
                 //x2 goes second and x1 goes second
                 roots[1] = x2;
                 roots[2] = x1;
@@ -245,12 +263,14 @@ public class ThirdDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return True if is a third degree polynomial, false otherwise
      */        
-    public static boolean isThirdDegree(double[] polyParams){
+    public static boolean isThirdDegree(double[] polyParams) {
         int length = polyParams.length;
-        if(length >= VALID_POLY_PARAMS_LENGTH){
-            if(Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS){
-                for(int i = VALID_POLY_PARAMS_LENGTH; i < length; i++){
-                    if(Math.abs(polyParams[i]) > EPS) return false;
+        if (length >= VALID_POLY_PARAMS_LENGTH) {
+            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+                for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+                    if (Math.abs(polyParams[i]) > EPS) {
+                        return false;
+                    }
                 }
                 return true;
             }

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.estimators.PolynomialEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 6, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
@@ -12,6 +19,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +27,7 @@ import java.util.List;
  * This class defines the interface for an estimator of a polynomial of a given 
  * degree using points where polynomials are evaluated.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public abstract class PolynomialEstimator {
     
     /**
@@ -597,7 +606,7 @@ public abstract class PolynomialEstimator {
         
         double powX = 1.0;
         double x = evaluation.getX();
-        for(int i = 0; i < a.getColumns(); i++) {
+        for (int i = 0; i < a.getColumns(); i++) {
             a.setElementAt(row, i, powX);
             powX *= x;
         }
@@ -618,15 +627,15 @@ public abstract class PolynomialEstimator {
         
         int order = evaluation.getDerivativeOrder();
         
-        for(int i = 0; i < order; i++) {
+        for (int i = 0; i < order; i++) {
             a.setElementAt(row, i, 0.0);
         }
 
         double powX = 1.0;
         double x = evaluation.getX();
-        for(int i = order; i < a.getColumns(); i++) {
+        for (int i = order; i < a.getColumns(); i++) {
             int param = i;
-            for(int j = 1; j < order; j++) {
+            for (int j = 1; j < order; j++) {
                 param *= i - j;
             }
             a.setElementAt(row, i, param * powX);
@@ -651,17 +660,17 @@ public abstract class PolynomialEstimator {
         
         int order = evaluation.getIntegralOrder();
         double[] constants = evaluation.getConstants();
-        if(constants != null && constants.length != order) {
+        if (constants != null && constants.length != order) {
             throw new PolynomialEstimationException();
         }
         
         double accum = 0.0;        
         double powX = 1.0;
         double x = evaluation.getX();
-        for(int i = 0; i < order; i++) {
-            if(constants != null) {
+        for (int i = 0; i < order; i++) {
+            if (constants != null) {
                 int param = 1;
-                for(int k = 1; k <= i; k++) {
+                for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
                 accum += constants[i] / (double)param * powX;
@@ -669,9 +678,9 @@ public abstract class PolynomialEstimator {
             powX *= x;
         }
         
-        for(int i = 0, j = order; i < a.getColumns(); i++, j++) {
+        for (int i = 0, j = order; i < a.getColumns(); i++, j++) {
             int param = j;
-            for(int k = 1; k < order; k++) {
+            for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
             a.setElementAt(row, i, powX / (double)param);
@@ -697,7 +706,7 @@ public abstract class PolynomialEstimator {
         
         int order = evaluation.getIntegralOrder();
         double[] constants = evaluation.getConstants();
-        if(constants != null && constants.length != order) {
+        if (constants != null && constants.length != order) {
             throw new PolynomialEstimationException();
         }
         
@@ -706,7 +715,7 @@ public abstract class PolynomialEstimator {
         double powEndX = 1.0;
         double startX = evaluation.getStartX();
         double endX = evaluation.getEndX();
-        for(int i = 0; i < order; i++) {
+        for (int i = 0; i < order; i++) {
             if(constants != null) {
                 int param = 1;
                 for(int k = 1; k <= i; k++) {
@@ -718,9 +727,9 @@ public abstract class PolynomialEstimator {
             powEndX *= endX;
         }
         
-        for(int i = 0, j = order; i < a.getColumns(); i++, j++) {
+        for (int i = 0, j = order; i < a.getColumns(); i++, j++) {
             int param = j;
-            for(int k = 1; k < order; k++) {
+            for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
             a.setElementAt(row, i, (powEndX - powStartX) / (double)param);
@@ -740,14 +749,14 @@ public abstract class PolynomialEstimator {
      */
     protected void normalize(Matrix a, Matrix b, int row) {
         double sqrNorm = 0.0;
-        for(int i = 0; i < a.getColumns(); i++) {
+        for (int i = 0; i < a.getColumns(); i++) {
             sqrNorm += Math.pow(a.getElementAt(row, i), 2.0);
         }
         sqrNorm += Math.pow(b.getElementAtIndex(row), 2.0);
         
         double norm = Math.sqrt(sqrNorm);
         
-        for(int i = 0; i < a.getColumns(); i++) {
+        for (int i = 0; i < a.getColumns(); i++) {
             a.setElementAt(row, i, a.getElementAt(row, i) / norm);
         }
         b.setElementAtIndex(row, b.getElementAtIndex(row) / norm);

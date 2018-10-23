@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.DirectionalDerivativeEvaluator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 1, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -14,6 +21,7 @@ package com.irurueta.numerical;
  * Using provided input point and direction, the multidimensional function's 
  * input parameters are determined so they all lay on a line.
  */
+@SuppressWarnings("WeakerAccess")
 public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
     
     /**
@@ -27,21 +35,21 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
     double[] dft;
     
     /**
-     * Constructor
-     * @param listener Listener to evaluate a multidimensional function
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
      * @param gradientListener Listener to evaluate a multidimensional 
-     * function's gradient
+     * function's gradient.
      * @param point Point used as a reference to determine the function's input
      * parameters along a line.
      * @param direction Vector indicating the direction of the line where the 
      * function is evaluated.
      * @throws IllegalArgumentException Raised if point and direction don't have
-     * the same length
+     * the same length.
      */
     public DirectionalDerivativeEvaluator(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener, double[] point, 
-            double[] direction) throws IllegalArgumentException{
+            double[] direction) throws IllegalArgumentException {
         super(listener, point, direction);
         
         this.gradientListener = gradientListener;        
@@ -53,10 +61,10 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      * gradient.
      * If the gradient expression is not known (e.g. is not a closed 
      * expression), then a GradientEstimator can be used internally in the 
-     * listener implementation
-     * @return Gradient listener
+     * listener implementation.
+     * @return Gradient listener.
      */
-    public GradientFunctionEvaluatorListener getGradientListener(){
+    public GradientFunctionEvaluatorListener getGradientListener() {
         return gradientListener;
     }
     
@@ -69,7 +77,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      * @param gradientListener Gradient listener
      */
     public void setGradientListener(
-            GradientFunctionEvaluatorListener gradientListener){
+            GradientFunctionEvaluatorListener gradientListener) {
         this.gradientListener = gradientListener;
     }
     
@@ -77,27 +85,27 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      * Computes derivative on current direction of a function at distance x from
      * current point and using current listener and gradient listener.
      * @param x Distance from current point using current direction where 
-     * function is being evaluated
-     * @return Result of evaluating function
-     * @throws EvaluationException Thrown if function evaluation fails 
+     * function is being evaluated.
+     * @return Result of evaluating function.
+     * @throws EvaluationException Thrown if function evaluation fails.
      */
-    public double differentiateAt(double x) throws EvaluationException{
+    public double differentiateAt(double x) throws EvaluationException {
         int length = point.length;
         
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             p[i] = point[i] + x * direction[i];
         }
         
         //Compute gradient at such point
-        try{
+        try {
             gradientListener.evaluateGradient(p, dft);
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new EvaluationException(t);
         }
         
         //Obtain 1D derivative on corresponding direction
         double df1 = 0.0;
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             df1 += dft[i] * direction[i];
         }        
         return df1;

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.FalsePositionSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 12, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -19,13 +26,14 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * and maximum evaluation points.
  * This class is based on the false position algorithm.
  * This implementation is based on Numerical Recipes 3rd ed. Section 9.2 
- * page 451
+ * page 451.
  */
+@SuppressWarnings("WeakerAccess")
 public class FalsePositionSingleRootEstimator 
-    extends BracketedSingleRootEstimator{
+    extends BracketedSingleRootEstimator {
     
     /**
-     * Maximum allowed number of iterations
+     * Maximum allowed number of iterations.
      */
     public static final int MAXIT = 30;
     
@@ -42,20 +50,20 @@ public class FalsePositionSingleRootEstimator
     /**
      * Tolerance to find a root. Whenever the variation of the estimated root is
      * smaller than the provided tolerance, then the algorithm is assumed to be 
-     * converged
+     * converged.
      */    
     private double tolerance;
         
     /**
-     * Empty constructor
+     * Empty constructor.
      */    
-    public FalsePositionSingleRootEstimator(){
+    public FalsePositionSingleRootEstimator() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
@@ -67,13 +75,13 @@ public class FalsePositionSingleRootEstimator
      * tolerance, then the algorithm is assumed to be converged, and the root
      * is ensured to have an accuracy that equals tolerance.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
-     * @throws IllegalArgumentException Raised if provided tolerance is negative
+     * maxEvalPoint.
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */    
     public FalsePositionSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException{
+            throws InvalidBracketRangeException, IllegalArgumentException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -85,7 +93,7 @@ public class FalsePositionSingleRootEstimator
      * equals the returned tolerance.
      * @return Tolerance to find a root.
      */    
-    public double getTolerance(){
+    public double getTolerance() {
         return tolerance;
     }    
     
@@ -97,11 +105,13 @@ public class FalsePositionSingleRootEstimator
      * estimated root is ensured to have an accuracy that equals provided 
      * tolerance.
      * @param tolerance Tolerance to find a root.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */    
     private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException{
-        if(tolerance < MIN_TOLERANCE) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
         this.tolerance = tolerance;
     }
     
@@ -113,11 +123,13 @@ public class FalsePositionSingleRootEstimator
      * @param tolerance Tolerance to find a root.
      * @throws LockedException Raised if this instance is locked while doing
      * some computations.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */    
     public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetTolerance(tolerance);
     }
     
@@ -134,14 +146,18 @@ public class FalsePositionSingleRootEstimator
      */        
     @Override
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+            RootEstimationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         rootAvailable = false;
         
-        try{
+        try {
             double[] v1 = new double[1];
             double[] v2 = new double[1];
         
@@ -151,15 +167,15 @@ public class FalsePositionSingleRootEstimator
             double xl, xh, del;
             double fl = listener.evaluate(x1);
             double fh = listener.evaluate(x2);
-            if(fl * fh > 0.0){
+            if (fl * fh > 0.0) {
                 //root must be bracketed
                 locked = false;
                 throw new RootEstimationException();
             }
-            if(fl < 0.0){
+            if (fl < 0.0) {
                 xl = x1;
                 xh = x2;
-            }else{
+            } else {
                 xl = x2;
                 xh = x1;
             
@@ -170,20 +186,20 @@ public class FalsePositionSingleRootEstimator
                 fh = v2[0];
             }
             double dx = xh - xl;
-            for(int j = 0; j < MAXIT; j++){
+            for (int j = 0; j < MAXIT; j++) {
                 double rtf = xl + dx * fl / (fl - fh);
                 double f = listener.evaluate(rtf);
-                if(f < 0.0){
+                if (f < 0.0) {
                     del = xl - rtf;
                     xl = rtf;
                     fl = f;
-                }else{
+                } else {
                     del = xh - rtf;
                     xh = rtf;
                     fh = f;
                 }
                 dx = xh - xl;
-                if(Math.abs(del) < xacc || f == 0.0){
+                if (Math.abs(del) < xacc || f == 0.0) {
                     //result obtained
                     root = rtf;
                     rootAvailable = true;
@@ -191,7 +207,7 @@ public class FalsePositionSingleRootEstimator
                     return;
                 }
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new RootEstimationException(t);
         }
         //too many iterations and error exceeds desired tolerance
@@ -207,7 +223,7 @@ public class FalsePositionSingleRootEstimator
      * @return True if instance is ready, false otherwise
      */    
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
     }
 }

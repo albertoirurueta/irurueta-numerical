@@ -1,16 +1,24 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.robust.LMedSRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 4, 2015
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -36,6 +44,7 @@ import java.util.List;
  * produces results with a similar accuracy and computational cost than RANSAC.
  * @param <T> type of object to be estimated.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
 
     /**
@@ -390,7 +399,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             int currentIter = 0;                     
             //reusable list that will contain preliminar solutions on each 
             //iteration
-            List<T> iterResults = new ArrayList<T>();            
+            List<T> iterResults = new ArrayList<>();
             bestResult = null; //best result found so far
             //progress and previous progress to determine when progress
             //notification must occur
@@ -427,77 +436,75 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
                 
                 //iterate over all solutions that have been found
                 improved = false;
-                if (iterResults != null) {
-                    for (T iterResult : iterResults) {
-                        //compute inliers
-                        computeInliers(iterResult, subsetSize, mInlierFactor, 
-                                residualsTemp, listener, sorter, inliersData);
+                for (T iterResult : iterResults) {
+                    //compute inliers
+                    computeInliers(iterResult, subsetSize, mInlierFactor,
+                            residualsTemp, listener, sorter, inliersData);
 
-                        //save solution that produces the best residual
-                        if (inliersData.isMedianResidualImproved()) {
-                            improved = true;
+                    //save solution that produces the best residual
+                    if (inliersData.isMedianResidualImproved()) {
+                        improved = true;
 
-                            //keep current solution
-                            bestResult = iterResult;
+                        //keep current solution
+                        bestResult = iterResult;
 
-                            //keep best inliers data corresponding to best solution,
-                            //in case it can be useful along with the result
-                            mBestInliersData = inliersData;
+                        //keep best inliers data corresponding to best solution,
+                        //in case it can be useful along with the result
+                        mBestInliersData = inliersData;
 
-                            //recompute number of times the algorithm needs to be
-                            //executed depending on current number of inliers to 
-                            //achieve with probability mConfidence that we have 
-                            //inliers and probability 1 - mConfidence that we have
-                            //outliers
-                            bestNumInliers = inliersData.getNumInliers();
-                            double probInlier = ((double)bestNumInliers) /
-                                    ((double)totalSamples);
+                        //recompute number of times the algorithm needs to be
+                        //executed depending on current number of inliers to
+                        //achieve with probability mConfidence that we have
+                        //inliers and probability 1 - mConfidence that we have
+                        //outliers
+                        bestNumInliers = inliersData.getNumInliers();
+                        double probInlier = ((double)bestNumInliers) /
+                                ((double)totalSamples);
 
-                            double probSubsetAllInliers =
-                                    Math.pow(probInlier, (double)subsetSize);
+                        double probSubsetAllInliers =
+                                Math.pow(probInlier, (double)subsetSize);
 
-                            if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                                    Double.isNaN(probSubsetAllInliers)) {
+                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
+                                Double.isNaN(probSubsetAllInliers)) {
+                            newNIters = Integer.MAX_VALUE;
+                        } else {
+                            double logProbSomeOutliers =
+                                    Math.log(1.0 - probSubsetAllInliers);
+                            if (Math.abs(logProbSomeOutliers) <
+                                    Double.MIN_VALUE ||
+                                    Double.isNaN(logProbSomeOutliers)) {
                                 newNIters = Integer.MAX_VALUE;
                             } else {
-                                double logProbSomeOutliers = 
-                                        Math.log(1.0 - probSubsetAllInliers);
-                                if (Math.abs(logProbSomeOutliers) < 
-                                        Double.MIN_VALUE ||
-                                        Double.isNaN(logProbSomeOutliers)) {
-                                    newNIters = Integer.MAX_VALUE;
-                                } else {
-                                    newNIters = (int)Math.ceil(Math.abs(
-                                            Math.log(1.0 - mConfidence) / 
-                                            logProbSomeOutliers));
-                                }
+                                newNIters = (int)Math.ceil(Math.abs(
+                                        Math.log(1.0 - mConfidence) /
+                                        logProbSomeOutliers));
                             }
-
-                            if (newNIters < nIters) {
-                                nIters = newNIters;
-                            }
-
-                            threshold = inliersData.getEstimatedThreshold();
-                            
-                            //create new inliers data instance until a new best 
-                            //solution is found
-                            double bestMedianResidual = 
-                                    inliersData.getBestMedianResidual();
-                            inliersData = new LMedSInliersData(totalSamples);
-                            //update best median residual on new instance so 
-                            //that only better solutions that are found later 
-                            //can update inliers data
-                            inliersData.update(bestMedianResidual, 
-                                    inliersData.getStandardDeviation(),
-                                    inliersData.getInliers(), 
-                                    inliersData.getResiduals(), 
-                                    inliersData.getNumInliers(), 
-                                    bestMedianResidual, 
-                                    inliersData.getEstimatedThreshold(), false);                            
                         }
+
+                        if (newNIters < nIters) {
+                            nIters = newNIters;
+                        }
+
+                        threshold = inliersData.getEstimatedThreshold();
+
+                        //create new inliers data instance until a new best
+                        //solution is found
+                        double bestMedianResidual =
+                                inliersData.getBestMedianResidual();
+                        inliersData = new LMedSInliersData(totalSamples);
+                        //update best median residual on new instance so
+                        //that only better solutions that are found later
+                        //can update inliers data
+                        inliersData.update(bestMedianResidual,
+                                inliersData.getStandardDeviation(),
+                                inliersData.getInliers(),
+                                inliersData.getResiduals(),
+                                inliersData.getNumInliers(),
+                                bestMedianResidual,
+                                inliersData.getEstimatedThreshold(), false);
                     }
                 }
-                
+
                 if (nIters > 0) {
                     progress = Math.min((float)currentIter / (float)nIters, 
                             1.0f);
@@ -563,9 +570,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param listener listener to obtain residuals for samples.
      * @param sorter sorter instance to compute median of residuals.
      * @param inliersData inliers data to be reused on each iteration.
-     * @return inliers data.
      */
-    private static <T> LMedSInliersData computeInliers(T iterResult, 
+    private static <T> void computeInliers(T iterResult,
             int subsetSize, double inlierFactor, double[] residualsTemp, 
             LMedSRobustEstimatorListener<T> listener, 
             Sorter sorter, LMedSInliersData inliersData) {
@@ -607,10 +613,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (medianResidualImproved) {
             inliersData.update(bestMedianResidual, standardDeviation, inliers, 
                     residuals, numInliers, medianResidual, 
-                    normEstimatedThreshold, medianResidualImproved);
+                    normEstimatedThreshold, true);
         }
-        
-        return inliersData;
     }
     
     /**

@@ -1,28 +1,33 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.estimators.MSACPolynomialRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 14, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
-import com.irurueta.numerical.robust.MSACRobustEstimator;
-import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Finds the best polynomial using RANSAC algorithm.
  */
-public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator{
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
+public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
     
     /**
      * Constant defining default threshold to determine whether polynomials are
@@ -194,12 +199,12 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator{
         if(!isReady()) throw new NotReadyException();
         
         MSACRobustEstimator<Polynomial> innerEstimator =
-                new MSACRobustEstimator<Polynomial>(
+                new MSACRobustEstimator<>(
                 new MSACRobustEstimatorListener<Polynomial>(){
                     
             //subset of evaluations picked on each iteration
             private List<PolynomialEvaluation> mSubsetEvaluations =
-                    new ArrayList<PolynomialEvaluation>();
+                    new ArrayList<>();
                     
             @Override
             public double getThreshold() {
@@ -220,8 +225,8 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator{
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List<Polynomial> solutions) {
                 mSubsetEvaluations.clear();
-                for(int i = 0; i < samplesIndices.length; i++) {
-                    mSubsetEvaluations.add(mEvaluations.get(samplesIndices[i]));
+                for (int samplesIndex : samplesIndices) {
+                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));
                 }
                 
                 try {

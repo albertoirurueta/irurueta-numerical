@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.robust.RobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 4, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
@@ -15,6 +22,7 @@ import com.irurueta.numerical.NotReadyException;
  * Robust estimator to estimate some object in a robust manner
  * @param <T> Object to be estimated (i.e. lines, cameras, etc)
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class RobustEstimator<T> {
     
     /**
@@ -54,7 +62,7 @@ public abstract class RobustEstimator<T> {
     /**
      * Constructor
      */
-    public RobustEstimator(){
+    public RobustEstimator() {
         mListener = null;
         mLocked = false;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
@@ -65,7 +73,7 @@ public abstract class RobustEstimator<T> {
      * @param listener listener to be notified of events such as when estimation
      * starts, ends or its progress significantly changes
      */
-    public RobustEstimator(RobustEstimatorListener<T> listener){
+    public RobustEstimator(RobustEstimatorListener<T> listener) {
         mListener = listener;
         mLocked = false;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
@@ -76,7 +84,7 @@ public abstract class RobustEstimator<T> {
      * estimation starts, ends or its progress significantly changes
      * @return listener to be notified of events
      */
-    public RobustEstimatorListener<T> getListener(){
+    public RobustEstimatorListener<T> getListener() {
         return mListener;
     }
     
@@ -87,8 +95,10 @@ public abstract class RobustEstimator<T> {
      * @throws LockedException if robust estimator is locked
      */
     public void setListener(RobustEstimatorListener<T> listener) 
-            throws LockedException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         mListener = listener;
     }
     
@@ -97,7 +107,7 @@ public abstract class RobustEstimator<T> {
      * retrieval
      * @return true if available, false otherwise
      */
-    public boolean isListenerAvailable(){
+    public boolean isListenerAvailable() {
         return mListener != null;
     }
     
@@ -105,7 +115,7 @@ public abstract class RobustEstimator<T> {
      * Indicates if this instance is locked because estimation is being computed
      * @return true if locked, false otherwise
      */
-    public boolean isLocked(){
+    public boolean isLocked() {
         return mLocked;
     }
 
@@ -115,7 +125,7 @@ public abstract class RobustEstimator<T> {
      * @return amount of progress variation before notifying a progress change
      * during estimation
      */
-    public float getProgressDelta(){
+    public float getProgressDelta() {
         return mProgressDelta;
     }
     
@@ -130,11 +140,14 @@ public abstract class RobustEstimator<T> {
      * is being computed
      */
     public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(progressDelta < MIN_PROGRESS_DELTA || 
-                progressDelta > MAX_PROGRESS_DELTA) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (progressDelta < MIN_PROGRESS_DELTA ||
+                progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
+        }
         mProgressDelta = progressDelta;
     }
     
@@ -166,8 +179,11 @@ public abstract class RobustEstimator<T> {
      * Indicates if estimator is ready to start the estimation process
      * @return true if ready, false otherwise
      */
-    public boolean isReady(){
-        if(mListener != null) return mListener.isReady();
-        else return false;
+    public boolean isReady() {
+        if (mListener != null) {
+            return mListener.isReady();
+        } else {
+            return false;
+        }
     }
 }

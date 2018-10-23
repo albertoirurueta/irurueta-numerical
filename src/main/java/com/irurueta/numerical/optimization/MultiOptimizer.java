@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.optimization.MultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@iruruta.com)
- * @date May 6, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
@@ -17,7 +24,8 @@ import com.irurueta.numerical.NotAvailableException;
  * A multidimensional class is one having several input parameters (usually 
  * provided as an array of values), and returning a single scalar value.
  */
-public abstract class MultiOptimizer extends Optimizer{
+@SuppressWarnings("WeakerAccess")
+public abstract class MultiOptimizer extends Optimizer {
     /**
      * Listener to evaluate a multidimensional function.
      */
@@ -112,7 +120,7 @@ public abstract class MultiOptimizer extends Optimizer{
      * available for retrieval.
      * @return True if result is available, false otherwise.
      */
-    public boolean isResultAvailable(){
+    public boolean isResultAvailable() {
         return resultAvailable;
     }
     

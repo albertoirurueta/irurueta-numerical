@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.RootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -18,6 +25,7 @@ import com.irurueta.numerical.NotReadyException;
  * Usually root estimators will only find a single root around an initial 
  * coarsely estimated solution.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class RootEstimator {
     
     /**
@@ -29,9 +37,9 @@ public abstract class RootEstimator {
     protected boolean locked;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public RootEstimator(){
+    public RootEstimator() {
         locked = false;
     }
     
@@ -41,7 +49,7 @@ public abstract class RootEstimator {
      * change any parameters while being locked will raise a LockedException.
      * @return Boolean indicating whether this instance is locked.
      */
-    public boolean isLocked(){
+    public boolean isLocked() {
         return locked;
     }
     
@@ -56,7 +64,7 @@ public abstract class RootEstimator {
      * numerical instability or convergence problems, or no roots are found).
      */
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{}
+            RootEstimationException{ }
     
     /**
      * Returns boolean indicating whether enough parameters have been provided
@@ -64,7 +72,7 @@ public abstract class RootEstimator {
      * @return True if this instance is ready to start the root estimation,
      * false otherwise.
      */
-    public boolean isReady(){
+    public boolean isReady() {
         return false;
     }
 }

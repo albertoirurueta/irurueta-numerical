@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.BisectionSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -37,10 +44,11 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This class is based on the implementation of Numerical Recipes 3rd ed. 
  * Section 9.1.1 page 447.
  */
-public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
+@SuppressWarnings("WeakerAccess")
+public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
     
     /**
-     * Constant defining maximum number of iterations to estimate a root
+     * Constant defining maximum number of iterations to estimate a root.
      */
     public static final int JMAX = 50;
     
@@ -57,20 +65,20 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
     /**
      * Tolerance to find a root. Whenever the variation of the estimated root is
      * smaller than the provided tolerance, then the algorithm is assumed to be 
-     * converged
+     * converged.
      */
     private double tolerance;
      
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    BisectionSingleRootEstimator(){
+    BisectionSingleRootEstimator() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener Listener to evaluate a single dimension function f(x)
      * to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
@@ -82,13 +90,13 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
      * tolerance, then the algorithm is assumed to be converged, and the root
      * is ensured to have an accuracy that equals tolerance.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint
-     * @throws IllegalArgumentException Raised if provided tolerance is negative
+     * maxEvalPoint.
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     BisectionSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener,
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException{
+            throws InvalidBracketRangeException, IllegalArgumentException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -100,7 +108,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
      * equals the returned tolerance.
      * @return Tolerance to find a root.
      */
-    public double getTolerance(){
+    public double getTolerance() {
         return tolerance;
     }
     
@@ -112,11 +120,13 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
      * @param tolerance Tolerance to find a root.
      * @throws LockedException Raised if this instance is locked while doing
      * some computations.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetTolerance(tolerance);
     }
     
@@ -128,11 +138,13 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
      * estimated root is ensured to have an accuracy that equals provided 
      * tolerance.
      * @param tolerance Tolerance to find a root.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException{
-        if(tolerance < MIN_TOLERANCE) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
         this.tolerance = tolerance;
     }
     
@@ -149,14 +161,18 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
      */    
     @Override
     public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+            RootEstimationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         rootAvailable = false;
         
-        try{
+        try {
             double x1 = minEvalPoint;
             double x2 = maxEvalPoint;
             double xacc = tolerance;
@@ -164,22 +180,24 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
             double f = listener.evaluate(x1);
             double fmid = listener.evaluate(x2);
         
-            if(f * fmid >= 0.0){
+            if (f * fmid >= 0.0) {
                 //check that bracket contains a sign change in function
                 locked = false;
                 throw new RootEstimationException();
             }
-            if(f < 0.0){
+            if (f < 0.0) {
                 dx = x2 - x1;
                 rtb = x1;
-            }else{
+            } else {
                 dx = x1 - x2;
                 rtb = x2;
             }
-            for(int j = 0; j < JMAX; j++){
+            for (int j = 0; j < JMAX; j++) {
                 fmid = listener.evaluate(xmid = rtb + (dx *= 0.5));
-                if(fmid <= 0.0) rtb = xmid;
-                if(Math.abs(dx) < xacc || fmid == 0.0){
+                if (fmid <= 0.0) {
+                    rtb = xmid;
+                }
+                if (Math.abs(dx) < xacc || fmid == 0.0) {
                     //result obtained
                     root = rtb;
                     rootAvailable = true;
@@ -187,7 +205,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
                     return;
                 }
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             locked = false;
             throw new RootEstimationException(t);
         }
@@ -204,7 +222,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator{
      * @return True if instance is ready, false otherwise
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
     }
 }

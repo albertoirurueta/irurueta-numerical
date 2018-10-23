@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.MaximumLikelihoodEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 5, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -24,10 +31,11 @@ package com.irurueta.numerical;
  * AccurateMaximumLikelihoodEstimator), as it will provide much more accurate
  * results at a slightly higher computational cost.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class MaximumLikelihoodEstimator {
 
     /**
-     * Default Gaussian sigma assigned to each sample
+     * Default Gaussian sigma assigned to each sample.
      */
     public static final double DEFAULT_GAUSSIAN_SIGMA = 1.0;
     
@@ -69,7 +77,7 @@ public abstract class MaximumLikelihoodEstimator {
     /**
      * Boolean indicating whether this instance is locked because some 
      * computations are being done. While this instance is locked, attempting to
-     * change its status or parameters will raise an exception
+     * change its status or parameters will raise an exception.
      */
     protected boolean locked;
     
@@ -86,7 +94,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero.
      */
     public MaximumLikelihoodEstimator(double gaussianSigma) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         inputData = null;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -95,9 +103,9 @@ public abstract class MaximumLikelihoodEstimator {
     }
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public MaximumLikelihoodEstimator(){
+    public MaximumLikelihoodEstimator() {
         inputData = null;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -106,15 +114,15 @@ public abstract class MaximumLikelihoodEstimator {
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param inputData Array containing input data where most likely value must
      * be estimated from.
-     * @param gaussianSigma Gaussian sigma to be used on each sample
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */
     public MaximumLikelihoodEstimator(double[] inputData, double gaussianSigma)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         this.inputData = inputData;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -130,13 +138,13 @@ public abstract class MaximumLikelihoodEstimator {
      * array.
      * @param inputData Array containing input data where most likely value must
      * be estimated from.
-     * @param gaussianSigma Gaussian sigma to be used on each sample
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is 
-     * negative or zero, or if minValue &lt; maxValue
+     * negative or zero, or if minValue &lt; maxValue.
      */
     public MaximumLikelihoodEstimator(double minValue, double maxValue,
             double[] inputData, double gaussianSigma) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         this.inputData = inputData;
         locked = false;
         internalSetMinMaxValues(minValue, maxValue);
@@ -156,8 +164,10 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws NotAvailableException Raised if this value has not yet been set
      * or computed.
      */
-    public double getMinValue() throws NotAvailableException{
-        if(!areMinMaxValuesAvailable()) throw new NotAvailableException();
+    public double getMinValue() throws NotAvailableException {
+        if (!areMinMaxValuesAvailable()) {
+            throw new NotAvailableException();
+        }
         return minValue;
     }
     
@@ -167,27 +177,13 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws NotAvailableException Raised if this value has not yet been set
      * or computed.
      */
-    public double getMaxValue() throws NotAvailableException{
-        if(!areMinMaxValuesAvailable()) throw new NotAvailableException();        
+    public double getMaxValue() throws NotAvailableException {
+        if (!areMinMaxValuesAvailable()) {
+            throw new NotAvailableException();
+        }
         return maxValue;
     }
     
-    /**
-     * Method to set internally minimum and maximum value found in input data
-     * array.
-     * @param minValue Minimum value in input data array.
-     * @param maxValue Maximum value in input data array.
-     * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
-     */
-    private void internalSetMinMaxValues(double minValue, double maxValue)
-            throws IllegalArgumentException{
-        if(minValue > maxValue) throw new IllegalArgumentException();
-        
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        areMinMaxAvailable = true;
-    }
-
     /**
      * Sets minimum and maximum value assumed to be found in input data array.
      * @param minValue Minimum value in input data array.
@@ -198,8 +194,10 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
     public void setMinMaxValues(double minValue, double maxValue)
-            throws LockedException, IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetMinMaxValues(minValue, maxValue);
     }
     
@@ -209,17 +207,17 @@ public abstract class MaximumLikelihoodEstimator {
      * @return Boolean indicating whether minimum and maximum values in array
      * are already available.
      */
-    public boolean areMinMaxValuesAvailable(){
+    public boolean areMinMaxValuesAvailable() {
         return areMinMaxAvailable;
     }
     
     /**
      * Returns boolean indicating whether this instance is locked because some 
      * computations are being done. While this instance is locked, attempting to
-     * change its status or parameters will raise an exception
+     * change its status or parameters will raise an exception.
      * @return Returns boolean indicating whether this instance is locked.
      */
-    public boolean isLocked(){
+    public boolean isLocked() {
         return locked;
     }
     
@@ -230,21 +228,25 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws NotAvailableException Exception raised if input data has not yet
      * been provided.
      */
-    public double[] getInputData() throws NotAvailableException{
-        if(!isInputDataAvailable()) throw new NotAvailableException();
+    public double[] getInputData() throws NotAvailableException {
+        if (!isInputDataAvailable()) {
+            throw new NotAvailableException();
+        }
         return inputData;
     }
     
     /**
      * Sets array containing input data to be used to find the most likely 
      * value.
-     * @param inputData Array containing input data
+     * @param inputData Array containing input data.
      * @throws LockedException Exception raised if this instance is locked.
      * This method can only be executed when computations finish and this 
      * instance becomes unlocked.
      */
-    public void setInputData(double[] inputData) throws LockedException{
-        if(isLocked()) throw new LockedException();
+    public void setInputData(double[] inputData) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         this.inputData = inputData;
     }
     
@@ -252,18 +254,18 @@ public abstract class MaximumLikelihoodEstimator {
      * Sets array containing input data to be used to find the most likely 
      * value along with the minimum and maximum values assumed to be contained
      * in it.
-     * @param inputData Array containing input data
+     * @param inputData Array containing input data.
      * @param minValue Minimum value assumed to be contained in provided input
      * data array.
      * @param maxValue Maximum value assumed to be contained in provided input
      * data array.
      * @throws LockedException Exception raised if this instance is locked.
      * This method can only be executed when computations finish and this
-     * instance becomes unlocked
+     * instance becomes unlocked.
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
     public void setInputData(double[] inputData, double minValue, 
-            double maxValue) throws LockedException, IllegalArgumentException{
+            double maxValue) throws LockedException, IllegalArgumentException {
         setMinMaxValues(minValue, maxValue);
         this.inputData = inputData;
     }
@@ -273,7 +275,7 @@ public abstract class MaximumLikelihoodEstimator {
      * or not.
      * @return True if input data is available and can be retrieved. 
      */
-    public boolean isInputDataAvailable(){
+    public boolean isInputDataAvailable() {
         return inputData != null;
     }
     
@@ -285,7 +287,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @return True if this instance is ready to start the computation of the
      * maximum likelihood value.
      */
-    public boolean isReady(){
+    public boolean isReady() {
         return isInputDataAvailable();
     }
     
@@ -294,24 +296,10 @@ public abstract class MaximumLikelihoodEstimator {
      * Gaussian functions centered at each input data sample value.
      * @return Gaussian sigma to be used on each sample.
      */
-    public double getGaussianSigma(){
+    public double getGaussianSigma() {
         return gaussianSigma;
     }
-    
-    /**
-     * Internal method to set Gaussian sigma to be used on each sample when
-     * aggregating Gaussian functions centered at each input data sample value.
-     * @param gaussianSigma Gaussian sigma to be used on each sample.
-     * @throws IllegalArgumentException Exception raised if provided Gaussian
-     * sigma is negative or zero.
-     */
-    private void internalSetGaussianSigma(double gaussianSigma)
-            throws IllegalArgumentException{
-        if(gaussianSigma <= MIN_GAUSSIAN_SIGMA) 
-            throw new IllegalArgumentException();
-        this.gaussianSigma = gaussianSigma;
-    }
-    
+
     /**
      * Sets Gaussian sigma to be used on each sample when aggregating Gaussian
      * functions centered at each input data sample value.
@@ -323,8 +311,10 @@ public abstract class MaximumLikelihoodEstimator {
      * sigma is negative or zero.
      */
     public void setGaussianSigma(double gaussianSigma) 
-            throws LockedException, IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetGaussianSigma(gaussianSigma);
     }
     
@@ -343,17 +333,17 @@ public abstract class MaximumLikelihoodEstimator {
     
     /**
      * Creates an instance of a subclass of this class based on provided method
-     * and using provided Gaussian sigma
+     * and using provided Gaussian sigma.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
-     * @param method Method to estimate maximum likelihood value
-     * @return A maximum likelihood estimator
+     * @param method Method to estimate maximum likelihood value.
+     * @return A maximum likelihood estimator.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */
     public static MaximumLikelihoodEstimator create(double gaussianSigma,
             MaximumLikelihoodEstimatorMethod method) 
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
                 return new HistogramMaximumLikelihoodEstimator(gaussianSigma,
                         HistogramMaximumLikelihoodEstimator.
@@ -371,12 +361,12 @@ public abstract class MaximumLikelihoodEstimator {
      * Creates an instance of a subclass of this class using default maximum
      * likelihood estimation method and provided Gaussian sigma.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
-     * @return A maximum likelihood estimator
+     * @return A maximum likelihood estimator.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */
     public static MaximumLikelihoodEstimator create(double gaussianSigma)
-        throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(gaussianSigma, DEFAULT_METHOD);
     }
     
@@ -385,25 +375,25 @@ public abstract class MaximumLikelihoodEstimator {
      * likelihood estimation method and default Gaussian sigma.
      * @return A maximum likelihood estimator.
      */
-    public static MaximumLikelihoodEstimator create(){
+    public static MaximumLikelihoodEstimator create() {
         return create(DEFAULT_GAUSSIAN_SIGMA);
     }
     
     /**
      * Creates an instance of a subclass of this class based on provided method
-     * and using provided Gaussian sigma and input data array
+     * and using provided Gaussian sigma and input data array.
      * @param inputData Array containing input data to be used for the 
      * estimation of the maximum likelihood value.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
      * @param method Method to estimate maximum likelihood value
-     * @return A maximum likelihood estimator
+     * @return A maximum likelihood estimator.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */    
     public static MaximumLikelihoodEstimator create(double[] inputData,
             double gaussianSigma, MaximumLikelihoodEstimatorMethod method)
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
                 return new HistogramMaximumLikelihoodEstimator(inputData,
                         gaussianSigma, HistogramMaximumLikelihoodEstimator.
@@ -427,7 +417,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero.
      */        
     public static MaximumLikelihoodEstimator create(double[] inputData,
-            double gaussianSigma) throws IllegalArgumentException{
+            double gaussianSigma) throws IllegalArgumentException {
         return create(inputData, gaussianSigma, DEFAULT_METHOD);
     }
     
@@ -440,7 +430,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */            
-    public static MaximumLikelihoodEstimator create(double[] inputData){
+    public static MaximumLikelihoodEstimator create(double[] inputData) {
         return create(inputData, DEFAULT_GAUSSIAN_SIGMA);
     }            
     
@@ -461,8 +451,8 @@ public abstract class MaximumLikelihoodEstimator {
     public static MaximumLikelihoodEstimator create(double minValue,
             double maxValue, double[] inputData, double gaussianSigma,
             MaximumLikelihoodEstimatorMethod method) 
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
                 return new HistogramMaximumLikelihoodEstimator(minValue, 
                         maxValue, inputData, gaussianSigma,
@@ -492,7 +482,7 @@ public abstract class MaximumLikelihoodEstimator {
      */            
     public static MaximumLikelihoodEstimator create(double minValue,
             double maxValue, double[] inputData, double gaussianSigma)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(minValue, maxValue, inputData, gaussianSigma, 
                 DEFAULT_METHOD);
     }
@@ -511,7 +501,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero, or if minValue &lt; maxValue.
      */                
     public static MaximumLikelihoodEstimator create(double minValue,
-            double maxValue, double[] inputData){
+            double maxValue, double[] inputData) {
         return create(minValue, maxValue, inputData, DEFAULT_GAUSSIAN_SIGMA);
     }
     
@@ -519,20 +509,54 @@ public abstract class MaximumLikelihoodEstimator {
      * Internal method to compute minimum and maximum values of provided input
      * data array.
      */
-    protected void computeMinMaxValues(){
-        if(!isInputDataAvailable()) return;
-        
-        int length = inputData.length;
+    protected void computeMinMaxValues() {
+        if (!isInputDataAvailable()) {
+            return;
+        }
+
         minValue = Integer.MAX_VALUE;
         maxValue = -Integer.MAX_VALUE;
                 
         double value;
-        for(int i = 0; i < length; i++){
-            value = inputData[i];
-            if(value < minValue) minValue = value;
-            if(value > maxValue) maxValue = value;
+        for (double data : inputData) {
+            value = data;
+            if (value < minValue) minValue = value;
+            if (value > maxValue) maxValue = value;
         }
         
         areMinMaxAvailable = true;
+    }
+
+    /**
+     * Method to set internally minimum and maximum value found in input data
+     * array.
+     * @param minValue Minimum value in input data array.
+     * @param maxValue Maximum value in input data array.
+     * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
+     */
+    private void internalSetMinMaxValues(double minValue, double maxValue)
+            throws IllegalArgumentException {
+        if (minValue > maxValue) {
+            throw new IllegalArgumentException();
+        }
+
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        areMinMaxAvailable = true;
+    }
+
+    /**
+     * Internal method to set Gaussian sigma to be used on each sample when
+     * aggregating Gaussian functions centered at each input data sample value.
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
+     * @throws IllegalArgumentException Exception raised if provided Gaussian
+     * sigma is negative or zero.
+     */
+    private void internalSetGaussianSigma(double gaussianSigma)
+            throws IllegalArgumentException {
+        if (gaussianSigma <= MIN_GAUSSIAN_SIGMA) {
+            throw new IllegalArgumentException();
+        }
+        this.gaussianSigma = gaussianSigma;
     }
 }

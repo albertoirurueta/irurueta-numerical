@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.optimization.SimplexMultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 9, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
@@ -14,6 +21,7 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
+
 import java.util.Arrays;
 
 /**
@@ -26,6 +34,7 @@ import java.util.Arrays;
  * The implementation of this class is based on Numerical Recipes 3rd ed. 
  * Section 10.5 page 502.
  */
+@SuppressWarnings("WeakerAccess")
 public class SimplexMultiOptimizer extends MultiOptimizer {
     /**
      * Maximum number of iterations.
@@ -247,7 +256,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
             throw new IllegalArgumentException();
         }
         
-        Matrix pp = null;
+        Matrix pp;
         try {
             pp = new Matrix(localndim + 1, localndim);
         } catch (WrongSizeException e) {
@@ -475,7 +484,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                 double ytry = amotry(p, y, psum, ihi, -1.0, listener);
                 
                 if(ytry <= y[ilo]) {
-                    ytry = amotry(p, y, psum, ihi, 2.0, listener);
+                    amotry(p, y, psum, ihi, 2.0, listener);
                 } else if (ytry >= y[inhi]) {
                     double ysave = y[ihi];
                     ytry = amotry(p, y, psum, ihi, 0.5, listener);

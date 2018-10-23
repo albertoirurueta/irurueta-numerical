@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.robust.PROSACRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 6, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
@@ -12,6 +19,7 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -37,6 +45,7 @@ import java.util.List;
  * http://devernay.free.fr/vision/src/prosac.c
  * @param <T> type of object to be estimated.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
 
     /**
@@ -536,11 +545,15 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             int subsetSize = listener.getSubsetSize();    
             double threshold = listener.getThreshold();
             //only positive thresholds are allowed            
-            if(threshold < MIN_THRESHOLD) throw new RobustEstimatorException();
+            if (threshold < MIN_THRESHOLD) {
+                throw new RobustEstimatorException();
+            }
             
             double[] qualityScores = listener.getQualityScores();
             //check for invalid quality scores length
-            if(qualityScores.length != totalSamples) throw new RobustEstimatorException();
+            if (qualityScores.length != totalSamples) {
+                throw new RobustEstimatorException();
+            }
             //obtain indices referring to original samples position after sorting
             //quality scores in descending order
             int[] sortedIndices = computeSortedQualityIndices(
@@ -548,7 +561,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             
             //reusable list that will contain preliminar solutions on each 
             //iteration
-            List<T> iterResults = new ArrayList<T>();
+            List<T> iterResults = new ArrayList<>();
             bestResult = null;
             float previousProgress = 0.0f, progress;
             //subset indices obtained from a subset selector
@@ -581,7 +594,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                                 //maximality constraint
             
             double[] residuals = null;
-            if(mComputeAndKeepInliers || mComputeAndKeepResiduals) {
+            if (mComputeAndKeepInliers || mComputeAndKeepResiduals) {
                 mBestInliersData = new PROSACInliersData(totalSamples, 
                         mComputeAndKeepInliers, mComputeAndKeepResiduals);
                 
@@ -780,9 +793,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             listener.onEstimateEnd(this);
             
             return bestResult;
-        } catch (SubsetSelectorException e) {
-            throw new RobustEstimatorException(e);
-        } catch (SortingException e) {
+        } catch (SubsetSelectorException | SortingException e) {
             throw new RobustEstimatorException(e);
         } finally {
             mLocked = false;
@@ -856,7 +867,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             } else {
                 inliers.clear(i);
             }
-            if(residuals != null) {
+            if (residuals != null) {
                 residuals[i] = residual;
             }
         }
@@ -996,25 +1007,22 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 totalSamples = residuals.length;
             }
             
-            if(mInliers != null && inliers != null && mResiduals != null && 
+            if (mInliers != null && inliers != null && mResiduals != null &&
                     residuals != null) {
                 //update inliers and residuals
                 for (int i = 0; i < totalSamples; i++) {
                     mInliers.set(i, inliers.get(i));
                     mResiduals[i] = residuals[i];
                 }
-            } else if ((mInliers != null && inliers != null) && 
-                    (mResiduals == null || residuals == null)) {
+            } else if (mInliers != null && inliers != null) {
                 //update inliers but not the residuals
                 for (int i = 0; i < totalSamples; i++) {
                     mInliers.set(i, inliers.get(i));
                 }
-            } else if ((mInliers == null || inliers == null) && 
-                    (mResiduals != null && residuals != null)) {
+            } else if (mResiduals != null && residuals != null) {
                 //update residuals but not inliers
-                for (int i = 0; i < totalSamples; i++) {
-                    mResiduals[i] = residuals[i];
-                }
+                System.arraycopy(residuals, 0, mResiduals,
+                        0, totalSamples);
             }
             mNumInliers = numInliers;
         }

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.PolynomialRootsEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 13, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -15,7 +22,8 @@ import com.irurueta.numerical.NotAvailableException;
 /**
  * Abstract class to estimate the roots of a polynomial.
  */
-public abstract class PolynomialRootsEstimator extends RootEstimator{
+@SuppressWarnings("WeakerAccess")
+public abstract class PolynomialRootsEstimator extends RootEstimator {
     
     /**
      * Array containing parameters of a polynomial, taking into account that
@@ -26,27 +34,28 @@ public abstract class PolynomialRootsEstimator extends RootEstimator{
     protected Complex[] polyParams;
     
     /**
-     * Array containing estimated roots
+     * Array containing estimated roots.
      */
     protected Complex[] roots;
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public PolynomialRootsEstimator(){
+    public PolynomialRootsEstimator() {
         super();
         polyParams = roots = null;
     }
     
     /**
-     * Returns array containing polynomial parameters
-     * @return Array of polynomial parameters
+     * Returns array containing polynomial parameters.
+     * @return Array of polynomial parameters.
      * @throws NotAvailableException Raised if polynomial parameters have not
      * been provided and are not available for retrieval.
      */
-    public Complex[] getPolynomialParameters() throws NotAvailableException{
-        if(!arePolynomialParametersAvailable()) 
-            throw new NotAvailableException();        
+    public Complex[] getPolynomialParameters() throws NotAvailableException {
+        if (!arePolynomialParametersAvailable()) {
+            throw new NotAvailableException();
+        }
         return polyParams;
     }
     
@@ -56,9 +65,9 @@ public abstract class PolynomialRootsEstimator extends RootEstimator{
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * then the array of parameters is [a0, a1, ... a(n - 1), an]
      * This method does not check if this class is locked.
-     * @param polyParams Polynomial parameters
+     * @param polyParams Polynomial parameters.
      * @throws IllegalArgumentException Raised if the length of the array is not
-     * valid depending on the subclass implementation
+     * valid depending on the subclass implementation.
      */
     protected abstract void internalSetPolynomialParameters(
             Complex[] polyParams) throws IllegalArgumentException;
@@ -68,23 +77,25 @@ public abstract class PolynomialRootsEstimator extends RootEstimator{
      * that a polynomial of degree n is defined as:
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * then the array of parameters is [a0, a1, ... a(n - 1), an]
-     * @param polyParams Polynomial parameters
-     * @throws LockedException Raised if this instance is locked
+     * @param polyParams Polynomial parameters.
+     * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if the length of the array is not
-     * valid depending on the subclass implementation
+     * valid depending on the subclass implementation.
      */
     public void setPolynomialParameters(Complex[] polyParams) 
-            throws LockedException, IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetPolynomialParameters(polyParams);
     }
     
     /**
      * Returns boolean indicating whether polynomial parameters have been
-     * provided and are available for retrieval
+     * provided and are available for retrieval.
      * @return True if available, false otherwise.
      */
-    public boolean arePolynomialParametersAvailable(){
+    public boolean arePolynomialParametersAvailable() {
         return polyParams != null;
     }
     
@@ -93,10 +104,10 @@ public abstract class PolynomialRootsEstimator extends RootEstimator{
      * estimation of the polynomial roots.
      * This instance is considered to be ready once polynomial parameters are
      * provided.
-     * @return True if ready, false otherwise
+     * @return True if ready, false otherwise.
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return arePolynomialParametersAvailable();
     }
     
@@ -108,8 +119,10 @@ public abstract class PolynomialRootsEstimator extends RootEstimator{
      * @throws NotAvailableException Raised if roots have not yet been estimated
      * and are not available for retrieval
      */
-    public Complex[] getRoots() throws NotAvailableException{
-        if(!areRootsAvailable()) throw new NotAvailableException();
+    public Complex[] getRoots() throws NotAvailableException {
+        if (!areRootsAvailable()) {
+            throw new NotAvailableException();
+        }
         return roots;
     }
     
@@ -118,7 +131,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator{
      * available for retrieval.
      * @return True if available, false otherwise.
      */
-    public boolean areRootsAvailable(){
+    public boolean areRootsAvailable() {
         return roots != null;
     }
 }

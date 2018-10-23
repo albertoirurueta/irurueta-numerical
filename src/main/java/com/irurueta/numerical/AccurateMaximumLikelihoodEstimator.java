@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.AccurateMaximumLikelihoodEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 5, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -20,8 +27,9 @@ import com.irurueta.numerical.optimization.BrentSingleOptimizer;
  * is computed by aggregating small Gaussians (of size gaussianSigma) centered 
  * at the location of each sample.
  */
+@SuppressWarnings("WeakerAccess")
 public class AccurateMaximumLikelihoodEstimator 
-    extends MaximumLikelihoodEstimator{
+        extends MaximumLikelihoodEstimator {
     
     /**
      * Boolean indicating if an initial solution should be obtained first by
@@ -58,7 +66,7 @@ public class AccurateMaximumLikelihoodEstimator
     private BrentSingleOptimizer optimizer;
     
     /**
-     * Constructor
+     * Constructor.
      * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @param useHistogramInitialSolution Boolean indicating whether an internal
      * HistogramMaximumLikelihoodEstimator will be used to obtain a coarse
@@ -69,7 +77,7 @@ public class AccurateMaximumLikelihoodEstimator
      */
     public AccurateMaximumLikelihoodEstimator(double gaussianSigma,
             boolean useHistogramInitialSolution) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -77,9 +85,9 @@ public class AccurateMaximumLikelihoodEstimator
     }
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public AccurateMaximumLikelihoodEstimator(){
+    public AccurateMaximumLikelihoodEstimator() {
         super();
         this.useHistogramInitialSolution = 
                 DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION;
@@ -91,7 +99,7 @@ public class AccurateMaximumLikelihoodEstimator
      * Constructor
      * @param inputData Array containing input data where most likely value must
      * be estimated from.
-     * @param gaussianSigma Gaussian sigma to be used on each sample
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @param useHistogramInitialSolution Boolean indicating whether an internal
      * HistogramMaximumLikelihoodEstimator will be used to obtain a coarse
      * initial solution to initialize the BrentSingleOptimizer. It is suggested
@@ -101,7 +109,7 @@ public class AccurateMaximumLikelihoodEstimator
      */
     public AccurateMaximumLikelihoodEstimator(double[] inputData,
             double gaussianSigma, boolean useHistogramInitialSolution)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputData, gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -109,7 +117,7 @@ public class AccurateMaximumLikelihoodEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param minValue Minimum value assumed to be contained within input data
      * array.
      * @param maxValue Maximum value assumed to be contained within input data
@@ -122,12 +130,12 @@ public class AccurateMaximumLikelihoodEstimator
      * initial solution to initialize the BrentSingleOptimizer. It is suggested
      * to set this value always to true.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero, or if minValue &lt; maxValue
+     * negative or zero, or if minValue &lt; maxValue.
      */
     public AccurateMaximumLikelihoodEstimator(double minValue, double maxValue,
             double[] inputData, double gaussianSigma, 
             boolean useHistogramInitialSolution) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(minValue, maxValue, inputData, gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -137,7 +145,7 @@ public class AccurateMaximumLikelihoodEstimator
     /**
      * Returns method to be used for maximum likelihood estimation, which for
      * this class is MaximumLikelihoodEstimatorMethod.
-     * ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR
+     * ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR.
      * @return Method for maximum likelihood estimation.
      */        
     @Override
@@ -170,8 +178,10 @@ public class AccurateMaximumLikelihoodEstimator
      * instance becomes unlocked.
      */
     public void setHistogramInitialSolutionUsed(boolean used) 
-            throws LockedException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         useHistogramInitialSolution = used;
     }
 
@@ -183,20 +193,24 @@ public class AccurateMaximumLikelihoodEstimator
      * This method can only be executed when computations finish and this
      * instance becomes unlocked.
      * @throws NotReadyException Exception raised if this instance is not yet
-     * ready
+     * ready.
      * @see #isReady()
      */        
     @Override
     public double estimate() throws LockedException, NotReadyException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         
         double minEvalPoint, middleEvalPoint, maxEvalPoint;
         
-        if(useHistogramInitialSolution){
-            if(internalEstimator == null){
+        if (useHistogramInitialSolution) {
+            if (internalEstimator == null) {
                 internalEstimator = new HistogramMaximumLikelihoodEstimator();
             }
             internalEstimator.setInputData(inputData);
@@ -207,10 +221,10 @@ public class AccurateMaximumLikelihoodEstimator
             
             double localMinValue = 0.0, localMaxValue = 0.0;
             
-            try{
+            try {
                 localMinValue = internalEstimator.getMinValue();
                 localMaxValue = internalEstimator.getMaxValue();
-            }catch(NotAvailableException ignore){}
+            } catch (NotAvailableException ignore) { }
             
             int numberOfBins = internalEstimator.getNumberOfBins();
             
@@ -221,13 +235,13 @@ public class AccurateMaximumLikelihoodEstimator
             minEvalPoint = middleEvalPoint - delta;
             maxEvalPoint = middleEvalPoint + delta;
             
-            if(!areMinMaxAvailable){
+            if (!areMinMaxAvailable) {
                 this.minValue = localMinValue;
                 this.maxValue = localMaxValue;
                 areMinMaxAvailable = true;
             }
-        }else{
-            if(!areMinMaxAvailable){
+        } else {
+            if (!areMinMaxAvailable) {
                 computeMinMaxValues();
             }
             
@@ -237,16 +251,16 @@ public class AccurateMaximumLikelihoodEstimator
             middleEvalPoint = (minValue + maxValue) * 0.5;
         }
         
-        if((maxValue - minValue) < EPS){
+        if ((maxValue - minValue) < EPS) {
             //min-max limits are almost equal, so we return it as the solution
             locked = false;
             return middleEvalPoint;
         }
                 
         double solution;
-        try{
+        try {
             //Use an optimizer to find maximum value on histogram (PDF)
-            if(optimizer == null){
+            if (optimizer == null) {
                 optimizer = new BrentSingleOptimizer(new EvaluatorListener(), 
                         BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 
                             BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
@@ -257,11 +271,11 @@ public class AccurateMaximumLikelihoodEstimator
             optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
             optimizer.minimize();
             solution = optimizer.getResult();
-        }catch(Throwable ignore){
+        } catch (Throwable ignore) {
             //if optimization fails, pick coarse solution if available
-            if(useHistogramInitialSolution){
+            if (useHistogramInitialSolution) {
                 solution = middleEvalPoint;
-            }else{
+            } else {
                 //if coarse solution is not available, then compute it
                 internalEstimator.setInputData(inputData);
                 internalEstimator.setGaussianSigma(gaussianSigma);
@@ -280,7 +294,7 @@ public class AccurateMaximumLikelihoodEstimator
      * a high degree of precision.
      */
     private class EvaluatorListener 
-        implements SingleDimensionFunctionEvaluatorListener{
+            implements SingleDimensionFunctionEvaluatorListener {
         
     
         /**
@@ -297,12 +311,10 @@ public class AccurateMaximumLikelihoodEstimator
          */
         @Override
         public double evaluate(double point) throws Throwable {
-            int length = inputData.length;
-        
             double out = 0.0;
             double x;
-            for(int i = 0; i < length; i++){
-                x = point - inputData[i];
+            for (double data : inputData) {
+                x = point - data;
                 out += Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma)) /
                         (Math.sqrt(2.0 * Math.PI) * gaussianSigma);
             }                

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.signal.processing.MeasurementCovarianceEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 14, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.signal.processing;
 
@@ -20,6 +27,7 @@ import com.irurueta.algebra.Matrix;
  * This class should only be used for samples obtained while system state is
  * held constant.
  */
+@SuppressWarnings("WeakerAccess")
 public class MeasurementNoiseCovarianceEstimator {
     
     /**
@@ -76,12 +84,14 @@ public class MeasurementNoiseCovarianceEstimator {
      * @throws SignalProcessingException if something fails.
      */
     public MeasurementNoiseCovarianceEstimator(int measureParams) 
-            throws SignalProcessingException, IllegalArgumentException{
+            throws SignalProcessingException, IllegalArgumentException {
         
-        if(measureParams < 1) throw new IllegalArgumentException(
-                "Measure parameters must be greater than zero");
+        if (measureParams < 1) {
+            throw new IllegalArgumentException(
+                    "Measure parameters must be greater than zero");
+        }
         
-        try{
+        try {
             mp = measureParams;
             measurementNoiseCov = new Matrix(mp, mp);
             sampleAverage = new double[mp];
@@ -91,7 +101,7 @@ public class MeasurementNoiseCovarianceEstimator {
             transposedSampleMatrix = new Matrix(1, mp);
             
             singleCov = new Matrix(mp, mp);
-        }catch(AlgebraException ex){
+        } catch (AlgebraException ex) {
             throw new SignalProcessingException(ex);
         }        
     }
@@ -106,16 +116,16 @@ public class MeasurementNoiseCovarianceEstimator {
      * @throws SignalProcessingException if something fails.
      */
     public Matrix update(double[] sample) throws IllegalArgumentException, 
-            SignalProcessingException{
+            SignalProcessingException {
         
-        if(sample.length != mp){
+        if (sample.length != mp) {
             throw new IllegalArgumentException("wrong sample size");
         }
         
         long nextCount = sampleCount + 1;
         
         //update sample average
-        for(int i = 0; i < mp; i++){
+        for (int i = 0; i < mp; i++) {
             sampleAverage[i] = (sampleAverage[i]*sampleCount + sample[i]) / 
                     nextCount;
         }
@@ -124,11 +134,12 @@ public class MeasurementNoiseCovarianceEstimator {
         ArrayUtils.subtract(sample, sampleAverage, sampleNoMean);
         
         //copy sample without mean into matrix form
-        sampleMatrix.setSubmatrix(0, 0, mp - 1, 0, sampleNoMean);
+        sampleMatrix.setSubmatrix(0, 0,
+                mp - 1, 0, sampleNoMean);
         //compute transpose of matrix form
         sampleMatrix.transpose(transposedSampleMatrix);
         
-        try{
+        try {
             //compute covariance matrix for a single sample
             sampleMatrix.multiply(transposedSampleMatrix, singleCov);
             
@@ -136,7 +147,7 @@ public class MeasurementNoiseCovarianceEstimator {
             measurementNoiseCov.multiplyByScalar(sampleCount);
             measurementNoiseCov.add(singleCov);
             measurementNoiseCov.multiplyByScalar(1.0 / nextCount);
-        }catch(AlgebraException ex){
+        } catch (AlgebraException ex) {
             throw new SignalProcessingException(ex);
         }
         
@@ -149,7 +160,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * Obtains the number of measurement vector dimensions (measure parameters).
      * @return number of measurement vector dimensions (measure parameters).
      */
-    public int getMeasureParams(){
+    public int getMeasureParams() {
         return mp;
     }
     
@@ -157,7 +168,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * Obtains estimated measurement noise covariance matrix.
      * @return estimated measurement noise covariance matrix.
      */
-    public Matrix getMeasurementNoiseCov(){
+    public Matrix getMeasurementNoiseCov() {
         return measurementNoiseCov;
     }
     
@@ -165,7 +176,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * Obtains estimated sample average.
      * @return estimated sample average.
      */
-    public double[] getSampleAverage(){
+    public double[] getSampleAverage() {
         return sampleAverage;
     }    
     
@@ -173,7 +184,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * Obtains number of samples used for estimation.
      * @return number of samples used for estimation.
      */
-    public long getSampleCount(){
+    public long getSampleCount() {
         return sampleCount;
     }    
 }

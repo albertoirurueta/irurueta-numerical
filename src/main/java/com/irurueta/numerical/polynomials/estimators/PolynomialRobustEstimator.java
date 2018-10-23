@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 12, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
@@ -13,6 +20,7 @@ import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
 import java.util.List;
 
 /**
@@ -21,6 +29,7 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public abstract class PolynomialRobustEstimator {
     
     /**
@@ -259,7 +268,9 @@ public abstract class PolynomialRobustEstimator {
      */
     public void setEvaluations(List<PolynomialEvaluation> evaluations) 
             throws LockedException, IllegalArgumentException {
-        if(isLocked()) throw new LockedException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetEvaluations(evaluations);
     }
     
@@ -321,8 +332,10 @@ public abstract class PolynomialRobustEstimator {
      */
     public void setProgressDelta(float progressDelta)
             throws IllegalArgumentException, LockedException {
-        if(isLocked()) throw new LockedException();
-        if(progressDelta < MIN_PROGRESS_DELTA || 
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (progressDelta < MIN_PROGRESS_DELTA ||
                 progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
@@ -353,8 +366,10 @@ public abstract class PolynomialRobustEstimator {
      */
     public void setConfidence(double confidence) 
             throws IllegalArgumentException, LockedException {
-        if(isLocked()) throw new LockedException();
-        if(confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
         mConfidence = confidence;
@@ -381,8 +396,12 @@ public abstract class PolynomialRobustEstimator {
      */
     public void setMaxIterations(int maxIterations)
             throws IllegalArgumentException, LockedException {
-        if(isLocked()) throw new LockedException();
-        if(maxIterations < MIN_ITERATIONS) throw new IllegalArgumentException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (maxIterations < MIN_ITERATIONS) {
+            throw new IllegalArgumentException();
+        }
         mMaxIterations = maxIterations;
     }    
     
@@ -404,7 +423,9 @@ public abstract class PolynomialRobustEstimator {
      */
     public void setGeometricDistanceUsed(boolean geometricDistanceUsed)
             throws LockedException {
-        if(isLocked()) throw new LockedException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
         mUseGeometricDistance = geometricDistanceUsed;
     }    
     
@@ -443,8 +464,8 @@ public abstract class PolynomialRobustEstimator {
         
         //also ensure that at least a direct or integral evaluation exists
         int count = 0;
-        for(PolynomialEvaluation eval : mEvaluations) {
-            if(eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
+        for (PolynomialEvaluation eval : mEvaluations) {
+            if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
                     eval.getType() == PolynomialEvaluationType.INTEGRAL_EVALUATION ||
                     eval.getType() == PolynomialEvaluationType.INTEGRAL_INTERVAL) {
                 count++;
@@ -967,7 +988,7 @@ public abstract class PolynomialRobustEstimator {
         
         double slope = polynomial.evaluateDerivative(x);
         double a, b, c;
-        if(Math.abs(slope) > 1.0) {
+        if (Math.abs(slope) > 1.0) {
             a = 1.0;
             b = -1.0 / slope;
             c = -x + y2/slope;

@@ -1,10 +1,17 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.robust.PROMedSRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 7, 2015
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
@@ -12,6 +19,7 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -41,7 +49,7 @@ import java.util.List;
  * known beforehand although one can be provided as well.
  * @param <T> type of object to be estimated.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Constant defining default confidence of the estimated result, which is
@@ -154,12 +162,6 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      */
     public static final double MIN_INLER_FACTOR = 0.0;
     
-    /**
-     * Minimum allowed value for inlier threshold to determine whether residuals
-     * are inliers.
-     */
-    public static final double MIN_INLER_THRESHOLD = 0.0;
-
     /**
      * Indicates whether the inlier threshold will be used to find inliers along
      * with their median of residuals.
@@ -599,7 +601,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * Returns data related to inliers found for best result.
      * @return data related to inliers found for best result.
      */
-    protected PROMedSInliersData getBestInliersData(){
+    protected PROMedSInliersData getBestInliersData() {
         return mBestInliersData;
     }
     
@@ -625,6 +627,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
+    @SuppressWarnings("all")
     public T estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
         if (isLocked()) {
@@ -636,7 +639,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         
         try {
             PROMedSRobustEstimatorListener<T> listener = 
-                    (PROMedSRobustEstimatorListener<T>)mListener;
+                    (PROMedSRobustEstimatorListener<T>) mListener;
             
             mLocked = true;
             
@@ -660,7 +663,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             
             //reusable list that will contain preliminar solutions on each 
             //iteration
-            List<T> iterResults = new ArrayList<T>();            
+            List<T> iterResults = new ArrayList<>();
             bestResult = null;
             float previousProgress = 0.0f, progress;
             //subset indices obtained from a subset selector
@@ -981,9 +984,8 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param listener listener to obtain residuals for samples.
      * @param sorter sorter instance to compute median of residuals.
      * @param inliersData inliers data to be reused on each iteration
-     * @return inliers data.
      */
-    private static <T> PROMedSInliersData computeInliers(T iterResult, 
+    private static <T> void computeInliers(T iterResult,
             int subsetSize, double inlierFactor, boolean useInlierThresholds, 
             double inlierThreshold, double[] residualsTemp,
             LMedSRobustEstimatorListener<T> listener, 
@@ -1053,14 +1055,12 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         //store values in inliers data, only if residuals improve
         if (medianResidualImproved) {
             inliersData.update(bestMedianResidual, standardDeviation, 
-                    lmedsInliers, msacInliers, lmedsInlierModelEnabled,
-                    residuals, numInliers, medianResidual, 
-                    normEstimatedThreshold, medianResidualImproved);         
+                    lmedsInlierModelEnabled, residuals, numInliers,
+                    medianResidual, normEstimatedThreshold,
+                    medianResidualImproved);
         } else {
             inliersData.mMedianResidualImproved = false;
         }
-        
-        return inliersData;
     }
     
     /**
@@ -1175,9 +1175,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         //only better solutions that are found later can update 
         //inliers data
         inliersData.update(bestMedianResidual, 
-                inliersData.getStandardDeviation(), 
-                inliersData.getInliersLMedS(), 
-                inliersData.getInliersMSAC(), 
+                inliersData.getStandardDeviation(),
                 inliersData.isLMedSInlierModelEnabled(), 
                 inliersData.getResiduals(), 
                 inliersData.getNumInliers(), 
@@ -1360,10 +1358,6 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * into account all provided samples.
          * @param standardDeviation standard deviation of error among all
          * provided samples respect to currently estimated result.
-         * @param inliersLmeds stores which samples are considered inliers when
-         * LMedS inlier model is used.
-         * @param inliersMsac stores which samples are considered inliers when
-         * MSAC inlier model is used.
          * @param lmedsInlierModelEnabled indicates whether the LMedS or MSAC
          * inlier model is used.
          * @param residuals residuals obtained for each sample of data.
@@ -1377,7 +1371,6 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * iteration.
          */
         protected void update(double bestMedianResidual, double standardDeviation,
-                              BitSet inliersLmeds, BitSet inliersMsac,
                               boolean lmedsInlierModelEnabled, double[] residuals,
                               int numInliers, double medianResidual,
                               double estimatedThreshold, boolean medianResidualImproved) {

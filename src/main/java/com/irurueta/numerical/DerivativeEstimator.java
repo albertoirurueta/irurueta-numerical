@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.DerivativeEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 1, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -14,8 +21,9 @@ package com.irurueta.numerical;
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
  * This implementation is faster although less accurate than 
- * SymmetricDerivativeEstimator
+ * SymmetricDerivativeEstimator.
  */
+@SuppressWarnings("WeakerAccess")
 public class DerivativeEstimator {
     
     /**
@@ -33,7 +41,7 @@ public class DerivativeEstimator {
      * @param listener listener to evaluate a single dimension function
      */
     public DerivativeEstimator(
-            SingleDimensionFunctionEvaluatorListener listener){
+            SingleDimensionFunctionEvaluatorListener listener) {
         this.listener = listener;
     }
     
@@ -44,8 +52,8 @@ public class DerivativeEstimator {
      * @throws EvaluationException Raised if function cannot be properly 
      * evaluated
      */
-    public double derivative(double x) throws EvaluationException{
-        try{
+    public double derivative(double x) throws EvaluationException {
+        try {
             double fold = listener.evaluate(x);
         
             double h = EPS * Math.abs(x);
@@ -55,7 +63,7 @@ public class DerivativeEstimator {
             double fh = listener.evaluate(xh);
         
             return (fh - fold) / h;
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new EvaluationException(t);
         }
     }

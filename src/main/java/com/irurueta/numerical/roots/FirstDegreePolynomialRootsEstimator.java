@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 13, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -17,13 +24,14 @@ import com.irurueta.numerical.NotReadyException;
  * Class to estimate the root of a first degree polynomial along with other
  * polynomial properties.
  * A first degree polynomial is defined by its parameters as p(x) = a * x + b,
- * hence the polynomial can be simply be defined by an array of length 2 [b, a]
+ * hence the polynomial can be simply be defined by an array of length 2 [b, a].
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class FirstDegreePolynomialRootsEstimator 
-    extends PolynomialRootsEstimator{
+    extends PolynomialRootsEstimator {
     
     /**
-     * Constant defining machine precision
+     * Constant defining machine precision.
      */
     public static final double EPS = 1e-10;
     
@@ -34,26 +42,26 @@ public class FirstDegreePolynomialRootsEstimator
     public static final int VALID_POLY_PARAMS_LENGTH = 2;
     
     /**
-     * Array containing parameters of a first degree polynomial
+     * Array containing parameters of a first degree polynomial.
      */
     private double[] realPolyParams;    
     
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public FirstDegreePolynomialRootsEstimator(){
+    public FirstDegreePolynomialRootsEstimator() {
         super();
         realPolyParams = null;                 
     }
     
     /**
-     * Constructor
-     * @param polyParams Array containing polynomial parameters
+     * Constructor.
+     * @param polyParams Array containing polynomial parameters.
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */
     public FirstDegreePolynomialRootsEstimator(double[] polyParams)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         internalSetPolynomialParameters(polyParams);
     }
@@ -62,15 +70,17 @@ public class FirstDegreePolynomialRootsEstimator
      * Set array of first degree polynomial parameters.
      * A first degree polynomial is defined by p(x) = a * x + b, and the array
      * must be provided as [b, a].
-     * Note: This class only supports real polynomial parameters
-     * @param polyParams Array containing polynomial parameters
-     * @throws LockedException Raised if this instance is locked
+     * Note: This class only supports real polynomial parameters.
+     * @param polyParams Array containing polynomial parameters.
+     * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if the length of the provided
      * array is not valid.
      */
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException, IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetPolynomialParameters(polyParams);
     }
     
@@ -78,17 +88,20 @@ public class FirstDegreePolynomialRootsEstimator
      * Internal method to set array of first degree polynomial parameters.
      * A first degree polynomial is defined by p(x) = a * x + b, and the array
      * must be provided as [b, a].
-     * Note: This class only supports real polynomial parameters
+     * Note: This class only supports real polynomial parameters.
      * This method does not check if this instance is locked.
-     * @param polyParams Array containing polynomial parameters
+     * @param polyParams Array containing polynomial parameters.
      * @throws IllegalArgumentException Raised if the length of the provided
      * array is not valid.
      */
     private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException{
-        if(polyParams.length < VALID_POLY_PARAMS_LENGTH)
+            throws IllegalArgumentException {
+        if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
-        if(!isFirstDegree(polyParams)) throw new IllegalArgumentException();
+        }
+        if (!isFirstDegree(polyParams)) {
+            throw new IllegalArgumentException();
+        }
         
         this.realPolyParams = polyParams;
     }
@@ -97,43 +110,44 @@ public class FirstDegreePolynomialRootsEstimator
      * Returns array of first degree polynomial parameters.
      * A first degree polynomial is defined by p(x) = a * x + b, and the array
      * is returned as [b, a].
-     * Note: This class only supports real polynomial parameters
-     * @return Array of first degree polynomial parameters
+     * Note: This class only supports real polynomial parameters.
+     * @return Array of first degree polynomial parameters.
      * @throws NotAvailableException if parameters are not available for retrieval.
      */
-    public double[] getRealPolynomialParameters() throws NotAvailableException{
-        if(!arePolynomialParametersAvailable()) 
+    public double[] getRealPolynomialParameters() throws NotAvailableException {
+        if(!arePolynomialParametersAvailable()) {
             throw new NotAvailableException();
+        }
         return realPolyParams;
     }
     
     /**
      * Returns boolean indicating whether REAL polynomial parameters have been 
      * provided and is available for retrieval.
-     * Note: This class only supports real polynomial parameters
-     * @return True if available, false otherwise
+     * Note: This class only supports real polynomial parameters.
+     * @return True if available, false otherwise.
      */
     @Override
-    public boolean arePolynomialParametersAvailable(){
+    public boolean arePolynomialParametersAvailable() {
         return realPolyParams != null;
     }
 
     /**
      * This method will always raise a NotAvailableException because this class
-     * only supports REAL polynomial parameters
-     * @return throws NotAvailableException
-     * @throws NotAvailableException alwasy throws this exception
+     * only supports REAL polynomial parameters.
+     * @return throws NotAvailableException.
+     * @throws NotAvailableException alwasy throws this exception.
      * @deprecated
      */
     @Override
-    public Complex[] getPolynomialParameters() throws NotAvailableException{
+    public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
     
 
     /**
      * This method will always raise an IllegalArgumentException because this
-     * class only supports REAL polynomial parameters
+     * class only supports REAL polynomial parameters.
      * @deprecated 
      */
     @Override
@@ -148,16 +162,17 @@ public class FirstDegreePolynomialRootsEstimator
      * @throws LockedException Raised if this instance is locked estimating a
      * root.
      * @throws NotReadyException Raised if this instance is not ready because
-     * polynomial parameters have not been provided
-     * @throws RootEstimationException Raised if root cannot be estimated for
-     * some reason
+     * polynomial parameters have not been provided.
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException{
+    public void estimate() throws LockedException, NotReadyException {
         
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         locked = true;
         
@@ -182,12 +197,14 @@ public class FirstDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return True if is a first degree polynomial, false otherwise
      */
-    public static boolean isFirstDegree(double[] polyParams){
+    public static boolean isFirstDegree(double[] polyParams) {
         int length = polyParams.length;
-        if(length >= VALID_POLY_PARAMS_LENGTH){
-            if(Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS){
-                for(int i = VALID_POLY_PARAMS_LENGTH; i < length; i++){
-                    if(Math.abs(polyParams[i]) > EPS) return false;
+        if (length >= VALID_POLY_PARAMS_LENGTH) {
+            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+                for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+                    if (Math.abs(polyParams[i]) > EPS) {
+                        return false;
+                    }
                 }
                 return true;
             }
@@ -200,13 +217,15 @@ public class FirstDegreePolynomialRootsEstimator
      * instance correspond to a valid first degree polynomial.
      * A first degree polynomial is defined by p(x) = a * x + b, and the array
      * is returned as [b, a].
-     * Note: This class only supports real polynomial parameters
-     * @return True if is a first degree polynomial, false otherwise
+     * Note: This class only supports real polynomial parameters.
+     * @return True if is a first degree polynomial, false otherwise.
      * @throws NotReadyException Raised if this instance is not ready because
      * an array of polynomial parameters has not yet been provided.
      */
-    public boolean isFirstDegree() throws NotReadyException{
-        if(!isReady()) throw new NotReadyException();        
+    public boolean isFirstDegree() throws NotReadyException {
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         return isFirstDegree(realPolyParams);
     }
     
@@ -214,20 +233,20 @@ public class FirstDegreePolynomialRootsEstimator
      * Returns boolean indicating whether estimated root is real.
      * Because this class only accepts real polynomial parameters, then the
      * estimated root will always be real, and consequently this method always
-     * returns true
+     * returns true.
      * @return True if estimated root is real, false otherwise.
      */
-    public boolean isRealSolution(){
+    public boolean isRealSolution() {
         return true;
     }
     
     /**
-     * Internal method to estimate a root on a first degree polynomial
-     * @param a A parameter
-     * @param b B parameter
-     * @return Root
+     * Internal method to estimate a root on a first degree polynomial.
+     * @param a A parameter.
+     * @param b B parameter.
+     * @return Root.
      */
-    private double solveLinear(double a, double b){
+    private double solveLinear(double a, double b) {
         //a * x + b = 0
         return -b / a;
     }

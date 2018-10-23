@@ -1,14 +1,22 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.robust.FastRandomSubsetSelector
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date August 10, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
 import com.irurueta.statistics.UniformRandomizer;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -18,12 +26,13 @@ import java.util.Set;
  * to pick random samples as fast as possible.
  * This class ensures that samples are not repeated within a single subset.
  */
-public class FastRandomSubsetSelector extends SubsetSelector{
+@SuppressWarnings("WeakerAccess")
+public class FastRandomSubsetSelector extends SubsetSelector {
     
     /**
      * Constant defining whether randomizer needs to be initialized with system
      * timer. By disabling this option it is ensured that the same result is
-     * obtained on each execution
+     * obtained on each execution.
      */
     public static final boolean DEFAULT_SEED_RANDOMIZER_WITH_TIME = false;
     
@@ -41,129 +50,147 @@ public class FastRandomSubsetSelector extends SubsetSelector{
     private Set<Integer> mSelectedIndices;
     
     /**
-     * Constructor
+     * Constructor.
      * @param numSamples number of samples to select subsets from
      * @throws IllegalArgumentException if provided number of samples is zero
      * or negative
      */
     public FastRandomSubsetSelector(int numSamples) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         this(numSamples, DEFAULT_SEED_RANDOMIZER_WITH_TIME);
     }
     
     /**
-     * Constructor
-     * @param numSamples number of samples to select subsets from
+     * Constructor.
+     * @param numSamples number of samples to select subsets from.
      * @param seedRandomizerWithTime true if randomizer seed must be initialized
-     * to system timer to obtain more random results
+     * to system timer to obtain more random results.
      * @throws IllegalArgumentException if provided number of samples is zero
-     * or negative
+     * or negative.
      */
     public FastRandomSubsetSelector(int numSamples, 
-            boolean seedRandomizerWithTime) throws IllegalArgumentException{
+            boolean seedRandomizerWithTime) throws IllegalArgumentException {
         super(numSamples);
         createRandomizer(seedRandomizerWithTime);
-        mSelectedIndices = new HashSet<Integer>();
+        mSelectedIndices = new HashSet<>();
     }
     
     /**
-     * Returns type of this subset selector
-     * @return type of this subset selector
+     * Returns type of this subset selector.
+     * @return type of this subset selector.
      */
     @Override
-    public SubsetSelectorType getType(){
+    public SubsetSelectorType getType() {
         return SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR;
     }
 
     /**
      * Returns internal randomizer to generate uniformly distributed random
-     * values
-     * @return internal randomizer
+     * values.
+     * @return internal randomizer.
      */
-    protected UniformRandomizer getRandomizer(){
+    protected UniformRandomizer getRandomizer() {
         return mRandomizer;
     }
     
     /**
      * Computes a random subset of indices within range of number of samples to
-     * be used on robust estimators
+     * be used on robust estimators.
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples
+     * than total number of samples.
      * @param result array containing indices to be picked. Provided array must
      * be at least of length subsetSize. The former subsetSize entries of the
-     * array will be modified by this method
+     * array will be modified by this method.
      * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples
+     * total number of samples.
      * @throws InvalidSubsetSizeException if subset size is zero or if result
-     * array does not have at least a length of subsetSize
+     * array does not have at least a length of subsetSize.
      */
     @Override
     public void computeRandomSubsets(int subsetSize, int[] result) 
             throws NotEnoughSamplesException, InvalidSubsetSizeException {
-        if(subsetSize == 0) throw new InvalidSubsetSizeException();
-        if(result.length < subsetSize) throw new InvalidSubsetSizeException();
-        if(mNumSamples < subsetSize) throw new NotEnoughSamplesException();
+        if (subsetSize == 0) {
+            throw new InvalidSubsetSizeException();
+        }
+        if (result.length < subsetSize) {
+            throw new InvalidSubsetSizeException();
+        }
+        if (mNumSamples < subsetSize) {
+            throw new NotEnoughSamplesException();
+        }
         
         //On start set of selected indices is empty
         mSelectedIndices.clear();        
         
         int counter = 0;
         int index;
-        do{
+        do {
             index = mRandomizer.nextInt(0, mNumSamples);
             
             //check whether this index has already been selected
             Integer intIndex = index;
-            if(mSelectedIndices.contains(intIndex)) continue;
+            if (mSelectedIndices.contains(intIndex)) {
+                continue;
+            }
             
             //if not selected, pick it now
             mSelectedIndices.add(intIndex);
             result[counter] = index;
             counter++;
-        }while(counter < subsetSize);
+        } while (counter < subsetSize);
         
         mSelectedIndices.clear();
     }
 
     /**
      * Computes a random subset of indices within provided range of positions to
-     * be used on robust estimators
+     * be used on robust estimators.
      * @param minPos minimum position to be picked. This value must be greater 
      * or equal than zero and smaller than the total number of samples and less
-     * than maxPos
+     * than maxPos.
      * @param maxPos maximum position to be picked. This value must be greater
      * or equal than zero and smaller than the total number of samples and 
-     * greater than minPos
+     * greater than minPos.
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples
+     * than total number of samples.
      * @param pickLast true indicates that last sample in range must always be
      * picked within subset. This is done to obtain faster execution times and
-     * greater stability on some algorithms
+     * greater stability on some algorithms.
      * @param result array containing indices to be picked. Provided array must
      * be at least of length subsetSize. The former subsetSize entries of the
-     * array will be modified by this method
+     * array will be modified by this method.
      * @throws NotEnoughSamplesException if subset size is greater than the 
      * total number of samples or if maxPos is greater than the total number of
-     * samples
+     * samples.
      * @throws InvalidSubsetSizeException if subset size is zero or if result
      * array does not have at least a length of subsetSize, or ig subset size
-     * is greater than the allowed range of positions to be picked
+     * is greater than the allowed range of positions to be picked.
      * @throws InvalidSubsetRangeException if maximum position is smaller than
-     * minimum position or maximum or minimum position are negative
+     * minimum position or maximum or minimum position are negative.
      */
     @Override
     public void computeRandomSubsetsInRange(int minPos, int maxPos, 
             int subsetSize, boolean pickLast, int[] result) 
             throws NotEnoughSamplesException, InvalidSubsetSizeException, 
             InvalidSubsetRangeException {
-        if(subsetSize == 0) throw new InvalidSubsetSizeException();
-        if(result.length < subsetSize) throw new InvalidSubsetSizeException();
-        if(minPos >= maxPos || minPos < 0 || maxPos < 0) 
-            throw new InvalidSubsetRangeException();        
-        if((maxPos - minPos) < subsetSize) 
-            throw new InvalidSubsetSizeException();        
-        if(mNumSamples < subsetSize) throw new NotEnoughSamplesException();
-        if(maxPos > mNumSamples) throw new NotEnoughSamplesException();
+        if (subsetSize == 0) {
+            throw new InvalidSubsetSizeException();
+        }
+        if (result.length < subsetSize) {
+            throw new InvalidSubsetSizeException();
+        }
+        if (minPos >= maxPos || maxPos < 0 || minPos < 0 ) {
+            throw new InvalidSubsetRangeException();
+        }
+        if ((maxPos - minPos) < subsetSize) {
+            throw new InvalidSubsetSizeException();
+        }
+        if (mNumSamples < subsetSize) {
+            throw new NotEnoughSamplesException();
+        }
+        if (maxPos > mNumSamples) {
+            throw new NotEnoughSamplesException();
+        }
         
         //On start set of selected indices is empty
         mSelectedIndices.clear();        
@@ -172,8 +199,9 @@ public class FastRandomSubsetSelector extends SubsetSelector{
         int index;
         
         Integer intIndex;
-        if(pickLast){ //this is done to accelerate computations and obtain more
-                      //stable results in some cases
+        if (pickLast) {
+            //this is done to accelerate computations and obtain more
+            //stable results in some cases
             //pick last element in range
             index = maxPos - 1;
             intIndex = index;
@@ -182,9 +210,9 @@ public class FastRandomSubsetSelector extends SubsetSelector{
             counter++;
         }
         
-        if(!pickLast || (pickLast && counter < result.length)){
+        if (!pickLast || counter < result.length) {
             //keep selecting only if not all elements have already been selected
-            do{
+            do {
                 index = mRandomizer.nextInt(minPos, maxPos);
 
                 //check whether this index has already been selected
@@ -195,7 +223,7 @@ public class FastRandomSubsetSelector extends SubsetSelector{
                 mSelectedIndices.add(intIndex);
                 result[counter] = index;
                 counter++;
-            }while(counter < subsetSize);
+            } while (counter < subsetSize);
         }
         
         mSelectedIndices.clear();
@@ -205,10 +233,12 @@ public class FastRandomSubsetSelector extends SubsetSelector{
      * Initializes randomizer for an instance of this class.
      * @param seedWithTime if true randomizer will be initialized using current
      * time as seed. If false, randomizer will always generate the same 
-     * pseudo-random sequence on each JVM execution
+     * pseudo-random sequence on each JVM execution.
      */
-    private void createRandomizer(boolean seedWithTime){
+    private void createRandomizer(boolean seedWithTime) {
         mRandomizer = new UniformRandomizer(new Random());
-        if(seedWithTime) mRandomizer.setSeed(System.currentTimeMillis());
+        if (seedWithTime) {
+            mRandomizer.setSeed(System.currentTimeMillis());
+        }
     }
 }

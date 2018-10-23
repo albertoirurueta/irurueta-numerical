@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.DirectionalEvaluator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 1, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -35,23 +42,23 @@ public class DirectionalEvaluator {
     
     /**
      * Point currently being evaluated in the multidimensional function.
-     * This is used internally
+     * This is used internally.
      */
     protected double[] p;
     
     /**
-     * Constructor
-     * @param listener Listener to evaluate a multidimensional function
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
      * @param point Point used as a reference to determine the function's input
      * parameters along a line.
      * @param direction Vector indicating the direction of the line where the 
      * function is evaluated.
      * @throws IllegalArgumentException Raised if point and direction don't have
-     * the same length
+     * the same length.
      */
     public DirectionalEvaluator(
             MultiDimensionFunctionEvaluatorListener listener, double[] point, 
-            double[] direction) throws IllegalArgumentException{
+            double[] direction) throws IllegalArgumentException {
         
         setPointAndDirection(point, direction);
         this.listener = listener;        
@@ -62,15 +69,15 @@ public class DirectionalEvaluator {
      * Returns listener to evaluate a multidimensional function.
      * @return Listener to evaluate a multidimensional function.
      */
-    public MultiDimensionFunctionEvaluatorListener getListener(){
+    public MultiDimensionFunctionEvaluatorListener getListener() {
         return listener;
     }
     
     /**
-     * Sets listener to evaluate a multidimensional function
-     * @param listener  Listener to evaluate a multidimensional function
+     * Sets listener to evaluate a multidimensional function.
+     * @param listener  Listener to evaluate a multidimensional function.
      */
-    public void setListener(MultiDimensionFunctionEvaluatorListener listener){
+    public void setListener(MultiDimensionFunctionEvaluatorListener listener) {
         this.listener = listener;
     }
     
@@ -80,7 +87,7 @@ public class DirectionalEvaluator {
      * @return Point used as a reference to determine the function's input
      * parameters along a line
      */
-    public double[] getPoint(){
+    public double[] getPoint() {
         return point;
     }
     
@@ -90,7 +97,7 @@ public class DirectionalEvaluator {
      * @return Array indicating the direction of the line where the function is
      * evaluated.
      */
-    public double[] getDirection(){
+    public double[] getDirection() {
         return direction;
     }
         
@@ -103,12 +110,13 @@ public class DirectionalEvaluator {
      * @param direction Array indicating the direction of the line where the
      * function is evaluated.
      * @throws IllegalArgumentException Raised if point and direction don't have
-     * the same length
+     * the same length.
      */
     public final void setPointAndDirection(double[] point, double[] direction) 
-            throws IllegalArgumentException{
-        if(point.length != direction.length) 
+            throws IllegalArgumentException {
+        if (point.length != direction.length) {
             throw new IllegalArgumentException();
+        }
         
         this.point = point;
         this.direction = direction;
@@ -126,9 +134,9 @@ public class DirectionalEvaluator {
         for(int i = 0; i < point.length; i++){
             p[i] = point[i] + x * direction[i];
         }
-        try{
+        try {
             return listener.evaluate(p);
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new EvaluationException(t);
         }
     }    

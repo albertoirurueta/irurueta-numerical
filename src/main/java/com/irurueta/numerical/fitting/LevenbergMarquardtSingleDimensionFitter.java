@@ -1,235 +1,273 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.fitting.LevenbergMarquardtSingleDimensionFitter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 28, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.fitting;
 
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.GaussJordanElimination;
 import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
 import com.irurueta.numerical.NotReadyException;
+import com.irurueta.statistics.ChiSqDist;
+import com.irurueta.statistics.MaxIterationsExceededException;
+
 import java.util.Arrays;
 
 /**
  * Fits provided data (x,y) to a generic non-linear function using 
  * Levenberg-Marquardt iterative algorithm.
  * This class is based on the implementation available at Numerical Recipes 3rd
- * Ed, page 801
+ * Ed, page 801.
  */
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LevenbergMarquardtSingleDimensionFitter 
-        extends SingleDimensionFitter{
+        extends SingleDimensionFitter {
     
     /**
      * Default convergence parameter. Number of times that tolerance is assumed
-     * to be reached to consider that algorithm has finished iterating
+     * to be reached to consider that algorithm has finished iterating.
      */
     public static final int NDONE = 4;
     
     /**
-     * Default maximum number of iterations
+     * Default maximum number of iterations.
      */
-    public static final int ITMAX = 1000;
+    public static final int ITMAX = 5000;
     
     /**
-     * Default tolerance to reach convergence
+     * Default tolerance to reach convergence.
      */
     public static final double TOL = 1e-3;
-    
+
     /**
-     * Convergence parameter
+     * Indicates whether covariance must be adjusted or not after fitting is finished.
      */
-    private int ndone;
+    public static final boolean ADJUST_COVARIANCE = true;
     
     /**
-     * Maximum number of iterations
+     * Convergence parameter.
      */
-    private int itmax;
+    private int ndone = NDONE;
     
     /**
-     * Tolerance to reach convergence
+     * Maximum number of iterations.
      */
-    private double tol;
+    private int itmax = ITMAX;
     
     /**
-     * Evaluator of functions
+     * Tolerance to reach convergence.
+     */
+    private double tol = TOL;
+    
+    /**
+     * Evaluator of functions.
      */
     private LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator;
     
     /**
-     * Number of function parameters to be estimated
+     * Number of function parameters to be estimated.
      */
     private int ma;
     
     /**
      * Determines which parameters can be modified during estimation (if true)
-     * and which ones are locked (if false)
+     * and which ones are locked (if false).
      */
     private boolean[] ia;    
     
     /**
-     * Curvature matrix
+     * Curvature matrix.
      */
     private Matrix alpha;
     
     /**
-     * Number of parameters ot be fitted
+     * Number of parameters to be fitted.
      */
     private int mfit = 0;
+
+    /**
+     * Mean square error.
+     */
+    private double mse = 0.0;
+
+    /**
+     * Indicates whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function over estimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default covariance is adjusted after fitting finishes.
+     */
+    private boolean adjustCovariance = ADJUST_COVARIANCE;
         
     /**
-     * Constructor
+     * Constructor.
      */
-    public LevenbergMarquardtSingleDimensionFitter(){
+    public LevenbergMarquardtSingleDimensionFitter() {
         super();
-        ndone = NDONE;
-        itmax = ITMAX;
-        tol = TOL;
     }
     
     /**
-     * Constructor
-     * @param x input points x where function f(x) is evaluated
+     * Constructor.
+     * @param x input points x where function f(x) is evaluated.
      * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points
-     * @param sig standard deviations of each pair of points (x, y)
+     * at provided x points.
+     * @param sig standard deviations of each pair of points (x, y).
      * @throws IllegalArgumentException if provided arrays don't have the same
-     * length
+     * length.
      */
     public LevenbergMarquardtSingleDimensionFitter(double[] x, double[] y, 
-            double[] sig) throws IllegalArgumentException{
+            double[] sig) throws IllegalArgumentException {
         super(x, y, sig);
-        ndone = NDONE;
-        itmax = ITMAX;
-        tol = TOL;
     }
     
     /**
-     * Constructor
-     * @param x input points x where function f(x) is evaluated
+     * Constructor.
+     * @param x input points x where function f(x) is evaluated.
      * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points
+     * at provided x points.
      * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant
+     * standard deviations are constant.
      * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length 
+     * length.
      */
     public LevenbergMarquardtSingleDimensionFitter(double[] x, double[] y, 
-            double sig) throws IllegalArgumentException{
+            double sig) throws IllegalArgumentException {
         super(x, y, sig);
-        ndone = NDONE;
-        itmax = ITMAX;
-        tol = TOL;
     }
 
     /**
-     * Constructor
+     * Constructor.
      * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point
-     * @throws FittingException if evaluation fails
+     * obtain the evaluation of function basis at such point.
+     * @throws FittingException if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
             LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException{
+            throws FittingException {
         this();
         setFunctionEvaluator(evaluator);
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point
-     * @param x input points x where function f(x) is evaluated
+     * obtain the evaluation of function basis at such point.
+     * @param x input points x where function f(x) is evaluated.
      * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points
-     * @param sig standard deviations of each pair of points (x, y)
+     * at provided x points.
+     * @param sig standard deviations of each pair of points (x, y).
      * @throws IllegalArgumentException if provided arrays don't have the same
-     * length
-     * @throws FittingException if evaluation fails
+     * length.
+     * @throws FittingException if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
             LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
             double[] x, double[] y, double[] sig) 
-            throws IllegalArgumentException, FittingException{
+            throws IllegalArgumentException, FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point
-     * @param x input points x where function f(x) is evaluated
+     * obtain the evaluation of function basis at such point.
+     * @param x input points x where function f(x) is evaluated.
      * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points
+     * at provided x points.
      * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant
+     * standard deviations are constant.
      * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length 
-     * @throws FittingException if evaluation fails
+     * length.
+     * @throws FittingException if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
             LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator, 
             double[] x, double[] y, double sig) throws IllegalArgumentException,
-            FittingException{
+            FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }    
     
     /**
-     * Returns convergence parameter
-     * @return convergence parameter
+     * Returns convergence parameter.
+     * @return convergence parameter.
      */
-    public int getNdone(){
+    public int getNdone() {
         return ndone;
     }
     
     /**
-     * Sets convergence parameter
-     * @param ndone convergence parameter
-     * @throws IllegalArgumentException if provided value is less than 1
+     * Sets convergence parameter.
+     * @param ndone convergence parameter.
+     * @throws IllegalArgumentException if provided value is less than 1.
      */
-    public void setNdone(int ndone) throws IllegalArgumentException{
-        if(ndone < 1) throw new IllegalArgumentException();
+    public void setNdone(int ndone) throws IllegalArgumentException {
+        if (ndone < 1) {
+            throw new IllegalArgumentException();
+        }
         this.ndone = ndone;
     }
 
     /**
-     * Returns maximum number of iterations
-     * @return maximum number of iterations
+     * Returns maximum number of iterations.
+     * @return maximum number of iterations.
      */
-    public int getItmax(){
+    public int getItmax() {
         return itmax;
     }
     
     /**
-     * Sets maximum number of iterations
-     * @param itmax maximum number of iterations
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * Sets maximum number of iterations.
+     * @param itmax maximum number of iterations.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setItmax(int itmax) throws IllegalArgumentException{
-        if(itmax <= 0) throw new IllegalArgumentException();
+    public void setItmax(int itmax) throws IllegalArgumentException {
+        if (itmax <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.itmax = itmax;
     }    
 
     /**
-     * Returns tolerance to reach convergence
-     * @return tolerance to reach convergence
+     * Returns tolerance to reach convergence.
+     * @return tolerance to reach convergence.
      */
-    public double getTol(){
+    public double getTol() {
         return tol;
     }
     
     /**
-     * Sets tolerance to reach convergence
-     * @param tol tolerance to reach convergence
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * Sets tolerance to reach convergence.
+     * @param tol tolerance to reach convergence.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setTol(double tol) throws IllegalArgumentException{
-        if(tol <= 0.0) throw new IllegalArgumentException();
+    public void setTol(double tol) throws IllegalArgumentException {
+        if (tol <= 0.0) {
+            throw new IllegalArgumentException();
+        }
         this.tol = tol;
     }
     
@@ -239,7 +277,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @return function evaluator
      */
     public LevenbergMarquardtSingleDimensionFunctionEvaluator 
-            getFunctionEvaluator(){
+            getFunctionEvaluator() {
         return evaluator;
     }
     
@@ -251,34 +289,8 @@ public class LevenbergMarquardtSingleDimensionFitter
      */
     public final void setFunctionEvaluator(
             LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator) 
-            throws FittingException{
+            throws FittingException {
         internalSetFunctionEvaluator(evaluator);
-    }
-    
-    /**
-     * Internal method to set function evaluator to evaluate function at a given 
-     * point and obtain function derivatives respect to each provided parameter
-     * @param evaluator function evaluator
-     * @throws FittingException if evaluation fails
-     */    
-    private void internalSetFunctionEvaluator(
-            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator) 
-            throws FittingException{
-        
-        try{
-            this.evaluator = evaluator;    
-        
-            if(evaluator != null){
-                a = evaluator.createInitialParametersArray();
-                ma = a.length;
-                covar = new Matrix(ma, ma);
-                alpha = new Matrix(ma, ma);
-                ia = new boolean[ma];
-                Arrays.fill(ia, true);                
-            }            
-        }catch(AlgebraException e){
-            throw new FittingException(e);
-        }
     }
 
     /**
@@ -294,162 +306,393 @@ public class LevenbergMarquardtSingleDimensionFitter
     }
     
     /**
-     * Returns curvature matrix
-     * @return curvature matrix
+     * Returns curvature matrix.
+     * Curvature matrix is an indicatiion o fht curvature of the error of the
+     * function being fitted on parameters dimensions.
+     * The larger the curvatures are, the more likely that parameters can be correctly
+     * fitted because a deep enough valley has been found to converge to an optimal
+     * solution.
+     * Typically curvature is proportional to the inverse of the covariance matrix.
+     * @return curvature matrix.
      */
-    public Matrix getAlpha(){
+    public Matrix getAlpha() {
         return alpha;
     }
-    
+
+    /**
+     * Returns degrees of freedom of computed chi square value.
+     * Degrees of fredom is equal to the number of sampled data minus the
+     * number of estimated parameters.
+     * @return degrees of freedom of computed chi square value.
+     */
+    public int getChisqDegreesOfFreedom() {
+        return ndat - ma;
+    }
+
+    /**
+     * Gets mean square error produced by estimated parameters respect to
+     * provided sample data.
+     * @return mean square error.
+     */
+    public double getMse() {
+        return mse;
+    }
+
+    /**
+     * Gets the probability of finding a smaller chi square value.
+     * The smaller the found chi square value is, the better the fit of the estimated
+     * parameters to the actual parameter.
+     * Thus, the smaller the chance of finding a smaller chi square value, then the
+     * better the estimated fit is.
+     * @return probability of finding a smaller chi square value (better fit), expressed
+     * as a value between 0.0 and 1.0.
+     * @throws MaxIterationsExceededException if convergence of incomplete
+     * gamma function cannot be reached. This is rarely thrown and happens
+     * usually for numerically unstable input values.
+     */
+    public double getP() throws MaxIterationsExceededException {
+        return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());
+    }
+
+    /**
+     * Gets a measure of quality of estimated fit as a value between 0.0 and 1.0.
+     * The larger the quality value is, the better the fit that has been estimated.
+     * @return measure of quality of estimated fit.
+     * @throws MaxIterationsExceededException if convergence of incomplete
+     * gamma function cannot be reached. This is rarely thrown and happens
+     * usually for numerically unstable input values.
+     */
+    public double getQ() throws MaxIterationsExceededException {
+        return 1.0 - getP();
+    }
+
+    /**
+     * Indicates whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function over estimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default covariance is adjusted after fitting finishes.
+     * More info about confidence os estimated parameters can be found here:
+     * http://people.duke.edu/~hpgavin/ce281/lm.pdf
+     * https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf
+     * Numerical Recipes 3rd Ed, page 812
+     * @return true if covariance must be adjusted, false otherwise.
+     */
+    public boolean isCovarianceAdjusted() {
+        return adjustCovariance;
+    }
+
+    /**
+     * Specifies whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function over estimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default covariance is adjusted after fitting finishes.
+     * @param adjustCovariance true if covariance must be adjusted, false otherwise.
+     */
+    public void setCovarianceAdjusted(boolean adjustCovariance) {
+        this.adjustCovariance = adjustCovariance;
+    }
+
     /**
      * Fits a function to provided data so that parameters associated to that
      * function can be estimated along with their covariance matrix and chi
-     * square value
-     * @throws FittingException if fitting fails
-     * @throws NotReadyException if enough input data has not yet been provided
+     * square value.
+     * If chi square value is close to 1, the fit is usually good.
+     * If it is much larger, then error cannot be properly fitted.
+     * If it is close to zero, then the model overfits the error.
+     * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
+     * the quality of the fit.
+     * @throws FittingException if fitting fails.
+     * @throws NotReadyException if enough input data has not yet been provided.
      */        
     @Override
     public void fit() throws FittingException, NotReadyException {
-        if(!isReady()) throw new NotReadyException();
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
 
-        try{
+        try {
             resultAvailable = false;        
         
             int j, k, l, iter, done = 0;
-            double alamda = .001, ochisq;
+            double alamda = 0.001, ochisq;
             double[] atry = new double[ma];
             double[] beta = new double[ma];
             double[] da = new double[ma];
-        
-            mfit=0; //number of parameters to be fitted
-            for(j = 0; j < ma; j++) if(ia[j]) mfit++;
+
+            //number of parameters to be fitted
+            mfit = 0;
+            for (j = 0; j < ma; j++) {
+                if (ia[j]) {
+                    mfit++;
+                }
+            }
+
             Matrix oneda = new Matrix(mfit, 1);
             Matrix temp = new Matrix(mfit, mfit);
+
             //initialization
-            mrqcof(a,alpha,beta);
-            for(j = 0 ; j < ma; j++) atry[j]=a[j];
-            ochisq=chisq;
-            for(iter = 0; iter < itmax; iter++) {
-                if(done == ndone) alamda=0.; //last pass. Use zero alamda
-                for(j = 0; j < mfit; j++) { 
+            mrqcof(a, alpha, beta);
+            for (j = 0 ; j < ma; j++) {
+                atry[j] = a[j];
+            }
+
+            ochisq = chisq;
+            for (iter = 0; iter < itmax; iter++) {
+
+                if (done == ndone) {
+                    //last pass. Use zero alamda
+                    alamda = 0.0;
+                }
+
+                for (j = 0; j < mfit; j++) {
                     //alter linearized fitting matrix, by augmenting diagonal 
                     //elements
-                    for (k = 0; k < mfit; k++){
+                    for (k = 0; k < mfit; k++) {
                         covar.setElementAt(j, k, alpha.getElementAt(j, k));
                     }
                     covar.setElementAt(j, j, alpha.getElementAt(j, j) * (1.0 + alamda));
-                    for(k = 0; k < mfit; k++){
+                    for (k = 0; k < mfit; k++) {
                         temp.setElementAt(j, k, covar.getElementAt(j, k));
                     }
                     oneda.setElementAt(j, 0, beta[j]);
                 }
-                GaussJordanElimination.process(temp, oneda); //matrix solution
-                for(j = 0; j < mfit; j++){
-                    for(k = 0; k < mfit; k++){
+
+                //matrix solution
+                GaussJordanElimination.process(temp, oneda);
+
+                for (j = 0; j < mfit; j++) {
+                    for (k = 0; k < mfit; k++) {
                         covar.setElementAt(j, k, temp.getElementAt(j, k));
                     }
                     da[j] = oneda.getElementAt(j, 0);
                 }
-                if(done == ndone) { //Converged. Clean up and return
+
+                if (done == ndone) {
+                    //Converged. Clean up and return
                     covsrt(covar);
                     covsrt(alpha);
+
+                    if (adjustCovariance) {
+                        adjustCovariance();
+                    }
                     
                     resultAvailable = true;
                     
                     return;
                 }
-                for(j = 0, l = 0; l < ma; l++){ //did the trial succeed?
-                    if(ia[l]) atry[l] = a[l] + da[j++];
+
+                //did the trial succeed?
+                for (j = 0, l = 0; l < ma; l++) {
+                    if(ia[l]) {
+                        atry[l] = a[l] + da[j++];
+                    }
                 }
-                mrqcof(atry,covar,da);
-                if(Math.abs(chisq - ochisq) < Math.max(tol, tol * chisq)) done++;
-                if(chisq < ochisq) { //success, accept the new solution
+
+                mrqcof(atry, covar, da);
+                if (Math.abs(chisq - ochisq) < Math.max(tol, tol * chisq)) {
+                    done++;
+                }
+
+                if (chisq < ochisq) {
+                    //success, accept the new solution
                     alamda *= 0.1;
-                    ochisq=chisq;
-                    for(j = 0; j < mfit; j++) {
-                        for (k = 0; k < mfit; k++){
+                    ochisq = chisq;
+                    for (j = 0; j < mfit; j++) {
+                        for (k = 0; k < mfit; k++) {
                             alpha.setElementAt(j, k, covar.getElementAt(j, k));
                         }
                         beta[j] = da[j];
                     }
-                    for (l = 0; l < ma; l++) a[l] = atry[l];
-                }else{ //failure, increase alamda
+                    for (l = 0; l < ma; l++) {
+                        a[l] = atry[l];
+                    }
+                } else {
+                    //failure, increase alamda
                     alamda *= 10.0;
-                    chisq=ochisq;
+                    chisq = ochisq;
                 }
             }
 
             //too many iterations
             throw new FittingException("too many iterations");
                 
-        }catch(FittingException e){
+        } catch (FittingException e) {
             throw e;
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new FittingException(t);
         }                
     }
     
     /**
      * Prevents parameter at position i of linear combination of basis functions 
-     * to be modified during function fitting
-     * @param i position of parameter to be retained
-     * @param val value to be set for parameter at position i
+     * to be modified during function fitting.
+     * @param i position of parameter to be retained.
+     * @param val value to be set for parameter at position i.
      */
-    public void hold(int i, double val){
+    public void hold(int i, double val) {
         ia[i] = false;
         a[i] = val;
     }
     
     /**
      * Releases parameter at position i of linear combination of basis functions
-     * so it can be modified again if needed
-     * @param i position of parameter to be released
+     * so it can be modified again if needed.
+     * @param i position of parameter to be released.
      */
-    public void free(int i){
+    public void free(int i) {
         ia[i] = true;
+    }
+
+    /**
+     * Adjusts covariance.
+     * Covariance must be adjusted to produce more real results close to the scale
+     * of problem, otherwise estimated covariance will just be a measure of
+     * goodness similar to chi square value because it will be the inverse of
+     * the curvature matrix, which is just a solution of the covariance up to scale.
+     *
+     * Covariance is adjusted taking into account input samples, input standard
+     * deviations of the samples and jacobians of the model function over estimated
+     * parameters using the following expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * @throws Throwable if anything fails.
+     */
+    private void adjustCovariance() throws Throwable {
+
+        Matrix invCov = new Matrix(a.length, a.length);
+        Matrix tmp1 = new Matrix(a.length, 1);
+        Matrix tmp2 = new Matrix(1, a.length);
+        Matrix tmpInvCov = new Matrix(a.length, a.length);
+        double[] derivatives = new double[a.length];
+        int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
+        for (int i = 0; i < ndat; i++) {
+            evaluator.evaluate(i, x[i], a, derivatives);
+
+            tmp1.fromArray(derivatives);
+            tmp2.fromArray(derivatives);
+
+            tmp1.multiply(tmp2, tmpInvCov);
+
+            double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
+            tmpInvCov.multiplyByScalar(w);
+            invCov.add(tmpInvCov);
+        }
+
+        covar = Utils.inverse(invCov);
+    }
+
+    /**
+     * Internal method to set function evaluator to evaluate function at a given
+     * point and obtain function derivatives respect to each provided parameter
+     * @param evaluator function evaluator
+     * @throws FittingException if evaluation fails
+     */
+    private void internalSetFunctionEvaluator(
+            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+
+        try {
+            this.evaluator = evaluator;
+
+            if (evaluator != null) {
+                a = evaluator.createInitialParametersArray();
+                ma = a.length;
+                covar = new Matrix(ma, ma);
+                alpha = new Matrix(ma, ma);
+                ia = new boolean[ma];
+                Arrays.fill(ia, true);
+            }
+        } catch(AlgebraException e) {
+            throw new FittingException(e);
+        }
     }
         
     /**
-     * Used by fit to evaluate the linearized fitting matrix alpha, and vector 
-     * beta to calculate chi square
-     * @param a estimated parameters so far
-     * @param alpha curvature (i.e. fitting) matrix
+     * Used by {@link #fit()} to evaluate the linearized fitting matrix alpha, and
+     * vector beta to calculate chi square.
+     * @param a estimated parameters so far.
+     * @param alpha curvature (i.e. fitting) matrix.
      * @param beta array where derivative increments for each parameter are 
-     * stored
-     * @throws Throwable if evaluation of function fails
+     * stored.
+     * @throws Throwable if evaluation of function fails.
      */
     private void mrqcof(double[] a, Matrix alpha, double[] beta) 
-            throws Throwable{
-	int i,j,k,l,m;
-	double ymod,wt,sig2i,dy;
+            throws Throwable {
+
+	    int i, j, k, l, m;
+	    double ymod, wt, sig2i, dy;
         double[] dyda = new double[ma];
-	for(j = 0; j < mfit; j++) {
-            for(k = 0; k <= j; k++){
+
+        //initialize (symmetric) alpha, beta
+	    for (j = 0; j < mfit; j++) {
+            for (k = 0; k <= j; k++) {
                 alpha.setElementAt(j, k, 0.0);
             }
-            beta[j] = 0.;
-	}
-	chisq = 0.;
-	for(i = 0; i < ndat; i++) {
+            beta[j] = 0.0;
+	    }
+
+	    chisq = 0.0;
+	    mse = 0.0;
+	    int degreesOfFreedom = getChisqDegreesOfFreedom();
+	    for (i = 0; i < ndat; i++) {
+	        //summation loop over all data
             ymod = evaluator.evaluate(i, x[i], a, dyda);
+
             sig2i = 1.0 / (sig[i] * sig[i]);
             dy = y[i] - ymod;
-            for(j = 0, l = 0; l < ma; l++) {
-                if(ia[l]){
+            for (j = 0, l = 0; l < ma; l++) {
+                if (ia[l]) {
                     wt = dyda[l] * sig2i;
-                    for(k = 0, m = 0; m < l + 1; m++){
-                        if(ia[m]){
+                    double[] alphaBuffer = alpha.getBuffer();
+                    for (k = 0, m = 0; m < l + 1; m++) {
+                        if (ia[m]) {
                             int index = alpha.getIndex(j, k++);
-                            alpha.getBuffer()[index] += wt*dyda[m];
+                            alphaBuffer[index] += wt * dyda[m];
                         }                    
                     }
-                    beta[j++] += dy*wt;
+                    beta[j++] += dy * wt;
                 }
             }
-            chisq += dy*dy*sig2i;
-	}
-	for (j = 1; j < mfit; j++){
-            for(k = 0; k < j; k++){
+
+            //add to mse
+            mse += dy * dy / (double)degreesOfFreedom;
+
+            //and find chi square
+            chisq += dy * dy * sig2i / (double)degreesOfFreedom;
+	    }
+
+	    //fill in the symmetric side
+	    for (j = 1; j < mfit; j++) {
+            for (k = 0; k < j; k++) {
                 alpha.setElementAt(k, j, alpha.getElementAt(j, k));
             }
         }
@@ -458,44 +701,47 @@ public class LevenbergMarquardtSingleDimensionFitter
     /**
      * Expand in storage the covariance matrix covar, so as to take into account
      * parameters that are being held fixed. (For the latter, return zero 
-     * covariances)
-     * @param covar covariance matrix
+     * covariances).
+     * @param covar covariance matrix.
      */
     private void covsrt(Matrix covar) {
-	int i,j,k;
-	for(i = mfit; i < ma; i++){
-            for(j = 0; j < i + 1; j++){
+	    int i, j, k;
+	    for (i = mfit; i < ma; i++) {
+            for (j = 0; j < i + 1; j++) {
                 covar.setElementAt(i, j, 0.0);
                 covar.setElementAt(j, i, 0.0);
             }
         }
-	k = mfit - 1;
-	for(j = ma - 1; j >= 0; j--){
-            if(ia[j]){
+
+	    k = mfit - 1;
+	    for (j = ma - 1; j >= 0; j--) {
+            if (ia[j]) {
                 double[] buffer = covar.getBuffer();
-		for(i = 0; i < ma; i++){
+		        for (i = 0; i < ma; i++) {
                     int pos1 = covar.getIndex(i, k);
                     int pos2 = covar.getIndex(i, j);
                     swap(buffer, buffer, pos1, pos2);
                 }
-		for(i = 0; i < ma; i++){
+
+		        for (i = 0; i < ma; i++) {
                     int pos1 = covar.getIndex(k, i);
                     int pos2 = covar.getIndex(j, i);
                     swap(buffer, buffer, pos1, pos2);
                 }
-		k--;
+
+		        k--;
             }
-	}
+	    }
     }
     
     /**
-     * Swaps values of arrays at provided positions
-     * @param array1 1st array
-     * @param array2 2nd array
-     * @param pos1 1st position
-     * @param pos2 2nd position
+     * Swaps values of arrays at provided positions.
+     * @param array1 1st array.
+     * @param array2 2nd array.
+     * @param pos1 1st position.
+     * @param pos2 2nd position.
      */
-    private void swap(double[] array1, double[] array2, int pos1, int pos2){
+    private void swap(double[] array1, double[] array2, int pos1, int pos2) {
         double value1 = array1[pos1];
         double value2 = array2[pos2];
         array1[pos1] = value2;

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of 
- * com.irurueta.numerical.SymmetricGradientEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
@@ -15,26 +22,27 @@ package com.irurueta.numerical;
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
  * This implementation is more accurate although slower than 
- * GradientEstimator
+ * GradientEstimator.
  */
-public class SymmetricGradientEstimator extends GradientEstimator{
+@SuppressWarnings("WeakerAccess")
+public class SymmetricGradientEstimator extends GradientEstimator {
     
     /**
-     * Internal array containing one point to sample close to the original one
+     * Internal array containing one point to sample close to the original one.
      */
     private double[] xh1;
     
     /**
-     * Internal array containing one point to sample close to the original one
+     * Internal array containing one point to sample close to the original one.
      */    
     private double[] xh2;
     
     /**
-     * Constructor
-     * @param listener Listener to evaluate a multidimensional function
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
      */   
     public SymmetricGradientEstimator(
-            MultiDimensionFunctionEvaluatorListener listener){
+            MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
     
@@ -42,33 +50,35 @@ public class SymmetricGradientEstimator extends GradientEstimator{
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
-     * array can be reused and hence is more memory efficient
-     * @param point Input point
+     * array can be reused and hence is more memory efficient.
+     * @param point Input point.
      * @param result Output parameter containing estimated array. This parameter
-     * must be an array of length equal to point
-     * @throws EvaluationException Raised if function cannot be evaluated
+     * must be an array of length equal to point.
+     * @throws EvaluationException Raised if function cannot be evaluated.
      * @throws IllegalArgumentException Raised if length of result and point are
      * not equal.
      */    
     @Override
     public void gradient(double[] point, double[] result) 
-            throws EvaluationException, IllegalArgumentException{
+            throws EvaluationException, IllegalArgumentException {
         int n = point.length;
-        if(result.length != n) throw new IllegalArgumentException();
+        if (result.length != n) {
+            throw new IllegalArgumentException();
+        }
         
-        if(xh1 == null || xh1.length != n){ 
+        if (xh1 == null || xh1.length != n) {
             xh1 = new double[n];
             System.arraycopy(point, 0, xh1, 0, n);
         }
-        if(xh2 == null || xh2.length != n){ 
+        if (xh2 == null || xh2.length != n) {
             xh2 = new double[n];
             System.arraycopy(point, 0, xh2, 0, n);
         }
                 
-        try{
+        try {
             double temp, h, h1, h2, hh, fh1, fh2;
             //double fold = listener.evaluate(point);
-            for(int j = 0; j < n; j++){
+            for (int j = 0; j < n; j++) {
                 temp = point[j];
                 h = EPS * Math.abs(temp);
                 if(h == 0.0) h = EPS; //Trich to reduce finite-precision error
@@ -89,7 +99,7 @@ public class SymmetricGradientEstimator extends GradientEstimator{
                 
                 result[j] = (fh1 - fh2) / hh;
             }
-        }catch(Throwable t){
+        } catch (Throwable t) {
             throw new EvaluationException(t);
         }
     }    

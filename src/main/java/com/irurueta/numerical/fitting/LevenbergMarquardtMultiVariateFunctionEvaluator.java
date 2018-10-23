@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.fitting.LevenbergMarquardtMultiVariateFunctionEvaluator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date June 1, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.fitting;
 
@@ -14,7 +21,7 @@ import com.irurueta.algebra.Matrix;
  * Interface to evaluate non-linear multi variate and multi dimensional 
  * functions.
  * Evaluation of functions requires both function value at provided point x and
- * function jacopiab respect to its parameters (i.e. derivatives respect to its
+ * function jacobian respect to its parameters (i.e. derivatives respect to its
  * parameters for each function output or variable)
  */
 public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
@@ -24,7 +31,7 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
      * evaluated by this function evaluator
      * @return number of dimensions of points
      */
-    public int getNumberOfDimensions();
+    int getNumberOfDimensions();
     
     /**
      * Number of variables of function f. This is equal to the length of the
@@ -33,7 +40,7 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
      * be N
      * @return number of variables of function f
      */
-    public int getNumberOfVariables();
+    int getNumberOfVariables();
     
     /**
      * Creates array where estimated parameters will be stored.
@@ -41,7 +48,7 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
      * Marquardt algorithm
      * @return array where estimated parameters will be stored
      */
-    public double[] createInitialParametersArray();
+    double[] createInitialParametersArray();
     
     /**
      * Evaluates a non-linear multi variate function at provided point using 
@@ -58,7 +65,7 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
      * respect to each provided parameter for each function output or variable
      * @throws Throwable raised if something failed during the evaluation
      */
-    public void evaluate(int i, double[] point, double[] result, 
+    void evaluate(int i, double[] point, double[] result,
             double[] params, Matrix jacobian) throws Throwable;    
     
 }
