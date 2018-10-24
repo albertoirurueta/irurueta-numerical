@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.optimization.PowellMultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 25, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
@@ -13,11 +20,12 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Arrays;
 import java.util.Random;
-import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public class PowellMultiOptimizerTest {
@@ -27,9 +35,6 @@ public class PowellMultiOptimizerTest {
     
     public static final double MIN_EVAL_POINT = -1e3;
     public static final double MAX_EVAL_POINT = 1e3;
-    
-    public static final double MIN_DIRECTION = -1.0;
-    public static final double MAX_DIRECTION = 1.0;
     
     public static final double MIN_OFFSET = -1e3;
     public static final double MAX_OFFSET = 1e3;
@@ -55,7 +60,7 @@ public class PowellMultiOptimizerTest {
         listener = new MultiDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double[] point) throws Throwable {
+            public double evaluate(double[] point) {
                 int dims = Math.min(Math.min(point.length, minimum.length), 
                         width.length);
                 
@@ -72,10 +77,10 @@ public class PowellMultiOptimizerTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -113,12 +118,12 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getDirections();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areDirectionsAvailable());
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isDirectionAvailable());
         assertFalse(optimizer.isReady());
         assertEquals(optimizer.getTolerance(), 
@@ -127,21 +132,21 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         
@@ -152,35 +157,35 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getDirections();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areDirectionsAvailable());
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isDirectionAvailable());
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isReady());
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
         assertFalse(optimizer.isStartPointAvailable());
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(optimizer.getListener(), listener);
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         //Force IllegalArgumentException
@@ -188,7 +193,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer = new PowellMultiOptimizer(listener, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
         
         
@@ -203,7 +208,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isDirectionAvailable());
         assertTrue(optimizer.isReady());
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
@@ -215,11 +220,11 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
     }
     
@@ -239,7 +244,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getDirections();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areDirectionsAvailable());
         
         //set directions
@@ -267,7 +272,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isDirectionAvailable());
         
         //set direction
@@ -317,7 +322,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -336,7 +341,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableExceptio expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isStartPointAvailable());
         
         //set start point
@@ -355,7 +360,7 @@ public class PowellMultiOptimizerTest {
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         
         //set listener
@@ -372,8 +377,7 @@ public class PowellMultiOptimizerTest {
     }
     
     @Test
-    public void testMinimize() throws LockedException, NotReadyException, 
-        OptimizationException, NotAvailableException, Throwable {
+    public void testMinimize() throws Throwable {
         
         for (int i = 0; i < TIMES; i++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());

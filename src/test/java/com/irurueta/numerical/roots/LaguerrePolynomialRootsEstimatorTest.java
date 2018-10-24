@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.roots.LaguerrePolynomialRootsEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date June 1, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -14,120 +21,38 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class LaguerrePolynomialRootsEstimatorTest {
     
-    public static final double MIN_EVAL_POINT = 0.0;
-    public static final double MAX_EVAL_POINT = 1.0;
+    private static final double MIN_EVAL_POINT = 0.0;
+    private static final double MAX_EVAL_POINT = 1.0;
     
-    public static final double TOLERANCE = 3e-8;
+    private static final double TOLERANCE = 3e-8;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public LaguerrePolynomialRootsEstimatorTest() {
-    }
+    public LaguerrePolynomialRootsEstimatorTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
-    
-    public double vectorNorm(Complex[] v){
-        double normValue = 0.0, real, imag;
-        for(int i = 0; i < v.length; i++){
-            real = v[i].getReal();
-            imag = v[i].getImaginary();
-            normValue += real * real + imag * imag; //square norm
-        }
-        
-        return Math.sqrt(normValue);
-    }
-    
-    public Complex[] generateConstantPolynomialParams(Complex param){
-        
-        Complex[] out = new Complex[1];
-        out[0] = param;
-        return out;
-    }
-    
-    public Complex[] generateFirstDegreePolynomialParams(Complex root1){
-        
-        Complex[] out = new Complex[2];
-        //p(x) = x - root1
-        out[1] = new Complex(1.0, 0.0);
-        out[0] = new Complex(-root1.getReal(), -root1.getImaginary());
-        
-        double normValue = vectorNorm(out);
-        //normalize vector of complex values
-        ArrayUtils.multiplyByScalar(out, normValue, out);
-        
-        return out;
-    }
-    
-        public Complex[] generateSecondDegreePolynomialParams(Complex root1, 
-            Complex root2){
-        
-        Complex[] out = new Complex[3];
-        //p(x) = (x - root1) * (x - root2) = x * x - (root1 * root2) * x + 
-        //root1 + root2
-        out[2] = new Complex(1.0, 0.0);
-        out[1] = root1.addAndReturnNew(root2).multiplyByScalarAndReturnNew(
-                -1.0);
-        out[0] = root1.multiplyAndReturnNew(root2);
-        
-        double normValue = vectorNorm(out);
-        //normalize vector of complex values
-        ArrayUtils.multiplyByScalar(out, normValue, out);
-        
-        return out;
-    }
-        
-    public Complex[] generateThirdDegreePolynomialParams(Complex root1,
-            Complex root2, Complex root3){
-        
-        Complex[] out = new Complex[4];
-        //p(x) = (x - root1) * (x - root2) * (x - root3) =
-        //(x * x - (root1 + root2) * x + root1 * root2) * (x - root3) =
-        //(x * x * x - (root1 + root2) * x * x + (root1 + root2) * x
-        //- root3 * x * x + (root1 + root2) * root3 * x
-        //- (root1 + root2) * root3 =
-        
-        //x * x * x - (root1 + root2 + root3) * x * x +
-        //((root1 * root2) + (root1 + root2) * root3) * x 
-        //- root1 * root2 * root3
-        
-        out[3] = new Complex(1.0, 0.0);
-        out[2] = root1.addAndReturnNew(root2).addAndReturnNew(root3).
-                multiplyByScalarAndReturnNew(-1.0);
-        out[1] = root1.multiplyAndReturnNew(root2).addAndReturnNew(
-                root1.addAndReturnNew(root2).multiplyAndReturnNew(root3));
-        out[0] = root1.multiplyAndReturnNew(root2).multiplyAndReturnNew(root3).
-                multiplyByScalarAndReturnNew(-1.0);
-        
-        double normValue = vectorNorm(out);
-        //normalize vector of complex values
-        ArrayUtils.multiplyByScalar(out, normValue, out);        
-        
-        return out;
-    }        
-        
+    public void tearDown() { }
+
     @Test
     public void testConstructor() throws LockedException, 
-        RootEstimationException, NotAvailableException{
+        RootEstimationException, NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         boolean polishRoots = randomizer.nextBoolean();
@@ -476,4 +401,84 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(roots[2].equals(new Complex(realRoot1), TOLERANCE));
         }
     }
+
+    private double vectorNorm(Complex[] v) {
+        double normValue = 0.0, real, imag;
+        for (Complex value : v) {
+            real = value.getReal();
+            imag = value.getImaginary();
+            normValue += real * real + imag * imag; //square norm
+        }
+
+        return Math.sqrt(normValue);
+    }
+
+    private Complex[] generateConstantPolynomialParams(Complex param) {
+
+        Complex[] out = new Complex[1];
+        out[0] = param;
+        return out;
+    }
+
+    private Complex[] generateFirstDegreePolynomialParams(Complex root1) {
+
+        Complex[] out = new Complex[2];
+        //p(x) = x - root1
+        out[1] = new Complex(1.0, 0.0);
+        out[0] = new Complex(-root1.getReal(), -root1.getImaginary());
+
+        double normValue = vectorNorm(out);
+        //normalize vector of complex values
+        ArrayUtils.multiplyByScalar(out, normValue, out);
+
+        return out;
+    }
+
+    private Complex[] generateSecondDegreePolynomialParams(Complex root1,
+            Complex root2) {
+
+        Complex[] out = new Complex[3];
+        //p(x) = (x - root1) * (x - root2) = x * x - (root1 * root2) * x +
+        //root1 + root2
+        out[2] = new Complex(1.0, 0.0);
+        out[1] = root1.addAndReturnNew(root2).multiplyByScalarAndReturnNew(
+                -1.0);
+        out[0] = root1.multiplyAndReturnNew(root2);
+
+        double normValue = vectorNorm(out);
+        //normalize vector of complex values
+        ArrayUtils.multiplyByScalar(out, normValue, out);
+
+        return out;
+    }
+
+    private Complex[] generateThirdDegreePolynomialParams(Complex root1,
+            Complex root2, Complex root3) {
+
+        Complex[] out = new Complex[4];
+        //p(x) = (x - root1) * (x - root2) * (x - root3) =
+        //(x * x - (root1 + root2) * x + root1 * root2) * (x - root3) =
+        //(x * x * x - (root1 + root2) * x * x + (root1 + root2) * x
+        //- root3 * x * x + (root1 + root2) * root3 * x
+        //- (root1 + root2) * root3 =
+
+        //x * x * x - (root1 + root2 + root3) * x * x +
+        //((root1 * root2) + (root1 + root2) * root3) * x
+        //- root1 * root2 * root3
+
+        out[3] = new Complex(1.0, 0.0);
+        out[2] = root1.addAndReturnNew(root2).addAndReturnNew(root3).
+                multiplyByScalarAndReturnNew(-1.0);
+        out[1] = root1.multiplyAndReturnNew(root2).addAndReturnNew(
+                root1.addAndReturnNew(root2).multiplyAndReturnNew(root3));
+        out[0] = root1.multiplyAndReturnNew(root2).multiplyAndReturnNew(root3).
+                multiplyByScalarAndReturnNew(-1.0);
+
+        double normValue = vectorNorm(out);
+        //normalize vector of complex values
+        ArrayUtils.multiplyByScalar(out, normValue, out);
+
+        return out;
+    }
+
 }

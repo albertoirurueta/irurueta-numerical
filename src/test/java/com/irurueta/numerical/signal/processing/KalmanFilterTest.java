@@ -1,77 +1,80 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.signal.processing.KalmanFilter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 12, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.signal.processing;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.signal.processing.AccelerationFileLoader.Data;
+import org.junit.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Random;
-import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class KalmanFilterTest {
     
-    public static final Logger LOGGER = 
-            Logger.getLogger(KalmanFilterTest.class.getName());
-    
-    public static final int N_SAMPLES = 500;    
-    public static final boolean WRITE_TO_CONSOLE = false;
-    public static final boolean DO_NOT_SKIP = true;
-    
-    public static final String ACCELERATION_MOTION = 
+    private static final int N_SAMPLES = 500;
+    private static final boolean WRITE_TO_CONSOLE = false;
+    private static final boolean DO_NOT_SKIP = true;
+    private static final int TIMES = 50;
+
+    private static final String ACCELERATION_MOTION =
             "./src/test/java/com/irurueta/numerical/signal/processing/acceleration-motion.dat";
-    
-    public static final String ACCELERATION_NO_MOTION = 
+
+    private static final String ACCELERATION_NO_MOTION =
             "./src/test/java/com/irurueta/numerical/signal/processing/acceleration-no-motion.dat";
-    
-    public static final String CSV_FILE_MOTION =
+
+    private static final String CSV_FILE_MOTION =
             "./src/test/java/com/irurueta/numerical/signal/processing/motion.csv";
-    
-    public static final String CSV_FILE_NO_MOTION = 
+
+    private static final String CSV_FILE_NO_MOTION =
             "./src/test/java/com/irurueta/numerical/signal/processing/no-motion.csv";
 
-    public static final String ACCELERATION_MOTION_FAST = 
+    private static final String ACCELERATION_MOTION_FAST =
             "./src/test/java/com/irurueta/numerical/signal/processing/acceleration-motion-fast.dat";
-    
-    public static final String ACCELERATION_NO_MOTION_FAST = 
+
+    private static final String ACCELERATION_NO_MOTION_FAST =
             "./src/test/java/com/irurueta/numerical/signal/processing/acceleration-no-motion-fast.dat";
-    
-    public static final String CSV_FILE_MOTION_FAST =
+
+    private static final String CSV_FILE_MOTION_FAST =
             "./src/test/java/com/irurueta/numerical/signal/processing/motion-fast.csv";
-    
-    public static final String CSV_FILE_NO_MOTION_FAST = 
+
+    private static final String CSV_FILE_NO_MOTION_FAST =
             "./src/test/java/com/irurueta/numerical/signal/processing/no-motion-fast.csv";
     
-    public KalmanFilterTest() {}
+    public KalmanFilterTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor() throws SignalProcessingException{
+    public void testConstructor() throws SignalProcessingException {
         KalmanFilter filter = new KalmanFilter(6, 9, -1);
         
         //check correctness
@@ -190,15 +193,15 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         filter = null;
-        try{
+        try {
             filter = new KalmanFilter(-1, 9, 1);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             filter = new KalmanFilter(6, -1, 1);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         assertNull(filter);
     }   
@@ -219,77 +222,90 @@ public class KalmanFilterTest {
         try {
             filter.setMeasureParameters(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
         
     @Test
     public void testPredictAndCorrectAcceleration() 
-            throws SignalProcessingException, WrongSizeException{
-        
-        //using a Kalman filter we take noisy measures of acceleration (for
-        //simplicity we only consider one dimension).
-        //Using acceleration samples we want to obtain the state of speed and 
-        //position
-        KalmanFilter kalman = new KalmanFilter(1, 1);
-        
-        Random rand = new Random();
-        //constant acceleration
-        double acceleration = rand.nextDouble();
-        double sampleNoise;
-        double predictedAcceleration, correctedAcceleration = 0.0;
-        
-        
-        //setup Kalman filter;
-        Matrix predictedState; //[acceleration]
-        Matrix correctedState; //[acceleration]
-        
-        Matrix measurement = new Matrix(1, 1); //measurement (aceleration)
-        measurement.setElementAtIndex(0, acceleration);
-        
-        //transitions for acceleration
-        //[1]
-        Matrix transitionMatrix = new Matrix(1, 1);
-        transitionMatrix.setElementAtIndex(0, 1.0);
-        kalman.setTransitionMatrix(transitionMatrix);
-        
-        if(WRITE_TO_CONSOLE){
-            System.out.println("no;truePosition;trueSpeed;trueAcceleration;" + 
-                    "predictedPosition;predictedSpeed;predictedAcceleration;" + 
-                    "correctedPosition;correctedSpeed;correctedAcceleration;");
-        }
-        
-        //assume each sample happens every second
-        for(int i = 0; i < N_SAMPLES; i++){
-            sampleNoise = 1e-3 * rand.nextGaussian();
-            
-            predictedState = kalman.predict();
-            
-            //take measure with noise
-            measurement.setElementAtIndex(0, 
-                    measurement.getElementAtIndex(0) + sampleNoise);
-            
-            //correct
-            correctedState = kalman.correct(measurement);
-            
-            predictedAcceleration = predictedState.getElementAtIndex(0);
-            
-            correctedAcceleration = correctedState.getElementAtIndex(0);
-            
-            if(WRITE_TO_CONSOLE){
-                System.out.println(i + ";;;" + acceleration + ";" +
-                    ";;" + predictedAcceleration + ";" +
-                    ";;" + correctedAcceleration);
+            throws SignalProcessingException, WrongSizeException {
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+
+            //using a Kalman filter we take noisy measures of acceleration (for
+            //simplicity we only consider one dimension).
+            //Using acceleration samples we want to obtain the state of speed and
+            //position
+            KalmanFilter kalman = new KalmanFilter(1, 1);
+
+            Random rand = new Random();
+            //constant acceleration
+            double acceleration = rand.nextDouble();
+            double sampleNoise;
+            //double predictedAcceleration = 0.0;
+            double correctedAcceleration = 0.0;
+
+
+            //setup Kalman filter;
+            //Matrix predictedState; //[acceleration]
+            Matrix correctedState; //[acceleration]
+
+            Matrix measurement = new Matrix(1, 1); //measurement (aceleration)
+            measurement.setElementAtIndex(0, acceleration);
+
+            //transitions for acceleration
+            //[1]
+            Matrix transitionMatrix = new Matrix(1, 1);
+            transitionMatrix.setElementAtIndex(0, 1.0);
+            kalman.setTransitionMatrix(transitionMatrix);
+
+            if (WRITE_TO_CONSOLE) {
+                System.out.println("no;truePosition;trueSpeed;trueAcceleration;" +
+                        "predictedPosition;predictedSpeed;predictedAcceleration;" +
+                        "correctedPosition;correctedSpeed;correctedAcceleration;");
             }
+
+            //assume each sample happens every second
+            for (int i = 0; i < N_SAMPLES; i++) {
+                sampleNoise = 1e-3 * rand.nextGaussian();
+
+                //predictedState = kalman.predict();
+
+                //take measure with noise
+                measurement.setElementAtIndex(0,
+                        measurement.getElementAtIndex(0) + sampleNoise);
+
+                //correct
+                correctedState = kalman.correct(measurement);
+
+                //predictedAcceleration = predictedState.getElementAtIndex(0);
+
+                correctedAcceleration = correctedState.getElementAtIndex(0);
+
+                if (WRITE_TO_CONSOLE) {
+                    System.out.println(i + ";;;" + acceleration + ";" +
+                            //";;" + predictedAcceleration + ";" +
+                            ";;" + correctedAcceleration);
+                }
+            }
+
+            if (Math.abs(acceleration - correctedAcceleration) >
+                    KalmanFilter.DEFAULT_MEASUREMENT_NOISE_VARIANCE) {
+                continue;
+            }
+            assertEquals(acceleration, correctedAcceleration,
+                    KalmanFilter.DEFAULT_MEASUREMENT_NOISE_VARIANCE);
+
+            numValid++;
+            break;
         }
-        
-        assertEquals(acceleration, correctedAcceleration, 
-                KalmanFilter.DEFAULT_MEASUREMENT_NOISE_VARIANCE);
+
+        assertTrue(numValid > 0);
     }
     
     
     @Test
     public void testPredictAndCorrectPositionSpeedAndAcceleration() 
-            throws SignalProcessingException, WrongSizeException{
+            throws SignalProcessingException, WrongSizeException {
         
         //using a Kalman filter we take noisy measures of acceleration (for
         //simplicity we only consider one dimension).
@@ -303,8 +319,9 @@ public class KalmanFilterTest {
         double trueSpeed = 0.0, truePosition = 0.0;
         double rawSpeed = 0.0, rawPosition = 0.0;
         double rawAcceleration, sampleNoise;
-        double predictedPosition, predictedSpeed, predictedAcceleration,
-                correctedPosition, correctedSpeed, correctedAcceleration = 0.0;        
+        //double predictedPosition, predictedSpeed, predictedAcceleration,
+        //        correctedPosition, correctedSpeed;
+        double correctedAcceleration = 0.0;
         
         //setup Kalman filter;
         Matrix predictedState; //[position, speed, acceleration]
@@ -357,7 +374,7 @@ public class KalmanFilterTest {
         measurementMatrix.setSubmatrix(0, 0, 0, 2, new double[]{0.0, 0.0, 1.0}, true);
         kalman.setMeasurementMatrix(measurementMatrix);
         
-        if(WRITE_TO_CONSOLE){
+        if (WRITE_TO_CONSOLE) {
             System.out.println("no;truePosition;trueSpeed;trueAcceleration;" + 
                     "predictedPosition;predictedSpeed;predictedAcceleration;" + 
                     "correctedPosition;correctedSpeed;correctedAcceleration;" + 
@@ -365,7 +382,7 @@ public class KalmanFilterTest {
         }
         
         //assume each sample happens every second
-        for(int i = 0; i < N_SAMPLES; i++){
+        for (int i = 0; i < N_SAMPLES; i++) {
             trueSpeed += acceleration;
             truePosition += trueSpeed;
             
@@ -374,36 +391,38 @@ public class KalmanFilterTest {
             rawAcceleration = acceleration + sampleNoise;
             rawSpeed += rawAcceleration;
             rawPosition += rawSpeed;
-            
+
             predictedState = kalman.predict();
+            assertNotNull(predictedState);
             
-            predictedPosition = predictedState.getElementAtIndex(0);
-            predictedSpeed = predictedState.getElementAtIndex(1);
-            predictedAcceleration = predictedState.getElementAtIndex(2);            
+            //predictedPosition = predictedState.getElementAtIndex(0);
+            //predictedSpeed = predictedState.getElementAtIndex(1);
+            //predictedAcceleration = predictedState.getElementAtIndex(2);
             
             //correct state for the 75% of samples if  DO_NOT_SKIP is enabled
-            if(rand.nextDouble() <= 0.75 || DO_NOT_SKIP){
+            if (rand.nextDouble() <= 0.75 || DO_NOT_SKIP) {
                 //take measure with noise
                 measurement.setElementAtIndex(0, rawAcceleration);
             
                 //correct
                 correctedState = kalman.correct(measurement);
                 
-                correctedPosition = correctedState.getElementAtIndex(0);
-                correctedSpeed = correctedState.getElementAtIndex(1);
+                //correctedPosition = correctedState.getElementAtIndex(0);
+                //correctedSpeed = correctedState.getElementAtIndex(1);
                 correctedAcceleration = correctedState.getElementAtIndex(2);  
             
-                if(WRITE_TO_CONSOLE){
+                if (WRITE_TO_CONSOLE) {
                     System.out.println(i + ";" + truePosition + ";" + trueSpeed + ";" + acceleration + ";" +
-                        predictedPosition + ";" + predictedSpeed + ";" + predictedAcceleration + ";" +
-                        correctedPosition + ";" + correctedSpeed + ";" + correctedAcceleration + ";" + 
+                        //predictedPosition + ";" + predictedSpeed + ";" + predictedAcceleration + ";" +
+                        //correctedPosition + ";" + correctedSpeed + ";" +
+                        correctedAcceleration + ";" +
                         rawPosition + ";" + rawSpeed + ";" + rawAcceleration);
                 }
                 
-            }else{
-                if(WRITE_TO_CONSOLE){
+            } else {
+                if (WRITE_TO_CONSOLE) {
                     System.out.println(i + ";" + truePosition + ";" + trueSpeed + ";" + acceleration + ";" +
-                        predictedPosition + ";" + predictedSpeed + ";" + predictedAcceleration + ";" +
+                        //predictedPosition + ";" + predictedSpeed + ";" + predictedAcceleration + ";" +
                         ";;;" + 
                         rawPosition + ";" + rawSpeed + ";" + rawAcceleration);                
                 }
@@ -416,7 +435,7 @@ public class KalmanFilterTest {
     
     @Test
     public void testPredictAndCorrectPositionSpeedAndAcceleration3D() 
-            throws SignalProcessingException, WrongSizeException{
+            throws SignalProcessingException, WrongSizeException {
         
         //using a Kalman filter we take noisy measures of acceleration in 3D.
         //Using acceleration samples we want to obtain the state of speed and 
@@ -434,12 +453,12 @@ public class KalmanFilterTest {
                 rawPositionX = 0.0, rawPositionY = 0.0, rawPositionZ = 0.0;
         double rawAccelerationX, rawAccelerationY, rawAccelerationZ, 
                 sampleNoiseX, sampleNoiseY, sampleNoiseZ;
-        double predictedPositionX, predictedPositionY, predictedPositionZ, 
-                predictedSpeedX, predictedSpeedY, predictedSpeedZ, 
-                predictedAccelerationX, predictedAccelerationY, predictedAccelerationZ,
-                correctedPositionX, correctedPositionY, correctedPositionZ, 
-                correctedSpeedX, correctedSpeedY, correctedSpeedZ, 
-                correctedAccelerationX = 0.0, correctedAccelerationY = 0.0, correctedAccelerationZ = 0.0;        
+        //double predictedPositionX, predictedPositionY, predictedPositionZ,
+        //        predictedSpeedX, predictedSpeedY, predictedSpeedZ,
+        //        predictedAccelerationX, predictedAccelerationY, predictedAccelerationZ,
+        //        correctedPositionX, correctedPositionY, correctedPositionZ,
+        //        correctedSpeedX, correctedSpeedY, correctedSpeedZ;
+        double correctedAccelerationX = 0.0, correctedAccelerationY = 0.0, correctedAccelerationZ = 0.0;
         
         //setup Kalman filter;
         Matrix predictedState; //[positionX, speedX, accelerationX, positionY, speedY, accelerationY, positionZ, speedZ, accelerationZ]
@@ -566,21 +585,22 @@ public class KalmanFilterTest {
             rawPositionZ += rawSpeedZ;
             
             predictedState = kalman.predict();
+            assertNotNull(predictedState);
             
-            predictedPositionX = predictedState.getElementAtIndex(0);
-            predictedSpeedX = predictedState.getElementAtIndex(1);
-            predictedAccelerationX = predictedState.getElementAtIndex(2);
+            //predictedPositionX = predictedState.getElementAtIndex(0);
+            //predictedSpeedX = predictedState.getElementAtIndex(1);
+            //predictedAccelerationX = predictedState.getElementAtIndex(2);
             
-            predictedPositionY = predictedState.getElementAtIndex(3);
-            predictedSpeedY = predictedState.getElementAtIndex(4);
-            predictedAccelerationY = predictedState.getElementAtIndex(5);
+            //predictedPositionY = predictedState.getElementAtIndex(3);
+            //predictedSpeedY = predictedState.getElementAtIndex(4);
+            //predictedAccelerationY = predictedState.getElementAtIndex(5);
             
-            predictedPositionZ = predictedState.getElementAtIndex(6);
-            predictedSpeedZ = predictedState.getElementAtIndex(7);
-            predictedAccelerationZ = predictedState.getElementAtIndex(8);
+            //predictedPositionZ = predictedState.getElementAtIndex(6);
+            //predictedSpeedZ = predictedState.getElementAtIndex(7);
+            //predictedAccelerationZ = predictedState.getElementAtIndex(8);
             
             //correct state for the 75% of samples if  DO_NOT_SKIP is enabled
-            if(rand.nextDouble() <= 0.75 || DO_NOT_SKIP){
+            if (rand.nextDouble() <= 0.75 || DO_NOT_SKIP) {
                 //take measure with noise
                 measurement.setElementAtIndex(0, rawAccelerationX);
                 measurement.setElementAtIndex(1, rawAccelerationY);
@@ -589,45 +609,48 @@ public class KalmanFilterTest {
                 //correct
                 correctedState = kalman.correct(measurement);
                 
-                correctedPositionX = correctedState.getElementAtIndex(0);
-                correctedSpeedX = correctedState.getElementAtIndex(1);
+                //correctedPositionX = correctedState.getElementAtIndex(0);
+                //correctedSpeedX = correctedState.getElementAtIndex(1);
                 correctedAccelerationX = correctedState.getElementAtIndex(2);  
                 
-                correctedPositionY = correctedState.getElementAtIndex(3);
-                correctedSpeedY = correctedState.getElementAtIndex(4);
+                //correctedPositionY = correctedState.getElementAtIndex(3);
+                //correctedSpeedY = correctedState.getElementAtIndex(4);
                 correctedAccelerationY = correctedState.getElementAtIndex(5);
                 
-                correctedPositionZ = correctedState.getElementAtIndex(6);
-                correctedSpeedZ = correctedState.getElementAtIndex(7);
+                //correctedPositionZ = correctedState.getElementAtIndex(6);
+                //correctedSpeedZ = correctedState.getElementAtIndex(7);
                 correctedAccelerationZ = correctedState.getElementAtIndex(8);
             
                 if(WRITE_TO_CONSOLE){
                     System.out.println(i + ";" + truePositionX + ";" + trueSpeedX + ";" + accelerationX + ";" +
-                        predictedPositionX + ";" + predictedSpeedX + ";" + predictedAccelerationX + ";" +
-                        correctedPositionX + ";" + correctedSpeedX + ";" + correctedAccelerationX + ";" + 
+                        //predictedPositionX + ";" + predictedSpeedX + ";" + predictedAccelerationX + ";" +
+                        //correctedPositionX + ";" + correctedSpeedX + ";" +
+                        correctedAccelerationX + ";" +
                         rawPositionX + ";" + rawSpeedX + ";" + rawAccelerationX + ";" +
                         truePositionY + ";" + trueSpeedY + ";" + accelerationY + ";" +
-                        predictedPositionY + ";" + predictedSpeedY + ";" + predictedAccelerationY + ";" +
-                        correctedPositionY + ";" + correctedSpeedY + ";" + correctedAccelerationY + ";" + 
+                        //predictedPositionY + ";" + predictedSpeedY + ";" + predictedAccelerationY + ";" +
+                        //correctedPositionY + ";" + correctedSpeedY + ";" +
+                        correctedAccelerationY + ";" +
                         rawPositionY + ";" + rawSpeedY + ";" + rawAccelerationY + ";" +
                         truePositionZ + ";" + trueSpeedZ + ";" + accelerationZ + ";" +
-                        predictedPositionZ + ";" + predictedSpeedZ + ";" + predictedAccelerationZ + ";" +
-                        correctedPositionZ + ";" + correctedSpeedZ + ";" + correctedAccelerationZ + ";" + 
+                        //predictedPositionZ + ";" + predictedSpeedZ + ";" + predictedAccelerationZ + ";" +
+                        //correctedPositionZ + ";" + correctedSpeedZ + ";" +
+                        correctedAccelerationZ + ";" +
                         rawPositionZ + ";" + rawSpeedZ + ";" + rawAccelerationZ);
                 }
                 
             }else{
                 if(WRITE_TO_CONSOLE){
                     System.out.println(i + ";" + truePositionX + ";" + trueSpeedX + ";" + accelerationX + ";" +
-                        predictedPositionX + ";" + predictedSpeedX + ";" + predictedAccelerationX + ";" +
+                        //predictedPositionX + ";" + predictedSpeedX + ";" + predictedAccelerationX + ";" +
                         ";;;" + 
                         rawPositionX + ";" + rawSpeedX + ";" + rawAccelerationX + ";" +
                         truePositionY + ";" + trueSpeedY + ";" + accelerationY + ";" +
-                        predictedPositionY + ";" + predictedSpeedY + ";" + predictedAccelerationY + ";" +
+                        //predictedPositionY + ";" + predictedSpeedY + ";" + predictedAccelerationY + ";" +
                         ";;;" + 
                         rawPositionY + ";" + rawSpeedY + ";" + rawAccelerationY + ";" +                            
                         truePositionZ + ";" + trueSpeedZ + ";" + accelerationZ + ";" +
-                        predictedPositionZ + ";" + predictedSpeedZ + ";" + predictedAccelerationZ + ";" +
+                        //predictedPositionZ + ";" + predictedSpeedZ + ";" + predictedAccelerationZ + ";" +
                         ";;;" + 
                         rawPositionZ + ";" + rawSpeedZ + ";" + rawAccelerationZ);
                 }
@@ -642,7 +665,7 @@ public class KalmanFilterTest {
     
     @Test
     public void testPredictAndCorrectRealDataNoMotion() throws IOException, 
-            SignalProcessingException, WrongSizeException{
+            SignalProcessingException, WrongSizeException {
         
         File f = new File(ACCELERATION_NO_MOTION);
         Data data = AccelerationFileLoader.load(f);
@@ -726,10 +749,10 @@ public class KalmanFilterTest {
         double deltaTime = 20e-3; //1.0;
         long prevTimestampNanos, timestampNanos = 0;
         double time = 0.0;
-        for(int i = 0; i < data.numSamples; i++){
+        for (int i = 0; i < data.numSamples; i++) {
             prevTimestampNanos = timestampNanos;
             timestampNanos = data.timestamp[i];
-            if(i > 0){
+            if (i > 0) {
                 deltaTime = (timestampNanos - prevTimestampNanos) * 1e-9;
                 time += deltaTime;
             }
@@ -806,7 +829,7 @@ public class KalmanFilterTest {
 
     @Test
     public void testPredictAndCorrectRealDataMotion() throws IOException, 
-            SignalProcessingException, WrongSizeException{
+            SignalProcessingException, WrongSizeException {
         
         File f = new File(ACCELERATION_NO_MOTION);
         Data dataNoMotion = AccelerationFileLoader.load(f);
@@ -893,10 +916,10 @@ public class KalmanFilterTest {
         double deltaTime = 20e-3; //1.0;
         long prevTimestampNanos, timestampNanos = 0;
         double time = 0.0;
-        for(int i = 0; i < data.numSamples; i++){
+        for (int i = 0; i < data.numSamples; i++) {
             prevTimestampNanos = timestampNanos;
             timestampNanos = data.timestamp[i];
-            if(i > 0){
+            if (i > 0) {
                 deltaTime = (timestampNanos - prevTimestampNanos) * 1e-9;
                 time += deltaTime;
             }
@@ -973,7 +996,7 @@ public class KalmanFilterTest {
 
     @Test
     public void testPredictAndCorrectRealDataNoMotionFast() throws IOException, 
-            SignalProcessingException, WrongSizeException{
+            SignalProcessingException, WrongSizeException {
         
         File f = new File(ACCELERATION_NO_MOTION_FAST);
         Data data = AccelerationFileLoader.load(f);
@@ -1058,10 +1081,10 @@ public class KalmanFilterTest {
         double deltaTime = 4e-3; //1.0;
         long prevTimestampNanos, timestampNanos = 0;
         double time = 0.0;
-        for(int i = 0; i < data.numSamples; i++){
+        for (int i = 0; i < data.numSamples; i++) {
             prevTimestampNanos = timestampNanos;
             timestampNanos = data.timestamp[i];
-            if(i > 0){
+            if (i > 0) {
                 deltaTime = (timestampNanos - prevTimestampNanos) * 1e-9;
                 time += deltaTime;
             }
@@ -1138,7 +1161,7 @@ public class KalmanFilterTest {
 
     @Test
     public void testPredictAndCorrectRealDataMotionFast() throws IOException, 
-            SignalProcessingException, WrongSizeException{
+            SignalProcessingException, WrongSizeException {
         
         File f = new File(ACCELERATION_NO_MOTION_FAST);
         Data dataNoMotion = AccelerationFileLoader.load(f);
@@ -1225,10 +1248,10 @@ public class KalmanFilterTest {
         double deltaTime = 4e-3; //1.0;
         long prevTimestampNanos, timestampNanos = 0;
         double time = 0.0;
-        for(int i = 0; i < data.numSamples; i++){
+        for (int i = 0; i < data.numSamples; i++) {
             prevTimestampNanos = timestampNanos;
             timestampNanos = data.timestamp[i];
-            if(i > 0){
+            if (i > 0) {
                 deltaTime = (timestampNanos - prevTimestampNanos) * 1e-9;
                 time += deltaTime;
             }
@@ -1305,7 +1328,7 @@ public class KalmanFilterTest {
     
     @Test
     public void testGetSetStatePre() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         //check default value
@@ -1323,21 +1346,21 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongStatePre = new Matrix(5, 1);
-        try{
+        try {
             filter.setStatePre(wrongStatePre);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongStatePre = new Matrix(6, 2);
-        try{
+        try {
             filter.setStatePre(wrongStatePre);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetStatePost() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         //check default value
@@ -1355,21 +1378,21 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongStatePost = new Matrix(5, 1);
-        try{
+        try {
             filter.setStatePost(wrongStatePost);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongStatePost = new Matrix(6, 2);
-        try{
+        try {
             filter.setStatePost(wrongStatePost);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetTransitionMatrix() throws SignalProcessingException, 
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         //check default value
@@ -1387,21 +1410,21 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongTransitionMatrix = new Matrix(5, 6);
-        try{
+        try {
             filter.setTransitionMatrix(wrongTransitionMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongTransitionMatrix = new Matrix(6, 5);
-        try{
+        try {
             filter.setTransitionMatrix(wrongTransitionMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetControlMatrix() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9, 1);
         
         //check default value
@@ -1419,21 +1442,21 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongControlMatrix = new Matrix(5, 1);
-        try{
+        try {
             filter.setControlMatrix(wrongControlMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongControlMatrix = new Matrix(6, 2);
-        try{
+        try {
             filter.setControlMatrix(wrongControlMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetMeasurementMatrix() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         //check default value
@@ -1451,21 +1474,21 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongMeasurementMatrix = new Matrix(8, 6);
-        try{
+        try {
             filter.setMeasurementMatrix(wrongMeasurementMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         wrongMeasurementMatrix = new Matrix(9, 5);
-        try{
+        try {
             filter.setMeasurementMatrix(wrongMeasurementMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetProcessNoiseCov() throws SignalProcessingException, 
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         //check default value
@@ -1483,28 +1506,28 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongProcessNoiseCov = new Matrix(5, 6);
-        try{
+        try {
             filter.setProcessNoiseCov(wrongProcessNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
 
         wrongProcessNoiseCov = new Matrix(6, 5);
-        try{
+        try {
             filter.setProcessNoiseCov(wrongProcessNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
 
         wrongProcessNoiseCov = Matrix.diagonal(new double[]{1,2,3,4,5,6});
         wrongProcessNoiseCov.setElementAt(0, 1, 1.0);
-        try{
+        try {
             filter.setProcessNoiseCov(wrongProcessNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetMeasurementNoiseCov() 
-            throws SignalProcessingException, WrongSizeException{
+            throws SignalProcessingException, WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         //check default value
@@ -1523,28 +1546,28 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongMeasurmentNoiseCov = new Matrix(8, 9);
-        try{
+        try {
             filter.setMeasurementNoiseCov(wrongMeasurmentNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
 
         wrongMeasurmentNoiseCov = new Matrix(9, 8);
-        try{
+        try {
             filter.setMeasurementNoiseCov(wrongMeasurmentNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
 
         wrongMeasurmentNoiseCov = Matrix.diagonal(new double[]{1,2,3,4,5,6,7,8,9});
         wrongMeasurmentNoiseCov.setElementAt(0, 1, 1.0);
-        try{
+        try {
             filter.setMeasurementNoiseCov(wrongMeasurmentNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetErrorCovPre() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         Matrix errorCovPre = filter.getErrorCovPre();
@@ -1561,28 +1584,28 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongErrorCovPre = new Matrix(5, 6);
-        try{
+        try {
             filter.setErrorCovPre(wrongErrorCovPre);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongErrorCovPre = new Matrix(6, 5);
-        try{
+        try {
             filter.setErrorCovPre(wrongErrorCovPre);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         wrongErrorCovPre = Matrix.diagonal(new double[]{1,2,3,4,5,6});
         wrongErrorCovPre.setElementAt(0, 1, 1.0);
-        try{
+        try {
             filter.setErrorCovPre(wrongErrorCovPre);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetGain() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         Matrix gain = filter.getGain();
@@ -1599,21 +1622,21 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongGain = new Matrix(5, 9);
-        try{
+        try {
             filter.setGain(wrongGain);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongGain = new Matrix(6, 8);
-        try{
+        try {
             filter.setGain(wrongGain);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
     public void testGetSetErrorCovPost() throws SignalProcessingException,
-            WrongSizeException{
+            WrongSizeException {
         KalmanFilter filter = new KalmanFilter(6, 9);
         
         Matrix errorCovPost = filter.getErrorCovPost();
@@ -1630,27 +1653,27 @@ public class KalmanFilterTest {
         
         //Force IllegalArgumentException
         Matrix wrongErrorCovPost = new Matrix(5, 6);
-        try{
+        try {
             filter.setErrorCovPost(wrongErrorCovPost);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         wrongErrorCovPost = new Matrix(6, 5);
-        try{
+        try {
             filter.setErrorCovPost(wrongErrorCovPost);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         wrongErrorCovPost = Matrix.diagonal(new double[]{1,2,3,4,5,6});
         wrongErrorCovPost.setElementAt(0, 1, 1.0);
-        try{
+        try {
             filter.setErrorCovPost(wrongErrorCovPost);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }  
     
     private void updateProcessNoiseCov(double processNoiseVariance, 
-            double deltaTime, Matrix block, Matrix result){
+            double deltaTime, Matrix block, Matrix result) {
         
         //block matrix has the following form:
         // processNoiseVariance * [deltaTime^4/4,   deltaTime^3/2,  deltaTime^2/2]
@@ -1686,7 +1709,7 @@ public class KalmanFilterTest {
         }        
     }
     
-    private void updateTransitionMatrix(double deltaTime, Matrix result){
+    private void updateTransitionMatrix(double deltaTime, Matrix result) {
         //transitions for position, speed and acceleration
         //[1,   deltaTime,    deltaTime^2/2,    0,  0,          0,              0,  0,          0]
         //[0,   1,            deltaTime,        0,  0,          0,              0,  0,          0]
@@ -1791,7 +1814,7 @@ public class KalmanFilterTest {
     }
     
     private Matrix noiseCovarianceMatrix(Data data) 
-            throws SignalProcessingException{
+            throws SignalProcessingException {
         
         MeasurementNoiseCovarianceEstimator estimator =
                 new MeasurementNoiseCovarianceEstimator(3);

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.polynomials.Polynomial
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 3, 2016
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials;
 
@@ -12,27 +19,25 @@ import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Complex;
 import com.irurueta.numerical.NumericalException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PolynomialTest {
     
-    public static final int MIN_LENGTH = 1;
-    public static final int MAX_LENGTH = 10;
+    private static final int MIN_LENGTH = 1;
+    private static final int MAX_LENGTH = 10;
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-5;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-5;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-3;
     
-    public static final int TIMES = 50;
+    private static final int TIMES = 50;
     
     public PolynomialTest() { }
     
@@ -84,7 +89,7 @@ public class PolynomialTest {
         try {
             p = new Polynomial(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(p);
         
         
@@ -108,7 +113,7 @@ public class PolynomialTest {
         try {
             p = new Polynomial(new double[0]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(p);
     }
     
@@ -133,7 +138,7 @@ public class PolynomialTest {
         try {
             p.setPolyParams(wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -781,6 +786,7 @@ public class PolynomialTest {
             if (!cond1) {
                 continue;
             }
+            //noinspection all
             assertTrue(cond1);
 
             boolean cond2 = Math.abs(roots[1].getReal() - root1) <= LARGE_ABSOLUTE_ERROR ||
@@ -790,6 +796,7 @@ public class PolynomialTest {
             if (!cond2) {
                 continue;
             }
+            //noinspection all
             assertTrue(cond2);
 
             boolean cond3 = Math.abs(roots[2].getReal() - root1) <= LARGE_ABSOLUTE_ERROR ||
@@ -799,6 +806,7 @@ public class PolynomialTest {
             if (!cond3) {
                 continue;
             }
+            //noinspection all
             assertTrue(cond3);
 
             boolean cond4 = Math.abs(roots[3].getReal() - root1) <= LARGE_ABSOLUTE_ERROR ||
@@ -808,6 +816,7 @@ public class PolynomialTest {
             if (!cond4) {
                 continue;
             }
+            //noinspection all
             assertTrue(cond4);
 
             assertEquals(roots[0].getImaginary(), 0.0, ABSOLUTE_ERROR);
@@ -1655,7 +1664,7 @@ public class PolynomialTest {
         try {
             p.nthDerivative(0, ddd2);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
 
     @Test
@@ -1916,7 +1925,7 @@ public class PolynomialTest {
         try {
             p.nthDerivative(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
     }
 
     @Test
@@ -2178,7 +2187,7 @@ public class PolynomialTest {
         try {
             ddd2 = p.nthDerivativeAndReturnNew(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(ddd2);
     }
     
@@ -4896,7 +4905,7 @@ public class PolynomialTest {
     }
 
     @Test
-    public void testNormalizeWithResult() throws NumericalException {
+    public void testNormalizeWithResult() {
         //x^2 - 1
         Polynomial p = new Polynomial(-1.0, 0.0, 1.0);
         Polynomial result = new Polynomial();
@@ -4980,7 +4989,7 @@ public class PolynomialTest {
     }
 
     @Test
-    public void testNormalize() throws NumericalException {
+    public void testNormalize() {
         //x^2 - 1
         Polynomial p = new Polynomial(-1.0, 0.0, 1.0);
         p.normalize();
@@ -5063,7 +5072,7 @@ public class PolynomialTest {
     }
 
     @Test
-    public void testNormalizeAndReturnNew() throws NumericalException {
+    public void testNormalizeAndReturnNew() {
         //x^2 - 1
         Polynomial p = new Polynomial(-1.0, 0.0, 1.0);
         Polynomial result = p.normalizeAndReturnNew();
@@ -5146,7 +5155,7 @@ public class PolynomialTest {
     }
 
     @Test
-    public void testNormalizeHighestDegreeTermWithResult() throws NumericalException {
+    public void testNormalizeHighestDegreeTermWithResult() {
         //x^2 - 1
         Polynomial p = new Polynomial(-1.0, 0.0, 1.0);
         Polynomial result = new Polynomial();
@@ -5233,7 +5242,7 @@ public class PolynomialTest {
     }
 
     @Test
-    public void testNormalizeHighestDegreeTerm() throws NumericalException {
+    public void testNormalizeHighestDegreeTerm() {
         //x^2 - 1
         Polynomial p = new Polynomial(-1.0, 0.0, 1.0);
         p.normalizeHighestDegreeTerm();
@@ -5319,7 +5328,7 @@ public class PolynomialTest {
     }
     
     @Test
-    public void testNormalizeHighestDegreeTermAndReturnNew() throws NumericalException {
+    public void testNormalizeHighestDegreeTermAndReturnNew() {
         //x^2 - 1
         Polynomial p = new Polynomial(-1.0, 0.0, 1.0);
         Polynomial result = p.normalizeHighestDegreeTermAndReturnNew();
@@ -5510,7 +5519,7 @@ public class PolynomialTest {
             try {
                 p.getMaxima(-1.0);
                 fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException e) { }
+            } catch (IllegalArgumentException ignore) { }
         }
     }
     

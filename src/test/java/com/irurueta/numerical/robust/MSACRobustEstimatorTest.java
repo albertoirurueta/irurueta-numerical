@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.robust.MSACRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 6, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
@@ -12,61 +19,56 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.robust.MSACRobustEstimator.MSACInliersData;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class MSACRobustEstimatorTest {
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final double THRESHOLD = 1e-3;
+    private static final double THRESHOLD = 1e-3;
     
-    public static final double MIN_ERROR = 1e-5;
-    public static final double MAX_ERROR = 1.0;
+    private static final double MIN_ERROR = 1e-5;
+    private static final double MAX_ERROR = 1.0;
     
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
+    private static final int MIN_MAX_ITERATIONS = 500;
+    private static final int MAX_MAX_ITERATIONS = 5000;
     
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int NUM_PARAMS = 2;
     
-    public static final int NUM_PARAMS = 2;    
+    private static final int TIMES = 100;
     
-    public static final int TIMES = 100;
-    
-    public MSACRobustEstimatorTest() {}
+    public MSACRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test empty constructor
-        MSACRobustEstimator<double[]> estimator =
-                new MSACRobustEstimator<double[]>();
+        MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -91,7 +93,7 @@ public class MSACRobustEstimatorTest {
         TestMSACRobustEstimatorListener listener =
                 new TestMSACRobustEstimatorListener(numSamples, 
                 PERCENTAGE_OUTLIER, THRESHOLD);
-        estimator = new MSACRobustEstimator<double[]>(listener);
+        estimator = new MSACRobustEstimator<>(listener);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -113,9 +115,8 @@ public class MSACRobustEstimatorTest {
     
     @Test
     public void testGetSetListenerAvailabilityAndIsReady() 
-            throws LockedException{
-        MSACRobustEstimator<double[]> estimator = 
-                new MSACRobustEstimator<double[]>();
+            throws LockedException {
+        MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
@@ -137,9 +138,8 @@ public class MSACRobustEstimatorTest {
     
     @Test
     public void testGetSetProgressDelta() throws IllegalArgumentException, 
-            LockedException{
-        MSACRobustEstimator<double[]> estimator = 
-                new MSACRobustEstimator<double[]>();
+            LockedException {
+        MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
         assertEquals(estimator.getProgressDelta(), 
                 RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         
@@ -152,21 +152,20 @@ public class MSACRobustEstimatorTest {
         assertEquals(estimator.getProgressDelta(), progressDelta, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     } 
     
     @Test
     public void testGetSetConfidence() throws IllegalArgumentException, 
-            LockedException{
-        MSACRobustEstimator<double[]> estimator = 
-                new MSACRobustEstimator<double[]>();
+            LockedException {
+        MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
         assertEquals(estimator.getConfidence(), 
                 MSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
         
@@ -179,21 +178,20 @@ public class MSACRobustEstimatorTest {
         assertEquals(estimator.getConfidence(), confidence, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
     public void testGetSetMaxIterations() throws IllegalArgumentException, 
-            LockedException{
-        MSACRobustEstimator<double[]> estimator =
-                new MSACRobustEstimator<double[]>();
+            LockedException {
+        MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
         assertEquals(estimator.getMaxIterations(), 
                 MSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
         
@@ -207,29 +205,28 @@ public class MSACRobustEstimatorTest {
         assertEquals(estimator.getMaxIterations(), maxIterations);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }   
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-            RobustEstimatorException{
-        for(int i = 0; i < TIMES; i++){
+            RobustEstimatorException {
+        for (int i = 0; i < TIMES; i++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
             TestMSACRobustEstimatorListener listener = 
                     new TestMSACRobustEstimatorListener(numSamples, 
                     PERCENTAGE_OUTLIER, THRESHOLD);
-            MSACRobustEstimator<double[]> estimator = 
-                    new MSACRobustEstimator<double[]>();
+            MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
 
             //Force NotReadyException
-            try{
+            try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}
+            } catch (NotReadyException ignore) { }
 
             //set listener
             estimator.setListener(listener);
@@ -267,7 +264,7 @@ public class MSACRobustEstimatorTest {
         }
     }    
     
-    private double[] computeParams(){
+    private double[] computeParams() {
         //we will estimate parameters a and b for equation y = a*x + b
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] params = new double[NUM_PARAMS];
@@ -279,15 +276,15 @@ public class MSACRobustEstimatorTest {
     }
     
     private void computeSamples(double[] params, int numSamples, 
-            int percentageOutliers, double[] ys, double[] xs){
+            int percentageOutliers, double[] ys, double[] xs) {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        for(int i = 0; i < numSamples; i++){
+        for (int i = 0; i < numSamples; i++) {
             //compute x values
             xs[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             //compute exact y values
             ys[i] = params[0] * xs[i] + params[1];
-            if(randomizer.nextInt(0, 100) < percentageOutliers){
+            if (randomizer.nextInt(0, 100) < percentageOutliers) {
                 //is outlier, so we add a certain amount of error
                 double error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
                 ys[i] += error;
@@ -296,7 +293,7 @@ public class MSACRobustEstimatorTest {
     }    
 
     public class TestMSACRobustEstimatorListener implements 
-            MSACRobustEstimatorListener<double[]>{
+            MSACRobustEstimatorListener<double[]> {
         
         private double[] params;
         private double[] xs;
@@ -308,8 +305,8 @@ public class MSACRobustEstimatorTest {
         private int endCounter;
         private float previousProgress;
         
-        public TestMSACRobustEstimatorListener(int numSamples, 
-                int percentageOutliers, double threshold){
+        TestMSACRobustEstimatorListener(int numSamples,
+                int percentageOutliers, double threshold) {
             this.numSamples = numSamples;
             params = computeParams();
             xs = new double[numSamples];
@@ -319,24 +316,8 @@ public class MSACRobustEstimatorTest {
             reset();
         }
         
-        public double[] getParams(){
+        public double[] getParams() {
             return params;
-        }
-        
-        public double[] getXs(){
-            return xs;
-        }
-        
-        public double[] getYs(){
-            return ys;
-        }
-                
-        public int getStartCounter(){
-            return startCounter;
-        }
-        
-        public int getEndCounter(){
-            return endCounter;
         }
 
         @Override
@@ -359,13 +340,13 @@ public class MSACRobustEstimatorTest {
         }
         
         @Override
-        public double getThreshold(){
+        public double getThreshold() {
             return threshold;
         }        
 
         @Override
         public void estimatePreliminarSolutions(int[] samplesIndices, 
-                List<double[]> solutions){
+                List<double[]> solutions) {
             
             if(samplesIndices.length != NUM_PARAMS) 
                 throw new IllegalArgumentException();
@@ -434,27 +415,35 @@ public class MSACRobustEstimatorTest {
             assertTrue(progress <= 1.0f);
             assertTrue(progress >= previousProgress);
             previousProgress = progress;
-        }    
-        
-        private void testIsLocked(MSACRobustEstimator<double[]> estimator){
+        }
+
+        int getStartCounter() {
+            return startCounter;
+        }
+
+        int getEndCounter() {
+            return endCounter;
+        }
+
+        private void testIsLocked(MSACRobustEstimator<double[]> estimator) {
             assertTrue(estimator.isLocked());
             //test that estimator cannot be modified while locked
-            try{
+            try {
                 estimator.setConfidence(0.5);
                 fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
+            } catch (LockedException ignore) { }
+            try {
                 estimator.setListener(this);
                 fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
+            } catch (LockedException ignore) { }
+            try {
                 estimator.setMaxIterations(1);
                 fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
+            } catch (LockedException ignore) { }
+            try {
                 estimator.setProgressDelta(0.5f);
                 fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
+            } catch (LockedException ignore) { }
         }
         
         public final void reset(){

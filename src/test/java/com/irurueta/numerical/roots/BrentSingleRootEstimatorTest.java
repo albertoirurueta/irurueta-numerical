@@ -1,30 +1,35 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.roots.BrentSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 30, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class BrentSingleRootEstimatorTest {
     
-    public static final double MIN_EVAL_POINT = 0.0;
-    public static final double MAX_EVAL_POINT = 1.0;
+    private static final double MIN_EVAL_POINT = 0.0;
+    private static final double MAX_EVAL_POINT = 1.0;
     
-    public static final double MIN_TOLERANCE = 3e-8;
-    public static final double MAX_TOLERANCE = 1e-5;
+    private static final double MIN_TOLERANCE = 3e-8;
+    private static final double MAX_TOLERANCE = 1e-5;
     
     private double constant;
     private double root1;
@@ -45,7 +50,7 @@ public class BrentSingleRootEstimatorTest {
         constantPolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return constant;
             }
         };
@@ -53,7 +58,7 @@ public class BrentSingleRootEstimatorTest {
         firstDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1);
             }
         };
@@ -62,7 +67,7 @@ public class BrentSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root2);
             }
         };
@@ -71,7 +76,7 @@ public class BrentSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point * point + Math.abs(root1));
             }
         };
@@ -79,7 +84,7 @@ public class BrentSingleRootEstimatorTest {
         thirdDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root2) * (point - root3);
             }
         };
@@ -88,7 +93,7 @@ public class BrentSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root1) * (point - root2);
             }
         };
@@ -97,7 +102,7 @@ public class BrentSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root1) * (point - root1);
             }
         };
@@ -106,31 +111,27 @@ public class BrentSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point * point + Math.abs(root2));
             }
         };
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws NotAvailableException, 
-        InvalidBracketRangeException{
+            InvalidBracketRangeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, 
@@ -145,18 +146,18 @@ public class BrentSingleRootEstimatorTest {
         estimator = new BrentSingleRootEstimator();
         assertNotNull(estimator);
         
-        try{
+        try {
             estimator.getListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getMaxEvaluationPoint(),
                 BrentSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(),
                 BrentSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getTolerance(),
                 BrentSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
         assertTrue(estimator.isBracketAvailable());
@@ -174,10 +175,10 @@ public class BrentSingleRootEstimatorTest {
         assertEquals(estimator.getListener(), constantPolynomial);
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
@@ -187,31 +188,31 @@ public class BrentSingleRootEstimatorTest {
                 
         //Force InvalidBracketRangeException
         estimator = null;
-        try{
+        try {
             estimator = new BrentSingleRootEstimator(constantPolynomial,
                     maxEvalPoint, minEvalPoint, tolerance);
             fail("InvalidBracketRangeException expected but not thrown");
-        }catch(InvalidBracketRangeException e){}
+        } catch (InvalidBracketRangeException ignore) { }
         //Force IllegalArgumentException
-        try{
+        try {
             estimator = new BrentSingleRootEstimator(constantPolynomial,
                     minEvalPoint, maxEvalPoint, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
     @Test
     public void testGetSetListenerAvailabilityAndIsReady() 
-            throws LockedException, NotAvailableException{
+            throws LockedException, NotAvailableException {
         
         BrentSingleRootEstimator estimator = new BrentSingleRootEstimator();
         
         //check default values
-        try{
+        try {
             estimator.getListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
         
@@ -226,7 +227,7 @@ public class BrentSingleRootEstimatorTest {
     @Test
     public void testSetBracketGetEvaluationPointsAndAvailability() 
             throws NotAvailableException, LockedException, 
-            InvalidBracketRangeException{
+            InvalidBracketRangeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, 
@@ -251,14 +252,14 @@ public class BrentSingleRootEstimatorTest {
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         
         //Force InvalidBracketRangeException
-        try{
+        try {
             estimator.setBracket(maxEvalPoint, minEvalPoint);
             fail("InvalidBracketRangeException expected but not thrown");
-        }catch(InvalidBracketRangeException e){}
+        } catch (InvalidBracketRangeException ignore) { }
     }
     
     @Test
-    public void testGetSetTolerance() throws LockedException{
+    public void testGetSetTolerance() throws LockedException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
@@ -275,15 +276,15 @@ public class BrentSingleRootEstimatorTest {
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-        InvalidBracketRangeException, RootEstimationException, NotAvailableException{
+        InvalidBracketRangeException, RootEstimationException, NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -298,21 +299,21 @@ public class BrentSingleRootEstimatorTest {
         //test constant polynomial
         estimator.setListener(constantPolynomial);
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.estimate();
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         
         //reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -358,15 +359,15 @@ public class BrentSingleRootEstimatorTest {
         //test 2nd degree polynomial with two complex conjugate roots
         estimator.setListener(secondDegreePolynomialWithTwoComplexConjugateRoots);
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.estimate();
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
         
         //reset bracket

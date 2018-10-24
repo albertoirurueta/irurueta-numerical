@@ -20,17 +20,13 @@ import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.*;
 import com.irurueta.statistics.*;
+import org.junit.*;
 
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import static org.junit.Assert.*;
 
 @SuppressWarnings("Duplicates")
@@ -3159,6 +3155,9 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
+                if (sigmas[i] == 0.0) {
+                    sigmas[i] = Double.MIN_VALUE;
+                }
 
                 errorRandomizer.setStandardDeviation(sigmas[i]);
 

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.polynomials.estimators.RANSACPolynomialRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 13, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
@@ -15,35 +22,31 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class RANSACPolynomialRobustEstimatorTest implements 
-        PolynomialRobustEstimatorListener{
+        PolynomialRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final int MIN_DEGREE = 1;
-    public static final int MAX_DEGREE = 5;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int MIN_EVALUATIONS = 500;
+    private static final int MAX_EVALUATIONS = 1000;
     
-    public static final int MIN_EVALUATIONS = 500;
-    public static final int MAX_EVALUATIONS = 1000;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double STD_ERROR = 100.0;
-    
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
     private int estimateStart;
     private int estimateEnd;
@@ -123,13 +126,12 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator = new RANSACPolynomialRobustEstimator(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test constructor with evaluations
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>(); 
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = new RANSACPolynomialRobustEstimator(evaluations);
@@ -157,13 +159,12 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = new RANSACPolynomialRobustEstimator(wrongEvals);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -223,11 +224,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator = new RANSACPolynomialRobustEstimator(0, evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new RANSACPolynomialRobustEstimator(2, wrongEvals);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -260,7 +261,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator = new RANSACPolynomialRobustEstimator(0, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -294,7 +295,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator = new RANSACPolynomialRobustEstimator(wrongEvals, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -328,12 +329,12 @@ public class RANSACPolynomialRobustEstimatorTest implements
             estimator = new RANSACPolynomialRobustEstimator(0, evaluations,
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new RANSACPolynomialRobustEstimator(2, wrongEvals, 
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
@@ -356,7 +357,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -368,8 +369,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertNull(estimator.getEvaluations());
         
         //set new value
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>(); 
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator.setEvaluations(evaluations);
@@ -381,11 +381,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator.setEvaluations(null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setEvaluations(new ArrayList<PolynomialEvaluation>());
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -422,11 +422,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -448,11 +448,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -474,7 +474,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -513,7 +513,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
         try {
             estimator.setDegree(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -550,7 +550,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
 
             //create random 1st degree polynomial
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -563,8 +563,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
                     MAX_EVALUATIONS);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<PolynomialEvaluation> evaluations =
-                    new ArrayList<PolynomialEvaluation>();
+            List<PolynomialEvaluation> evaluations = new ArrayList<>();
             for (int i = 0; i < numEvaluations; i++) {
                 double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);
@@ -628,7 +627,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
 
             //create random 1st degree polynomial
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -641,8 +640,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
                     MAX_EVALUATIONS);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<PolynomialEvaluation> evaluations =
-                    new ArrayList<PolynomialEvaluation>();
+            List<PolynomialEvaluation> evaluations = new ArrayList<>();
             for (int i = 0; i < numEvaluations / 2; i++) {
                 double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);
@@ -725,7 +723,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
 
             //create random 1st degree polynomial
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -738,8 +736,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
                     MAX_EVALUATIONS);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<PolynomialEvaluation> evaluations =
-                    new ArrayList<PolynomialEvaluation>();
+            List<PolynomialEvaluation> evaluations = new ArrayList<>();
             for (int i = 0; i < numEvaluations; i++) {
                 double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);
@@ -750,7 +747,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
                 double value = integral.evaluate(x);
 
                 double valueWithError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //evaluation is outlier
                     double error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
@@ -808,7 +805,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
 
             //create random 1st degree polynomial
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -821,8 +818,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
                     MAX_EVALUATIONS);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<PolynomialEvaluation> evaluations =
-                    new ArrayList<PolynomialEvaluation>();
+            List<PolynomialEvaluation> evaluations = new ArrayList<>();
             for (int i = 0; i < numEvaluations; i++) {
                 double startX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);
@@ -831,7 +827,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
                 double value = polynomial.integrateInterval(startX, endX);
 
                 double valueWithError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //evaluation is outlier
                     double error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
@@ -889,7 +885,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
 
             //create random 1st degree polynomial
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -902,15 +898,14 @@ public class RANSACPolynomialRobustEstimatorTest implements
                     MAX_EVALUATIONS);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<PolynomialEvaluation> evaluations =
-                    new ArrayList<PolynomialEvaluation>();
+            List<PolynomialEvaluation> evaluations = new ArrayList<>();
             for (int i = 0; i < numEvaluations; i++) {
                 double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);
                 double value = polynomial.evaluate(x);
 
                 double valueWithError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //evaluation is outlier
                     double error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
@@ -968,7 +963,7 @@ public class RANSACPolynomialRobustEstimatorTest implements
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
 
             //create random 1st degree polynomial
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -981,15 +976,14 @@ public class RANSACPolynomialRobustEstimatorTest implements
                     MAX_EVALUATIONS);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<PolynomialEvaluation> evaluations =
-                    new ArrayList<PolynomialEvaluation>();
+            List<PolynomialEvaluation> evaluations = new ArrayList<>();
             for (int i = 0; i < numEvaluations / 2; i++) {
                 double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);
                 double value = polynomial.evaluate(x);
 
                 double valueWithError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //evaluation is outlier
                     double error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
@@ -1045,11 +1039,6 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertTrue(estimateProgressChange >= 0);            
         }
     }
-        
-    private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration = 
-                estimateProgressChange = 0;
-    }
 
     @Override
     public void onEstimateStart(PolynomialRobustEstimator estimator) {
@@ -1071,5 +1060,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
     public void onEstimateProgressChange(PolynomialRobustEstimator estimator, 
             float progress) {
         estimateProgressChange++;
+    }
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
     }
 }

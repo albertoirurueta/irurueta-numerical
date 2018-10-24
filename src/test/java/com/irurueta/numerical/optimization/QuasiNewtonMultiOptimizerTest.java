@@ -1,41 +1,46 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 26, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.GradientFunctionEvaluatorListener;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class QuasiNewtonMultiOptimizerTest {
     
-    public static final int MIN_DIMS = 2;
-    public static final int MAX_DIMS = 4;
+    private static final int MIN_DIMS = 2;
+    private static final int MAX_DIMS = 4;
     
-    public static final double MIN_EVAL_POINT = -1e3;
-    public static final double MAX_EVAL_POINT = 1e3;
+    private static final double MIN_EVAL_POINT = -1e3;
+    private static final double MAX_EVAL_POINT = 1e3;
     
-    public static final double MIN_OFFSET = -1e3;
-    public static final double MAX_OFFSET = 1e3;
+    private static final double MIN_OFFSET = -1e3;
+    private static final double MAX_OFFSET = 1e3;
     
-    public static final double MIN_WIDTH = 1.0;
-    public static final double MAX_WIDTH = 2.0;
+    private static final double MIN_WIDTH = 1.0;
+    private static final double MAX_WIDTH = 2.0;
     
-    public static final double MIN_TOLERANCE = 3e-8;
-    public static final double MAX_TOLERANCE = 3e-6;
+    private static final double MIN_TOLERANCE = 3e-8;
+    private static final double MAX_TOLERANCE = 3e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
     private int ndims;
     private double[] minimum;
@@ -49,7 +54,7 @@ public class QuasiNewtonMultiOptimizerTest {
         listener = new MultiDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double[] point) throws Throwable {
+            public double evaluate(double[] point) {
                 int dims = Math.min(Math.min(point.length, minimum.length), 
                         width.length);
                 
@@ -66,8 +71,7 @@ public class QuasiNewtonMultiOptimizerTest {
         gradientListener = new GradientFunctionEvaluatorListener() {
 
             @Override
-            public void evaluateGradient(double[] params, double[] result) 
-                    throws Throwable {
+            public void evaluateGradient(double[] params, double[] result) {
                 int dims = Math.min(Math.min(params.length, minimum.length), 
                         width.length);
                 
@@ -90,10 +94,10 @@ public class QuasiNewtonMultiOptimizerTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -128,27 +132,27 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isGradientListenerAvailable());
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isReady());
         assertFalse(optimizer.isResultAvailable());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         
@@ -161,7 +165,7 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(optimizer.getGradientListener(), gradientListener);
         assertTrue(optimizer.isGradientListenerAvailable());
         assertEquals(optimizer.getListener(), listener);
@@ -171,11 +175,11 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         //Force IllegalArgumentException
@@ -184,7 +188,7 @@ public class QuasiNewtonMultiOptimizerTest {
             optimizer = new QuasiNewtonMultiOptimizer(listener, 
                     gradientListener, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
         
         
@@ -205,11 +209,11 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         //Force IllegalArgumentException
@@ -218,7 +222,7 @@ public class QuasiNewtonMultiOptimizerTest {
             optimizer = new QuasiNewtonMultiOptimizer(listener, 
                     gradientListener, startPoint, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);        
     }
     
@@ -290,7 +294,7 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set start point
         optimizer.setStartPoint(startPoint);
@@ -320,7 +324,7 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set new listener
         optimizer.setGradientListener(gradientListener);
@@ -341,7 +345,7 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set new listener
         optimizer.setListener(listener);
@@ -360,8 +364,7 @@ public class QuasiNewtonMultiOptimizerTest {
     }
     
     @Test
-    public void testMinimize() throws LockedException, NotReadyException, 
-        OptimizationException, NotAvailableException, Throwable {
+    public void testMinimize() throws Throwable {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
@@ -386,11 +389,11 @@ public class QuasiNewtonMultiOptimizerTest {
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //minimize
         optimizer.minimize();

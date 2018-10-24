@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 12, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
@@ -12,26 +19,25 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class WeightedPolynomialEstimatorTest implements 
         PolynomialEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final int MIN_DEGREE = 1;
-    public static final int MAX_DEGREE = 5;
+    private static final int MIN_DEGREE = 1;
+    private static final int MAX_DEGREE = 5;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
     private int estimateStart;
     private int estimateEnd; 
@@ -97,13 +103,12 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator = new WeightedPolynomialEstimator(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test constructor with evaluations and weights
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         double[] weights = new double[1];
         estimator = new WeightedPolynomialEstimator(evaluations, weights);
@@ -126,28 +131,25 @@ public class WeightedPolynomialEstimatorTest implements
 
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
-            estimator = new WeightedPolynomialEstimator(
-                    (List<PolynomialEvaluation>)null, weights);
+            estimator = new WeightedPolynomialEstimator(null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
-            estimator = new WeightedPolynomialEstimator(evaluations, 
-                    (double[])null);
+            estimator = new WeightedPolynomialEstimator(evaluations, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(wrongEvals, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(evaluations, 
                     new double[2]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -195,23 +197,23 @@ public class WeightedPolynomialEstimatorTest implements
         estimator = null;
         try {
             estimator = new WeightedPolynomialEstimator(2,
-                    (List<PolynomialEvaluation>)null, weights);
+                    null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(2, evaluations, 
-                    (double[])null);
+                    null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(2, wrongEvals, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(2, evaluations, 
                     new double[2]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator); 
         
         
@@ -239,7 +241,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator = new WeightedPolynomialEstimator(0, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -267,24 +269,24 @@ public class WeightedPolynomialEstimatorTest implements
         estimator = null;
         try {
             estimator = new WeightedPolynomialEstimator(
-                    (List<PolynomialEvaluation>)null, weights, this);
+                    null, weights, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(evaluations, 
-                    (double[])null, this);
+                    null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(wrongEvals, weights, 
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(evaluations, 
                     new double[2], this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -313,23 +315,23 @@ public class WeightedPolynomialEstimatorTest implements
         estimator = null;
         try {
             estimator = new WeightedPolynomialEstimator(2,
-                    (List<PolynomialEvaluation>)null, weights);
+                    null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(2, evaluations, 
-                    (double[])null);
+                    null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(2, wrongEvals, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPolynomialEstimator(2, evaluations, 
                     new double[2]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);         
     }
     
@@ -352,7 +354,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.setMaxEvaluations(1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -382,8 +384,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertNull(estimator.getEvaluations());
         
         //set new values
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         double[] weights = new double[1];        
         estimator.setEvaluationsAndWeights(evaluations, weights);
@@ -396,31 +397,30 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.setEvaluations(evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setDegreeAndEvaluations(2, evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         try {
-            estimator.setEvaluationsAndWeights((List<PolynomialEvaluation>)null, 
+            estimator.setEvaluationsAndWeights(null,
                     weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
-            estimator.setEvaluationsAndWeights(evaluations, (double[])null);
+            estimator.setEvaluationsAndWeights(evaluations, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setEvaluationsAndWeights(wrongEvals, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setEvaluationsAndWeights(evaluations, new double[2]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }                
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -441,7 +441,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.setDegree(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -455,8 +455,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertNull(estimator.getEvaluations());
         
         //set new values
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         double[] weights = new double[1];        
         estimator.setDegreeEvaluationsAndWeights(2, evaluations, weights);
@@ -470,38 +469,37 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.setEvaluations(evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setDegreeAndEvaluations(2, evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setDegreeEvaluationsAndWeights(0, evaluations, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
 
         
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         try {
             estimator.setDegreeEvaluationsAndWeights(2, 
-                    (List<PolynomialEvaluation>)null, weights);
+                    null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setDegreeEvaluationsAndWeights(2, evaluations, 
-                    (double[])null);
+                    null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setDegreeEvaluationsAndWeights(2, wrongEvals, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setDegreeEvaluationsAndWeights(2, evaluations, 
                     new double[2]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }                
+        } catch (IllegalArgumentException ignore) { }
     }
 
     @Test
@@ -523,8 +521,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = new double[2];
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
@@ -552,9 +549,10 @@ public class WeightedPolynomialEstimatorTest implements
         
         //Force IllegalArgumentException
         try {
-            PolynomialEstimator.getMinNumberOfEvaluations(0);
+            assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(0),
+                    degree + 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         WeightedPolynomialEstimator estimator = 
                 new WeightedPolynomialEstimator(degree);
@@ -592,7 +590,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -605,8 +603,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[2 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -658,7 +655,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -671,8 +668,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[4 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -735,7 +731,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -748,8 +744,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[2 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -805,7 +800,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -818,8 +813,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[2 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -875,7 +869,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -888,8 +882,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 2);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 3);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[2 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -941,7 +934,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -954,8 +947,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 2);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 3);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[2 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -1011,7 +1003,7 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -1024,8 +1016,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         double[] weights = 
                 new double[2 * estimator.getMinNumberOfEvaluations()];
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
@@ -1068,10 +1059,6 @@ public class WeightedPolynomialEstimatorTest implements
         assertEquals(estimateStart, 1);
         assertEquals(estimateEnd, 1);      
     }    
-    
-    private void reset() {
-        estimateStart = estimateEnd = 0;
-    }
 
     @Override
     public void onEstimateStart(PolynomialEstimator estimator) {
@@ -1092,36 +1079,40 @@ public class WeightedPolynomialEstimatorTest implements
         try {
             estimator.setDegree(2);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             ((WeightedPolynomialEstimator)estimator).setEvaluationsAndWeights(
                     null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             ((WeightedPolynomialEstimator)estimator).
                     setDegreeEvaluationsAndWeights(2, null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }     
+        } catch (LockedException ignore) { }
         try {
             ((WeightedPolynomialEstimator)estimator).setMaxEvaluations(1);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }             
+        } catch (LockedException ignore) { }
         try {
             ((WeightedPolynomialEstimator)estimator).setSortWeightsEnabled(
                     false);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }                     
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { 
-        } catch (Exception e) { 
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
-    }    
+    }
+
+    private void reset() {
+        estimateStart = estimateEnd = 0;
+    }
 }

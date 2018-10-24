@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date June 2, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
@@ -14,90 +21,40 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
 
+import java.util.Random;
+
+import static org.junit.Assert.*;
+
+@SuppressWarnings("Duplicates")
 public class SecondDegreePolynomialRootsEstimatorTest {
     
-    public static final double MIN_EVAL_POINT = 0.0;
-    public static final double MAX_EVAL_POINT = 1.0;
+    private static final double MIN_EVAL_POINT = 0.0;
+    private static final double MAX_EVAL_POINT = 1.0;
     
-    public static final double TOLERANCE = 3e-8;
+    private static final double TOLERANCE = 3e-8;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public SecondDegreePolynomialRootsEstimatorTest() {
-    }
+    public SecondDegreePolynomialRootsEstimatorTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
-    
-    public double vectorNorm(double[] v){
-        double normValue = 0.0, value;
-        for(int i = 0; i < v.length; i++){
-            value = v[i];
-            normValue += value * value; //square norm
-        }
-        
-        return Math.sqrt(normValue);
-    }
-    
-    public double[] generateConstantPolynomialParams(double param){
-        
-        double[] out = new double[1];
-        out[0] = param;
-        return out;
-    }
-    
-    public double[] generateFirstDegreePolynomialParams(double root1){
-        
-        double[] out = new double[2];
-        //p(x) = x - root1
-        out[1] = 1.0;
-        out[0] = -root1;
-        
-        double normValue = vectorNorm(out);
-        //normalize vector of complex values
-        ArrayUtils.multiplyByScalar(out, 1.0 / normValue, out);        
-        return out;
-    }
-    
-    public double[] generateSecondDegreePolynomialParams(Complex root1, 
-            Complex root2){
-        
-        double[] out = new double[3];
-        //p(x) = (x - root1) * (x - root2) = x * x - (root1 + root2) * x + 
-        //root1 * root2
-        out[2] = 1.0;
-        out[1] = root1.addAndReturnNew(root2).multiplyByScalarAndReturnNew(
-                -1.0).getReal();
-        out[0] = root1.multiplyAndReturnNew(root2).getReal();
-        
-        double normValue = vectorNorm(out);
-        //normalize vector of complex values
-        ArrayUtils.multiplyByScalar(out, 1.0 / normValue, out);        
-        return out;
-    }
-    
+    public void tearDown() { }
+
     @Test
     public void testConstructor() throws LockedException, 
-        RootEstimationException, 
-        NotAvailableException, 
-        NotReadyException{
+            RootEstimationException, NotAvailableException,
+            NotReadyException {
         
         double[] polyParams = new double[3];
         polyParams[2] = 1.0; //to ensure it's second degree
@@ -110,32 +67,33 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         
         assertFalse(estimator.arePolynomialParametersAvailable());
         assertFalse(estimator.areRootsAvailable());
-        try{
+        try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
-        try{
+        } catch (NotReadyException ignore) { }
+        try {
+            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
-        try{
+        try {
             estimator.isSecondDegree();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
-        try{
+        } catch (NotReadyException ignore) { }
+        try {
             estimator.hasTwoDistinctRealRoots();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
-        try{
+        } catch (NotReadyException ignore) { }
+        try {
             estimator.hasDoubleRoot();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
-        try{
+        } catch (NotReadyException ignore) { }
+        try {
             estimator.hasTwoComplexConjugateRoots();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
         
         
         //test 2nd constructor
@@ -146,14 +104,15 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         assertFalse(estimator.areRootsAvailable());
         assertArrayEquals(estimator.getRealPolynomialParameters(), polyParams, 
                 TOLERANCE);
-        try{
+        try {
+            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
-        try{
+        } catch (NotAvailableException ignore) { }
+        try {
             estimator.getRoots();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isSecondDegree());
@@ -165,9 +124,9 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         double[] badPolyParams = new double[1];
         
         estimator = null;
-        try{
+        try {
             estimator = new SecondDegreePolynomialRootsEstimator(badPolyParams);
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
@@ -188,14 +147,15 @@ public class SecondDegreePolynomialRootsEstimatorTest {
                 new SecondDegreePolynomialRootsEstimator();
         
         //check default values
-        try{
+        try {
+            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
-        try{
+        } catch (NotAvailableException ignore) { }
+        try {
             estimator.getRealPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}        
+        } catch (NotAvailableException ignore) { }
         assertFalse(estimator.arePolynomialParametersAvailable());
         
         //set polynomial parameters
@@ -203,45 +163,47 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         //check correctness
         assertArrayEquals(estimator.getRealPolynomialParameters(), polyParams, 
                 TOLERANCE);
-        try{
+        try {
+            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         
         estimator.setPolynomialParameters(polyParams2);
         //check correctness
         assertArrayEquals(estimator.getRealPolynomialParameters(), polyParams2, 
                 TOLERANCE);
-        try{
+        try {
+            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         
         
         //Force IllegalArgumentException
         try{
             estimator.setPolynomialParameters(badPolyParams);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             estimator.setPolynomialParameters(badPolyParams2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //attempting to use complex parameters will also raise an 
         //IllegalArgumentException
-        try{
+        try {
             estimator.setPolynomialParameters(new Complex[3]);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-        RootEstimationException, NotAvailableException{
+        RootEstimationException, NotAvailableException {
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
         
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double realRoot1 = randomizer.nextDouble(MIN_EVAL_POINT, 
@@ -264,8 +226,6 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         
             //also compute conjugates
             Complex conjRoot1 = root1.conjugateAndReturnNew();
-            Complex conjRoot2 = root2.conjugateAndReturnNew();
-        
         
             SecondDegreePolynomialRootsEstimator estimator = 
                     new SecondDegreePolynomialRootsEstimator();
@@ -277,18 +237,18 @@ public class SecondDegreePolynomialRootsEstimatorTest {
             polyParams = generateConstantPolynomialParams(realRoot1);
             assertFalse(SecondDegreePolynomialRootsEstimator.isSecondDegree(
                     polyParams));
-            try{
+            try {
                 estimator.setPolynomialParameters(polyParams);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            try{
+            } catch (IllegalArgumentException ignore) { }
+            try {
                 estimator.isSecondDegree();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}            
-            try{
+            } catch (NotReadyException ignore) { }
+            try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}
+            } catch (NotReadyException ignore) { }
             //check correctness
             assertFalse(estimator.areRootsAvailable());
             
@@ -297,18 +257,18 @@ public class SecondDegreePolynomialRootsEstimatorTest {
             polyParams = generateFirstDegreePolynomialParams(realRoot1);
             assertFalse(SecondDegreePolynomialRootsEstimator.isSecondDegree(
                     polyParams));
-            try{
+            try {
                 estimator.setPolynomialParameters(polyParams);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            try{
+            } catch (IllegalArgumentException ignore) { }
+            try {
                 estimator.isSecondDegree();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}
-            try{
+            } catch (NotReadyException ignore) { }
+            try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}
+            } catch (NotReadyException ignore) { }
             //check correctness
             assertFalse(estimator.areRootsAvailable());
         
@@ -379,5 +339,51 @@ public class SecondDegreePolynomialRootsEstimatorTest {
             assertTrue(roots[1].equals(new Complex(realRoot1), TOLERANCE));
 
         }
+    }
+
+    private double vectorNorm(double[] v) {
+        double normValue = 0.0;
+        for (double value : v) {
+            normValue += value * value; //square norm
+        }
+
+        return Math.sqrt(normValue);
+    }
+
+    private double[] generateConstantPolynomialParams(double param) {
+
+        double[] out = new double[1];
+        out[0] = param;
+        return out;
+    }
+
+    private double[] generateFirstDegreePolynomialParams(double root1) {
+
+        double[] out = new double[2];
+        //p(x) = x - root1
+        out[1] = 1.0;
+        out[0] = -root1;
+
+        double normValue = vectorNorm(out);
+        //normalize vector of complex values
+        ArrayUtils.multiplyByScalar(out, 1.0 / normValue, out);
+        return out;
+    }
+
+    private double[] generateSecondDegreePolynomialParams(Complex root1,
+                                                          Complex root2) {
+
+        double[] out = new double[3];
+        //p(x) = (x - root1) * (x - root2) = x * x - (root1 + root2) * x +
+        //root1 * root2
+        out[2] = 1.0;
+        out[1] = root1.addAndReturnNew(root2).multiplyByScalarAndReturnNew(
+                -1.0).getReal();
+        out[0] = root1.multiplyAndReturnNew(root2).getReal();
+
+        double normValue = vectorNorm(out);
+        //normalize vector of complex values
+        ArrayUtils.multiplyByScalar(out, 1.0 / normValue, out);
+        return out;
     }
 }

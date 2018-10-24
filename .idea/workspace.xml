@@ -2,149 +2,88 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a53c5476-1851-45dc-8984-bfc6a6dec60e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/irurueta-numerical.iml" beforeDir="false" afterPath="$PROJECT_DIR$/irurueta-numerical.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/BuildInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/BuildInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/ComplexPolynomialEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/ComplexPolynomialEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DerivativeEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DerivativeEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalDerivativeEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalDerivativeEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/EvaluationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/EvaluationException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientFunctionEvaluatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientFunctionEvaluatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/InvalidBracketRangeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/InvalidBracketRangeException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/JacobianEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/JacobianEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/LockedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/LockedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiVariateFunctionEvaluatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiVariateFunctionEvaluatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotAvailableException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotAvailableException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotReadyException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotReadyException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NumericalException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NumericalException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/PolynomialEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/PolynomialEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/RealPolynomialEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/RealPolynomialEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayGradientEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayGradientEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricDerivativeEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricDerivativeEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricGradientEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricGradientEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/Fitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/Fitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/FittingException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/FittingException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFunctionEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFunctionEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LinearFitterMultiDimensionFunctionEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LinearFitterMultiDimensionFunctionEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LinearFitterSingleDimensionFunctionEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/LinearFitterSingleDimensionFunctionEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/MultiDimensionFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/MultiDimensionFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/MultiDimensionLinearFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/MultiDimensionLinearFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/MultiVariateFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/MultiVariateFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SingleDimensionFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SingleDimensionFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SingleDimensionLinearFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SingleDimensionLinearFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/StraightLineFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/StraightLineFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/BracketedSingleOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/BracketedSingleOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/BrentSingleOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/BrentSingleOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/GoldenSingleOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/GoldenSingleOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/LineMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/LineMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/MultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/MultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/OptimizationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/OptimizationException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/Optimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/Optimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/PowellMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/PowellMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/SimplexMultiOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/SimplexMultiOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/SingleOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/optimization/SingleOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/Polynomial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/Polynomial.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/PolynomialsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/PolynomialsException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/DerivativePolynomialEvaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/DerivativePolynomialEvaluation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/DirectPolynomialEvaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/DirectPolynomialEvaluation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/LMedSPolynomialRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/LMedSPolynomialRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimationException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEvaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEvaluation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEvaluationType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialEvaluationType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/RANSACPolynomialRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/RANSACPolynomialRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/FastRandomSubsetSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/FastRandomSubsetSelector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/InliersData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/InliersData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/InvalidSubsetRangeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/InvalidSubsetRangeException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/InvalidSubsetSizeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/InvalidSubsetSizeException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/LMedSRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/LMedSRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/LMedSRobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/LMedSRobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/MSACRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/MSACRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/MSACRobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/MSACRobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/NotEnoughSamplesException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/NotEnoughSamplesException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROMedSRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROMedSRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROSACRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROSACRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROSACRobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/PROSACRobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimatorException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimatorException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimatorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimatorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimatorMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RobustEstimatorMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/SubsetSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/SubsetSelector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/SubsetSelectorException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/SubsetSelectorException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/SubsetSelectorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/SubsetSelectorType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/WeightSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/WeightSelection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BisectionSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BisectionSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BracketedSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BracketedSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BrentSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BrentSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/DerivativeSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/DerivativeSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/PolynomialRootsEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/PolynomialRootsEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RidderSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RidderSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimationException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecantSingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecantSingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SingleRootEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SingleRootEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/Convolver1D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/Convolver1D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/KalmanFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/KalmanFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/SignalProcessingException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/SignalProcessingException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/irurueta/numerical/build-info.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/irurueta/numerical/build-info.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/BuildInfoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/BuildInfoTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/ComplexPolynomialEvaluatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/ComplexPolynomialEvaluatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DerivativeEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DerivativeEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalDerivativeEvaluatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalDerivativeEvaluatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalEvaluatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalEvaluatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/GradientEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/GradientEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/InvalidBracketRangeExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/InvalidBracketRangeExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/JacobianEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/JacobianEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/MaximumLikelihoodEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/MaximumLikelihoodEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/PolynomialEvaluatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/PolynomialEvaluatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/RealPolynomialEvaluatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/RealPolynomialEvaluatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayGradientEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayGradientEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricDerivativeEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricDerivativeEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricGradientEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricGradientEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/FittingExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/FittingExceptionTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/StraightLineFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/StraightLineFitterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/BrentSingleOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/BrentSingleOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/GoldenSingleOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/GoldenSingleOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/OptimizationExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/OptimizationExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/PowellMultiOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/PowellMultiOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/SimplexMultiOptimizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/optimization/SimplexMultiOptimizerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialsExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialsExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/DerivativePolynomialEvaluationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/DerivativePolynomialEvaluationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/DirectPolynomialEvaluationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/DirectPolynomialEvaluationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/LMedSPolynomialRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/LMedSPolynomialRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimationExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimationExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PolynommialRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/PolynommialRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/RANSACPolynomialRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/RANSACPolynomialRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/FastRandomSubsetSelectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/FastRandomSubsetSelectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetRangeExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetRangeExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetSizeExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetSizeExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/LMedSRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/LMedSRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/MSACRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/MSACRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/NotEnoughSamplesExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/NotEnoughSamplesExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROSACRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROSACRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RANSACRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RANSACRobustEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RobustEstimatorExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RobustEstimatorExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/WeightSelectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/WeightSelectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BisectionSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BisectionSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BrentSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BrentSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RidderSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RidderSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RootEstimationExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RootEstimationExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/AccelerationFileLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/AccelerationFileLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/Convolver1DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/Convolver1DTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/KalmanFilterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/KalmanFilterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/SignalProcessingExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/SignalProcessingExceptionTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -160,37 +99,38 @@
     <session id="75130814">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="10" />
-          <entry key="java" value="258" />
+          <entry key="class" value="11" />
+          <entry key="java" value="346" />
           <entry key="xml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="10" />
-          <entry key="JAVA" value="258" />
+          <entry key="CLASS" value="11" />
+          <entry key="JAVA" value="346" />
           <entry key="XML" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="32374" />
+          <entry key="JAVA" value="46381" />
           <entry key="XML" value="28" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="32374" />
+          <entry key="java" value="46381" />
           <entry key="xml" value="28" />
         </counts>
       </usages-collector>
@@ -201,44 +141,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="328" column="28" selection-start-line="328" selection-start-column="28" selection-end-line="328" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotReadyException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" selection-end-line="15" />
-              <folding>
-                <element signature="e#0#1679#0" expanded="true" />
-                <element signature="e#937#938#0" expanded="true" />
-                <element signature="e#960#961#0" expanded="true" />
-                <element signature="e#1152#1153#0" expanded="true" />
-                <element signature="e#1182#1183#0" expanded="true" />
-                <element signature="e#1451#1452#0" expanded="true" />
-                <element signature="e#1488#1489#0" expanded="true" />
-                <element signature="e#1660#1661#0" expanded="true" />
-                <element signature="e#1688#1689#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricGradientEstimator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="89" column="34" lean-forward="true" selection-start-line="89" selection-start-column="34" selection-end-line="89" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#3821#0" expanded="true" />
-                <element signature="e#1096#1129#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="180">
+              <caret line="12" column="18" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -269,6 +176,9 @@
       <find>mse</find>
       <find>setSt</find>
       <find>mStopThresholdEnabled</find>
+      <find>SimpleSingleDimensionLinearFitterTest</find>
+      <find>KalmanFilterTest</find>
+      <find>LevenbergMarquardtMultiVariateFitterTest</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -285,57 +195,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/WeightSelection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BisectionSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BracketedSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BrentSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/DerivativeSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/package-info.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/PolynomialRootsEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RidderSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimationException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecantSingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SingleRootEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/Convolver1D.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/KalmanFilter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/SignalProcessingException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/BuildInfo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/ComplexPolynomialEvaluator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DerivativeEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalDerivativeEvaluator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalEvaluator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/EvaluationException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientFunctionEvaluatorListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/InvalidBracketRangeException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/JacobianEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/LockedException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotAvailableException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotReadyException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NumericalException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/package-info.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/PolynomialEvaluator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/RealPolynomialEvaluator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayGradientEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricDerivativeEstimator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricGradientEstimator.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialsExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/FastRandomSubsetSelectorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetRangeExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetSizeExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/LMedSRobustEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/MSACRobustEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/NotEnoughSamplesExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROSACRobustEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RANSACRobustEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RobustEstimatorExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/WeightSelectionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BisectionSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BrentSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RidderSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RootEstimationExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/AccelerationFileLoader.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/Convolver1DTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/SignalProcessingExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/BuildInfoTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/ComplexPolynomialEvaluatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DerivativeEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalDerivativeEvaluatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalEvaluatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/GradientEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/InvalidBracketRangeExceptionTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/JacobianEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/MaximumLikelihoodEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/PolynomialEvaluatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/RealPolynomialEvaluatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayGradientEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricDerivativeEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricGradientEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitterTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitterTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/KalmanFilterTest.java" />
       </list>
     </option>
   </component>
@@ -368,8 +278,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="127" />
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
@@ -401,14 +310,20 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
+              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -416,7 +331,7 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="fitting" type="462c0819:PsiDirectoryNode" />
@@ -425,7 +340,7 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="optimization" type="462c0819:PsiDirectoryNode" />
@@ -434,7 +349,7 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="polynomials" type="462c0819:PsiDirectoryNode" />
@@ -443,7 +358,7 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="polynomials" type="462c0819:PsiDirectoryNode" />
@@ -453,7 +368,7 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="robust" type="462c0819:PsiDirectoryNode" />
@@ -462,7 +377,7 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="roots" type="462c0819:PsiDirectoryNode" />
@@ -471,45 +386,17 @@
               <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="numerical" type="462c0819:PsiDirectoryNode" />
               <item name="processing" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -521,7 +408,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540302088995" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540392784301" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -544,7 +431,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SavitzkyGolayGradientEstimatorTest">
+  <component name="RunManager" selected="JUnit.KalmanFilterTest">
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -584,16 +471,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LevenbergMarquardtMultiDimensionFitterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="KalmanFilterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-numerical" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.irurueta.numerical.fitting.*" />
+          <option name="PATTERN" value="com.irurueta.numerical.signal.processing.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.irurueta.numerical.fitting" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitterTest" />
+      <option name="PACKAGE_NAME" value="com.irurueta.numerical.signal.processing" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.signal.processing.KalmanFilterTest" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="KalmanFilterTest.testPredictAndCorrectAcceleration" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="irurueta-numerical" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.numerical.signal.processing.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.irurueta.numerical.signal.processing" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.signal.processing.KalmanFilterTest" />
+      <option name="METHOD_NAME" value="testPredictAndCorrectAcceleration" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -614,7 +518,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LevenbergMarquardtSingleDimensionFitterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleSingleDimensionLinearFitterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-numerical" />
       <extension name="coverage">
         <pattern>
@@ -623,37 +527,24 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.irurueta.numerical.fitting" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.fitting.LevenbergMarquardtSingleDimensionFitterTest" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.fitting.SimpleSingleDimensionLinearFitterTest" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SavitzkyGolayDerivativeEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-numerical" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.irurueta.numerical.*" />
+          <option name="PATTERN" value="com.irurueta.numerical.fitting.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.irurueta.numerical" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.SavitzkyGolayDerivativeEstimatorTest" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SavitzkyGolayGradientEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="irurueta-numerical" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.numerical.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.irurueta.numerical" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.SavitzkyGolayGradientEstimatorTest" />
+      <option name="PACKAGE_NAME" value="com.irurueta.numerical.fitting" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.fitting.SimpleSingleDimensionLinearFitterTest" />
+      <option name="METHOD_NAME" value="testFitTrigoWithHoldAndFree" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -717,19 +608,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" />
+      <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest" />
+      <item itemvalue="JUnit.KalmanFilterTest" />
       <item itemvalue="JUnit.LevenbergMarquardtMultiVariateFitterTest" />
-      <item itemvalue="JUnit.LevenbergMarquardtMultiDimensionFitterTest" />
-      <item itemvalue="JUnit.LevenbergMarquardtSingleDimensionFitterTest" />
-      <item itemvalue="JUnit.SavitzkyGolayDerivativeEstimatorTest" />
-      <item itemvalue="JUnit.SavitzkyGolayGradientEstimatorTest" />
+      <item itemvalue="JUnit.KalmanFilterTest.testPredictAndCorrectAcceleration" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SavitzkyGolayGradientEstimatorTest" />
-        <item itemvalue="JUnit.SavitzkyGolayDerivativeEstimatorTest" />
-        <item itemvalue="JUnit.LevenbergMarquardtSingleDimensionFitterTest" />
-        <item itemvalue="JUnit.LevenbergMarquardtMultiDimensionFitterTest" />
+        <item itemvalue="JUnit.KalmanFilterTest" />
+        <item itemvalue="JUnit.KalmanFilterTest.testPredictAndCorrectAcceleration" />
         <item itemvalue="JUnit.LevenbergMarquardtMultiVariateFitterTest" />
+        <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest" />
+        <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" />
       </list>
     </recent_temporary>
   </component>
@@ -770,50 +661,51 @@
       <workItem from="1539974613216" duration="68118000" />
       <workItem from="1540195219640" duration="4365000" />
       <workItem from="1540245605176" duration="1840000" />
-      <workItem from="1540279041983" duration="14446000" />
+      <workItem from="1540279041983" duration="25338000" />
+      <workItem from="1540372603529" duration="10595000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="LevenbergMarquardtMultiVariateFitterTest_testFitMultiVariateGaussianAndSineCovariance - 2018.10.21 at 23h 36m 16s.xml">
-      <configuration name="LevenbergMarquardtMultiVariateFitterTest.testFitMultiVariateGaussianAndSineCovariance" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtMultiVariateFitterTest_testFitMultiVariateGaussianAndSineCovariance - 2018.10.21 at 23h 36m 36s.xml">
-      <configuration name="LevenbergMarquardtMultiVariateFitterTest.testFitMultiVariateGaussianAndSineCovariance" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtMultiVariateFitterTest_testFitMultiVariateGaussianAndSineCovariance - 2018.10.21 at 23h 37m 53s.xml">
-      <configuration name="LevenbergMarquardtMultiVariateFitterTest.testFitMultiVariateGaussianAndSineCovariance" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtMultiVariateFitterTest - 2018.10.21 at 23h 38m 55s.xml">
-      <configuration name="LevenbergMarquardtMultiVariateFitterTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtMultiVariateFitterTest_testFitMultidimensionalSineCovariance - 2018.10.21 at 23h 41m 35s.xml">
-      <configuration name="LevenbergMarquardtMultiVariateFitterTest.testFitMultidimensionalSineCovariance" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtMultiVariateFitterTest - 2018.10.21 at 23h 42m 27s.xml">
-      <configuration name="LevenbergMarquardtMultiVariateFitterTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtMultiDimensionFitterTest - 2018.10.21 at 23h 43m 02s.xml">
-      <configuration name="LevenbergMarquardtMultiDimensionFitterTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LevenbergMarquardtSingleDimensionFitterTest - 2018.10.21 at 23h 43m 25s.xml">
-      <configuration name="LevenbergMarquardtSingleDimensionFitterTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="SavitzkyGolayDerivativeEstimatorTest - 2018.10.23 at 15h 33m 06s.xml">
-      <configuration name="SavitzkyGolayDerivativeEstimatorTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="SavitzkyGolayGradientEstimatorTest - 2018.10.23 at 15h 38m 17s.xml">
       <configuration name="SavitzkyGolayGradientEstimatorTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="com_irurueta_numerical_in_irurueta-numerical - 2018.10.24 at 00h 34m 57s.xml">
+      <configuration name="com.irurueta.numerical in irurueta-numerical" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SimpleSingleDimensionLinearFitterTest_testFitTrigoWithHoldAndFree - 2018.10.24 at 16h 38m 31s.xml">
+      <configuration name="SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SimpleSingleDimensionLinearFitterTest - 2018.10.24 at 16h 39m 57s.xml">
+      <configuration name="SimpleSingleDimensionLinearFitterTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SimpleSingleDimensionLinearFitterTest - 2018.10.24 at 16h 45m 12s.xml">
+      <configuration name="SimpleSingleDimensionLinearFitterTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KalmanFilterTest - 2018.10.24 at 16h 45m 30s.xml">
+      <configuration name="KalmanFilterTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LevenbergMarquardtMultiVariateFitterTest - 2018.10.24 at 16h 46m 30s.xml">
+      <configuration name="LevenbergMarquardtMultiVariateFitterTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KalmanFilterTest - 2018.10.24 at 16h 46m 56s.xml">
+      <configuration name="KalmanFilterTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KalmanFilterTest_testPredictAndCorrectAcceleration - 2018.10.24 at 16h 47m 42s.xml">
+      <configuration name="KalmanFilterTest.testPredictAndCorrectAcceleration" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KalmanFilterTest - 2018.10.24 at 16h 47m 49s.xml">
+      <configuration name="KalmanFilterTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155082000" />
+    <option name="totallyTimeSpent" value="176569000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-48" y="23" width="1440" height="877" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20600858" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20886981" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.26037195" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -823,7 +715,7 @@
       <window_info id="Nl-Palette" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3299363" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4996299" weight="0.32738853" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4996299" visible="true" weight="0.32738853" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4996299" weight="0.35414013" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -856,723 +748,715 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/BrentSingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="248" column="22" lean-forward="true" selection-start-line="248" selection-start-column="22" selection-end-line="248" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#8713#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1114#1147#0" expanded="true" />
-            <element signature="e#3453#3454#0" expanded="true" />
-            <element signature="e#3485#3486#0" expanded="true" />
-            <element signature="e#8194#8195#0" expanded="true" />
-            <element signature="e#8262#8263#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/DerivativeSingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="220" column="38" lean-forward="true" selection-start-line="220" selection-start-column="38" selection-end-line="220" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#9200#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1095#1128#0" expanded="true" />
-            <element signature="e#8683#8684#0" expanded="true" />
-            <element signature="e#8732#8733#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="219" column="12" lean-forward="true" selection-start-line="219" selection-start-column="12" selection-end-line="219" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#8297#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1246#1279#0" expanded="true" />
-            <element signature="e#3722#3723#0" expanded="true" />
-            <element signature="e#3754#3755#0" expanded="true" />
-            <element signature="e#8394#8395#0" expanded="true" />
-            <element signature="e#8462#8463#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetSizeExceptionTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" selection-end-line="15" />
           <folding>
-            <element signature="e#0#22033#0" expanded="true" />
+            <element signature="e#0#1680#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1488#1537#0" expanded="true" />
-            <element signature="e#5224#5225#0" expanded="true" />
-            <element signature="e#5258#5259#0" expanded="true" />
-            <element signature="e#6510#6511#0" expanded="true" />
-            <element signature="e#6547#6548#0" expanded="true" />
-            <element signature="e#7586#7587#0" expanded="true" />
-            <element signature="e#7615#7616#0" expanded="true" />
-            <element signature="e#7823#7824#0" expanded="true" />
-            <element signature="e#7856#7857#0" expanded="true" />
-            <element signature="e#8050#8051#0" expanded="true" />
-            <element signature="e#8089#8090#0" expanded="true" />
-            <element signature="e#8345#8346#0" expanded="true" />
-            <element signature="e#8390#8391#0" expanded="true" />
-            <element signature="e#9187#9188#0" expanded="true" />
-            <element signature="e#9234#9235#0" expanded="true" />
-            <element signature="e#18279#18280#0" expanded="true" />
-            <element signature="e#18322#18323#0" expanded="true" />
-            <element signature="e#18521#18522#0" expanded="true" />
-            <element signature="e#18572#18573#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/MSACRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="243" column="32" lean-forward="true" selection-start-line="243" selection-start-column="32" selection-end-line="243" selection-end-column="32" />
+        <state relative-caret-position="96">
+          <caret line="32" column="47" lean-forward="true" selection-start-line="32" selection-start-column="47" selection-end-line="32" selection-end-column="47" />
           <folding>
-            <element signature="e#0#8830#0" expanded="true" />
+            <element signature="e#0#17679#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1133#1182#0" expanded="true" />
-            <element signature="e#4824#4825#0" expanded="true" />
-            <element signature="e#4869#4870#0" expanded="true" />
-            <element signature="e#8672#8673#0" expanded="true" />
-            <element signature="e#8699#8700#0" expanded="true" />
+            <element signature="e#1002#1033#0" expanded="true" />
+            <element signature="e#12772#12773#0" expanded="true" />
+            <element signature="e#12809#12810#0" expanded="true" />
+            <element signature="e#13019#13020#0" expanded="true" />
+            <element signature="e#13060#13061#0" expanded="true" />
+            <element signature="e#13475#13476#0" expanded="true" />
+            <element signature="e#13515#13516#0" expanded="true" />
+            <element signature="e#14847#14848#0" expanded="true" />
+            <element signature="e#14920#14921#0" expanded="true" />
+            <element signature="e#16071#16072#0" expanded="true" />
+            <element signature="e#16114#16115#0" expanded="true" />
+            <element signature="e#16145#16146#0" expanded="true" />
+            <element signature="e#16186#16187#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/NotEnoughSamplesExceptionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4845">
-          <caret line="323" column="19" lean-forward="true" selection-start-line="323" selection-start-column="19" selection-end-line="323" selection-end-column="19" />
+        <state relative-caret-position="470">
+          <caret line="39" column="23" lean-forward="true" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
           <folding>
-            <element signature="e#0#10403#0" expanded="true" />
+            <element signature="e#0#1670#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1102#1135#0" expanded="true" />
-            <element signature="e#7349#7350#0" expanded="true" />
-            <element signature="e#7383#7384#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="199" column="37" selection-start-line="199" selection-start-column="37" selection-end-line="199" selection-end-column="37" />
+        <state relative-caret-position="168">
+          <caret line="603" column="17" lean-forward="true" selection-start-line="603" selection-start-column="17" selection-end-line="603" selection-end-column="17" />
           <folding>
-            <element signature="e#0#7754#0" expanded="true" />
+            <element signature="e#0#25188#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1125#1158#0" expanded="true" />
-            <element signature="e#4497#4498#0" expanded="true" />
-            <element signature="e#4529#4530#0" expanded="true" />
+            <element signature="e#1008#1039#0" expanded="true" />
+            <element signature="e#19522#19523#0" expanded="true" />
+            <element signature="e#19559#19560#0" expanded="true" />
+            <element signature="e#19775#19776#0" expanded="true" />
+            <element signature="e#19819#19820#0" expanded="true" />
+            <element signature="e#19877#19878#0" expanded="true" />
+            <element signature="e#19917#19918#0" expanded="true" />
+            <element signature="e#19975#19976#0" expanded="true" />
+            <element signature="e#20016#20017#0" expanded="true" />
+            <element signature="e#21681#21682#0" expanded="true" />
+            <element signature="e#21754#21755#0" expanded="true" />
+            <element signature="e#22906#22907#0" expanded="true" />
+            <element signature="e#22949#22950#0" expanded="true" />
+            <element signature="e#22988#22989#0" expanded="true" />
+            <element signature="e#23029#23030#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/package-info.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/PROSACRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/PolynomialRootsEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="131" column="26" selection-start-line="131" selection-start-column="26" selection-end-line="131" selection-end-column="26" />
+        <state relative-caret-position="617">
+          <caret line="655" column="34" selection-start-line="655" selection-start-column="34" selection-end-line="655" selection-end-column="34" />
           <folding>
-            <element signature="e#0#4841#0" expanded="true" />
+            <element signature="e#0#25819#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#879#912#0" expanded="true" />
-            <element signature="e#3683#3684#0" expanded="true" />
-            <element signature="e#3724#3725#0" expanded="true" />
-            <element signature="e#4053#4054#0" expanded="true" />
-            <element signature="e#4110#4111#0" expanded="true" />
-            <element signature="e#4908#4909#0" expanded="true" />
-            <element signature="e#4944#4945#0" expanded="true" />
+            <element signature="e#1006#1037#0" expanded="true" />
+            <element signature="e#20450#20451#0" expanded="true" />
+            <element signature="e#20487#20488#0" expanded="true" />
+            <element signature="e#20591#20592#0" expanded="true" />
+            <element signature="e#20635#20636#0" expanded="true" />
+            <element signature="e#20693#20694#0" expanded="true" />
+            <element signature="e#20733#20734#0" expanded="true" />
+            <element signature="e#20791#20792#0" expanded="true" />
+            <element signature="e#20832#20833#0" expanded="true" />
+            <element signature="e#22497#22498#0" expanded="true" />
+            <element signature="e#22570#22571#0" expanded="true" />
+            <element signature="e#23830#23831#0" expanded="true" />
+            <element signature="e#23873#23874#0" expanded="true" />
+            <element signature="e#23912#23913#0" expanded="true" />
+            <element signature="e#23953#23954#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RidderSingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="248" column="22" selection-start-line="248" selection-start-column="22" selection-end-line="248" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#9124#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1235#1268#0" expanded="true" />
-            <element signature="e#3466#3467#0" expanded="true" />
-            <element signature="e#3498#3499#0" expanded="true" />
-            <element signature="e#9247#9248#0" expanded="true" />
-            <element signature="e#9315#9316#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimationException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="53" column="52" selection-start-line="53" selection-start-column="52" selection-end-line="53" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#1782#0" expanded="true" />
-            <element signature="e#1006#1007#0" expanded="true" />
-            <element signature="e#1029#1030#0" expanded="true" />
-            <element signature="e#1231#1232#0" expanded="true" />
-            <element signature="e#1261#1262#0" expanded="true" />
-            <element signature="e#1540#1541#0" expanded="true" />
-            <element signature="e#1577#1578#0" expanded="true" />
-            <element signature="e#1787#1788#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/polynomials/PolynomialsException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#1666#0" expanded="true" />
-            <element signature="e#475#476#0" expanded="true" />
-            <element signature="e#498#499#0" expanded="true" />
-            <element signature="e#689#690#0" expanded="true" />
-            <element signature="e#719#720#0" expanded="true" />
-            <element signature="e#987#988#0" expanded="true" />
-            <element signature="e#1024#1025#0" expanded="true" />
-            <element signature="e#1195#1196#0" expanded="true" />
-            <element signature="e#1223#1224#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="573">
-          <caret line="272" column="19" selection-start-line="272" selection-start-column="19" selection-end-line="272" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#9600#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1234#1267#0" expanded="true" />
-            <element signature="e#4639#4640#0" expanded="true" />
-            <element signature="e#4671#4672#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecantSingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="203" column="23" selection-start-line="203" selection-start-column="23" selection-end-line="203" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#7480#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1232#1265#0" expanded="true" />
-            <element signature="e#3424#3425#0" expanded="true" />
-            <element signature="e#3456#3457#0" expanded="true" />
-            <element signature="e#7571#7572#0" expanded="true" />
-            <element signature="e#7639#7640#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="386" column="15" selection-start-line="386" selection-start-column="15" selection-end-line="386" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#14507#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1231#1280#0" expanded="true" />
-            <element signature="e#5037#5038#0" expanded="true" />
-            <element signature="e#5082#5083#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/SingleRootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1246#1279#0" expanded="true" />
-            <element signature="e#3512#3513#0" expanded="true" />
-            <element signature="e#3551#3552#0" expanded="true" />
-            <element signature="e#3868#3869#0" expanded="true" />
-            <element signature="e#3912#3913#0" expanded="true" />
-            <element signature="e#4138#4139#0" expanded="true" />
-            <element signature="e#4174#4175#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="150" column="33" selection-start-line="150" selection-start-column="33" selection-end-line="150" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#17814#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1239#1288#0" expanded="true" />
-            <element signature="e#5318#5319#0" expanded="true" />
-            <element signature="e#5363#5364#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/Convolver1D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-          <folding>
-            <element signature="e#0#33782#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/KalmanFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4886">
-          <caret line="801" column="7" lean-forward="true" selection-start-line="801" selection-start-column="7" selection-end-line="801" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#31365#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#2393#2426#0" expanded="true" />
-            <element signature="e#13815#13816#0" expanded="true" />
-            <element signature="e#13840#13841#0" expanded="true" />
-            <element signature="e#15591#15592#0" expanded="true" />
-            <element signature="e#15616#15617#0" expanded="true" />
-            <element signature="e#15822#15823#0" expanded="true" />
-            <element signature="e#15847#15848#0" expanded="true" />
-            <element signature="e#16105#16106#0" expanded="true" />
-            <element signature="e#16136#16137#0" expanded="true" />
-            <element signature="e#17107#17108#0" expanded="true" />
-            <element signature="e#17139#17140#0" expanded="true" />
-            <element signature="e#18266#18267#0" expanded="true" />
-            <element signature="e#18305#18306#0" expanded="true" />
-            <element signature="e#19554#19555#0" expanded="true" />
-            <element signature="e#19590#19591#0" expanded="true" />
-            <element signature="e#21258#21259#0" expanded="true" />
-            <element signature="e#21298#21299#0" expanded="true" />
-            <element signature="e#22788#22789#0" expanded="true" />
-            <element signature="e#22826#22827#0" expanded="true" />
-            <element signature="e#25289#25290#0" expanded="true" />
-            <element signature="e#25331#25332#0" expanded="true" />
-            <element signature="e#27097#27098#0" expanded="true" />
-            <element signature="e#27131#27132#0" expanded="true" />
-            <element signature="e#28813#28814#0" expanded="true" />
-            <element signature="e#28840#28841#0" expanded="true" />
-            <element signature="e#30283#30284#0" expanded="true" />
-            <element signature="e#30318#30319#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="183" column="20" lean-forward="true" selection-start-line="183" selection-start-column="20" selection-end-line="183" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#6271#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1149#1182#0" expanded="true" />
-            <element signature="e#5687#5688#0" expanded="true" />
-            <element signature="e#5712#5713#0" expanded="true" />
-            <element signature="e#5936#5937#0" expanded="true" />
-            <element signature="e#5978#5979#0" expanded="true" />
-            <element signature="e#6122#6123#0" expanded="true" />
-            <element signature="e#6158#6159#0" expanded="true" />
-            <element signature="e#6326#6327#0" expanded="true" />
-            <element signature="e#6360#6361#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/LMedSRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" selection-end-line="15" />
           <folding>
-            <element signature="e#0#1628#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/signal/processing/SignalProcessingException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="70" lean-forward="true" selection-start-line="12" selection-start-column="70" selection-end-line="12" selection-end-column="70" />
-          <folding>
-            <element signature="e#804#837#0" expanded="true" />
-            <element signature="e#986#987#0" expanded="true" />
-            <element signature="e#1009#1010#0" expanded="true" />
-            <element signature="e#1204#1205#0" expanded="true" />
-            <element signature="e#1234#1235#0" expanded="true" />
-            <element signature="e#1508#1509#0" expanded="true" />
-            <element signature="e#1545#1546#0" expanded="true" />
-            <element signature="e#1721#1722#0" expanded="true" />
-            <element signature="e#1749#1750#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/roots/RootEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#2760#0" expanded="true" />
+            <element signature="e#0#19478#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1039#1072#0" expanded="true" />
-            <element signature="e#1425#1426#0" expanded="true" />
-            <element signature="e#1455#1456#0" expanded="true" />
-            <element signature="e#1796#1797#0" expanded="true" />
-            <element signature="e#1825#1826#0" expanded="true" />
-            <element signature="e#2767#2768#0" expanded="true" />
-            <element signature="e#2795#2796#0" expanded="true" />
+            <element signature="e#1004#1035#0" expanded="true" />
+            <element signature="e#14302#14303#0" expanded="true" />
+            <element signature="e#14339#14340#0" expanded="true" />
+            <element signature="e#14574#14575#0" expanded="true" />
+            <element signature="e#14615#14616#0" expanded="true" />
+            <element signature="e#16281#16282#0" expanded="true" />
+            <element signature="e#16354#16355#0" expanded="true" />
+            <element signature="e#17496#17497#0" expanded="true" />
+            <element signature="e#17539#17540#0" expanded="true" />
+            <element signature="e#17570#17571#0" expanded="true" />
+            <element signature="e#17611#17612#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="48" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
-          <folding>
-            <element signature="e#1468#1501#0" expanded="true" />
-            <element signature="e#6482#6483#0" expanded="true" />
-            <element signature="e#6532#6533#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/ComplexPolynomialEvaluator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="63" column="39" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#2082#0" expanded="true" />
-            <element signature="e#864#897#0" expanded="true" />
-            <element signature="e#1832#1833#0" expanded="true" />
-            <element signature="e#1866#1867#0" expanded="true" />
-            <element signature="e#2114#2115#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DerivativeEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RANSACRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="573">
-          <caret line="65" column="30" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+          <caret line="536" column="29" selection-start-line="536" selection-start-column="29" selection-end-line="536" selection-end-column="29" />
           <folding>
-            <element signature="e#0#2322#0" expanded="true" />
-            <element signature="e#995#1028#0" expanded="true" />
+            <element signature="e#0#21057#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1006#1037#0" expanded="true" />
+            <element signature="e#15957#15958#0" expanded="true" />
+            <element signature="e#15994#15995#0" expanded="true" />
+            <element signature="e#16386#16387#0" expanded="true" />
+            <element signature="e#16427#16428#0" expanded="true" />
+            <element signature="e#16937#16938#0" expanded="true" />
+            <element signature="e#16977#16978#0" expanded="true" />
+            <element signature="e#18214#18215#0" expanded="true" />
+            <element signature="e#18287#18288#0" expanded="true" />
+            <element signature="e#19543#19544#0" expanded="true" />
+            <element signature="e#19586#19587#0" expanded="true" />
+            <element signature="e#19617#19618#0" expanded="true" />
+            <element signature="e#19658#19659#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalDerivativeEvaluator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/RobustEstimatorExceptionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="107" column="41" selection-start-line="107" selection-start-column="41" selection-end-line="107" selection-end-column="41" />
+        <state relative-caret-position="603">
+          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
           <folding>
-            <element signature="e#0#4244#0" expanded="true" />
-            <element signature="e#975#1008#0" expanded="true" />
-            <element signature="e#2692#2693#0" expanded="true" />
-            <element signature="e#2731#2732#0" expanded="true" />
+            <element signature="e#0#1658#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/DirectionalEvaluator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorExceptionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="573">
-          <caret line="138" column="30" selection-start-line="138" selection-start-column="30" selection-end-line="138" selection-end-column="30" />
+        <state relative-caret-position="619">
+          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
           <folding>
-            <element signature="e#0#4953#0" expanded="true" />
-            <element signature="e#2548#2549#0" expanded="true" />
-            <element signature="e#2579#2580#0" expanded="true" />
-            <element signature="e#2816#2817#0" expanded="true" />
-            <element signature="e#2856#2857#0" expanded="true" />
-            <element signature="e#3123#3124#0" expanded="true" />
-            <element signature="e#3151#3152#0" expanded="true" />
-            <element signature="e#3406#3407#0" expanded="true" />
-            <element signature="e#3438#3439#0" expanded="true" />
+            <element signature="e#0#1656#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/EvaluationException.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/SubsetSelectorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="618">
-          <caret line="50" column="48" selection-start-line="50" selection-start-column="48" selection-end-line="50" selection-end-column="48" />
+          <caret line="250" column="55" selection-start-line="250" selection-start-column="55" selection-end-line="250" selection-end-column="55" />
           <folding>
-            <element signature="e#0#1633#0" expanded="true" />
-            <element signature="e#869#870#0" expanded="true" />
-            <element signature="e#892#893#0" expanded="true" />
-            <element signature="e#1089#1090#0" expanded="true" />
-            <element signature="e#1119#1120#0" expanded="true" />
-            <element signature="e#1394#1395#0" expanded="true" />
-            <element signature="e#1431#1432#0" expanded="true" />
-            <element signature="e#1646#1647#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="573">
-          <caret line="96" column="30" selection-start-line="96" selection-start-column="30" selection-end-line="96" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#3462#0" expanded="true" />
-            <element signature="e#1455#1456#0" expanded="true" />
-            <element signature="e#1495#1496#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/GradientFunctionEvaluatorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#1431#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="295" column="41" selection-start-line="295" selection-start-column="41" selection-end-line="295" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#11227#0" expanded="true" />
+            <element signature="e#0#10531#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1166#1199#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/InvalidBracketRangeException.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/WeightSelectionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="50" column="57" selection-start-line="50" selection-start-column="57" selection-end-line="50" selection-end-column="57" />
+        <state relative-caret-position="108">
+          <caret line="56" column="71" selection-start-line="56" selection-start-column="71" selection-end-line="56" selection-end-column="71" />
           <folding>
-            <element signature="e#0#1675#0" expanded="true" />
-            <element signature="e#897#898#0" expanded="true" />
-            <element signature="e#920#921#0" expanded="true" />
-            <element signature="e#1128#1129#0" expanded="true" />
-            <element signature="e#1158#1159#0" expanded="true" />
-            <element signature="e#1434#1435#0" expanded="true" />
-            <element signature="e#1471#1472#0" expanded="true" />
-            <element signature="e#1682#1683#0" expanded="true" />
+            <element signature="e#0#3415#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/JacobianEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BisectionSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="450" column="6" lean-forward="true" selection-start-line="450" selection-start-column="6" selection-end-line="450" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#18574#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1824#2020#0" expanded="true" />
+            <element signature="e#2019#2020#0" expanded="true" />
+            <element signature="e#2701#2902#0" expanded="true" />
+            <element signature="e#2901#2902#0" expanded="true" />
+            <element signature="e#2946#3167#0" expanded="true" />
+            <element signature="e#3166#3167#0" expanded="true" />
+            <element signature="e#2601#2820#0" expanded="true" />
+            <element signature="e#2819#2820#0" expanded="true" />
+            <element signature="e#2863#3102#0" expanded="true" />
+            <element signature="e#3101#3102#0" expanded="true" />
+            <element signature="e#3159#3398#0" expanded="true" />
+            <element signature="e#3397#3398#0" expanded="true" />
+            <element signature="e#3455#3694#0" expanded="true" />
+            <element signature="e#3693#3694#0" expanded="true" />
+            <element signature="e#3779#4018#0" expanded="true" />
+            <element signature="e#4017#4018#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FalsePositionSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#17882#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1837#2033#0" expanded="true" />
+            <element signature="e#2032#2033#0" expanded="true" />
+            <element signature="e#2714#2917#0" expanded="true" />
+            <element signature="e#2916#2917#0" expanded="true" />
+            <element signature="e#2961#3182#0" expanded="true" />
+            <element signature="e#3181#3182#0" expanded="true" />
+            <element signature="e#2616#2837#0" expanded="true" />
+            <element signature="e#2836#2837#0" expanded="true" />
+            <element signature="e#2880#3119#0" expanded="true" />
+            <element signature="e#3118#3119#0" expanded="true" />
+            <element signature="e#3176#3415#0" expanded="true" />
+            <element signature="e#3414#3415#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/BrentSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="440" column="15" lean-forward="true" selection-start-line="440" selection-start-column="15" selection-end-line="440" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#18372#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1813#2009#0" expanded="true" />
+            <element signature="e#2008#2009#0" expanded="true" />
+            <element signature="e#2690#2893#0" expanded="true" />
+            <element signature="e#2892#2893#0" expanded="true" />
+            <element signature="e#2954#3175#0" expanded="true" />
+            <element signature="e#3174#3175#0" expanded="true" />
+            <element signature="e#3264#3485#0" expanded="true" />
+            <element signature="e#3484#3485#0" expanded="true" />
+            <element signature="e#2890#3129#0" expanded="true" />
+            <element signature="e#3128#3129#0" expanded="true" />
+            <element signature="e#3841#4080#0" expanded="true" />
+            <element signature="e#4079#4080#0" expanded="true" />
+            <element signature="e#4154#4393#0" expanded="true" />
+            <element signature="e#4392#4393#0" expanded="true" />
+            <element signature="e#4495#4734#0" expanded="true" />
+            <element signature="e#4733#4734#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="159" column="38" selection-start-line="159" selection-start-column="38" selection-end-line="159" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#9837#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1034#1065#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="392" column="33" lean-forward="true" selection-start-line="392" selection-start-column="33" selection-end-line="392" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#20138#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="647" column="75" selection-start-line="647" selection-start-column="75" selection-end-line="647" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#27564#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#2858#3054#0" expanded="true" />
+            <element signature="e#3053#3054#0" expanded="true" />
+            <element signature="e#3120#3311#0" expanded="true" />
+            <element signature="e#3310#3311#0" expanded="true" />
+            <element signature="e#3992#4195#0" expanded="true" />
+            <element signature="e#4194#4195#0" expanded="true" />
+            <element signature="e#3627#3818#0" expanded="true" />
+            <element signature="e#3817#3818#0" expanded="true" />
+            <element signature="e#4517#4738#0" expanded="true" />
+            <element signature="e#4737#4738#0" expanded="true" />
+            <element signature="e#4809#5024#0" expanded="true" />
+            <element signature="e#5023#5024#0" expanded="true" />
+            <element signature="e#5099#5320#0" expanded="true" />
+            <element signature="e#5319#5320#0" expanded="true" />
+            <element signature="e#4767#4976#0" expanded="true" />
+            <element signature="e#4975#4976#0" expanded="true" />
+            <element signature="e#5703#5924#0" expanded="true" />
+            <element signature="e#5923#5924#0" expanded="true" />
+            <element signature="e#5385#5584#0" expanded="true" />
+            <element signature="e#5583#5584#0" expanded="true" />
+            <element signature="e#5627#5866#0" expanded="true" />
+            <element signature="e#5865#5866#0" expanded="true" />
+            <element signature="e#5936#6231#0" expanded="true" />
+            <element signature="e#6230#6231#0" expanded="true" />
+            <element signature="e#6943#7182#0" expanded="true" />
+            <element signature="e#7181#7182#0" expanded="true" />
+            <element signature="e#6628#6916#0" expanded="true" />
+            <element signature="e#6915#6916#0" expanded="true" />
+            <element signature="e#8280#8519#0" expanded="true" />
+            <element signature="e#8518#8519#0" expanded="true" />
+            <element signature="e#7993#8271#0" expanded="true" />
+            <element signature="e#8270#8271#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RidderSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-762">
+          <caret line="369" column="51" selection-start-line="369" selection-start-column="51" selection-end-line="369" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#18705#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1816#2012#0" expanded="true" />
+            <element signature="e#2011#2012#0" expanded="true" />
+            <element signature="e#2693#2896#0" expanded="true" />
+            <element signature="e#2895#2896#0" expanded="true" />
+            <element signature="e#2940#3161#0" expanded="true" />
+            <element signature="e#3160#3161#0" expanded="true" />
+            <element signature="e#2595#2816#0" expanded="true" />
+            <element signature="e#2815#2816#0" expanded="true" />
+            <element signature="e#2859#3098#0" expanded="true" />
+            <element signature="e#3097#3098#0" expanded="true" />
+            <element signature="e#3155#3394#0" expanded="true" />
+            <element signature="e#3393#3394#0" expanded="true" />
+            <element signature="e#3451#3690#0" expanded="true" />
+            <element signature="e#3689#3690#0" expanded="true" />
+            <element signature="e#3775#4014#0" expanded="true" />
+            <element signature="e#4013#4014#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RootEstimationExceptionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="45" column="58" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#1654#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-792">
+          <caret line="540" column="51" selection-start-line="540" selection-start-column="51" selection-end-line="540" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#27997#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#2857#3053#0" expanded="true" />
+            <element signature="e#3052#3053#0" expanded="true" />
+            <element signature="e#3119#3310#0" expanded="true" />
+            <element signature="e#3309#3310#0" expanded="true" />
+            <element signature="e#3991#4194#0" expanded="true" />
+            <element signature="e#4193#4194#0" expanded="true" />
+            <element signature="e#3626#3817#0" expanded="true" />
+            <element signature="e#3816#3817#0" expanded="true" />
+            <element signature="e#4516#4737#0" expanded="true" />
+            <element signature="e#4736#4737#0" expanded="true" />
+            <element signature="e#4808#5023#0" expanded="true" />
+            <element signature="e#5022#5023#0" expanded="true" />
+            <element signature="e#5702#5923#0" expanded="true" />
+            <element signature="e#5922#5923#0" expanded="true" />
+            <element signature="e#5384#5583#0" expanded="true" />
+            <element signature="e#5582#5583#0" expanded="true" />
+            <element signature="e#5626#5865#0" expanded="true" />
+            <element signature="e#5864#5865#0" expanded="true" />
+            <element signature="e#5935#6230#0" expanded="true" />
+            <element signature="e#6229#6230#0" expanded="true" />
+            <element signature="e#6942#7181#0" expanded="true" />
+            <element signature="e#7180#7181#0" expanded="true" />
+            <element signature="e#6627#6915#0" expanded="true" />
+            <element signature="e#6914#6915#0" expanded="true" />
+            <element signature="e#8279#8518#0" expanded="true" />
+            <element signature="e#8517#8518#0" expanded="true" />
+            <element signature="e#7992#8270#0" expanded="true" />
+            <element signature="e#8269#8270#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-237">
+          <caret line="356" column="51" selection-start-line="356" selection-start-column="51" selection-end-line="356" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#16404#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1640#1836#0" expanded="true" />
+            <element signature="e#1835#1836#0" expanded="true" />
+            <element signature="e#2517#2718#0" expanded="true" />
+            <element signature="e#2717#2718#0" expanded="true" />
+            <element signature="e#2762#2983#0" expanded="true" />
+            <element signature="e#2982#2983#0" expanded="true" />
+            <element signature="e#2417#2636#0" expanded="true" />
+            <element signature="e#2635#2636#0" expanded="true" />
+            <element signature="e#2679#2918#0" expanded="true" />
+            <element signature="e#2917#2918#0" expanded="true" />
+            <element signature="e#3003#3242#0" expanded="true" />
+            <element signature="e#3241#3242#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="166" column="38" selection-start-line="166" selection-start-column="38" selection-end-line="166" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#15334#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1034#1065#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="179" column="38" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#21762#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1034#1065#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/AccelerationFileLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1065">
+          <caret line="71" column="11" lean-forward="true" selection-start-line="71" selection-start-column="11" selection-end-line="71" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#2643#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/Convolver1DTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2142">
+          <caret line="805" column="48" selection-start-line="805" selection-start-column="48" selection-end-line="805" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#36173#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="69" column="50" selection-start-line="69" selection-start-column="50" selection-end-line="69" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#4868#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#955#986#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/SignalProcessingExceptionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="28" column="15" lean-forward="true" selection-start-line="28" selection-start-column="15" selection-end-line="28" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#1654#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/AccurateMaximumLikelihoodEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="360" selection-start-line="360" selection-end-line="360" />
+          <folding>
+            <element signature="e#0#18110#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#853#884#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/BuildInfoTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="333">
-          <caret line="100" column="8" lean-forward="true" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
+          <caret line="64" column="28" selection-start-line="64" selection-start-column="28" selection-end-line="64" selection-end-column="28" />
           <folding>
-            <element signature="e#0#4171#0" expanded="true" />
-            <element signature="e#938#971#0" expanded="true" />
-            <element signature="e#1506#1507#0" expanded="true" />
-            <element signature="e#1546#1547#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/LockedException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="42" column="39" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#1589#0" expanded="true" />
-            <element signature="e#858#859#0" expanded="true" />
-            <element signature="e#881#882#0" expanded="true" />
-            <element signature="e#1067#1068#0" expanded="true" />
-            <element signature="e#1097#1098#0" expanded="true" />
-            <element signature="e#1356#1357#0" expanded="true" />
-            <element signature="e#1393#1394#0" expanded="true" />
-            <element signature="e#1555#1556#0" expanded="true" />
-            <element signature="e#1583#1584#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/BuildInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#6092#0" expanded="true" />
+            <element signature="e#0#2633#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#988#1021#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/ComplexPolynomialEvaluatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-end-line="15" />
+        <state relative-caret-position="393">
+          <caret line="66" column="28" lean-forward="true" selection-start-line="66" selection-start-column="28" selection-end-line="66" selection-end-column="28" />
           <folding>
-            <element signature="e#0#22730#0" expanded="true" />
-            <element signature="e#1561#1594#0" expanded="true" />
-            <element signature="e#8434#8435#0" expanded="true" />
-            <element signature="e#8475#8476#0" expanded="true" />
-            <element signature="e#8828#8829#0" expanded="true" />
-            <element signature="e#8857#8858#0" expanded="true" />
-            <element signature="e#11031#11032#0" expanded="true" />
-            <element signature="e#11071#11072#0" expanded="true" />
-            <element signature="e#11529#11530#0" expanded="true" />
-            <element signature="e#11574#11575#0" expanded="true" />
-            <element signature="e#11833#11834#0" expanded="true" />
-            <element signature="e#11869#11870#0" expanded="true" />
-            <element signature="e#14552#14553#0" expanded="true" />
-            <element signature="e#14605#14606#0" expanded="true" />
+            <element signature="e#0#2905#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DerivativeEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="54" lean-forward="true" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="2" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/MultiVariateFunctionEvaluatorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="24" lean-forward="true" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
+        <state relative-caret-position="288">
+          <caret line="65" column="60" selection-start-line="65" selection-start-column="60" selection-end-line="65" selection-end-column="60" />
           <folding>
-            <element signature="e#0#1619#0" expanded="true" />
+            <element signature="e#0#2947#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#2851#2852#0" expanded="true" />
+            <element signature="e#2901#2902#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NotAvailableException.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalDerivativeEvaluatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="40" column="23" lean-forward="true" selection-start-line="40" selection-start-column="23" selection-end-line="40" selection-end-column="23" />
+        <state relative-caret-position="2835">
+          <caret line="189" column="27" lean-forward="true" selection-start-line="189" selection-start-column="27" selection-end-line="189" selection-end-column="27" />
           <folding>
-            <element signature="e#0#1697#0" expanded="true" />
-            <element signature="e#480#481#0" expanded="true" />
-            <element signature="e#503#504#0" expanded="true" />
-            <element signature="e#1158#1159#0" expanded="true" />
-            <element signature="e#1188#1189#0" expanded="true" />
-            <element signature="e#1461#1462#0" expanded="true" />
-            <element signature="e#1498#1499#0" expanded="true" />
-            <element signature="e#1674#1675#0" expanded="true" />
-            <element signature="e#1702#1703#0" expanded="true" />
+            <element signature="e#0#7922#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#859#890#0" expanded="true" />
+            <element signature="e#1293#1849#0" expanded="true" />
+            <element signature="e#1848#1849#0" expanded="true" />
+            <element signature="e#1887#2778#0" expanded="true" />
+            <element signature="e#2777#2778#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/NumericalException.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/DirectionalEvaluatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="50" column="47" selection-start-line="50" selection-start-column="47" selection-end-line="50" selection-end-column="47" />
+        <state relative-caret-position="587">
+          <caret line="126" column="40" selection-start-line="126" selection-start-column="40" selection-end-line="126" selection-end-column="40" />
           <folding>
-            <element signature="e#0#1605#0" expanded="true" />
-            <element signature="e#861#862#0" expanded="true" />
-            <element signature="e#884#885#0" expanded="true" />
-            <element signature="e#1077#1078#0" expanded="true" />
-            <element signature="e#1107#1108#0" expanded="true" />
-            <element signature="e#1377#1378#0" expanded="true" />
-            <element signature="e#1414#1415#0" expanded="true" />
-            <element signature="e#1615#1616#0" expanded="true" />
+            <element signature="e#0#4593#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1203#1759#0" expanded="true" />
+            <element signature="e#1758#1759#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/package-info.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/GradientEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="-57">
+          <caret line="108" column="44" selection-start-line="108" selection-start-column="44" selection-end-line="108" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#4941#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#859#890#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/HistogramMaximumLikelihoodEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="493" column="45" selection-start-line="493" selection-start-column="45" selection-end-line="493" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#19955#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#853#884#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/InvalidBracketRangeExceptionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#1608#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/JacobianEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="117" column="37" lean-forward="true" selection-start-line="117" selection-start-column="37" selection-end-line="117" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#6511#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#5287#5288#0" expanded="true" />
+            <element signature="e#5315#5316#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/MaximumLikelihoodEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="678" column="45" selection-start-line="678" selection-start-column="45" selection-end-line="678" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#28440#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#853#884#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/PolynomialEvaluator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        <state relative-caret-position="253">
+          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/PolynomialEvaluatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="258" column="29" lean-forward="true" selection-start-line="258" selection-start-column="29" selection-end-line="258" selection-end-column="29" />
           <folding>
-            <element signature="e#805#838#0" expanded="true" />
+            <element signature="e#0#11310#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/RealPolynomialEvaluator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/RealPolynomialEvaluatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="58" column="32" lean-forward="true" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
+        <state relative-caret-position="408">
+          <caret line="62" column="31" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
           <folding>
-            <element signature="e#0#2025#0" expanded="true" />
-            <element signature="e#821#854#0" expanded="true" />
-            <element signature="e#1781#1782#0" expanded="true" />
-            <element signature="e#1815#1816#0" expanded="true" />
-            <element signature="e#2014#2015#0" expanded="true" />
-            <element signature="e#2061#2062#0" expanded="true" />
+            <element signature="e#0#2540#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayGradientEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="98" column="12" lean-forward="true" selection-start-line="98" selection-start-column="12" selection-end-line="98" selection-end-column="12" />
+        <state relative-caret-position="618">
+          <caret line="101" column="39" selection-start-line="101" selection-start-column="39" selection-end-line="101" selection-end-column="39" />
           <folding>
-            <element signature="e#0#5864#0" expanded="true" />
-            <element signature="e#1527#1560#0" expanded="true" />
+            <element signature="e#0#3494#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#3444#3445#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SavitzkyGolayDerivativeEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SavitzkyGolayGradientEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="82" column="28" selection-start-line="82" selection-start-column="28" selection-end-line="82" selection-end-column="28" />
+        <state relative-caret-position="483">
+          <caret line="148" column="23" selection-start-line="148" selection-start-column="23" selection-end-line="148" selection-end-column="23" />
           <folding>
-            <element signature="e#0#4616#0" expanded="true" />
-            <element signature="e#1399#1432#0" expanded="true" />
+            <element signature="e#0#5177#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#859#890#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricDerivativeEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
+        <state relative-caret-position="588">
+          <caret line="102" column="39" selection-start-line="102" selection-start-column="39" selection-end-line="102" selection-end-column="39" />
           <folding>
-            <element signature="e#0#1312#0" expanded="true" />
+            <element signature="e#0#3495#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#3445#3446#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricDerivativeEstimator.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/SymmetricGradientEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="55" column="15" selection-start-line="55" selection-start-column="15" selection-end-line="55" selection-end-column="15" />
+        <state relative-caret-position="527">
+          <caret line="111" column="44" selection-start-line="111" selection-start-column="44" selection-end-line="111" selection-end-column="44" />
           <folding>
-            <element signature="e#0#2365#0" expanded="true" />
-            <element signature="e#986#1019#0" expanded="true" />
+            <element signature="e#0#5056#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#859#890#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1582,7 +1466,7 @@
         <state relative-caret-position="225">
           <caret line="15" selection-end-line="15" />
           <folding>
-            <element signature="e#0#1679#0" expanded="true" />
+            <element signature="e#0#1692#0" expanded="true" />
             <element signature="e#937#938#0" expanded="true" />
             <element signature="e#960#961#0" expanded="true" />
             <element signature="e#1152#1153#0" expanded="true" />
@@ -1595,14 +1479,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/numerical/SymmetricGradientEstimator.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/irurueta/irurueta-statistics/1.0-SNAPSHOT/irurueta-statistics-1.0-20181019.101443-9.jar!/com/irurueta/statistics/GaussianRandomizer.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="89" column="34" lean-forward="true" selection-start-line="89" selection-start-column="34" selection-end-line="89" selection-end-column="34" />
+        <state relative-caret-position="167">
+          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="571" column="15" lean-forward="true" selection-start-line="571" selection-start-column="15" selection-end-line="571" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="3158" column="49" selection-start-line="3158" selection-start-column="49" selection-end-line="3158" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/KalmanFilterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="33" column="58" lean-forward="true" selection-start-line="33" selection-start-column="58" selection-end-line="33" selection-end-column="58" />
           <folding>
-            <element signature="e#0#3821#0" expanded="true" />
-            <element signature="e#1096#1129#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="18" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
         </state>
       </provider>
     </entry>

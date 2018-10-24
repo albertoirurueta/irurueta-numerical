@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.fitting.SvdMultiDimensionLinearFitter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 27, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.fitting;
 
@@ -13,46 +20,44 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class SvdMultiDimensionLinearFitterTest {
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_SIGMA_VALUE = 1e-4;
-    public static final double MAX_SIGMA_VALUE = 1.0;
+    private static final double MIN_SIGMA_VALUE = 1e-4;
+    private static final double MAX_SIGMA_VALUE = 1.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-1;
+    private static final double ABSOLUTE_ERROR = 1e-1;
     
     //For functions like: a*1 + b*x + c*y + d*x*y + e*x^2 + f*y^2
-    public static final int NUM_QUADRATIC_PARAMS = 6;
+    private static final int NUM_QUADRATIC_PARAMS = 6;
     
-    public SvdMultiDimensionLinearFitterTest() {}
+    public SvdMultiDimensionLinearFitterTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
-    public void testConstructor() throws FittingException, WrongSizeException{
+    public void testConstructor() throws FittingException, WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
@@ -89,18 +94,18 @@ public class SvdMultiDimensionLinearFitterTest {
         double[] shortSig = new double[nPoints - 1];
         
         fitter = null;
-        try{
+        try {
             fitter = new SvdMultiDimensionLinearFitter(shortX, y, sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter = new SvdMultiDimensionLinearFitter(x, shortY, sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter = new SvdMultiDimensionLinearFitter(x, y, shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(fitter);
         
         //test constructor with input data (constant sigma)
@@ -111,7 +116,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getX(), x);
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
-        for(int i = 0; i < fitter.getSig().length; i++){
+        for (int i = 0; i < fitter.getSig().length; i++) {
             assertEquals(fitter.getSig()[i], 1.0, 0.0);
         }
         assertFalse(fitter.isReady());
@@ -119,14 +124,14 @@ public class SvdMultiDimensionLinearFitterTest {
         
         //Force IllegalArgumentException
         fitter = null;
-        try{
+        try {
             fitter = new SvdMultiDimensionLinearFitter(shortX, y, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter = new SvdMultiDimensionLinearFitter(x, shortY, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(fitter);
         
         //test constructor with evaluator
@@ -144,9 +149,7 @@ public class SvdMultiDimensionLinearFitterTest {
             }
 
             @Override
-            public void evaluate(double[] point, double[] result) 
-                    throws Throwable {
-            }
+            public void evaluate(double[] point, double[] result) { }
         };
         
         fitter = new SvdMultiDimensionLinearFitter(evaluator);
@@ -172,21 +175,21 @@ public class SvdMultiDimensionLinearFitterTest {
         
         //Force IllegalArgumentException
         fitter = null;
-        try{
+        try {
             fitter = new SvdMultiDimensionLinearFitter(evaluator, shortX, y, 
                     sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter = new SvdMultiDimensionLinearFitter(evaluator, x, shortY, 
                     sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter = new SvdMultiDimensionLinearFitter(evaluator, x, y, 
                     shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(fitter);
         
         //test constructor with evaluator and input data (constant sigma)
@@ -197,7 +200,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getX(), x);
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
-        for(int i = 0; i < fitter.getSig().length; i++) {
+        for (int i = 0; i < fitter.getSig().length; i++) {
             assertEquals(fitter.getSig()[i], 1.0, 0.0);
         }
         assertTrue(fitter.isReady());
@@ -205,21 +208,21 @@ public class SvdMultiDimensionLinearFitterTest {
         
         //Force IllegalArgumentException
         fitter = null;
-        try{
+        try {
             fitter = new SvdMultiDimensionLinearFitter(evaluator, shortX, y, 
                     1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter = new SvdMultiDimensionLinearFitter(evaluator, x, shortY, 
                     1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(fitter);        
     }
 
     @Test
-    public void testGetSetFunctionEvaluator() throws FittingException{
+    public void testGetSetFunctionEvaluator() throws FittingException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
@@ -244,9 +247,7 @@ public class SvdMultiDimensionLinearFitterTest {
             }
 
             @Override
-            public void evaluate(double[] point, double[] result) 
-                    throws Throwable {
-            }
+            public void evaluate(double[] point, double[] result) { }
         };
         
         //set new value
@@ -257,7 +258,7 @@ public class SvdMultiDimensionLinearFitterTest {
     }
     
     @Test
-    public void testGetSetInputData() throws WrongSizeException{
+    public void testGetSetInputData() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
@@ -286,23 +287,23 @@ public class SvdMultiDimensionLinearFitterTest {
         double[] wrongY = new double[nPoints - 1];
         double[] wrongSig = new double[nPoints - 1];
         
-        try{
+        try {
             fitter.setInputData(wrongX, y, sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter.setInputData(x, wrongY, sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter.setInputData(x, y, wrongSig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }   
     
     @Test
     public void testGetSetInputDataWithConstantSigma() 
-            throws WrongSizeException{
+            throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
@@ -324,7 +325,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getX(), x);
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
-        for(int i = 0; i < fitter.getSig().length; i++){
+        for (int i = 0; i < fitter.getSig().length; i++) {
             assertEquals(fitter.getSig()[i], 1.0, 0.0);
         }
         
@@ -332,18 +333,18 @@ public class SvdMultiDimensionLinearFitterTest {
         Matrix wrongX = new Matrix(nPoints - 1, 2);
         double[] wrongY = new double[nPoints - 1];
         
-        try{
+        try {
             fitter.setInputData(wrongX, y, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter.setInputData(x, wrongY, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testIsReady() throws FittingException, WrongSizeException{
+    public void testIsReady() throws FittingException, WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
@@ -376,9 +377,7 @@ public class SvdMultiDimensionLinearFitterTest {
             }
 
             @Override
-            public void evaluate(double[] point, double[] result) 
-                    throws Throwable {
-            }
+            public void evaluate(double[] point, double[] result) { }
         };
         
         fitter.setFunctionEvaluator(evaluator);
@@ -400,9 +399,7 @@ public class SvdMultiDimensionLinearFitterTest {
             }
 
             @Override
-            public void evaluate(double[] point, double[] result) 
-                    throws Throwable {
-            }
+            public void evaluate(double[] point, double[] result) { }
         };
 
         fitter.setFunctionEvaluator(badEvaluator);
@@ -411,7 +408,7 @@ public class SvdMultiDimensionLinearFitterTest {
     }
     
     @Test
-    public void testGetSetTol(){
+    public void testGetSetTol() {
         SvdMultiDimensionLinearFitter fitter = 
                 new SvdMultiDimensionLinearFitter();
         
@@ -427,7 +424,7 @@ public class SvdMultiDimensionLinearFitterTest {
     
     @Test
     public void testFitQuadratic() throws FittingException, NotReadyException, 
-            WrongSizeException{
+            WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -435,7 +432,7 @@ public class SvdMultiDimensionLinearFitterTest {
         double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
         
         double[] params = new double[NUM_QUADRATIC_PARAMS];
-        for(int i = 0; i < NUM_QUADRATIC_PARAMS; i++){
+        for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {
             params[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
         }
@@ -446,7 +443,7 @@ public class SvdMultiDimensionLinearFitterTest {
         GaussianRandomizer errorRandomizer = new GaussianRandomizer(
             new Random(), 0.0, sigma);
         double error, x1, x2;
-        for(int i = 0; i < npoints; i++){
+        for (int i = 0; i < npoints; i++) {
             x1 = x.getElementAt(i, 0);
             x2 = x.getElementAt(i, 1);
             //function is: a*1 + b*x + c*y + d*x*y + e*x^2 + f*y^2
@@ -472,8 +469,7 @@ public class SvdMultiDimensionLinearFitterTest {
             }
 
             @Override
-            public void evaluate(double[] point, double[] result) 
-                    throws Throwable {
+            public void evaluate(double[] point, double[] result) {
                 double x = point[0];
                 double y = point[1];
                 
@@ -503,7 +499,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, NUM_QUADRATIC_PARAMS);
-        for(int i = 0; i < NUM_QUADRATIC_PARAMS; i++){
+        for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
         assertNotNull(fitter.getCovar());

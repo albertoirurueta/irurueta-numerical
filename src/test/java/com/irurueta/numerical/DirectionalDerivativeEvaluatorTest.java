@@ -1,35 +1,45 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.DirectionalDerivativeEvaluator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 20, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical;
 
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import org.junit.*;
 
+import java.util.Random;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+@SuppressWarnings("Duplicates")
 public class DirectionalDerivativeEvaluatorTest {
     
-    public static final int MIN_DIMS = 2;
-    public static final int MAX_DIMS = 5;
+    private static final int MIN_DIMS = 2;
+    private static final int MAX_DIMS = 5;
     
-    public static final double MIN_EVAL_POINT = -1e3;
-    public static final double MAX_EVAL_POINT = 1e3;
+    private static final double MIN_EVAL_POINT = -1e3;
+    private static final double MAX_EVAL_POINT = 1e3;
     
-    public static final double MIN_DIRECTION = -1.0;
-    public static final double MAX_DIRECTION = 1.0;
+    private static final double MIN_DIRECTION = -1.0;
+    private static final double MAX_DIRECTION = 1.0;
     
-    public static final double MIN_OFFSET = -1e3;
-    public static final double MAX_OFFSET = 1e3;
+    private static final double MIN_OFFSET = -1e3;
+    private static final double MAX_OFFSET = 1e3;
     
-    public static final double MIN_WIDTH = 1.0;
-    public static final double MAX_WIDTH = 2.0;
+    private static final double MIN_WIDTH = 1.0;
+    private static final double MAX_WIDTH = 2.0;
     
     private int ndims;
     private double[] minimum;
@@ -43,7 +53,7 @@ public class DirectionalDerivativeEvaluatorTest {
         listener = new MultiDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double[] point) throws Throwable {
+            public double evaluate(double[] point) {
                 int dims = Math.min(Math.min(point.length, minimum.length), 
                         width.length);
                 
@@ -60,8 +70,7 @@ public class DirectionalDerivativeEvaluatorTest {
         gradientListener = new GradientFunctionEvaluatorListener() {
 
             @Override
-            public void evaluateGradient(double[] params, double[] result) 
-                    throws Throwable {
+            public void evaluateGradient(double[] params, double[] result) {
                 int dims = Math.min(Math.min(params.length, minimum.length), 
                     width.length);        
         
@@ -84,46 +93,19 @@ public class DirectionalDerivativeEvaluatorTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
-    private double[] gradient(double[] params){
-        int dims = Math.min(Math.min(params.length, minimum.length), 
-                width.length);
-        
-        double[] gradient = new double[dims];
-        
-        double value;
-        for(int j = 0; j < dims; j++){
-            value = 1.0;
-            for(int i = 0; i < dims; i++){
-                if(i != j){
-                    value *= Math.pow(params[i] - minimum[i], 2.0) / width[i];
-                }else{
-                    value *= 2.0 * (params[i] - minimum[i]) / width[i];
-                }
-            }
-            
-            gradient[j] = value;
-        }
-        
-        return gradient;
-    }
-
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
@@ -145,7 +127,7 @@ public class DirectionalDerivativeEvaluatorTest {
     }
     
     @Test
-    public void testEvaluateAt() throws EvaluationException, Throwable{
+    public void testEvaluateAt() throws Throwable {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
@@ -181,7 +163,7 @@ public class DirectionalDerivativeEvaluatorTest {
     }
     
     @Test
-    public void testDifferentiateAt() throws EvaluationException, Throwable{
+    public void testDifferentiateAt() throws Throwable {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
@@ -207,7 +189,7 @@ public class DirectionalDerivativeEvaluatorTest {
         
         //check correctness
         double[] xt = new double[ndims];
-        for(int i = 0; i < ndims; i++){
+        for (int i = 0; i < ndims; i++) {
             xt[i] = point[i] + x * direction[i];
         }
         
@@ -215,7 +197,7 @@ public class DirectionalDerivativeEvaluatorTest {
         gradientListener.evaluateGradient(xt, gradient);
         
         double diff2 = 0.0;
-        for(int i = 0; i < ndims; i++){
+        for (int i = 0; i < ndims; i++) {
             diff2 += gradient[i] * direction[i];
         }
         

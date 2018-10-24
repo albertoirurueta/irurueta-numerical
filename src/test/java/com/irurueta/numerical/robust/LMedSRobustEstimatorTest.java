@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.robust.LMedSRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 6, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
@@ -12,59 +19,54 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.robust.LMedSRobustEstimator.LMedSInliersData;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class LMedSRobustEstimatorTest {
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final double MIN_ERROR = 1e-5;
-    public static final double MAX_ERROR = 1.0;
+    private static final double MIN_ERROR = 1e-5;
+    private static final double MAX_ERROR = 1.0;
     
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
+    private static final int MIN_MAX_ITERATIONS = 500;
+    private static final int MAX_MAX_ITERATIONS = 5000;
     
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int NUM_PARAMS = 2;
     
-    public static final int NUM_PARAMS = 2;
+    private static final int TIMES = 100;
     
-    public static final int TIMES = 100;
-    
-    public LMedSRobustEstimatorTest() {}
+    public LMedSRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test empty constructor
-        LMedSRobustEstimator<double[]> estimator =
-                new LMedSRobustEstimator<double[]>();
+        LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -92,7 +94,7 @@ public class LMedSRobustEstimatorTest {
         TestLMedSRobustEstimatorListener listener =
                 new TestLMedSRobustEstimatorListener(numSamples, 
                 PERCENTAGE_OUTLIER);
-        estimator = new LMedSRobustEstimator<double[]>(listener);
+        estimator = new LMedSRobustEstimator<>(listener);
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -117,10 +119,9 @@ public class LMedSRobustEstimatorTest {
     }
     
     @Test
-    public void testGetSetListenerAvailabilityAndIsReady()
-            throws LockedException{
+    public void testGetSetListenerAvailabilityAndIsReady() throws LockedException {
         LMedSRobustEstimator<double[]> estimator =
-                new LMedSRobustEstimator<double[]>();
+                new LMedSRobustEstimator<>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
@@ -142,9 +143,8 @@ public class LMedSRobustEstimatorTest {
     
     @Test
     public void testGetSetProgressDelta() throws IllegalArgumentException,
-            LockedException{
-        LMedSRobustEstimator<double[]> estimator =
-                new LMedSRobustEstimator<double[]>();
+            LockedException {
+        LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
         assertEquals(estimator.getProgressDelta(),
                 RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         
@@ -157,21 +157,20 @@ public class LMedSRobustEstimatorTest {
         assertEquals(estimator.getProgressDelta(), progressDelta, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetConfidence() throws IllegalArgumentException, 
-            LockedException{
-        LMedSRobustEstimator<double[]> estimator = 
-                new LMedSRobustEstimator<double[]>();
+            LockedException {
+        LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
         assertEquals(estimator.getConfidence(), 
                 LMedSRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
         
@@ -187,18 +186,17 @@ public class LMedSRobustEstimatorTest {
         try{
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        }catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetMaxIterations() throws IllegalArgumentException, 
-            LockedException{
-        LMedSRobustEstimator<double[]> estimator =
-                new LMedSRobustEstimator<double[]>();
+            LockedException {
+        LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
         assertEquals(estimator.getMaxIterations(), 
                 LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
         
@@ -212,17 +210,16 @@ public class LMedSRobustEstimatorTest {
         assertEquals(estimator.getMaxIterations(), maxIterations);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
     public void testGetSetStopThreshold() throws IllegalArgumentException,
-            LockedException{
-        LMedSRobustEstimator<double[]> estimator =
-                new LMedSRobustEstimator<double[]>();
+            LockedException {
+        LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
         assertEquals(estimator.getStopThreshold(),
                 LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
         
@@ -233,17 +230,16 @@ public class LMedSRobustEstimatorTest {
         assertEquals(estimator.getStopThreshold(), 2.0, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setStopThreshold(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetSetInlierFactor() throws IllegalArgumentException,
-            LockedException{
-        LMedSRobustEstimator<double[]> estimator =
-                new LMedSRobustEstimator<double[]>();
+            LockedException {
+        LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
         assertEquals(estimator.getInlierFactor(),
                 LMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
         
@@ -254,29 +250,28 @@ public class LMedSRobustEstimatorTest {
         assertEquals(estimator.getInlierFactor(), 2.0, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setInlierFactor(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException{
-        for(int i = 0; i < TIMES; i++){
+            RobustEstimatorException {
+        for (int i = 0; i < TIMES; i++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
             TestLMedSRobustEstimatorListener listener =
                     new TestLMedSRobustEstimatorListener(numSamples, 
                     PERCENTAGE_OUTLIER);
-            LMedSRobustEstimator<double[]> estimator =
-                    new LMedSRobustEstimator<double[]>();
+            LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
             
             //Force NotReadyException
-            try{
+            try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}
+            } catch (NotReadyException ignore) { }
 
             //set listener
             estimator.setListener(listener);
@@ -311,7 +306,7 @@ public class LMedSRobustEstimatorTest {
         }
     }
     
-    private double[] computeParams(){
+    private double[] computeParams() {
         //we will estimate parameters a and b for equation y = a*x + b
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] params = new double[NUM_PARAMS];
@@ -340,7 +335,7 @@ public class LMedSRobustEstimatorTest {
     }    
     
     public class TestLMedSRobustEstimatorListener implements
-            LMedSRobustEstimatorListener<double[]>{
+            LMedSRobustEstimatorListener<double[]> {
         
         private double[] params;
         private double[] xs;
@@ -351,8 +346,8 @@ public class LMedSRobustEstimatorTest {
         private int endCounter;
         private float previousProgress;
         
-        public TestLMedSRobustEstimatorListener(int numSamples,
-                int percentageOutliers){
+        TestLMedSRobustEstimatorListener(int numSamples,
+                int percentageOutliers) {
             this.numSamples = numSamples;
             params = computeParams();
             xs = new double[numSamples];
@@ -361,24 +356,8 @@ public class LMedSRobustEstimatorTest {
             reset();
         }
         
-        public double[] getParams(){
+        public double[] getParams() {
             return params;
-        }
-        
-        public double[] getXs(){
-            return xs;
-        }
-        
-        public double[] getYs(){
-            return ys;
-        }
-        
-        public int getStartCounter(){
-            return startCounter;
-        }
-        
-        public int getEndCounter(){
-            return endCounter;
         }
 
         @Override
@@ -402,7 +381,7 @@ public class LMedSRobustEstimatorTest {
 
         @Override
         public void estimatePreliminarSolutions(int[] samplesIndices, 
-                List<double[]> solutions){
+                List<double[]> solutions) {
             
             if(samplesIndices.length != NUM_PARAMS) 
                 throw new IllegalArgumentException();
@@ -471,37 +450,45 @@ public class LMedSRobustEstimatorTest {
             assertTrue(progress >= previousProgress);
             previousProgress = progress;
         }
-        
-        private void testIsLocked(LMedSRobustEstimator<double[]> estimator){
-            assertTrue(estimator.isLocked());
-            //test that estimator cannot be modified while locked
-            try{
-                estimator.setConfidence(0.5);
-                fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
-                estimator.setListener(this);
-                fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
-                estimator.setMaxIterations(1);
-                fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
-                estimator.setProgressDelta(0.5f);
-                fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
-                estimator.setStopThreshold(1.0);
-                fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
-            try{
-                estimator.setInlierFactor(1.0);
-                fail("LockedException expected but not thrown");
-            }catch(LockedException e){}
+
+        int getStartCounter() {
+            return startCounter;
+        }
+
+        int getEndCounter() {
+            return endCounter;
         }
         
-        public final void reset(){
+        private void testIsLocked(LMedSRobustEstimator<double[]> estimator) {
+            assertTrue(estimator.isLocked());
+            //test that estimator cannot be modified while locked
+            try {
+                estimator.setConfidence(0.5);
+                fail("LockedException expected but not thrown");
+            } catch (LockedException ignore) { }
+            try {
+                estimator.setListener(this);
+                fail("LockedException expected but not thrown");
+            } catch (LockedException ignore) { }
+            try {
+                estimator.setMaxIterations(1);
+                fail("LockedException expected but not thrown");
+            } catch (LockedException ignore) { }
+            try {
+                estimator.setProgressDelta(0.5f);
+                fail("LockedException expected but not thrown");
+            } catch (LockedException ignore) { }
+            try {
+                estimator.setStopThreshold(1.0);
+                fail("LockedException expected but not thrown");
+            } catch (LockedException ignore) { }
+            try {
+                estimator.setInlierFactor(1.0);
+                fail("LockedException expected but not thrown");
+            } catch (LockedException ignore) { }
+        }
+        
+        public final void reset() {
             startCounter = endCounter = 0;
             previousProgress = 0.0f;            
         }        

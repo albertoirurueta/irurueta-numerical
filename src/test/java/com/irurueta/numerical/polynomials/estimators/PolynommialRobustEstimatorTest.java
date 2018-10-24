@@ -1,25 +1,30 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 16, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PolynommialRobustEstimatorTest implements 
-        PolynomialRobustEstimatorListener{
+        PolynomialRobustEstimatorListener {
     
     public PolynommialRobustEstimatorTest() { }
     
@@ -88,13 +93,12 @@ public class PolynommialRobustEstimatorTest implements
         try {
             estimator = PolynomialRobustEstimator.create(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test creator with evaluations
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations);
@@ -119,13 +123,12 @@ public class PolynommialRobustEstimatorTest implements
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -180,11 +183,11 @@ public class PolynommialRobustEstimatorTest implements
         try {
             estimator = PolynomialRobustEstimator.create(0, evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -215,7 +218,7 @@ public class PolynommialRobustEstimatorTest implements
         try {
             estimator = PolynomialRobustEstimator.create(0, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -246,7 +249,7 @@ public class PolynommialRobustEstimatorTest implements
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -277,11 +280,11 @@ public class PolynommialRobustEstimatorTest implements
         try {
             estimator = PolynomialRobustEstimator.create(0, evaluations, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
@@ -340,13 +343,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, 
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test creator with evaluations and method
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations,
@@ -372,14 +374,13 @@ public class PolynommialRobustEstimatorTest implements
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals, 
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -437,12 +438,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -475,7 +476,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, this,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -508,7 +509,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(wrongEvals, this,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         
@@ -541,12 +542,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations, this,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -605,13 +606,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test creator with evaluations and method
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations,
@@ -637,14 +637,13 @@ public class PolynommialRobustEstimatorTest implements
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -702,12 +701,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations,
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals,
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -740,7 +739,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, this,
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -773,7 +772,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(wrongEvals, this,
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         
@@ -806,12 +805,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations, this,
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -870,13 +869,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, 
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test creator with evaluations and method
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations,
@@ -902,14 +900,13 @@ public class PolynommialRobustEstimatorTest implements
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals, 
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -967,12 +964,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations,
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals,
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1005,7 +1002,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, this,
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1038,7 +1035,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(wrongEvals, this,
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         
@@ -1071,12 +1068,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations, this,
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -1135,13 +1132,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test creator with evaluations
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations,
@@ -1167,14 +1163,13 @@ public class PolynommialRobustEstimatorTest implements
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1232,12 +1227,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1270,7 +1265,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, this,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1303,7 +1298,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(wrongEvals, this,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1336,12 +1331,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations, this,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
 
@@ -1400,13 +1395,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, 
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //test creator with evaluations
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations,
@@ -1432,14 +1426,13 @@ public class PolynommialRobustEstimatorTest implements
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
         
         //Force IllegalArgumentException
-        List<PolynomialEvaluation> wrongEvals = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
         estimator = null;
         try {
             estimator = PolynomialRobustEstimator.create(wrongEvals,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1497,12 +1490,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1535,7 +1528,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, this,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1568,7 +1561,7 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(wrongEvals, this,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1601,12 +1594,12 @@ public class PolynommialRobustEstimatorTest implements
             estimator = PolynomialRobustEstimator.create(0, evaluations, this,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }    
 

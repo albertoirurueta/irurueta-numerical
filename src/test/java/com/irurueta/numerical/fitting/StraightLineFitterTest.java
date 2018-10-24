@@ -1,55 +1,60 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.fitting.StraightLineFitter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 24, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.fitting;
 
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class StraightLineFitterTest {
-    public static final double MIN_PARAM_VALUE = -100.0;
-    public static final double MAX_PARAM_VALUE = 100.0;
+    private static final double MIN_PARAM_VALUE = -100.0;
+    private static final double MAX_PARAM_VALUE = 100.0;
     
-    public static final double MIN_SIGMA_VALUE = 1e-3;
-    public static final double MAX_SIGMA_VALUE = 3.0;
+    private static final double MIN_SIGMA_VALUE = 1e-3;
+    private static final double MAX_SIGMA_VALUE = 3.0;
     
-    public static final int MIN_POINTS = 1000;
-    public static final int MAX_POINTS = 10000;
+    private static final int MIN_POINTS = 1000;
+    private static final int MAX_POINTS = 10000;
     
-    public static final double MIN_DATA_VALUE = -100.0;
-    public static final double MAX_DATA_VALUE = 100.0;
+    private static final double MIN_DATA_VALUE = -100.0;
+    private static final double MAX_DATA_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-1;
+    private static final double ABSOLUTE_ERROR = 1e-1;
     
-    public StraightLineFitterTest() {}
+    public StraightLineFitterTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test constructor without arguments
         StraightLineFitter fitter = new StraightLineFitter();
         
@@ -91,10 +96,10 @@ public class StraightLineFitterTest {
         double[] shortX = new double[1];
         
         fitter = null;
-        try{
+        try {
             fitter = new StraightLineFitter(shortX, y);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(fitter);
         
         //test constructor with input data and sigmas
@@ -119,15 +124,15 @@ public class StraightLineFitterTest {
         double[] shortSig = new double[1];
         
         fitter = null;
-        try{
+        try {
             fitter = new StraightLineFitter(x, y, shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(fitter);
     }
     
     @Test
-    public void testGetSetInputDataAndIsReady(){
+    public void testGetSetInputDataAndIsReady() {
         StraightLineFitter fitter = new StraightLineFitter();
         
         //check default values
@@ -151,14 +156,14 @@ public class StraightLineFitterTest {
         //Force IllegalArgumentException
         double[] shortX = new double[1];
         
-        try{
+        try {
             fitter.setInputData(shortX, y);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetInputDataAndStandardDeviations(){
+    public void testGetSetInputDataAndStandardDeviations() {
         StraightLineFitter fitter = new StraightLineFitter();
         
         //check default values
@@ -191,18 +196,18 @@ public class StraightLineFitterTest {
         //Force IllegalArgumentException
         double[] shortX = new double[1];
         double[] shortSig = new double[1];
-        try{
+        try {
             fitter.setInputDataAndStandardDeviations(shortX, y, sig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             fitter.setInputDataAndStandardDeviations(x, y, shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
 
     @Test
-    public void testFitNoSig() throws FittingException, NotReadyException{
+    public void testFitNoSig() throws FittingException, NotReadyException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double a = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
         double b = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
@@ -216,7 +221,7 @@ public class StraightLineFitterTest {
         int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         double[] x = new double[nPoints];
         double[] y = new double[nPoints];
-        for(int i = 0; i < nPoints; i++){
+        for (int i = 0; i < nPoints; i++) {
             x[i] = randomizer.nextDouble(MIN_DATA_VALUE, MAX_DATA_VALUE);
             y[i] = a + b * x[i] + errorRandomizer.nextDouble();
         }
@@ -256,14 +261,14 @@ public class StraightLineFitterTest {
         fitter = new StraightLineFitter();
         
         assertFalse(fitter.isReady());
-        try{
+        try {
             fitter.fit();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
     }
     
     @Test
-    public void testFitSig() throws FittingException, NotReadyException{
+    public void testFitSig() throws FittingException, NotReadyException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double a = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
         double b = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
@@ -278,7 +283,7 @@ public class StraightLineFitterTest {
         double[] x = new double[nPoints];
         double[] y = new double[nPoints];
         double[] sig = new double[nPoints];
-        for(int i = 0; i < nPoints; i++){
+        for (int i = 0; i < nPoints; i++) {
             x[i] = randomizer.nextDouble(MIN_DATA_VALUE, MAX_DATA_VALUE);
             y[i] = a + b * x[i] + errorRandomizer.nextDouble();
             sig[i] = sigma;
@@ -319,9 +324,9 @@ public class StraightLineFitterTest {
         fitter = new StraightLineFitter();
         
         assertFalse(fitter.isReady());
-        try{
+        try {
             fitter.fit();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
     }    
 }

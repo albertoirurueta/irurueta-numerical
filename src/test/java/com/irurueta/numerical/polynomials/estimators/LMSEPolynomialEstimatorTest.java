@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.polynomials.estimators.LMSEPolynomialEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 9, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.polynomials.estimators;
 
@@ -12,25 +19,24 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
+@SuppressWarnings("Duplicates")
+public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final int MIN_DEGREE = 1;
-    public static final int MAX_DEGREE = 5;
+    private static final int MIN_DEGREE = 1;
+    private static final int MAX_DEGREE = 5;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
     private int estimateStart;
     private int estimateEnd;
@@ -85,13 +91,12 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator = new LMSEPolynomialEstimator(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
         //constructor with evaluations
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         estimator = new LMSEPolynomialEstimator(evaluations);
         
         //check correctness
@@ -140,7 +145,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator = new LMSEPolynomialEstimator(0, evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -163,7 +168,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator = new LMSEPolynomialEstimator(0, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -201,7 +206,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator = new LMSEPolynomialEstimator(0, evaluations, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
@@ -236,7 +241,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.setDegree(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -247,8 +252,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertNull(estimator.getEvaluations());
         
         //set new value
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         estimator.setEvaluations(evaluations);
         
         //check correctness
@@ -264,8 +268,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertNull(estimator.getEvaluations());
         
         //set new values
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();        
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         estimator.setDegreeAndEvaluations(2, evaluations);
         
         //check correctness
@@ -276,7 +279,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.setDegreeAndEvaluations(0, evaluations);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -298,7 +301,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
         List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+                new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -324,9 +327,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         
         //Force IllegalArgumentException
         try {
-            PolynomialEstimator.getMinNumberOfEvaluations(0);
+            assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(0), degree + 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(degree);
         assertEquals(estimator.getMinNumberOfEvaluations(), degree + 1);
@@ -361,7 +364,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -374,8 +377,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -424,7 +426,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -437,8 +439,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -486,7 +487,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -499,8 +500,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations() - 1; i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -555,7 +555,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -568,8 +568,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2*estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -626,7 +625,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -639,8 +638,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -693,7 +691,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -706,8 +704,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2*estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -759,7 +756,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -772,8 +769,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double startX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -826,7 +822,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -839,8 +835,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2*estimator.getMinNumberOfEvaluations(); i++) {
             double startX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -893,7 +888,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         //create random 2nd degree polynomial
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -905,8 +900,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 2);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 3);
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -956,7 +950,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         //create random 2nd degree polynomial
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -968,8 +962,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 2);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 3);
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1018,7 +1011,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         //create random 2nd degree polynomial
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1030,8 +1023,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 2);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 3);
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations() - 2; i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1092,7 +1084,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         //create random 2nd degree polynomial
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1104,8 +1096,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 2);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 3);
-        List<PolynomialEvaluation> evaluations =
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1164,7 +1155,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -1177,8 +1168,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1231,7 +1221,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -1244,8 +1234,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             double x = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1297,7 +1286,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -1310,8 +1299,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             double startX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1368,7 +1356,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException e) { }
+        } catch (NotReadyException ignore) { }
         
         
         //create random 1st degree polynomial
@@ -1381,8 +1369,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         assertEquals(polynomial.getDegree(), 1);
         
         assertEquals(estimator.getMinNumberOfEvaluations(), 2);
-        List<PolynomialEvaluation> evaluations = 
-                new ArrayList<PolynomialEvaluation>();
+        List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for(int i = 0; i < 2*estimator.getMinNumberOfEvaluations(); i++) {
             double startX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1447,25 +1434,25 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener{
         try {
             estimator.setDegree(2);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setEvaluations(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { 
-        } catch (Exception e) { 
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
         try {
             ((LMSEPolynomialEstimator)estimator).setLMSESolutionAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
     }
 }

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.optimization.SimplexMultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 28, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
@@ -13,37 +20,39 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Arrays;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
 
+import java.util.Arrays;
+import java.util.Random;
+
+import static org.junit.Assert.*;
+
+@SuppressWarnings("Duplicates")
 public class SimplexMultiOptimizerTest 
     implements MultiDimensionFunctionEvaluatorListener {
     
-    public static final int MIN_DIMS = 2;
-    public static final int MAX_DIMS = 4;
+    private static final int MIN_DIMS = 2;
+    private static final int MAX_DIMS = 4;
     
-    public static final double MIN_EVAL_POINT = -10.0;
-    public static final double MAX_EVAL_POINT = 10.0;
+    private static final double MIN_EVAL_POINT = -10.0;
+    private static final double MAX_EVAL_POINT = 10.0;
     
-    public static final double MIN_TOLERANCE = 3e-8;
-    public static final double MAX_TOLERANCE = 1e-5;
+    private static final double MIN_TOLERANCE = 3e-8;
+    private static final double MAX_TOLERANCE = 1e-5;
     
-    public static final double MIN_OFFSET = -10.0;
-    public static final double MAX_OFFSET = 10.0;
+    private static final double MIN_OFFSET = -10.0;
+    private static final double MAX_OFFSET = 10.0;
     
-    public static final double MIN_WIDTH = 1.0;
-    public static final double MAX_WIDTH = 2.0;
+    private static final double MIN_WIDTH = 1.0;
+    private static final double MAX_WIDTH = 2.0;
     
-    public static final double MIN_DELTA = -1.0;
-    public static final double MAX_DELTA = 1.0;
+    private static final double MIN_DELTA = -1.0;
+    private static final double MAX_DELTA = 1.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-4;
+    private static final double ABSOLUTE_ERROR = 1e-4;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int ndims;
     private double[] minimum;
@@ -53,31 +62,17 @@ public class SimplexMultiOptimizerTest
     public SimplexMultiOptimizerTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
     
     @After
     public void tearDown() { }
-        
-    @Override
-    public double evaluate(double[] point) throws Throwable {
-        int dims = Math.min(Math.min(point.length, minimum.length), 
-                width.length);
-        
-        double value = 1.0;
-        for (int i = 0; i < dims; i++) {
-            value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
-        }
-        
-        value += offset;
-        return value;
-    }
-    
+
     @Test
     public void testConstructor() throws NotAvailableException, 
         WrongSizeException {
@@ -110,12 +105,12 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isSimplexAvailable());
         try {
             optimizer.getEvaluationsAtSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
         assertEquals(optimizer.getTolerance(),
                 SimplexMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
@@ -123,17 +118,17 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         
@@ -148,7 +143,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getEvaluationsAtSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
         assertTrue(optimizer.isReady());
@@ -158,11 +153,11 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         //Force IllegalArgumentException
@@ -171,7 +166,7 @@ public class SimplexMultiOptimizerTest
             optimizer = new SimplexMultiOptimizer(this, startPoint, delta,
                     -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
         
         
@@ -186,7 +181,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getEvaluationsAtSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
         assertTrue(optimizer.isReady());
@@ -196,11 +191,11 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         //Force IllegalArgumentException
@@ -209,12 +204,12 @@ public class SimplexMultiOptimizerTest
             optimizer = new SimplexMultiOptimizer(this, startPoint, deltas,
                     -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             optimizer = new SimplexMultiOptimizer(this, startPoint, badDeltas,
                     tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
         
         
@@ -228,7 +223,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getEvaluationsAtSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
         assertTrue(optimizer.isReady());
@@ -238,11 +233,11 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isLocked());
         
         //Force IllegalArgumentException
@@ -250,13 +245,13 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer = new SimplexMultiOptimizer(this, simplex, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
     }
     
     @Test
     public void testGetSetSimplexAndAvailability() throws LockedException, 
-        NotAvailableException, WrongSizeException {
+            NotAvailableException, WrongSizeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
@@ -278,7 +273,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isSimplexAvailable());
         
         //set simplex using start point and delta
@@ -295,7 +290,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getSimplex();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isSimplexAvailable());
 
         //set simplex using start point and deltas
@@ -309,15 +304,15 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.setSimplex(startPoint, badDeltas);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         
         
         optimizer = new SimplexMultiOptimizer();
-        try{
+        try {
             optimizer.getSimplex();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isSimplexAvailable());
 
         //set simplex
@@ -349,7 +344,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -384,7 +379,7 @@ public class SimplexMultiOptimizerTest
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         
         //set listener
@@ -393,8 +388,7 @@ public class SimplexMultiOptimizerTest
     }
     
     @Test
-    public void testMinimize() throws LockedException, NotReadyException, 
-        OptimizationException, NotAvailableException, Throwable {
+    public void testMinimize() throws Throwable {
         
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -428,11 +422,11 @@ public class SimplexMultiOptimizerTest
             try {
                 optimizer.getEvaluationAtResult();
                 fail("NotAvailableException expected but not thrown");
-            } catch (NotAvailableException e) { }
+            } catch (NotAvailableException ignore) { }
             try {
                 optimizer.getResult();
                 fail("NotAvailableException expected but not thrown");
-            } catch (NotAvailableException e) { }
+            } catch (NotAvailableException ignore) { }
                 
             //optimize
             optimizer.minimize();
@@ -462,5 +456,19 @@ public class SimplexMultiOptimizerTest
             assertNotNull(evaluationsAtSimplex);
             assertNotNull(result);
         }
+    }
+
+    @Override
+    public double evaluate(double[] point) throws Throwable {
+        int dims = Math.min(Math.min(point.length, minimum.length),
+                width.length);
+
+        double value = 1.0;
+        for (int i = 0; i < dims; i++) {
+            value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
+        }
+
+        value += offset;
+        return value;
     }
 }

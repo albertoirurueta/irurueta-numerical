@@ -1,30 +1,35 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date June 1, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class SafeNewtonRaphsonSingleRootEstimatorTest {
 
-    public static final double MIN_EVAL_POINT = 0.0;
-    public static final double MAX_EVAL_POINT = 1.0;
+    private static final double MIN_EVAL_POINT = 0.0;
+    private static final double MAX_EVAL_POINT = 1.0;
     
-    public static final double MIN_TOLERANCE = 3e-8;
-    public static final double MAX_TOLERANCE = 1e-5;
+    private static final double MIN_TOLERANCE = 3e-8;
+    private static final double MAX_TOLERANCE = 1e-5;
     
     private double constant;
     private double root1;
@@ -39,10 +44,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
     
     private SingleDimensionFunctionEvaluatorListener secondDegreePolynomial;
     private SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomial;
-    
-    private SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithDoubleRoot;
-    private SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomialWithDoubleRoot;
-    
+
     private SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots;
     private SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomialWithTwoComplexConjugateRoots;
     
@@ -51,10 +53,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
     
     private SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithDoubleRoot;
     private SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithDoubleRoot;
-    
-    private SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithTripleRoot;
-    private SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithTripleRoot;
-    
+
     private SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots;
     private SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots;
     
@@ -63,7 +62,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         constantPolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return constant;
             }
         };
@@ -72,7 +71,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return 0.0;
             }
         };
@@ -80,7 +79,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         firstDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1);
             }
         };
@@ -89,7 +88,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return 1.0;
             }
         };
@@ -98,7 +97,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root2);
             }
         };
@@ -107,26 +106,8 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return 2.0 * point - root1 - root2;
-            }
-        };
-        
-        secondDegreePolynomialWithDoubleRoot = 
-                new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(double point) throws Throwable {
-                return (point - root1) * (point - root1);
-            }
-        };
-        
-        derivativeSecondDegreePolynomialWithDoubleRoot = 
-                new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(double point) throws Throwable {
-                return 2.0 * (point - root1);
             }
         };
         
@@ -134,7 +115,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point * point + Math.abs(root1));
             }
         };
@@ -143,7 +124,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return 2.0 * point;
             }
         };
@@ -151,7 +132,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         thirdDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root2) * (point - root3);
             }
         };
@@ -160,7 +141,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root2) * (point - root3) +
                         (point - root1) * (2.0 * point - root2 - root3);
             }
@@ -170,7 +151,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point - root1) * (point - root2);
             }
         };
@@ -179,35 +160,17 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return 2.0 * (point - root1) * (point - root2) + 
                         (point - root1) * (point - root1);
             }
         };
-        
-        thirdDegreePolynomialWithTripleRoot = 
-                new SingleDimensionFunctionEvaluatorListener() {
 
-            @Override
-            public double evaluate(double point) throws Throwable {
-                return (point - root1) * (point - root1) * (point - root1);
-            }
-        };
-        
-        derivativeThirdDegreePolynomialWithTripleRoot = 
-                new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(double point) throws Throwable {
-                return 3.0 * (point - root1) * (point - root1);
-            }
-        };
-        
         thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots = 
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point - root1) * (point * point + Math.abs(root2));
             }
         };
@@ -216,7 +179,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) throws Throwable {
+            public double evaluate(double point) {
                 return (point * point + Math.abs(root2)) + 
                         2.0 * point * (point - root1);
             }
@@ -224,23 +187,20 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor() throws NotAvailableException, InvalidBracketRangeException{
+    public void testConstructor() throws NotAvailableException,
+            InvalidBracketRangeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, 
@@ -255,24 +215,24 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         estimator = new SafeNewtonRaphsonSingleRootEstimator();
         assertNotNull(estimator);
         
-        try{
+        try {
             estimator.getListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
-        try{
+        } catch (NotAvailableException ignore) { }
+        try {
             estimator.getDerivativeListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getMaxEvaluationPoint(),
                 SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 
                 0.0);
         assertEquals(estimator.getMinEvaluationPoint(),
                 SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 
                 0.0);
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getTolerance(),
                 SafeNewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
         assertTrue(estimator.isBracketAvailable());
@@ -289,16 +249,16 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         assertNotNull(estimator);
         
         assertEquals(estimator.getListener(), constantPolynomial);
-        try{
+        try {
             estimator.getDerivativeListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
@@ -309,17 +269,17 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         
         //Force InvalidBracketRangeException
         estimator = null;
-        try{
+        try {
             estimator = new SafeNewtonRaphsonSingleRootEstimator(constantPolynomial,
                     maxEvalPoint, minEvalPoint, tolerance);
             fail("InvalidBracketRangeException expected but not thrown");
-        }catch(InvalidBracketRangeException e){}
+        } catch (InvalidBracketRangeException ignore) { }
         //Force IllegalArgumentException
-        try{
+        try {
             estimator = new SafeNewtonRaphsonSingleRootEstimator(constantPolynomial,
                     minEvalPoint, maxEvalPoint, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -334,10 +294,10 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 derivativeContantPolynomial);
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
@@ -348,40 +308,40 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         
         //Force InvalidBracketRangeException
         estimator = null;
-        try{
+        try {
             estimator = new SafeNewtonRaphsonSingleRootEstimator(constantPolynomial,
                     derivativeContantPolynomial, maxEvalPoint, minEvalPoint, 
                     tolerance);
             fail("InvalidBracketRangeException expected but not thrown");
-        }catch(InvalidBracketRangeException e){}
+        } catch (InvalidBracketRangeException ignore) { }
         //Force IllegalArgumentException
-        try{
+        try {
             estimator = new SafeNewtonRaphsonSingleRootEstimator(constantPolynomial,
                     derivativeContantPolynomial, minEvalPoint, maxEvalPoint, 
                     -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
     }
     
     @Test
     public void testGetSetListenerAndDerivativeListenerAvailabilityAndIsReady() 
-            throws LockedException, NotAvailableException{
+            throws LockedException, NotAvailableException {
         
         SafeNewtonRaphsonSingleRootEstimator estimator =
                 new SafeNewtonRaphsonSingleRootEstimator();
         
         //check default values
-        try{
+        try {
             estimator.getListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertFalse(estimator.isListenerAvailable());
-        try{
+        try {
             estimator.getDerivativeListener();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         assertFalse(estimator.isDerivativeListenerAvailable());
         assertFalse(estimator.isReady());
         
@@ -406,7 +366,7 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
     @Test
     public void testSetBracketGetEvaluationPointsAndAvailability() 
             throws NotAvailableException, LockedException, 
-            InvalidBracketRangeException{
+            InvalidBracketRangeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, 
@@ -434,14 +394,14 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         
         //Force InvalidBracketRangeException
-        try{
+        try {
             estimator.setBracket(maxEvalPoint, minEvalPoint);
             fail("InvalidBracketRangeException expected but not thrown");
-        }catch(InvalidBracketRangeException e){}
+        } catch (InvalidBracketRangeException ignore) { }
     }
     
     @Test
-    public void testGetSetTolerance() throws LockedException{
+    public void testGetSetTolerance() throws LockedException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
@@ -459,15 +419,15 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-        InvalidBracketRangeException, RootEstimationException, NotAvailableException{
+        InvalidBracketRangeException, RootEstimationException, NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -484,21 +444,21 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         estimator.setListener(constantPolynomial);
         estimator.setDerivativeListener(derivativeContantPolynomial);
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.estimate();
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
-        try{
+        try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         
         //reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -569,16 +529,16 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
         estimator.setListener(secondDegreePolynomialWithTwoComplexConjugateRoots);
         estimator.setDerivativeListener(derivativeSecondDegreePolynomialWithTwoComplexConjugateRoots);
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
         assertFalse(estimator.isLocked());
-        try{
+        try {
             estimator.estimate();
             fail("RootEstimationException expected but not thrown");
-        }catch(RootEstimationException e){}
+        } catch (RootEstimationException ignore) { }
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
         

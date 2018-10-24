@@ -1,48 +1,51 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.numerical.optimization.DerivativeConjugateGradientMultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 20, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.GradientFunctionEvaluatorListener;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class DerivativeConjugateGradientMultiOptimizerTest {
     
-    public static final int MIN_DIMS = 2;
-    public static final int MAX_DIMS = 4;
+    private static final int MIN_DIMS = 2;
+    private static final int MAX_DIMS = 4;
     
-    public static final double MIN_EVAL_POINT = -10.0;
-    public static final double MAX_EVAL_POINT = 10.0;
+    private static final double MIN_EVAL_POINT = -10.0;
+    private static final double MAX_EVAL_POINT = 10.0;
     
-    public static final double MIN_OFFSET = 0.0;
-    public static final double MAX_OFFSET = 1.0;
+    private static final double MIN_OFFSET = 0.0;
+    private static final double MAX_OFFSET = 1.0;
     
-    public static final double MIN_WIDTH = 1.0;
-    public static final double MAX_WIDTH = 2.0;
+    private static final double MIN_WIDTH = 1.0;
+    private static final double MAX_WIDTH = 2.0;
     
-    public static final double MIN_TOLERANCE = 3e-8;
-    public static final double MAX_TOLERANCE = 3e-6;
+    private static final double MIN_TOLERANCE = 3e-8;
+    private static final double MAX_TOLERANCE = 3e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-3;
+    private static final double ABSOLUTE_ERROR = 1e-3;
     
-    public static final int PROBABILITY = 50;
+    private static final double MIN_DIRECTION = -1.0;
+    private static final double MAX_DIRECTION = 1.0;
     
-    public static final double MIN_DIRECTION = -1.0;
-    public static final double MAX_DIRECTION = 1.0;
-    
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int ndims;
     private double[] minimum;
@@ -56,7 +59,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         listener = new MultiDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double[] point) throws Throwable {
+            public double evaluate(double[] point) {
                 int dims = Math.min(Math.min(point.length, minimum.length),
                         width.length);
                 
@@ -73,8 +76,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         gradientListener = new GradientFunctionEvaluatorListener() {
 
             @Override
-            public void evaluateGradient(double[] params, double[] result) 
-                    throws Throwable {
+            public void evaluateGradient(double[] params, double[] result) {
                 int dims = Math.min(Math.min(params.length, minimum.length), 
                         width.length);
                 
@@ -97,10 +99,10 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -139,7 +141,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isGradientListenerAvailable());
         assertEquals(optimizer.isPolakRibiereEnabled(), 
                 DerivativeConjugateGradientMultiOptimizer.
@@ -148,26 +150,26 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isDirectionAvailable());
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         
         
@@ -191,11 +193,11 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         
         //Force IllegalArgumentException
@@ -205,7 +207,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
                     gradientListener, startPoint, direction, -tolerance, 
                     usePolakRibiere);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
     }
     
@@ -268,7 +270,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -282,7 +284,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isGradientListenerAvailable());
         
         //set gradient listener
@@ -334,7 +336,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set start point
         optimizer.setStartPoint(startPoint);
@@ -364,11 +366,11 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set start point and direction
         optimizer.setStartPointAndDirection(startPoint, direction);
@@ -384,7 +386,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.setStartPointAndDirection(wrongStartPoint, direction);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -399,7 +401,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set listener
         optimizer.setListener(listener);
@@ -419,8 +421,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
     }
     
     @Test
-    public void testMinimize() throws LockedException, NotReadyException, 
-        OptimizationException, NotAvailableException, Throwable {
+    public void testMinimize() throws Throwable {
         
         //we repeat the process because depending on the start point this
         //algorithm is not very accurate
@@ -448,7 +449,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest {
             try {
                 optimizer.getResult();
                 fail("NotAvailableException expected but not thrown");
-            } catch (NotAvailableException e) { }
+            } catch (NotAvailableException ignore) { }
         
             //minimize
             optimizer.minimize();

@@ -1,23 +1,28 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.signal.processing.Convolver1D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 1, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.signal.processing;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class Convolver1DTest implements Convolver1D.Convolver1DListener{
+public class Convolver1DTest implements Convolver1D.Convolver1DListener {
     
     public static final double MIN_RANDOM_VALUE = -10.0;
     public static final double MAX_RANDOM_VALUE = 10.0;
@@ -26,19 +31,19 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener{
     private int finishConvolution;
     private int convolveProgressChange;    
     
-    public Convolver1DTest() {}
+    public Convolver1DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
     public void testConstructor() {
@@ -116,7 +121,7 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener{
         try {
             convolver.setKernelCenter(-1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -227,12 +232,12 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener{
             Convolver1D.convolve(signal, kernel, 0, 
                     ConvolverEdgeMethod.ZERO_EDGE, 0.0, new double[1], this);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             Convolver1D.convolve(signal, kernel, 3, 
                 ConvolverEdgeMethod.ZERO_EDGE, 0.0, result, this);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
 
 
         Convolver1D.convolve(signal, kernel, 0, 
@@ -565,12 +570,12 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener{
                     ConvolverEdgeMethod.CONSTANT_EDGE, constantValue, 
                     new double[1], this);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             Convolver1D.convolve(signal, kernel, 3, 
                 ConvolverEdgeMethod.CONSTANT_EDGE, constantValue, result, this);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
 
 
         Convolver1D.convolve(signal, kernel, 0, 
@@ -679,12 +684,12 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener{
             Convolver1D.convolve(signal, kernel, 0,
                     ConvolverEdgeMethod.REPEAT_EDGE, 0.0, new double[1], this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             Convolver1D.convolve(signal, kernel, 3, 
                     ConvolverEdgeMethod.REPEAT_EDGE, 0.0, result, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         
         Convolver1D.convolve(signal, kernel, 0, ConvolverEdgeMethod.REPEAT_EDGE, 
@@ -793,12 +798,12 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener{
             Convolver1D.convolve(signal, kernel, 0,
                     ConvolverEdgeMethod.MIRROR_EDGE, 0.0, new double[1], this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             Convolver1D.convolve(signal, kernel, 3,
                     ConvolverEdgeMethod.MIRROR_EDGE, 0.0, result, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         
         Convolver1D.convolve(signal, kernel, 0, ConvolverEdgeMethod.MIRROR_EDGE,

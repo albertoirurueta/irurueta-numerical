@@ -1,50 +1,54 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.numerical.optimization.ConjugateGradientMultiOptimizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 19, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.GradientFunctionEvaluatorListener;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
 
+import java.util.Random;
+
+import static org.junit.Assert.*;
+
+@SuppressWarnings("Duplicates")
 public class ConjugateGradientMultiOptimizerTest 
     implements MultiDimensionFunctionEvaluatorListener, 
     GradientFunctionEvaluatorListener {
     
-    public static final int MIN_DIMS = 2;
-    public static final int MAX_DIMS = 4;
+    private static final int MIN_DIMS = 2;
+    private static final int MAX_DIMS = 4;
     
-    public static final double MIN_EVAL_POINT = -10.0;
-    public static final double MAX_EVAL_POINT = 10.0;
+    private static final double MIN_EVAL_POINT = -10.0;
+    private static final double MAX_EVAL_POINT = 10.0;
     
-    public static final double MIN_OFFSET = 0.0;
-    public static final double MAX_OFFSET = 1.0;
+    private static final double MIN_OFFSET = 0.0;
+    private static final double MAX_OFFSET = 1.0;
     
-    public static final double MIN_WIDTH = 1.0;
-    public static final double MAX_WIDTH = 2.0;
+    private static final double MIN_WIDTH = 1.0;
+    private static final double MAX_WIDTH = 2.0;
     
-    public static final double MIN_TOLERANCE = 3e-8;
-    public static final double MAX_TOLERANCE = 3e-6;
+    private static final double MIN_TOLERANCE = 3e-8;
+    private static final double MAX_TOLERANCE = 3e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int PROBABILITY = 50;
+    private static final double MIN_DIRECTION = -1.0;
+    private static final double MAX_DIRECTION = 1.0;
     
-    public static final double MIN_DIRECTION = -1.0;
-    public static final double MAX_DIRECTION = 1.0;
-    
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int ndims;
     private double[] minimum;
@@ -54,10 +58,10 @@ public class ConjugateGradientMultiOptimizerTest
     public ConjugateGradientMultiOptimizerTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -65,44 +69,6 @@ public class ConjugateGradientMultiOptimizerTest
     @After
     public void tearDown() { }
 
-    @Override
-    public double evaluate(double[] point) throws Throwable {
-        int dims = Math.min(Math.min(point.length, minimum.length), 
-                width.length);
-        
-        double value = 1.0;
-        
-        for (int i = 0; i < dims; i++) {
-            value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
-        }
-        
-        value += offset;
-        
-        return value;
-    }
-
-    @Override
-    public void evaluateGradient(double[] params, double[] result) 
-            throws Throwable {
-        int dims = Math.min(Math.min(params.length, minimum.length), 
-                width.length);
-        
-        double value;
-        for (int j = 0; j < dims; j++) {
-            value = 1.0;
-            for (int i = 0; i < dims; i++) {
-                if (i != j) {
-                    value *= Math.pow(params[i] - minimum[i], 2.0) /
-                            width[i];
-                } else {
-                    value *= 2.0 * (params[i] - minimum[i]) / width[i];
-                }
-            }
-            
-            result[j] = value;
-        }
-    }
-    
     @Test
     public void testConstructor() throws NotAvailableException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -134,7 +100,7 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isGradientListenerAvailable());
         assertEquals(optimizer.isPolakRibiereEnabled(),
                 ConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE);
@@ -142,26 +108,26 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isDirectionAvailable());
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //Test 2nd constructor
         optimizer = new ConjugateGradientMultiOptimizer(this, 
@@ -181,11 +147,11 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             optimizer.getEvaluationAtResult();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //Force IllegalArgumentException
         optimizer = null;
@@ -193,12 +159,12 @@ public class ConjugateGradientMultiOptimizerTest
             optimizer = new ConjugateGradientMultiOptimizer(this,
                     this, startPoint, direction, -tolerance, usePolakRibiere);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             optimizer = new ConjugateGradientMultiOptimizer(this,
                     this, startPoint, direction, -tolerance, usePolakRibiere);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(optimizer);
     }
     
@@ -257,7 +223,7 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -270,7 +236,7 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertFalse(optimizer.isGradientListenerAvailable());
         
         //set gradient
@@ -321,7 +287,7 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set start point
         optimizer.setStartPoint(startPoint);
@@ -349,7 +315,7 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getDirection();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set direction
         optimizer.setStartPointAndDirection(startPoint, direction);
@@ -371,7 +337,7 @@ public class ConjugateGradientMultiOptimizerTest
         try {
             optimizer.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         //set listener
         optimizer.setListener(this);
@@ -389,8 +355,7 @@ public class ConjugateGradientMultiOptimizerTest
     }
     
     @Test
-    public void testMinimize() throws LockedException, NotReadyException, 
-        OptimizationException, NotAvailableException, Throwable {
+    public void testMinimize() throws Throwable {
         
         //we repeat the process because depending on the start point this
         //algorithm is not very accurate
@@ -418,7 +383,7 @@ public class ConjugateGradientMultiOptimizerTest
             try {
                 optimizer.getResult();
                 fail("NotAvailableException expected but not thrown");
-            } catch (NotAvailableException e) { }
+            } catch (NotAvailableException ignore) { }
         
             //minimize
             optimizer.minimize();
@@ -436,6 +401,43 @@ public class ConjugateGradientMultiOptimizerTest
             double valueResult = evaluate(result);
         
             assertEquals(valueMin, valueResult, ABSOLUTE_ERROR);
+        }
+    }
+
+    @Override
+    public double evaluate(double[] point) throws Throwable {
+        int dims = Math.min(Math.min(point.length, minimum.length),
+                width.length);
+
+        double value = 1.0;
+
+        for (int i = 0; i < dims; i++) {
+            value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
+        }
+
+        value += offset;
+
+        return value;
+    }
+
+    @Override
+    public void evaluateGradient(double[] params, double[] result) {
+        int dims = Math.min(Math.min(params.length, minimum.length),
+                width.length);
+
+        double value;
+        for (int j = 0; j < dims; j++) {
+            value = 1.0;
+            for (int i = 0; i < dims; i++) {
+                if (i != j) {
+                    value *= Math.pow(params[i] - minimum[i], 2.0) /
+                            width[i];
+                } else {
+                    value *= 2.0 * (params[i] - minimum[i]) / width[i];
+                }
+            }
+
+            result[j] = value;
         }
     }
 }

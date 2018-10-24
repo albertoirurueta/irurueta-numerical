@@ -1,46 +1,51 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.numerical.robust.SubsetSelector
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date August 11, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.numerical.robust;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class SubsetSelectorTest {
     
-    public static final int MIN_SAMPLES = 100;
-    public static final int MAX_SAMPLES = 500;
+    private static final int MIN_SAMPLES = 100;
+    private static final int MAX_SAMPLES = 500;
     
-    public static final int MIN_SUBSET_SIZE = 5;
-    public static final int MAX_SUBSET_SIZE = 10;    
+    private static final int MIN_SUBSET_SIZE = 5;
+    private static final int MAX_SUBSET_SIZE = 10;
     
-    public SubsetSelectorTest() {}
+    public SubsetSelectorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
     public void tearDown() {}
     
     @Test
-    public void testCreate(){
+    public void testCreate() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
         
@@ -53,11 +58,11 @@ public class SubsetSelectorTest {
         
         //Force IllegalArgumentException
         selector = null;
-        try{
+        try {
             selector = SubsetSelector.create(0, 
                     SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(selector);
         
         //Test create with number of samples
@@ -68,15 +73,15 @@ public class SubsetSelectorTest {
         
         //Force IllegalArgumentException
         selector = null;
-        try{
+        try {
             selector = SubsetSelector.create(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(selector);
     }
     
     @Test
-    public void testGetType(){
+    public void testGetType() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
         
@@ -86,7 +91,7 @@ public class SubsetSelectorTest {
     }
     
     @Test
-    public void testGetSetNumSamples(){
+    public void testGetSetNumSamples() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numSamples1 = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
         int numSamples2 = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
@@ -102,15 +107,15 @@ public class SubsetSelectorTest {
         assertEquals(selector.getNumSamples(), numSamples2);
         
         //Force IllegalArgumentException
-        try{
+        try {
             selector.setNumSamples(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testComputeRandomSubsets() throws NotEnoughSamplesException, 
-            InvalidSubsetSizeException{
+            InvalidSubsetSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);        
         int subsetSize = randomizer.nextInt(MIN_SUBSET_SIZE, MAX_SUBSET_SIZE);
@@ -125,41 +130,41 @@ public class SubsetSelectorTest {
         assertEquals(result2.length, subsetSize);
         
         //check that indices in results are valid
-        for(int i = 0; i < subsetSize; i++){
+        for (int i = 0; i < subsetSize; i++) {
             assertTrue(result1[i] >= 0 && result1[i] < numSamples);
             assertTrue(result2[i] >= 0 && result2[i] < numSamples);
         }
         
         //Force InvalidSubsetSizeException
-        try{
+        try {
             selector.computeRandomSubsets(0);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsets(0, result2);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsets(numSamples + 1, result2);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
+        } catch (InvalidSubsetSizeException ignore) { }
         
         //Force NotEnoughSamplesException
-        try{
+        try {
             selector.computeRandomSubsets(numSamples + 1);
             fail("NotEnoughSamplesException expected but not thrown");
-        }catch(NotEnoughSamplesException e){}
+        } catch (NotEnoughSamplesException ignore) { }
         result2 = new int[numSamples + 1];
-        try{
+        try {
             selector.computeRandomSubsets(numSamples + 1, result2);
             fail("NotEnoughSamplesException expected but not thrown");
-        }catch(NotEnoughSamplesException e){}
+        } catch (NotEnoughSamplesException ignore) { }
     }
     
     @Test
     public void testComputeRandomSubsetsInRange() 
             throws NotEnoughSamplesException, InvalidSubsetSizeException, 
-            InvalidSubsetRangeException{
+            InvalidSubsetRangeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);        
         int subsetSize = randomizer.nextInt(MIN_SUBSET_SIZE, MAX_SUBSET_SIZE);
@@ -178,7 +183,7 @@ public class SubsetSelectorTest {
         assertEquals(result2.length, subsetSize);
         
         //check that indices in results are valid
-        for(int i = 0; i < subsetSize; i++){
+        for (int i = 0; i < subsetSize; i++) {
             assertTrue(result1[i] >= minPos && result1[i] < maxPos && 
                     result1[i] >= 0 && result1[i] < numSamples);
             assertTrue(result2[i] >= minPos && result2[i] < maxPos && 
@@ -186,63 +191,63 @@ public class SubsetSelectorTest {
         }
         
         //Force InvalidSubsetSizeException
-        try{
+        try {
             selector.computeRandomSubsetsInRange(minPos, maxPos, 0, false);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, maxPos, 0, false, 
                     result2);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, maxPos, numSamples + 1,
                     false, result2);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, 
                     minPos + subsetSize - 1, subsetSize, false);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, 
                     minPos + subsetSize - 1, subsetSize, false, result2);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, maxPos, numSamples + 1,
                     false);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
-        try{
+        } catch (InvalidSubsetSizeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, maxPos, numSamples + 1,
                     false, result2);
             fail("InvalidSubsetSizeException expected but not thrown");
-        }catch(InvalidSubsetSizeException e){}
+        } catch (InvalidSubsetSizeException ignore) { }
         
         //Force NotEnoughSamplesException
-        try{
+        try {
             selector.computeRandomSubsetsInRange(minPos, numSamples + 1, 
                     subsetSize, false);
             fail("NotEnoughSamplesException expected but not thrown");
-        }catch(NotEnoughSamplesException e){}
-        try{
+        } catch (NotEnoughSamplesException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(minPos, numSamples + 1, 
                     subsetSize, false, result2);
             fail("NotEnoughSamplesException expected but not thrown");
-        }catch(NotEnoughSamplesException e){}
+        } catch (NotEnoughSamplesException ignore) { }
         
         //Force InvalidSubsetRangeException
-        try{
+        try {
             selector.computeRandomSubsetsInRange(maxPos, minPos, subsetSize, 
                     false);
             fail("InvalidSubsetRangeException expected but not thrown");
-        }catch(InvalidSubsetRangeException e){}
-        try{
+        } catch (InvalidSubsetRangeException ignore) { }
+        try {
             selector.computeRandomSubsetsInRange(maxPos, minPos, subsetSize, 
                     false, result2);
             fail("InvalidSubsetRangeException expected but not thrown");
-        }catch(InvalidSubsetRangeException e){}
+        } catch (InvalidSubsetRangeException ignore) { }
     }        
 }
