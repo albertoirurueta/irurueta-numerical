@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a53c5476-1851-45dc-8984-bfc6a6dec60e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkstyle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/checkstyle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/irurueta/numerical/build-info.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/irurueta/numerical/build-info.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,39 +21,39 @@
     <session id="75130814">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
-          <entry key="project.open.time.0" value="5" />
+          <entry key="project.closed" value="10" />
+          <entry key="project.open.time.0" value="6" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="11" />
-          <entry key="java" value="346" />
-          <entry key="xml" value="2" />
+          <entry key="java" value="347" />
+          <entry key="xml" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="11" />
-          <entry key="JAVA" value="346" />
-          <entry key="XML" value="2" />
+          <entry key="JAVA" value="347" />
+          <entry key="XML" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="46381" />
+          <entry key="JAVA" value="46563" />
           <entry key="XML" value="52" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="46381" />
+          <entry key="java" value="46563" />
           <entry key="xml" value="52" />
         </counts>
       </usages-collector>
@@ -65,14 +64,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-392">
-              <caret line="276" column="74" selection-start-line="276" selection-start-column="74" selection-end-line="276" selection-end-column="74" />
-              <folding>
-                <element signature="e#37#58#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="75">
+              <caret line="5" column="57" selection-start-line="5" selection-end-line="5" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="396" column="23" selection-start-line="396" selection-start-column="23" selection-end-line="396" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/checkstyle.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="131">
+              <caret line="56" column="47" selection-start-line="56" selection-start-column="47" selection-end-line="56" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -106,6 +120,8 @@
       <find>SimpleSingleDimensionLinearFitterTest</find>
       <find>KalmanFilterTest</find>
       <find>LevenbergMarquardtMultiVariateFitterTest</find>
+      <find>AvoidStarImport</find>
+      <find>SecantSingleRootEstimatorTest</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,7 +138,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/polynomials/PolynomialTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/FastRandomSubsetSelectorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetRangeExceptionTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetSizeExceptionTest.java" />
@@ -145,7 +160,6 @@
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RidderSingleRootEstimatorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/RootEstimationExceptionTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimatorTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimatorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimatorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/AccelerationFileLoader.java" />
@@ -173,6 +187,8 @@
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitterTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/signal/processing/KalmanFilterTest.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/checkstyle.xml" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java" />
       </list>
     </option>
   </component>
@@ -206,6 +222,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="172" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
@@ -215,7 +232,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -240,90 +257,11 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="fitting" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="optimization" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="polynomials" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="polynomials" type="462c0819:PsiDirectoryNode" />
-              <item name="estimators" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="robust" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="roots" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-numerical" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="numerical" type="462c0819:PsiDirectoryNode" />
-              <item name="processing" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -335,7 +273,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540392797719" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541859213526" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -358,7 +296,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.KalmanFilterTest">
+  <component name="RunManager" selected="JUnit.SecantSingleRootEstimatorTest">
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -445,6 +383,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SecantSingleRootEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="irurueta-numerical" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.numerical.roots.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.irurueta.numerical.roots" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.roots.SecantSingleRootEstimatorTest" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SimpleSingleDimensionLinearFitterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-numerical" />
       <extension name="coverage">
@@ -455,23 +408,6 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.irurueta.numerical.fitting" />
       <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.fitting.SimpleSingleDimensionLinearFitterTest" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="irurueta-numerical" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.numerical.fitting.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.irurueta.numerical.fitting" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.numerical.fitting.SimpleSingleDimensionLinearFitterTest" />
-      <option name="METHOD_NAME" value="testFitTrigoWithHoldAndFree" />
-      <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -535,19 +471,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" />
       <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest" />
       <item itemvalue="JUnit.KalmanFilterTest" />
       <item itemvalue="JUnit.LevenbergMarquardtMultiVariateFitterTest" />
       <item itemvalue="JUnit.KalmanFilterTest.testPredictAndCorrectAcceleration" />
+      <item itemvalue="JUnit.SecantSingleRootEstimatorTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SecantSingleRootEstimatorTest" />
         <item itemvalue="JUnit.KalmanFilterTest" />
         <item itemvalue="JUnit.KalmanFilterTest.testPredictAndCorrectAcceleration" />
         <item itemvalue="JUnit.LevenbergMarquardtMultiVariateFitterTest" />
         <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest" />
-        <item itemvalue="JUnit.SimpleSingleDimensionLinearFitterTest.testFitTrigoWithHoldAndFree" />
       </list>
     </recent_temporary>
   </component>
@@ -593,13 +529,11 @@
       <workItem from="1540397078641" duration="172000" />
       <workItem from="1540399097760" duration="156000" />
       <workItem from="1540478132194" duration="71000" />
+      <workItem from="1541856520337" duration="1856000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="SavitzkyGolayGradientEstimatorTest - 2018.10.23 at 15h 38m 17s.xml">
-      <configuration name="SavitzkyGolayGradientEstimatorTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="com_irurueta_numerical_in_irurueta-numerical - 2018.10.24 at 00h 34m 57s.xml">
       <configuration name="com.irurueta.numerical in irurueta-numerical" configurationId="JUnit" />
     </history-entry>
@@ -627,15 +561,17 @@
     <history-entry file="KalmanFilterTest - 2018.10.24 at 16h 47m 49s.xml">
       <configuration name="KalmanFilterTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="SecantSingleRootEstimatorTest - 2018.11.10 at 14h 57m 07s.xml">
+      <configuration name="SecantSingleRootEstimatorTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="177093000" />
+    <option name="totallyTimeSpent" value="178949000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
-    <editor active="true" />
+    <frame x="172" y="23" width="1440" height="877" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21745351" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22031474" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.26037195" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -678,13 +614,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/InvalidSubsetSizeExceptionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/robust/MSACRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -815,13 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-792">
           <caret line="540" column="51" selection-start-line="540" selection-start-column="51" selection-end-line="540" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-237">
-          <caret line="356" column="51" selection-start-line="356" selection-start-column="51" selection-end-line="356" selection-end-column="51" />
         </state>
       </provider>
     </entry>
@@ -1028,13 +950,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/numerical/roots/SecantSingleRootEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="396" column="23" selection-start-line="396" selection-start-column="23" selection-end-line="396" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-392">
-          <caret line="276" column="74" selection-start-line="276" selection-start-column="74" selection-end-line="276" selection-end-column="74" />
-          <folding>
-            <element signature="e#37#58#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="75">
+          <caret line="5" column="57" selection-start-line="5" selection-end-line="5" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checkstyle.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="56" column="47" selection-start-line="56" selection-start-column="47" selection-end-line="56" selection-end-column="47" />
         </state>
       </provider>
     </entry>
