@@ -1,4 +1,4 @@
-# irurueta-sorting
+# irurueta-numerical
 Numerical utilities
 
 [![Build Status](https://travis-ci.org/albertoirurueta/irurueta-numerical.svg?branch=master)](https://travis-ci.org/albertoirurueta/irurueta-numerical)
