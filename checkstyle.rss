@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>com.irurueta:irurueta-numerical - Checkstyle report</title>
-    <link>https://bitbucket.org/alberto_irurueta/irurueta-numerical</link>
+    <link>https://github.com/albertoirurueta/irurueta-numerical</link>
     <description>com.irurueta:irurueta-numerical - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2017 - 2018</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 0,
              Infos: 0
       </title>
-            <link>https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html</link>
+            <link>https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html</link>
       <description>
-        <p>Click <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.JacobianEstimator.java">com/irurueta/numerical/JacobianEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.JacobianEstimator.java">com/irurueta/numerical/JacobianEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimationException.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimationException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimationException.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimationException.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtSingleDimensionFitter.java">com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtSingleDimensionFitter.java">com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.PolynomialRootsEstimator.java">com/irurueta/numerical/roots/PolynomialRootsEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.PolynomialRootsEstimator.java">com/irurueta/numerical/roots/PolynomialRootsEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.NewtonRaphsonSingleRootEstimator.java">com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.NewtonRaphsonSingleRootEstimator.java">com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimatorType.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorType.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimatorType.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorType.java</a>
                 </td>
                 <td>
                   0
@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.MSACRobustEstimator.java">com/irurueta/numerical/robust/MSACRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.MSACRobustEstimator.java">com/irurueta/numerical/robust/MSACRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -144,7 +144,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NumericalException.java">com/irurueta/numerical/NumericalException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NumericalException.java">com/irurueta/numerical/NumericalException.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeLineMultiOptimizer.java">com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeLineMultiOptimizer.java">com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -172,7 +172,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator.java">com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator.java">com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -186,7 +186,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.MeasurementNoiseCovarianceEstimator.java">com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.MeasurementNoiseCovarianceEstimator.java">com/irurueta/numerical/signal/processing/MeasurementNoiseCovarianceEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -200,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.MultiDimensionLinearFitter.java">com/irurueta/numerical/fitting/MultiDimensionLinearFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.MultiDimensionLinearFitter.java">com/irurueta/numerical/fitting/MultiDimensionLinearFitter.java</a>
                 </td>
                 <td>
                   0
@@ -214,7 +214,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeBrentSingleOptimizer.java">com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeBrentSingleOptimizer.java">com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -228,7 +228,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.OptimizationException.java">com/irurueta/numerical/optimization/OptimizationException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.OptimizationException.java">com/irurueta/numerical/optimization/OptimizationException.java</a>
                 </td>
                 <td>
                   0
@@ -242,7 +242,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.DerivativePolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/DerivativePolynomialEvaluation.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.DerivativePolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/DerivativePolynomialEvaluation.java</a>
                 </td>
                 <td>
                   0
@@ -256,7 +256,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.KalmanFilter.java">com/irurueta/numerical/signal/processing/KalmanFilter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.KalmanFilter.java">com/irurueta/numerical/signal/processing/KalmanFilter.java</a>
                 </td>
                 <td>
                   0
@@ -270,7 +270,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BrentSingleRootEstimator.java">com/irurueta/numerical/roots/BrentSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BrentSingleRootEstimator.java">com/irurueta/numerical/roots/BrentSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -284,7 +284,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SavitzkyGolayDerivativeEstimator.java">com/irurueta/numerical/SavitzkyGolayDerivativeEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SavitzkyGolayDerivativeEstimator.java">com/irurueta/numerical/SavitzkyGolayDerivativeEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -298,7 +298,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SecantSingleRootEstimator.java">com/irurueta/numerical/roots/SecantSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SecantSingleRootEstimator.java">com/irurueta/numerical/roots/SecantSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -312,7 +312,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.DirectionalDerivativeEvaluator.java">com/irurueta/numerical/DirectionalDerivativeEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.DirectionalDerivativeEvaluator.java">com/irurueta/numerical/DirectionalDerivativeEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -326,7 +326,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.PowellMultiOptimizer.java">com/irurueta/numerical/optimization/PowellMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.PowellMultiOptimizer.java">com/irurueta/numerical/optimization/PowellMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -340,7 +340,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -354,7 +354,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorListener.java">com/irurueta/numerical/robust/RobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorListener.java">com/irurueta/numerical/robust/RobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -368,7 +368,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.WeightSelection.java">com/irurueta/numerical/robust/WeightSelection.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.WeightSelection.java">com/irurueta/numerical/robust/WeightSelection.java</a>
                 </td>
                 <td>
                   0
@@ -382,7 +382,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEvaluationType.java">com/irurueta/numerical/polynomials/estimators/PolynomialEvaluationType.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEvaluationType.java">com/irurueta/numerical/polynomials/estimators/PolynomialEvaluationType.java</a>
                 </td>
                 <td>
                   0
@@ -396,7 +396,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.LMedSPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/LMedSPolynomialRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.LMedSPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/LMedSPolynomialRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -410,7 +410,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RANSACRobustEstimatorListener.java">com/irurueta/numerical/robust/RANSACRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RANSACRobustEstimatorListener.java">com/irurueta/numerical/robust/RANSACRobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -424,7 +424,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelector.java">com/irurueta/numerical/robust/SubsetSelector.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelector.java">com/irurueta/numerical/robust/SubsetSelector.java</a>
                 </td>
                 <td>
                   0
@@ -438,7 +438,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.PolynomialsException.java">com/irurueta/numerical/polynomials/PolynomialsException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.PolynomialsException.java">com/irurueta/numerical/polynomials/PolynomialsException.java</a>
                 </td>
                 <td>
                   0
@@ -452,7 +452,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LinearFitterMultiDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LinearFitterMultiDimensionFunctionEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LinearFitterMultiDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LinearFitterMultiDimensionFunctionEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -466,7 +466,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.LineMultiOptimizer.java">com/irurueta/numerical/optimization/LineMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.LineMultiOptimizer.java">com/irurueta/numerical/optimization/LineMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -480,7 +480,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.Polynomial.java">com/irurueta/numerical/polynomials/Polynomial.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.Polynomial.java">com/irurueta/numerical/polynomials/Polynomial.java</a>
                 </td>
                 <td>
                   0
@@ -494,7 +494,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROSACRobustEstimatorListener.java">com/irurueta/numerical/robust/PROSACRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROSACRobustEstimatorListener.java">com/irurueta/numerical/robust/PROSACRobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -508,7 +508,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetSizeException.java">com/irurueta/numerical/robust/InvalidSubsetSizeException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetSizeException.java">com/irurueta/numerical/robust/InvalidSubsetSizeException.java</a>
                 </td>
                 <td>
                   0
@@ -522,7 +522,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelectorException.java">com/irurueta/numerical/robust/SubsetSelectorException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelectorException.java">com/irurueta/numerical/robust/SubsetSelectorException.java</a>
                 </td>
                 <td>
                   0
@@ -536,7 +536,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.RANSACPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/RANSACPolynomialRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.RANSACPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/RANSACPolynomialRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -550,7 +550,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorException.java">com/irurueta/numerical/robust/RobustEstimatorException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorException.java">com/irurueta/numerical/robust/RobustEstimatorException.java</a>
                 </td>
                 <td>
                   0
@@ -564,7 +564,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.DirectPolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/DirectPolynomialEvaluation.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.DirectPolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/DirectPolynomialEvaluation.java</a>
                 </td>
                 <td>
                   0
@@ -578,7 +578,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.SingleOptimizer.java">com/irurueta/numerical/optimization/SingleOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.SingleOptimizer.java">com/irurueta/numerical/optimization/SingleOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -592,7 +592,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.RealPolynomialEvaluator.java">com/irurueta/numerical/RealPolynomialEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.RealPolynomialEvaluator.java">com/irurueta/numerical/RealPolynomialEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -606,7 +606,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.RootEstimationException.java">com/irurueta/numerical/roots/RootEstimationException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.RootEstimationException.java">com/irurueta/numerical/roots/RootEstimationException.java</a>
                 </td>
                 <td>
                   0
@@ -620,7 +620,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SvdMultiDimensionLinearFitter.java">com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SvdMultiDimensionLinearFitter.java">com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.java</a>
                 </td>
                 <td>
                   0
@@ -634,7 +634,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.GradientFunctionEvaluatorListener.java">com/irurueta/numerical/GradientFunctionEvaluatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.GradientFunctionEvaluatorListener.java">com/irurueta/numerical/GradientFunctionEvaluatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -648,7 +648,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.Convolver1D.java">com/irurueta/numerical/signal/processing/Convolver1D.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.Convolver1D.java">com/irurueta/numerical/signal/processing/Convolver1D.java</a>
                 </td>
                 <td>
                   0
@@ -662,7 +662,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.RidderSingleRootEstimator.java">com/irurueta/numerical/roots/RidderSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.RidderSingleRootEstimator.java">com/irurueta/numerical/roots/RidderSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -676,7 +676,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.BrentSingleOptimizer.java">com/irurueta/numerical/optimization/BrentSingleOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.BrentSingleOptimizer.java">com/irurueta/numerical/optimization/BrentSingleOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -690,7 +690,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.MultiDimensionFitter.java">com/irurueta/numerical/fitting/MultiDimensionFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.MultiDimensionFitter.java">com/irurueta/numerical/fitting/MultiDimensionFitter.java</a>
                 </td>
                 <td>
                   0
@@ -704,7 +704,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiVariateFitter.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiVariateFitter.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</a>
                 </td>
                 <td>
                   0
@@ -718,7 +718,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.EvaluationException.java">com/irurueta/numerical/EvaluationException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.EvaluationException.java">com/irurueta/numerical/EvaluationException.java</a>
                 </td>
                 <td>
                   0
@@ -732,7 +732,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LinearFitterSingleDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LinearFitterSingleDimensionFunctionEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LinearFitterSingleDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LinearFitterSingleDimensionFunctionEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -746,7 +746,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimatorListener.java">com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimatorListener.java">com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -760,7 +760,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/PolynomialEvaluation.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/PolynomialEvaluation.java</a>
                 </td>
                 <td>
                   0
@@ -774,7 +774,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.DirectionalEvaluator.java">com/irurueta/numerical/DirectionalEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.DirectionalEvaluator.java">com/irurueta/numerical/DirectionalEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -788,7 +788,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.HistogramMaximumLikelihoodEstimator.java">com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.HistogramMaximumLikelihoodEstimator.java">com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -802,7 +802,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer.java">com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer.java">com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -816,7 +816,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -830,7 +830,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.package-info.java">com/irurueta/numerical/roots/package-info.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.package-info.java">com/irurueta/numerical/roots/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -844,7 +844,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SavitzkyGolayGradientEstimator.java">com/irurueta/numerical/SavitzkyGolayGradientEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SavitzkyGolayGradientEstimator.java">com/irurueta/numerical/SavitzkyGolayGradientEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -858,7 +858,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -872,7 +872,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorMethod.java">com/irurueta/numerical/robust/RobustEstimatorMethod.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorMethod.java">com/irurueta/numerical/robust/RobustEstimatorMethod.java</a>
                 </td>
                 <td>
                   0
@@ -886,7 +886,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.LMedSRobustEstimator.java">com/irurueta/numerical/robust/LMedSRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.LMedSRobustEstimator.java">com/irurueta/numerical/robust/LMedSRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -900,7 +900,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SingleDimensionFitter.java">com/irurueta/numerical/fitting/SingleDimensionFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SingleDimensionFitter.java">com/irurueta/numerical/fitting/SingleDimensionFitter.java</a>
                 </td>
                 <td>
                   0
@@ -914,7 +914,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.SimplexMultiOptimizer.java">com/irurueta/numerical/optimization/SimplexMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.SimplexMultiOptimizer.java">com/irurueta/numerical/optimization/SimplexMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -928,7 +928,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.FalsePositionSingleRootEstimator.java">com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.FalsePositionSingleRootEstimator.java">com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -942,7 +942,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -956,7 +956,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BisectionSingleRootEstimator.java">com/irurueta/numerical/roots/BisectionSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BisectionSingleRootEstimator.java">com/irurueta/numerical/roots/BisectionSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -970,7 +970,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator.java">com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator.java">com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -984,7 +984,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RANSACRobustEstimator.java">com/irurueta/numerical/robust/RANSACRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RANSACRobustEstimator.java">com/irurueta/numerical/robust/RANSACRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -998,7 +998,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.RootEstimator.java">com/irurueta/numerical/roots/RootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.RootEstimator.java">com/irurueta/numerical/roots/RootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1012,7 +1012,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtSingleDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtSingleDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -1026,7 +1026,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SimpleSingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SimpleSingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1040,7 +1040,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiVariateFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFunctionEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiVariateFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFunctionEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -1054,7 +1054,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.MSACPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.MSACPolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1068,7 +1068,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BracketedSingleRootEstimator.java">com/irurueta/numerical/roots/BracketedSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BracketedSingleRootEstimator.java">com/irurueta/numerical/roots/BracketedSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1082,7 +1082,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SingleRootEstimator.java">com/irurueta/numerical/roots/SingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SingleRootEstimator.java">com/irurueta/numerical/roots/SingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1096,7 +1096,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.ComplexPolynomialEvaluator.java">com/irurueta/numerical/ComplexPolynomialEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.ComplexPolynomialEvaluator.java">com/irurueta/numerical/ComplexPolynomialEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -1110,7 +1110,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener.java">com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener.java">com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1124,7 +1124,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SingleDimensionLinearFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SingleDimensionLinearFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1138,7 +1138,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InliersData.java">com/irurueta/numerical/robust/InliersData.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InliersData.java">com/irurueta/numerical/robust/InliersData.java</a>
                 </td>
                 <td>
                   0
@@ -1152,7 +1152,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.MSACRobustEstimatorListener.java">com/irurueta/numerical/robust/MSACRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.MSACRobustEstimatorListener.java">com/irurueta/numerical/robust/MSACRobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1166,7 +1166,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROSACRobustEstimator.java">com/irurueta/numerical/robust/PROSACRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROSACRobustEstimator.java">com/irurueta/numerical/robust/PROSACRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1180,7 +1180,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.DerivativeSingleRootEstimator.java">com/irurueta/numerical/roots/DerivativeSingleRootEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.DerivativeSingleRootEstimator.java">com/irurueta/numerical/roots/DerivativeSingleRootEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1194,7 +1194,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.LockedException.java">com/irurueta/numerical/LockedException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.LockedException.java">com/irurueta/numerical/LockedException.java</a>
                 </td>
                 <td>
                   0
@@ -1208,7 +1208,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.MultiOptimizer.java">com/irurueta/numerical/optimization/MultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.MultiOptimizer.java">com/irurueta/numerical/optimization/MultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -1222,7 +1222,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NotAvailableException.java">com/irurueta/numerical/NotAvailableException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NotAvailableException.java">com/irurueta/numerical/NotAvailableException.java</a>
                 </td>
                 <td>
                   0
@@ -1236,7 +1236,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SymmetricGradientEstimator.java">com/irurueta/numerical/SymmetricGradientEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SymmetricGradientEstimator.java">com/irurueta/numerical/SymmetricGradientEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1250,7 +1250,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.Optimizer.java">com/irurueta/numerical/optimization/Optimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.Optimizer.java">com/irurueta/numerical/optimization/Optimizer.java</a>
                 </td>
                 <td>
                   0
@@ -1264,7 +1264,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MaximumLikelihoodEstimator.java">com/irurueta/numerical/MaximumLikelihoodEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MaximumLikelihoodEstimator.java">com/irurueta/numerical/MaximumLikelihoodEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1278,7 +1278,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.PolynomialEvaluator.java">com/irurueta/numerical/PolynomialEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.PolynomialEvaluator.java">com/irurueta/numerical/PolynomialEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -1292,7 +1292,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimator.java">com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1306,7 +1306,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimator.java">com/irurueta/numerical/robust/RobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimator.java">com/irurueta/numerical/robust/RobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1320,7 +1320,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.BuildInfo.java">com/irurueta/numerical/BuildInfo.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.BuildInfo.java">com/irurueta/numerical/BuildInfo.java</a>
                 </td>
                 <td>
                   0
@@ -1334,7 +1334,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.NotEnoughSamplesException.java">com/irurueta/numerical/robust/NotEnoughSamplesException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.NotEnoughSamplesException.java">com/irurueta/numerical/robust/NotEnoughSamplesException.java</a>
                 </td>
                 <td>
                   0
@@ -1348,7 +1348,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator.java">com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator.java">com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1362,7 +1362,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SvdSingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SvdSingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1376,7 +1376,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.SignalProcessingException.java">com/irurueta/numerical/signal/processing/SignalProcessingException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.SignalProcessingException.java">com/irurueta/numerical/signal/processing/SignalProcessingException.java</a>
                 </td>
                 <td>
                   0
@@ -1390,7 +1390,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator.java">com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator.java">com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1404,7 +1404,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.IntegralIntervalPolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluation.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.IntegralIntervalPolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluation.java</a>
                 </td>
                 <td>
                   0
@@ -1418,7 +1418,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MaximumLikelihoodEstimatorMethod.java">com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MaximumLikelihoodEstimatorMethod.java">com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java</a>
                 </td>
                 <td>
                   0
@@ -1432,7 +1432,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetRangeException.java">com/irurueta/numerical/robust/InvalidSubsetRangeException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetRangeException.java">com/irurueta/numerical/robust/InvalidSubsetRangeException.java</a>
                 </td>
                 <td>
                   0
@@ -1446,7 +1446,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.MultiVariateFitter.java">com/irurueta/numerical/fitting/MultiVariateFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.MultiVariateFitter.java">com/irurueta/numerical/fitting/MultiVariateFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1460,7 +1460,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.FittingException.java">com/irurueta/numerical/fitting/FittingException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.FittingException.java">com/irurueta/numerical/fitting/FittingException.java</a>
                 </td>
                 <td>
                   0
@@ -1474,7 +1474,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimatorListener.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimatorListener.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1488,7 +1488,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.package-info.java">com/irurueta/numerical/package-info.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.package-info.java">com/irurueta/numerical/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1502,7 +1502,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SymmetricDerivativeEstimator.java">com/irurueta/numerical/SymmetricDerivativeEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SymmetricDerivativeEstimator.java">com/irurueta/numerical/SymmetricDerivativeEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1516,7 +1516,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.GoldenSingleOptimizer.java">com/irurueta/numerical/optimization/GoldenSingleOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.GoldenSingleOptimizer.java">com/irurueta/numerical/optimization/GoldenSingleOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -1530,7 +1530,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROMedSRobustEstimatorListener.java">com/irurueta/numerical/robust/PROMedSRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROMedSRobustEstimatorListener.java">com/irurueta/numerical/robust/PROMedSRobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1544,7 +1544,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.BracketedSingleOptimizer.java">com/irurueta/numerical/optimization/BracketedSingleOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.BracketedSingleOptimizer.java">com/irurueta/numerical/optimization/BracketedSingleOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -1558,7 +1558,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.build-info.properties">com/irurueta/numerical/build-info.properties</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.build-info.properties">com/irurueta/numerical/build-info.properties</a>
                 </td>
                 <td>
                   0
@@ -1572,7 +1572,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.DerivativeEstimator.java">com/irurueta/numerical/DerivativeEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.DerivativeEstimator.java">com/irurueta/numerical/DerivativeEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1586,7 +1586,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NotReadyException.java">com/irurueta/numerical/NotReadyException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NotReadyException.java">com/irurueta/numerical/NotReadyException.java</a>
                 </td>
                 <td>
                   0
@@ -1600,7 +1600,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.AccurateMaximumLikelihoodEstimator.java">com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.AccurateMaximumLikelihoodEstimator.java">com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1614,7 +1614,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.Fitter.java">com/irurueta/numerical/fitting/Fitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.Fitter.java">com/irurueta/numerical/fitting/Fitter.java</a>
                 </td>
                 <td>
                   0
@@ -1628,7 +1628,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.PolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/PolynomialEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1642,7 +1642,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.package-info.java">com/irurueta/numerical/robust/package-info.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.package-info.java">com/irurueta/numerical/robust/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1656,7 +1656,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.ConjugateGradientMultiOptimizer.java">com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.ConjugateGradientMultiOptimizer.java">com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -1670,7 +1670,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.LaguerrePolynomialRootsEstimator.java">com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.LaguerrePolynomialRootsEstimator.java">com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1684,7 +1684,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.FastRandomSubsetSelector.java">com/irurueta/numerical/robust/FastRandomSubsetSelector.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.FastRandomSubsetSelector.java">com/irurueta/numerical/robust/FastRandomSubsetSelector.java</a>
                 </td>
                 <td>
                   0
@@ -1698,7 +1698,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.LMedSRobustEstimatorListener.java">com/irurueta/numerical/robust/LMedSRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.LMedSRobustEstimatorListener.java">com/irurueta/numerical/robust/LMedSRobustEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1712,7 +1712,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener.java">com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener.java">com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1726,7 +1726,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.ConvolverEdgeMethod.java">com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.signal.processing.ConvolverEdgeMethod.java">com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java</a>
                 </td>
                 <td>
                   0
@@ -1740,7 +1740,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.InvalidBracketRangeException.java">com/irurueta/numerical/InvalidBracketRangeException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.InvalidBracketRangeException.java">com/irurueta/numerical/InvalidBracketRangeException.java</a>
                 </td>
                 <td>
                   0
@@ -1754,7 +1754,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROMedSRobustEstimator.java">com/irurueta/numerical/robust/PROMedSRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.PROMedSRobustEstimator.java">com/irurueta/numerical/robust/PROMedSRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1768,7 +1768,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.StraightLineFitter.java">com/irurueta/numerical/fitting/StraightLineFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.StraightLineFitter.java">com/irurueta/numerical/fitting/StraightLineFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1782,7 +1782,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.GradientEstimator.java">com/irurueta/numerical/GradientEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.GradientEstimator.java">com/irurueta/numerical/GradientEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1796,7 +1796,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeConjugateGradientMultiOptimizer.java">com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeConjugateGradientMultiOptimizer.java">com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java</a>
                 </td>
                 <td>
                   0
@@ -1810,7 +1810,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.LMSEPolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.LMSEPolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1824,7 +1824,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelectorType.java">com/irurueta/numerical/robust/SubsetSelectorType.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelectorType.java">com/irurueta/numerical/robust/SubsetSelectorType.java</a>
                 </td>
                 <td>
                   0
@@ -1838,7 +1838,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1852,7 +1852,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation.java">com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.java</a>
                 </td>
                 <td>
                   0
@@ -1866,7 +1866,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MultiVariateFunctionEvaluatorListener.java">com/irurueta/numerical/MultiVariateFunctionEvaluatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MultiVariateFunctionEvaluatorListener.java">com/irurueta/numerical/MultiVariateFunctionEvaluatorListener.java</a>
                 </td>
                 <td>
                   0
