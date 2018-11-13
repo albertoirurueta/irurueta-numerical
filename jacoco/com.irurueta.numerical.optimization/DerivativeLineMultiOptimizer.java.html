@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DerivativeLineMultiOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">DerivativeLineMultiOptimizer.java</span></div><h1>DerivativeLineMultiOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.numerical.*;
+
+/**
+ * Class to find a minimum on a multidimensional function along a given line
+ * of input values. The difference between this abstract class and 
+ * LineMultiOptimizer is that subclasses of this class will use the function
+ * gradient information. By using gradient information, typically convergence is
+ * faster, although, if gradient does not have a closed expression, then a
+ * GradientEstimator will be needed in the gradient listener provided to this 
+ * class. Notice that a GradientEstimator might estimate gradients with a 
+ * certain error, so depending on the function topology, LineMultiOptimizer
+ * subclasses might obtain greater accuracy than subclasses of this class.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
+    /**
+     * n-dimensional point containing a minimum in a given line.
+     */
+    protected double[] p;
+    
+    /**
+     * Direction to make the search.
+     */
+    protected double[] xi;
+    
+    /**
+     * Number of dimensions on function being evaluated.
+     */    
+    private int n;
+    
+    /**
+     * Listener to evaluate the function's gradient. If the function's 
+     * gradient is not know (e.g. does not have a closed expression), then
+     * a GradientEstimator might be used inside the listener implementation.
+     */    
+    protected GradientFunctionEvaluatorListener gradientListener;
+    
+    /**
+     * Class in charge of evaluating a function through a given line.
+     */    
+    private DirectionalDerivativeEvaluator evaluator;
+    
+    /**
+     * Internal optimizer to find a minimum of a function along aline of
+     * input values. Hence, input is converted to a single dimension using a
+     * DirectionalEvaluator.
+     */
+    private DerivativeBrentSingleOptimizer dbrent;
+    
+    /**
+     * Empty constructor.
+     */
+    public DerivativeLineMultiOptimizer() {
+<span class="fc" id="L71">        super();</span>
+<span class="fc" id="L72">        p = xi = null;</span>
+<span class="fc" id="L73">        n = 0;</span>
+<span class="fc" id="L74">        gradientListener = null;</span>
+<span class="fc" id="L75">        evaluator = null;</span>
+<span class="fc" id="L76">        dbrent = null;</span>
+<span class="fc" id="L77">    }  </span>
+    
+    /**
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
+     */
+    public DerivativeLineMultiOptimizer(
+            MultiDimensionFunctionEvaluatorListener listener) {
+<span class="nc" id="L85">        super(listener);</span>
+<span class="nc" id="L86">        p = xi = null;</span>
+<span class="nc" id="L87">        n = 0;</span>
+<span class="nc" id="L88">        gradientListener = null;</span>
+<span class="nc" id="L89">        evaluator = null;</span>
+<span class="nc" id="L90">        dbrent = null;        </span>
+<span class="nc" id="L91">    }</span>
+    
+    /**
+     * Constructor.
+     * @param gradientListener Listener to evaluate the function's gradient.
+     */
+    public DerivativeLineMultiOptimizer(
+            GradientFunctionEvaluatorListener gradientListener) {
+<span class="nc" id="L99">        super();</span>
+<span class="nc" id="L100">        p = xi = null;</span>
+<span class="nc" id="L101">        n = 0;</span>
+<span class="nc" id="L102">        this.gradientListener = gradientListener;</span>
+<span class="nc" id="L103">        evaluator = null;</span>
+<span class="nc" id="L104">        dbrent = null;        </span>
+<span class="nc" id="L105">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
+     * @param gradientListener Listener to evaluate the function's gradient.
+     */
+    public DerivativeLineMultiOptimizer(
+            MultiDimensionFunctionEvaluatorListener listener,
+            GradientFunctionEvaluatorListener gradientListener) {
+<span class="nc" id="L115">        super(listener);</span>
+<span class="nc" id="L116">        p = xi = null;</span>
+<span class="nc" id="L117">        n = 0;</span>
+<span class="nc" id="L118">        this.gradientListener = gradientListener;</span>
+<span class="nc" id="L119">        evaluator = null;</span>
+<span class="nc" id="L120">        dbrent = null;        </span>
+<span class="nc" id="L121">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener Listener to evaluate a multidimension function.
+     * @param gradientListener Listener to evaluate the function's gradient.
+     * @param point Start point where algorithm will be started. Start point 
+     * should be close to the local minimum to be found. Provided array must 
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param direction Direction to start looking for a minimum. Provided array
+     * must have the same length as the number of dimensions of the function 
+     * being evaluated. Provided direction is considered as a vector pointing
+     * to the minimum to be found.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     * don't have the same length.
+     */    
+    public DerivativeLineMultiOptimizer(
+            MultiDimensionFunctionEvaluatorListener listener,
+            GradientFunctionEvaluatorListener gradientListener,
+            double[] point, double[] direction) 
+            throws IllegalArgumentException {
+<span class="fc" id="L144">        super(listener);</span>
+<span class="fc" id="L145">        internalSetStartPointAndDirection(point, direction);</span>
+<span class="fc" id="L146">        n = 0;</span>
+<span class="fc" id="L147">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L148">        evaluator = null;</span>
+<span class="fc" id="L149">        dbrent = null;        </span>
+<span class="fc" id="L150">    }</span>
+    
+    /**
+     * Returns boolean indicating whether start point has already been provided
+     * and is ready for retrieval.
+     * @return True if available, false otherwise.
+     */
+
+    public boolean isStartPointAvailable() {
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        return p != null;</span>
+    }
+    
+    /**
+     * Returns start point where algorithm will be started. Start point should 
+     * be close to the local minimum to be found.
+     * @return Start point where algorithm will be started.
+     * @throws NotAvailableException Raised if start point has not yet been
+     * provided and is not available.
+     */    
+    public double[] getStartPoint() throws NotAvailableException {
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
+<span class="fc" id="L171">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L173">        return p;</span>
+    }
+    
+    /**
+     * Returns boolean indicating whether direction has already been provided 
+     * and is ready for retrieval.
+     * @return True if available, false otherwise.
+     */    
+    public boolean isDirectionAvailable() {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        return xi != null;</span>
+    }
+    
+    /**
+     * Returns direction to start looking for a minimum. Provided array must 
+     * have the same length as the number of dimensions of the function being 
+     * evaluated. Provided direction is considered as a vector pointing to the 
+     * minimum to be found.
+     * @return Direction to start looking for a minimum.
+     * @throws NotAvailableException Raised if direction has not yet been 
+     * provided and is not available.
+     */    
+    public double[] getDirection() throws NotAvailableException {
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (!isDirectionAvailable()) {</span>
+<span class="fc" id="L196">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L198">        return xi;</span>
+    }
+    
+    /**
+     * Internal method to set start point and direction to start the search for
+     * a local minimum.
+     * This method does not check whether this instance is locked.
+     * @param point Start point where algorithm will be started. Start point 
+     * should be close to the local minimum to be found. Provided array must 
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param direction Direction to start looking for a minimum. Provided array
+     * must have the same length as the number of dimensions of the function 
+     * being evaluated. Provided direction is considered as a vector pointing
+     * to the minimum to be found.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     * don't have the same length.
+     */    
+    private void internalSetStartPointAndDirection(double[] point, 
+            double[] direction) throws IllegalArgumentException {
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (point.length != direction.length) {</span>
+<span class="fc" id="L220">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L223">        p = point;</span>
+<span class="fc" id="L224">        xi = direction;        </span>
+<span class="fc" id="L225">    }</span>
+    
+    /**
+     * Internal method to set start point and direction to start the search for
+     * a local minimum.
+     * @param point Start point where algorithm will be started. Start point 
+     * should be close to the local minimum to be found. Provided array must 
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param direction Direction to start looking for a minimum. Provided array
+     * must have the same length as the number of dimensions of the function 
+     * being evaluated. Provided direction is considered as a vector pointing
+     * to the minimum to be found.
+     * @throws LockedException Raised if this instance is locked.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     * don't have the same length.
+     */    
+    public void setStartPointAndDirection(double[] point, double[] direction)
+            throws LockedException, IllegalArgumentException {
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L246">            throw new LockedException();</span>
+        }
+<span class="fc" id="L248">        internalSetStartPointAndDirection(point, direction);</span>
+<span class="fc" id="L249">    }</span>
+    
+    /**
+     * Returns boolean indicating whether this instance is considered to be
+     * ready to start the estimation of a minimum.
+     * This instance is considered to be ready once a listener, gradient 
+     * listener, start point and direction are provided.
+     * @return True if this instance is ready, false otherwise.
+     */    
+    @Override
+    public boolean isReady() {
+<span class="nc bnc" id="L260" title="All 4 branches missed.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</span>
+<span class="nc bnc" id="L261" title="All 4 branches missed.">                isStartPointAvailable() &amp;&amp; isDirectionAvailable();</span>
+    }
+    
+    /**
+     * Returns gradient listener.
+     * The gradient listener is used to evaluate the function's gradient. If the
+     * function's gradient is not know (e.g. does not have a closed expression),
+     * then a GradientEstimator might be used inside the listener 
+     * implementation.
+     * @return Gradient listener.
+     * @throws NotAvailableException Raised if gradient listener is not 
+     * available for retrieval.
+     */
+    public GradientFunctionEvaluatorListener getGradientListener()
+            throws NotAvailableException {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
+<span class="fc" id="L277">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L279">        return gradientListener;</span>
+    }
+    
+    /**
+     * Sets gradient listener.
+     * The gradient listener is used to evaluate the function's gradient. If the
+     * function's gradient is not know (e.g. does not have a closed expression),
+     * then a GradientEstimator might be used inside the listener 
+     * implementation.
+     * @param gradientListener Gradient listener.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setGradientListener(
+            GradientFunctionEvaluatorListener gradientListener)
+            throws LockedException {
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L295">            throw new LockedException();</span>
+        }
+<span class="fc" id="L297">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L298">    }</span>
+    
+    /**
+     * Returns boolean indicating whether the gradient listener has been 
+     * provided and is available for retrieval.
+     * @return True if available, false otherwise.
+     */
+    public boolean isGradientListenerAvailable() {
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        return gradientListener != null;</span>
+    }       
+    
+    /**
+     * Searches for a minimum along a given line of input values.
+     * The line being searched is obtained by using a start point and direction.
+     * @return Returns function evaluation at minimum that has been found.
+     */    
+    protected double linmin() {
+        double ax, xx, linxmin;
+<span class="fc" id="L316">        n = p.length;</span>
+        
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (evaluator == null) {</span>
+            //attempt to reuse evaluator
+<span class="fc" id="L320">            evaluator = new DirectionalDerivativeEvaluator(listener, </span>
+                    gradientListener, p, xi);
+        }
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
+            //update listener
+<span class="nc" id="L325">            evaluator.setListener(listener);</span>
+        }
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (evaluator.getGradientListener() != gradientListener) {</span>
+            //update gradient listener
+<span class="nc" id="L329">            evaluator.setGradientListener(gradientListener);</span>
+        }
+<span class="pc bpc" id="L331" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
+<span class="nc" id="L332">            evaluator.setPointAndDirection(p, xi);</span>
+        }
+        
+<span class="fc" id="L335">        ax = 0.0;</span>
+<span class="fc" id="L336">        xx = 1.0;</span>
+                
+        try {
+<span class="fc bfc" id="L339" title="All 2 branches covered.">            if (dbrent == null) {</span>
+                //attempt to reuse brent single optimizer
+<span class="fc" id="L341">                dbrent = new DerivativeBrentSingleOptimizer(</span>
+<span class="fc" id="L342">                        new SingleDimensionFunctionEvaluatorListener() {</span>
+
+                    @Override
+                    public double evaluate(double point) throws Throwable {
+<span class="fc" id="L346">                        return evaluator.evaluateAt(point);</span>
+                    }
+<span class="fc" id="L348">                }, new SingleDimensionFunctionEvaluatorListener() {</span>
+
+                    @Override
+                    public double evaluate(double point) throws Throwable {
+<span class="fc" id="L352">                        return evaluator.differentiateAt(point);</span>
+                    }
+                }, DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                    DerivativeBrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                    DerivativeBrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                    DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE);
+            }
+            
+<span class="fc" id="L360">            dbrent.computeBracket(ax, xx);</span>
+<span class="fc" id="L361">            dbrent.minimize();</span>
+<span class="fc" id="L362">            linxmin = dbrent.getResult();</span>
+            
+<span class="fc bfc" id="L364" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L365">                xi[j] *= linxmin;</span>
+<span class="fc" id="L366">                p[j] += xi[j];</span>
+            }
+            
+<span class="fc" id="L369">            return dbrent.getEvaluationAtResult();</span>
+<span class="nc" id="L370">        } catch (Throwable t) {</span>
+            //if minimization fails we assume that obtained result is the worst
+            //possible one
+<span class="nc" id="L373">            return Double.MAX_VALUE;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

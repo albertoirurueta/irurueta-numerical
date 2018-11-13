@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MSACRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.robust</a> &gt; <span class="el_source">MSACRobustEstimator.java</span></div><h1>MSACRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.robust;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.sorting.Sorter;
+
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * This class implements MSAC (Median SAmple Consensus) algorithm to robustly
+ * estimate a data model.
+ * MSAC is a mixture between LMedS and RANSAC, where a fixed threshold is
+ * used such as in RANSAC to determine the number of remaining iterations, and 
+ * the least median of residuals is used to pick best solution, rather than 
+ * the one producing a higher number of inliers based on the fixed threshold,
+ * such as in RANSAC.
+ * This algorithm requires a threshold known beforehand such as RANSAC, but
+ * might get better accuracy if the inlier samples are very accurate, since
+ * the solution with smallest median of residuals will be picked. In typical 
+ * situations however, this algorithm will produce similar results to RANSAC in
+ * both terms of accuracy and computational cost, since typically inlier samples 
+ * tend to have certain error.
+ * @param &lt;T&gt; type of object to be estimated.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class MSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
+
+    /**
+     * Constant defining default confidence of estimated result, which is 99%.
+     * This means that with a probability of 99% estimation will be accurate
+     * because chosen subsamples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+    
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+    
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+    
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+    
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;    
+    
+    /**
+     * Minimum allowed threshold to determine inliers.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+    
+    /**
+     * Amount of confidence expressed as a value between 0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    private double mConfidence;
+        
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     */
+    private int mMaxIterations;
+    
+    /**
+     * Instance in charge of picking random subsets of samples.
+     */
+    private SubsetSelector subsetSelector;   
+    
+    /**
+     * Number of iterations to be done to obtain required confidence.
+     */
+    private int nIters;
+    
+    /**
+     * Best solution that has been found so far during an estimation.
+     */
+    private T bestResult;
+    
+    /**
+     * Data related to inliers found for best result.
+     */
+    private MSACInliersData mBestResultInliersData;    
+    
+    /**
+     * Data related to solution producing the largest number of inliers.
+     */
+    private MSACInliersData mBestNumberInliersData;
+    
+    /**
+     * Constructor.
+     */
+    public MSACRobustEstimator() {
+<span class="fc" id="L121">        super();</span>
+<span class="fc" id="L122">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L123">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L124">        nIters = mMaxIterations;</span>
+<span class="fc" id="L125">        bestResult = null;</span>
+<span class="fc" id="L126">        mBestResultInliersData = mBestNumberInliersData = null;</span>
+<span class="fc" id="L127">    }</span>
+    
+    public MSACRobustEstimator(MSACRobustEstimatorListener&lt;T&gt; listener) {
+<span class="fc" id="L130">        super(listener);</span>
+<span class="fc" id="L131">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L132">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L133">        nIters = mMaxIterations;</span>
+<span class="fc" id="L134">        bestResult = null;</span>
+<span class="fc" id="L135">        mBestResultInliersData = mBestNumberInliersData = null;</span>
+<span class="fc" id="L136">    }</span>
+    
+    /**
+     * Returns amount of confidence expressed as a value between 0 and 1.0 
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @return  amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L146">        return mConfidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0 and 1.0 (which 
+     * is equivalent to 100%). The amount of confidence indicates the 
+     * probability that the estimated result is correct. Usually this value will 
+     * be close to 1.0, but not exactly 1.0.
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     * 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setConfidence(double confidence) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L163">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L165" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L166">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L168">        mConfidence = confidence;</span>
+<span class="fc" id="L169">    }</span>
+    
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L178">        return mMaxIterations;</span>
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L193">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L198">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L199">    }</span>
+    
+    /**
+     * Returns number of iterations to be done to obtain required confidence.
+     * @return number of iterations to be done to obtain required confidence.
+     */
+    public int getNIters() {
+<span class="fc" id="L206">        return nIters;</span>
+    }
+    
+    /**
+     * Returns best solution that has been found so far during an estimation.
+     * @return best solution that has been found so far during an estimation.
+     */
+    public T getBestResult() {
+<span class="fc" id="L214">        return bestResult;</span>
+    }    
+    
+    /**
+     * Returns data related to best inliers found for best result.
+     * @return data related to inliers found for best result.
+     */
+    public MSACInliersData getBestResultInliersData() {
+<span class="fc" id="L222">        return mBestResultInliersData;</span>
+    }  
+    
+    /**
+     * Returns data related to solution producing the largest number of inliers.
+     * @return data related to solution producint the largest number of inliers.
+     */
+    public MSACInliersData getBestNumberInliersData() {
+<span class="fc" id="L230">        return mBestNumberInliersData;</span>
+    }
+    
+    /**
+     * Indicates if estimator is ready to start the estimation process.
+     * @return true if ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (!super.isReady()) {</span>
+<span class="fc" id="L240">            return false;</span>
+        }
+<span class="fc" id="L242">        return (mListener instanceof MSACRobustEstimatorListener);</span>
+    }        
+        
+    /**
+     * Robustly estimates an instance of T.
+     * @return estimated object.
+     * @throws LockedException if robust estimator is locked.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     * (i.e. numerical instability, no solution available, etc).
+     */      
+    @Override
+    public T estimate() throws LockedException, NotReadyException, 
+            RobustEstimatorException {
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L258">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L261">            throw new NotReadyException();</span>
+        }
+        
+        try {
+<span class="fc" id="L265">            MSACRobustEstimatorListener&lt;T&gt; listener = </span>
+                    (MSACRobustEstimatorListener&lt;T&gt;)mListener;
+            
+<span class="fc" id="L268">            mLocked = true;</span>
+            
+<span class="fc" id="L270">            listener.onEstimateStart(this);</span>
+        
+<span class="fc" id="L272">            int totalSamples = listener.getTotalSamples();</span>
+<span class="fc" id="L273">            int subsetSize = listener.getSubsetSize();    </span>
+<span class="fc" id="L274">            double threshold = listener.getThreshold();</span>
+            //only positive thresholds are allowed
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">            if(threshold &lt; MIN_THRESHOLD) throw new RobustEstimatorException();</span>
+            
+<span class="fc" id="L278">            int bestNumInliers = 0;</span>
+<span class="fc" id="L279">            double bestMedianResidual = Double.MAX_VALUE;</span>
+<span class="fc" id="L280">            nIters = Integer.MAX_VALUE;</span>
+            int newNIters;
+<span class="fc" id="L282">            int currentIter = 0;</span>
+            //reusable list that will contain preliminar solutions on each 
+            //iteration
+<span class="fc" id="L285">            List&lt;T&gt; iterResults = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L286">            bestResult = null; //best result found so far</span>
+            int currentInliers;
+            //progress and previous progress to determine when progress
+            //notification must occur
+<span class="fc" id="L290">            float previousProgress = 0.0f, progress;</span>
+            //indices of subset picked in one iteration
+<span class="fc" id="L292">            int[] subsetIndices = new int[subsetSize];</span>
+<span class="fc" id="L293">            double[] residualsTemp = new double[totalSamples];</span>
+        
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">            if (subsetSelector == null) {</span>
+                //create new subset selector
+<span class="fc" id="L297">                subsetSelector = SubsetSelector.create(totalSamples);</span>
+            } else {
+                //set number of samples to current subset selector
+<span class="nc" id="L300">                subsetSelector.setNumSamples(totalSamples);</span>
+            }
+            
+            //data related to inliers
+<span class="fc" id="L304">            MSACInliersData inliersData = new MSACInliersData(totalSamples);</span>
+            //sorter to compute medians
+<span class="fc" id="L306">            Sorter sorter = Sorter.create();            </span>
+            
+<span class="pc bpc" id="L308" title="1 of 4 branches missed.">            while ((nIters &gt; currentIter) &amp;&amp; (currentIter &lt; mMaxIterations)) {                </span>
+                //generate a random subset of samples
+<span class="fc" id="L310">                subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);</span>
+                
+                //clear list of preliminar solutions before calling listener
+<span class="fc" id="L313">                iterResults.clear();                 </span>
+                //compute solution for current iteration
+<span class="fc" id="L315">                listener.estimatePreliminarSolutions(subsetIndices, </span>
+                        iterResults);
+                
+                //iterate over all solutions that have been found
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                for (T iterResult : iterResults) {</span>
+                    //compute inliers
+<span class="fc" id="L321">                    computeInliers(iterResult, threshold, residualsTemp,</span>
+                            listener, sorter, inliersData);
+
+                    //save solution that  minimizes the median residual
+<span class="fc bfc" id="L325" title="All 2 branches covered.">                    if (inliersData.isMedianResidualImproved()) {</span>
+                        //keep current solution
+<span class="fc" id="L327">                        bestResult = iterResult;</span>
+
+                        //keep best inliers data corresponding to best solution
+                        //in case it can be useful along with the result
+<span class="fc" id="L331">                        mBestResultInliersData = inliersData;</span>
+<span class="fc" id="L332">                        bestMedianResidual = inliersData.getBestMedianResidual();</span>
+                    }
+
+                    //if number of inliers have improved, update number of
+                    //remaining iterations
+<span class="fc" id="L337">                    currentInliers = inliersData.getNumInliers();</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                    if (currentInliers &gt; bestNumInliers) {</span>
+                        //update best number of inliers
+<span class="fc" id="L340">                        bestNumInliers = currentInliers;</span>
+
+                        //keep inliers data corresponding to best number of
+                        //inliers
+<span class="fc" id="L344">                        mBestNumberInliersData = inliersData;</span>
+
+                        //recompute number of times the algorithm needs to be
+                        //executed depending on current number of inliers to
+                        //achieve with probability mConfidence that we have
+                        //inliers and probability 1 - mConfidence that we have
+                        //outliers
+<span class="fc" id="L351">                        double probSubsetAllInliers = Math.pow(</span>
+                                (double)bestNumInliers / (double)totalSamples,
+                                (double)subsetSize);
+
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                        if (Math.abs(probSubsetAllInliers) &lt; Double.MIN_VALUE ||</span>
+<span class="pc bpc" id="L356" title="1 of 2 branches missed.">                                Double.isNaN(probSubsetAllInliers)) {</span>
+<span class="nc" id="L357">                            newNIters = Integer.MAX_VALUE;</span>
+                        } else {
+<span class="fc" id="L359">                            double logProbSomeOutliers =</span>
+<span class="fc" id="L360">                                    Math.log(1.0 - probSubsetAllInliers);</span>
+<span class="pc bpc" id="L361" title="1 of 2 branches missed.">                            if (Math.abs(logProbSomeOutliers) &lt;</span>
+                                    Double.MIN_VALUE ||
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">                                    Double.isNaN(logProbSomeOutliers)) {</span>
+<span class="nc" id="L364">                                newNIters = Integer.MAX_VALUE;</span>
+                            } else {
+<span class="fc" id="L366">                                newNIters = (int)Math.ceil(Math.abs(</span>
+<span class="fc" id="L367">                                        Math.log(1.0 - mConfidence) /</span>
+                                        logProbSomeOutliers));
+                            }
+                        }
+<span class="pc bpc" id="L371" title="1 of 2 branches missed.">                        if (newNIters &lt; nIters) {</span>
+<span class="fc" id="L372">                            nIters = newNIters;</span>
+                        }
+                    }
+
+                    //reset inliers data if either residual or number of inliers
+                    //improved
+<span class="pc bpc" id="L378" title="1 of 4 branches missed.">                    if (inliersData.isMedianResidualImproved() ||</span>
+                            currentInliers &gt; bestNumInliers) {
+                        //create new inliers data instance until a new best solution
+                        //is found
+<span class="fc" id="L382">                        inliersData = new MSACInliersData(totalSamples);</span>
+                        //update best median residual on new instance so that
+                        //only better solutions that are found later can update
+                        //inliers data
+<span class="fc" id="L386">                        inliersData.update(bestMedianResidual,</span>
+<span class="fc" id="L387">                                inliersData.getInliers(),</span>
+<span class="fc" id="L388">                                inliersData.getResiduals(),</span>
+<span class="fc" id="L389">                                inliersData.getNumInliers(), bestMedianResidual,</span>
+                                false);
+                    }
+<span class="fc" id="L392">                }</span>
+
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">                if (nIters &gt; 0) {</span>
+<span class="fc" id="L395">                    progress = Math.min((float)currentIter / (float)nIters, </span>
+                            1.0f);
+                } else {
+<span class="nc" id="L398">                    progress = 1.0f;</span>
+                }
+<span class="fc bfc" id="L400" title="All 2 branches covered.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
+<span class="fc" id="L401">                    previousProgress = progress;</span>
+<span class="fc" id="L402">                    listener.onEstimateProgressChange(this, progress);                    </span>
+                }                
+<span class="fc" id="L404">                currentIter++;</span>
+                
+<span class="fc" id="L406">                listener.onEstimateNextIteration(this, currentIter);</span>
+            }
+            
+            //no solution could be found after completing all iterations
+<span class="pc bpc" id="L410" title="1 of 2 branches missed.">            if (bestResult == null) {</span>
+<span class="nc" id="L411">                throw new RobustEstimatorException();</span>
+            }
+                        
+<span class="fc" id="L414">            listener.onEstimateEnd(this);</span>
+            
+<span class="fc" id="L416">            return bestResult;</span>
+<span class="nc" id="L417">        } catch (SubsetSelectorException e) {</span>
+<span class="nc" id="L418">            throw new RobustEstimatorException(e);</span>
+        } finally {
+<span class="fc" id="L420">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns data about inliers once estimation has been done.
+     * @return data about inliers or null if estimation has not been done.
+     */
+    @Override
+    public InliersData getInliersData() {
+<span class="fc" id="L430">        return getBestNumberInliersData();</span>
+    }
+    
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */        
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L439">        return RobustEstimatorMethod.MSAC;</span>
+    }
+    
+    /**
+     * Computes inliers data for current iteration.
+     * @param &lt;T&gt; type of result to be estimated.
+     * @param iterResult result to be tested on current iteration.
+     * @param threshold threshold to determine whether samples are inliers or
+     * not.
+     * @param residualsTemp temporal array to store residuals, since median
+     * computation requires modifying the original array.
+     * @param listener listener to obtain residuals for samples.
+     * @param sorter sorter instance to compute median of residuals.
+     * @param inliersData inliers data to be reused on each iteration
+     */
+    private static &lt;T&gt; void computeInliers(T iterResult,
+            double threshold, double[] residualsTemp, 
+            LMedSRobustEstimatorListener&lt;T&gt; listener, 
+            Sorter sorter, MSACInliersData inliersData) {
+
+<span class="fc" id="L459">        double[] residuals = inliersData.getResiduals();</span>
+<span class="fc" id="L460">        BitSet inliers = inliersData.getInliers();</span>
+<span class="fc" id="L461">        double bestMedianResidual = inliersData.getBestMedianResidual();</span>
+<span class="fc" id="L462">        boolean medianResidualImproved = false;</span>
+        
+<span class="fc" id="L464">        int totalSamples = residuals.length;</span>
+        double residual;
+<span class="fc" id="L466">        int numInliers = 0;</span>
+        //find residuals and inliers
+<span class="fc bfc" id="L468" title="All 2 branches covered.">        for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc" id="L469">            residual = Math.abs(listener.computeResidual(iterResult, i));</span>
+<span class="fc bfc" id="L470" title="All 2 branches covered.">            if (residual &lt; threshold) {</span>
+<span class="fc" id="L471">                residuals[i] = residual;</span>
+<span class="fc" id="L472">                numInliers++;</span>
+<span class="fc" id="L473">                inliers.set(i);</span>
+            } else {
+<span class="fc" id="L475">                residuals[i] = threshold;</span>
+<span class="fc" id="L476">                inliers.clear(i);</span>
+            }
+        }
+        
+        //compute median of residuals
+<span class="fc" id="L481">        System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);</span>
+<span class="fc" id="L482">        double medianResidual = sorter.median(residualsTemp);</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">        if (medianResidual &lt; bestMedianResidual) {</span>
+<span class="fc" id="L484">            bestMedianResidual = medianResidual;</span>
+<span class="fc" id="L485">            medianResidualImproved = true;</span>
+        }
+        
+        
+        //store values in inliers data, only if residuals improve
+<span class="fc bfc" id="L490" title="All 2 branches covered.">        if (medianResidualImproved) {</span>
+<span class="fc" id="L491">            inliersData.update(bestMedianResidual, inliers, residuals, </span>
+                    numInliers, medianResidual, true);
+        }
+<span class="fc" id="L494">    }    </span>
+    
+    /**
+     * Contains data related to inliers estimated in one iteration.
+     */
+    public static class MSACInliersData extends InliersData {
+        /**
+         * Best median of error found so far taking into account all provided
+         * samples.
+         */
+        private double mBestMedianResidual;
+                
+        /**
+         * Efficiently stores which samples are considered inliers and which
+         * ones aren't.
+         */
+        private BitSet mInliers;
+        
+        /**
+         * Median of error found on current iteration among all provided 
+         * samples.
+         */
+        private double mMedianResidual;        
+        
+        /**
+         * Indicates whether median residual computed in current iteration has
+         * improved respect to previous iterations.
+         */
+        private boolean mMedianResidualImproved;
+        
+        /**
+         * Constructor.
+         * @param totalSamples total number of samples.
+         */
+<span class="fc" id="L528">        protected MSACInliersData(int totalSamples) {</span>
+<span class="fc" id="L529">            mBestMedianResidual = mMedianResidual = Double.MAX_VALUE;</span>
+<span class="fc" id="L530">            mInliers = new BitSet(totalSamples);</span>
+<span class="fc" id="L531">            mResiduals = new double[totalSamples];</span>
+<span class="fc" id="L532">            mNumInliers = 0;     </span>
+<span class="fc" id="L533">            mMedianResidualImproved = false;</span>
+<span class="fc" id="L534">        }</span>
+        
+        /**
+         * Updates data contained in this instance.
+         * @param bestMedianResidual best median of error found so far taking 
+         * into account all provided samples.
+         * @param inliers efficiently stores which samples are considered 
+         * inliers and which ones aren't.
+         * @param residuals residuals obtained for each sample of data.
+         * @param numInliers number of inliers found on current iteration.
+         * @param medianResidual median of error found on current iteration 
+         * among all provided samples.
+         * @param medianResidualImproved indicates whether median residual 
+         * computed in current iteration has improved respect to previous
+         * iteration.
+         */
+        protected void update(double bestMedianResidual, BitSet inliers, 
+                double[] residuals, int numInliers, double medianResidual, 
+                boolean medianResidualImproved) {
+<span class="fc" id="L553">            mBestMedianResidual = bestMedianResidual;</span>
+<span class="fc" id="L554">            mInliers = inliers;</span>
+<span class="fc" id="L555">            mResiduals = residuals;</span>
+<span class="fc" id="L556">            mNumInliers = numInliers;</span>
+<span class="fc" id="L557">            mMedianResidual = medianResidual;</span>
+<span class="fc" id="L558">            mMedianResidualImproved = medianResidualImproved;</span>
+<span class="fc" id="L559">        }</span>
+        
+        /**
+         * Returns best median of error found so far taking into account all 
+         * provided samples.
+         * @return best median of error found so far taking into account all
+         * provided samples.
+         */
+        public double getBestMedianResidual() {
+<span class="fc" id="L568">            return mBestMedianResidual;</span>
+        }
+        
+        /**
+         * Returns efficient array indicating which samples are considered 
+         * inliers and which ones aren't.
+         * @return array indicating which samples are considered inliers and 
+         * which ones aren't.
+         */
+        @Override
+        public BitSet getInliers() {
+<span class="fc" id="L579">            return mInliers;</span>
+        }
+
+        /**
+         * Returns median of error found on current iteration among all provided
+         * samples.
+         * @return median of error found on current iteration among all provided
+         * samples.
+         */
+        public double getMedianResidual() {
+<span class="nc" id="L589">            return mMedianResidual;</span>
+        }
+
+        /**
+         * Returns boolean indicating whether median residual computed in 
+         * current iteration has improved respect to previous iterations.
+         * @return true if median residual improved, false otherwise.
+         */
+        public boolean isMedianResidualImproved() {
+<span class="fc" id="L598">            return mMedianResidualImproved;</span>
+        }
+    }    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

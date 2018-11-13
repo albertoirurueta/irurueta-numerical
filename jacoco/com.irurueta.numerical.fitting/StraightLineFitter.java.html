@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StraightLineFitter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.fitting</a> &gt; <span class="el_source">StraightLineFitter.java</span></div><h1>StraightLineFitter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.fitting;
+
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.statistics.Gamma;
+import com.irurueta.statistics.MaxIterationsExceededException;
+
+/**
+ * Fits provided data (x,y) to a straight line following equation y = a + b*x,
+ * estimates parameters a and b their variances, covariance and their chi square
+ * value.
+ * This class is based on the implementation available at Numerical Recipes 
+ * 3rd Ed, page 784.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class StraightLineFitter extends Fitter {
+    
+    /**
+     * Array containing x coordinates of input data to be fitted to a straight
+     * line.
+     */
+    private double[] x;
+    
+    /**
+     * Array containing y coordinates of input data to be fitted to a straight 
+     * line.
+     */
+    private double[] y;
+    
+    /**
+     * Standard deviations of each pair of points (x,y). This is optional, if
+     * not provided, variances of a and b will be estimated assuming equal
+     * error for all input points.
+     */
+    private double[] sig;
+    
+    /**
+     * Estimated &quot;a&quot; parameter of line following equation y = a + b*x
+     */
+    private double a;
+    
+    /**
+     * Estimated &quot;b&quot; parameter of line following equation y = a + b*X
+     */
+    private double b;
+    
+    /**
+     * Estimated standard deviation of parameter &quot;a&quot;.
+     */
+    private double siga;
+    
+    /**
+     * Estimated standard deviation of parameter &quot;b&quot;.
+     */
+    private double sigb;
+    
+    /**
+     * Estimated chi square value.
+     */
+    private double chi2;
+    
+    /**
+     * Estimated goodness-of-fit probability (i.e. that the fit would have a
+     * chi square value equal or larger than the estimated one).
+     */
+    private double q;
+    
+    /**
+     * Estimated standard deviation of provided input data. This is only 
+     * estimated if array of standard deviations of input points is not provided.
+     */
+    private double sigdat;
+    
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L91">    public StraightLineFitter() {</span>
+<span class="fc" id="L92">        q = 1.0;</span>
+<span class="fc" id="L93">        chi2 = sigdat = 0.0;</span>
+<span class="fc" id="L94">    }</span>
+    
+    /**
+     * Constructor.
+     * @param x x coordinates of input data to be fitted to a straight line.
+     * @param y y coordinates of input data to be fitted to a straight line.
+     * @throws IllegalArgumentException if provided arrays don't have the same 
+     * length.
+     */
+    public StraightLineFitter(double[] x, double [] y) 
+            throws IllegalArgumentException {
+<span class="fc" id="L105">        this();</span>
+<span class="fc" id="L106">        setInputData(x, y);</span>
+<span class="fc" id="L107">    }</span>
+    
+    /**
+     * Constructor.
+     * @param x x coordinates of input data to be fitted to a straight line.
+     * @param y y coordinates of input data to be fitted to a straight line.
+     * @param sig standard deviation (i.e. errors) of provided data. This is 
+     * optional, if not provided, variances of a and b will be estimated 
+     * assuming equal error for all input points.
+     * @throws IllegalArgumentException if provided arrays don't have the same 
+     * length.
+     */
+    public StraightLineFitter(double[] x, double[] y, double[] sig)
+            throws IllegalArgumentException {
+<span class="fc" id="L121">        this();</span>
+<span class="fc" id="L122">        setInputDataAndStandardDeviations(x, y, sig);</span>
+<span class="fc" id="L123">    }</span>
+    
+    /**
+     * Returns array containing x coordinates of input data to be fitted to a
+     * straight line.
+     * @return array containing x coordinates of input data to be fitted to a
+     * straight line.
+     */
+    public double[] getX() {
+<span class="fc" id="L132">        return x;</span>
+    }
+    
+    /**
+     * Returns array containing y coordinates of input data to be fitted to a
+     * straight line.
+     * @return array containing y coordinates of input data to be fitted to a
+     * straight line.
+     */
+    public double[] getY() {
+<span class="fc" id="L142">        return y;</span>
+    }
+    
+    /**
+     * Returns standard deviations of each pair of points (x,y). This is 
+     * optional, if not provided, variances of a and b will be estimated 
+     * assuming equal error for all input points.
+     * @return standard deviations of each pair of points (x,y).
+     */
+    public double[] getSig() {
+<span class="fc" id="L152">        return sig;</span>
+    }
+    
+    /**
+     * Sets input data to to fit a straight line to.
+     * @param x x coordinates.
+     * @param y y coordinates.
+     * @throws IllegalArgumentException if arrays don't have the same length.
+     */
+    public final void setInputData(double[] x, double[] y) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (x.length != y.length) {</span>
+<span class="fc" id="L164">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L167">        this.x = x;</span>
+<span class="fc" id="L168">        this.y = y;</span>
+<span class="fc" id="L169">        this.sig = null;</span>
+<span class="fc" id="L170">    }</span>
+    
+    /**
+     * Sets input data and standard deviations of input data to fit a straight
+     * line to.
+     * @param x x coordinates.
+     * @param y y coordinates.
+     * @param sig standard deviations of each pair of points (x,y). This is
+     * optional, if not provided, variances of a and b will be estimated 
+     * assuming equal error for all input points.
+     * @throws IllegalArgumentException if arrays don't have the same length.
+     */
+    public final void setInputDataAndStandardDeviations(double[] x, double[] y, 
+            double[] sig) throws IllegalArgumentException {
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (sig != null) {</span>
+<span class="fc bfc" id="L185" title="All 4 branches covered.">            if (x.length != y.length || y.length != sig.length) {</span>
+<span class="fc" id="L186">                throw new IllegalArgumentException();</span>
+            }
+
+<span class="fc" id="L189">            this.x = x;</span>
+<span class="fc" id="L190">            this.y = y;</span>
+<span class="fc" id="L191">            this.sig = sig;</span>
+        } else {
+<span class="fc" id="L193">            setInputData(x, y);</span>
+        }
+<span class="fc" id="L195">    }</span>
+            
+
+    /**
+     * Indicates whether this instance is ready because enough input data has 
+     * been provided to start the fitting process.
+     * @return true if this fitter is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L205" title="3 of 10 branches missed.">        return x != null &amp;&amp; y != null &amp;&amp; x.length == y.length &amp;&amp;</span>
+                (sig == null || sig.length == y.length);
+    }
+    
+    /**
+     * Returns estimated &quot;a&quot; parameter of line following equation y = a + b*x
+     * @return estimated &quot;a&quot; parameter.
+     */
+    public double getA() {
+<span class="fc" id="L214">        return a;</span>
+    }
+
+    /**
+     * Returns estimated &quot;b&quot; parameter of line following equation y = a + b*x
+     * @return estimated &quot;b&quot; parameter
+     */
+    public double getB() {
+<span class="fc" id="L222">        return b;</span>
+    }
+
+    /**
+     * Returns estimated standard deviation of parameter &quot;a&quot;.
+     * @return estimated standard deviation of parameter &quot;a&quot;.
+     */
+    public double getSigA() {
+<span class="fc" id="L230">        return siga;</span>
+    }
+
+    /**
+     * Returns estimated standard deviation of parameter &quot;b&quot;.
+     * @return estimated standard deviation of parameter &quot;b&quot;.
+     */
+    public double getSigB() {
+<span class="fc" id="L238">        return sigb;</span>
+    }
+
+    /**
+     * Returns estimated chi square value.
+     * @return estimated chi square value.
+     */
+    public double getChi2() {
+<span class="fc" id="L246">        return chi2;</span>
+    }
+
+    /**
+     * Returns estimated goodness-of-fit probability (i.e. that the fit would
+     * have a chi square value equal or larger than the estimated one).
+     * @return estimated goodness-of-fit probability.
+     */
+    public double getQ() {
+<span class="fc" id="L255">        return q;</span>
+    }
+
+    /**
+     * Returns estimated standard deviation of provided input data. This is only
+     * estimated if array of standard deviations of input points is not provided.
+     * @return estimated standard deviation of provided input data.
+     */
+    public double getSigdat() {
+<span class="fc" id="L264">        return sigdat;</span>
+    }    
+    
+    /**
+     * Fits a straight line following equation y = a + b*x to provided data 
+     * (x, y) so that parameters associated a, b can be estimated along with 
+     * their variances, covariance and chi square value.
+     * @throws FittingException if fitting fails.
+     * @throws NotReadyException if enough input data has not yet been provided.
+     */    
+    @Override
+    public void fit() throws FittingException, NotReadyException {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L277">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L280">        resultAvailable = false;</span>
+        
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (sig != null) {</span>
+<span class="fc" id="L283">            fitWithSig();</span>
+        } else {
+<span class="fc" id="L285">            fitWithoutSig();</span>
+        }
+        
+<span class="fc" id="L288">        resultAvailable = true;</span>
+<span class="fc" id="L289">    }</span>
+    
+    /**
+     * Fits data when standard deviations of input data is provided.
+     * @throws FittingException if fitting fails.
+     */
+    private void fitWithSig() throws FittingException {
+<span class="fc" id="L296">        Gamma gam = new Gamma();</span>
+        int i;
+<span class="fc" id="L298">	    double ss = 0.0, sx = 0.0, sy = 0.0, st2 = 0.0, t, wt, sxoss;</span>
+<span class="fc" id="L299">        int ndata = x.length;</span>
+<span class="fc" id="L300">	    b = 0.0;</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">	    for (i = 0;i &lt; ndata; i++) {</span>
+<span class="fc" id="L302">            wt = 1.0 / Math.pow(sig[i], 2.0);</span>
+<span class="fc" id="L303">            ss += wt;</span>
+<span class="fc" id="L304">            sx += x[i]*wt;</span>
+<span class="fc" id="L305">            sy += y[i]*wt;</span>
+	    }
+<span class="fc" id="L307">	    sxoss = sx / ss;</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L309">            t = (x[i] - sxoss) / sig[i];</span>
+<span class="fc" id="L310">            st2 += t*t;</span>
+<span class="fc" id="L311">            b += t * y[i] / sig[i];</span>
+	    }
+<span class="fc" id="L313">	    b /= st2;</span>
+<span class="fc" id="L314">	    a = (sy - sx * b) / ss;</span>
+<span class="fc" id="L315">	    siga = Math.sqrt((1.0 + sx * sx / (ss * st2)) / ss);</span>
+<span class="fc" id="L316">	    sigb = Math.sqrt(1.0 / st2);</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L318">	        chi2 += Math.pow((y[i] - a - b * x[i]) / sig[i], 2.0);</span>
+        }
+        try {
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">	        if (ndata &gt; 2) {</span>
+<span class="fc" id="L322">	            q = gam.gammq(0.5 * (ndata - 2),0.5 * chi2);</span>
+            }
+<span class="nc" id="L324">        } catch (MaxIterationsExceededException e) {</span>
+<span class="nc" id="L325">            throw new FittingException(e);</span>
+<span class="fc" id="L326">        }</span>
+<span class="fc" id="L327">    }</span>
+    
+    /**
+     * Fits data when standard deviations of input data is not provided.
+     */
+    private void fitWithoutSig() {
+	    int i;
+<span class="fc" id="L334">	    double ss, sx=0.0, sy = 0.0, st2 = 0.0, t, sxoss;</span>
+<span class="fc" id="L335">        int ndata = x.length;</span>
+<span class="fc" id="L336">	    b = 0.0;</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L338">            sx += x[i];</span>
+<span class="fc" id="L339">            sy += y[i];</span>
+	    }
+<span class="fc" id="L341">	    ss = ndata;</span>
+<span class="fc" id="L342">	    sxoss = sx / ss;</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L344">            t = x[i] - sxoss;</span>
+<span class="fc" id="L345">            st2 += t*t;</span>
+<span class="fc" id="L346">            b += t*y[i];</span>
+	    }
+<span class="fc" id="L348">	    b /= st2;</span>
+<span class="fc" id="L349">	    a = (sy - sx * b) / ss;</span>
+<span class="fc" id="L350">	    siga = Math.sqrt((1.0 + sx * sx / (ss * st2)) / ss);</span>
+<span class="fc" id="L351">	    sigb = Math.sqrt(1.0 / st2);</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L353">	        chi2 += Math.pow(y[i] - a - b * x[i], 2.0);</span>
+        }
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">	    if (ndata &gt; 2) {</span>
+<span class="fc" id="L356">	        sigdat = Math.sqrt(chi2 / (ndata - 2));</span>
+        }
+<span class="fc" id="L358">	    siga *= sigdat;</span>
+<span class="fc" id="L359">	    sigb *= sigdat;</span>
+<span class="fc" id="L360">    }    </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

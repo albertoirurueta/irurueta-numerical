@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuasiNewtonMultiOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">QuasiNewtonMultiOptimizer.java</span></div><h1>QuasiNewtonMultiOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.numerical.*;
+
+/**
+ * This class searches for a multi dimension function local minimum.
+ * The local minimum is searched by starting the algorithm at a start point
+ * The implementation of this class is based on Numerical Recipes 3rd ed. 
+ * Section 10.9 page 521.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
+    /**
+     * Matimum number of iterations.
+     */
+    public static final int ITMAX = 200;
+    
+    /**
+     * Machine precision.
+     */
+    public static final double EPS = 1e-12;
+    
+    /**
+     * Convergence criterion on x values.
+     */
+    public static final double TOLX = 4.0 * EPS;
+    
+    /**
+     * Scaled maximum step length allowed in line searches.
+     */
+    public static final double STPMX = 100.0;
+    public static final double ALF = 1e-4;
+    public static final double TOLX2 = 1e-12;
+    
+    /**
+     * Constant defining default tolerance or accuracy to be achieved on the
+     * minimum being estimated by this class.
+     */        
+    public static final double DEFAULT_TOLERANCE = 3e-8;
+    
+    /**
+     * Minimum allowed tolerance value.
+     */    
+    public static final double MIN_TOLERANCE = 0.0;
+    
+    /**
+     * n-dimensional start point.
+     */
+    private double[] p;
+    
+    /**
+     * The fractional tolerance in the function value such that failure to
+     * decrease by more than this amount on one iteration signals doneness.
+     */
+    private double tolerance;
+    
+    /**
+     * Member contains number of iterations that were needed to estimate a 
+     * minimum.
+     */    
+    private int iter;
+    
+    /**
+     * Listener to obtain gradient values for the multi dimension function being
+     * evaluated.
+     * If the gradient is unknown (e.g. doesn't have a closed expression), the
+     * provided listener could use a GradientEstimator to obtain one.
+     */    
+    GradientFunctionEvaluatorListener gradientListener;
+    
+    /**
+     * value of the function at the minimum.
+     */
+    double fret;
+    
+    /**
+     * Empty constructor.
+     */
+    public QuasiNewtonMultiOptimizer() {
+<span class="fc" id="L96">        super();</span>
+<span class="fc" id="L97">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L98">        p = null;</span>
+<span class="fc" id="L99">        iter = 0;</span>
+<span class="fc" id="L100">        gradientListener = null;</span>
+<span class="fc" id="L101">    }</span>
+     
+    /**
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
+     * @param gradientListener Listener to obtain gradient value for the 
+     * multidimensional function being evaluated.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public QuasiNewtonMultiOptimizer(
+            MultiDimensionFunctionEvaluatorListener listener,
+            GradientFunctionEvaluatorListener gradientListener, 
+            double tolerance) throws IllegalArgumentException {
+<span class="fc" id="L116">        super(listener);</span>
+<span class="fc" id="L117">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L118">        p = null;</span>
+<span class="fc" id="L119">        iter = 0;</span>
+<span class="fc" id="L120">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L121">    }</span>
+        
+    /**
+     * Constructor.
+     * @param listener Listener to evaluate a multidimensional function.
+     * @param gradientListener Listener to obtain gradient value for the 
+     * multidimensional function being evaluated.
+     * @param startPoint Start point where algorithm will be started. Start point 
+     * should be close to the local minimum to be found. Provided array must 
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public QuasiNewtonMultiOptimizer(
+            MultiDimensionFunctionEvaluatorListener listener,
+            GradientFunctionEvaluatorListener gradientListener,
+            double[] startPoint, double tolerance)
+            throws IllegalArgumentException {
+<span class="fc" id="L142">        super(listener);</span>
+<span class="fc" id="L143">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L144">        p = startPoint;</span>
+<span class="fc" id="L145">        iter = 0;</span>
+<span class="fc" id="L146">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L147">    }</span>
+
+    /**
+     * This function estimates a function minimum.
+     * Implementations of this class will usually search a local minimum close
+     * to a start point.
+     * Given a starting point p[0..n-1], the Broyden-Fletcher-Goldfarb-Sharno
+     * variant of Davidon Fletcher-Powell minimization is performed on a 
+     * function whose value and gradient are provided by respective listeners.
+     * The convergence requirement on zeroing the gradient is provided by 
+     * tolerance. This method estimates the location of the minimum, sets the
+     * number of iterations that were required and the minimum value of the 
+     * function at the minimum.
+     * The internal method lnsrch is called within this method to perform
+     * approximate line minimizations.
+     * @throws LockedException Raised if this instance is locked, because
+     * estimation is being computed.
+     * @throws NotReadyException Raised if this instance is not ready, because
+     * a listener, a gradient listener and a start point haven't been provided
+     * @throws OptimizationException Raised if the algorithm failed because of
+     * lack of convergence or because function couldn't be evaluated.
+     */        
+    @Override
+    public void minimize() throws LockedException, NotReadyException,
+            OptimizationException {
+        
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L174">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L177">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L180">        locked = true;</span>
+        
+<span class="fc" id="L182">        boolean validResult = false;</span>
+<span class="fc" id="L183">        int n = p.length;</span>
+        
+        try {
+<span class="fc" id="L186">            double den, fac, fad, fae, fp, stpmax, sum = 0.0, sumdg, sumxi, </span>
+                    temp, test;
+<span class="fc" id="L188">            double[] dg = new double[n];</span>
+<span class="fc" id="L189">            double[] g = new double[n];</span>
+<span class="fc" id="L190">            double[] hdg = new double[n];</span>
+<span class="fc" id="L191">            double[] pnew = new double[n];</span>
+<span class="fc" id="L192">            double[] xi = new double[n];</span>
+<span class="fc" id="L193">            double[] fretArray = new double[1];</span>
+<span class="fc" id="L194">            boolean[] check = new boolean[1];</span>
+            
+<span class="fc" id="L196">            Matrix hessin = new Matrix(n, n);</span>
+<span class="fc" id="L197">            fp = listener.evaluate(p);</span>
+<span class="fc" id="L198">            gradientListener.evaluateGradient(p, g);</span>
+            
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">                for(int j = 0; j &lt; n; j++) hessin.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L202">                hessin.setElementAt(i, i, 1.0);</span>
+<span class="fc" id="L203">                xi[i] = -g[i];</span>
+<span class="fc" id="L204">                sum += p[i] * p[i];</span>
+            }
+<span class="fc" id="L206">            stpmax = STPMX * Math.max(Math.sqrt(sum), (double)n);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            for (int its = 0; its &lt; ITMAX; its++) {</span>
+<span class="fc" id="L208">                iter = its;</span>
+<span class="fc" id="L209">                lnsrch(p, fp, g, xi, pnew, fretArray, stpmax, check);</span>
+<span class="fc" id="L210">                fret = fretArray[0];</span>
+<span class="fc" id="L211">                fp = fret;</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L213">                    xi[i] = pnew[i] - p[i];</span>
+<span class="fc" id="L214">                    p[i] = pnew[i];</span>
+                }
+<span class="fc" id="L216">                test = 0.0;</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L218">                    temp = Math.abs(xi[i]) / Math.max(Math.abs(p[i]), 1.0);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">                    if(temp &gt; test) test = temp;</span>
+                }
+<span class="fc bfc" id="L221" title="All 2 branches covered.">                if (test &lt; TOLX) {</span>
+                    //minimum found
+<span class="fc" id="L223">                    validResult = true;</span>
+<span class="fc" id="L224">                    break;</span>
+                }
+
+<span class="fc" id="L227">                System.arraycopy(g, 0, dg, 0, n);</span>
+                
+<span class="fc" id="L229">                gradientListener.evaluateGradient(p, g);</span>
+                
+<span class="fc" id="L231">                test = 0.0;</span>
+<span class="fc" id="L232">                den = Math.max(Math.abs(fret), 1.0);</span>
+                
+<span class="fc bfc" id="L234" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L235">                    temp = Math.abs(g[i]) * Math.max(Math.abs(p[i]), 1.0) / den;</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                    if (temp &gt; test) {</span>
+<span class="fc" id="L237">                        test = temp;</span>
+                    }
+                }
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                if (test &lt; tolerance) {</span>
+                    //minimum found
+<span class="fc" id="L242">                    validResult = true;</span>
+<span class="fc" id="L243">                    break;</span>
+                }
+                
+<span class="fc bfc" id="L246" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L247">                    dg[i] = g[i] - dg[i];</span>
+                }
+                
+<span class="fc bfc" id="L250" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L251">                    hdg[i] = 0.0;</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">                    for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L253">                        hdg[i] += hessin.getElementAt(i, j) * dg[j];</span>
+                    }
+                }
+<span class="fc" id="L256">                fac = fae = sumdg = sumxi = 0.0;</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L258">                    fac += dg[i] * xi[i];</span>
+<span class="fc" id="L259">                    fae += dg[i] * hdg[i];</span>
+<span class="fc" id="L260">                    sumdg += sqr(dg[i]);</span>
+<span class="fc" id="L261">                    sumxi += sqr(xi[i]);</span>
+                }
+                
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
+<span class="fc" id="L265">                    fac = 1.0 / fac;</span>
+<span class="fc" id="L266">                    fad = 1.0 / fae;</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L268">                        dg[i] = fac * xi[i] - fad * hdg[i];</span>
+                    }
+                    
+<span class="fc bfc" id="L271" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">                        for (int j = i; j &lt; n; j++) {</span>
+<span class="fc" id="L273">                            hessin.setElementAt(i, j, </span>
+<span class="fc" id="L274">                                    hessin.getElementAt(i, j) + </span>
+                                    fac * xi[i] * xi[j] - 
+                                    fad * hdg[i] * hdg[j] + 
+                                    fae * dg[i] * dg[j]);
+<span class="fc" id="L278">                            hessin.setElementAt(j, i, </span>
+<span class="fc" id="L279">                                    hessin.getElementAt(i, j));</span>
+                        }
+                    }
+                }
+<span class="fc bfc" id="L283" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L284">                    xi[i] = 0.0;</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">                    for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L286">                        xi[i] -= hessin.getElementAt(i, j) * g[j];</span>
+                    }
+                }
+            }
+            
+<span class="pc bpc" id="L291" title="1 of 2 branches missed.">            if (!validResult) {</span>
+                //too many iterations
+<span class="nc" id="L293">                locked = false;</span>
+<span class="nc" id="L294">                throw new OptimizationException();</span>
+            }
+<span class="nc" id="L296">        } catch (Throwable t) {</span>
+<span class="nc" id="L297">            locked = false;</span>
+<span class="nc" id="L298">            throw new OptimizationException(t);</span>
+<span class="fc" id="L299">        }</span>
+        
+        //set result
+<span class="fc" id="L302">        xmin = p;</span>
+<span class="fc" id="L303">        resultAvailable = true;</span>
+<span class="fc" id="L304">        fmin = fret;</span>
+        
+<span class="fc" id="L306">        locked = false;</span>
+<span class="fc" id="L307">    }</span>
+    
+    /**
+     * Returns boolean indicating whether this instance is ready to start the
+     * estimation of a local minimum.
+     * An instance is ready once a listener, a gradient listener and a start 
+     * point are provided.
+     * @return True if this instance is ready, false otherwise.
+     */    
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L318" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                isStartPointAvailable();</span>
+    }
+    
+    /**
+     * Returns tolerance or accuracy to be expected on estimated local minimum.
+     * @return Tolerance or accuracy to be expected on estimated local minimum.
+     */    
+    public double getTolerance() {
+<span class="fc" id="L327">        return tolerance;</span>
+    }
+
+    /**
+     * Internal method to set tolerance or accuracy to be expected on estimated
+     * local minimum.
+     * This method does not check whether this instance is locked.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws IllegalArgumentException Raised if provided tolerance is 
+     * negative.
+     */    
+    private void internalSetTolerance(double tolerance) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L342">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L344">        this.tolerance = tolerance;</span>
+<span class="fc" id="L345">    }</span>
+    
+    /**
+     * Sets tolerance or accuracy to be expected on estimated local minimum.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws LockedException Raised if this instance is locked.
+     * @throws IllegalArgumentException Raised if provided tolerance is 
+     * negative.
+     */    
+    public void setTolerance(double tolerance) throws LockedException,
+            IllegalArgumentException {
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L358">            throw new LockedException();</span>
+        }
+<span class="fc" id="L360">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L361">    }</span>
+    
+    /**
+     * Returns boolean indicating whether start point has already been provided
+     * and is ready for retrieval.
+     * @return True if available, false otherwise.
+     */    
+    public boolean isStartPointAvailable() {
+<span class="fc bfc" id="L369" title="All 2 branches covered.">        return p != null;</span>
+    }
+    
+    /**
+     * Sets start point where algorithm will be started. Start point should be
+     * close to the local minimum to be found.
+     * @param startPoint Start point where algorithm will be started.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setStartPoint(double[] startPoint) throws LockedException {
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L380">            throw new LockedException();</span>
+        }
+<span class="fc" id="L382">        p = startPoint;</span>
+<span class="fc" id="L383">    }</span>
+    
+    /**
+     * Returns start point where algorithm will be started. Start point should 
+     * be close to the local minimum to be found.
+     * @return Start point where algorithm will be started.
+     * @throws NotAvailableException Raised if start point has not yet been
+     * provided and is not available.
+     */    
+    public double[] getStartPoint() throws NotAvailableException {
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
+<span class="fc" id="L394">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L396">        return p;</span>
+    }
+    
+    /**
+     * Returns gradient listener in charge of obtaining gradient values for the
+     * function to be evaluated.
+     * @return Gradient listener.
+     * @throws NotAvailableException Raised if gradient listener has not yet 
+     * been provided.
+     */    
+    public GradientFunctionEvaluatorListener getGradientListener()
+            throws NotAvailableException {
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
+<span class="fc" id="L409">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L411">        return gradientListener;</span>
+    }
+    
+    /**
+     * Sets gradient listener in charge of obtaining gradient values for the
+     * function to be evaluated.
+     * @param gradientListener Gradient listener.
+     * @throws LockedException Raised if this instance is locked.
+     */    
+    public void setGradientListener(
+            GradientFunctionEvaluatorListener gradientListener)
+            throws LockedException {
+<span class="pc bpc" id="L423" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L424">            throw new LockedException();</span>
+        }
+<span class="fc" id="L426">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L427">    }</span>
+    
+    /**
+     * Returns boolean indicating whether a gradient listener has already been
+     * provided and is available for retrieval.
+     * @return True if available, false otherwise.
+     */    
+    public boolean isGradientListenerAvailable() {
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        return gradientListener != null;</span>
+    }
+    
+    /**
+     * Computes the squared value of provided double.
+     * @param x Value to be squared.
+     * @return Squared value.
+     */    
+    private double sqr(double x) {
+<span class="fc" id="L444">        return x * x;</span>
+    }
+    
+    /**
+     * Internal method to search for a minimum along a line.
+     * NOTE: comments of params might be incorrect.
+     * @param xold previous point.
+     * @param fold previous function evaluation.
+     * @param g gradient.
+     * @param p point.
+     * @param x point.
+     * @param f function.
+     * @param stpmax stores point maximum.
+     * @param check checks line search.
+     * @throws OptimizationException Raised if convergence was not achieved.
+     */
+    private void lnsrch(double[] xold, double fold, double[] g, double[] p, 
+            double[] x, double[] f, double stpmax, boolean[] check) 
+            throws OptimizationException {
+<span class="fc" id="L463">        double a, alam, alam2 = 0.0, alamin, b, disc, f2 = 0.0;</span>
+<span class="fc" id="L464">        double rhs1, rhs2, slope = 0.0, sum = 0.0, temp, test, tmplam;</span>
+<span class="fc" id="L465">        int i, n = xold.length;</span>
+<span class="fc" id="L466">        check[0] = false;</span>
+        
+<span class="fc bfc" id="L468" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L469">            sum += p[i] * p[i];</span>
+        }
+<span class="fc" id="L471">        sum = Math.sqrt(sum);</span>
+        
+<span class="fc bfc" id="L473" title="All 2 branches covered.">        if (sum &gt; stpmax) {</span>
+<span class="fc bfc" id="L474" title="All 2 branches covered.">            for(i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L475">                p[i] *= stpmax / sum;</span>
+            }
+        }
+<span class="fc bfc" id="L478" title="All 2 branches covered.">        for(i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L479">            slope += g[i] * p[i];</span>
+        }
+<span class="pc bpc" id="L481" title="1 of 2 branches missed.">        if (slope &gt;= 0.0) {</span>
+<span class="nc" id="L482">            throw new OptimizationException();</span>
+        }
+<span class="fc" id="L484">        test = 0.0;</span>
+<span class="fc bfc" id="L485" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L486">            temp = Math.abs(p[i]) / Math.max(Math.abs(xold[i]), 1.0);</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">            if(temp &gt; test) test = temp;</span>
+        }
+<span class="fc" id="L489">        alamin = TOLX2 / test;</span>
+<span class="fc" id="L490">        alam = 1.0;</span>
+        for (;;) {
+<span class="fc bfc" id="L492" title="All 2 branches covered.">            for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L493">                x[i] = xold[i] + alam * p[i];</span>
+            }
+            try {
+<span class="fc" id="L496">                f[0] = listener.evaluate(x);</span>
+<span class="nc" id="L497">            } catch (Throwable t) {</span>
+<span class="nc" id="L498">                throw new OptimizationException(t);</span>
+<span class="fc" id="L499">            }</span>
+            
+<span class="fc bfc" id="L501" title="All 2 branches covered.">            if (alam &lt; alamin) {</span>
+<span class="fc bfc" id="L502" title="All 2 branches covered.">                for(i = 0; i &lt; n; i++) x[i] = xold[i];</span>
+<span class="fc" id="L503">                check[0] = true;</span>
+<span class="fc" id="L504">                return;</span>
+<span class="fc bfc" id="L505" title="All 2 branches covered.">            } else if (f[0] &lt;= fold + ALF * alam * slope) {</span>
+<span class="fc" id="L506">                return;</span>
+            } else {
+<span class="fc bfc" id="L508" title="All 2 branches covered.">                if (alam == 1.0) {</span>
+<span class="fc" id="L509">                    tmplam = -slope / (2.0 * (f[0] - fold - slope));</span>
+                } else {
+<span class="fc" id="L511">                    rhs1 = f[0] - fold - alam * slope;</span>
+<span class="fc" id="L512">                    rhs2 = f2 - fold - alam2 * slope;</span>
+<span class="fc" id="L513">                    a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) /</span>
+                            (alam - alam2);
+<span class="fc" id="L515">                    b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 /</span>
+                            (alam2 * alam2)) / (alam - alam2);
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">                    if (a == 0.0) {</span>
+<span class="nc" id="L518">                        tmplam = -slope / (2.0 * b);</span>
+                    } else {
+<span class="fc" id="L520">                        disc = b * b - 3.0 * a * slope;</span>
+<span class="pc bpc" id="L521" title="1 of 2 branches missed.">                        if (disc &lt; 0.0) {</span>
+<span class="nc" id="L522">                            tmplam = 0.5 * alam;</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">                        } else if (b &lt;= 0.0) {</span>
+<span class="fc" id="L524">                            tmplam = (-b + Math.sqrt(disc)) /</span>
+                                (3.0 * a);
+                        } else {
+<span class="fc" id="L527">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
+                        }
+                    }
+<span class="fc bfc" id="L530" title="All 2 branches covered.">                    if (tmplam &gt; 0.5 * alam) {</span>
+<span class="fc" id="L531">                        tmplam = 0.5 * alam;</span>
+                    }
+                }
+            }
+<span class="fc" id="L535">            alam2 = alam;</span>
+<span class="fc" id="L536">            f2 = f[0];</span>
+<span class="fc" id="L537">            alam = Math.max(tmplam, 0.1 * alam);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

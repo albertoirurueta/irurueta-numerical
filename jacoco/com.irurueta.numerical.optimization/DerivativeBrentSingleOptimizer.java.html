@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DerivativeBrentSingleOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">DerivativeBrentSingleOptimizer.java</span></div><h1>DerivativeBrentSingleOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.numerical.*;
+
+/**
+ * Class to compute local minimum on single dimension functions using a 
+ * modification of Brent's algorithm that takes into account the function's
+ * derivative.
+ * This class will search for a local minimum within a bracket of values.
+ * A bracket is a set of points: &quot;a&quot; a minimum evaluation point, 
+ * &quot;b&quot; a middle evaluation point and &quot;c&quot; a maximum evaluation where a &amp;lt;= b
+ * &amp;lt;= c, and where f(b) &amp;lt;= f(a) and f(b) &amp;lt;= f(c).
+ * This class is based on the implementation of Numerical Recipes 3rd ed. 
+ * Section 10.4. Page 500.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
+    
+    /**
+     * Maximum number of iterations to perform. If convergence is not found
+     * within this number of iterations, the minimum search will be considered 
+     * as failed.
+     */
+    public static final int ITMAX = 100;
+    
+    /**
+     * Constant defining machine precision.
+     */
+    public static final double ZEPS = 1e-8;
+    
+    /**
+     * Default tolerance. Estimated result will be found with an accuracy below
+     * or equal to provided tolerance value.
+     */
+    public static final double DEFAULT_TOLERANCE = 3e-8;
+    
+    /**
+     * Minimum allowed tolerance value.
+     */
+    public static final double MIN_TOLERANCE = 0.0;
+    
+    /**
+     * Listener to evaluate the functions derivative. If the function's 
+     * derivative is not know (e.g. does not have a closed expression), then
+     * a DerivativeEstimator might be used inside the listener implementation.
+     */
+    private SingleDimensionFunctionEvaluatorListener derivativeListener;
+        
+    /**
+     * Tolerance. Estimated result will be found with an accuracy below or equal
+     * to provided tolerance value.
+     */
+    private double tolerance;
+    
+    /**
+     * Empty constructor.
+     */
+    public DerivativeBrentSingleOptimizer() {
+<span class="fc" id="L74">        super();</span>
+<span class="fc" id="L75">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Constructor. Creates an instance with provided bracket of values and a
+     * listener to get single dimension function evaluations.
+     * @param listener Listener to evaluate a function.
+     * @param derivativeListener Listener to get function derivative.
+     * @param minEvalPoint Minimum bracket evaluation point.
+     * @param middleEvalPoint Middle bracket evaluation point.
+     * @param maxEvalPoint Maximum bracket evaluation point.
+     * @param tolerance tolerance to find result with. Estimated result will be
+     * found with an accuracy below or equal to provided tolerance value.
+     * @throws InvalidBracketRangeException Raised if the following condition is
+     * not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public DerivativeBrentSingleOptimizer(
+            SingleDimensionFunctionEvaluatorListener listener,
+            SingleDimensionFunctionEvaluatorListener derivativeListener, 
+            double minEvalPoint, double middleEvalPoint, double maxEvalPoint, 
+            double tolerance) throws InvalidBracketRangeException, 
+            IllegalArgumentException {
+<span class="fc" id="L98">        super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L99">        this.derivativeListener = derivativeListener;</span>
+<span class="fc" id="L100">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L101">    }</span>
+        
+    /**
+     * Returns derivative listener to get function derivative.
+     * @return Derivative listener.
+     * @throws NotAvailableException Raised if derivative listener is not 
+     * available for retrieval.
+     */
+    public SingleDimensionFunctionEvaluatorListener getDerivativeListener() 
+            throws NotAvailableException {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!isDerivativeListenerAvailable()) {</span>
+<span class="fc" id="L112">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L114">        return derivativeListener;</span>
+    }
+    
+    /**
+     * Sets derivative listener that gets function derivative.
+     * @param derivativeListener Sets derivative listener.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setDerivativeListener(
+            SingleDimensionFunctionEvaluatorListener derivativeListener) 
+            throws LockedException {
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L126">            throw new LockedException();</span>
+        }
+<span class="fc" id="L128">        this.derivativeListener = derivativeListener;</span>
+<span class="fc" id="L129">    }</span>
+    
+    /**
+     * Returns boolean indicating whether derivative listener has been provided
+     * and is available for retrieval.
+     * @return Boolean indicating whether derivative listener is available.
+     */
+    public boolean isDerivativeListenerAvailable() {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        return derivativeListener != null;</span>
+    }
+    
+    /**
+     * Returns tolerance value. Estimated result will be found with an accuracy 
+     * below or equal to provided tolerance value.
+     * @return Tolerance value.
+     */
+    public double getTolerance() {
+<span class="fc" id="L146">        return tolerance;</span>
+    }
+    
+    /**
+     * Sets tolerance value. Estimated result will be found with an accuracy
+     * below or equal to provided tolerance value.
+     * @param tolerance Tolerance value.
+     * @throws LockedException Raised if this instance is locked.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public void setTolerance(double tolerance) throws LockedException,
+            IllegalArgumentException {
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L159">            throw new LockedException();</span>
+        }
+<span class="fc" id="L161">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L162">    }</span>
+    
+    /**
+     * This function estimates a function minimum within provided or computed
+     * bracket of values.
+     * Given a function f that computes a function and also its derivative 
+     * function df, and given a bracketing triplet of abscissas ax, bx, cx (such
+     * that bx is between ax and cx, and f(bx) is less than both f(ax) and 
+     * f(cx), this routine isolates the minimum to a fractional precision of 
+     * about tolerance using a modification of Brent's method that uses 
+     * derivatives. The abscissa of the minimum is returned as xmin and the 
+     * minimum function value is returned as fmin.
+     * @throws LockedException Raised if this instance is locked, because
+     * estimation is being computed.
+     * @throws NotReadyException Raised if this instance is not ready because
+     * either a listener or a bracket has not yet been provided or computed.
+     * @throws OptimizationException Raised if the algorithm failed because of
+     * lack of convergence or because function couldn't be evaluated.
+     */    
+    @Override
+    public void minimize() throws LockedException, NotReadyException,
+            OptimizationException {
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L185">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L188">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L191">        locked = true;</span>
+        
+<span class="fc" id="L193">        double[] v1 = new double[1];</span>
+<span class="fc" id="L194">        double[] v2 = new double[2];</span>
+<span class="fc" id="L195">        double[] v3 = new double[3];</span>
+        
+        try {
+            //Will be used as flags for whether proposed steps are accpetable or
+            //not
+            boolean ok1, ok2;
+<span class="fc" id="L201">            double a, b, d = 0.0, d1, d2, du, dv, dw, dx, e = 0.0;</span>
+            double fu, fv, fw, fx, olde, tol1, tol2, u, u1, u2, v, w, x, xm;
+            
+            //Comments following will point out only differences from the Brent
+            //single optimizer. Read that routine first.
+<span class="fc bfc" id="L206" title="All 2 branches covered.">            a = ax &lt; cx ? ax : cx;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">            b = ax &gt; cx ? ax : cx;</span>
+<span class="fc" id="L208">            x = w = v = bx;</span>
+<span class="fc" id="L209">            fw = fv = fx = listener.evaluate(x);</span>
+<span class="fc" id="L210">            dw = dv = dx = derivativeListener.evaluate(x);</span>
+            
+            //All out housekeeping chores are doubled by the necessity of moving
+            //around derivative values as well as funciton values
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">            for (int iter = 0; iter &lt; ITMAX; iter++) {</span>
+<span class="fc" id="L215">                xm = 0.5 * (a + b);</span>
+<span class="fc" id="L216">                tol1 = tolerance * Math.abs(x) + ZEPS;</span>
+<span class="fc" id="L217">                tol2 = 2.0 * tol1;</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                if (Math.abs(x - xm) &lt;= (tol2 - 0.5 * (b - a))) {</span>
+<span class="fc" id="L219">                    fmin = fx;</span>
+<span class="fc" id="L220">                    xmin = x;</span>
+                    
+<span class="fc" id="L222">                    resultAvailable = true;</span>
+<span class="fc" id="L223">                    locked = false;</span>
+<span class="fc" id="L224">                    return;</span>
+                }
+                
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                if (Math.abs(e) &gt; tol1) {</span>
+                    //Initialize these d's to an out-of-bracket value
+<span class="fc" id="L229">                    d1 = 2.0 * (b - a);</span>
+<span class="fc" id="L230">                    d2 = d1;</span>
+                    //Secant method with one point
+<span class="fc bfc" id="L232" title="All 2 branches covered.">                    if (dw != dx) {</span>
+<span class="fc" id="L233">                        d1 = (w - x) * dx / (dx - dw);</span>
+                    }
+                    //And the other
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                    if (dv != dx) {</span>
+<span class="fc" id="L237">                        d2 = (v - x) * dx / (dx - dv);</span>
+                    }
+                    //Which of these two estimates of d shall we take? We will
+                    //insist that they be within the bracket, and on the side
+                    //pointed to by the derivative at x
+<span class="fc" id="L242">                    u1 = x + d1;</span>
+<span class="fc" id="L243">                    u2 = x + d2;</span>
+<span class="fc bfc" id="L244" title="All 4 branches covered.">                    ok1 = (a - u1) * (u1 - b) &gt; 0.0 &amp;&amp; dx * d1 &lt;= 0.0;</span>
+<span class="fc bfc" id="L245" title="All 4 branches covered.">                    ok2 = (a - u2) * (u2 - b) &gt; 0.0 &amp;&amp; dx * d2 &lt;= 0.0;</span>
+                    //Movement on the step before last
+<span class="fc" id="L247">                    olde = e;</span>
+<span class="fc" id="L248">                    e = d;</span>
+<span class="fc bfc" id="L249" title="All 4 branches covered.">                    if (ok1 || ok2) {</span>
+                        //Take only an acceptable d, and if both are acceptable,
+                        //then take the smallest one.
+<span class="fc bfc" id="L252" title="All 4 branches covered.">                        if (ok1 &amp;&amp; ok2) {</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">                            d = Math.abs(d1) &lt; Math.abs(d2) ? d1: d2;</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">                        } else if (ok1) {</span>
+<span class="fc" id="L255">                            d = d1;</span>
+                        } else {
+<span class="fc" id="L257">                            d = d2;</span>
+                        }
+                        
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                        if (Math.abs(d) &lt;= Math.abs(0.5 * olde)) {</span>
+<span class="fc" id="L261">                            u = x + d;</span>
+<span class="fc bfc" id="L262" title="All 4 branches covered.">                            if(u - a &lt; tol2 || b - u &lt; tol2)</span>
+<span class="fc" id="L263">                                d = sign(tol1, xm - x);</span>
+                        } else {
+                            //Bisect, not golden section.
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                            d = 0.5 * (e = (dx &gt;= 0.0 ? a - x : b - x));</span>
+                            //Decide which segment by the sign of the derivative
+                        }
+                    } else {
+<span class="fc bfc" id="L270" title="All 2 branches covered.">                        d = 0.5 * (e = (dx &gt;= 0.0 ? a - x : b - x));</span>
+                    }
+                } else {
+<span class="fc bfc" id="L273" title="All 2 branches covered.">                    d = 0.5 * (e = (dx &gt;= 0.0 ? a - x : b - x));</span>
+                }
+                
+<span class="fc bfc" id="L276" title="All 2 branches covered.">                if (Math.abs(d) &gt;= tol1) {</span>
+<span class="fc" id="L277">                    u = x + d;</span>
+<span class="fc" id="L278">                    fu = listener.evaluate(u);</span>
+                } else {
+<span class="fc" id="L280">                    u = x + sign(tol1, d);</span>
+<span class="fc" id="L281">                    fu = listener.evaluate(u);</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">                    if (fu &gt; fx) {</span>
+                        //If the minimum step in the downhill direction takes us
+                        //uphill, then we are done
+<span class="fc" id="L285">                        fmin = fx;</span>
+<span class="fc" id="L286">                        xmin = x;</span>
+                        
+<span class="fc" id="L288">                        resultAvailable = true;</span>
+<span class="fc" id="L289">                        locked = false;</span>
+<span class="fc" id="L290">                        return;</span>
+                    }
+                }
+                
+                //Now all the housekeeping, sigh
+<span class="fc" id="L295">                du = derivativeListener.evaluate(u);</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                if (fu &lt;= fx) {</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">                    if (u &gt;= x) {</span>
+<span class="fc" id="L298">                        a = x;</span>
+                    } else {
+<span class="fc" id="L300">                        b = x;</span>
+                    }
+<span class="fc" id="L302">                    v1[0] = v;</span>
+<span class="fc" id="L303">                    v2[0] = fv;</span>
+<span class="fc" id="L304">                    v3[0] = dv;</span>
+<span class="fc" id="L305">                    mov3(v1, v2, v3, w, fw, dw);</span>
+<span class="fc" id="L306">                    v = v1[0];</span>
+<span class="fc" id="L307">                    fv = v2[0];</span>
+<span class="fc" id="L308">                    dv = v3[0];</span>
+                    
+                    
+<span class="fc" id="L311">                    v1[0] = w;</span>
+<span class="fc" id="L312">                    v2[0] = fw;</span>
+<span class="fc" id="L313">                    v3[0] = dw;</span>
+<span class="fc" id="L314">                    mov3(v1, v2, v3, x, fx, dx);</span>
+<span class="fc" id="L315">                    w = v1[0];</span>
+<span class="fc" id="L316">                    fw = v2[0];</span>
+<span class="fc" id="L317">                    dw = v3[0];</span>
+                    
+<span class="fc" id="L319">                    v1[0] = x;</span>
+<span class="fc" id="L320">                    v2[0] = fx;</span>
+<span class="fc" id="L321">                    v3[0] = dx;</span>
+<span class="fc" id="L322">                    mov3(v1, v2, v3, u, fu, du);</span>
+<span class="fc" id="L323">                    x = v1[0];</span>
+<span class="fc" id="L324">                    fx = v2[0];</span>
+<span class="fc" id="L325">                    dx = v3[0];</span>
+                } else {
+<span class="fc bfc" id="L327" title="All 2 branches covered.">                    if (u &lt; x) {</span>
+<span class="fc" id="L328">                        a = u;</span>
+                    } else {
+<span class="fc" id="L330">                        b = u;</span>
+                    }
+<span class="fc bfc" id="L332" title="All 4 branches covered.">                    if (fu &lt;= fw || w == x) {</span>
+<span class="fc" id="L333">                        v1[0] = v;</span>
+<span class="fc" id="L334">                        v2[0] = fv;</span>
+<span class="fc" id="L335">                        v3[0] = dv;</span>
+<span class="fc" id="L336">                        mov3(v1, v2, v3, w, fw, dw);</span>
+<span class="fc" id="L337">                        v = v1[0];</span>
+<span class="fc" id="L338">                        fv = v2[0];</span>
+<span class="fc" id="L339">                        dv = v3[0];</span>
+                        
+<span class="fc" id="L341">                        v1[0] = w;</span>
+<span class="fc" id="L342">                        v2[0] = fw;</span>
+<span class="fc" id="L343">                        v3[0] = dw;</span>
+<span class="fc" id="L344">                        mov3(v1, v2, v3, u, fu, du);</span>
+<span class="fc" id="L345">                        w = v1[0];</span>
+<span class="fc" id="L346">                        fw = v2[0];</span>
+<span class="fc" id="L347">                        dw = v3[0];</span>
+<span class="fc bfc" id="L348" title="All 6 branches covered.">                    } else if (fu &lt; fv || v == x || v == w) {</span>
+<span class="fc" id="L349">                        v1[0] = v;</span>
+<span class="fc" id="L350">                        v2[0] = fv;</span>
+<span class="fc" id="L351">                        v3[0] = dv;</span>
+<span class="fc" id="L352">                        mov3(v1, v2, v3, u, fu, du);</span>
+<span class="fc" id="L353">                        v = v1[0];</span>
+<span class="fc" id="L354">                        fv = v2[0];</span>
+<span class="fc" id="L355">                        dv = v3[0];</span>
+                    }
+                }
+            }
+            
+<span class="nc" id="L360">        } catch (Throwable t) {</span>
+<span class="nc" id="L361">            locked = false;</span>
+<span class="nc" id="L362">            throw new OptimizationException(t);</span>
+<span class="nc" id="L363">        }</span>
+        
+        //Too many iterations in Derivative Brent
+<span class="nc" id="L366">        locked = false;</span>
+<span class="nc" id="L367">        throw new OptimizationException();</span>
+    }
+    
+    /**
+     * Returns boolean indicating whether this instance is ready to start the
+     * estimation of a local minimum.
+     * This instance will be ready once a listener, derivative listener and
+     * bracket are available.
+     * @return True if ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L379" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isDerivativeListenerAvailable() &amp;&amp;</span>
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">                isBracketAvailable();</span>
+    }
+    
+    /**
+     * Internal method to set tolerance. Estimated result will be found with an 
+     * accuracy below or equal to provided tolerance value.
+     * @param tolerance Tolerance value.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    private void internalSetTolerance(double tolerance) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L392">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L394">        this.tolerance = tolerance;</span>
+<span class="fc" id="L395">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

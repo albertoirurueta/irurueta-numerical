@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RANSACRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.robust</a> &gt; <span class="el_source">RANSACRobustEstimator.java</span></div><h1>RANSACRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.robust;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * This class implements RANSAC (RANdom SAmple Consensus) algorithm to robustly 
+ * estimate a data model.
+ * RANSAC is based on the idea that given a proportion of outliers (that is 
+ * estimated while the algorithm is run), it is needed a certain number of 
+ * random subsamples to obtain required data with a certain level of confidence.
+ * To determine whether a sample is an outlier or not, provided constant 
+ * threshold is used. If a threshold cannot be determined beforehand, then it
+ * is better to use LMedS algorithm, at the expense of slightly less accurate
+ * results.
+ * @param &lt;T&gt; type of object to be estimated.
+ */
+@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
+    
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be 
+     * accurate because chosen subsamples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+    
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+    
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+    
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+    
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+    
+    /**
+     * Minimum allowed threshold to determine inliers.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+    
+    /**
+     * Indicates that by default inliers will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
+    
+    /**
+     * Indicates that by default residuals will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+    
+    /**
+     * Amount of confidence expressed as a value between 0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    private double mConfidence;
+        
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     */
+    private int mMaxIterations;
+    
+    /**
+     * Instance in charge of picking random subsets of samples.
+     */
+    private SubsetSelector subsetSelector;
+    
+    /**
+     * Number of iterations to be done to obtain required confidence.
+     */
+    private int nIters;
+    
+    /**
+     * Best solution that has been found so far during an estimation.
+     */
+    private T bestResult;
+    
+    /**
+     * Data related to inliers found for best result.
+     */
+    private RANSACInliersData mBestInliersData;
+    
+    /**
+     * Indicates whether inliers must be computed and kept.
+     */
+    private boolean mComputeAndKeepInliers;
+    
+    /**
+     * Indicates whether residuals must be computed and kept.
+     */
+    private boolean mComputeAndKeepResiduals;
+    
+    /**
+     * Constructor.
+     */
+    public RANSACRobustEstimator() {
+<span class="fc" id="L131">        super();</span>
+<span class="fc" id="L132">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L133">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L134">        nIters = mMaxIterations;</span>
+<span class="fc" id="L135">        bestResult = null;</span>
+<span class="fc" id="L136">        mBestInliersData = null;</span>
+<span class="fc" id="L137">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L138">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L139">    }</span>
+    
+    /**
+     * Constructor with listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes, as well as in charge
+     * of picking samples and doing per-iteration estimations.
+     */
+    public RANSACRobustEstimator(RANSACRobustEstimatorListener&lt;T&gt; listener) {
+<span class="fc" id="L148">        super(listener);</span>
+<span class="fc" id="L149">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L150">        mMaxIterations = DEFAULT_MAX_ITERATIONS;    </span>
+<span class="fc" id="L151">        nIters = mMaxIterations;</span>
+<span class="fc" id="L152">        bestResult = null;</span>
+<span class="fc" id="L153">        mBestInliersData = null;</span>
+<span class="fc" id="L154">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L155">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L156">    }</span>
+        
+    /**
+     * Returns amount of confidence expressed as a value between 0 and 1.0 
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @return  amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L166">        return mConfidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0 and 1.0 (which 
+     * is equivalent to 100%). The amount of confidence indicates the 
+     * probability that the estimated result is correct. Usually this value will 
+     * be close to 1.0, but not exactly 1.0.
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     * 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setConfidence(double confidence) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L183">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L185" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L186">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L188">        mConfidence = confidence;</span>
+<span class="fc" id="L189">    }</span>
+    
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L198">        return mMaxIterations;</span>
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L213">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L216">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L218">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L219">    }</span>
+    
+    /**
+     * Returns number of iterations to be done to obtain required confidence.
+     * @return number of iterations to be done to obtain required confidence.
+     */
+    public int getNIters() {
+<span class="fc" id="L226">        return nIters;</span>
+    }
+    
+    /**
+     * Returns best solution that has been found so far during an estimation.
+     * @return best solution that has been found so far during an estimation.
+     */
+    public T getBestResult() {
+<span class="fc" id="L234">        return bestResult;</span>
+    }
+    
+    /**
+     * Gets data related to inliers found for best result.
+     * @return data related to inliers found for best result.
+     */
+    public RANSACInliersData getBestInliersData() {
+<span class="fc" id="L242">        return mBestInliersData;</span>
+    }
+    
+    /**
+     * Indicates whether inliers must be computed and kept.
+     * @return true if inliers must be computed and kept, false if inliers
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepInliersEnabled() {
+<span class="fc" id="L251">        return mComputeAndKeepInliers;</span>
+    }
+    
+    /**
+     * Specifies whether inliers must be computed and kept.
+     * @param computeAndKeepInliers true if inliers must be computed and kept,
+     * false if inliers only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers)
+            throws LockedException {
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L263">            throw new LockedException();</span>
+        }
+<span class="fc" id="L265">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L266">    }</span>
+    
+    /**
+     * Indicates whether residuals must be computed and kept.
+     * @return true if residuals must be computed and kept, false if residuals
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepResidualsEnabled() {
+<span class="fc" id="L274">        return mComputeAndKeepResiduals;</span>
+    }
+    
+    /**
+     * Specifies whether residuals must be computed and kept.
+     * @param computeAndKeepResiduals true if residuals must be computed and 
+     * kept, false if residuals only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepResidualsEnabled(
+            boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L286">            throw new LockedException();</span>
+        }
+<span class="fc" id="L288">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L289">    }</span>
+            
+    /**
+     * Indicates if estimator is ready to start the estimation process.
+     * @return true if ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (!super.isReady()) {</span>
+<span class="fc" id="L298">            return false;</span>
+        }
+<span class="fc" id="L300">        return (mListener instanceof RANSACRobustEstimatorListener);</span>
+    }    
+    
+    /**
+     * Robustly estimates an instance of T.
+     * @return estimated object.
+     * @throws LockedException if robust estimator is locked.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     * (i.e. numerical instability, no solution available, etc).
+     */    
+    @Override
+    public T estimate() throws LockedException, NotReadyException, 
+            RobustEstimatorException {
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L316">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L319">            throw new NotReadyException();</span>
+        }
+        
+        try {
+<span class="fc" id="L323">            RANSACRobustEstimatorListener&lt;T&gt; listener = </span>
+                    (RANSACRobustEstimatorListener&lt;T&gt;)mListener;
+            
+<span class="fc" id="L326">            mLocked = true;</span>
+            
+<span class="fc" id="L328">            listener.onEstimateStart(this);</span>
+        
+<span class="fc" id="L330">            int totalSamples = listener.getTotalSamples();</span>
+<span class="fc" id="L331">            int subsetSize = listener.getSubsetSize();    </span>
+<span class="fc" id="L332">            double threshold = listener.getThreshold();</span>
+            //only positive thresholds are allowed
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">            if(threshold &lt; MIN_THRESHOLD) throw new RobustEstimatorException();</span>
+            
+<span class="fc" id="L336">            int bestNumInliers = 0;</span>
+<span class="fc" id="L337">            nIters = Integer.MAX_VALUE;</span>
+            int newNIters;
+<span class="fc" id="L339">            int currentIter = 0;</span>
+            //reusable list that will contain preliminar solutions on each 
+            //iteration
+<span class="fc" id="L342">            List&lt;T&gt; iterResults = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L343">            bestResult = null;</span>
+            int currentInliers;
+<span class="fc" id="L345">            float previousProgress = 0.0f, progress;</span>
+<span class="fc" id="L346">            int[] subsetIndices = new int[subsetSize];</span>
+            
+<span class="fc" id="L348">            BitSet inliers = null;</span>
+<span class="fc" id="L349">            double[] residuals = null;</span>
+<span class="pc bpc" id="L350" title="1 of 4 branches missed.">            if (mComputeAndKeepInliers || mComputeAndKeepResiduals) {</span>
+<span class="fc" id="L351">                mBestInliersData = new RANSACInliersData(totalSamples, </span>
+                        mComputeAndKeepInliers, mComputeAndKeepResiduals);
+                
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">                if (mComputeAndKeepInliers) {</span>
+<span class="fc" id="L355">                    inliers = new BitSet(totalSamples);</span>
+                }
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">                if (mComputeAndKeepResiduals) {</span>
+<span class="fc" id="L358">                    residuals = new double[totalSamples];</span>
+                }
+            }
+        
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">            if (subsetSelector == null) {</span>
+                //create new subset selector
+<span class="fc" id="L364">                subsetSelector = SubsetSelector.create(totalSamples);</span>
+            } else {
+                //set number of samples to current subset selector
+<span class="nc" id="L367">                subsetSelector.setNumSamples(totalSamples);</span>
+            }
+            
+<span class="pc bpc" id="L370" title="1 of 4 branches missed.">            while ((nIters &gt; currentIter) &amp;&amp; (currentIter &lt; mMaxIterations)) {                </span>
+                //generate a random subset of samples
+<span class="fc" id="L372">                subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);</span>
+                
+                //clear list of preliminar solutions before calling listener
+<span class="fc" id="L375">                iterResults.clear();                 </span>
+                //compute solution for current iteration
+<span class="fc" id="L377">                listener.estimatePreliminarSolutions(subsetIndices, </span>
+                        iterResults);
+
+<span class="fc bfc" id="L380" title="All 2 branches covered.">                for (T iterResult : iterResults) {</span>
+                    //compute number of inliers
+<span class="fc" id="L382">                    currentInliers = 0;</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">                    for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc" id="L384">                        double error = listener.computeResidual(iterResult,</span>
+                                i);
+<span class="fc bfc" id="L386" title="All 2 branches covered.">                        if(error &lt;= threshold) {</span>
+<span class="fc" id="L387">                            currentInliers++;</span>
+                            //keep inlier data if needed
+<span class="fc bfc" id="L389" title="All 2 branches covered.">                            if (inliers != null) {</span>
+<span class="fc" id="L390">                                inliers.set(i);</span>
+                            }
+                        } else {
+                            //outlier
+<span class="fc bfc" id="L394" title="All 2 branches covered.">                            if (inliers != null) {</span>
+<span class="fc" id="L395">                                inliers.clear(i);</span>
+                            }
+                        }
+
+<span class="fc bfc" id="L399" title="All 2 branches covered.">                        if (residuals != null) {</span>
+<span class="fc" id="L400">                            residuals[i] = error;</span>
+                        }
+                    }
+
+                    //save result that produces the largest number of inliers
+                    //and update number of iterations
+<span class="fc bfc" id="L406" title="All 2 branches covered.">                    if (currentInliers &gt; bestNumInliers) {</span>
+                        //update best number of inliers
+<span class="fc" id="L408">                        bestNumInliers = currentInliers;</span>
+                        //keep current result
+<span class="fc" id="L410">                        bestResult = iterResult;</span>
+
+                        //update best inlier data
+<span class="fc bfc" id="L413" title="All 2 branches covered.">                        if(mBestInliersData != null) {</span>
+<span class="fc" id="L414">                            mBestInliersData.update(inliers, residuals,</span>
+                                    bestNumInliers);
+                        }
+
+                        //recompute number of times the algorithm needs to be
+                        //executed depending on current number of inliers to
+                        //achieve with probability mConfidence that we have
+                        //inliers and probability 1 - mConfidence that we have
+                        //outliers
+<span class="fc" id="L423">                        double probSubsetAllInliers = Math.pow(</span>
+                                (double)bestNumInliers / (double)totalSamples,
+                                (double)subsetSize);
+
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">                        if (Math.abs(probSubsetAllInliers) &lt; Double.MIN_VALUE ||</span>
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">                                Double.isNaN(probSubsetAllInliers)) {</span>
+<span class="nc" id="L429">                            newNIters = Integer.MAX_VALUE;</span>
+                        } else {
+<span class="fc" id="L431">                            double logProbSomeOutliers =</span>
+<span class="fc" id="L432">                                    Math.log(1.0 - probSubsetAllInliers);</span>
+<span class="pc bpc" id="L433" title="1 of 2 branches missed.">                            if (Math.abs(logProbSomeOutliers) &lt;</span>
+                                    Double.MIN_VALUE ||
+<span class="pc bpc" id="L435" title="1 of 2 branches missed.">                                    Double.isNaN(logProbSomeOutliers)) {</span>
+<span class="nc" id="L436">                                newNIters = Integer.MAX_VALUE;</span>
+                            } else {
+<span class="fc" id="L438">                                newNIters = (int)Math.ceil(Math.abs(</span>
+<span class="fc" id="L439">                                        Math.log(1.0 - mConfidence) /</span>
+                                        logProbSomeOutliers));
+                            }
+                        }
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">                        if (newNIters &lt; nIters) {</span>
+<span class="fc" id="L444">                            nIters = newNIters;</span>
+                        }
+                    }
+<span class="fc" id="L447">                }</span>
+
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">                if (nIters &gt; 0) {</span>
+<span class="fc" id="L450">                    progress = Math.min((float)currentIter / (float)nIters, </span>
+                            1.0f);
+                } else {
+<span class="nc" id="L453">                    progress = 1.0f;</span>
+                }
+<span class="fc bfc" id="L455" title="All 2 branches covered.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
+<span class="fc" id="L456">                    previousProgress = progress;</span>
+<span class="fc" id="L457">                    listener.onEstimateProgressChange(this, progress);                    </span>
+                }                
+<span class="fc" id="L459">                currentIter++;</span>
+                
+<span class="fc" id="L461">                listener.onEstimateNextIteration(this, currentIter);</span>
+            }
+            
+            //no solution could be found after completing all iterations
+<span class="pc bpc" id="L465" title="1 of 2 branches missed.">            if (bestResult == null) {</span>
+<span class="nc" id="L466">                throw new RobustEstimatorException();</span>
+            }
+                        
+<span class="fc" id="L469">            listener.onEstimateEnd(this);</span>
+            
+<span class="fc" id="L471">            return bestResult;</span>
+<span class="nc" id="L472">        } catch (SubsetSelectorException e) {</span>
+<span class="nc" id="L473">            throw new RobustEstimatorException(e);</span>
+        } finally {
+<span class="fc" id="L475">            mLocked = false;</span>
+        }
+    }
+    
+    /**
+     * Returns data about inliers once estimation has been done.
+     * @return data about inliers or null if estimation has not been done.
+     */
+    @Override
+    public InliersData getInliersData() {
+<span class="fc" id="L485">        return getBestInliersData();</span>
+    }
+    
+
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */    
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L495">        return RobustEstimatorMethod.RANSAC;</span>
+    }
+    
+    /**
+     * Contains data related to estimated inliers.
+     */
+    public static class RANSACInliersData extends InliersData {
+        
+        /**
+         * Efficiently stores which samples are considered inliers and which
+         * ones aren't.
+         */
+        private BitSet mInliers;
+        
+        /**
+         * Constructor.
+         * @param totalSamples total number of samples.
+         * @param keepInliers true to keep inliers, false otherwise.
+         * @param keepResiduals true to keep residuals, false otherwise.
+         */
+        protected RANSACInliersData(int totalSamples, boolean keepInliers,
+<span class="fc" id="L516">                boolean keepResiduals) {            </span>
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">            if (keepInliers) {</span>
+<span class="fc" id="L518">                mInliers = new BitSet(totalSamples);</span>
+            }
+<span class="pc bpc" id="L520" title="1 of 2 branches missed.">            if (keepResiduals) {</span>
+<span class="fc" id="L521">                mResiduals = new double[totalSamples];</span>
+            }
+<span class="fc" id="L523">            mNumInliers = 0;</span>
+<span class="fc" id="L524">        }</span>
+        
+        /**
+         * Updates data contained in this instance.
+         * @param inliers efficiently stores which samples are considered
+         * inliers and which ones aren't.
+         * @param residuals residuals obtained for each sample of data.
+         * @param numInliers number of inliers found on current iteration.
+         */
+        protected void update(BitSet inliers, double[] residuals, 
+                int numInliers) {
+<span class="fc" id="L535">            int totalSamples = 0;</span>
+<span class="pc bpc" id="L536" title="1 of 2 branches missed.">            if (inliers != null) {</span>
+<span class="fc" id="L537">                totalSamples = inliers.length();</span>
+            }
+<span class="pc bpc" id="L539" title="1 of 2 branches missed.">            if (residuals != null) {</span>
+<span class="fc" id="L540">               totalSamples = residuals.length; </span>
+            }
+            
+<span class="pc bpc" id="L543" title="4 of 8 branches missed.">            if(mInliers != null &amp;&amp; inliers != null &amp;&amp; mResiduals != null &amp;&amp; </span>
+                    residuals != null) {
+                //update inliers and residuals
+<span class="fc bfc" id="L546" title="All 2 branches covered.">                for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc" id="L547">                    mInliers.set(i, inliers.get(i));</span>
+<span class="fc" id="L548">                    mResiduals[i] = residuals[i];</span>
+                }
+<span class="nc bnc" id="L550" title="All 4 branches missed.">            } else if (mInliers != null &amp;&amp; inliers != null) {</span>
+                //update inliers but not the residuals
+<span class="nc bnc" id="L552" title="All 2 branches missed.">                for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="nc" id="L553">                    mInliers.set(i, inliers.get(i));</span>
+                }
+<span class="nc bnc" id="L555" title="All 4 branches missed.">            } else if (mResiduals != null &amp;&amp; residuals != null) {</span>
+                //update residuals but not inliers
+<span class="nc" id="L557">                System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);</span>
+            }
+<span class="fc" id="L559">            mNumInliers = numInliers;</span>
+<span class="fc" id="L560">        }</span>
+
+        /**
+         * Returns efficient array indicating which samples are considered 
+         * inliers and which ones aren't.
+         * @return array indicating which samples are considered inliers and 
+         * which ones aren't.
+         */        
+        @Override
+        public BitSet getInliers() {
+<span class="fc" id="L570">            return mInliers;</span>
+        }        
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

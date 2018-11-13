@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSPolynomialRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">LMedSPolynomialRobustEstimator.java</span></div><h1>LMedSPolynomialRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best polynomial using LMedS algorithm.
+ */
+@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
+    
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solutions is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * Threshold will be used to compare either algebraic or geometric distance
+     * of estimated polynomial respect each provided evaluation.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-6;
+    
+    /**
+     * Minimum value that can be set as stop threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+    
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in case where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the sopt threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * strill produce even smaller thresholds in estimated results.
+     */
+    private double mStopThreshold;
+    
+    /**
+     * Constructor.
+     */
+    public LMedSPolynomialRobustEstimator() {
+<span class="fc" id="L70">        super();</span>
+<span class="fc" id="L71">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L72">    }</span>
+    
+    /**
+     * Constructor.
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public LMedSPolynomialRobustEstimator(int degree) 
+            throws IllegalArgumentException {
+<span class="fc" id="L81">        super(degree);</span>
+<span class="fc" id="L82">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L83">    }</span>
+    
+    /**
+     * Constructor.
+     * @param evaluations collections of polynomial evaluations.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     * less than the required minimum.
+     */
+    public LMedSPolynomialRobustEstimator(
+            List&lt;PolynomialEvaluation&gt; evaluations) 
+            throws IllegalArgumentException {
+<span class="fc" id="L94">        super(evaluations);</span>
+<span class="fc" id="L95">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L96">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public LMedSPolynomialRobustEstimator(
+            PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L105">        super(listener);</span>
+<span class="fc" id="L106">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L107">    }</span>
+    
+    /**
+     * Constructor.
+     * @param degree degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     * provided number of evaluations is less than the required minimum for
+     * provided degree.
+     */
+    public LMedSPolynomialRobustEstimator(int degree,
+            List&lt;PolynomialEvaluation&gt; evaluations)
+            throws IllegalArgumentException {
+<span class="fc" id="L120">        super(degree, evaluations);</span>
+<span class="fc" id="L121">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L122">    }</span>
+    
+    /**
+     * Constructor.
+     * @param degree degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public LMedSPolynomialRobustEstimator(int degree,
+            PolynomialRobustEstimatorListener listener)
+            throws IllegalArgumentException {
+<span class="fc" id="L134">        super(degree, listener);</span>
+<span class="fc" id="L135">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L136">    }</span>
+    
+    /**
+     * Constructor.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided number of evaluations is 
+     * less than the required minimum.
+     */
+    public LMedSPolynomialRobustEstimator(
+            List&lt;PolynomialEvaluation&gt; evaluations,
+            PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L149">        super(evaluations, listener);</span>
+<span class="fc" id="L150">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L151">    }</span>
+    
+    /**
+     * Constructor.
+     * @param degree degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener listenerto be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     * provided number of evaluations is less than the required minimum for
+     * provided degree.
+     */
+    public LMedSPolynomialRobustEstimator(int degree,
+            List&lt;PolynomialEvaluation&gt; evaluations,
+            PolynomialRobustEstimatorListener listener)
+            throws IllegalArgumentException {
+<span class="fc" id="L167">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L168">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L169">    }</span>
+    
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L190">        return mStopThreshold;</span>
+    }
+    
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough. 
+     * Once a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results
+     * @param stopThreshold stop threshold to stop the algorithm prematurely 
+     * when a certain accuracy has been reached
+     * @throws IllegalArgumentException if provided value is zero or negative
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress
+     */
+    public void setStopthreshold(double stopThreshold) 
+            throws IllegalArgumentException, LockedException {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if(isLocked()) throw new LockedException();</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if(stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L218">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L220">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * Estimates polynomial.
+     * @return estimated polynomial.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any other reason
+     * (i.e. numerical instability, no solution available, etc).
+     */    
+    @Override
+    public Polynomial estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException {
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L237">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L240">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L243">        LMedSRobustEstimator&lt;Polynomial&gt; innerEstimator =</span>
+                new LMedSRobustEstimator&lt;&gt;(
+<span class="fc" id="L245">                        new LMedSRobustEstimatorListener&lt;Polynomial&gt;(){</span>
+                            
+            //subset of evaluations picked on each iteration
+<span class="fc" id="L248">            private List&lt;PolynomialEvaluation&gt; mSubsetEvaluations =</span>
+                    new ArrayList&lt;&gt;();
+                            
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L253">                return mEvaluations.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L258">                return mPolynomialEstimator.getMinNumberOfEvaluations();</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(int[] samplesIndices, 
+                    List&lt;Polynomial&gt; solutions) {
+<span class="fc" id="L264">                mSubsetEvaluations.clear();</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L266">                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));</span>
+                }
+                
+                try {
+<span class="fc" id="L270">                    mPolynomialEstimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L271">                    mPolynomialEstimator.setEvaluations(mSubsetEvaluations);</span>
+                    
+<span class="fc" id="L273">                    Polynomial polynomial = mPolynomialEstimator.estimate();</span>
+<span class="fc" id="L274">                    solutions.add(polynomial);</span>
+<span class="fc" id="L275">                } catch (Exception e) {</span>
+                    //if anything fails, no solution is added
+<span class="fc" id="L277">                }</span>
+<span class="fc" id="L278">            }</span>
+
+            @Override
+            public double computeResidual(Polynomial currentEstimation, int i) {
+<span class="fc" id="L282">                PolynomialEvaluation eval = mEvaluations.get(i);</span>
+<span class="fc" id="L283">                return getDistance(eval, currentEstimation);</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L288">                return LMedSPolynomialRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L294">                    mListener.onEstimateStart(</span>
+                            LMedSPolynomialRobustEstimator.this);
+                }
+<span class="fc" id="L297">            }</span>
+
+            @Override
+            public void onEstimateEnd(RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L302">                    mListener.onEstimateEnd(</span>
+                            LMedSPolynomialRobustEstimator.this);
+                }
+<span class="fc" id="L305">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(
+                    RobustEstimator&lt;Polynomial&gt; estimator, int iteration) {
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L311">                    mListener.onEstimateNextIteration(</span>
+                            LMedSPolynomialRobustEstimator.this, iteration);
+                }
+<span class="fc" id="L314">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(
+                    RobustEstimator&lt;Polynomial&gt; estimator, float progress) {
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L320">                    mListener.onEstimateProgressChange(</span>
+                            LMedSPolynomialRobustEstimator.this, progress);
+                }
+<span class="fc" id="L323">            }</span>
+        });
+        
+        try {
+<span class="fc" id="L327">            mLocked = true;</span>
+<span class="fc" id="L328">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L329">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L330">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L331">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L332">            return innerEstimator.estimate();</span>
+        } finally {
+<span class="fc" id="L334">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */        
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L344">        return RobustEstimatorMethod.LMedS;</span>
+    }    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
