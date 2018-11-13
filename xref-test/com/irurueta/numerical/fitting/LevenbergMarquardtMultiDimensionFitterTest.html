@@ -3321,7 +3321,7 @@
 <a class="jxr_linenumber" name="L3313" href="#L3313">3313</a>                 mse2 += Math.pow(y[i] - yi, 2.0) / (npoints - params.length);
 <a class="jxr_linenumber" name="L3314" href="#L3314">3314</a>             }
 <a class="jxr_linenumber" name="L3315" href="#L3315">3315</a> 
-<a class="jxr_linenumber" name="L3316" href="#L3316">3316</a>             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L3316" href="#L3316">3316</a>             assertEquals(mse, mse2, ABSOLUTE_ERROR);
 <a class="jxr_linenumber" name="L3317" href="#L3317">3317</a> 
 <a class="jxr_linenumber" name="L3318" href="#L3318">3318</a>             Matrix cov = Utils.inverse(invCov);
 <a class="jxr_linenumber" name="L3319" href="#L3319">3319</a>             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
