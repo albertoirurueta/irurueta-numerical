@@ -3313,7 +3313,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 mse2 += Math.pow(y[i] - yi, 2.0) / (npoints - params.length);
             }
 
-            assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
+            assertEquals(mse, mse2, ABSOLUTE_ERROR);
 
             Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
