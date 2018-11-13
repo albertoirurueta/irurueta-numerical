@@ -28,13 +28,21 @@ addons:
 
 #add: -Denvironment=test to activate CI profile to publish into gh-pages
 script:
-- travis_wait 50 mvn clean jacoco:prepare-agent install jacoco:report coveralls:report -Denvironment=test -P !build-extras
-- travis_wait 50 mvn site -Denvironment=test -P !build-extras
+- travis_wait 50 mvn clean jacoco:prepare-agent install jacoco:report coveralls:report site -Denvironment=test -P !build-extras
 - sonar-scanner
 
 cache:
   directories:
   - ~/.m2/repository
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_OAUTH_TOKEN
+  keep-history: true
+  local-dir: ./target/site
+  on:
+    branch: master
 
 after_success:
 - ./cd/before-deploy.sh
