@@ -2,7 +2,6 @@
 Numerical utilities
 
 [![Build Status](https://travis-ci.org/albertoirurueta/irurueta-numerical.svg?branch=master)](https://travis-ci.org/albertoirurueta/irurueta-numerical)
-[![Coverage Status](https://coveralls.io/repos/github/albertoirurueta/irurueta-numerical/badge.svg?branch=master)](https://coveralls.io/github/albertoirurueta/irurueta-numerical?branch=master)
 
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-numerical&metric=bugs)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-numerical)
@@ -21,3 +20,8 @@ Numerical utilities
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-numerical&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-numerical)
 
 [Maven Site Report](http://albertoirurueta.github.io/irurueta-numerical)
+
+Donations are welcome :)
+Contribute to the maintenance of this project by clicking on the following link:
+
+[![paypal](https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png)](https://paypal.me/albertoirurueta)
