@@ -218,10 +218,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L218">                    temp = Math.abs(xi[i]) / Math.max(Math.abs(p[i]), 1.0);</span>
 <span class="fc bfc" id="L219" title="All 2 branches covered.">                    if(temp &gt; test) test = temp;</span>
                 }
-<span class="fc bfc" id="L221" title="All 2 branches covered.">                if (test &lt; TOLX) {</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">                if (test &lt; TOLX) {</span>
                     //minimum found
-<span class="fc" id="L223">                    validResult = true;</span>
-<span class="fc" id="L224">                    break;</span>
+<span class="nc" id="L223">                    validResult = true;</span>
+<span class="nc" id="L224">                    break;</span>
                 }
 
 <span class="fc" id="L227">                System.arraycopy(g, 0, dg, 0, n);</span>
@@ -237,10 +237,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L237">                        test = temp;</span>
                     }
                 }
-<span class="pc bpc" id="L240" title="1 of 2 branches missed.">                if (test &lt; tolerance) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                if (test &lt; tolerance) {</span>
                     //minimum found
-<span class="nc" id="L242">                    validResult = true;</span>
-<span class="nc" id="L243">                    break;</span>
+<span class="fc" id="L242">                    validResult = true;</span>
+<span class="fc" id="L243">                    break;</span>
                 }
                 
 <span class="fc bfc" id="L246" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
@@ -261,7 +261,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L261">                    sumxi += sqr(xi[i]);</span>
                 }
                 
-<span class="fc bfc" id="L264" title="All 2 branches covered.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
 <span class="fc" id="L265">                    fac = 1.0 / fac;</span>
 <span class="fc" id="L266">                    fad = 1.0 / fae;</span>
 <span class="fc bfc" id="L267" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
@@ -498,10 +498,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="nc" id="L498">                throw new OptimizationException(t);</span>
 <span class="fc" id="L499">            }</span>
             
-<span class="fc bfc" id="L501" title="All 2 branches covered.">            if (alam &lt; alamin) {</span>
-<span class="fc bfc" id="L502" title="All 2 branches covered.">                for(i = 0; i &lt; n; i++) x[i] = xold[i];</span>
-<span class="fc" id="L503">                check[0] = true;</span>
-<span class="fc" id="L504">                return;</span>
+<span class="pc bpc" id="L501" title="1 of 2 branches missed.">            if (alam &lt; alamin) {</span>
+<span class="nc bnc" id="L502" title="All 2 branches missed.">                for(i = 0; i &lt; n; i++) x[i] = xold[i];</span>
+<span class="nc" id="L503">                check[0] = true;</span>
+<span class="nc" id="L504">                return;</span>
 <span class="fc bfc" id="L505" title="All 2 branches covered.">            } else if (f[0] &lt;= fold + ALF * alam * slope) {</span>
 <span class="fc" id="L506">                return;</span>
             } else {
@@ -520,11 +520,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L520">                        disc = b * b - 3.0 * a * slope;</span>
 <span class="pc bpc" id="L521" title="1 of 2 branches missed.">                        if (disc &lt; 0.0) {</span>
 <span class="nc" id="L522">                            tmplam = 0.5 * alam;</span>
-<span class="fc bfc" id="L523" title="All 2 branches covered.">                        } else if (b &lt;= 0.0) {</span>
+<span class="pc bpc" id="L523" title="1 of 2 branches missed.">                        } else if (b &lt;= 0.0) {</span>
 <span class="fc" id="L524">                            tmplam = (-b + Math.sqrt(disc)) /</span>
                                 (3.0 * a);
                         } else {
-<span class="fc" id="L527">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
+<span class="nc" id="L527">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
                         }
                     }
 <span class="fc bfc" id="L530" title="All 2 branches covered.">                    if (tmplam &gt; 0.5 * alam) {</span>
