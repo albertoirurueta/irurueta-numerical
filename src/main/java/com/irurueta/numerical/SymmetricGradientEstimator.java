@@ -59,8 +59,9 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      * not equal.
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public void gradient(double[] point, double[] result) 
-            throws EvaluationException, IllegalArgumentException {
+            throws EvaluationException {
         int n = point.length;
         if (result.length != n) {
             throw new IllegalArgumentException();
@@ -76,31 +77,39 @@ public class SymmetricGradientEstimator extends GradientEstimator {
         }
                 
         try {
-            double temp, h, h1, h2, hh, fh1, fh2;
-            //double fold = listener.evaluate(point);
+            double temp;
+            double h;
+            double h1;
+            double h2;
+            double hh;
+            double fh1;
+            double fh2;
+
             for (int j = 0; j < n; j++) {
                 temp = point[j];
                 h = EPS * Math.abs(temp);
-                if(h == 0.0) h = EPS; //Trich to reduce finite-precision error
+                if (h == 0.0) h = EPS; //Trich to reduce finite-precision error
                 xh1[j] = temp + h;
                 xh2[j] = temp - h;
                 //because of machine precision h could be different in both cases
-                
+
                 h1 = xh1[j] - temp;
                 h2 = temp - xh2[j];
-                
+
                 hh = h1 + h2; //this is more or less equal to 2.0 * h
-                
+
                 fh1 = listener.evaluate(xh1);
                 fh2 = listener.evaluate(xh2);
-                
+
                 xh1[j] = temp;
                 xh2[j] = temp;
-                
+
                 result[j] = (fh1 - fh2) / hh;
             }
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (EvaluationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
     }    
 }

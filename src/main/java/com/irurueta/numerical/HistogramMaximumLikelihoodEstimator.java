@@ -90,7 +90,7 @@ public class HistogramMaximumLikelihoodEstimator
      * minimum allowed number of bins.
      */
     public HistogramMaximumLikelihoodEstimator(double gaussianSigma,
-            int numberOfBins) throws IllegalArgumentException {
+            int numberOfBins) {
         super(gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -108,8 +108,7 @@ public class HistogramMaximumLikelihoodEstimator
      * minimum allowed number of bins.
      */    
     public HistogramMaximumLikelihoodEstimator(double[] inputData,
-            double gaussianSigma, int numberOfBins) 
-            throws IllegalArgumentException {
+            double gaussianSigma, int numberOfBins) {
         super(inputData, gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -132,7 +131,7 @@ public class HistogramMaximumLikelihoodEstimator
      */        
     public HistogramMaximumLikelihoodEstimator(double minValue,
             double maxValue, double[] inputData, double gaussianSigma,
-            int numberOfBins) throws IllegalArgumentException {
+            int numberOfBins) {
         super(minValue, maxValue, inputData, gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -162,25 +161,7 @@ public class HistogramMaximumLikelihoodEstimator
     public int getNumberOfBins(){
         return numberOfBins;
     }
-    
-    /**
-     * Internal method to set number of bins to be used on the histogram. The
-     * larger the value being set the more precise results will be but more data
-     * will be needed to obtain statistically meaningful data so that enough
-     * samples are present on each bin.
-     * @param numberOfBins Number of bins to be used on the histogram.
-     * @throws IllegalArgumentException Raised if provided value is lower than
-     * the allowed minimum.
-     */
-    private void internalSetNumberOfBins(int numberOfBins)
-            throws IllegalArgumentException {
-        if (numberOfBins < MIN_NUMBER_OF_BINS) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.numberOfBins = numberOfBins;
-    }
-    
+
     /**
      * Sets number of bins to be used on the histogram. The larger the provided
      * value being set the more precise results will be but more data will be
@@ -193,8 +174,7 @@ public class HistogramMaximumLikelihoodEstimator
      * @throws IllegalArgumentException Raised if provided value is lower than
      * the allowed minimum.
      */
-    public void setNumberOfBins(int numberOfBins) throws LockedException,
-            IllegalArgumentException {
+    public void setNumberOfBins(int numberOfBins) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -241,7 +221,7 @@ public class HistogramMaximumLikelihoodEstimator
         Arrays.fill(bins, 0.0);
         
         
-        //Vector contianing gaussians being added to histogram
+        //Vector containing gaussians being added to histogram
         //Data is added to histogram as if it was convoluted with a gaussian
         //to add smoothness to results
         if (gaussian == null || gaussian.length != numberOfBins) {
@@ -252,7 +232,6 @@ public class HistogramMaximumLikelihoodEstimator
         double delta = (maxValue - minValue) / (double)(numberOfBins - 1);
         
         //iterate over input data to add data to histogram
-        int nDataElems = inputData.length;
         double gaussianCenterPos;
         for (double data : inputData) {
             gaussianCenterPos = (data - minValue) / delta;
@@ -260,14 +239,11 @@ public class HistogramMaximumLikelihoodEstimator
 
             //add gaussian centered at input data value to histogram bins
             ArrayUtils.sum(bins, gaussian, bins);
-            //line above is equal to:
-            //for(int j = 0; j < numberOfBins; j++){
-            //    bins[j] += gaussian[j];
-            //}
         }
         
         //find location of maximum in histogram
-        double maxBin = 0.0, maxFuncValue;
+        double maxBin = 0.0;
+        double maxFuncValue;
         int maxPos = 0;
         for (int i = 0; i < numberOfBins; i++) {
             if (bins[i] > maxBin) {
@@ -299,5 +275,22 @@ public class HistogramMaximumLikelihoodEstimator
                     (2.0 * gaussianSigma * gaussianSigma)) / 
                     (Math.sqrt(2.0 * Math.PI) * gaussianSigma);
         }
+    }
+
+    /**
+     * Internal method to set number of bins to be used on the histogram. The
+     * larger the value being set the more precise results will be but more data
+     * will be needed to obtain statistically meaningful data so that enough
+     * samples are present on each bin.
+     * @param numberOfBins Number of bins to be used on the histogram.
+     * @throws IllegalArgumentException Raised if provided value is lower than
+     * the allowed minimum.
+     */
+    private void internalSetNumberOfBins(int numberOfBins) {
+        if (numberOfBins < MIN_NUMBER_OF_BINS) {
+            throw new IllegalArgumentException();
+        }
+
+        this.numberOfBins = numberOfBins;
     }
 }

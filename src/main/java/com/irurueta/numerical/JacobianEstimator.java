@@ -34,7 +34,7 @@ public class JacobianEstimator {
     /**
      * Listener to evaluate a multivariate function.
      */
-    public MultiVariateFunctionEvaluatorListener listener;
+    MultiVariateFunctionEvaluatorListener listener;
     
     /**
      * Internal array to hold input parameter's values.
@@ -63,8 +63,8 @@ public class JacobianEstimator {
             return result;
         } catch (EvaluationException e) {
             throw e;
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
     }
     
@@ -81,8 +81,9 @@ public class JacobianEstimator {
      * @throws EvaluationException raised if function cannot be evaluated.
      * @throws IllegalArgumentException if size of result is not valid.
      */
+    @SuppressWarnings("Duplicates")
     public void jacobian(double[] point, Matrix result) 
-            throws EvaluationException, IllegalArgumentException {
+            throws EvaluationException {
         int numdims = point.length;
         int numvars = listener.getNumberOfVariables();
         if (result.getColumns() != numdims) {
@@ -100,7 +101,8 @@ public class JacobianEstimator {
         System.arraycopy(point, 0, xh, 0, numdims);
         
         try {
-            double temp, h;
+            double temp;
+            double h;
             listener.evaluate(point, fold);
             for (int j = 0; j < numdims; j++) {
                 temp = point[j];
@@ -114,8 +116,10 @@ public class JacobianEstimator {
                     result.setElementAt(i, j, (fh[i] - fold[i]) / h);
                 }
             }
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (EvaluationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
     }
 }

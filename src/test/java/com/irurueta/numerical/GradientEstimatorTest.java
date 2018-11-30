@@ -114,7 +114,7 @@ public class GradientEstimatorTest
     }
 
     @Override
-    public double evaluate(double[] point) throws Throwable {
+    public double evaluate(double[] point) throws Exception {
         int dims = Math.min(Math.min(point.length, minimum.length),
                 width.length);
 

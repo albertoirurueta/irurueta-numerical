@@ -65,13 +65,17 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
         double xh1 = x + h;
         double xh2 = x - h;
         
-        double f, fh1, fh2;
+        double f;
+        double fh1;
+        double fh2;
         try {
             f = listener.evaluate(x);
             fh1 = listener.evaluate(xh1);
             fh2 = listener.evaluate(xh2);
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (EvaluationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
         
         //express the problem as:
@@ -80,7 +84,8 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
         //c * xh2^2 + b * xh2 + c = f(xh2)
         
         Matrix a;
-        double aParam, bParam;
+        double aParam;
+        double bParam;
         try {
             a = new Matrix(N_POINTS, N_POINTS);
 
@@ -121,7 +126,7 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
             aParam = params[0];
             bParam = params[1];
 
-        } catch (Throwable t) {
+        } catch (Exception e) {
             return Double.NaN;
         }
         

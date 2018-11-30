@@ -167,7 +167,7 @@ public class BuildInfo {
      * Obtains singleton instance.
      * @return singleton instance.
      */
-    public synchronized static BuildInfo getInstance() {
+    public static synchronized BuildInfo getInstance() {
         BuildInfo info;
         if (mReference == null || (info = mReference.get()) == null) {
             info = new BuildInfo();

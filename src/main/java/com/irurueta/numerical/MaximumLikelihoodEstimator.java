@@ -93,8 +93,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */
-    public MaximumLikelihoodEstimator(double gaussianSigma) 
-            throws IllegalArgumentException {
+    public MaximumLikelihoodEstimator(double gaussianSigma) {
         inputData = null;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -121,8 +120,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */
-    public MaximumLikelihoodEstimator(double[] inputData, double gaussianSigma)
-            throws IllegalArgumentException {
+    public MaximumLikelihoodEstimator(double[] inputData, double gaussianSigma) {
         this.inputData = inputData;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -143,8 +141,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero, or if minValue &lt; maxValue.
      */
     public MaximumLikelihoodEstimator(double minValue, double maxValue,
-            double[] inputData, double gaussianSigma) 
-            throws IllegalArgumentException {
+            double[] inputData, double gaussianSigma) {
         this.inputData = inputData;
         locked = false;
         internalSetMinMaxValues(minValue, maxValue);
@@ -194,7 +191,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
     public void setMinMaxValues(double minValue, double maxValue)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -265,7 +262,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
     public void setInputData(double[] inputData, double minValue, 
-            double maxValue) throws LockedException, IllegalArgumentException {
+            double maxValue) throws LockedException {
         setMinMaxValues(minValue, maxValue);
         this.inputData = inputData;
     }
@@ -311,7 +308,7 @@ public abstract class MaximumLikelihoodEstimator {
      * sigma is negative or zero.
      */
     public void setGaussianSigma(double gaussianSigma) 
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -341,8 +338,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero.
      */
     public static MaximumLikelihoodEstimator create(double gaussianSigma,
-            MaximumLikelihoodEstimatorMethod method) 
-            throws IllegalArgumentException {
+            MaximumLikelihoodEstimatorMethod method) {
         switch (method) {
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
                 return new HistogramMaximumLikelihoodEstimator(gaussianSigma,
@@ -365,8 +361,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      * negative or zero.
      */
-    public static MaximumLikelihoodEstimator create(double gaussianSigma)
-            throws IllegalArgumentException {
+    public static MaximumLikelihoodEstimator create(double gaussianSigma) {
         return create(gaussianSigma, DEFAULT_METHOD);
     }
     
@@ -391,8 +386,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero.
      */    
     public static MaximumLikelihoodEstimator create(double[] inputData,
-            double gaussianSigma, MaximumLikelihoodEstimatorMethod method)
-            throws IllegalArgumentException {
+            double gaussianSigma, MaximumLikelihoodEstimatorMethod method) {
         switch (method) {
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
                 return new HistogramMaximumLikelihoodEstimator(inputData,
@@ -417,7 +411,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero.
      */        
     public static MaximumLikelihoodEstimator create(double[] inputData,
-            double gaussianSigma) throws IllegalArgumentException {
+            double gaussianSigma) {
         return create(inputData, gaussianSigma, DEFAULT_METHOD);
     }
     
@@ -450,8 +444,7 @@ public abstract class MaximumLikelihoodEstimator {
      */        
     public static MaximumLikelihoodEstimator create(double minValue,
             double maxValue, double[] inputData, double gaussianSigma,
-            MaximumLikelihoodEstimatorMethod method) 
-            throws IllegalArgumentException {
+            MaximumLikelihoodEstimatorMethod method) {
         switch (method) {
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
                 return new HistogramMaximumLikelihoodEstimator(minValue, 
@@ -481,8 +474,7 @@ public abstract class MaximumLikelihoodEstimator {
      * negative or zero, or if minValue &lt; maxValue.
      */            
     public static MaximumLikelihoodEstimator create(double minValue,
-            double maxValue, double[] inputData, double gaussianSigma)
-            throws IllegalArgumentException {
+            double maxValue, double[] inputData, double gaussianSigma) {
         return create(minValue, maxValue, inputData, gaussianSigma, 
                 DEFAULT_METHOD);
     }
@@ -534,8 +526,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @param maxValue Maximum value in input data array.
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
-    private void internalSetMinMaxValues(double minValue, double maxValue)
-            throws IllegalArgumentException {
+    private void internalSetMinMaxValues(double minValue, double maxValue) {
         if (minValue > maxValue) {
             throw new IllegalArgumentException();
         }
@@ -552,8 +543,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Exception raised if provided Gaussian
      * sigma is negative or zero.
      */
-    private void internalSetGaussianSigma(double gaussianSigma)
-            throws IllegalArgumentException {
+    private void internalSetGaussianSigma(double gaussianSigma) {
         if (gaussianSigma <= MIN_GAUSSIAN_SIGMA) {
             throw new IllegalArgumentException();
         }

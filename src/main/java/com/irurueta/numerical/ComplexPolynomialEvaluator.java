@@ -39,8 +39,7 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-    public ComplexPolynomialEvaluator(Complex[] polyParams) 
-            throws IllegalArgumentException {
+    public ComplexPolynomialEvaluator(Complex[] polyParams) {
         if (polyParams == null || polyParams.length == 0) {
             throw new IllegalArgumentException();
         }

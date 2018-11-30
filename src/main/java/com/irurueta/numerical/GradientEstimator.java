@@ -30,7 +30,7 @@ public class GradientEstimator {
     /**
      * Listener to evaluate a multidimensional function.
      */
-    public MultiDimensionFunctionEvaluatorListener listener;
+    MultiDimensionFunctionEvaluatorListener listener;
     
     /**
      * Internal array to hold input parameter's values.
@@ -69,8 +69,9 @@ public class GradientEstimator {
      * @throws IllegalArgumentException Raised if length of result and point are
      * not equal.
      */
+    @SuppressWarnings("Duplicates")
     public void gradient(double[] point, double[] result) 
-            throws EvaluationException, IllegalArgumentException {
+            throws EvaluationException {
         int length = point.length;
         if (result.length != length) {
             throw new IllegalArgumentException();
@@ -82,7 +83,9 @@ public class GradientEstimator {
         System.arraycopy(point, 0, xh, 0, length);
         
         try {
-            double temp, h, fh;
+            double temp;
+            double h;
+            double fh;
             double fold = listener.evaluate(point);
             for (int j = 0; j < length; j++) {
                 temp = point[j];
@@ -94,8 +97,10 @@ public class GradientEstimator {
                 xh[j] = temp;
                 result[j] = (fh - fold) / h;
             }
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (EvaluationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
     }
 }

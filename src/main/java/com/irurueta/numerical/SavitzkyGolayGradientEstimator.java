@@ -60,8 +60,9 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
      * not equal.
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public void gradient(double[] point, double[] result) 
-            throws EvaluationException, IllegalArgumentException {
+            throws EvaluationException {
         int n = point.length;
         if (result.length != n) {
             throw new IllegalArgumentException();
@@ -73,8 +74,10 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
         double f;
         try {
             f = listener.evaluate(point);
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (EvaluationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
         System.arraycopy(point, 0, xh1, 0, n);
         System.arraycopy(point, 0, xh2, 0, n);
@@ -100,12 +103,15 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             double p1 = xh1[j] = temp + h;
             double p2 = xh2[j] = temp - h;
             
-            double fh1, fh2;
+            double fh1;
+            double fh2;
             try {
                 fh1 = listener.evaluate(xh1);
                 fh2 = listener.evaluate(xh2);
-            } catch (Throwable t) {
-                throw new EvaluationException(t);
+            } catch (EvaluationException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new EvaluationException(e);
             }
             
             xh1[j] = temp;
@@ -134,7 +140,8 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             //normalize to increase accuracy
             ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);
 
-            double aParam, bParam;
+            double aParam;
+            double bParam;
             try {
                 decomposer.setInputMatrix(a);
                 decomposer.decompose();
@@ -152,7 +159,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
                 //partial derivative on dimension j is:
                 //2.0 * a * x + b , therefore:
                 result[j] = 2.0 * aParam * temp + bParam;
-            } catch (Throwable t) {
+            } catch (Exception e) {
                 result[j] = Double.NaN;
             }                        
         }

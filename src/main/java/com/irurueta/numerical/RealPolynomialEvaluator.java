@@ -37,8 +37,7 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-    public RealPolynomialEvaluator(double[] polyParams) 
-            throws IllegalArgumentException {
+    public RealPolynomialEvaluator(double[] polyParams) {
         if (polyParams == null || polyParams.length == 0) {
             throw new IllegalArgumentException();
         }

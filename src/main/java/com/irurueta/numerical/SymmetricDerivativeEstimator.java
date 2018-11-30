@@ -43,6 +43,7 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      * evaluated.
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public double derivative(double x) throws EvaluationException {
         try {
             double h = EPS * Math.abs(x);
@@ -62,8 +63,8 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
             double fh2 = listener.evaluate(xh2);
             
             return (fh1 - fh2) / hh;
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
     }
 }

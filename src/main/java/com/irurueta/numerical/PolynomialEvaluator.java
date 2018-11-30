@@ -40,8 +40,7 @@ public class PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-    public static double evaluate(double[] polyParams, double x) 
-            throws IllegalArgumentException {
+    public static double evaluate(double[] polyParams, double x) {
         if (polyParams == null || polyParams.length == 0) {
             throw new IllegalArgumentException();
         }
@@ -69,8 +68,7 @@ public class PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-    public static Complex evaluate(Complex[] polyParams, Complex x) 
-            throws IllegalArgumentException {
+    public static Complex evaluate(Complex[] polyParams, Complex x) {
         if (polyParams == null || polyParams.length == 0) {
             throw new IllegalArgumentException();
         }

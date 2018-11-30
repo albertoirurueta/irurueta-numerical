@@ -492,7 +492,7 @@ public class GoldenSingleOptimizerTest
     }
 
     @Override
-    public double evaluate(double point) throws Throwable {
+    public double evaluate(double point) throws Exception {
         return (point - minimum) * (point - minimum) / width + offset;
     }
 }

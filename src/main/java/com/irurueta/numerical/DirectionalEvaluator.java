@@ -58,7 +58,7 @@ public class DirectionalEvaluator {
      */
     public DirectionalEvaluator(
             MultiDimensionFunctionEvaluatorListener listener, double[] point, 
-            double[] direction) throws IllegalArgumentException {
+            double[] direction) {
         
         setPointAndDirection(point, direction);
         this.listener = listener;        
@@ -112,8 +112,7 @@ public class DirectionalEvaluator {
      * @throws IllegalArgumentException Raised if point and direction don't have
      * the same length.
      */
-    public final void setPointAndDirection(double[] point, double[] direction) 
-            throws IllegalArgumentException {
+    public final void setPointAndDirection(double[] point, double[] direction) {
         if (point.length != direction.length) {
             throw new IllegalArgumentException();
         }
@@ -130,14 +129,14 @@ public class DirectionalEvaluator {
      * @return Result of evaluating the function
      * @throws EvaluationException Thrown if function evaluation fails
      */
-    public double evaluateAt(double x) throws EvaluationException{        
+    public double evaluateAt(double x) throws EvaluationException {
         for(int i = 0; i < point.length; i++){
             p[i] = point[i] + x * direction[i];
         }
         try {
             return listener.evaluate(p);
-        } catch (Throwable t) {
-            throw new EvaluationException(t);
+        } catch (Exception e) {
+            throw new EvaluationException(e);
         }
     }    
 }

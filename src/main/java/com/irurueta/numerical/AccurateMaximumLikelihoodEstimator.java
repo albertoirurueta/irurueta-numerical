@@ -76,8 +76,7 @@ public class AccurateMaximumLikelihoodEstimator
      * negative or zero.
      */
     public AccurateMaximumLikelihoodEstimator(double gaussianSigma,
-            boolean useHistogramInitialSolution) 
-            throws IllegalArgumentException {
+            boolean useHistogramInitialSolution) {
         super(gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -108,8 +107,7 @@ public class AccurateMaximumLikelihoodEstimator
      * negative or zero.
      */
     public AccurateMaximumLikelihoodEstimator(double[] inputData,
-            double gaussianSigma, boolean useHistogramInitialSolution)
-            throws IllegalArgumentException {
+            double gaussianSigma, boolean useHistogramInitialSolution) {
         super(inputData, gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -134,8 +132,7 @@ public class AccurateMaximumLikelihoodEstimator
      */
     public AccurateMaximumLikelihoodEstimator(double minValue, double maxValue,
             double[] inputData, double gaussianSigma, 
-            boolean useHistogramInitialSolution) 
-            throws IllegalArgumentException {
+            boolean useHistogramInitialSolution) {
         super(minValue, maxValue, inputData, gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -207,7 +204,9 @@ public class AccurateMaximumLikelihoodEstimator
         
         locked = true;
         
-        double minEvalPoint, middleEvalPoint, maxEvalPoint;
+        double minEvalPoint;
+        double middleEvalPoint;
+        double maxEvalPoint;
         
         if (useHistogramInitialSolution) {
             if (internalEstimator == null) {
@@ -219,12 +218,15 @@ public class AccurateMaximumLikelihoodEstimator
             
             middleEvalPoint = internalEstimator.estimate();
             
-            double localMinValue = 0.0, localMaxValue = 0.0;
+            double localMinValue = 0.0;
+            double localMaxValue = 0.0;
             
             try {
                 localMinValue = internalEstimator.getMinValue();
                 localMaxValue = internalEstimator.getMaxValue();
-            } catch (NotAvailableException ignore) { }
+            } catch (NotAvailableException ignore) {
+                //never happens
+            }
             
             int numberOfBins = internalEstimator.getNumberOfBins();
             
@@ -271,7 +273,7 @@ public class AccurateMaximumLikelihoodEstimator
             optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
             optimizer.minimize();
             solution = optimizer.getResult();
-        } catch (Throwable ignore) {
+        } catch (Exception ignore) {
             //if optimization fails, pick coarse solution if available
             if (useHistogramInitialSolution) {
                 solution = middleEvalPoint;
@@ -306,11 +308,11 @@ public class AccurateMaximumLikelihoodEstimator
          * @param point Point where the aggregation of Gaussians will be 
          * evaluated
          * @return The value of the aggregation of samples at provided point.
-         * @throws Throwable Raised if anything failed during the execution.
+         * @throws Exception Raised if anything failed during the execution.
          * This exception should never be raised.
          */
         @Override
-        public double evaluate(double point) throws Throwable {
+        public double evaluate(double point) throws Exception {
             double out = 0.0;
             double x;
             for (double data : inputData) {

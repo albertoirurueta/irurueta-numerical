@@ -342,13 +342,13 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
                         new SingleDimensionFunctionEvaluatorListener() {
 
                     @Override
-                    public double evaluate(double point) throws Throwable {
+                    public double evaluate(double point) throws Exception {
                         return evaluator.evaluateAt(point);
                     }
                 }, new SingleDimensionFunctionEvaluatorListener() {
 
                     @Override
-                    public double evaluate(double point) throws Throwable {
+                    public double evaluate(double point) throws Exception {
                         return evaluator.differentiateAt(point);
                     }
                 }, DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
