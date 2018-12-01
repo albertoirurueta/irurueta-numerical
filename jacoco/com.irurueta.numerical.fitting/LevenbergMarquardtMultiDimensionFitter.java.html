@@ -543,10 +543,8 @@ public class LevenbergMarquardtMultiDimensionFitter
             //too many iterations
 <span class="nc" id="L544">            throw new FittingException(&quot;too many iterations&quot;);</span>
                 
-<span class="nc" id="L546">        } catch (FittingException e) {</span>
-<span class="nc" id="L547">            throw e;</span>
-<span class="nc" id="L548">        } catch (Throwable t) {</span>
-<span class="nc" id="L549">            throw new FittingException(t);</span>
+<span class="nc" id="L546">        } catch (AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L547">            throw new FittingException(e);</span>
         }                
     }
     
@@ -557,9 +555,9 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @param val value to be set for parameter at position i.
      */
     public void hold(int i, double val) {
-<span class="fc" id="L560">        ia[i] = false;</span>
-<span class="fc" id="L561">        a[i] = val;</span>
-<span class="fc" id="L562">    }</span>
+<span class="fc" id="L558">        ia[i] = false;</span>
+<span class="fc" id="L559">        a[i] = val;</span>
+<span class="fc" id="L560">    }</span>
     
     /**
      * Releases parameter at position i of linear combination of basis functions
@@ -567,8 +565,8 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @param i position of parameter to be released.
      */
     public void free(int i) {
-<span class="fc" id="L570">        ia[i] = true;</span>
-<span class="fc" id="L571">    }</span>
+<span class="fc" id="L568">        ia[i] = true;</span>
+<span class="fc" id="L569">    }</span>
 
     /**
      * Adjusts covariance.
@@ -594,35 +592,35 @@ public class LevenbergMarquardtMultiDimensionFitter
      */
     private void adjustCovariance() throws AlgebraException, EvaluationException {
 
-<span class="fc" id="L597">        int xCols = x.getColumns();</span>
-<span class="pc bpc" id="L598" title="1 of 2 branches missed.">        if (xRow == null) {</span>
-<span class="nc" id="L599">            xRow = new double[x.getColumns()];</span>
+<span class="fc" id="L595">        int xCols = x.getColumns();</span>
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (xRow == null) {</span>
+<span class="nc" id="L597">            xRow = new double[x.getColumns()];</span>
         }
 
-<span class="fc" id="L602">        Matrix invCov = new Matrix(a.length, a.length);</span>
-<span class="fc" id="L603">        Matrix tmp1 = new Matrix(a.length, 1);</span>
-<span class="fc" id="L604">        Matrix tmp2 = new Matrix(1, a.length);</span>
-<span class="fc" id="L605">        Matrix tmpInvCov = new Matrix(a.length, a.length);</span>
-<span class="fc" id="L606">        double[] derivatives = new double[a.length];</span>
-<span class="fc" id="L607">        int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();</span>
-<span class="fc bfc" id="L608" title="All 2 branches covered.">        for (int i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L609">            x.getSubmatrixAsArray(i, 0, i,</span>
+<span class="fc" id="L600">        Matrix invCov = new Matrix(a.length, a.length);</span>
+<span class="fc" id="L601">        Matrix tmp1 = new Matrix(a.length, 1);</span>
+<span class="fc" id="L602">        Matrix tmp2 = new Matrix(1, a.length);</span>
+<span class="fc" id="L603">        Matrix tmpInvCov = new Matrix(a.length, a.length);</span>
+<span class="fc" id="L604">        double[] derivatives = new double[a.length];</span>
+<span class="fc" id="L605">        int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        for (int i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L607">            x.getSubmatrixAsArray(i, 0, i,</span>
                     xCols - 1, xRow);
 
-<span class="fc" id="L612">            evaluator.evaluate(i, xRow, a, derivatives);</span>
+<span class="fc" id="L610">            evaluator.evaluate(i, xRow, a, derivatives);</span>
 
-<span class="fc" id="L614">            tmp1.fromArray(derivatives);</span>
-<span class="fc" id="L615">            tmp2.fromArray(derivatives);</span>
+<span class="fc" id="L612">            tmp1.fromArray(derivatives);</span>
+<span class="fc" id="L613">            tmp2.fromArray(derivatives);</span>
 
-<span class="fc" id="L617">            tmp1.multiply(tmp2, tmpInvCov);</span>
+<span class="fc" id="L615">            tmp1.multiply(tmp2, tmpInvCov);</span>
 
-<span class="fc" id="L619">            double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);</span>
-<span class="fc" id="L620">            tmpInvCov.multiplyByScalar(w);</span>
-<span class="fc" id="L621">            invCov.add(tmpInvCov);</span>
+<span class="fc" id="L617">            double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);</span>
+<span class="fc" id="L618">            tmpInvCov.multiplyByScalar(w);</span>
+<span class="fc" id="L619">            invCov.add(tmpInvCov);</span>
         }
 
-<span class="fc" id="L624">        covar = Utils.inverse(invCov);</span>
-<span class="fc" id="L625">    }</span>
+<span class="fc" id="L622">        covar = Utils.inverse(invCov);</span>
+<span class="fc" id="L623">    }</span>
 
     /**
      * Internal method to set function evaluator to evaluate function at a given
@@ -635,20 +633,20 @@ public class LevenbergMarquardtMultiDimensionFitter
             throws FittingException {
 
         try {
-<span class="fc" id="L638">            this.evaluator = evaluator;</span>
+<span class="fc" id="L636">            this.evaluator = evaluator;</span>
 
-<span class="pc bpc" id="L640" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
-<span class="fc" id="L641">                a = evaluator.createInitialParametersArray();</span>
-<span class="fc" id="L642">                ma = a.length;</span>
-<span class="fc" id="L643">                covar = new Matrix(ma, ma);</span>
-<span class="fc" id="L644">                alpha = new Matrix(ma, ma);</span>
-<span class="fc" id="L645">                ia = new boolean[ma];</span>
-<span class="fc" id="L646">                Arrays.fill(ia, true);</span>
+<span class="pc bpc" id="L638" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
+<span class="fc" id="L639">                a = evaluator.createInitialParametersArray();</span>
+<span class="fc" id="L640">                ma = a.length;</span>
+<span class="fc" id="L641">                covar = new Matrix(ma, ma);</span>
+<span class="fc" id="L642">                alpha = new Matrix(ma, ma);</span>
+<span class="fc" id="L643">                ia = new boolean[ma];</span>
+<span class="fc" id="L644">                Arrays.fill(ia, true);</span>
             }
-<span class="nc" id="L648">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L649">            throw new FittingException(e);</span>
-<span class="fc" id="L650">        }</span>
-<span class="fc" id="L651">    }</span>
+<span class="nc" id="L646">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L647">            throw new FittingException(e);</span>
+<span class="fc" id="L648">        }</span>
+<span class="fc" id="L649">    }</span>
 
     /**
      * Used by fit to evaluate the linearized fitting matrix alpha, and vector 
@@ -672,60 +670,60 @@ public class LevenbergMarquardtMultiDimensionFitter
 	    double wt;
 	    double sig2i;
 	    double dy;
-<span class="fc" id="L675">	    double[] dyda = new double[ma];</span>
+<span class="fc" id="L673">	    double[] dyda = new double[ma];</span>
 
-<span class="fc bfc" id="L677" title="All 2 branches covered.">	    if (xRow == null) {</span>
-<span class="fc" id="L678">	        xRow = new double[x.getColumns()];</span>
+<span class="fc bfc" id="L675" title="All 2 branches covered.">	    if (xRow == null) {</span>
+<span class="fc" id="L676">	        xRow = new double[x.getColumns()];</span>
 	    }
-<span class="fc" id="L680">	    int xCols = evaluator.getNumberOfDimensions();</span>
+<span class="fc" id="L678">	    int xCols = evaluator.getNumberOfDimensions();</span>
 
 	    //initialize (symmetric) alpha, beta
-<span class="fc bfc" id="L683" title="All 2 branches covered.">	    for (j = 0; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L684" title="All 2 branches covered.">	        for (k = 0; k &lt;= j; k++) {</span>
-<span class="fc" id="L685">	            alpha.setElementAt(j, k, 0.0);</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">	    for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L682" title="All 2 branches covered.">	        for (k = 0; k &lt;= j; k++) {</span>
+<span class="fc" id="L683">	            alpha.setElementAt(j, k, 0.0);</span>
 	        }
-<span class="fc" id="L687">	        beta[j] = 0.;</span>
+<span class="fc" id="L685">	        beta[j] = 0.;</span>
 	    }
 
-<span class="fc" id="L690">	    chisq = 0.;</span>
-<span class="fc" id="L691">	    mse = 0.0;</span>
-<span class="fc" id="L692">        int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
-<span class="fc bfc" id="L693" title="All 2 branches covered.">	    for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L688">	    chisq = 0.;</span>
+<span class="fc" id="L689">	    mse = 0.0;</span>
+<span class="fc" id="L690">        int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc bfc" id="L691" title="All 2 branches covered.">	    for (i = 0; i &lt; ndat; i++) {</span>
             //summation loop over all data
-<span class="fc" id="L695">            x.getSubmatrixAsArray(i, 0, i, xCols - 1,</span>
+<span class="fc" id="L693">            x.getSubmatrixAsArray(i, 0, i, xCols - 1,</span>
                     xRow);
-<span class="fc" id="L697">            ymod = evaluator.evaluate(i, xRow, a, dyda);</span>
+<span class="fc" id="L695">            ymod = evaluator.evaluate(i, xRow, a, dyda);</span>
 
-<span class="fc" id="L699">            sig2i = 1.0 / (sig[i] * sig[i]);</span>
-<span class="fc" id="L700">            dy = y[i] - ymod;</span>
-<span class="fc bfc" id="L701" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
-<span class="fc bfc" id="L702" title="All 2 branches covered.">                if (ia[l]) {</span>
-<span class="fc" id="L703">                    wt = dyda[l] * sig2i;</span>
-<span class="fc" id="L704">                    double[] alphaBuffer = alpha.getBuffer();</span>
-<span class="fc bfc" id="L705" title="All 2 branches covered.">                    for (k = 0, m = 0; m &lt; l + 1; m++) {</span>
-<span class="fc bfc" id="L706" title="All 2 branches covered.">                        if (ia[m]) {</span>
-<span class="fc" id="L707">                            int index = alpha.getIndex(j, k++);</span>
-<span class="fc" id="L708">                            alphaBuffer[index] += wt * dyda[m];</span>
+<span class="fc" id="L697">            sig2i = 1.0 / (sig[i] * sig[i]);</span>
+<span class="fc" id="L698">            dy = y[i] - ymod;</span>
+<span class="fc bfc" id="L699" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L700" title="All 2 branches covered.">                if (ia[l]) {</span>
+<span class="fc" id="L701">                    wt = dyda[l] * sig2i;</span>
+<span class="fc" id="L702">                    double[] alphaBuffer = alpha.getBuffer();</span>
+<span class="fc bfc" id="L703" title="All 2 branches covered.">                    for (k = 0, m = 0; m &lt; l + 1; m++) {</span>
+<span class="fc bfc" id="L704" title="All 2 branches covered.">                        if (ia[m]) {</span>
+<span class="fc" id="L705">                            int index = alpha.getIndex(j, k++);</span>
+<span class="fc" id="L706">                            alphaBuffer[index] += wt * dyda[m];</span>
                         }                    
                     }
-<span class="fc" id="L711">                    beta[j++] += dy * wt;</span>
+<span class="fc" id="L709">                    beta[j++] += dy * wt;</span>
                 }
             }
 
             //add to mse
-<span class="fc" id="L716">            mse += dy * dy / (double)(degreesOfFreedom);</span>
+<span class="fc" id="L714">            mse += dy * dy / (double)(degreesOfFreedom);</span>
 
             //and find chi square
-<span class="fc" id="L719">            chisq += dy * dy * sig2i / (double)(degreesOfFreedom);</span>
+<span class="fc" id="L717">            chisq += dy * dy * sig2i / (double)(degreesOfFreedom);</span>
 	    }
 
         //fill in the symmetric side
-<span class="fc bfc" id="L723" title="All 2 branches covered.">	    for (j = 1; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L724" title="All 2 branches covered.">            for (k = 0; k &lt; j; k++) {</span>
-<span class="fc" id="L725">                alpha.setElementAt(k, j, alpha.getElementAt(j, k));</span>
+<span class="fc bfc" id="L721" title="All 2 branches covered.">	    for (j = 1; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L722" title="All 2 branches covered.">            for (k = 0; k &lt; j; k++) {</span>
+<span class="fc" id="L723">                alpha.setElementAt(k, j, alpha.getElementAt(j, k));</span>
             }
         }
-<span class="fc" id="L728">    }</span>
+<span class="fc" id="L726">    }</span>
 
     /**
      * Expand in storage the covariance matrix covar, so as to take into account
@@ -737,32 +735,32 @@ public class LevenbergMarquardtMultiDimensionFitter
 	    int i;
 	    int j;
 	    int k;
-<span class="fc bfc" id="L740" title="All 2 branches covered.">	    for (i = mfit; i &lt; ma; i++) {</span>
-<span class="fc bfc" id="L741" title="All 2 branches covered.">            for (j = 0; j &lt; i + 1; j++) {</span>
-<span class="fc" id="L742">                covar.setElementAt(i, j, 0.0);</span>
-<span class="fc" id="L743">                covar.setElementAt(j, i, 0.0);</span>
+<span class="fc bfc" id="L738" title="All 2 branches covered.">	    for (i = mfit; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L739" title="All 2 branches covered.">            for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L740">                covar.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L741">                covar.setElementAt(j, i, 0.0);</span>
             }
         }
 
-<span class="fc" id="L747">	    k = mfit - 1;</span>
-<span class="fc bfc" id="L748" title="All 2 branches covered.">	    for (j = ma - 1; j &gt;= 0; j--) {</span>
-<span class="fc bfc" id="L749" title="All 2 branches covered.">            if (ia[j]) {</span>
-<span class="fc" id="L750">                double[] buffer = covar.getBuffer();</span>
-<span class="fc bfc" id="L751" title="All 2 branches covered.">        		for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc" id="L752">                    int pos1 = covar.getIndex(i, k);</span>
-<span class="fc" id="L753">                    int pos2 = covar.getIndex(i, j);</span>
-<span class="fc" id="L754">                    swap(buffer, buffer, pos1, pos2);</span>
+<span class="fc" id="L745">	    k = mfit - 1;</span>
+<span class="fc bfc" id="L746" title="All 2 branches covered.">	    for (j = ma - 1; j &gt;= 0; j--) {</span>
+<span class="fc bfc" id="L747" title="All 2 branches covered.">            if (ia[j]) {</span>
+<span class="fc" id="L748">                double[] buffer = covar.getBuffer();</span>
+<span class="fc bfc" id="L749" title="All 2 branches covered.">        		for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L750">                    int pos1 = covar.getIndex(i, k);</span>
+<span class="fc" id="L751">                    int pos2 = covar.getIndex(i, j);</span>
+<span class="fc" id="L752">                    swap(buffer, buffer, pos1, pos2);</span>
                 }
-<span class="fc bfc" id="L756" title="All 2 branches covered.">		        for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc" id="L757">                    int pos1 = covar.getIndex(k, i);</span>
-<span class="fc" id="L758">                    int pos2 = covar.getIndex(j, i);</span>
-<span class="fc" id="L759">                    swap(buffer, buffer, pos1, pos2);</span>
+<span class="fc bfc" id="L754" title="All 2 branches covered.">		        for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L755">                    int pos1 = covar.getIndex(k, i);</span>
+<span class="fc" id="L756">                    int pos2 = covar.getIndex(j, i);</span>
+<span class="fc" id="L757">                    swap(buffer, buffer, pos1, pos2);</span>
                 }
 
-<span class="fc" id="L762">		        k--;</span>
+<span class="fc" id="L760">		        k--;</span>
             }
 	    }
-<span class="fc" id="L765">    }</span>
+<span class="fc" id="L763">    }</span>
     
     /**
      * Swaps values of arrays at provided positions.
@@ -772,10 +770,10 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @param pos2 2nd position.
      */
     private void swap(double[] array1, double[] array2, int pos1, int pos2) {
-<span class="fc" id="L775">        double value1 = array1[pos1];</span>
-<span class="fc" id="L776">        double value2 = array2[pos2];</span>
-<span class="fc" id="L777">        array1[pos1] = value2;</span>
-<span class="fc" id="L778">        array2[pos2] = value1;</span>
-<span class="fc" id="L779">    }        </span>
+<span class="fc" id="L773">        double value1 = array1[pos1];</span>
+<span class="fc" id="L774">        double value2 = array2[pos2];</span>
+<span class="fc" id="L775">        array1[pos1] = value2;</span>
+<span class="fc" id="L776">        array2[pos2] = value1;</span>
+<span class="fc" id="L777">    }        </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -61,10 +61,9 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      * length.
      */
-    public SingleDimensionLinearFitter(double[] x, double[] y, double[] sig)
-            throws IllegalArgumentException {
-<span class="fc" id="L66">        super(x, y, sig);</span>
-<span class="fc" id="L67">    }</span>
+    public SingleDimensionLinearFitter(double[] x, double[] y, double[] sig) {
+<span class="fc" id="L65">        super(x, y, sig);</span>
+<span class="fc" id="L66">    }</span>
     
     /**
      * Constructor.
@@ -77,10 +76,9 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public SingleDimensionLinearFitter(double[] x, double[] y, double sig)
-            throws IllegalArgumentException {
-<span class="fc" id="L82">        super(x, y, sig);</span>
-<span class="fc" id="L83">    }</span>
+    public SingleDimensionLinearFitter(double[] x, double[] y, double sig) {
+<span class="fc" id="L80">        super(x, y, sig);</span>
+<span class="fc" id="L81">    }</span>
     
     /**
      * Constructor.
@@ -89,9 +87,9 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws FittingException if evaluation fails.
      */
     public SingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator)
-<span class="fc" id="L92">            throws FittingException {</span>
-<span class="fc" id="L93">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L90">            throws FittingException {</span>
+<span class="fc" id="L91">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor.
@@ -109,10 +107,10 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      */
     public SingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator, 
             double[] x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException {
-<span class="fc" id="L113">        super(x, y, sig);</span>
-<span class="fc" id="L114">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L115">    }</span>
+            throws FittingException {
+<span class="fc" id="L111">        super(x, y, sig);</span>
+<span class="fc" id="L112">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L113">    }</span>
     
     /**
      * Constructor.
@@ -130,10 +128,10 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      */
     public SingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator, 
             double[] x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException {
-<span class="fc" id="L134">        super(x, y, sig);</span>
-<span class="fc" id="L135">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L136">    }</span>
+            throws FittingException {
+<span class="fc" id="L132">        super(x, y, sig);</span>
+<span class="fc" id="L133">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L134">    }</span>
     
     /**
      * Returns function evaluator to evaluate function at a given point and
@@ -141,7 +139,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @return function evaluator.
      */
     public LinearFitterSingleDimensionFunctionEvaluator getFunctionEvaluator() {
-<span class="fc" id="L144">        return evaluator;</span>
+<span class="fc" id="L142">        return evaluator;</span>
     }
     
     /**
@@ -153,8 +151,8 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
     public void setFunctionEvaluator(
             LinearFitterSingleDimensionFunctionEvaluator evaluator) 
             throws FittingException {
-<span class="fc" id="L156">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L154">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L155">    }</span>
     
     /**
      * Internal method to set function evaluator to evaluate function at a given 
@@ -166,18 +164,18 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
             throws FittingException {
         
         try {
-<span class="fc" id="L169">            this.evaluator = evaluator;    </span>
+<span class="fc" id="L167">            this.evaluator = evaluator;    </span>
         
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
-<span class="fc" id="L172">                afunc = evaluator.createResultArray();</span>
-<span class="fc" id="L173">                ma = afunc.length;</span>
-<span class="fc" id="L174">                a = new double[ma];</span>
-<span class="fc" id="L175">                covar = new Matrix(ma, ma);</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
+<span class="fc" id="L170">                afunc = evaluator.createResultArray();</span>
+<span class="fc" id="L171">                ma = afunc.length;</span>
+<span class="fc" id="L172">                a = new double[ma];</span>
+<span class="fc" id="L173">                covar = new Matrix(ma, ma);</span>
             }
-<span class="nc" id="L177">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L178">            throw new FittingException(e);</span>
-<span class="fc" id="L179">        }</span>
-<span class="fc" id="L180">    }</span>
+<span class="nc" id="L175">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L176">            throw new FittingException(e);</span>
+<span class="fc" id="L177">        }</span>
+<span class="fc" id="L178">    }</span>
             
     /**
      * Indicates whether provided instance has enough data to start the function
@@ -187,7 +185,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L190" title="2 of 8 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp; </span>
+<span class="pc bpc" id="L188" title="2 of 8 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp; </span>
                 x.length == y.length;
     }    
 }

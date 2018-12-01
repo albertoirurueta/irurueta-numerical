@@ -551,241 +551,239 @@
 <a class="jxr_linenumber" name="L543" href="#L543">543</a>             <em class="jxr_comment">//too many iterations</em>
 <a class="jxr_linenumber" name="L544" href="#L544">544</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a>(<span class="jxr_string">"too many iterations"</span>);
 <a class="jxr_linenumber" name="L545" href="#L545">545</a>                 
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>         } <strong class="jxr_keyword">catch</strong> (FittingException e) {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>             <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>         } <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a>(t);
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>         }                
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>     }
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>     
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">     * Prevents parameter at position i of linear combination of basis functions </em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">     * to be modified during function fitting.</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">     * @param i position of parameter to be retained.</em>
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">     * @param val value to be set for parameter at position i.</em>
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hold(<strong class="jxr_keyword">int</strong> i, <strong class="jxr_keyword">double</strong> val) {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>         ia[i] = false;
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>         a[i] = val;
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>     }
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>     
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">     * Releases parameter at position i of linear combination of basis functions</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">     * so it can be modified again if needed.</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">     * @param i position of parameter to be released.</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> free(<strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>         ia[i] = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>     }
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">     * Adjusts covariance.</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">     * Covariance must be adjusted to produce more real results close to the scale</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">     * of problem, otherwise estimated covariance will just be a measure of</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">     * goodness similar to chi square value because it will be the inverse of</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">     * the curvature matrix, which is just a solution of the covariance up to scale.</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">     * Covariance is adjusted taking into account input samples, input standard</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">     * deviations of the samples and jacobians of the model function over estimated</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">     * parameters using the following expression: Cov = (J'*W*J)^-1 where:</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">     * Cov is the covariance of estimated parameters</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">     * J is a matrix containing the Jacobians of the function over estimated parameters</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">     * for each input parameter x. Each row of J matrix contains an evaluation of</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">     * the model function Jacobian for i-th input parameter x. Each column of J matrix</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">     * contains the partial derivative of model function over j-th estimated parameter.</em>
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">     * W is the inverse of input variances. It's a diagonal matrix containing the</em>
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">     * reciprocal of the input variances (squared input standard deviations). That is:</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">     * the k-th standard deviation of input sample k.</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if there are numerical instabilities.</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">     * @throws EvaluationException if function evaluation fails.</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L595" href="#L595">595</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> adjustCovariance() <strong class="jxr_keyword">throws</strong> AlgebraException, EvaluationException {
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>         <strong class="jxr_keyword">int</strong> xCols = x.getColumns();
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>         <strong class="jxr_keyword">if</strong> (xRow == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>             xRow = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[x.getColumns()];
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>         }
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>         Matrix invCov = <strong class="jxr_keyword">new</strong> Matrix(a.length, a.length);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>         Matrix tmp1 = <strong class="jxr_keyword">new</strong> Matrix(a.length, 1);
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>         Matrix tmp2 = <strong class="jxr_keyword">new</strong> Matrix(1, a.length);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a>         Matrix tmpInvCov = <strong class="jxr_keyword">new</strong> Matrix(a.length, a.length);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>         <strong class="jxr_keyword">double</strong>[] derivatives = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[a.length];
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>         <strong class="jxr_keyword">int</strong> chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ndat; i++) {
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>             x.getSubmatrixAsArray(i, 0, i,
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>                     xCols - 1, xRow);
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException | EvaluationException e) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a>(e);
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>         }                
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>     }
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>     
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">     * Prevents parameter at position i of linear combination of basis functions </em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">     * to be modified during function fitting.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">     * @param i position of parameter to be retained.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">     * @param val value to be set for parameter at position i.</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hold(<strong class="jxr_keyword">int</strong> i, <strong class="jxr_keyword">double</strong> val) {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>         ia[i] = false;
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>         a[i] = val;
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>     }
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>     
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">     * Releases parameter at position i of linear combination of basis functions</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">     * so it can be modified again if needed.</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">     * @param i position of parameter to be released.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> free(<strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>         ia[i] = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>     }
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">     * Adjusts covariance.</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">     * Covariance must be adjusted to produce more real results close to the scale</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">     * of problem, otherwise estimated covariance will just be a measure of</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">     * goodness similar to chi square value because it will be the inverse of</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">     * the curvature matrix, which is just a solution of the covariance up to scale.</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">     * Covariance is adjusted taking into account input samples, input standard</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">     * deviations of the samples and jacobians of the model function over estimated</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">     * parameters using the following expression: Cov = (J'*W*J)^-1 where:</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">     * Cov is the covariance of estimated parameters</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">     * J is a matrix containing the Jacobians of the function over estimated parameters</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">     * for each input parameter x. Each row of J matrix contains an evaluation of</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">     * the model function Jacobian for i-th input parameter x. Each column of J matrix</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">     * contains the partial derivative of model function over j-th estimated parameter.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">     * W is the inverse of input variances. It's a diagonal matrix containing the</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">     * reciprocal of the input variances (squared input standard deviations). That is:</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">     * the k-th standard deviation of input sample k.</em>
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if there are numerical instabilities.</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">     * @throws EvaluationException if function evaluation fails.</em>
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> adjustCovariance() <strong class="jxr_keyword">throws</strong> AlgebraException, EvaluationException {
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a>         <strong class="jxr_keyword">int</strong> xCols = x.getColumns();
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>         <strong class="jxr_keyword">if</strong> (xRow == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L597" href="#L597">597</a>             xRow = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[x.getColumns()];
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>         }
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>         Matrix invCov = <strong class="jxr_keyword">new</strong> Matrix(a.length, a.length);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>         Matrix tmp1 = <strong class="jxr_keyword">new</strong> Matrix(a.length, 1);
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>         Matrix tmp2 = <strong class="jxr_keyword">new</strong> Matrix(1, a.length);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>         Matrix tmpInvCov = <strong class="jxr_keyword">new</strong> Matrix(a.length, a.length);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>         <strong class="jxr_keyword">double</strong>[] derivatives = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[a.length];
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>         <strong class="jxr_keyword">int</strong> chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ndat; i++) {
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>             x.getSubmatrixAsArray(i, 0, i,
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>                     xCols - 1, xRow);
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>             evaluator.evaluate(i, xRow, a, derivatives);
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>             evaluator.evaluate(i, xRow, a, derivatives);
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>             tmp1.fromArray(derivatives);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>             tmp2.fromArray(derivatives);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>             tmp1.fromArray(derivatives);
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>             tmp2.fromArray(derivatives);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>             tmp1.multiply(tmp2, tmpInvCov);
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>             tmp1.multiply(tmp2, tmpInvCov);
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a>             <strong class="jxr_keyword">double</strong> w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
-<a class="jxr_linenumber" name="L620" href="#L620">620</a>             tmpInvCov.multiplyByScalar(w);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a>             invCov.add(tmpInvCov);
-<a class="jxr_linenumber" name="L622" href="#L622">622</a>         }
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 
-<a class="jxr_linenumber" name="L624" href="#L624">624</a>         covar = Utils.inverse(invCov);
-<a class="jxr_linenumber" name="L625" href="#L625">625</a>     }
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
-<a class="jxr_linenumber" name="L627" href="#L627">627</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">     * Internal method to set function evaluator to evaluate function at a given</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">     * point and obtain function derivatives respect to each provided parameter.</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">     * @param evaluator function evaluator.</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">     * @throws FittingException if evaluation fails.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetFunctionEvaluator(
-<a class="jxr_linenumber" name="L634" href="#L634">634</a>             <a href="../../../../com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.html">LevenbergMarquardtMultiDimensionFunctionEvaluator</a> evaluator)
-<a class="jxr_linenumber" name="L635" href="#L635">635</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a> {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 
-<a class="jxr_linenumber" name="L637" href="#L637">637</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L638" href="#L638">638</a>             <strong class="jxr_keyword">this</strong>.evaluator = evaluator;
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
-<a class="jxr_linenumber" name="L640" href="#L640">640</a>             <strong class="jxr_keyword">if</strong> (evaluator != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L641" href="#L641">641</a>                 a = evaluator.createInitialParametersArray();
-<a class="jxr_linenumber" name="L642" href="#L642">642</a>                 ma = a.length;
-<a class="jxr_linenumber" name="L643" href="#L643">643</a>                 covar = <strong class="jxr_keyword">new</strong> Matrix(ma, ma);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>                 alpha = <strong class="jxr_keyword">new</strong> Matrix(ma, ma);
-<a class="jxr_linenumber" name="L645" href="#L645">645</a>                 ia = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[ma];
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>                 Arrays.fill(ia, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L647" href="#L647">647</a>             }
-<a class="jxr_linenumber" name="L648" href="#L648">648</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException e) {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a>(e);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a>         }
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>     }
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">     * Used by fit to evaluate the linearized fitting matrix alpha, and vector </em>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">     * beta to calculate chi square.</em>
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">     * @param a estimated parameters so far.</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">     * @param alpha curvature (i.e. fitting) matrix.</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">     * @param beta array where derivative increments for each parameter are </em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">     * stored.</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if there are numerical instabilities.</em>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">     * @throws EvaluationException if function evaluation fails.</em>
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L663" href="#L663">663</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> mrqcof(<strong class="jxr_keyword">double</strong>[] a, Matrix alpha, <strong class="jxr_keyword">double</strong>[] beta) 
-<a class="jxr_linenumber" name="L664" href="#L664">664</a>             <strong class="jxr_keyword">throws</strong> AlgebraException, <a href="../../../../com/irurueta/numerical/EvaluationException.html">EvaluationException</a> {
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	    <strong class="jxr_keyword">int</strong> i;
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	    <strong class="jxr_keyword">int</strong> j;
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	    <strong class="jxr_keyword">int</strong> k;
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	    <strong class="jxr_keyword">int</strong> l;
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	    <strong class="jxr_keyword">int</strong> m;
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	    <strong class="jxr_keyword">double</strong> ymod;
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	    <strong class="jxr_keyword">double</strong> wt;
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	    <strong class="jxr_keyword">double</strong> sig2i;
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	    <strong class="jxr_keyword">double</strong> dy;
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	    <strong class="jxr_keyword">double</strong>[] dyda = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[ma];
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	    <strong class="jxr_keyword">if</strong> (xRow == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	        xRow = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[x.getColumns()];
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	    }
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	    <strong class="jxr_keyword">int</strong> xCols = evaluator.getNumberOfDimensions();
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	    <em class="jxr_comment">//initialize (symmetric) alpha, beta</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	    <strong class="jxr_keyword">for</strong> (j = 0; j &lt; mfit; j++) {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	        <strong class="jxr_keyword">for</strong> (k = 0; k &lt;= j; k++) {
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	            alpha.setElementAt(j, k, 0.0);
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	        }
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	        beta[j] = 0.;
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	    }
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	    chisq = 0.;
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	    mse = 0.0;
-<a class="jxr_linenumber" name="L692" href="#L692">692</a>         <strong class="jxr_keyword">int</strong> degreesOfFreedom = getChisqDegreesOfFreedom();
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	    <strong class="jxr_keyword">for</strong> (i = 0; i &lt; ndat; i++) {
-<a class="jxr_linenumber" name="L694" href="#L694">694</a>             <em class="jxr_comment">//summation loop over all data</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a>             x.getSubmatrixAsArray(i, 0, i, xCols - 1,
-<a class="jxr_linenumber" name="L696" href="#L696">696</a>                     xRow);
-<a class="jxr_linenumber" name="L697" href="#L697">697</a>             ymod = evaluator.evaluate(i, xRow, a, dyda);
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 
-<a class="jxr_linenumber" name="L699" href="#L699">699</a>             sig2i = 1.0 / (sig[i] * sig[i]);
-<a class="jxr_linenumber" name="L700" href="#L700">700</a>             dy = y[i] - ymod;
-<a class="jxr_linenumber" name="L701" href="#L701">701</a>             <strong class="jxr_keyword">for</strong> (j = 0, l = 0; l &lt; ma; l++) {
-<a class="jxr_linenumber" name="L702" href="#L702">702</a>                 <strong class="jxr_keyword">if</strong> (ia[l]) {
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>                     wt = dyda[l] * sig2i;
-<a class="jxr_linenumber" name="L704" href="#L704">704</a>                     <strong class="jxr_keyword">double</strong>[] alphaBuffer = alpha.getBuffer();
-<a class="jxr_linenumber" name="L705" href="#L705">705</a>                     <strong class="jxr_keyword">for</strong> (k = 0, m = 0; m &lt; l + 1; m++) {
-<a class="jxr_linenumber" name="L706" href="#L706">706</a>                         <strong class="jxr_keyword">if</strong> (ia[m]) {
-<a class="jxr_linenumber" name="L707" href="#L707">707</a>                             <strong class="jxr_keyword">int</strong> index = alpha.getIndex(j, k++);
-<a class="jxr_linenumber" name="L708" href="#L708">708</a>                             alphaBuffer[index] += wt * dyda[m];
-<a class="jxr_linenumber" name="L709" href="#L709">709</a>                         }                    
-<a class="jxr_linenumber" name="L710" href="#L710">710</a>                     }
-<a class="jxr_linenumber" name="L711" href="#L711">711</a>                     beta[j++] += dy * wt;
-<a class="jxr_linenumber" name="L712" href="#L712">712</a>                 }
-<a class="jxr_linenumber" name="L713" href="#L713">713</a>             }
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 
-<a class="jxr_linenumber" name="L715" href="#L715">715</a>             <em class="jxr_comment">//add to mse</em>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a>             mse += dy * dy / (<strong class="jxr_keyword">double</strong>)(degreesOfFreedom);
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
-<a class="jxr_linenumber" name="L718" href="#L718">718</a>             <em class="jxr_comment">//and find chi square</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a>             chisq += dy * dy * sig2i / (<strong class="jxr_keyword">double</strong>)(degreesOfFreedom);
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	    }
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 
-<a class="jxr_linenumber" name="L722" href="#L722">722</a>         <em class="jxr_comment">//fill in the symmetric side</em>
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	    <strong class="jxr_keyword">for</strong> (j = 1; j &lt; mfit; j++) {
-<a class="jxr_linenumber" name="L724" href="#L724">724</a>             <strong class="jxr_keyword">for</strong> (k = 0; k &lt; j; k++) {
-<a class="jxr_linenumber" name="L725" href="#L725">725</a>                 alpha.setElementAt(k, j, alpha.getElementAt(j, k));
-<a class="jxr_linenumber" name="L726" href="#L726">726</a>             }
-<a class="jxr_linenumber" name="L727" href="#L727">727</a>         }
-<a class="jxr_linenumber" name="L728" href="#L728">728</a>     }
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 
-<a class="jxr_linenumber" name="L730" href="#L730">730</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">     * Expand in storage the covariance matrix covar, so as to take into account</em>
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">     * parameters that are being held fixed. (For the latter, return zero </em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">     * covariances).</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">     * @param covar covariance matrix.</em>
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> covsrt(Matrix covar) {
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 	    <strong class="jxr_keyword">int</strong> i;
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	    <strong class="jxr_keyword">int</strong> j;
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 	    <strong class="jxr_keyword">int</strong> k;
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 	    <strong class="jxr_keyword">for</strong> (i = mfit; i &lt; ma; i++) {
-<a class="jxr_linenumber" name="L741" href="#L741">741</a>             <strong class="jxr_keyword">for</strong> (j = 0; j &lt; i + 1; j++) {
-<a class="jxr_linenumber" name="L742" href="#L742">742</a>                 covar.setElementAt(i, j, 0.0);
-<a class="jxr_linenumber" name="L743" href="#L743">743</a>                 covar.setElementAt(j, i, 0.0);
-<a class="jxr_linenumber" name="L744" href="#L744">744</a>             }
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>         }
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	    k = mfit - 1;
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	    <strong class="jxr_keyword">for</strong> (j = ma - 1; j &gt;= 0; j--) {
-<a class="jxr_linenumber" name="L749" href="#L749">749</a>             <strong class="jxr_keyword">if</strong> (ia[j]) {
-<a class="jxr_linenumber" name="L750" href="#L750">750</a>                 <strong class="jxr_keyword">double</strong>[] buffer = covar.getBuffer();
-<a class="jxr_linenumber" name="L751" href="#L751">751</a>         		<strong class="jxr_keyword">for</strong> (i = 0; i &lt; ma; i++) {
-<a class="jxr_linenumber" name="L752" href="#L752">752</a>                     <strong class="jxr_keyword">int</strong> pos1 = covar.getIndex(i, k);
-<a class="jxr_linenumber" name="L753" href="#L753">753</a>                     <strong class="jxr_keyword">int</strong> pos2 = covar.getIndex(i, j);
-<a class="jxr_linenumber" name="L754" href="#L754">754</a>                     swap(buffer, buffer, pos1, pos2);
-<a class="jxr_linenumber" name="L755" href="#L755">755</a>                 }
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		        <strong class="jxr_keyword">for</strong> (i = 0; i &lt; ma; i++) {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a>                     <strong class="jxr_keyword">int</strong> pos1 = covar.getIndex(k, i);
-<a class="jxr_linenumber" name="L758" href="#L758">758</a>                     <strong class="jxr_keyword">int</strong> pos2 = covar.getIndex(j, i);
-<a class="jxr_linenumber" name="L759" href="#L759">759</a>                     swap(buffer, buffer, pos1, pos2);
-<a class="jxr_linenumber" name="L760" href="#L760">760</a>                 }
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		        k--;
-<a class="jxr_linenumber" name="L763" href="#L763">763</a>             }
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	    }
-<a class="jxr_linenumber" name="L765" href="#L765">765</a>     }
-<a class="jxr_linenumber" name="L766" href="#L766">766</a>     
-<a class="jxr_linenumber" name="L767" href="#L767">767</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">     * Swaps values of arrays at provided positions.</em>
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">     * @param array1 1st array.</em>
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">     * @param array2 2nd array.</em>
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">     * @param pos1 1st position.</em>
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">     * @param pos2 2nd position.</em>
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L774" href="#L774">774</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> swap(<strong class="jxr_keyword">double</strong>[] array1, <strong class="jxr_keyword">double</strong>[] array2, <strong class="jxr_keyword">int</strong> pos1, <strong class="jxr_keyword">int</strong> pos2) {
-<a class="jxr_linenumber" name="L775" href="#L775">775</a>         <strong class="jxr_keyword">double</strong> value1 = array1[pos1];
-<a class="jxr_linenumber" name="L776" href="#L776">776</a>         <strong class="jxr_keyword">double</strong> value2 = array2[pos2];
-<a class="jxr_linenumber" name="L777" href="#L777">777</a>         array1[pos1] = value2;
-<a class="jxr_linenumber" name="L778" href="#L778">778</a>         array2[pos2] = value1;
-<a class="jxr_linenumber" name="L779" href="#L779">779</a>     }        
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> }
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>             <strong class="jxr_keyword">double</strong> w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>             tmpInvCov.multiplyByScalar(w);
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>             invCov.add(tmpInvCov);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>         }
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>         covar = Utils.inverse(invCov);
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>     }
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
+<a class="jxr_linenumber" name="L625" href="#L625">625</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">     * Internal method to set function evaluator to evaluate function at a given</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">     * point and obtain function derivatives respect to each provided parameter.</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">     * @param evaluator function evaluator.</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">     * @throws FittingException if evaluation fails.</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetFunctionEvaluator(
+<a class="jxr_linenumber" name="L632" href="#L632">632</a>             <a href="../../../../com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.html">LevenbergMarquardtMultiDimensionFunctionEvaluator</a> evaluator)
+<a class="jxr_linenumber" name="L633" href="#L633">633</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a> {
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
+<a class="jxr_linenumber" name="L635" href="#L635">635</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a>             <strong class="jxr_keyword">this</strong>.evaluator = evaluator;
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a>             <strong class="jxr_keyword">if</strong> (evaluator != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>                 a = evaluator.createInitialParametersArray();
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>                 ma = a.length;
+<a class="jxr_linenumber" name="L641" href="#L641">641</a>                 covar = <strong class="jxr_keyword">new</strong> Matrix(ma, ma);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>                 alpha = <strong class="jxr_keyword">new</strong> Matrix(ma, ma);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>                 ia = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[ma];
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>                 Arrays.fill(ia, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>             }
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException e) {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/fitting/FittingException.html">FittingException</a>(e);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>         }
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>     }
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
+<a class="jxr_linenumber" name="L651" href="#L651">651</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">     * Used by fit to evaluate the linearized fitting matrix alpha, and vector </em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">     * beta to calculate chi square.</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">     * @param a estimated parameters so far.</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">     * @param alpha curvature (i.e. fitting) matrix.</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">     * @param beta array where derivative increments for each parameter are </em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">     * stored.</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if there are numerical instabilities.</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">     * @throws EvaluationException if function evaluation fails.</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> mrqcof(<strong class="jxr_keyword">double</strong>[] a, Matrix alpha, <strong class="jxr_keyword">double</strong>[] beta) 
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>             <strong class="jxr_keyword">throws</strong> AlgebraException, <a href="../../../../com/irurueta/numerical/EvaluationException.html">EvaluationException</a> {
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	    <strong class="jxr_keyword">int</strong> i;
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	    <strong class="jxr_keyword">int</strong> j;
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	    <strong class="jxr_keyword">int</strong> k;
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	    <strong class="jxr_keyword">int</strong> l;
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	    <strong class="jxr_keyword">int</strong> m;
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	    <strong class="jxr_keyword">double</strong> ymod;
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	    <strong class="jxr_keyword">double</strong> wt;
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	    <strong class="jxr_keyword">double</strong> sig2i;
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	    <strong class="jxr_keyword">double</strong> dy;
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	    <strong class="jxr_keyword">double</strong>[] dyda = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[ma];
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	    <strong class="jxr_keyword">if</strong> (xRow == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	        xRow = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[x.getColumns()];
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	    }
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	    <strong class="jxr_keyword">int</strong> xCols = evaluator.getNumberOfDimensions();
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	    <em class="jxr_comment">//initialize (symmetric) alpha, beta</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	    <strong class="jxr_keyword">for</strong> (j = 0; j &lt; mfit; j++) {
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	        <strong class="jxr_keyword">for</strong> (k = 0; k &lt;= j; k++) {
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	            alpha.setElementAt(j, k, 0.0);
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	        }
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	        beta[j] = 0.;
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	    }
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	    chisq = 0.;
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	    mse = 0.0;
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>         <strong class="jxr_keyword">int</strong> degreesOfFreedom = getChisqDegreesOfFreedom();
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	    <strong class="jxr_keyword">for</strong> (i = 0; i &lt; ndat; i++) {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>             <em class="jxr_comment">//summation loop over all data</em>
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>             x.getSubmatrixAsArray(i, 0, i, xCols - 1,
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>                     xRow);
+<a class="jxr_linenumber" name="L695" href="#L695">695</a>             ymod = evaluator.evaluate(i, xRow, a, dyda);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 
+<a class="jxr_linenumber" name="L697" href="#L697">697</a>             sig2i = 1.0 / (sig[i] * sig[i]);
+<a class="jxr_linenumber" name="L698" href="#L698">698</a>             dy = y[i] - ymod;
+<a class="jxr_linenumber" name="L699" href="#L699">699</a>             <strong class="jxr_keyword">for</strong> (j = 0, l = 0; l &lt; ma; l++) {
+<a class="jxr_linenumber" name="L700" href="#L700">700</a>                 <strong class="jxr_keyword">if</strong> (ia[l]) {
+<a class="jxr_linenumber" name="L701" href="#L701">701</a>                     wt = dyda[l] * sig2i;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a>                     <strong class="jxr_keyword">double</strong>[] alphaBuffer = alpha.getBuffer();
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>                     <strong class="jxr_keyword">for</strong> (k = 0, m = 0; m &lt; l + 1; m++) {
+<a class="jxr_linenumber" name="L704" href="#L704">704</a>                         <strong class="jxr_keyword">if</strong> (ia[m]) {
+<a class="jxr_linenumber" name="L705" href="#L705">705</a>                             <strong class="jxr_keyword">int</strong> index = alpha.getIndex(j, k++);
+<a class="jxr_linenumber" name="L706" href="#L706">706</a>                             alphaBuffer[index] += wt * dyda[m];
+<a class="jxr_linenumber" name="L707" href="#L707">707</a>                         }                    
+<a class="jxr_linenumber" name="L708" href="#L708">708</a>                     }
+<a class="jxr_linenumber" name="L709" href="#L709">709</a>                     beta[j++] += dy * wt;
+<a class="jxr_linenumber" name="L710" href="#L710">710</a>                 }
+<a class="jxr_linenumber" name="L711" href="#L711">711</a>             }
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 
+<a class="jxr_linenumber" name="L713" href="#L713">713</a>             <em class="jxr_comment">//add to mse</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a>             mse += dy * dy / (<strong class="jxr_keyword">double</strong>)(degreesOfFreedom);
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 
+<a class="jxr_linenumber" name="L716" href="#L716">716</a>             <em class="jxr_comment">//and find chi square</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a>             chisq += dy * dy * sig2i / (<strong class="jxr_keyword">double</strong>)(degreesOfFreedom);
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	    }
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 
+<a class="jxr_linenumber" name="L720" href="#L720">720</a>         <em class="jxr_comment">//fill in the symmetric side</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	    <strong class="jxr_keyword">for</strong> (j = 1; j &lt; mfit; j++) {
+<a class="jxr_linenumber" name="L722" href="#L722">722</a>             <strong class="jxr_keyword">for</strong> (k = 0; k &lt; j; k++) {
+<a class="jxr_linenumber" name="L723" href="#L723">723</a>                 alpha.setElementAt(k, j, alpha.getElementAt(j, k));
+<a class="jxr_linenumber" name="L724" href="#L724">724</a>             }
+<a class="jxr_linenumber" name="L725" href="#L725">725</a>         }
+<a class="jxr_linenumber" name="L726" href="#L726">726</a>     }
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 
+<a class="jxr_linenumber" name="L728" href="#L728">728</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">     * Expand in storage the covariance matrix covar, so as to take into account</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">     * parameters that are being held fixed. (For the latter, return zero </em>
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">     * covariances).</em>
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">     * @param covar covariance matrix.</em>
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> covsrt(Matrix covar) {
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	    <strong class="jxr_keyword">int</strong> i;
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	    <strong class="jxr_keyword">int</strong> j;
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 	    <strong class="jxr_keyword">int</strong> k;
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	    <strong class="jxr_keyword">for</strong> (i = mfit; i &lt; ma; i++) {
+<a class="jxr_linenumber" name="L739" href="#L739">739</a>             <strong class="jxr_keyword">for</strong> (j = 0; j &lt; i + 1; j++) {
+<a class="jxr_linenumber" name="L740" href="#L740">740</a>                 covar.setElementAt(i, j, 0.0);
+<a class="jxr_linenumber" name="L741" href="#L741">741</a>                 covar.setElementAt(j, i, 0.0);
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>             }
+<a class="jxr_linenumber" name="L743" href="#L743">743</a>         }
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	    k = mfit - 1;
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 	    <strong class="jxr_keyword">for</strong> (j = ma - 1; j &gt;= 0; j--) {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>             <strong class="jxr_keyword">if</strong> (ia[j]) {
+<a class="jxr_linenumber" name="L748" href="#L748">748</a>                 <strong class="jxr_keyword">double</strong>[] buffer = covar.getBuffer();
+<a class="jxr_linenumber" name="L749" href="#L749">749</a>         		<strong class="jxr_keyword">for</strong> (i = 0; i &lt; ma; i++) {
+<a class="jxr_linenumber" name="L750" href="#L750">750</a>                     <strong class="jxr_keyword">int</strong> pos1 = covar.getIndex(i, k);
+<a class="jxr_linenumber" name="L751" href="#L751">751</a>                     <strong class="jxr_keyword">int</strong> pos2 = covar.getIndex(i, j);
+<a class="jxr_linenumber" name="L752" href="#L752">752</a>                     swap(buffer, buffer, pos1, pos2);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a>                 }
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		        <strong class="jxr_keyword">for</strong> (i = 0; i &lt; ma; i++) {
+<a class="jxr_linenumber" name="L755" href="#L755">755</a>                     <strong class="jxr_keyword">int</strong> pos1 = covar.getIndex(k, i);
+<a class="jxr_linenumber" name="L756" href="#L756">756</a>                     <strong class="jxr_keyword">int</strong> pos2 = covar.getIndex(j, i);
+<a class="jxr_linenumber" name="L757" href="#L757">757</a>                     swap(buffer, buffer, pos1, pos2);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a>                 }
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		        k--;
+<a class="jxr_linenumber" name="L761" href="#L761">761</a>             }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	    }
+<a class="jxr_linenumber" name="L763" href="#L763">763</a>     }
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>     
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">     * Swaps values of arrays at provided positions.</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">     * @param array1 1st array.</em>
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">     * @param array2 2nd array.</em>
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">     * @param pos1 1st position.</em>
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">     * @param pos2 2nd position.</em>
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L772" href="#L772">772</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> swap(<strong class="jxr_keyword">double</strong>[] array1, <strong class="jxr_keyword">double</strong>[] array2, <strong class="jxr_keyword">int</strong> pos1, <strong class="jxr_keyword">int</strong> pos2) {
+<a class="jxr_linenumber" name="L773" href="#L773">773</a>         <strong class="jxr_keyword">double</strong> value1 = array1[pos1];
+<a class="jxr_linenumber" name="L774" href="#L774">774</a>         <strong class="jxr_keyword">double</strong> value2 = array2[pos2];
+<a class="jxr_linenumber" name="L775" href="#L775">775</a>         array1[pos1] = value2;
+<a class="jxr_linenumber" name="L776" href="#L776">776</a>         array2[pos2] = value1;
+<a class="jxr_linenumber" name="L777" href="#L777">777</a>     }        
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

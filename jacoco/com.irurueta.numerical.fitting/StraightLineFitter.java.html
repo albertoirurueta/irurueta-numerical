@@ -100,11 +100,10 @@ public class StraightLineFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public StraightLineFitter(double[] x, double [] y) 
-            throws IllegalArgumentException {
-<span class="fc" id="L105">        this();</span>
-<span class="fc" id="L106">        setInputData(x, y);</span>
-<span class="fc" id="L107">    }</span>
+    public StraightLineFitter(double[] x, double [] y) {
+<span class="fc" id="L104">        this();</span>
+<span class="fc" id="L105">        setInputData(x, y);</span>
+<span class="fc" id="L106">    }</span>
     
     /**
      * Constructor.
@@ -116,11 +115,10 @@ public class StraightLineFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public StraightLineFitter(double[] x, double[] y, double[] sig)
-            throws IllegalArgumentException {
-<span class="fc" id="L121">        this();</span>
-<span class="fc" id="L122">        setInputDataAndStandardDeviations(x, y, sig);</span>
-<span class="fc" id="L123">    }</span>
+    public StraightLineFitter(double[] x, double[] y, double[] sig) {
+<span class="fc" id="L119">        this();</span>
+<span class="fc" id="L120">        setInputDataAndStandardDeviations(x, y, sig);</span>
+<span class="fc" id="L121">    }</span>
     
     /**
      * Returns array containing x coordinates of input data to be fitted to a
@@ -129,7 +127,7 @@ public class StraightLineFitter extends Fitter {
      * straight line.
      */
     public double[] getX() {
-<span class="fc" id="L132">        return x;</span>
+<span class="fc" id="L130">        return x;</span>
     }
     
     /**
@@ -139,7 +137,7 @@ public class StraightLineFitter extends Fitter {
      * straight line.
      */
     public double[] getY() {
-<span class="fc" id="L142">        return y;</span>
+<span class="fc" id="L140">        return y;</span>
     }
     
     /**
@@ -149,7 +147,7 @@ public class StraightLineFitter extends Fitter {
      * @return standard deviations of each pair of points (x,y).
      */
     public double[] getSig() {
-<span class="fc" id="L152">        return sig;</span>
+<span class="fc" id="L150">        return sig;</span>
     }
     
     /**
@@ -158,16 +156,15 @@ public class StraightLineFitter extends Fitter {
      * @param y y coordinates.
      * @throws IllegalArgumentException if arrays don't have the same length.
      */
-    public final void setInputData(double[] x, double[] y) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (x.length != y.length) {</span>
-<span class="fc" id="L164">            throw new IllegalArgumentException();</span>
+    public final void setInputData(double[] x, double[] y) {
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (x.length != y.length) {</span>
+<span class="fc" id="L161">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L167">        this.x = x;</span>
-<span class="fc" id="L168">        this.y = y;</span>
-<span class="fc" id="L169">        this.sig = null;</span>
-<span class="fc" id="L170">    }</span>
+<span class="fc" id="L164">        this.x = x;</span>
+<span class="fc" id="L165">        this.y = y;</span>
+<span class="fc" id="L166">        this.sig = null;</span>
+<span class="fc" id="L167">    }</span>
     
     /**
      * Sets input data and standard deviations of input data to fit a straight
@@ -179,20 +176,21 @@ public class StraightLineFitter extends Fitter {
      * assuming equal error for all input points.
      * @throws IllegalArgumentException if arrays don't have the same length.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public final void setInputDataAndStandardDeviations(double[] x, double[] y, 
-            double[] sig) throws IllegalArgumentException {
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (sig != null) {</span>
-<span class="fc bfc" id="L185" title="All 4 branches covered.">            if (x.length != y.length || y.length != sig.length) {</span>
-<span class="fc" id="L186">                throw new IllegalArgumentException();</span>
+            double[] sig) {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (sig != null) {</span>
+<span class="fc bfc" id="L183" title="All 4 branches covered.">            if (x.length != y.length || y.length != sig.length) {</span>
+<span class="fc" id="L184">                throw new IllegalArgumentException();</span>
             }
 
-<span class="fc" id="L189">            this.x = x;</span>
-<span class="fc" id="L190">            this.y = y;</span>
-<span class="fc" id="L191">            this.sig = sig;</span>
+<span class="fc" id="L187">            this.x = x;</span>
+<span class="fc" id="L188">            this.y = y;</span>
+<span class="fc" id="L189">            this.sig = sig;</span>
         } else {
-<span class="fc" id="L193">            setInputData(x, y);</span>
+<span class="fc" id="L191">            setInputData(x, y);</span>
         }
-<span class="fc" id="L195">    }</span>
+<span class="fc" id="L193">    }</span>
             
 
     /**
@@ -202,7 +200,7 @@ public class StraightLineFitter extends Fitter {
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L205" title="3 of 10 branches missed.">        return x != null &amp;&amp; y != null &amp;&amp; x.length == y.length &amp;&amp;</span>
+<span class="pc bpc" id="L203" title="3 of 10 branches missed.">        return x != null &amp;&amp; y != null &amp;&amp; x.length == y.length &amp;&amp;</span>
                 (sig == null || sig.length == y.length);
     }
     
@@ -211,7 +209,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated &quot;a&quot; parameter.
      */
     public double getA() {
-<span class="fc" id="L214">        return a;</span>
+<span class="fc" id="L212">        return a;</span>
     }
 
     /**
@@ -219,7 +217,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated &quot;b&quot; parameter
      */
     public double getB() {
-<span class="fc" id="L222">        return b;</span>
+<span class="fc" id="L220">        return b;</span>
     }
 
     /**
@@ -227,7 +225,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated standard deviation of parameter &quot;a&quot;.
      */
     public double getSigA() {
-<span class="fc" id="L230">        return siga;</span>
+<span class="fc" id="L228">        return siga;</span>
     }
 
     /**
@@ -235,7 +233,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated standard deviation of parameter &quot;b&quot;.
      */
     public double getSigB() {
-<span class="fc" id="L238">        return sigb;</span>
+<span class="fc" id="L236">        return sigb;</span>
     }
 
     /**
@@ -243,7 +241,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated chi square value.
      */
     public double getChi2() {
-<span class="fc" id="L246">        return chi2;</span>
+<span class="fc" id="L244">        return chi2;</span>
     }
 
     /**
@@ -252,7 +250,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated goodness-of-fit probability.
      */
     public double getQ() {
-<span class="fc" id="L255">        return q;</span>
+<span class="fc" id="L253">        return q;</span>
     }
 
     /**
@@ -261,7 +259,7 @@ public class StraightLineFitter extends Fitter {
      * @return estimated standard deviation of provided input data.
      */
     public double getSigdat() {
-<span class="fc" id="L264">        return sigdat;</span>
+<span class="fc" id="L262">        return sigdat;</span>
     }    
     
     /**
@@ -273,90 +271,103 @@ public class StraightLineFitter extends Fitter {
      */    
     @Override
     public void fit() throws FittingException, NotReadyException {
-<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L277">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L275">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L280">        resultAvailable = false;</span>
+<span class="fc" id="L278">        resultAvailable = false;</span>
         
-<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (sig != null) {</span>
-<span class="fc" id="L283">            fitWithSig();</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (sig != null) {</span>
+<span class="fc" id="L281">            fitWithSig();</span>
         } else {
-<span class="fc" id="L285">            fitWithoutSig();</span>
+<span class="fc" id="L283">            fitWithoutSig();</span>
         }
         
-<span class="fc" id="L288">        resultAvailable = true;</span>
-<span class="fc" id="L289">    }</span>
+<span class="fc" id="L286">        resultAvailable = true;</span>
+<span class="fc" id="L287">    }</span>
     
     /**
      * Fits data when standard deviations of input data is provided.
      * @throws FittingException if fitting fails.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     private void fitWithSig() throws FittingException {
-<span class="fc" id="L296">        Gamma gam = new Gamma();</span>
+<span class="fc" id="L295">        Gamma gam = new Gamma();</span>
         int i;
-<span class="fc" id="L298">	    double ss = 0.0, sx = 0.0, sy = 0.0, st2 = 0.0, t, wt, sxoss;</span>
-<span class="fc" id="L299">        int ndata = x.length;</span>
-<span class="fc" id="L300">	    b = 0.0;</span>
-<span class="fc bfc" id="L301" title="All 2 branches covered.">	    for (i = 0;i &lt; ndata; i++) {</span>
-<span class="fc" id="L302">            wt = 1.0 / Math.pow(sig[i], 2.0);</span>
-<span class="fc" id="L303">            ss += wt;</span>
-<span class="fc" id="L304">            sx += x[i]*wt;</span>
-<span class="fc" id="L305">            sy += y[i]*wt;</span>
+<span class="fc" id="L297">	    double ss = 0.0;</span>
+<span class="fc" id="L298">	    double sx = 0.0;</span>
+<span class="fc" id="L299">	    double sy = 0.0;</span>
+<span class="fc" id="L300">	    double st2 = 0.0;</span>
+	    double t;
+	    double wt;
+	    double sxoss;
+<span class="fc" id="L304">        int ndata = x.length;</span>
+<span class="fc" id="L305">	    b = 0.0;</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">	    for (i = 0;i &lt; ndata; i++) {</span>
+<span class="fc" id="L307">            wt = 1.0 / Math.pow(sig[i], 2.0);</span>
+<span class="fc" id="L308">            ss += wt;</span>
+<span class="fc" id="L309">            sx += x[i]*wt;</span>
+<span class="fc" id="L310">            sy += y[i]*wt;</span>
 	    }
-<span class="fc" id="L307">	    sxoss = sx / ss;</span>
-<span class="fc bfc" id="L308" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
-<span class="fc" id="L309">            t = (x[i] - sxoss) / sig[i];</span>
-<span class="fc" id="L310">            st2 += t*t;</span>
-<span class="fc" id="L311">            b += t * y[i] / sig[i];</span>
+<span class="fc" id="L312">	    sxoss = sx / ss;</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L314">            t = (x[i] - sxoss) / sig[i];</span>
+<span class="fc" id="L315">            st2 += t*t;</span>
+<span class="fc" id="L316">            b += t * y[i] / sig[i];</span>
 	    }
-<span class="fc" id="L313">	    b /= st2;</span>
-<span class="fc" id="L314">	    a = (sy - sx * b) / ss;</span>
-<span class="fc" id="L315">	    siga = Math.sqrt((1.0 + sx * sx / (ss * st2)) / ss);</span>
-<span class="fc" id="L316">	    sigb = Math.sqrt(1.0 / st2);</span>
-<span class="fc bfc" id="L317" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
-<span class="fc" id="L318">	        chi2 += Math.pow((y[i] - a - b * x[i]) / sig[i], 2.0);</span>
+<span class="fc" id="L318">	    b /= st2;</span>
+<span class="fc" id="L319">	    a = (sy - sx * b) / ss;</span>
+<span class="fc" id="L320">	    siga = Math.sqrt((1.0 + sx * sx / (ss * st2)) / ss);</span>
+<span class="fc" id="L321">	    sigb = Math.sqrt(1.0 / st2);</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L323">	        chi2 += Math.pow((y[i] - a - b * x[i]) / sig[i], 2.0);</span>
         }
         try {
-<span class="pc bpc" id="L321" title="1 of 2 branches missed.">	        if (ndata &gt; 2) {</span>
-<span class="fc" id="L322">	            q = gam.gammq(0.5 * (ndata - 2),0.5 * chi2);</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">	        if (ndata &gt; 2) {</span>
+<span class="fc" id="L327">	            q = gam.gammq(0.5 * (ndata - 2),0.5 * chi2);</span>
             }
-<span class="nc" id="L324">        } catch (MaxIterationsExceededException e) {</span>
-<span class="nc" id="L325">            throw new FittingException(e);</span>
-<span class="fc" id="L326">        }</span>
-<span class="fc" id="L327">    }</span>
+<span class="nc" id="L329">        } catch (MaxIterationsExceededException e) {</span>
+<span class="nc" id="L330">            throw new FittingException(e);</span>
+<span class="fc" id="L331">        }</span>
+<span class="fc" id="L332">    }</span>
     
     /**
      * Fits data when standard deviations of input data is not provided.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     private void fitWithoutSig() {
 	    int i;
-<span class="fc" id="L334">	    double ss, sx=0.0, sy = 0.0, st2 = 0.0, t, sxoss;</span>
-<span class="fc" id="L335">        int ndata = x.length;</span>
-<span class="fc" id="L336">	    b = 0.0;</span>
-<span class="fc bfc" id="L337" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
-<span class="fc" id="L338">            sx += x[i];</span>
-<span class="fc" id="L339">            sy += y[i];</span>
+	    double ss;
+<span class="fc" id="L341">	    double sx = 0.0;</span>
+<span class="fc" id="L342">	    double sy = 0.0;</span>
+<span class="fc" id="L343">	    double st2 = 0.0;</span>
+	    double t;
+	    double sxoss;
+<span class="fc" id="L346">        int ndata = x.length;</span>
+<span class="fc" id="L347">	    b = 0.0;</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L349">            sx += x[i];</span>
+<span class="fc" id="L350">            sy += y[i];</span>
 	    }
-<span class="fc" id="L341">	    ss = ndata;</span>
-<span class="fc" id="L342">	    sxoss = sx / ss;</span>
-<span class="fc bfc" id="L343" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
-<span class="fc" id="L344">            t = x[i] - sxoss;</span>
-<span class="fc" id="L345">            st2 += t*t;</span>
-<span class="fc" id="L346">            b += t*y[i];</span>
+<span class="fc" id="L352">	    ss = ndata;</span>
+<span class="fc" id="L353">	    sxoss = sx / ss;</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L355">            t = x[i] - sxoss;</span>
+<span class="fc" id="L356">            st2 += t*t;</span>
+<span class="fc" id="L357">            b += t*y[i];</span>
 	    }
-<span class="fc" id="L348">	    b /= st2;</span>
-<span class="fc" id="L349">	    a = (sy - sx * b) / ss;</span>
-<span class="fc" id="L350">	    siga = Math.sqrt((1.0 + sx * sx / (ss * st2)) / ss);</span>
-<span class="fc" id="L351">	    sigb = Math.sqrt(1.0 / st2);</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
-<span class="fc" id="L353">	        chi2 += Math.pow(y[i] - a - b * x[i], 2.0);</span>
+<span class="fc" id="L359">	    b /= st2;</span>
+<span class="fc" id="L360">	    a = (sy - sx * b) / ss;</span>
+<span class="fc" id="L361">	    siga = Math.sqrt((1.0 + sx * sx / (ss * st2)) / ss);</span>
+<span class="fc" id="L362">	    sigb = Math.sqrt(1.0 / st2);</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">	    for (i = 0; i &lt; ndata; i++) {</span>
+<span class="fc" id="L364">	        chi2 += Math.pow(y[i] - a - b * x[i], 2.0);</span>
         }
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">	    if (ndata &gt; 2) {</span>
-<span class="fc" id="L356">	        sigdat = Math.sqrt(chi2 / (ndata - 2));</span>
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">	    if (ndata &gt; 2) {</span>
+<span class="fc" id="L367">	        sigdat = Math.sqrt(chi2 / (ndata - 2));</span>
         }
-<span class="fc" id="L358">	    siga *= sigdat;</span>
-<span class="fc" id="L359">	    sigb *= sigdat;</span>
-<span class="fc" id="L360">    }    </span>
+<span class="fc" id="L369">	    siga *= sigdat;</span>
+<span class="fc" id="L370">	    sigb *= sigdat;</span>
+<span class="fc" id="L371">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

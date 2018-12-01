@@ -308,10 +308,8 @@ com.irurueta:irurueta-numerical
             //too many iterations
             throw new FittingException(&quot;too many iterations&quot;);
                 
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }                
     }
     
@@ -366,16 +364,147 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L444">444</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L313">313</a></td></tr>
 <tr class="a">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L455">455</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L324">324</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L439">439</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L306">306</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
-<pre>            double ochisq;
+<pre>    }
+    
+    /**
+     * Returns curvature matrix.
+     * @return curvature matrix.
+     */
+    public Matrix getAlpha() {
+        return alpha;
+    }
+
+    /**
+     * Returns degrees of freedom of computed chi square value.
+     * Degrees of fredom is equal to the number of sampled data minus the
+     * number of estimated parameters.
+     * @return degrees of freedom of computed chi square value.
+     */
+    public int getChisqDegreesOfFreedom() {
+        return ndat - ma;
+    }
+
+    /**
+     * Gets mean square error produced by estimated parameters respect to
+     * provided sample data.
+     * @return mean square error.
+     */
+    public double getMse() {
+        return mse;
+    }
+
+    /**
+     * Gets the probability of finding a smaller chi square value.
+     * The smaller the found chi square value is, the better the fit of the estimated
+     * parameters to the actual parameter.
+     * Thus, the smaller the chance of finding a smaller chi square value, then the
+     * better the estimated fit is.
+     * @return probability of finding a smaller chi square value (better fit), expressed
+     * as a value between 0.0 and 1.0.
+     * @throws MaxIterationsExceededException if convergence of incomplete
+     * gamma function cannot be reached. This is rarely thrown and happens
+     * usually for numerically unstable input values.
+     */
+    public double getP() throws MaxIterationsExceededException {
+        return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());
+    }
+
+    /**
+     * Gets a measure of quality of estimated fit as a value between 0.0 and 1.0.
+     * The larger the quality value is, the better the fit that has been estimated.
+     * @return measure of quality of estimated fit.
+     * @throws MaxIterationsExceededException if convergence of incomplete
+     * gamma function cannot be reached. This is rarely thrown and happens
+     * usually for numerically unstable input values.
+     */
+    public double getQ() throws MaxIterationsExceededException {
+        return 1.0 - getP();
+    }
+
+    /**
+     * Indicates whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function over estimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default covariance is adjusted after fitting finishes.
+     * http://people.duke.edu/~hpgavin/ce281/lm.pdf
+     * https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf
+     * Numerical Recipes 3rd Ed, page 812
+     * @return true if covariance must be adjusted, false otherwise.
+     */
+    public boolean isCovarianceAdjusted() {
+        return adjustCovariance;
+    }
+
+    /**
+     * Specifies whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function over estimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default covariance is adjusted after fitting finishes.
+     * @param adjustCovariance true if covariance must be adjusted, false otherwise.
+     */
+    public void setCovarianceAdjusted(boolean adjustCovariance) {
+        this.adjustCovariance = adjustCovariance;
+    }
+
+    /**
+     * Fits a function to provided data so that parameters associated to that
+     * function can be estimated along with their covariance matrix and chi
+     * square value.
+     * If chi square value is close to 1, the fit is usually good.
+     * If it is much larger, then error cannot be properly fitted.
+     * If it is close to zero, then the model overfits the error.
+     * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
+     * the quality of the fit.
+     * @throws FittingException if fitting fails.
+     * @throws NotReadyException if enough input data has not yet been provided.
+     */        
+    @Override
+    public void fit() throws FittingException, NotReadyException {
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
+
+        try {
+            resultAvailable = false;        
+        
+            int j;
+            int k;
+            int l;
+            int iter;
+            int done = 0;
+            double alamda = 0.001;
+            double ochisq;
             double[] atry = new double[ma];
             double[] beta = new double[ma];
             double[] da = new double[ma];
@@ -477,10 +606,8 @@ com.irurueta:irurueta-numerical
             //too many iterations
             throw new FittingException(&quot;too many iterations&quot;);
                 
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }                
     }
     
@@ -741,11 +868,14 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L720">720</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L718">718</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L737">737</a></td></tr>
-<tr class="a"><td colspan='2'>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L735">735</a></td></tr>
+<tr class="a">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L702">702</a></td></tr>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>	    }
 
@@ -809,16 +939,16 @@ com.irurueta:irurueta-numerical
     }        
 }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.html#L190">190</a></td></tr>
 <tr class="b">
+<td>com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/SvdMultiDimensionLinearFitter.html#L193">193</a></td></tr>
+<tr class="a">
 <td>com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.html#L189">189</a></td></tr>
-<tr class="a"><td colspan='2'>
+<td><a href="./xref/com/irurueta/numerical/fitting/SvdSingleDimensionLinearFitter.html#L191">191</a></td></tr>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>            thresh = (tol &gt; 0. ? tol * svd.getSingularValues()[0] : -1.0);
             svd.solve(b, thresh, a);
@@ -848,70 +978,12 @@ com.irurueta:irurueta-numerical
             }
             
             resultAvailable = true;
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }        
     }    
     
-}</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L739">739</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L756">756</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L708">708</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>	    int k;
-	    for (i = mfit; i &lt; ma; i++) {
-            for (j = 0; j &lt; i + 1; j++) {
-                covar.setElementAt(i, j, 0.0);
-                covar.setElementAt(j, i, 0.0);
-            }
-        }
-
-	    k = mfit - 1;
-	    for (j = ma - 1; j &gt;= 0; j--) {
-            if (ia[j]) {
-                double[] buffer = covar.getBuffer();
-        		for (i = 0; i &lt; ma; i++) {
-                    int pos1 = covar.getIndex(i, k);
-                    int pos2 = covar.getIndex(i, j);
-                    swap(buffer, buffer, pos1, pos2);
-                }
-		        for (i = 0; i &lt; ma; i++) {
-                    int pos1 = covar.getIndex(k, i);
-                    int pos2 = covar.getIndex(j, i);
-                    swap(buffer, buffer, pos1, pos2);
-                }
-
-		        k--;
-            }
-	    }
-    }
-    
-    /**
-     * Swaps values of arrays at provided positions.
-     * @param array1 1st array.
-     * @param array2 2nd array.
-     * @param pos1 1st position.
-     * @param pos2 2nd position.
-     */
-    private void swap(double[] array1, double[] array2, int pos1, int pos2) {
-        double value1 = array1[pos1];
-        double value2 = array2[pos2];
-        array1[pos1] = value2;
-        array2[pos2] = value1;
-    }        
 }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -2051,10 +2123,10 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L697">697</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L695">695</a></td></tr>
 <tr class="a">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L668">668</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L679">679</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>            ymod = evaluator.evaluate(i, xRow, a, dyda);
@@ -2179,8 +2251,8 @@ com.irurueta:irurueta-numerical
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
 <td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L215">215</a></td></tr>
 <tr class="a">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L225">225</a></td></tr>
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L209">209</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>            Matrix x, double[] y, double sig) throws FittingException {
@@ -2259,12 +2331,98 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L215">215</a></td></tr>
+<tr class="a">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L225">225</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L209">209</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>            Matrix x, double[] y, double sig) throws FittingException {
+        this(x, y, sig);
+        setFunctionEvaluator(evaluator);
+    }    
+    
+    /**
+     * Returns convergence parameter.
+     * @return convergence parameter.
+     */
+    public int getNdone() {
+        return ndone;
+    }
+    
+    /**
+     * Sets convergence parameter.
+     * @param ndone convergence parameter.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     */
+    public void setNdone(int ndone) {
+        if (ndone &lt; 1) {
+            throw new IllegalArgumentException();
+        }
+        this.ndone = ndone;
+    }
+
+    /**
+     * Returns maximum number of iterations.
+     * @return maximum number of iterations.
+     */
+    public int getItmax() {
+        return itmax;
+    }
+    
+    /**
+     * Sets maximum number of iterations.
+     * @param itmax maximum number of iterations.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     */
+    public void setItmax(int itmax) {
+        if (itmax &lt;= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.itmax = itmax;
+    }    
+
+    /**
+     * Returns tolerance to reach convergence.
+     * @return tolerance to reach convergence.
+     */
+    public double getTol() {
+        return tol;
+    }
+    
+    /**
+     * Sets tolerance to reach convergence.
+     * @param tol tolerance to reach convergence.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     */
+    public void setTol(double tol) {
+        if (tol &lt;= 0.0) {
+            throw new IllegalArgumentException();
+        }
+        this.tol = tol;
+    }
+    
+    /**
+     * Returns function evaluator to evaluate function at a given point and
+     * obtain function derivatives respect to each provided parameter.
+     * @return function evaluator.
+     */
+    public LevenbergMarquardtMultiDimensionFunctionEvaluator </pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
 <td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L351">351</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L423">423</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>                        double probSubsetAllInliers = Math.pow(
                                 (double)bestNumInliers / (double)totalSamples,
@@ -2291,16 +2449,16 @@ com.irurueta:irurueta-numerical
                         }
                     }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/LMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/LMedSRobustEstimator.html#L580">580</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L996">996</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>        BitSet inliers = inliersData.getInliers();
         double bestMedianResidual = inliersData.getBestMedianResidual();
@@ -2326,16 +2484,16 @@ com.irurueta:irurueta-numerical
         //determine which points are inliers
         int numInliers = 0;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L136">136</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L156">156</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    }
     
@@ -2424,22 +2582,22 @@ com.irurueta:irurueta-numerical
      */
     public MSACInliersData getBestResultInliersData() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.html#L85">85</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L103">103</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L105">105</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/roots/SecantSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L81">81</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>        super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
@@ -2515,147 +2673,6 @@ com.irurueta:irurueta-numerical
         
         locked = true;
         rootAvailable = false;</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L313">313</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L324">324</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L306">306</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>    }
-    
-    /**
-     * Returns curvature matrix.
-     * @return curvature matrix.
-     */
-    public Matrix getAlpha() {
-        return alpha;
-    }
-
-    /**
-     * Returns degrees of freedom of computed chi square value.
-     * Degrees of fredom is equal to the number of sampled data minus the
-     * number of estimated parameters.
-     * @return degrees of freedom of computed chi square value.
-     */
-    public int getChisqDegreesOfFreedom() {
-        return ndat - ma;
-    }
-
-    /**
-     * Gets mean square error produced by estimated parameters respect to
-     * provided sample data.
-     * @return mean square error.
-     */
-    public double getMse() {
-        return mse;
-    }
-
-    /**
-     * Gets the probability of finding a smaller chi square value.
-     * The smaller the found chi square value is, the better the fit of the estimated
-     * parameters to the actual parameter.
-     * Thus, the smaller the chance of finding a smaller chi square value, then the
-     * better the estimated fit is.
-     * @return probability of finding a smaller chi square value (better fit), expressed
-     * as a value between 0.0 and 1.0.
-     * @throws MaxIterationsExceededException if convergence of incomplete
-     * gamma function cannot be reached. This is rarely thrown and happens
-     * usually for numerically unstable input values.
-     */
-    public double getP() throws MaxIterationsExceededException {
-        return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());
-    }
-
-    /**
-     * Gets a measure of quality of estimated fit as a value between 0.0 and 1.0.
-     * The larger the quality value is, the better the fit that has been estimated.
-     * @return measure of quality of estimated fit.
-     * @throws MaxIterationsExceededException if convergence of incomplete
-     * gamma function cannot be reached. This is rarely thrown and happens
-     * usually for numerically unstable input values.
-     */
-    public double getQ() throws MaxIterationsExceededException {
-        return 1.0 - getP();
-    }
-
-    /**
-     * Indicates whether covariance must be adjusted or not.
-     * When covariance adjustment is enabled, then covariance is recomputed taking
-     * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
-     * expression: Cov = (J'*W*J)^-1 where:
-     * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
-     * for each input parameter x. Each row of J matrix contains an evaluation of
-     * the model function Jacobian for i-th input parameter x. Each column of J matrix
-     * contains the partial derivative of model function over j-th estimated parameter.
-     * W is the inverse of input variances. It's a diagonal matrix containing the
-     * reciprocal of the input variances (squared input standard deviations). That is:
-     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
-     * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
-     * http://people.duke.edu/~hpgavin/ce281/lm.pdf
-     * https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf
-     * Numerical Recipes 3rd Ed, page 812
-     * @return true if covariance must be adjusted, false otherwise.
-     */
-    public boolean isCovarianceAdjusted() {
-        return adjustCovariance;
-    }
-
-    /**
-     * Specifies whether covariance must be adjusted or not.
-     * When covariance adjustment is enabled, then covariance is recomputed taking
-     * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
-     * expression: Cov = (J'*W*J)^-1 where:
-     * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
-     * for each input parameter x. Each row of J matrix contains an evaluation of
-     * the model function Jacobian for i-th input parameter x. Each column of J matrix
-     * contains the partial derivative of model function over j-th estimated parameter.
-     * W is the inverse of input variances. It's a diagonal matrix containing the
-     * reciprocal of the input variances (squared input standard deviations). That is:
-     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
-     * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
-     * @param adjustCovariance true if covariance must be adjusted, false otherwise.
-     */
-    public void setCovarianceAdjusted(boolean adjustCovariance) {
-        this.adjustCovariance = adjustCovariance;
-    }
-
-    /**
-     * Fits a function to provided data so that parameters associated to that
-     * function can be estimated along with their covariance matrix and chi
-     * square value.
-     * If chi square value is close to 1, the fit is usually good.
-     * If it is much larger, then error cannot be properly fitted.
-     * If it is close to zero, then the model overfits the error.
-     * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
-     * the quality of the fit.
-     * @throws FittingException if fitting fails.
-     * @throws NotReadyException if enough input data has not yet been provided.
-     */        
-    @Override
-    public void fit() throws FittingException, NotReadyException {
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
-
-        try {
-            resultAvailable = false;        
-        
-            int j;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -3042,10 +3059,10 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L634">634</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L632">632</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L647">647</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L645">645</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)

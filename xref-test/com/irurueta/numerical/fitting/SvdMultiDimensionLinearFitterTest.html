@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          assertNull(fitter.getY());
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          assertNull(fitter.getSig());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          assertFalse(fitter.isReady());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          <em class="jxr_comment">//test constructor with input data</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          Matrix x = <strong class="jxr_keyword">new</strong> Matrix(nPoints, 2);
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          assertSame(fitter.getY(), y);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          assertSame(fitter.getSig(), sig);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          assertFalse(fitter.isReady());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          <em class="jxr_comment">//Force IllegalArgumentException</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          Matrix shortX = <strong class="jxr_keyword">new</strong> Matrix(nPoints - 1, 2);
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>             assertEquals(fitter.getSig()[i], 1.0, 0.0);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>         }
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>         assertFalse(fitter.isReady());
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>         assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>         
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>         <em class="jxr_comment">//Force IllegalArgumentException</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         fitter = <strong class="jxr_keyword">null</strong>;
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>         assertNull(fitter.getY());
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>         assertNull(fitter.getSig());
 <a class="jxr_linenumber" name="L162" href="#L162">162</a>         assertFalse(fitter.isReady());
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>         assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>         assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>         
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>         <em class="jxr_comment">//test constructor with evaluator and input data</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>         fitter = <strong class="jxr_keyword">new</strong> SvdMultiDimensionLinearFitter(evaluator, x, y, sig);
@@ -179,7 +179,7 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>         assertSame(fitter.getY(), y);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>         assertSame(fitter.getSig(), sig);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>         assertTrue(fitter.isReady());
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>         assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>         
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>         <em class="jxr_comment">//Force IllegalArgumentException</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>         fitter = <strong class="jxr_keyword">null</strong>;
@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>             assertEquals(fitter.getSig()[i], 1.0, 0.0);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>         }
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>         assertTrue(fitter.isReady());
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>         assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>         
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>         <em class="jxr_comment">//Force IllegalArgumentException</em>
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>         fitter = <strong class="jxr_keyword">null</strong>;
@@ -421,7 +421,7 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a>                 <strong class="jxr_keyword">new</strong> SvdMultiDimensionLinearFitter();
 <a class="jxr_linenumber" name="L414" href="#L414">414</a>         
 <a class="jxr_linenumber" name="L415" href="#L415">415</a>         <em class="jxr_comment">//check default values</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>         assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.TOL, 0.0);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>         assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
 <a class="jxr_linenumber" name="L417" href="#L417">417</a>         
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>         <em class="jxr_comment">//set new value</em>
 <a class="jxr_linenumber" name="L419" href="#L419">419</a>         fitter.setTol(1e-3);

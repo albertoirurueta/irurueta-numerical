@@ -15,8 +15,10 @@
  */
 package com.irurueta.numerical.fitting;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
 
 /**
@@ -36,7 +38,7 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
     /**
      * Default tolerance.
      */
-    public static final double TOL = 1e-12;
+    public static final double DEFAULT_TOL = 1e-12;
     
     /**
      * Tolerance to define convergence threshold for SVD.
@@ -47,9 +49,9 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * Constructor.
      */
     public SvdSingleDimensionLinearFitter() {
-<span class="fc" id="L50">        super();</span>
-<span class="fc" id="L51">        tol = TOL;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L52">        super();</span>
+<span class="fc" id="L53">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L54">    }</span>
     
     /**
      * Constructor.
@@ -61,11 +63,10 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      * length.
      */
-    public SvdSingleDimensionLinearFitter(double[] x, double[] y, double[] sig)
-            throws IllegalArgumentException {
-<span class="fc" id="L66">        super(x, y, sig);</span>
-<span class="fc" id="L67">        tol = TOL;</span>
-<span class="fc" id="L68">    }</span>
+    public SvdSingleDimensionLinearFitter(double[] x, double[] y, double[] sig) {
+<span class="fc" id="L67">        super(x, y, sig);</span>
+<span class="fc" id="L68">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L69">    }</span>
     
     /**
      * Constructor.
@@ -78,10 +79,9 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */    
-    public SvdSingleDimensionLinearFitter(double[] x, double[] y, double sig)
-            throws IllegalArgumentException {
+    public SvdSingleDimensionLinearFitter(double[] x, double[] y, double sig) {
 <span class="fc" id="L83">        super(x, y, sig);</span>
-<span class="fc" id="L84">        tol = TOL;</span>
+<span class="fc" id="L84">        tol = DEFAULT_TOL;</span>
 <span class="fc" id="L85">    }</span>
     
     /**
@@ -93,7 +93,7 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
     public SvdSingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
 <span class="fc" id="L95">        super(evaluator);</span>
-<span class="fc" id="L96">        tol = TOL;</span>
+<span class="fc" id="L96">        tol = DEFAULT_TOL;</span>
 <span class="fc" id="L97">    }</span>
     
     /**
@@ -111,11 +111,10 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * length.
      */    
     public SvdSingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            double[] x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException {
-<span class="fc" id="L116">        super(evaluator, x, y, sig); </span>
-<span class="fc" id="L117">        tol = TOL;</span>
-<span class="fc" id="L118">    }</span>
+            double[] x, double[] y, double[] sig) throws FittingException {
+<span class="fc" id="L115">        super(evaluator, x, y, sig); </span>
+<span class="fc" id="L116">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L117">    }</span>
     
     /**
      * Constructor.
@@ -132,18 +131,17 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * length.
      */    
     public SvdSingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            double[] x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException {
-<span class="fc" id="L137">        super(evaluator, x, y, sig);</span>
-<span class="fc" id="L138">        tol = TOL;</span>
-<span class="fc" id="L139">    }</span>
+            double[] x, double[] y, double sig) throws FittingException {
+<span class="fc" id="L135">        super(evaluator, x, y, sig);</span>
+<span class="fc" id="L136">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L137">    }</span>
 
     /**
      * Returns tolerance to define convergence threshold for SVD.
      * @return tolerance to define convergence threshold for SVD.
      */
     public double getTol() {
-<span class="fc" id="L146">        return tol;</span>
+<span class="fc" id="L144">        return tol;</span>
     }
     
     /**
@@ -151,8 +149,8 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * @param tol tolerance to define convergence threshold for SVD.
      */
     public void setTol(double tol) {
-<span class="fc" id="L154">        this.tol = tol;</span>
-<span class="fc" id="L155">    }    </span>
+<span class="fc" id="L152">        this.tol = tol;</span>
+<span class="fc" id="L153">    }    </span>
     
     /**
      * Fits a function to provided data so that parameters associated to that
@@ -163,62 +161,65 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      */    
     @Override
     public void fit() throws FittingException, NotReadyException {
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L167">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L165">            throw new NotReadyException();</span>
         }
         
         try {
-<span class="fc" id="L171">            resultAvailable = false;</span>
+<span class="fc" id="L169">            resultAvailable = false;</span>
             
-            int i,j,k;
-            double tmp,thresh,sum;
-<span class="fc" id="L175">            Matrix aa = new Matrix(ndat, ma);</span>
-<span class="fc" id="L176">            double[] b = new double[ndat];</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L178">                evaluator.evaluate(x[i], afunc);</span>
-<span class="fc" id="L179">		        tmp = 1.0 / sig[i];</span>
-<span class="fc bfc" id="L180" title="All 2 branches covered.">		        for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc" id="L181">                    aa.setElementAt(i, j, afunc[j]*tmp);</span>
+            int i;
+            int j;
+            int k;
+            double tmp;
+            double thresh;
+            double sum;
+<span class="fc" id="L177">            Matrix aa = new Matrix(ndat, ma);</span>
+<span class="fc" id="L178">            double[] b = new double[ndat];</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L180">                evaluator.evaluate(x[i], afunc);</span>
+<span class="fc" id="L181">		        tmp = 1.0 / sig[i];</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">		        for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L183">                    aa.setElementAt(i, j, afunc[j]*tmp);</span>
                 }
-<span class="fc" id="L183">		        b[i] = y[i] * tmp;</span>
+<span class="fc" id="L185">		        b[i] = y[i] * tmp;</span>
             }
             
-<span class="fc" id="L186">            SingularValueDecomposer svd = </span>
+<span class="fc" id="L188">            SingularValueDecomposer svd = </span>
                     new SingularValueDecomposer(aa);
-<span class="fc" id="L188">            svd.decompose();</span>
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">            thresh = (tol &gt; 0.0 ? tol * svd.getSingularValues()[0] : -1.0);</span>
-<span class="fc" id="L190">            svd.solve(b, thresh, a);</span>
-<span class="fc" id="L191">            chisq = 0.0;</span>
-<span class="fc bfc" id="L192" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L193">		        sum = 0.0;</span>
-<span class="fc bfc" id="L194" title="All 2 branches covered.">		        for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc" id="L195">                    sum += aa.getElementAt(i, j)*a[j];</span>
+<span class="fc" id="L190">            svd.decompose();</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            thresh = (tol &gt; 0.0 ? tol * svd.getSingularValues()[0] : -1.0);</span>
+<span class="fc" id="L192">            svd.solve(b, thresh, a);</span>
+<span class="fc" id="L193">            chisq = 0.0;</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L195">		        sum = 0.0;</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">		        for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L197">                    sum += aa.getElementAt(i, j)*a[j];</span>
                 }
-<span class="fc" id="L197">		        chisq += Math.pow(sum-b[i], 2.0);</span>
+<span class="fc" id="L199">		        chisq += Math.pow(sum-b[i], 2.0);</span>
             }
-<span class="fc bfc" id="L199" title="All 2 branches covered.">            for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc bfc" id="L200" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
-<span class="fc" id="L201">                    sum = 0.0;</span>
-<span class="fc" id="L202">                    double[] w = svd.getSingularValues();</span>
-<span class="fc" id="L203">                    double tsh = svd.getNegligibleSingularValueThreshold();</span>
-<span class="fc" id="L204">                    Matrix v = svd.getV();</span>
-<span class="fc bfc" id="L205" title="All 2 branches covered.">                    for (k=0;k&lt;ma;k++) {</span>
-<span class="pc bpc" id="L206" title="1 of 2 branches missed.">                        if (w[k] &gt; tsh) {</span>
-<span class="fc" id="L207">                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / </span>
-<span class="fc" id="L208">                                    Math.pow(w[k], 2.0);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L203">                    sum = 0.0;</span>
+<span class="fc" id="L204">                    double[] w = svd.getSingularValues();</span>
+<span class="fc" id="L205">                    double tsh = svd.getNegligibleSingularValueThreshold();</span>
+<span class="fc" id="L206">                    Matrix v = svd.getV();</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">                    for (k=0;k&lt;ma;k++) {</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">                        if (w[k] &gt; tsh) {</span>
+<span class="fc" id="L209">                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / </span>
+<span class="fc" id="L210">                                    Math.pow(w[k], 2.0);</span>
                         }
                     }
-<span class="fc" id="L211">                    covar.setElementAt(j, i, sum);</span>
-<span class="fc" id="L212">                    covar.setElementAt(i, j, sum);</span>
+<span class="fc" id="L213">                    covar.setElementAt(j, i, sum);</span>
+<span class="fc" id="L214">                    covar.setElementAt(i, j, sum);</span>
 		        }
             }
             
-<span class="fc" id="L216">            resultAvailable = true;</span>
-<span class="nc" id="L217">        } catch (FittingException e) {</span>
-<span class="nc" id="L218">            throw e;</span>
-<span class="nc" id="L219">        } catch (Throwable t) {</span>
-<span class="nc" id="L220">            throw new FittingException(t);</span>
-<span class="fc" id="L221">        }        </span>
-<span class="fc" id="L222">    }    </span>
+<span class="fc" id="L218">            resultAvailable = true;</span>
+
+<span class="nc" id="L220">        } catch (AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L221">            throw new FittingException(e);</span>
+<span class="fc" id="L222">        }        </span>
+<span class="fc" id="L223">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
