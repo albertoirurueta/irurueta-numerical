@@ -17,10 +17,7 @@ package com.irurueta.numerical.optimization;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 
 import java.util.Arrays;
 
@@ -92,12 +89,12 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * Empty constructor.
      */
     public SimplexMultiOptimizer() {
-<span class="fc" id="L95">        super();</span>
-<span class="fc" id="L96">        nfunc = mpts = ndim = 0;</span>
-<span class="fc" id="L97">        y = null;</span>
-<span class="fc" id="L98">        p = null;</span>
-<span class="fc" id="L99">        ftol = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L92">        super();</span>
+<span class="fc" id="L93">        nfunc = mpts = ndim = 0;</span>
+<span class="fc" id="L94">        y = null;</span>
+<span class="fc" id="L95">        p = null;</span>
+<span class="fc" id="L96">        ftol = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L97">    }</span>
     
     /**
      * Constructor.
@@ -111,15 +108,14 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public SimplexMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener, 
-            double[] startPoint, double delta, double tolerance)
-            throws IllegalArgumentException {
-<span class="fc" id="L116">        super(listener);</span>
-<span class="fc" id="L117">        nfunc = mpts = ndim = 0;</span>
-<span class="fc" id="L118">        y = null;</span>
-<span class="fc" id="L119">        p = null;</span>
-<span class="fc" id="L120">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L121">        internalSetSimplex(startPoint, delta);</span>
-<span class="fc" id="L122">    }</span>
+            double[] startPoint, double delta, double tolerance) {
+<span class="fc" id="L112">        super(listener);</span>
+<span class="fc" id="L113">        nfunc = mpts = ndim = 0;</span>
+<span class="fc" id="L114">        y = null;</span>
+<span class="fc" id="L115">        p = null;</span>
+<span class="fc" id="L116">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L117">        internalSetSimplex(startPoint, delta);</span>
+<span class="fc" id="L118">    }</span>
     
     /**
      * Constructor.
@@ -134,15 +130,14 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public SimplexMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
-            double[] startPoint, double[] deltas, double tolerance)
-            throws IllegalArgumentException {
-<span class="fc" id="L139">        super(listener);</span>
-<span class="fc" id="L140">        nfunc = mpts = ndim = 0;</span>
-<span class="fc" id="L141">        y = null;</span>
-<span class="fc" id="L142">        p = null;</span>
-<span class="fc" id="L143">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L144">        internalSetSimplex(startPoint, deltas);        </span>
-<span class="fc" id="L145">    }</span>
+            double[] startPoint, double[] deltas, double tolerance) {
+<span class="fc" id="L134">        super(listener);</span>
+<span class="fc" id="L135">        nfunc = mpts = ndim = 0;</span>
+<span class="fc" id="L136">        y = null;</span>
+<span class="fc" id="L137">        p = null;</span>
+<span class="fc" id="L138">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L139">        internalSetSimplex(startPoint, deltas);        </span>
+<span class="fc" id="L140">    }</span>
         
     /**
      * Constructor.
@@ -155,14 +150,14 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public SimplexMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener, Matrix simplex, 
-            double tolerance) throws IllegalArgumentException {
-<span class="fc" id="L159">        super(listener);</span>
-<span class="fc" id="L160">        nfunc = mpts = ndim = 0;</span>
-<span class="fc" id="L161">        y = null;</span>
-<span class="fc" id="L162">        p = null;</span>
-<span class="fc" id="L163">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L164">        internalSetSimplex(simplex);</span>
-<span class="fc" id="L165">    }</span>
+            double tolerance) {
+<span class="fc" id="L154">        super(listener);</span>
+<span class="fc" id="L155">        nfunc = mpts = ndim = 0;</span>
+<span class="fc" id="L156">        y = null;</span>
+<span class="fc" id="L157">        p = null;</span>
+<span class="fc" id="L158">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L159">        internalSetSimplex(simplex);</span>
+<span class="fc" id="L160">    }</span>
         
     /**
      * Returns current simplex.
@@ -177,10 +172,10 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws NotAvailableException Raised if not provided or computed.
      */
     public Matrix getSimplex() throws NotAvailableException {
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (!isSimplexAvailable()) {</span>
-<span class="fc" id="L181">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (!isSimplexAvailable()) {</span>
+<span class="fc" id="L176">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L183">        return p;</span>
+<span class="fc" id="L178">        return p;</span>
     }
     
     /**
@@ -193,11 +188,11 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public void setSimplex(double[] startPoint, double delta) 
             throws LockedException {
-<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L197">            throw new LockedException();</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L192">            throw new LockedException();</span>
         }
-<span class="fc" id="L199">        internalSetSimplex(startPoint, delta);</span>
-<span class="fc" id="L200">    }</span>
+<span class="fc" id="L194">        internalSetSimplex(startPoint, delta);</span>
+<span class="fc" id="L195">    }</span>
 
     /**
      * Internal method to set a simplex as a central point and a set of 
@@ -208,10 +203,10 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param delta Distance of surrounding points.
      */
     private void internalSetSimplex(double[] startPoint, double delta) {
-<span class="fc" id="L211">        double[] deltas = new double[startPoint.length];</span>
-<span class="fc" id="L212">        Arrays.fill(deltas, delta);</span>
-<span class="fc" id="L213">        internalSetSimplex(startPoint, deltas);</span>
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L206">        double[] deltas = new double[startPoint.length];</span>
+<span class="fc" id="L207">        Arrays.fill(deltas, delta);</span>
+<span class="fc" id="L208">        internalSetSimplex(startPoint, deltas);</span>
+<span class="fc" id="L209">    }</span>
     
     /**
      * Sets a simplex defined as a central point and a set of surrounding points
@@ -228,12 +223,12 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * have the same length.
      */
     public void setSimplex(double[] startPoint, double[] deltas)
-            throws LockedException, IllegalArgumentException {
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L233">            throw new LockedException();</span>
+            throws LockedException {
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L228">            throw new LockedException();</span>
         }
-<span class="fc" id="L235">        internalSetSimplex(startPoint, deltas);</span>
-<span class="fc" id="L236">    }</span>
+<span class="fc" id="L230">        internalSetSimplex(startPoint, deltas);</span>
+<span class="fc" id="L231">    }</span>
     
     /**
      * Internal method to set a simplex defined as a central point and a set of
@@ -248,32 +243,31 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if startPoint and deltas don't
      * have the same length.
      */
-    private void internalSetSimplex(double[] startPoint, double[] deltas)
-            throws IllegalArgumentException {
-<span class="fc" id="L253">        int localndim = startPoint.length;</span>
+    private void internalSetSimplex(double[] startPoint, double[] deltas) {
+<span class="fc" id="L247">        int localndim = startPoint.length;</span>
         
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        if(deltas.length != localndim) {</span>
-<span class="fc" id="L256">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if(deltas.length != localndim) {</span>
+<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
         }
         
         Matrix pp;
         try {
-<span class="fc" id="L261">            pp = new Matrix(localndim + 1, localndim);</span>
-<span class="nc" id="L262">        } catch (WrongSizeException e) {</span>
-<span class="nc" id="L263">            throw new IllegalArgumentException(e);</span>
-<span class="fc" id="L264">        }</span>
-<span class="fc bfc" id="L265" title="All 2 branches covered.">        for (int i = 0; i &lt; localndim + 1; i++) {</span>
-<span class="fc bfc" id="L266" title="All 2 branches covered.">            for (int j = 0; j &lt; localndim; j++) {</span>
-<span class="fc" id="L267">                pp.setElementAt(i, j, startPoint[j]);</span>
+<span class="fc" id="L255">            pp = new Matrix(localndim + 1, localndim);</span>
+<span class="nc" id="L256">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L257">            throw new IllegalArgumentException(e);</span>
+<span class="fc" id="L258">        }</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        for (int i = 0; i &lt; localndim + 1; i++) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (int j = 0; j &lt; localndim; j++) {</span>
+<span class="fc" id="L261">                pp.setElementAt(i, j, startPoint[j]);</span>
             }
-<span class="fc bfc" id="L269" title="All 2 branches covered.">            if (i != 0) {</span>
-<span class="fc" id="L270">                pp.setElementAt(i, i - 1, </span>
-<span class="fc" id="L271">                    pp.getElementAt(i, i - 1) + deltas[i - 1]);</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">            if (i != 0) {</span>
+<span class="fc" id="L264">                pp.setElementAt(i, i - 1, </span>
+<span class="fc" id="L265">                    pp.getElementAt(i, i - 1) + deltas[i - 1]);</span>
             }
         }
                 
-<span class="fc" id="L275">        internalSetSimplex(pp);</span>
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L269">        internalSetSimplex(pp);</span>
+<span class="fc" id="L270">    }</span>
     
     /**
      * Sets simplex as a matrix containing on each row a point of the simplex.
@@ -284,11 +278,11 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws LockedException Raised if this instance is locked.
      */
     public void setSimplex(Matrix simplex) throws LockedException {
-<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L288">            throw new LockedException();</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L282">            throw new LockedException();</span>
         }
-<span class="fc" id="L290">        internalSetSimplex(simplex);</span>
-<span class="fc" id="L291">    }</span>
+<span class="fc" id="L284">        internalSetSimplex(simplex);</span>
+<span class="fc" id="L285">    }</span>
 
     /**
      * Internal method to Set simplex as a matrix containing on each row a point 
@@ -300,8 +294,8 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param simplex Simplex of points.
      */    
     private void internalSetSimplex(Matrix simplex) {
-<span class="fc" id="L303">        p = simplex;</span>
-<span class="fc" id="L304">    }</span>
+<span class="fc" id="L297">        p = simplex;</span>
+<span class="fc" id="L298">    }</span>
     
     /**
      * Returns boolean indicating whether a simplex has been provided and is
@@ -309,7 +303,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean isSimplexAvailable() {        
-<span class="fc bfc" id="L312" title="All 2 branches covered.">        return p != null;</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        return p != null;</span>
     }
     
     /**
@@ -319,13 +313,13 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * This parameter will be available one minimization has been computed.
      */
     public double[] getEvaluationsAtSimplex() throws NotAvailableException {
-<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (!areFunctionEvaluationsAvailable()) {</span>
-<span class="fc" id="L323">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        if (!areFunctionEvaluationsAvailable()) {</span>
+<span class="fc" id="L317">            throw new NotAvailableException();</span>
         }
-<span class="pc bpc" id="L325" title="1 of 2 branches missed.">        if (!areFunctionEvaluationsAvailable()) {</span>
-<span class="nc" id="L326">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">        if (!areFunctionEvaluationsAvailable()) {</span>
+<span class="nc" id="L320">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L328">        return y;</span>
+<span class="fc" id="L322">        return y;</span>
     }
     
     /**
@@ -336,7 +330,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean areFunctionEvaluationsAvailable() {
-<span class="fc bfc" id="L339" title="All 2 branches covered.">        return y != null;</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">        return y != null;</span>
     }
     
     /**
@@ -344,7 +338,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @return Tolerance or accuracy to be expected on estimated local minimum.
      */      
     public double getTolerance() {
-<span class="fc" id="L347">        return ftol;</span>
+<span class="fc" id="L341">        return ftol;</span>
     }
     
     /**
@@ -355,13 +349,12 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */       
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
-<span class="pc bpc" id="L360" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L361">            throw new LockedException();</span>
+    public void setTolerance(double tolerance) throws LockedException {
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L354">            throw new LockedException();</span>
         }
-<span class="fc" id="L363">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L364">    }</span>
+<span class="fc" id="L356">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L357">    }</span>
     
     /**
      * Internal method to set tolerance or accuracy to be expected on estimated
@@ -372,13 +365,12 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */        
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L377" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L378">            throw new IllegalArgumentException();</span>
+    private void internalSetTolerance(double tolerance) {
+<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L370">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L380">        ftol = tolerance;</span>
-<span class="fc" id="L381">    }</span>
+<span class="fc" id="L372">        ftol = tolerance;</span>
+<span class="fc" id="L373">    }</span>
     
     /**
      * This function estimates a function minimum.
@@ -395,120 +387,121 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
     @Override
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L399">            throw new LockedException();</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L391">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L401" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L402">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L394">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L405">        locked = true;</span>
+<span class="fc" id="L397">        locked = true;</span>
         
         //clean previous result and previous function evaluations
         try {
-            int ihi, ilo, inhi;
-<span class="fc" id="L410">            mpts = p.getRows();</span>
-<span class="fc" id="L411">            ndim = p.getColumns();</span>
+            int ihi;
+            int ilo;
+            int inhi;
+<span class="fc" id="L404">            mpts = p.getRows();</span>
+<span class="fc" id="L405">            ndim = p.getColumns();</span>
             
-<span class="fc" id="L413">            double[] psum = new double[ndim];</span>
-<span class="fc" id="L414">            double[] pmin = new double[ndim];</span>
-<span class="fc" id="L415">            double[] x = new double[ndim];</span>
-<span class="fc" id="L416">            double[] v1 = new double[1];</span>
-<span class="fc" id="L417">            double[] v2 = new double[1];</span>
+<span class="fc" id="L407">            double[] psum = new double[ndim];</span>
+<span class="fc" id="L408">            double[] pmin = new double[ndim];</span>
+<span class="fc" id="L409">            double[] x = new double[ndim];</span>
+<span class="fc" id="L410">            double[] v1 = new double[1];</span>
+<span class="fc" id="L411">            double[] v2 = new double[1];</span>
             
             //instantiate new function evaluations
-<span class="fc" id="L420">            y = new double[mpts];</span>
+<span class="fc" id="L414">            y = new double[mpts];</span>
             
-<span class="fc bfc" id="L422" title="All 2 branches covered.">            for (int i = 0; i &lt; mpts; i++) {</span>
-<span class="fc bfc" id="L423" title="All 2 branches covered.">                for (int j = 0; j &lt; ndim; j++) {</span>
-<span class="fc" id="L424">                    x[j] = p.getElementAt(i, j);</span>
+<span class="fc bfc" id="L416" title="All 2 branches covered.">            for (int i = 0; i &lt; mpts; i++) {</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">                for (int j = 0; j &lt; ndim; j++) {</span>
+<span class="fc" id="L418">                    x[j] = p.getElementAt(i, j);</span>
                 }
-<span class="fc" id="L426">                y[i] = listener.evaluate(x);</span>
+<span class="fc" id="L420">                y[i] = listener.evaluate(x);</span>
             }
             
-<span class="fc" id="L429">            nfunc = 0;</span>
-<span class="fc" id="L430">            getPsum(p, psum);</span>
+<span class="fc" id="L423">            nfunc = 0;</span>
+<span class="fc" id="L424">            getPsum(p, psum);</span>
             
             for (;;) {
-<span class="fc" id="L433">                ilo = 0;</span>
-<span class="fc bfc" id="L434" title="All 2 branches covered.">                if (y[0] &gt; y[1]) {</span>
-<span class="fc" id="L435">                    ihi = 0;</span>
-<span class="fc" id="L436">                    inhi = 1;</span>
+<span class="fc" id="L427">                ilo = 0;</span>
+<span class="fc bfc" id="L428" title="All 2 branches covered.">                if (y[0] &gt; y[1]) {</span>
+<span class="fc" id="L429">                    ihi = 0;</span>
+<span class="fc" id="L430">                    inhi = 1;</span>
                 } else {
-<span class="fc" id="L438">                    ihi = 1;</span>
-<span class="fc" id="L439">                    inhi = 0;</span>
+<span class="fc" id="L432">                    ihi = 1;</span>
+<span class="fc" id="L433">                    inhi = 0;</span>
                 }
-<span class="fc bfc" id="L441" title="All 2 branches covered.">                for (int i = 0; i &lt; mpts; i++) {</span>
-<span class="fc bfc" id="L442" title="All 2 branches covered.">                    if (y[i] &lt;= y[ilo]) {</span>
-<span class="fc" id="L443">                        ilo = i;</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">                for (int i = 0; i &lt; mpts; i++) {</span>
+<span class="fc bfc" id="L436" title="All 2 branches covered.">                    if (y[i] &lt;= y[ilo]) {</span>
+<span class="fc" id="L437">                        ilo = i;</span>
                     }
-<span class="fc bfc" id="L445" title="All 2 branches covered.">                    if (y[i] &gt; y[ihi]) {</span>
-<span class="fc" id="L446">                        inhi = ihi;</span>
-<span class="fc" id="L447">                        ihi = i;</span>
-<span class="fc bfc" id="L448" title="All 4 branches covered.">                    } else if (y[i] &gt; y[inhi] &amp;&amp; i != ihi) {</span>
-<span class="fc" id="L449">                        inhi = i;</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">                    if (y[i] &gt; y[ihi]) {</span>
+<span class="fc" id="L440">                        inhi = ihi;</span>
+<span class="fc" id="L441">                        ihi = i;</span>
+<span class="fc bfc" id="L442" title="All 4 branches covered.">                    } else if (y[i] &gt; y[inhi] &amp;&amp; i != ihi) {</span>
+<span class="fc" id="L443">                        inhi = i;</span>
                     }
                 }
-<span class="fc" id="L452">                double rtol = 2.0 * Math.abs(y[ihi] - y[ilo]) /</span>
-<span class="fc" id="L453">                        (Math.abs(y[ihi]) + Math.abs(y[ilo]) + TINY);</span>
+<span class="fc" id="L446">                double rtol = 2.0 * Math.abs(y[ihi] - y[ilo]) /</span>
+<span class="fc" id="L447">                        (Math.abs(y[ihi]) + Math.abs(y[ilo]) + TINY);</span>
                 
-<span class="fc bfc" id="L455" title="All 2 branches covered.">                if (rtol &lt; ftol) {</span>
-<span class="fc" id="L456">                    v1[0] = y[0];</span>
-<span class="fc" id="L457">                    v2[0] = y[ilo];</span>
-<span class="fc" id="L458">                    swap(v1, v2);</span>
-<span class="fc" id="L459">                    y[0] = v1[0];</span>
-<span class="fc" id="L460">                    y[ilo] = v2[0];</span>
-<span class="fc bfc" id="L461" title="All 2 branches covered.">                    for (int i = 0; i &lt; ndim; i++) {</span>
-<span class="fc" id="L462">                        v1[0] = p.getElementAt(0, i);</span>
-<span class="fc" id="L463">                        v2[0] = p.getElementAt(ilo, i);</span>
-<span class="fc" id="L464">                        swap(v1, v2);</span>
-<span class="fc" id="L465">                        p.setElementAt(0, i, v1[0]);</span>
-<span class="fc" id="L466">                        p.setElementAt(ilo, i, v2[0]);</span>
-<span class="fc" id="L467">                        pmin[i] = p.getElementAt(0, i);</span>
+<span class="fc bfc" id="L449" title="All 2 branches covered.">                if (rtol &lt; ftol) {</span>
+<span class="fc" id="L450">                    v1[0] = y[0];</span>
+<span class="fc" id="L451">                    v2[0] = y[ilo];</span>
+<span class="fc" id="L452">                    swap(v1, v2);</span>
+<span class="fc" id="L453">                    y[0] = v1[0];</span>
+<span class="fc" id="L454">                    y[ilo] = v2[0];</span>
+<span class="fc bfc" id="L455" title="All 2 branches covered.">                    for (int i = 0; i &lt; ndim; i++) {</span>
+<span class="fc" id="L456">                        v1[0] = p.getElementAt(0, i);</span>
+<span class="fc" id="L457">                        v2[0] = p.getElementAt(ilo, i);</span>
+<span class="fc" id="L458">                        swap(v1, v2);</span>
+<span class="fc" id="L459">                        p.setElementAt(0, i, v1[0]);</span>
+<span class="fc" id="L460">                        p.setElementAt(ilo, i, v2[0]);</span>
+<span class="fc" id="L461">                        pmin[i] = p.getElementAt(0, i);</span>
                     }
-<span class="fc" id="L469">                    fmin = y[0];</span>
+<span class="fc" id="L463">                    fmin = y[0];</span>
                     
                     //save result
-<span class="fc" id="L472">                    xmin = pmin;</span>
-<span class="fc" id="L473">                    resultAvailable = true;</span>
-                    
-<span class="fc" id="L475">                    locked = false;</span>
-<span class="fc" id="L476">                    return;</span>
+<span class="fc" id="L466">                    xmin = pmin;</span>
+<span class="fc" id="L467">                    resultAvailable = true;</span>
+
+<span class="fc" id="L469">                    return;</span>
                 }
-<span class="pc bpc" id="L478" title="1 of 2 branches missed.">                if (nfunc &gt;= NMAX) {</span>
-<span class="nc" id="L479">                    locked = false;</span>
-<span class="nc" id="L480">                    throw new OptimizationException();</span>
+<span class="pc bpc" id="L471" title="1 of 2 branches missed.">                if (nfunc &gt;= NMAX) {</span>
+<span class="nc" id="L472">                    throw new OptimizationException();</span>
                 }
                 
-<span class="fc" id="L483">                nfunc += 2;</span>
-<span class="fc" id="L484">                double ytry = amotry(p, y, psum, ihi, -1.0, listener);</span>
+<span class="fc" id="L475">                nfunc += 2;</span>
+<span class="fc" id="L476">                double ytry = amotry(p, y, psum, ihi, -1.0, listener);</span>
                 
-<span class="fc bfc" id="L486" title="All 2 branches covered.">                if(ytry &lt;= y[ilo]) {</span>
-<span class="fc" id="L487">                    amotry(p, y, psum, ihi, 2.0, listener);</span>
-<span class="fc bfc" id="L488" title="All 2 branches covered.">                } else if (ytry &gt;= y[inhi]) {</span>
-<span class="fc" id="L489">                    double ysave = y[ihi];</span>
-<span class="fc" id="L490">                    ytry = amotry(p, y, psum, ihi, 0.5, listener);</span>
-<span class="fc bfc" id="L491" title="All 2 branches covered.">                    if (ytry &gt;= ysave) {</span>
-<span class="fc bfc" id="L492" title="All 2 branches covered.">                        for (int i = 0; i &lt; mpts; i++) {</span>
-<span class="fc bfc" id="L493" title="All 2 branches covered.">                            if (i != ilo) {</span>
-<span class="fc bfc" id="L494" title="All 2 branches covered.">                                for (int j = 0; j &lt; ndim; j++) {</span>
-<span class="fc" id="L495">                                    psum[j] = 0.5 * (p.getElementAt(i, j) + </span>
-<span class="fc" id="L496">                                            p.getElementAt(ilo, j));</span>
-<span class="fc" id="L497">                                    p.setElementAt(i, j, psum[j]);</span>
+<span class="fc bfc" id="L478" title="All 2 branches covered.">                if(ytry &lt;= y[ilo]) {</span>
+<span class="fc" id="L479">                    amotry(p, y, psum, ihi, 2.0, listener);</span>
+<span class="fc bfc" id="L480" title="All 2 branches covered.">                } else if (ytry &gt;= y[inhi]) {</span>
+<span class="fc" id="L481">                    double ysave = y[ihi];</span>
+<span class="fc" id="L482">                    ytry = amotry(p, y, psum, ihi, 0.5, listener);</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">                    if (ytry &gt;= ysave) {</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">                        for (int i = 0; i &lt; mpts; i++) {</span>
+<span class="fc bfc" id="L485" title="All 2 branches covered.">                            if (i != ilo) {</span>
+<span class="fc bfc" id="L486" title="All 2 branches covered.">                                for (int j = 0; j &lt; ndim; j++) {</span>
+<span class="fc" id="L487">                                    psum[j] = 0.5 * (p.getElementAt(i, j) + </span>
+<span class="fc" id="L488">                                            p.getElementAt(ilo, j));</span>
+<span class="fc" id="L489">                                    p.setElementAt(i, j, psum[j]);</span>
                                 }
-<span class="fc" id="L499">                                y[i] = listener.evaluate(psum);</span>
+<span class="fc" id="L491">                                y[i] = listener.evaluate(psum);</span>
                             }
                         }
-<span class="fc" id="L502">                        nfunc += ndim;</span>
-<span class="fc" id="L503">                        getPsum(p, psum);</span>
+<span class="fc" id="L494">                        nfunc += ndim;</span>
+<span class="fc" id="L495">                        getPsum(p, psum);</span>
                     }
-<span class="fc" id="L505">                } else {</span>
-<span class="fc" id="L506">                    --nfunc;</span>
+<span class="fc" id="L497">                } else {</span>
+<span class="fc" id="L498">                    --nfunc;</span>
                 }
-<span class="fc" id="L508">            }</span>
-<span class="nc" id="L509">        } catch (Throwable t) {</span>
-<span class="nc" id="L510">            locked = false;</span>
-<span class="nc" id="L511">            throw new OptimizationException(t);</span>
+<span class="fc" id="L500">            }</span>
+<span class="nc" id="L501">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L502">            throw new OptimizationException(e);</span>
+        } finally {
+<span class="fc" id="L504">            locked = false;</span>
         }
     }
     
@@ -520,7 +513,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */    
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L523" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isSimplexAvailable();</span>
+<span class="fc bfc" id="L516" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isSimplexAvailable();</span>
     }
     
     /**
@@ -531,14 +524,14 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * parameter.
      */
     private void getPsum(Matrix p, double[] psum) {
-<span class="fc bfc" id="L534" title="All 2 branches covered.">        for (int j = 0; j &lt; ndim; j++) {</span>
-<span class="fc" id="L535">            double sum = 0.0;</span>
-<span class="fc bfc" id="L536" title="All 2 branches covered.">            for (int i = 0; i &lt; mpts; i++) {</span>
-<span class="fc" id="L537">                sum += p.getElementAt(i, j);</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        for (int j = 0; j &lt; ndim; j++) {</span>
+<span class="fc" id="L528">            double sum = 0.0;</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">            for (int i = 0; i &lt; mpts; i++) {</span>
+<span class="fc" id="L530">                sum += p.getElementAt(i, j);</span>
             }
-<span class="fc" id="L539">            psum[j] = sum;</span>
+<span class="fc" id="L532">            psum[j] = sum;</span>
         }
-<span class="fc" id="L541">    }</span>
+<span class="fc" id="L534">    }</span>
     
     /**
      * Internal method to move simplex around.
@@ -549,27 +542,27 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param fac another value.
      * @param listener a listener to evaluate function to optimize.
      * @return a value returned by the evaluated function.
-     * @throws Throwable Raised if function evaluation fails.
+     * @throws EvaluationException Raised if function evaluation fails.
      */
     private double amotry(Matrix p, double[] y, double[] psum, int ihi, 
             double fac, MultiDimensionFunctionEvaluatorListener listener)
-            throws Throwable {
-<span class="fc" id="L557">        double[] ptry = new double[ndim];</span>
-<span class="fc" id="L558">        double fac1 = (1.0 - fac) / ndim;</span>
-<span class="fc" id="L559">        double fac2 = fac1 - fac;</span>
-<span class="fc bfc" id="L560" title="All 2 branches covered.">        for (int j = 0; j &lt; ndim; j++) {</span>
-<span class="fc" id="L561">            ptry[j] = psum[j] * fac1 - p.getElementAt(ihi, j) * fac2;</span>
+            throws EvaluationException {
+<span class="fc" id="L550">        double[] ptry = new double[ndim];</span>
+<span class="fc" id="L551">        double fac1 = (1.0 - fac) / ndim;</span>
+<span class="fc" id="L552">        double fac2 = fac1 - fac;</span>
+<span class="fc bfc" id="L553" title="All 2 branches covered.">        for (int j = 0; j &lt; ndim; j++) {</span>
+<span class="fc" id="L554">            ptry[j] = psum[j] * fac1 - p.getElementAt(ihi, j) * fac2;</span>
         }
-<span class="fc" id="L563">        double ytry = listener.evaluate(ptry);</span>
-<span class="fc bfc" id="L564" title="All 2 branches covered.">        if (ytry &lt; y[ihi]) {</span>
-<span class="fc" id="L565">            y[ihi] = ytry;</span>
-<span class="fc bfc" id="L566" title="All 2 branches covered.">            for (int j = 0; j &lt; ndim; j++) {</span>
-<span class="fc" id="L567">                psum[j] += ptry[j] - p.getElementAt(ihi, j);</span>
-<span class="fc" id="L568">                p.setElementAt(ihi, j, ptry[j]);</span>
+<span class="fc" id="L556">        double ytry = listener.evaluate(ptry);</span>
+<span class="fc bfc" id="L557" title="All 2 branches covered.">        if (ytry &lt; y[ihi]) {</span>
+<span class="fc" id="L558">            y[ihi] = ytry;</span>
+<span class="fc bfc" id="L559" title="All 2 branches covered.">            for (int j = 0; j &lt; ndim; j++) {</span>
+<span class="fc" id="L560">                psum[j] += ptry[j] - p.getElementAt(ihi, j);</span>
+<span class="fc" id="L561">                p.setElementAt(ihi, j, ptry[j]);</span>
             }
         }
         
-<span class="fc" id="L572">        return ytry;</span>
+<span class="fc" id="L565">        return ytry;</span>
     }
     
     /**
@@ -578,9 +571,9 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param b value.
      */
     private void swap(double[] a, double[] b) {
-<span class="fc" id="L581">        double tmp = a[0];</span>
-<span class="fc" id="L582">        a[0] = b[0];</span>
-<span class="fc" id="L583">        b[0] = tmp;</span>
-<span class="fc" id="L584">    }</span>
+<span class="fc" id="L574">        double tmp = a[0];</span>
+<span class="fc" id="L575">        a[0] = b[0];</span>
+<span class="fc" id="L576">        b[0] = tmp;</span>
+<span class="fc" id="L577">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -73,7 +73,7 @@ com.irurueta:irurueta-numerical
 <th>Missing Classes</th></tr>
 <tr class="b">
 <td>150</td>
-<td>83</td>
+<td>82</td>
 <td>0</td>
 <td>32</td></tr></table></div>
 <div class="section">
@@ -129,7 +129,7 @@ com.irurueta:irurueta-numerical
 <td>1</td></tr>
 <tr class="a">
 <td><a href="#com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer">com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer</a></td>
-<td>4</td></tr>
+<td>3</td></tr>
 <tr class="b">
 <td><a href="#com.irurueta.numerical.optimization.SimplexMultiOptimizer">com.irurueta.numerical.optimization.SimplexMultiOptimizer</a></td>
 <td>1</td></tr>
@@ -581,13 +581,13 @@ com.irurueta:irurueta-numerical
 <td>com.irurueta.numerical.optimization.LineMultiOptimizer.getDirection() may expose internal representation by returning LineMultiOptimizer.xi</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/LineMultiOptimizer.html#L151">151</a></td>
+<td><a href="./xref/com/irurueta/numerical/optimization/LineMultiOptimizer.html#L150">150</a></td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.irurueta.numerical.optimization.LineMultiOptimizer.getStartPoint() may expose internal representation by returning LineMultiOptimizer.p</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/LineMultiOptimizer.html#L126">126</a></td>
+<td><a href="./xref/com/irurueta/numerical/optimization/LineMultiOptimizer.html#L125">125</a></td>
 <td>Medium</td></tr></table></div><a name="com.irurueta.numerical.optimization.MultiOptimizer"></a>
 <div class="section">
 <h3><a name="com.irurueta.numerical.optimization.MultiOptimizer"></a>com.irurueta.numerical.optimization.MultiOptimizer</h3>
@@ -617,7 +617,7 @@ com.irurueta:irurueta-numerical
 <td>com.irurueta.numerical.optimization.PowellMultiOptimizer.setStartPoint(double[]) may expose internal representation by storing an externally mutable object into PowellMultiOptimizer.p</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/PowellMultiOptimizer.html#L219">219</a></td>
+<td><a href="./xref/com/irurueta/numerical/optimization/PowellMultiOptimizer.html#L188">188</a></td>
 <td>Medium</td></tr></table></div><a name="com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer"></a>
 <div class="section">
 <h3><a name="com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer"></a>com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer</h3>
@@ -632,7 +632,7 @@ com.irurueta:irurueta-numerical
 <td>com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer.getStartPoint() may expose internal representation by returning QuasiNewtonMultiOptimizer.p</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html#L396">396</a></td>
+<td><a href="./xref/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html#L402">402</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>new com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer(MultiDimensionFunctionEvaluatorListener, GradientFunctionEvaluatorListener, double[], double) may expose internal representation by storing an externally mutable object into QuasiNewtonMultiOptimizer.p</td>
@@ -644,39 +644,33 @@ com.irurueta:irurueta-numerical
 <td>com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer.setStartPoint(double[]) may expose internal representation by storing an externally mutable object into QuasiNewtonMultiOptimizer.p</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html#L382">382</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>Unread field: com.irurueta.numerical.optimization.QuasiNewtonMultiOptimizer.iter</td>
-<td>PERFORMANCE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#URF_UNREAD_FIELD">URF_UNREAD_FIELD</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html#L99">99</a></td>
+<td><a href="./xref/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html#L388">388</a></td>
 <td>Medium</td></tr></table></div><a name="com.irurueta.numerical.optimization.SimplexMultiOptimizer"></a>
 <div class="section">
 <h3><a name="com.irurueta.numerical.optimization.SimplexMultiOptimizer"></a>com.irurueta.numerical.optimization.SimplexMultiOptimizer</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.optimization.SimplexMultiOptimizer.getEvaluationsAtSimplex() may expose internal representation by returning SimplexMultiOptimizer.y</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/com/irurueta/numerical/optimization/SimplexMultiOptimizer.html#L328">328</a></td>
+<td><a href="./xref/com/irurueta/numerical/optimization/SimplexMultiOptimizer.html#L322">322</a></td>
 <td>Medium</td></tr></table></div><a name="com.irurueta.numerical.polynomials.Polynomial"></a>
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.Polynomial"></a>com.irurueta.numerical.polynomials.Polynomial</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.polynomials.Polynomial.getPolyParams() may expose internal representation by returning Polynomial.mPolyParams</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -685,19 +679,19 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.IntegralIntervalPolynomialEvaluation"></a>com.irurueta.numerical.polynomials.estimators.IntegralIntervalPolynomialEvaluation</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.polynomials.estimators.IntegralIntervalPolynomialEvaluation.getConstants() may expose internal representation by returning IntegralIntervalPolynomialEvaluation.mConstants</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/IntegralIntervalPolynomialEvaluation.html#L147">147</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.polynomials.estimators.IntegralIntervalPolynomialEvaluation.setConstants(double[]) may expose internal representation by storing an externally mutable object into IntegralIntervalPolynomialEvaluation.mConstants</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
@@ -706,25 +700,25 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation"></a>com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation.getConstants() may expose internal representation by returning IntegralPolynomialEvaluation.mConstants</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.html#L122">122</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>new com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation(double, double, double[], int) may expose internal representation by storing an externally mutable object into IntegralPolynomialEvaluation.mConstants</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.html#L65">65</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.polynomials.estimators.IntegralPolynomialEvaluation.setConstant(double[]) may expose internal representation by storing an externally mutable object into IntegralPolynomialEvaluation.mConstants</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
@@ -733,13 +727,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.LMedSPolynomialRobustEstimator.241"></a>com.irurueta.numerical.polynomials.estimators.LMedSPolynomialRobustEstimator$1</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Exception is caught when Exception is not thrown in com.irurueta.numerical.polynomials.estimators.LMedSPolynomialRobustEstimator$1.estimatePreliminarSolutions(int[], List)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
@@ -748,13 +742,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.MSACPolynomialRobustEstimator.241"></a>com.irurueta.numerical.polynomials.estimators.MSACPolynomialRobustEstimator$1</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Exception is caught when Exception is not thrown in com.irurueta.numerical.polynomials.estimators.MSACPolynomialRobustEstimator$1.estimatePreliminarSolutions(int[], List)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
@@ -763,13 +757,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator"></a>com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator.getQualityScores() may expose internal representation by returning PROMedSPolynomialRobustEstimator.mQualityScores</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -778,13 +772,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator.241"></a>com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator$1</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Exception is caught when Exception is not thrown in com.irurueta.numerical.polynomials.estimators.PROMedSPolynomialRobustEstimator$1.estimatePreliminarSolutions(int[], List)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
@@ -793,13 +787,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator"></a>com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator.getQualityScores() may expose internal representation by returning PROSACPolynomialRobustEstimator.mQualityScores</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -808,13 +802,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator.241"></a>com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator$1</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Exception is caught when Exception is not thrown in com.irurueta.numerical.polynomials.estimators.PROSACPolynomialRobustEstimator$1.estimatePreliminarSolutions(int[], List)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
@@ -823,13 +817,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.RANSACPolynomialRobustEstimator.241"></a>com.irurueta.numerical.polynomials.estimators.RANSACPolynomialRobustEstimator$1</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Exception is caught when Exception is not thrown in com.irurueta.numerical.polynomials.estimators.RANSACPolynomialRobustEstimator$1.estimatePreliminarSolutions(int[], List)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
@@ -838,13 +832,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator"></a>com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator.getWeights() may expose internal representation by returning WeightedPolynomialEstimator.mWeights</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -853,13 +847,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.robust.InliersData"></a>com.irurueta.numerical.robust.InliersData</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.robust.InliersData.getResiduals() may expose internal representation by returning InliersData.mResiduals</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -868,19 +862,19 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.robust.WeightSelection"></a>com.irurueta.numerical.robust.WeightSelection</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.robust.WeightSelection.getSelected() may expose internal representation by returning WeightSelection.selected</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/robust/WeightSelection.html#L52">52</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.robust.WeightSelection.setSelected(boolean[]) may expose internal representation by storing an externally mutable object into WeightSelection.selected</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
@@ -889,13 +883,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.roots.BrentSingleRootEstimator"></a>com.irurueta.numerical.roots.BrentSingleRootEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>Test for floating point equality in com.irurueta.numerical.roots.BrentSingleRootEstimator.estimate()</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#FE_FLOATING_POINT_EQUALITY">FE_FLOATING_POINT_EQUALITY</a></td>
@@ -904,13 +898,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator"></a>com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator.getRealPolynomialParameters() may expose internal representation by returning FirstDegreePolynomialRootsEstimator.realPolyParams</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -919,19 +913,19 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.roots.PolynomialRootsEstimator"></a>com.irurueta.numerical.roots.PolynomialRootsEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.roots.PolynomialRootsEstimator.getPolynomialParameters() may expose internal representation by returning PolynomialRootsEstimator.polyParams</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/roots/PolynomialRootsEstimator.html#L59">59</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.roots.PolynomialRootsEstimator.getRoots() may expose internal representation by returning PolynomialRootsEstimator.roots</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -940,13 +934,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator"></a>com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Test for floating point equality in com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator.estimate()</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#FE_FLOATING_POINT_EQUALITY">FE_FLOATING_POINT_EQUALITY</a></td>
@@ -955,13 +949,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator"></a>com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator.getRealPolynomialParameters() may expose internal representation by returning SecondDegreePolynomialRootsEstimator.realPolyParams</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
@@ -970,19 +964,19 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator"></a>com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator.getRealPolynomialParameters() may expose internal representation by returning ThirdDegreePolynomialRootsEstimator.realPolyParams</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/roots/ThirdDegreePolynomialRootsEstimator.html#L135">135</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator.ROOTTHREE isn't final but should be</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#MS_SHOULD_BE_FINAL">MS_SHOULD_BE_FINAL</a></td>
@@ -991,31 +985,31 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.signal.processing.Convolver1D"></a>com.irurueta.numerical.signal.processing.Convolver1D</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.signal.processing.Convolver1D.getKernel() may expose internal representation by returning Convolver1D.mKernel</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/signal/processing/Convolver1D.html#L113">113</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.signal.processing.Convolver1D.getSignal() may expose internal representation by returning Convolver1D.mSignal</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/com/irurueta/numerical/signal/processing/Convolver1D.html#L97">97</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>com.irurueta.numerical.signal.processing.Convolver1D.setKernel(double[]) may expose internal representation by storing an externally mutable object into Convolver1D.mKernel</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/com/irurueta/numerical/signal/processing/Convolver1D.html#L121">121</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.signal.processing.Convolver1D.setSignal(double[]) may expose internal representation by storing an externally mutable object into Convolver1D.mSignal</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
@@ -1024,13 +1018,13 @@ com.irurueta:irurueta-numerical
 <div class="section">
 <h3><a name="com.irurueta.numerical.signal.processing.MeasurementNoiseCovarianceEstimator"></a>com.irurueta.numerical.signal.processing.MeasurementNoiseCovarianceEstimator</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com.irurueta.numerical.signal.processing.MeasurementNoiseCovarianceEstimator.getSampleAverage() may expose internal representation by returning MeasurementNoiseCovarianceEstimator.sampleAverage</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>

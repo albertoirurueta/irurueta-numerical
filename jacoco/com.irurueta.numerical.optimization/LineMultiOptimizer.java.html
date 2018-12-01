@@ -94,14 +94,13 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */
     public LineMultiOptimizer(MultiDimensionFunctionEvaluatorListener listener,
-            double[] point, double[] direction) 
-            throws IllegalArgumentException {
-<span class="fc" id="L99">        super(listener);</span>
-<span class="fc" id="L100">        internalSetStartPointAndDirection(point, direction);</span>
-<span class="fc" id="L101">        n = 0;</span>
-<span class="fc" id="L102">        evaluator = null;</span>
-<span class="fc" id="L103">        brent = null;        </span>
-<span class="fc" id="L104">    }</span>
+            double[] point, double[] direction) {
+<span class="fc" id="L98">        super(listener);</span>
+<span class="fc" id="L99">        internalSetStartPointAndDirection(point, direction);</span>
+<span class="fc" id="L100">        n = 0;</span>
+<span class="fc" id="L101">        evaluator = null;</span>
+<span class="fc" id="L102">        brent = null;        </span>
+<span class="fc" id="L103">    }</span>
     
     /**
      * Returns boolean indicating whether start point has already been provided
@@ -109,7 +108,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean isStartPointAvailable() {
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        return p != null;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        return p != null;</span>
     }
     
     /**
@@ -120,10 +119,10 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * provided and is not available.
      */
     public double[] getStartPoint() throws NotAvailableException {
-<span class="fc bfc" id="L123" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
-<span class="fc" id="L124">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
+<span class="fc" id="L123">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L126">        return p;</span>
+<span class="fc" id="L125">        return p;</span>
     }
     
     /**
@@ -132,7 +131,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean isDirectionAvailable() {
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        return xi != null;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        return xi != null;</span>
     }
     
     /**
@@ -145,37 +144,12 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * provided and is not available.
      */
     public double[] getDirection() throws NotAvailableException {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (!isDirectionAvailable()) {</span>
-<span class="fc" id="L149">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (!isDirectionAvailable()) {</span>
+<span class="fc" id="L148">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L151">        return xi;</span>
+<span class="fc" id="L150">        return xi;</span>
     }
-    
-    /**
-     * Internal method to set start point and direction to start the search for
-     * a local minimum.
-     * This method does not check whether this instance is locked.
-     * @param point Start point where algorithm will be started. Start point 
-     * should be close to the local minimum to be found. Provided array must 
-     * have a length equal to the number of dimensions of the function being
-     * evaluated, otherwise and exception will be raised when searching for the
-     * minimum.
-     * @param direction Direction to start looking for a minimum. Provided array
-     * must have the same length as the number of dimensions of the function 
-     * being evaluated. Provided direction is considered as a vector pointing
-     * to the minimum to be found.
-     * @throws IllegalArgumentException Raised if provided point and direction
-     * don't have the same length.
-     */
-    private void internalSetStartPointAndDirection(double[] point, 
-            double[] direction) throws IllegalArgumentException {
-<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (point.length != direction.length) {</span>
-<span class="nc" id="L173">            throw new IllegalArgumentException();</span>
-        }
-<span class="fc" id="L175">        p = point;</span>
-<span class="fc" id="L176">        xi = direction;</span>
-<span class="fc" id="L177">    }</span>
-    
+
     /**
      * Internal method to set start point and direction to start the search for
      * a local minimum.
@@ -193,12 +167,12 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */
     public void setStartPointAndDirection(double[] point, double[] direction)
-            throws LockedException, IllegalArgumentException {
-<span class="pc bpc" id="L197" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L198">            throw new LockedException();</span>
+            throws LockedException {
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L172">            throw new LockedException();</span>
         }
-<span class="fc" id="L200">        internalSetStartPointAndDirection(point, direction);</span>
-<span class="fc" id="L201">    }</span>
+<span class="fc" id="L174">        internalSetStartPointAndDirection(point, direction);</span>
+<span class="fc" id="L175">    }</span>
     
     /**
      * Returns boolean indicating whether this instance is considered to be
@@ -209,8 +183,8 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      */
     @Override
     public boolean isReady() {
-<span class="nc bnc" id="L212" title="All 4 branches missed.">        return isListenerAvailable() &amp;&amp; isStartPointAvailable() &amp;&amp;</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">                isDirectionAvailable();</span>
+<span class="nc bnc" id="L186" title="All 4 branches missed.">        return isListenerAvailable() &amp;&amp; isStartPointAvailable() &amp;&amp;</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                isDirectionAvailable();</span>
     }
     
     /**
@@ -220,33 +194,35 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      */
     @SuppressWarnings(&quot;Duplicates&quot;)
     protected double linmin() {
-        double ax, xx, linxmin;
-<span class="fc" id="L224">        n = p.length;</span>
+        double ax;
+        double xx;
+        double linxmin;
+<span class="fc" id="L200">        n = p.length;</span>
         
-<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (evaluator == null) {</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (evaluator == null) {</span>
             //attempt to reuse evaluator
-<span class="fc" id="L228">            evaluator = new DirectionalEvaluator(listener, p, xi);</span>
+<span class="fc" id="L204">            evaluator = new DirectionalEvaluator(listener, p, xi);</span>
         }
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
             //update listener
-<span class="nc" id="L232">            evaluator.setListener(listener);</span>
+<span class="nc" id="L208">            evaluator.setListener(listener);</span>
         }
-<span class="pc bpc" id="L234" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
-<span class="nc" id="L235">            evaluator.setPointAndDirection(p, xi);</span>
+<span class="pc bpc" id="L210" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
+<span class="nc" id="L211">            evaluator.setPointAndDirection(p, xi);</span>
         }
         
-<span class="fc" id="L238">        ax = 0.0;</span>
-<span class="fc" id="L239">        xx = 1.0;</span>
+<span class="fc" id="L214">        ax = 0.0;</span>
+<span class="fc" id="L215">        xx = 1.0;</span>
                 
         try {
-<span class="fc bfc" id="L242" title="All 2 branches covered.">            if (brent == null) {</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (brent == null) {</span>
                 //attempt to reuse brent single optimizer
-<span class="fc" id="L244">                brent = new BrentSingleOptimizer(</span>
-<span class="fc" id="L245">                        new SingleDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L220">                brent = new BrentSingleOptimizer(</span>
+<span class="fc" id="L221">                        new SingleDimensionFunctionEvaluatorListener() {</span>
 
                     @Override
                     public double evaluate(double point) throws EvaluationException {
-<span class="fc" id="L249">                        return evaluator.evaluateAt(point);</span>
+<span class="fc" id="L225">                        return evaluator.evaluateAt(point);</span>
                     }
                 }, BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 
                         BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
@@ -254,26 +230,51 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
             
-<span class="fc" id="L257">            brent.computeBracket(ax, xx);</span>
-<span class="fc" id="L258">            brent.minimize();</span>
-<span class="fc" id="L259">            linxmin = brent.getResult();</span>
+<span class="fc" id="L233">            brent.computeBracket(ax, xx);</span>
+<span class="fc" id="L234">            brent.minimize();</span>
+<span class="fc" id="L235">            linxmin = brent.getResult();</span>
             
-<span class="fc bfc" id="L261" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L262">                xi[j] *= linxmin;</span>
-<span class="fc" id="L263">                p[j] += xi[j];</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L238">                xi[j] *= linxmin;</span>
+<span class="fc" id="L239">                p[j] += xi[j];</span>
             }
             
-<span class="fc" id="L266">            return brent.getEvaluationAtResult();</span>
-<span class="nc" id="L267">        } catch (Throwable t) {</span>
+<span class="fc" id="L242">            return brent.getEvaluationAtResult();</span>
+<span class="nc" id="L243">        } catch (NumericalException e) {</span>
             //if minimization fails, try to evaluate at best point found so far
             try {
-<span class="nc" id="L270">                return listener.evaluate(p);</span>
-<span class="nc" id="L271">            } catch (Throwable t2) {</span>
+<span class="nc" id="L246">                return listener.evaluate(p);</span>
+<span class="nc" id="L247">            } catch (EvaluationException e2) {</span>
                 //if minimization fails here we assume that obtained result is 
                 //the worst possible one
-<span class="nc" id="L274">                return Double.MAX_VALUE;</span>
+<span class="nc" id="L250">                return Double.MAX_VALUE;</span>
             }
         }
     }
+
+    /**
+     * Internal method to set start point and direction to start the search for
+     * a local minimum.
+     * This method does not check whether this instance is locked.
+     * @param point Start point where algorithm will be started. Start point
+     * should be close to the local minimum to be found. Provided array must
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param direction Direction to start looking for a minimum. Provided array
+     * must have the same length as the number of dimensions of the function
+     * being evaluated. Provided direction is considered as a vector pointing
+     * to the minimum to be found.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     * don't have the same length.
+     */
+    private void internalSetStartPointAndDirection(double[] point,
+                                                   double[] direction) {
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (point.length != direction.length) {</span>
+<span class="nc" id="L274">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L276">        p = point;</span>
+<span class="fc" id="L277">        xi = direction;</span>
+<span class="fc" id="L278">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

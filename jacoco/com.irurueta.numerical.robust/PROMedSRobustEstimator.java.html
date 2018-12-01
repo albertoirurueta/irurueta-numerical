@@ -728,9 +728,9 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                 } else {
 <span class="nc" id="L729">                    progress = 1.0f;</span>
                 }
-<span class="pc bpc" id="L731" title="1 of 2 branches missed.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
-<span class="nc" id="L732">                    previousProgress = progress;</span>
-<span class="nc" id="L733">                    listener.onEstimateProgressChange(this, progress);                    </span>
+<span class="fc bfc" id="L731" title="All 2 branches covered.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
+<span class="fc" id="L732">                    previousProgress = progress;</span>
+<span class="fc" id="L733">                    listener.onEstimateProgressChange(this, progress);                    </span>
                 }     
 <span class="fc" id="L735">                currentIter++;                </span>
                 
