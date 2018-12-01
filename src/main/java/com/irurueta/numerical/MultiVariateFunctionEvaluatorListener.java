@@ -25,7 +25,7 @@ public interface MultiVariateFunctionEvaluatorListener {
      * as a vectorial value
      * @param point multidimensional point where function will be evaluated
      * @param result vector where function evaluation will be stored
-     * @throws Throwable if something failed during the evaluation
+     * @throws Exception if something failed during the evaluation
      */
     void evaluate(double[] point, double[] result) throws Exception;
     
