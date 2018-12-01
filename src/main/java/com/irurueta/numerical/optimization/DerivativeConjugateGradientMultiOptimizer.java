@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.GradientFunctionEvaluatorListener;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 
 /**
  * This class searches for a multi dimension function local minimum.
@@ -124,7 +121,7 @@ public class DerivativeConjugateGradientMultiOptimizer
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener,
             double[] point, double[] direction, double tolerance, 
-            boolean usePolakRibiere) throws IllegalArgumentException {
+            boolean usePolakRibiere) {
         super(listener, gradientListener, point, direction);
         internalSetTolerance(tolerance);
         this.usePolakRibiere = usePolakRibiere;
@@ -149,6 +146,7 @@ public class DerivativeConjugateGradientMultiOptimizer
      * lack of convergence or because function couldn't be evaluated.
      */        
     @Override
+    @SuppressWarnings("Duplicates")
     public void minimize() throws LockedException, NotReadyException, 
             OptimizationException {
         if (isLocked()) {
@@ -173,7 +171,8 @@ public class DerivativeConjugateGradientMultiOptimizer
         
         boolean validResult = false;
         try {
-            double gg, dgg;
+            double gg;
+            double dgg;
             
             double[] g = new double[n];
             double[] h = new double[n];
@@ -243,9 +242,10 @@ public class DerivativeConjugateGradientMultiOptimizer
                 locked = false;
                 throw new OptimizationException();
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         //set result
@@ -284,31 +284,13 @@ public class DerivativeConjugateGradientMultiOptimizer
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         internalSetTolerance(tolerance);
     }
-    
-    /**
-     * Internal method to set tolerance or accuracy to be expected on estimated
-     * local minimum.
-     * This method does not check whether this instance is locked.
-     * @param tolerance Tolerance or accuracy to be expected on estimated local
-     * minimum.
-     * @throws IllegalArgumentException Raised if provided tolerance is 
-     * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance < MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
+
     /**
      * Returns boolean indicating whether Polak-Ribiere method is used or
      * Fletcher-Reeves is used instead.
@@ -333,17 +315,7 @@ public class DerivativeConjugateGradientMultiOptimizer
         }
         this.usePolakRibiere = useIt;
     }
-    
-    /**
-     * Internal method to set start point where local minimum is searched 
-     * nearby.
-     * This method does not check whether this instance is locked.
-     * @param point Start point to search for a local minimum.
-     */    
-    private void internalSetStartPoint(double[] point) {
-        p = point;
-    }
-    
+
     /**
      * Sets start point where local minimum is searched nearby.
      * @param point Start point to search for a local minimum.
@@ -355,5 +327,39 @@ public class DerivativeConjugateGradientMultiOptimizer
             throw new LockedException();
         }
         internalSetStartPoint(point);
+    }
+
+    /**
+     * Return number of iterations that were needed to estimate a minimum.
+     * @return number of iterations that were needed.
+     */
+    public int getIterations() {
+        return iter;
+    }
+
+    /**
+     * Internal method to set tolerance or accuracy to be expected on estimated
+     * local minimum.
+     * This method does not check whether this instance is locked.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws IllegalArgumentException Raised if provided tolerance is
+     * negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
+    }
+
+    /**
+     * Internal method to set start point where local minimum is searched
+     * nearby.
+     * This method does not check whether this instance is locked.
+     * @param point Start point to search for a local minimum.
+     */
+    private void internalSetStartPoint(double[] point) {
+        p = point;
     }
 }

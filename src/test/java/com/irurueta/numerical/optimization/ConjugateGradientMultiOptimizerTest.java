@@ -97,6 +97,7 @@ public class ConjugateGradientMultiOptimizerTest
         assertFalse(optimizer.isReady());
         assertEquals(optimizer.getTolerance(), 
                 ConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(optimizer.getIterations(), 0);
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
@@ -144,6 +145,7 @@ public class ConjugateGradientMultiOptimizerTest
         assertArrayEquals(optimizer.getDirection(), direction, 0.0);
         assertEquals(optimizer.getListener(), this);
         assertFalse(optimizer.isResultAvailable());
+        assertEquals(optimizer.getIterations(), 0);
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
@@ -392,6 +394,7 @@ public class ConjugateGradientMultiOptimizerTest
             assertFalse(optimizer.isLocked());
             assertTrue(optimizer.isReady());
             assertTrue(optimizer.isResultAvailable());
+            assertTrue(optimizer.getIterations() >= 0);
         
             double[] result = optimizer.getResult();
         

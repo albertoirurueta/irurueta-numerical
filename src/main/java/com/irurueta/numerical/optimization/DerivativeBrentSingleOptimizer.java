@@ -93,8 +93,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
             SingleDimensionFunctionEvaluatorListener listener,
             SingleDimensionFunctionEvaluatorListener derivativeListener, 
             double minEvalPoint, double middleEvalPoint, double maxEvalPoint, 
-            double tolerance) throws InvalidBracketRangeException, 
-            IllegalArgumentException {
+            double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);
         this.derivativeListener = derivativeListener;
         internalSetTolerance(tolerance);
@@ -153,8 +152,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -179,6 +177,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * lack of convergence or because function couldn't be evaluated.
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
         if (isLocked()) {
@@ -197,9 +196,32 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         try {
             //Will be used as flags for whether proposed steps are accpetable or
             //not
-            boolean ok1, ok2;
-            double a, b, d = 0.0, d1, d2, du, dv, dw, dx, e = 0.0;
-            double fu, fv, fw, fx, olde, tol1, tol2, u, u1, u2, v, w, x, xm;
+            boolean ok1;
+            boolean ok2;
+            double a;
+            double b;
+            double d = 0.0;
+            double d1;
+            double d2;
+            double du;
+            double dv;
+            double dw;
+            double dx;
+            double e = 0.0;
+            double fu;
+            double fv;
+            double fw;
+            double fx;
+            double olde;
+            double tol1;
+            double tol2;
+            double u;
+            double u1;
+            double u2;
+            double v;
+            double w;
+            double x;
+            double xm;
             
             //Comments following will point out only differences from the Brent
             //single optimizer. Read that routine first.
@@ -263,14 +285,20 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                                 d = sign(tol1, xm - x);
                         } else {
                             //Bisect, not golden section.
-                            d = 0.5 * (e = (dx >= 0.0 ? a - x : b - x));
+                            //noinspection all
+                            e = dx >= 0.0 ? a - x : b - x;
+                            d = 0.5 * (e);
                             //Decide which segment by the sign of the derivative
                         }
                     } else {
-                        d = 0.5 * (e = (dx >= 0.0 ? a - x : b - x));
+                        //noinspection all
+                        e = dx >= 0.0 ? a - x : b - x;
+                        d = 0.5 * e;
                     }
                 } else {
-                    d = 0.5 * (e = (dx >= 0.0 ? a - x : b - x));
+                    //noinspection all
+                    e = dx >= 0.0 ? a - x : b - x;
+                    d = 0.5 * e;
                 }
                 
                 if (Math.abs(d) >= tol1) {
@@ -357,13 +385,13 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                 }
             }
             
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         //Too many iterations in Derivative Brent
-        locked = false;
         throw new OptimizationException();
     }
     
@@ -386,8 +414,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }

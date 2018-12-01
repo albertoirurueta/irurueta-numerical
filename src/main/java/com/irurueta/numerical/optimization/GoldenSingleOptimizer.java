@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * This class for a single dimensional function's local minimum.
@@ -79,8 +76,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
     public GoldenSingleOptimizer(
             SingleDimensionFunctionEvaluatorListener listener,
             double minEvalPoint, double middleEvalPoint, double maxEvalPoint,
-            double tolerance) throws InvalidBracketRangeException, 
-            IllegalArgumentException {
+            double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -109,8 +105,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
      * parameter while being locked will raise this exception.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -152,7 +147,8 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
         
         try {
             //At any given time we will keep track of four points x0, x1, x2, x3
-            double x1, x2;
+            double x1;
+            double x2;
             double x0 = ax;
             double x3 = cx;
             
@@ -216,13 +212,13 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                 xmin = x2;
                 fmin = f2;
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         resultAvailable = true;
-        locked = false;
     }
     
     /**
@@ -247,8 +243,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
      * minimum.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }

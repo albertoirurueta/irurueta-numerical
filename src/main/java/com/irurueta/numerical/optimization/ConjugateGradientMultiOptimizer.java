@@ -128,8 +128,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
     public ConjugateGradientMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener, double[] point,
-            double[] direction, double tolerance, boolean usePolakRibiere)
-            throws IllegalArgumentException {
+            double[] direction, double tolerance, boolean usePolakRibiere) {
         super(listener, point, direction);
         internalSetTolerance(tolerance);
         this.usePolakRibiere = usePolakRibiere;
@@ -156,8 +155,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
     public ConjugateGradientMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener, double[] point,
-            double tolerance, boolean usePolakRibiere)
-            throws IllegalArgumentException {
+            double tolerance, boolean usePolakRibiere) {
         super(listener);
         internalSetStartPoint(point);
         internalSetTolerance(tolerance);
@@ -208,7 +206,8 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
         
         boolean validResult = false;
         try {
-            double gg, dgg;
+            double gg;
+            double dgg;
             
             double[] g = new double[n];
             double[] h = new double[n];
@@ -279,16 +278,16 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
                 locked = false;
                 throw new OptimizationException();
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         //set result
         xmin = p;
         resultAvailable = true;
         fmin = fret;
-        locked = false;        
     }
     
     /**
@@ -311,24 +310,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
     public double getTolerance() {
         return tolerance;
     }
-      
-    /**
-     * Internal method to set tolerance or accuracy to be expected on estimated
-     * local minimum.
-     * This method does not check whether this instance is locked.
-     * @param tolerance Tolerance or accuracy to be expected on estimated local
-     * minimum.
-     * @throws IllegalArgumentException Raised if provided tolerance is 
-     * negative.
-     */
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance < MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
+
     /**
      * Sets tolerance or accuracy to be expected on estimated local minimum.
      * @param tolerance Tolerance or accuracy to be expected on estimated local
@@ -337,8 +319,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -409,17 +390,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
         }
         usePolakRibiere = useIt;
     }
-    
-    /**
-     * Internal method to set start point where local minimum is searched 
-     * nearby.
-     * This method does not check whether this instance is locked.
-     * @param point Start point to search for a local minimum.
-     */
-    private void internalSetStartPoint(double[] point) {
-        p = point;
-    }
-    
+
     /**
      * Sets start point where local minimum is searched nearby.
      * @param point Start point to search for a local minimum.
@@ -431,5 +402,39 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
             throw new LockedException();
         }
         internalSetStartPoint(point);
+    }
+
+    /**
+     * Return number of iterations that were needed to estimate a minimum.
+     * @return number of iterations that were needed.
+     */
+    public int getIterations() {
+        return iter;
+    }
+
+    /**
+     * Internal method to set tolerance or accuracy to be expected on estimated
+     * local minimum.
+     * This method does not check whether this instance is locked.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws IllegalArgumentException Raised if provided tolerance is
+     * negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
+    }
+
+    /**
+     * Internal method to set start point where local minimum is searched
+     * nearby.
+     * This method does not check whether this instance is locked.
+     * @param point Start point to search for a local minimum.
+     */
+    private void internalSetStartPoint(double[] point) {
+        p = point;
     }
 }

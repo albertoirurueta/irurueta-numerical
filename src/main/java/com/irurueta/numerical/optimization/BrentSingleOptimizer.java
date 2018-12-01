@@ -124,24 +124,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
     public double getTolerance() {
         return tolerance;
     }
-        
-    /**
-     * Internal method to set algorithm tolerance. This method does not check
-     * whether this instance is locked or not.
-     * The algorithm will iterate until the result converges below this value of
-     * accuracy or until the maximum number of iterations is achieved (and in
-     * such case, convergence will be assumed to have failed).
-     * @param tolerance Tolerance or accuracy to be obtained in estimated 
-     * minimum.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
-     */
-    private void internalSetTolerance(double tolerance) {
-        if (tolerance < MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
+
     /**
      * Sets algorithm's tolerance.
      * The algorithm will iterate until the result converges below this value of
@@ -342,5 +325,22 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
     @Override
     public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
+    }
+
+    /**
+     * Internal method to set algorithm tolerance. This method does not check
+     * whether this instance is locked or not.
+     * The algorithm will iterate until the result converges below this value of
+     * accuracy or until the maximum number of iterations is achieved (and in
+     * such case, convergence will be assumed to have failed).
+     * @param tolerance Tolerance or accuracy to be obtained in estimated
+     * minimum.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
     }
 }

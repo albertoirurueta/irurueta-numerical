@@ -139,8 +139,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     public DerivativeLineMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener,
-            double[] point, double[] direction) 
-            throws IllegalArgumentException {
+            double[] point, double[] direction) {
         super(listener);
         internalSetStartPointAndDirection(point, direction);
         n = 0;
@@ -215,7 +214,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */    
     private void internalSetStartPointAndDirection(double[] point, 
-            double[] direction) throws IllegalArgumentException {
+            double[] direction) {
         if (point.length != direction.length) {
             throw new IllegalArgumentException();
         }
@@ -241,7 +240,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */    
     public void setStartPointAndDirection(double[] point, double[] direction)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -313,7 +312,9 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */
     @SuppressWarnings("Duplicates")
     protected double linmin() {
-        double ax, xx, linxmin;
+        double ax;
+        double xx;
+        double linxmin;
         n = p.length;
         
         if (evaluator == null) {
@@ -368,7 +369,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
             }
             
             return dbrent.getEvaluationAtResult();
-        } catch (Throwable t) {
+        } catch (NumericalException t) {
             //if minimization fails we assume that obtained result is the worst
             //possible one
             return Double.MAX_VALUE;
