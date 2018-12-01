@@ -97,18 +97,14 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
         }
         
         //Compute gradient at such point
-        try {
-<span class="fc" id="L101">            gradientListener.evaluateGradient(p, dft);</span>
-<span class="nc" id="L102">        } catch (Exception e) {</span>
-<span class="nc" id="L103">            throw new EvaluationException(e);</span>
-<span class="fc" id="L104">        }</span>
-        
+<span class="fc" id="L100">        gradientListener.evaluateGradient(p, dft);</span>
+
         //Obtain 1D derivative on corresponding direction
-<span class="fc" id="L107">        double df1 = 0.0;</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L109">            df1 += dft[i] * direction[i];</span>
+<span class="fc" id="L103">        double df1 = 0.0;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L105">            df1 += dft[i] * direction[i];</span>
         }        
-<span class="fc" id="L111">        return df1;</span>
+<span class="fc" id="L107">        return df1;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

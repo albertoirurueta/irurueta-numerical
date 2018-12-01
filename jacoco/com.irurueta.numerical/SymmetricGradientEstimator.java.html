@@ -75,42 +75,38 @@ public class SymmetricGradientEstimator extends GradientEstimator {
 <span class="fc" id="L75">            xh2 = new double[n];</span>
 <span class="fc" id="L76">            System.arraycopy(point, 0, xh2, 0, n);</span>
         }
-                
-        try {
-            double temp;
-            double h;
-            double h1;
-            double h2;
-            double hh;
-            double fh1;
-            double fh2;
 
-<span class="fc bfc" id="L88" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L89">                temp = point[j];</span>
-<span class="fc" id="L90">                h = EPS * Math.abs(temp);</span>
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">                if (h == 0.0) h = EPS; //Trich to reduce finite-precision error</span>
-<span class="fc" id="L92">                xh1[j] = temp + h;</span>
-<span class="fc" id="L93">                xh2[j] = temp - h;</span>
-                //because of machine precision h could be different in both cases
+        double temp;
+        double h;
+        double h1;
+        double h2;
+        double hh;
+        double fh1;
+        double fh2;
 
-<span class="fc" id="L96">                h1 = xh1[j] - temp;</span>
-<span class="fc" id="L97">                h2 = temp - xh2[j];</span>
-
-<span class="fc" id="L99">                hh = h1 + h2; //this is more or less equal to 2.0 * h</span>
-
-<span class="fc" id="L101">                fh1 = listener.evaluate(xh1);</span>
-<span class="fc" id="L102">                fh2 = listener.evaluate(xh2);</span>
-
-<span class="fc" id="L104">                xh1[j] = temp;</span>
-<span class="fc" id="L105">                xh2[j] = temp;</span>
-
-<span class="fc" id="L107">                result[j] = (fh1 - fh2) / hh;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L88">            temp = point[j];</span>
+<span class="fc" id="L89">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+<span class="nc" id="L91">                h = EPS; //Trich to reduce finite-precision error</span>
             }
-<span class="nc" id="L109">        } catch (EvaluationException e) {</span>
-<span class="nc" id="L110">            throw e;</span>
-<span class="nc" id="L111">        } catch (Exception e) {</span>
-<span class="nc" id="L112">            throw new EvaluationException(e);</span>
-<span class="fc" id="L113">        }</span>
-<span class="fc" id="L114">    }    </span>
+<span class="fc" id="L93">            xh1[j] = temp + h;</span>
+<span class="fc" id="L94">            xh2[j] = temp - h;</span>
+            //because of machine precision h could be different in both cases
+
+<span class="fc" id="L97">            h1 = xh1[j] - temp;</span>
+<span class="fc" id="L98">            h2 = temp - xh2[j];</span>
+
+<span class="fc" id="L100">            hh = h1 + h2; //this is more or less equal to 2.0 * h</span>
+
+<span class="fc" id="L102">            fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L103">            fh2 = listener.evaluate(xh2);</span>
+
+<span class="fc" id="L105">            xh1[j] = temp;</span>
+<span class="fc" id="L106">            xh2[j] = temp;</span>
+
+<span class="fc" id="L108">            result[j] = (fh1 - fh2) / hh;</span>
+        }
+<span class="fc" id="L110">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

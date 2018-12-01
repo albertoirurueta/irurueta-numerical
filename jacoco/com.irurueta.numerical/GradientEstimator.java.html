@@ -81,27 +81,23 @@ public class GradientEstimator {
 <span class="fc" id="L81">            xh = new double[length];</span>
         }
 <span class="fc" id="L83">        System.arraycopy(point, 0, xh, 0, length);</span>
-        
-        try {
-            double temp;
-            double h;
-            double fh;
-<span class="fc" id="L89">            double fold = listener.evaluate(point);</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">            for (int j = 0; j &lt; length; j++) {</span>
-<span class="fc" id="L91">                temp = point[j];</span>
-<span class="fc" id="L92">                h = EPS * Math.abs(temp);</span>
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                if(h == 0.0) h = EPS;</span>
-<span class="fc" id="L94">                xh[j] = temp + h;</span>
-<span class="fc" id="L95">                h = xh[j] - temp;</span>
-<span class="fc" id="L96">                fh = listener.evaluate(xh);</span>
-<span class="fc" id="L97">                xh[j] = temp;</span>
-<span class="fc" id="L98">                result[j] = (fh - fold) / h;</span>
+
+        double temp;
+        double h;
+        double fh;
+<span class="fc" id="L88">        double fold = listener.evaluate(point);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int j = 0; j &lt; length; j++) {</span>
+<span class="fc" id="L90">            temp = point[j];</span>
+<span class="fc" id="L91">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if(h == 0.0) {</span>
+<span class="nc" id="L93">                h = EPS;</span>
             }
-<span class="nc" id="L100">        } catch (EvaluationException e) {</span>
-<span class="nc" id="L101">            throw e;</span>
-<span class="nc" id="L102">        } catch (Exception e) {</span>
-<span class="nc" id="L103">            throw new EvaluationException(e);</span>
-<span class="fc" id="L104">        }</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L95">            xh[j] = temp + h;</span>
+<span class="fc" id="L96">            h = xh[j] - temp;</span>
+<span class="fc" id="L97">            fh = listener.evaluate(xh);</span>
+<span class="fc" id="L98">            xh[j] = temp;</span>
+<span class="fc" id="L99">            result[j] = (fh - fold) / h;</span>
+        }
+<span class="fc" id="L101">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

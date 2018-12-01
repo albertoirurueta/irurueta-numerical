@@ -45,27 +45,23 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
     @Override
     @SuppressWarnings(&quot;Duplicates&quot;)
     public double derivative(double x) throws EvaluationException {
-        try {
-<span class="fc" id="L49">            double h = EPS * Math.abs(x);</span>
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
-<span class="nc" id="L51">                h = EPS; //Trick to reduce finite-precision error</span>
-            }
-            
-<span class="fc" id="L54">            double xh1 = x + h;</span>
-<span class="fc" id="L55">            double xh2 = x - h;</span>
-            //because of machine precision h could be different in both cases
-<span class="fc" id="L57">            double h1 = xh1 - x;</span>
-<span class="fc" id="L58">            double h2 = x - xh2;</span>
-            
-<span class="fc" id="L60">            double hh = h1 + h2; //this is more or less equal to 2.0 * h</span>
-            
-<span class="fc" id="L62">            double fh1 = listener.evaluate(xh1);</span>
-<span class="fc" id="L63">            double fh2 = listener.evaluate(xh2);</span>
-            
-<span class="fc" id="L65">            return (fh1 - fh2) / hh;</span>
-<span class="nc" id="L66">        } catch (Exception e) {</span>
-<span class="nc" id="L67">            throw new EvaluationException(e);</span>
+<span class="fc" id="L48">        double h = EPS * Math.abs(x);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
+<span class="nc" id="L50">            h = EPS; //Trick to reduce finite-precision error</span>
         }
+            
+<span class="fc" id="L53">        double xh1 = x + h;</span>
+<span class="fc" id="L54">        double xh2 = x - h;</span>
+        //because of machine precision h could be different in both cases
+<span class="fc" id="L56">        double h1 = xh1 - x;</span>
+<span class="fc" id="L57">        double h2 = x - xh2;</span>
+            
+<span class="fc" id="L59">        double hh = h1 + h2; //this is more or less equal to 2.0 * h</span>
+            
+<span class="fc" id="L61">        double fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L62">        double fh2 = listener.evaluate(xh2);</span>
+            
+<span class="fc" id="L64">        return (fh1 - fh2) / hh;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

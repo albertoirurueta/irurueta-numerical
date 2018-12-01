@@ -226,63 +226,64 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">     * The line being searched is obtained by using a start point and direction.</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">     * @return Returns function evaluation at minimum that has been found.</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">double</strong> linmin() {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>         <strong class="jxr_keyword">double</strong> ax, xx, linxmin;
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>         n = p.length;
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>         
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>         <strong class="jxr_keyword">if</strong> (evaluator == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>             <em class="jxr_comment">//attempt to reuse evaluator</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>             evaluator = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/DirectionalEvaluator.html">DirectionalEvaluator</a>(listener, p, xi);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>         }
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>         <strong class="jxr_keyword">if</strong> (evaluator.getListener() != listener) {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>             <em class="jxr_comment">//update listener</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>             evaluator.setListener(listener);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>         }
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>         <strong class="jxr_keyword">if</strong> (evaluator.getPoint() != p || evaluator.getDirection() != xi) {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>             evaluator.setPointAndDirection(p, xi);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>         }
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>         
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>         ax = 0.0;
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>         xx = 1.0;
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>                 
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>             <strong class="jxr_keyword">if</strong> (brent == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>                 <em class="jxr_comment">//attempt to reuse brent single optimizer</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>                 brent = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/optimization/BrentSingleOptimizer.html">BrentSingleOptimizer</a>(
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html">SingleDimensionFunctionEvaluatorListener</a>() {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>                     @Override
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>                     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong> point) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>                         <strong class="jxr_keyword">return</strong> evaluator.evaluateAt(point);
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>                     }
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>                 }, BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>                         BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>                         BrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>             }
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>             
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>             brent.computeBracket(ax, xx);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>             brent.minimize();
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>             linxmin = brent.getResult();
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>             
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; n; j++) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>                 xi[j] *= linxmin;
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>                 p[j] += xi[j];
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>             }
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>             
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>             <strong class="jxr_keyword">return</strong> brent.getEvaluationAtResult();
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>         } <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>             <em class="jxr_comment">//if minimization fails, try to evaluate at best point found so far</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>                 <strong class="jxr_keyword">return</strong> listener.evaluate(p);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>             } <strong class="jxr_keyword">catch</strong> (Throwable t2) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>                 <em class="jxr_comment">//if minimization fails here we assume that obtained result is </em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>                 <em class="jxr_comment">//the worst possible one</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>                 <strong class="jxr_keyword">return</strong> Double.MAX_VALUE;
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>             }
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>         }
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>     }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>     @SuppressWarnings(<span class="jxr_string">"Duplicates"</span>)
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">double</strong> linmin() {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         <strong class="jxr_keyword">double</strong> ax, xx, linxmin;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>         n = p.length;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>         
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>         <strong class="jxr_keyword">if</strong> (evaluator == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>             <em class="jxr_comment">//attempt to reuse evaluator</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>             evaluator = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/DirectionalEvaluator.html">DirectionalEvaluator</a>(listener, p, xi);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>         }
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>         <strong class="jxr_keyword">if</strong> (evaluator.getListener() != listener) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>             <em class="jxr_comment">//update listener</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>             evaluator.setListener(listener);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>         }
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>         <strong class="jxr_keyword">if</strong> (evaluator.getPoint() != p || evaluator.getDirection() != xi) {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>             evaluator.setPointAndDirection(p, xi);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         }
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>         
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>         ax = 0.0;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>         xx = 1.0;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>                 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>             <strong class="jxr_keyword">if</strong> (brent == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>                 <em class="jxr_comment">//attempt to reuse brent single optimizer</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>                 brent = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/optimization/BrentSingleOptimizer.html">BrentSingleOptimizer</a>(
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html">SingleDimensionFunctionEvaluatorListener</a>() {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>                     @Override
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>                     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong> point) <strong class="jxr_keyword">throws</strong> EvaluationException {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>                         <strong class="jxr_keyword">return</strong> evaluator.evaluateAt(point);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>                     }
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>                 }, BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>                         BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>                         BrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>             }
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>             
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>             brent.computeBracket(ax, xx);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>             brent.minimize();
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>             linxmin = brent.getResult();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>             
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; n; j++) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>                 xi[j] *= linxmin;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>                 p[j] += xi[j];
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>             }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>             
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>             <strong class="jxr_keyword">return</strong> brent.getEvaluationAtResult();
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         } <strong class="jxr_keyword">catch</strong> (Throwable t) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>             <em class="jxr_comment">//if minimization fails, try to evaluate at best point found so far</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>                 <strong class="jxr_keyword">return</strong> listener.evaluate(p);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>             } <strong class="jxr_keyword">catch</strong> (Throwable t2) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>                 <em class="jxr_comment">//if minimization fails here we assume that obtained result is </em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>                 <em class="jxr_comment">//the worst possible one</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>                 <strong class="jxr_keyword">return</strong> Double.MAX_VALUE;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>             }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>         }
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

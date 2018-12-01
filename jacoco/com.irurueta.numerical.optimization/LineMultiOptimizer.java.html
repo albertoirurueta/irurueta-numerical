@@ -218,34 +218,35 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * The line being searched is obtained by using a start point and direction.
      * @return Returns function evaluation at minimum that has been found.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     protected double linmin() {
         double ax, xx, linxmin;
-<span class="fc" id="L223">        n = p.length;</span>
+<span class="fc" id="L224">        n = p.length;</span>
         
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (evaluator == null) {</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (evaluator == null) {</span>
             //attempt to reuse evaluator
-<span class="fc" id="L227">            evaluator = new DirectionalEvaluator(listener, p, xi);</span>
+<span class="fc" id="L228">            evaluator = new DirectionalEvaluator(listener, p, xi);</span>
         }
-<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
             //update listener
-<span class="nc" id="L231">            evaluator.setListener(listener);</span>
+<span class="nc" id="L232">            evaluator.setListener(listener);</span>
         }
-<span class="pc bpc" id="L233" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
-<span class="nc" id="L234">            evaluator.setPointAndDirection(p, xi);</span>
+<span class="pc bpc" id="L234" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
+<span class="nc" id="L235">            evaluator.setPointAndDirection(p, xi);</span>
         }
         
-<span class="fc" id="L237">        ax = 0.0;</span>
-<span class="fc" id="L238">        xx = 1.0;</span>
+<span class="fc" id="L238">        ax = 0.0;</span>
+<span class="fc" id="L239">        xx = 1.0;</span>
                 
         try {
-<span class="fc bfc" id="L241" title="All 2 branches covered.">            if (brent == null) {</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">            if (brent == null) {</span>
                 //attempt to reuse brent single optimizer
-<span class="fc" id="L243">                brent = new BrentSingleOptimizer(</span>
-<span class="fc" id="L244">                        new SingleDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L244">                brent = new BrentSingleOptimizer(</span>
+<span class="fc" id="L245">                        new SingleDimensionFunctionEvaluatorListener() {</span>
 
                     @Override
-                    public double evaluate(double point) throws Exception {
-<span class="fc" id="L248">                        return evaluator.evaluateAt(point);</span>
+                    public double evaluate(double point) throws EvaluationException {
+<span class="fc" id="L249">                        return evaluator.evaluateAt(point);</span>
                     }
                 }, BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 
                         BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
@@ -253,24 +254,24 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
             
-<span class="fc" id="L256">            brent.computeBracket(ax, xx);</span>
-<span class="fc" id="L257">            brent.minimize();</span>
-<span class="fc" id="L258">            linxmin = brent.getResult();</span>
+<span class="fc" id="L257">            brent.computeBracket(ax, xx);</span>
+<span class="fc" id="L258">            brent.minimize();</span>
+<span class="fc" id="L259">            linxmin = brent.getResult();</span>
             
-<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L261">                xi[j] *= linxmin;</span>
-<span class="fc" id="L262">                p[j] += xi[j];</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L262">                xi[j] *= linxmin;</span>
+<span class="fc" id="L263">                p[j] += xi[j];</span>
             }
             
-<span class="fc" id="L265">            return brent.getEvaluationAtResult();</span>
-<span class="nc" id="L266">        } catch (Throwable t) {</span>
+<span class="fc" id="L266">            return brent.getEvaluationAtResult();</span>
+<span class="nc" id="L267">        } catch (Throwable t) {</span>
             //if minimization fails, try to evaluate at best point found so far
             try {
-<span class="nc" id="L269">                return listener.evaluate(p);</span>
-<span class="nc" id="L270">            } catch (Throwable t2) {</span>
+<span class="nc" id="L270">                return listener.evaluate(p);</span>
+<span class="nc" id="L271">            } catch (Throwable t2) {</span>
                 //if minimization fails here we assume that obtained result is 
                 //the worst possible one
-<span class="nc" id="L273">                return Double.MAX_VALUE;</span>
+<span class="nc" id="L274">                return Double.MAX_VALUE;</span>
             }
         }
     }

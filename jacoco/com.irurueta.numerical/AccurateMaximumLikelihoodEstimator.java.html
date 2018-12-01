@@ -308,11 +308,11 @@ public class AccurateMaximumLikelihoodEstimator
          * @param point Point where the aggregation of Gaussians will be 
          * evaluated
          * @return The value of the aggregation of samples at provided point.
-         * @throws Exception Raised if anything failed during the execution.
+         * @throws EvaluationException Raised if anything failed during the execution.
          * This exception should never be raised.
          */
         @Override
-        public double evaluate(double point) throws Exception {
+        public double evaluate(double point) throws EvaluationException {
 <span class="fc" id="L316">            double out = 0.0;</span>
             double x;
 <span class="fc bfc" id="L318" title="All 2 branches covered.">            for (double data : inputData) {</span>

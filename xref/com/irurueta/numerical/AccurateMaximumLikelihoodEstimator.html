@@ -316,11 +316,11 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">         * @param point Point where the aggregation of Gaussians will be </em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">         * evaluated</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">         * @return The value of the aggregation of samples at provided point.</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">         * @throws Exception Raised if anything failed during the execution.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">         * @throws EvaluationException Raised if anything failed during the execution.</em>
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">         * This exception should never be raised.</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">         */</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>         @Override
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong> point) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong> point) <strong class="jxr_keyword">throws</strong> EvaluationException {
 <a class="jxr_linenumber" name="L316" href="#L316">316</a>             <strong class="jxr_keyword">double</strong> out = 0.0;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a>             <strong class="jxr_keyword">double</strong> x;
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">double</strong> data : inputData) {

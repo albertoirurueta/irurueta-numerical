@@ -133,11 +133,7 @@ public class DirectionalEvaluator {
 <span class="fc bfc" id="L133" title="All 2 branches covered.">        for(int i = 0; i &lt; point.length; i++){</span>
 <span class="fc" id="L134">            p[i] = point[i] + x * direction[i];</span>
         }
-        try {
-<span class="fc" id="L137">            return listener.evaluate(p);</span>
-<span class="nc" id="L138">        } catch (Exception e) {</span>
-<span class="nc" id="L139">            throw new EvaluationException(e);</span>
-        }
-    }    
+<span class="fc" id="L136">        return listener.evaluate(p);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
