@@ -1394,7 +1394,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                         @Override
                         public void evaluate(int i, double[] point, double[] result,
-                                             double[] params, Matrix jacobian) throws Throwable {
+                                             double[] params, Matrix jacobian) throws EvaluationException {
                             this.point = point;
                             evaluateParams(point, params, result);
                             jacobianEstimator.jacobian(params, jacobian);
@@ -1544,7 +1544,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
             @Override
             public void evaluate(int i, double[] point, double[] result, 
-                    double[] params, Matrix jacobian) throws Throwable {
+                    double[] params, Matrix jacobian) throws EvaluationException {
                 this.point = point;
                 evaluateParams(point, params, result);
                 jacobianEstimator.jacobian(params, jacobian);
@@ -1682,7 +1682,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                     @Override
                     public void evaluate(int i, double[] point, double[] result,
-                                         double[] params, Matrix jacobian) throws Throwable {
+                                         double[] params, Matrix jacobian) throws EvaluationException {
                         this.point = point;
                         evaluateParams(point, params, result);
                         jacobianEstimator.jacobian(params, jacobian);
@@ -1830,7 +1830,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                         @Override
                         public void evaluate(int i, double[] point, double[] result,
-                                             double[] params, Matrix jacobian) throws Throwable {
+                                             double[] params, Matrix jacobian) throws EvaluationException {
                             this.point = point;
                             evaluateParams(point, params, result);
                             jacobianEstimator.jacobian(params, jacobian);
@@ -1972,7 +1972,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
             @Override
             public void evaluate(int i, double[] point, double[] result, 
-                    double[] params, Matrix jacobian) throws Throwable {
+                    double[] params, Matrix jacobian) throws EvaluationException {
                 this.point = point;
                 evaluateParams(point, params, result);
                 jacobianEstimator.jacobian(params, jacobian);
@@ -2125,7 +2125,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
             @Override
             public void evaluate(int i, double[] point, double[] result, 
-                    double[] params, Matrix jacobian) throws Throwable {
+                    double[] params, Matrix jacobian) throws EvaluationException {
                 this.point = point;
                 evaluateParams(point, params, result);
                 jacobianEstimator.jacobian(params, jacobian);
@@ -3485,7 +3485,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                         @Override
                         public void evaluate(int i, double[] point, double[] result,
-                                             double[] params, Matrix jacobian) throws Throwable {
+                                             double[] params, Matrix jacobian) throws EvaluationException {
                             this.point = point;
                             evaluateParams(point, params, result);
                             jacobianEstimator.jacobian(params, jacobian);
@@ -3807,7 +3807,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                         @Override
                         public void evaluate(int i, double[] point, double[] result,
-                                             double[] params, Matrix jacobian) throws Throwable {
+                                             double[] params, Matrix jacobian) throws EvaluationException {
                             this.point = point;
                             evaluateParams(point, params, result);
                             jacobianEstimator.jacobian(params, jacobian);
@@ -4048,7 +4048,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                         @Override
                         public void evaluate(int i, double[] point, double[] result,
-                                             double[] params, Matrix jacobian) throws Throwable {
+                                             double[] params, Matrix jacobian) throws EvaluationException {
                             this.point = point;
                             evaluateParams(point, params, result);
                             jacobianEstimator.jacobian(params, jacobian);
