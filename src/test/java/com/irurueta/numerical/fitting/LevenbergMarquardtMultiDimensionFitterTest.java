@@ -3489,7 +3489,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 y[i] += error;
