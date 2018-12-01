@@ -543,10 +543,8 @@ public class LevenbergMarquardtMultiDimensionFitter
             //too many iterations
             throw new FittingException("too many iterations");
                 
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }                
     }
     

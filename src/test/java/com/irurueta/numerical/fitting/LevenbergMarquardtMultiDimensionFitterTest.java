@@ -116,11 +116,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());

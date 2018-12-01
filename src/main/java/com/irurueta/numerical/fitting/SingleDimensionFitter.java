@@ -75,8 +75,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * length.
      */
-    public SingleDimensionFitter(double[] x, double[] y, double[] sig) 
-            throws IllegalArgumentException {
+    public SingleDimensionFitter(double[] x, double[] y, double[] sig) {
         setInputData(x, y, sig);
     }
     
@@ -90,8 +89,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public SingleDimensionFitter(double[] x, double[] y, double sig)
-            throws IllegalArgumentException {
+    public SingleDimensionFitter(double[] x, double[] y, double sig) {
         setInputData(x, y, sig);
     }
     
@@ -130,8 +128,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * size.
      */
-    public final void setInputData(double[] x, double [] y, double[] sig) 
-            throws IllegalArgumentException {
+    public final void setInputData(double[] x, double [] y, double[] sig) {
         if (x.length != y.length || sig.length != x.length) {
             throw new IllegalArgumentException();
         }
@@ -155,8 +152,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * size.
      */
-    public final void setInputData(double[] x, double[] y, double sig)
-            throws IllegalArgumentException {
+    public final void setInputData(double[] x, double[] y, double sig) {
         if (x.length != y.length) {
             throw new IllegalArgumentException();
         }

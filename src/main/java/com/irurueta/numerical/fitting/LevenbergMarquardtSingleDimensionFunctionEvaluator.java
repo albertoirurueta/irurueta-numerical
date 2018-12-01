@@ -15,6 +15,8 @@
  */
 package com.irurueta.numerical.fitting;
 
+import com.irurueta.numerical.EvaluationException;
+
 /**
  * Interface to evaluate non-linear single dimensional functions.
  * Evaluation of functions requires both function value at provided point x and
@@ -44,8 +46,8 @@ public interface LevenbergMarquardtSingleDimensionFunctionEvaluator {
      * provided parameter
      * @return function evaluation at provided point and using provided 
      * parameters
-     * @throws Throwable raised if something failed during the evaluation
+     * @throws EvaluationException raised if something failed during the evaluation
      */
     double evaluate(int i, double point, double[] params,
-            double[] derivatives) throws Throwable;
+            double[] derivatives) throws EvaluationException;
 }

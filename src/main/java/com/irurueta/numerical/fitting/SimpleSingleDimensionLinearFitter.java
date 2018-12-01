@@ -15,8 +15,10 @@
  */
 package com.irurueta.numerical.fitting;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.GaussJordanElimination;
 import com.irurueta.algebra.Matrix;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
 
 import java.util.Arrays;
@@ -160,17 +162,30 @@ public class SimpleSingleDimensionLinearFitter
      * @throws NotReadyException if enough input data has not yet been provided.
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public void fit() throws FittingException, NotReadyException {
         if(!isReady()) throw new NotReadyException();
         
         try {
             resultAvailable = false;        
         
-            int i, j, k, l, m, mfit = 0;
-            double ym, wt, sum, sig2i;
-            for(j = 0; j < ma; j++) if(ia[j]) mfit++;
-            if(mfit == 0) throw new FittingException(
-                    "lfit: no parameters to be fitted");
+            int i;
+            int j;
+            int k;
+            int l;
+            int m;
+            int mfit = 0;
+            double ym;
+            double wt;
+            double sum;
+            double sig2i;
+            for(j = 0; j < ma; j++) {
+                if(ia[j]) mfit++;
+            }
+            if(mfit == 0) {
+                throw new FittingException(
+                        "lfit: no parameters to be fitted");
+            }
             Matrix temp = new Matrix(mfit, mfit);
             Matrix beta = new Matrix(mfit, 1);
             for (i = 0; i < ndat; i++) {
@@ -244,10 +259,9 @@ public class SimpleSingleDimensionLinearFitter
             }            
             
             resultAvailable = true;
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }
     }
     

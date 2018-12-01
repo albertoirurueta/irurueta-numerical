@@ -17,6 +17,7 @@ package com.irurueta.numerical.fitting;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotReadyException;
@@ -107,11 +108,11 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -133,11 +134,11 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -180,11 +181,11 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -214,7 +215,7 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
 
             @Override
             public double evaluate(int i, double point, double[] params, 
-                    double[] derivatives) throws Throwable {
+                    double[] derivatives) throws EvaluationException {
                 return 0.0;
             }
         };
@@ -234,11 +235,11 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         assertEquals(fitter.getCovar().getColumns(), GAUSS_PARAMS);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), GAUSS_PARAMS);
@@ -262,11 +263,11 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         assertEquals(fitter.getCovar().getColumns(), GAUSS_PARAMS);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), GAUSS_PARAMS);
@@ -312,11 +313,11 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         assertEquals(fitter.getCovar().getColumns(), GAUSS_PARAMS);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), GAUSS_PARAMS);
@@ -345,7 +346,7 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
         
         //check default values
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtSingleDimensionFitter.NDONE);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
         
         //set new value
         fitter.setNdone(5);
@@ -367,7 +368,7 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
 
         //check default values
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtSingleDimensionFitter.ITMAX);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
         
         //set new value
         fitter.setItmax(10);
@@ -389,7 +390,7 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
 
         //check default values
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtSingleDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         
         //set new value
         fitter.setTol(1e-1);
@@ -1265,7 +1266,7 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
 
             @Override
             public double evaluate(int i, double point, double[] params, 
-                    double[] derivatives) throws Throwable {
+                    double[] derivatives) throws EvaluationException {
                 this.point = point;
                 double y = evaluateParams(point, params);
                 gradientEstimator.gradient(params, derivatives);
@@ -1386,7 +1387,7 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
 
             @Override
             public double evaluate(int i, double point, double[] params, 
-                    double[] derivatives) throws Throwable {
+                    double[] derivatives) throws EvaluationException {
                 this.point = point;
                 double y = evaluateParams(point, params);
                 gradientEstimator.gradient(params, derivatives);

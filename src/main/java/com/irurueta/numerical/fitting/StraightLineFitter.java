@@ -100,8 +100,7 @@ public class StraightLineFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public StraightLineFitter(double[] x, double [] y) 
-            throws IllegalArgumentException {
+    public StraightLineFitter(double[] x, double [] y) {
         this();
         setInputData(x, y);
     }
@@ -116,8 +115,7 @@ public class StraightLineFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public StraightLineFitter(double[] x, double[] y, double[] sig)
-            throws IllegalArgumentException {
+    public StraightLineFitter(double[] x, double[] y, double[] sig) {
         this();
         setInputDataAndStandardDeviations(x, y, sig);
     }
@@ -158,8 +156,7 @@ public class StraightLineFitter extends Fitter {
      * @param y y coordinates.
      * @throws IllegalArgumentException if arrays don't have the same length.
      */
-    public final void setInputData(double[] x, double[] y) 
-            throws IllegalArgumentException {
+    public final void setInputData(double[] x, double[] y) {
         if (x.length != y.length) {
             throw new IllegalArgumentException();
         }
@@ -179,8 +176,9 @@ public class StraightLineFitter extends Fitter {
      * assuming equal error for all input points.
      * @throws IllegalArgumentException if arrays don't have the same length.
      */
+    @SuppressWarnings("Duplicates")
     public final void setInputDataAndStandardDeviations(double[] x, double[] y, 
-            double[] sig) throws IllegalArgumentException {
+            double[] sig) {
         if (sig != null) {
             if (x.length != y.length || y.length != sig.length) {
                 throw new IllegalArgumentException();
@@ -292,10 +290,17 @@ public class StraightLineFitter extends Fitter {
      * Fits data when standard deviations of input data is provided.
      * @throws FittingException if fitting fails.
      */
+    @SuppressWarnings("Duplicates")
     private void fitWithSig() throws FittingException {
         Gamma gam = new Gamma();
         int i;
-	    double ss = 0.0, sx = 0.0, sy = 0.0, st2 = 0.0, t, wt, sxoss;
+	    double ss = 0.0;
+	    double sx = 0.0;
+	    double sy = 0.0;
+	    double st2 = 0.0;
+	    double t;
+	    double wt;
+	    double sxoss;
         int ndata = x.length;
 	    b = 0.0;
 	    for (i = 0;i < ndata; i++) {
@@ -329,9 +334,15 @@ public class StraightLineFitter extends Fitter {
     /**
      * Fits data when standard deviations of input data is not provided.
      */
+    @SuppressWarnings("Duplicates")
     private void fitWithoutSig() {
 	    int i;
-	    double ss, sx=0.0, sy = 0.0, st2 = 0.0, t, sxoss;
+	    double ss;
+	    double sx = 0.0;
+	    double sy = 0.0;
+	    double st2 = 0.0;
+	    double t;
+	    double sxoss;
         int ndata = x.length;
 	    b = 0.0;
 	    for (i = 0; i < ndata; i++) {

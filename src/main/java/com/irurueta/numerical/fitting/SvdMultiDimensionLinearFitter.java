@@ -15,8 +15,10 @@
  */
 package com.irurueta.numerical.fitting;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
 
 /**
@@ -34,7 +36,7 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
     /**
      * Default tolerance.
      */
-    public static final double TOL = 1e-12;
+    public static final double DEFAULT_TOL = 1e-12;
     
     /**
      * Tolerance to define convergence threshold for SVD.
@@ -51,10 +53,9 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length.
      */
-    public SvdMultiDimensionLinearFitter(Matrix x, double[] y, double[] sig)
-            throws IllegalArgumentException {
+    public SvdMultiDimensionLinearFitter(Matrix x, double[] y, double[] sig) {
         super(x, y, sig);
-        tol = TOL;
+        tol = DEFAULT_TOL;
     }
 
     /**
@@ -68,10 +69,9 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length.
      */
-    public SvdMultiDimensionLinearFitter(Matrix x, double[] y, double sig)
-            throws IllegalArgumentException {
+    public SvdMultiDimensionLinearFitter(Matrix x, double[] y, double sig) {
         super(x, y, sig);
-        tol = TOL;
+        tol = DEFAULT_TOL;
     }
     
     /**
@@ -83,7 +83,7 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
     public SvdMultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
         super(evaluator);
-        tol = TOL;
+        tol = DEFAULT_TOL;
     }
     
     /**
@@ -101,9 +101,9 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      */
     public SvdMultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
             Matrix x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException {
+            throws FittingException {
         super(evaluator, x, y, sig); 
-        tol = TOL;
+        tol = DEFAULT_TOL;
     }
     
     /**
@@ -121,10 +121,9 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      * don't have the same length.
      */    
     public SvdMultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException {
+            Matrix x, double[] y, double sig) throws FittingException {
         super(evaluator, x, y, sig);
-        tol = TOL;
+        tol = DEFAULT_TOL;
     }
 
     /**
@@ -132,7 +131,7 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      */
     SvdMultiDimensionLinearFitter() {
         super();
-        tol = TOL;
+        tol = DEFAULT_TOL;
     }
 
     /**
@@ -170,8 +169,12 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
         try {
             resultAvailable = false;
             
-            int i,j,k;
-            double tmp,thresh,sum;
+            int i;
+            int j;
+            int k;
+            double tmp;
+            double thresh;
+            double sum;
             Matrix aa = new Matrix(ndat, ma);
             double[] b = new double[ndat];
             for (i = 0; i < ndat; i++) {
@@ -215,10 +218,9 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
             }
             
             resultAvailable = true;
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }        
     }    
     

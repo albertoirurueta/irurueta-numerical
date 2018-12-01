@@ -19,6 +19,7 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.GaussJordanElimination;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.ChiSqDist;
 import com.irurueta.statistics.MaxIterationsExceededException;
@@ -39,37 +40,37 @@ public class LevenbergMarquardtSingleDimensionFitter
      * Default convergence parameter. Number of times that tolerance is assumed
      * to be reached to consider that algorithm has finished iterating.
      */
-    public static final int NDONE = 4;
+    public static final int DEFAULT_NDONE = 4;
     
     /**
      * Default maximum number of iterations.
      */
-    public static final int ITMAX = 5000;
+    public static final int DEFAULT_ITMAX = 5000;
     
     /**
      * Default tolerance to reach convergence.
      */
-    public static final double TOL = 1e-3;
+    public static final double DEFAULT_TOL = 1e-3;
 
     /**
      * Indicates whether covariance must be adjusted or not after fitting is finished.
      */
-    public static final boolean ADJUST_COVARIANCE = true;
+    public static final boolean DEFAULT_ADJUST_COVARIANCE = true;
     
     /**
      * Convergence parameter.
      */
-    private int ndone = NDONE;
+    private int ndone = DEFAULT_NDONE;
     
     /**
      * Maximum number of iterations.
      */
-    private int itmax = ITMAX;
+    private int itmax = DEFAULT_ITMAX;
     
     /**
      * Tolerance to reach convergence.
      */
-    private double tol = TOL;
+    private double tol = DEFAULT_TOL;
     
     /**
      * Evaluator of functions.
@@ -119,7 +120,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * the k-th standard deviation of input sample k.
      * By default covariance is adjusted after fitting finishes.
      */
-    private boolean adjustCovariance = ADJUST_COVARIANCE;
+    private boolean adjustCovariance = DEFAULT_ADJUST_COVARIANCE;
         
     /**
      * Constructor.
@@ -138,7 +139,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * length.
      */
     public LevenbergMarquardtSingleDimensionFitter(double[] x, double[] y, 
-            double[] sig) throws IllegalArgumentException {
+            double[] sig) {
         super(x, y, sig);
     }
     
@@ -153,7 +154,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * length.
      */
     public LevenbergMarquardtSingleDimensionFitter(double[] x, double[] y, 
-            double sig) throws IllegalArgumentException {
+            double sig) {
         super(x, y, sig);
     }
 
@@ -185,7 +186,7 @@ public class LevenbergMarquardtSingleDimensionFitter
     public LevenbergMarquardtSingleDimensionFitter(
             LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
             double[] x, double[] y, double[] sig) 
-            throws IllegalArgumentException, FittingException {
+            throws FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -205,8 +206,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      */
     public LevenbergMarquardtSingleDimensionFitter(
             LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator, 
-            double[] x, double[] y, double sig) throws IllegalArgumentException,
-            FittingException {
+            double[] x, double[] y, double sig) throws FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }    
@@ -224,7 +224,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param ndone convergence parameter.
      * @throws IllegalArgumentException if provided value is less than 1.
      */
-    public void setNdone(int ndone) throws IllegalArgumentException {
+    public void setNdone(int ndone) {
         if (ndone < 1) {
             throw new IllegalArgumentException();
         }
@@ -244,7 +244,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param itmax maximum number of iterations.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setItmax(int itmax) throws IllegalArgumentException {
+    public void setItmax(int itmax) {
         if (itmax <= 0) {
             throw new IllegalArgumentException();
         }
@@ -264,7 +264,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param tol tolerance to reach convergence.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setTol(double tol) throws IllegalArgumentException {
+    public void setTol(double tol) {
         if (tol <= 0.0) {
             throw new IllegalArgumentException();
         }
@@ -435,8 +435,13 @@ public class LevenbergMarquardtSingleDimensionFitter
         try {
             resultAvailable = false;        
         
-            int j, k, l, iter, done = 0;
-            double alamda = 0.001, ochisq;
+            int j;
+            int k;
+            int l;
+            int iter;
+            int done = 0;
+            double alamda = 0.001;
+            double ochisq;
             double[] atry = new double[ma];
             double[] beta = new double[ma];
             double[] da = new double[ma];
@@ -538,10 +543,8 @@ public class LevenbergMarquardtSingleDimensionFitter
             //too many iterations
             throw new FittingException("too many iterations");
                 
-        } catch (FittingException e) {
-            throw e;
-        } catch (Throwable t) {
-            throw new FittingException(t);
+        } catch (AlgebraException | EvaluationException e) {
+            throw new FittingException(e);
         }                
     }
     
@@ -584,9 +587,10 @@ public class LevenbergMarquardtSingleDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * @throws Throwable if anything fails.
+     * @throws AlgebraException if there are numerical instabilities.
+     * @throws EvaluationException if function evaluation fails.
      */
-    private void adjustCovariance() throws Throwable {
+    private void adjustCovariance() throws AlgebraException, EvaluationException {
 
         Matrix invCov = new Matrix(a.length, a.length);
         Matrix tmp1 = new Matrix(a.length, 1);
@@ -643,13 +647,20 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param alpha curvature (i.e. fitting) matrix.
      * @param beta array where derivative increments for each parameter are 
      * stored.
-     * @throws Throwable if evaluation of function fails.
+     * @throws EvaluationException if function evaluation fails.
      */
-    private void mrqcof(double[] a, Matrix alpha, double[] beta) 
-            throws Throwable {
+    private void mrqcof(double[] a, Matrix alpha, double[] beta)
+            throws EvaluationException {
 
-	    int i, j, k, l, m;
-	    double ymod, wt, sig2i, dy;
+	    int i;
+	    int j;
+	    int k;
+	    int l;
+	    int m;
+	    double ymod;
+	    double wt;
+	    double sig2i;
+	    double dy;
         double[] dyda = new double[ma];
 
         //initialize (symmetric) alpha, beta
@@ -705,7 +716,9 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param covar covariance matrix.
      */
     private void covsrt(Matrix covar) {
-	    int i, j, k;
+	    int i;
+	    int j;
+	    int k;
 	    for (i = mfit; i < ma; i++) {
             for (j = 0; j < i + 1; j++) {
                 covar.setElementAt(i, j, 0.0);

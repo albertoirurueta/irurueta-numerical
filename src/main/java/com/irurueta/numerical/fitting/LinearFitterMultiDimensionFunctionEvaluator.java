@@ -15,6 +15,8 @@
  */
 package com.irurueta.numerical.fitting;
 
+import com.irurueta.numerical.EvaluationException;
+
 /**
  * Interface to evaluate linear multi dimensional functions
  * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
@@ -45,7 +47,7 @@ public interface LinearFitterMultiDimensionFunctionEvaluator {
      * @param point point where function will be evaluated
      * @param result array where result of evaluation of basis functions is 
      * stored
-     * @throws Throwable raised if something failed during the evaluation
+     * @throws EvaluationException raised if something failed during the evaluation
      */
-    void evaluate(double[] point, double[] result) throws Throwable;
+    void evaluate(double[] point, double[] result) throws EvaluationException;
 }
