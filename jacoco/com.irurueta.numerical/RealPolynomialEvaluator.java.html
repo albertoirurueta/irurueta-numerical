@@ -37,21 +37,20 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-    public RealPolynomialEvaluator(double[] polyParams) 
-<span class="fc" id="L41">            throws IllegalArgumentException {</span>
-<span class="pc bpc" id="L42" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
-<span class="nc" id="L43">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L40">    public RealPolynomialEvaluator(double[] polyParams) {</span>
+<span class="pc bpc" id="L41" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="nc" id="L42">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L46">        mPolyParams = polyParams;</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L45">        mPolyParams = polyParams;</span>
+<span class="fc" id="L46">    }</span>
     
     /**
      * Gets polynomial parameters.
      * @return polynomial parameters.
      */
     public double[] getPolyParams() {
-<span class="fc" id="L54">        return mPolyParams;</span>
+<span class="fc" id="L53">        return mPolyParams;</span>
     }
     
     /**
@@ -60,7 +59,7 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
      * @return result of evaluation.
      */
     public double evaluate(double x) {
-<span class="fc" id="L63">        return evaluate(mPolyParams, x);</span>
+<span class="fc" id="L62">        return evaluate(mPolyParams, x);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

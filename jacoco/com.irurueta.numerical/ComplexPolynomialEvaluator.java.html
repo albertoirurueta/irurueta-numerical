@@ -39,21 +39,20 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-    public ComplexPolynomialEvaluator(Complex[] polyParams) 
-<span class="fc" id="L43">            throws IllegalArgumentException {</span>
-<span class="pc bpc" id="L44" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
-<span class="nc" id="L45">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L42">    public ComplexPolynomialEvaluator(Complex[] polyParams) {</span>
+<span class="pc bpc" id="L43" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="nc" id="L44">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L48">        mPolyParams = polyParams;</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L47">        mPolyParams = polyParams;</span>
+<span class="fc" id="L48">    }</span>
     
     /**
      * Gets polynomial parameters.
      * @return polynomial parameters.
      */
     public Complex[] getPolyParams() {
-<span class="fc" id="L56">        return mPolyParams;</span>
+<span class="fc" id="L55">        return mPolyParams;</span>
     }
     
     /**
@@ -62,7 +61,7 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * @return result of evaluation.
      */
     public Complex evaluate(Complex x) {
-<span class="fc" id="L65">        return evaluate(mPolyParams, x);</span>
+<span class="fc" id="L64">        return evaluate(mPolyParams, x);</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -59,49 +59,58 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      * not equal.
      */    
     @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void gradient(double[] point, double[] result) 
-            throws EvaluationException, IllegalArgumentException {
-<span class="fc" id="L64">        int n = point.length;</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (result.length != n) {</span>
-<span class="nc" id="L66">            throw new IllegalArgumentException();</span>
+            throws EvaluationException {
+<span class="fc" id="L65">        int n = point.length;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (result.length != n) {</span>
+<span class="nc" id="L67">            throw new IllegalArgumentException();</span>
         }
         
-<span class="pc bpc" id="L69" title="1 of 4 branches missed.">        if (xh1 == null || xh1.length != n) {</span>
-<span class="fc" id="L70">            xh1 = new double[n];</span>
-<span class="fc" id="L71">            System.arraycopy(point, 0, xh1, 0, n);</span>
+<span class="pc bpc" id="L70" title="1 of 4 branches missed.">        if (xh1 == null || xh1.length != n) {</span>
+<span class="fc" id="L71">            xh1 = new double[n];</span>
+<span class="fc" id="L72">            System.arraycopy(point, 0, xh1, 0, n);</span>
         }
-<span class="pc bpc" id="L73" title="1 of 4 branches missed.">        if (xh2 == null || xh2.length != n) {</span>
-<span class="fc" id="L74">            xh2 = new double[n];</span>
-<span class="fc" id="L75">            System.arraycopy(point, 0, xh2, 0, n);</span>
+<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (xh2 == null || xh2.length != n) {</span>
+<span class="fc" id="L75">            xh2 = new double[n];</span>
+<span class="fc" id="L76">            System.arraycopy(point, 0, xh2, 0, n);</span>
         }
                 
         try {
-            double temp, h, h1, h2, hh, fh1, fh2;
-            //double fold = listener.evaluate(point);
-<span class="fc bfc" id="L81" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L82">                temp = point[j];</span>
-<span class="fc" id="L83">                h = EPS * Math.abs(temp);</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">                if(h == 0.0) h = EPS; //Trich to reduce finite-precision error</span>
-<span class="fc" id="L85">                xh1[j] = temp + h;</span>
-<span class="fc" id="L86">                xh2[j] = temp - h;</span>
+            double temp;
+            double h;
+            double h1;
+            double h2;
+            double hh;
+            double fh1;
+            double fh2;
+
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L89">                temp = point[j];</span>
+<span class="fc" id="L90">                h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">                if (h == 0.0) h = EPS; //Trich to reduce finite-precision error</span>
+<span class="fc" id="L92">                xh1[j] = temp + h;</span>
+<span class="fc" id="L93">                xh2[j] = temp - h;</span>
                 //because of machine precision h could be different in both cases
-                
-<span class="fc" id="L89">                h1 = xh1[j] - temp;</span>
-<span class="fc" id="L90">                h2 = temp - xh2[j];</span>
-                
-<span class="fc" id="L92">                hh = h1 + h2; //this is more or less equal to 2.0 * h</span>
-                
-<span class="fc" id="L94">                fh1 = listener.evaluate(xh1);</span>
-<span class="fc" id="L95">                fh2 = listener.evaluate(xh2);</span>
-                
-<span class="fc" id="L97">                xh1[j] = temp;</span>
-<span class="fc" id="L98">                xh2[j] = temp;</span>
-                
-<span class="fc" id="L100">                result[j] = (fh1 - fh2) / hh;</span>
+
+<span class="fc" id="L96">                h1 = xh1[j] - temp;</span>
+<span class="fc" id="L97">                h2 = temp - xh2[j];</span>
+
+<span class="fc" id="L99">                hh = h1 + h2; //this is more or less equal to 2.0 * h</span>
+
+<span class="fc" id="L101">                fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L102">                fh2 = listener.evaluate(xh2);</span>
+
+<span class="fc" id="L104">                xh1[j] = temp;</span>
+<span class="fc" id="L105">                xh2[j] = temp;</span>
+
+<span class="fc" id="L107">                result[j] = (fh1 - fh2) / hh;</span>
             }
-<span class="nc" id="L102">        } catch (Throwable t) {</span>
-<span class="nc" id="L103">            throw new EvaluationException(t);</span>
-<span class="fc" id="L104">        }</span>
-<span class="fc" id="L105">    }    </span>
+<span class="nc" id="L109">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L110">            throw e;</span>
+<span class="nc" id="L111">        } catch (Exception e) {</span>
+<span class="nc" id="L112">            throw new EvaluationException(e);</span>
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

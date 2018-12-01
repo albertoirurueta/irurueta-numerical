@@ -238,7 +238,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
 <span class="fc" id="L238">                    etemp = e;</span>
 <span class="fc" id="L239">                    e = d;</span>
                     
-<span class="fc bfc" id="L241" title="All 6 branches covered.">                    if (Math.abs(p) &gt;= Math.abs(0.5 * q * etemp) || </span>
+<span class="pc bpc" id="L241" title="1 of 6 branches missed.">                    if (Math.abs(p) &gt;= Math.abs(0.5 * q * etemp) || </span>
                             p &lt;= q * (a - x) || p &gt;= q * (b - x)) {
 <span class="fc bfc" id="L243" title="All 2 branches covered.">                        d = CGOLD * (e = (x &gt;= xm ? a - x : b - x));</span>
                         //The above conditions determine the acceptability of

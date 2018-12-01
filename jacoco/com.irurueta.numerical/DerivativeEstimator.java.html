@@ -63,8 +63,10 @@ public class DerivativeEstimator {
 <span class="fc" id="L63">            double fh = listener.evaluate(xh);</span>
         
 <span class="fc" id="L65">            return (fh - fold) / h;</span>
-<span class="nc" id="L66">        } catch (Throwable t) {</span>
-<span class="nc" id="L67">            throw new EvaluationException(t);</span>
+<span class="nc" id="L66">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L67">            throw e;</span>
+<span class="nc" id="L68">        } catch (Exception e) {</span>
+<span class="nc" id="L69">            throw new EvaluationException(e);</span>
         }
     }
 }

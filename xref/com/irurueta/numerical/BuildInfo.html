@@ -175,7 +175,7 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">     * Obtains singleton instance.</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">     * @return singleton instance.</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">static</strong> <a href="../../../com/irurueta/numerical/BuildInfo.html">BuildInfo</a> getInstance() {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">synchronized</strong> <a href="../../../com/irurueta/numerical/BuildInfo.html">BuildInfo</a> getInstance() {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>         <a href="../../../com/irurueta/numerical/BuildInfo.html">BuildInfo</a> info;
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>         <strong class="jxr_keyword">if</strong> (mReference == <strong class="jxr_keyword">null</strong> || (info = mReference.get()) == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>             info = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/numerical/BuildInfo.html">BuildInfo</a>();

@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/numerical/DirectionalEvaluator.html">DirectionalEvaluator</a>(
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>              <a href="../../../com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html">MultiDimensionFunctionEvaluatorListener</a> listener, <strong class="jxr_keyword">double</strong>[] point, 
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>              <strong class="jxr_keyword">double</strong>[] direction) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>              <strong class="jxr_keyword">double</strong>[] direction) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          setPointAndDirection(point, direction);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">this</strong>.listener = listener;        
@@ -120,35 +120,34 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if point and direction don't have</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">     * the same length.</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setPointAndDirection(<strong class="jxr_keyword">double</strong>[] point, <strong class="jxr_keyword">double</strong>[] direction) 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">if</strong> (point.length != direction.length) {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>         }
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>         
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>         <strong class="jxr_keyword">this</strong>.point = point;
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <strong class="jxr_keyword">this</strong>.direction = direction;
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>     }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">     * Evaluates a function using current listener at a distance x from current</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">     * point using current direction</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">     * @param x Distance from provided point using provided direction where </em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">     * function is being evaluated</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">     * @return Result of evaluating the function</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">     * @throws EvaluationException Thrown if function evaluation fails</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluateAt(<strong class="jxr_keyword">double</strong> x) <strong class="jxr_keyword">throws</strong> EvaluationException{        
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; point.length; i++){
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>             p[i] = point[i] + x * direction[i];
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         }
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>             <strong class="jxr_keyword">return</strong> listener.evaluate(p);
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         } <strong class="jxr_keyword">catch</strong> (Throwable t) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/numerical/EvaluationException.html">EvaluationException</a>(t);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>         }
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     }    
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> }
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setPointAndDirection(<strong class="jxr_keyword">double</strong>[] point, <strong class="jxr_keyword">double</strong>[] direction) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">if</strong> (point.length != direction.length) {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         }
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>         
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>         <strong class="jxr_keyword">this</strong>.point = point;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>         <strong class="jxr_keyword">this</strong>.direction = direction;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">     * Evaluates a function using current listener at a distance x from current</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">     * point using current direction</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">     * @param x Distance from provided point using provided direction where </em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">     * function is being evaluated</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">     * @return Result of evaluating the function</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">     * @throws EvaluationException Thrown if function evaluation fails</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluateAt(<strong class="jxr_keyword">double</strong> x) <strong class="jxr_keyword">throws</strong> EvaluationException {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; point.length; i++){
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>             p[i] = point[i] + x * direction[i];
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>             <strong class="jxr_keyword">return</strong> listener.evaluate(p);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/numerical/EvaluationException.html">EvaluationException</a>(e);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     }    
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

@@ -49,7 +49,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
     public DirectionalDerivativeEvaluator(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener, double[] point, 
-            double[] direction) throws IllegalArgumentException {
+            double[] direction) {
 <span class="fc" id="L53">        super(listener, point, direction);</span>
         
 <span class="fc" id="L55">        this.gradientListener = gradientListener;        </span>
@@ -99,8 +99,8 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
         //Compute gradient at such point
         try {
 <span class="fc" id="L101">            gradientListener.evaluateGradient(p, dft);</span>
-<span class="nc" id="L102">        } catch (Throwable t) {</span>
-<span class="nc" id="L103">            throw new EvaluationException(t);</span>
+<span class="nc" id="L102">        } catch (Exception e) {</span>
+<span class="nc" id="L103">            throw new EvaluationException(e);</span>
 <span class="fc" id="L104">        }</span>
         
         //Obtain 1D derivative on corresponding direction
