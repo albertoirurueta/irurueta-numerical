@@ -236,32 +236,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
         cx = DEFAULT_MAX_EVAL_POINT;  
         bracketAvailable = true;
     }
-    
-    /**
-     * Internal method to set a bracket of values. This method does not check
-     * whether this instance is locked.
-     * @param minEvalPoint Minimum bracket evaluation point.
-     * @param middleEvalPoint Middle bracket evaluation point.
-     * @param maxEvalPoint Maximum bracket evaluation point.
-     * @throws InvalidBracketRangeException Raised if the following condition is
-     * not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
-     */
-    private void internalSetBracket(double minEvalPoint, double middleEvalPoint,
-            double maxEvalPoint) throws InvalidBracketRangeException {
-        
-        if ((minEvalPoint > middleEvalPoint) ||
-                (middleEvalPoint > maxEvalPoint) ||
-                (minEvalPoint > maxEvalPoint)) {
-            throw new InvalidBracketRangeException();
-        }
-        
-        ax = minEvalPoint;
-        bx = middleEvalPoint;
-        cx = maxEvalPoint;
-        
-        bracketAvailable = true;
-    }
-    
+
     /**
      * Sets a bracket of values to later search for a minimum. A local minimum
      * will only be search within the minimum and maximum evaluation points of
@@ -402,6 +377,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws OptimizationException Raised if a bracket couldn't be found .
      * because convergence was not achieved or function evaluation failed.
      */
+    @SuppressWarnings("Duplicates")
     public void computeBracket(double minEvalPoint, double middleEvalPoint)
             throws LockedException, NotReadyException, 
             InvalidBracketRangeException, OptimizationException {
@@ -529,14 +505,14 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
                 fb = b[0];
                 fc = c[0];
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         bracketAvailable = true;
         bracketEvaluationAvailable = true;
-        locked = false;        
     }
     
     /**
@@ -588,7 +564,9 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
             OptimizationException {
         try {
             computeBracket(DEFAULT_MIN_EVAL_POINT, DEFAULT_MIDDLE_EVAL_POINT);
-        } catch (InvalidBracketRangeException ignore) { }
+        } catch (InvalidBracketRangeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -617,13 +595,13 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
             fa = listener.evaluate(ax);
             fb = listener.evaluate(bx);
             fc = listener.evaluate(cx);
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException();
         }
         
         bracketEvaluationAvailable = true;
-        locked = false;
     }
     
     /**
@@ -634,19 +612,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     public boolean areBracketEvaluationsAvailable() {
         return bracketEvaluationAvailable;
     }
-    
-    /**
-     * Internal method to swap two values. Value inside a[0] will be swapped 
-     * with value provided in b[0].
-     * @param a Value to be swapped.
-     * @param b Value to be swapped.
-     */    
-    private void swap(double[] a, double[] b) {
-        double tmp = a[0];
-        a[0] = b[0];
-        b[0] = tmp;
-    }
-    
+
     /**
      * Internal method to determine whether a and b have the same sign.
      * @param a Value to be compared.
@@ -654,7 +620,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @return Returns a if a and b have the same sign or -a otherwise.
      */    
     protected double sign(double a, double b) {
-        return b >= 0.0 ? (a >= 0.0 ? a : -a) : (a >= 0.0 ? -a : a);
+        if (b >= 0.0) {
+            return a >= 0.0 ? a : -a;
+        } else {
+            return a >= 0.0 ? -a : a;
+        }
     }
     
     /**
@@ -700,5 +670,41 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
         a[0] = d;
         b[0] = e;
         c[0] = f;
+    }
+
+    /**
+     * Internal method to swap two values. Value inside a[0] will be swapped
+     * with value provided in b[0].
+     * @param a Value to be swapped.
+     * @param b Value to be swapped.
+     */
+    private void swap(double[] a, double[] b) {
+        double tmp = a[0];
+        a[0] = b[0];
+        b[0] = tmp;
+    }
+
+    /**
+     * Internal method to set a bracket of values. This method does not check
+     * whether this instance is locked.
+     * @param minEvalPoint Minimum bracket evaluation point.
+     * @param middleEvalPoint Middle bracket evaluation point.
+     * @param maxEvalPoint Maximum bracket evaluation point.
+     * @throws InvalidBracketRangeException Raised if the following condition is
+     * not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
+     */
+    private void internalSetBracket(double minEvalPoint, double middleEvalPoint,
+                                    double maxEvalPoint) throws InvalidBracketRangeException {
+
+        if ((minEvalPoint > middleEvalPoint) ||
+                (middleEvalPoint > maxEvalPoint)) { //which also means || (minEvalPoint > maxEvalPoint))
+            throw new InvalidBracketRangeException();
+        }
+
+        ax = minEvalPoint;
+        bx = middleEvalPoint;
+        cx = maxEvalPoint;
+
+        bracketAvailable = true;
     }
 }

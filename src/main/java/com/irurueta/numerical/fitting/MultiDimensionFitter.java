@@ -79,8 +79,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length
      */
-    public MultiDimensionFitter(Matrix x, double[] y, double[] sig)
-            throws IllegalArgumentException{
+    public MultiDimensionFitter(Matrix x, double[] y, double[] sig) {
         setInputData(x, y, sig);
     }
 
@@ -95,8 +94,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length
      */
-    public MultiDimensionFitter(Matrix x, double[] y, double sig)
-            throws IllegalArgumentException{
+    public MultiDimensionFitter(Matrix x, double[] y, double sig) {
         setInputData(x, y, sig);
     }
     
@@ -141,8 +139,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * size
      */
-    public final void setInputData(Matrix x, double [] y, double[] sig) 
-            throws IllegalArgumentException{
+    public final void setInputData(Matrix x, double [] y, double[] sig) {
         if(x.getRows() != y.length || sig.length != y.length) {
             throw new IllegalArgumentException();
         }
@@ -169,9 +166,11 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * size
      */
-    public final void setInputData(Matrix x, double[] y, double sig)
-            throws IllegalArgumentException{
-        if(x.getRows() != y.length) throw new IllegalArgumentException();
+    @SuppressWarnings("Duplicates")
+    public final void setInputData(Matrix x, double[] y, double sig) {
+        if (x.getRows() != y.length) {
+            throw new IllegalArgumentException();
+        }
         
         this.x = x;
         this.y = y;

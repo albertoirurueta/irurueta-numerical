@@ -61,8 +61,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length
      */
-    public MultiDimensionLinearFitter(Matrix x, double[] y, double[] sig)
-            throws IllegalArgumentException {
+    public MultiDimensionLinearFitter(Matrix x, double[] y, double[] sig) {
         super(x, y, sig);
     }
 
@@ -77,8 +76,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length
      */
-    public MultiDimensionLinearFitter(Matrix x, double[] y, double sig)
-            throws IllegalArgumentException {
+    public MultiDimensionLinearFitter(Matrix x, double[] y, double sig) {
         super(x, y, sig);
     }
     
@@ -108,8 +106,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * don't have the same length
      */
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException {
+            Matrix x, double[] y, double[] sig) throws FittingException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }
@@ -129,8 +126,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * don't have the same length
      */    
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException {
+            Matrix x, double[] y, double sig) throws FittingException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }     

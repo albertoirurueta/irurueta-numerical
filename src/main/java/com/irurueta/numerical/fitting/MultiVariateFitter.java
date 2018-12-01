@@ -81,8 +81,7 @@ public abstract class MultiVariateFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays don't
      * have the same length.
      */
-    public MultiVariateFitter(Matrix x, Matrix y, double[] sig)
-            throws IllegalArgumentException {
+    public MultiVariateFitter(Matrix x, Matrix y, double[] sig) {
         setInputData(x, y, sig);
     }
     
@@ -97,8 +96,7 @@ public abstract class MultiVariateFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays don't
      * have the same length.
      */
-    public MultiVariateFitter(Matrix x, Matrix y, double sig)
-            throws IllegalArgumentException {
+    public MultiVariateFitter(Matrix x, Matrix y, double sig) {
         setInputData(x, y, sig);
     }
     
@@ -143,8 +141,7 @@ public abstract class MultiVariateFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * size.
      */
-    public final void setInputData(Matrix x, Matrix y, double[] sig) 
-            throws IllegalArgumentException {
+    public final void setInputData(Matrix x, Matrix y, double[] sig) {
         if (x.getRows() != y.getRows() || sig.length != y.getRows()) {
             throw new IllegalArgumentException();
         }
@@ -170,8 +167,7 @@ public abstract class MultiVariateFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      * size.
      */
-    public final void setInputData(Matrix x, Matrix y, double sig) 
-            throws IllegalArgumentException {
+    public final void setInputData(Matrix x, Matrix y, double sig) {
         if (x.getRows() != y.getRows()) {
             throw new IllegalArgumentException();
         }

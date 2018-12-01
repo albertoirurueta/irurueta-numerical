@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * This class uses Brent algorithm to determine a local function minimum for
@@ -90,7 +87,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     public BrentSingleOptimizer(double minEvalPoint, double middleEvalPoint,
             double maxEvalPoint, double tolerance) 
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(minEvalPoint, middleEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -111,8 +108,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
     public BrentSingleOptimizer(
             SingleDimensionFunctionEvaluatorListener listener,
             double minEvalPoint, double middleEvalPoint, double maxEvalPoint,
-            double tolerance) throws InvalidBracketRangeException, 
-            IllegalArgumentException {
+            double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -139,8 +135,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * minimum.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -160,7 +155,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public void setTolerance(double tolerance)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -184,6 +179,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * lack of convergence or because function couldn't be evaluated.
      */
     @Override
+    @SuppressWarnings("Duplicates")
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
         if (isLocked()) {
@@ -199,8 +195,24 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
         double[] v3 = new double[3];        
         
         try {
-            double a, b, d = 0.0, etemp, fu, fv, fw, fx;
-            double p, q, r, tol1, tol2, u, v, w, x, xm;
+            double a;
+            double b;
+            double d = 0.0;
+            double etemp;
+            double fu;
+            double fv;
+            double fw;
+            double fx;
+            double p;
+            double q;
+            double r;
+            double tol1;
+            double tol2;
+            double u;
+            double v;
+            double w;
+            double x;
+            double xm;
             //This will be the distance moved on the step before last.
             double e = 0.0;
             
@@ -215,7 +227,8 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
             for (int iter = 0; iter < ITMAX; iter++) {
                 //Main program loop
                 xm = 0.5 * (a + b);
-                tol2 = 2.0 * (tol1 = tolerance * Math.abs(x) + ZEPS);
+                tol1 = tolerance * Math.abs(x) + ZEPS;
+                tol2 = 2.0 * tol1;
                 
                 if (Math.abs(x - xm) <= (tol2 - 0.5 * (b - a))) {
                     //Test for done here.
@@ -233,14 +246,18 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                     p = (x - v) * q - (x - w) * r;
                     q = 2.0 * (q - r);
                     
-                    if(q > 0.0) p = -p;
+                    if (q > 0.0) {
+                        p = -p;
+                    }
                     q = Math.abs(q);
                     etemp = e;
                     e = d;
                     
                     if (Math.abs(p) >= Math.abs(0.5 * q * etemp) || 
                             p <= q * (a - x) || p >= q * (b - x)) {
-                        d = CGOLD * (e = (x >= xm ? a - x : b - x));
+                        //noinspection all
+                        e = x >= xm ? a - x : b - x;
+                        d = CGOLD * (e);
                         //The above conditions determine the acceptability of
                         //the parabolic fit. Here we take the golden section 
                         //step into the larger of the two segments.
@@ -249,11 +266,14 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                         d = p / q;
                         u = x + d;
                         
-                        if(u - a < tol2 || b - u < tol2)
+                        if (u - a < tol2 || b - u < tol2) {
                             d = sign(tol1, xm - x);
+                        }
                     }
                 } else {
-                    d = CGOLD * (e = (x >= xm ? a - x : b - x));
+                    //noinspection all
+                    e = x >= xm ? a - x : b - x;
+                    d = CGOLD * (e);
                 }
                 
                 u = Math.abs(d) >= tol1 ? x + d : x + sign(tol1, d);
@@ -289,7 +309,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                     } else {
                         b = u;
                     }
-                    if (fu <= fu || w == x) {
+                    if (fu <= fw || w == x) {
                         v = w;
                         w = u;
                         fv = fw;
@@ -302,13 +322,13 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                 
                 //Done with housekeeping. Back for another iteration.
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         //Too many iterations in Brent!
-        locked = false;
         throw new OptimizationException();
     }
     

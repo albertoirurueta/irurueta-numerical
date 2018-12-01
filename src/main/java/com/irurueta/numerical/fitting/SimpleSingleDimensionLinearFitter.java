@@ -60,7 +60,7 @@ public class SimpleSingleDimensionLinearFitter
      * length.
      */
     public SimpleSingleDimensionLinearFitter(double[] x, double[] y, 
-            double[] sig) throws IllegalArgumentException {
+            double[] sig) {
         super(x, y, sig);
     }
     
@@ -75,8 +75,7 @@ public class SimpleSingleDimensionLinearFitter
      * @throws IllegalArgumentException if provided arrays don't have the same 
      * length.
      */
-    public SimpleSingleDimensionLinearFitter(double[] x, double[] y, double sig)
-            throws IllegalArgumentException {
+    public SimpleSingleDimensionLinearFitter(double[] x, double[] y, double sig) {
         super(x, y, sig);
     }
     
@@ -110,7 +109,7 @@ public class SimpleSingleDimensionLinearFitter
     public SimpleSingleDimensionLinearFitter(
             LinearFitterSingleDimensionFunctionEvaluator evaluator, 
             double[] x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException {
+            throws FittingException {
         super(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -132,7 +131,7 @@ public class SimpleSingleDimensionLinearFitter
     public SimpleSingleDimensionLinearFitter(
             LinearFitterSingleDimensionFunctionEvaluator evaluator, 
             double[] x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException {
+            throws FittingException {
         super(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
