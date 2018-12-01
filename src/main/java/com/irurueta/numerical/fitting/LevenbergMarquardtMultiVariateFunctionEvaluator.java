@@ -16,6 +16,7 @@
 package com.irurueta.numerical.fitting;
 
 import com.irurueta.algebra.Matrix;
+import com.irurueta.numerical.EvaluationException;
 
 /**
  * Interface to evaluate non-linear multi variate and multi dimensional 
@@ -63,9 +64,9 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
      * These are used as input parameters along with point to evaluate function
      * @param jacobian jacobian containing partial derivatives of the function 
      * respect to each provided parameter for each function output or variable
-     * @throws Throwable raised if something failed during the evaluation
+     * @throws EvaluationException raised if something failed during the evaluation
      */
     void evaluate(int i, double[] point, double[] result,
-            double[] params, Matrix jacobian) throws Throwable;    
+            double[] params, Matrix jacobian) throws EvaluationException;
     
 }

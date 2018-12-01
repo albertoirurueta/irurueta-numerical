@@ -18,6 +18,7 @@ package com.irurueta.numerical.fitting;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotReadyException;
@@ -141,11 +142,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtMultiDimensionFitter.NDONE);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtMultiDimensionFitter.ITMAX);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtMultiDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -186,11 +187,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtMultiDimensionFitter.NDONE);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtMultiDimensionFitter.ITMAX);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtMultiDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -243,11 +244,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtMultiDimensionFitter.NDONE);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtMultiDimensionFitter.ITMAX);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtMultiDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -271,11 +272,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtMultiDimensionFitter.NDONE);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtMultiDimensionFitter.ITMAX);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtMultiDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -321,11 +322,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtMultiDimensionFitter.NDONE);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(), 
-                LevenbergMarquardtMultiDimensionFitter.ITMAX);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtMultiDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -354,7 +355,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         
         //check default value
         assertEquals(fitter.getNdone(), 
-                LevenbergMarquardtMultiDimensionFitter.NDONE);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
         
         //new value
         fitter.setNdone(5);
@@ -376,7 +377,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         
         //check default value
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.ITMAX);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
         
         //new value
         fitter.setItmax(10);
@@ -398,7 +399,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         
         //check default value
         assertEquals(fitter.getTol(), 
-                LevenbergMarquardtMultiDimensionFitter.TOL, 0.0);
+                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         
         //new value
         fitter.setTol(1e-1);
@@ -1350,7 +1351,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                     @Override
                     public double evaluate(int i, double[] point, double[] params,
-                                           double[] derivatives) throws Throwable {
+                                           double[] derivatives) throws EvaluationException {
                         this.point = point;
                         double y = evaluateParams(point, params);
                         gradientEstimator.gradient(params, derivatives);
@@ -1476,7 +1477,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             @Override
             public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) throws Throwable {
+                    double[] derivatives) throws EvaluationException {
                 this.point = point;
                 double y = evaluateParams(point, params);
                 gradientEstimator.gradient(params, derivatives);
@@ -1613,7 +1614,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws Throwable {
+                                               double[] derivatives) throws EvaluationException {
                             this.point = point;
                             double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
@@ -1767,7 +1768,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws Throwable {
+                                               double[] derivatives) throws EvaluationException {
                             this.point = point;
                             double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
@@ -1916,7 +1917,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             @Override
             public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) throws Throwable {
+                    double[] derivatives) throws EvaluationException {
                 this.point = point;
                 double y = evaluateParams(point, params);
                 gradientEstimator.gradient(params, derivatives);
@@ -3217,7 +3218,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws Throwable {
+                                               double[] derivatives) throws EvaluationException {
                             this.point = point;
                             double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
@@ -3527,7 +3528,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws Throwable {
+                                               double[] derivatives) throws EvaluationException {
                             this.point = point;
                             double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);

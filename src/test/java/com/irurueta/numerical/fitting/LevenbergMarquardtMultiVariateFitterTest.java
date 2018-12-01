@@ -114,11 +114,11 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -140,11 +140,11 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -185,11 +185,11 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -245,11 +245,11 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -272,11 +272,11 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -321,11 +321,11 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -354,7 +354,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         
         //check default value
         assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiVariateFitter.NDONE);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_NDONE);
         
         //new value
         fitter.setNdone(5);
@@ -376,7 +376,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         
         //check default value
         assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiVariateFitter.ITMAX);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_ITMAX);
         
         //new value
         fitter.setItmax(10);
@@ -398,7 +398,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
         
         //check default value
         assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiVariateFitter.TOL, 0.0);
+                LevenbergMarquardtMultiVariateFitter.DEFAULT_TOL, 0.0);
         
         //new value
         fitter.setTol(1e-1);
