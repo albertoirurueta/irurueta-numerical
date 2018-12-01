@@ -660,32 +660,13 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.html#L167">167</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.html#L184">184</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.html#L131">131</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.html#L150">150</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
-<pre>    }
-    
-    /**
-     * This function estimates a function minimum.
-     * Implementations of this class will usually search a local minimum close
-     * to a start point and will start looking into provided start direction.
-     * Minimization of a function f. Input consists of an initial starting point
-     * p. The initial matrix xi, whose columns contain the initial set of
-     * directions, is set to the identity. Returned is the best point found, at
-     * which point fret is the minimum function value and iter is the number of
-     * iterations taken.
-     * @throws LockedException Raised if this instance is locked, because
-     * estimation is being computed.
-     * @throws NotReadyException Raised if this instance is not ready, because
-     * a listener, a gradient listener and a start point haven't been provided.
-     * @throws OptimizationException Raised if the algorithm failed because of
-     * lack of convergence or because function couldn't be evaluated.
-     */    
-    @Override
-    public void minimize() throws LockedException, NotReadyException, 
+<pre>    public void minimize() throws LockedException, NotReadyException, 
             OptimizationException {
         
         if (isLocked()) {
@@ -710,7 +691,8 @@ com.irurueta:irurueta-numerical
         
         boolean validResult = false;
         try {
-            double gg, dgg;
+            double gg;
+            double dgg;
             
             double[] g = new double[n];
             double[] h = new double[n];
@@ -1331,130 +1313,6 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.html#L149">149</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/optimization/LineMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/LineMultiOptimizer.html#L103">103</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>        dbrent = null;        
-    }
-    
-    /**
-     * Returns boolean indicating whether start point has already been provided
-     * and is ready for retrieval.
-     * @return True if available, false otherwise.
-     */
-
-    public boolean isStartPointAvailable() {
-        return p != null;
-    }
-    
-    /**
-     * Returns start point where algorithm will be started. Start point should 
-     * be close to the local minimum to be found.
-     * @return Start point where algorithm will be started.
-     * @throws NotAvailableException Raised if start point has not yet been
-     * provided and is not available.
-     */    
-    public double[] getStartPoint() throws NotAvailableException {
-        if (!isStartPointAvailable()) {
-            throw new NotAvailableException();
-        }
-        return p;
-    }
-    
-    /**
-     * Returns boolean indicating whether direction has already been provided 
-     * and is ready for retrieval.
-     * @return True if available, false otherwise.
-     */    
-    public boolean isDirectionAvailable() {
-        return xi != null;
-    }
-    
-    /**
-     * Returns direction to start looking for a minimum. Provided array must 
-     * have the same length as the number of dimensions of the function being 
-     * evaluated. Provided direction is considered as a vector pointing to the 
-     * minimum to be found.
-     * @return Direction to start looking for a minimum.
-     * @throws NotAvailableException Raised if direction has not yet been 
-     * provided and is not available.
-     */    
-    public double[] getDirection() throws NotAvailableException {
-        if (!isDirectionAvailable()) {
-            throw new NotAvailableException();
-        }
-        return xi;
-    }
-    
-    /**
-     * Internal method to set start point and direction to start the search for
-     * a local minimum.
-     * This method does not check whether this instance is locked.
-     * @param point Start point where algorithm will be started. Start point 
-     * should be close to the local minimum to be found. Provided array must 
-     * have a length equal to the number of dimensions of the function being
-     * evaluated, otherwise and exception will be raised when searching for the
-     * minimum.
-     * @param direction Direction to start looking for a minimum. Provided array
-     * must have the same length as the number of dimensions of the function 
-     * being evaluated. Provided direction is considered as a vector pointing
-     * to the minimum to be found.
-     * @throws IllegalArgumentException Raised if provided point and direction
-     * don't have the same length.
-     */    
-    private void internalSetStartPointAndDirection(double[] point, 
-            double[] direction) throws IllegalArgumentException {
-        if (point.length != direction.length) {
-            throw new IllegalArgumentException();
-        }
-        
-        p = point;
-        xi = direction;        
-    }
-    
-    /**
-     * Internal method to set start point and direction to start the search for
-     * a local minimum.
-     * @param point Start point where algorithm will be started. Start point 
-     * should be close to the local minimum to be found. Provided array must 
-     * have a length equal to the number of dimensions of the function being
-     * evaluated, otherwise and exception will be raised when searching for the
-     * minimum.
-     * @param direction Direction to start looking for a minimum. Provided array
-     * must have the same length as the number of dimensions of the function 
-     * being evaluated. Provided direction is considered as a vector pointing
-     * to the minimum to be found.
-     * @throws LockedException Raised if this instance is locked.
-     * @throws IllegalArgumentException Raised if provided point and direction
-     * don't have the same length.
-     */    
-    public void setStartPointAndDirection(double[] point, double[] direction)
-            throws LockedException, IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetStartPointAndDirection(point, direction);
-    }
-    
-    /**
-     * Returns boolean indicating whether this instance is considered to be
-     * ready to start the estimation of a minimum.
-     * This instance is considered to be ready once a listener, gradient 
-     * listener, start point and direction are provided.
-     * @return True if this instance is ready, false otherwise.
-     */    
-    @Override
-    public boolean isReady() {
-        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L811">811</a></td></tr>
 <tr class="b">
@@ -1650,75 +1508,6 @@ com.irurueta:irurueta-numerical
         double xacc = tolerance;
         
         double rtn = 0.5 * (x1 + x2);</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.html#L257">257</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.html#L221">221</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>                        dgg += (xi[j] + g[j]) * xi[j];
-                    } else {
-                        //This statement for Fletcher-Reeves
-                        dgg += xi[j] * xi[j];
-                    }
-                }
-                
-                if (gg == 0.0) {
-                    //minimum found
-                    validResult = true;
-                    break;
-                }
-                
-                double gam = dgg / gg;
-                for (int j = 0; j &lt; n; j++) {
-                    g[j] = -xi[j];
-                    xi[j] = h[j] = g[j] + gam * h[j];
-                }
-            }
-            
-            if (!validResult) {
-                //too many iterations
-                locked = false;
-                throw new OptimizationException();
-            }
-        } catch (Throwable t) {
-            locked = false;
-            throw new OptimizationException(t);
-        }
-        
-        //set result
-        xmin = p;
-        resultAvailable = true;
-        fmin = fret;
-        locked = false;        
-    }
-    
-    /**
-     * Returns boolean indicating whether this instance is ready to start the
-     * estimation of a local minimum.
-     * An instance is ready once a listener, a gradient listener and a start 
-     * point are provided.
-     * @return True if this instance is ready, false otherwise.
-     */
-    @Override
-    public boolean isReady() {
-        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;
-                isStartPointAvailable();
-    }
-    
-    /**
-     * Returns tolerance or accuracy to be expected on estimated local minimum.
-     * @return Tolerance or accuracy to be expected on estimated local minimum.
-     */
-    public double getTolerance() {
-        return tolerance;
-    }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -2154,100 +1943,6 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
-<td>com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.html#L274">274</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html#L288">288</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>                }
-            }
-            
-            if (!validResult) {
-                //too many iterations
-                locked = false;
-                throw new OptimizationException();
-            }
-        } catch (Throwable t) {
-            locked = false;
-            throw new OptimizationException(t);
-        }
-        
-        //set result
-        xmin = p;
-        resultAvailable = true;
-        fmin = fret;
-        locked = false;        
-    }
-    
-    /**
-     * Returns boolean indicating whether this instance is ready to start the
-     * estimation of a local minimum.
-     * An instance is ready once a listener, a gradient listener and a start 
-     * point are provided.
-     * @return True if this instance is ready, false otherwise.
-     */
-    @Override
-    public boolean isReady() {
-        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;
-                isStartPointAvailable();
-    }
-    
-    /**
-     * Returns tolerance or accuracy to be expected on estimated local minimum.
-     * @return Tolerance or accuracy to be expected on estimated local minimum.
-     */
-    public double getTolerance() {
-        return tolerance;
-    }
-      
-    /**
-     * Internal method to set tolerance or accuracy to be expected on estimated
-     * local minimum.
-     * This method does not check whether this instance is locked.
-     * @param tolerance Tolerance or accuracy to be expected on estimated local
-     * minimum.
-     * @throws IllegalArgumentException Raised if provided tolerance is 
-     * negative.
-     */
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance &lt; MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
-    /**
-     * Sets tolerance or accuracy to be expected on estimated local minimum.
-     * @param tolerance Tolerance or accuracy to be expected on estimated local
-     * minimum.
-     * @throws LockedException Raised if this instance is locked.
-     * @throws IllegalArgumentException Raised if provided tolerance is 
-     * negative.
-     */
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * Returns gradient listener in charge of obtaining gradient values for the
-     * function to be evaluated.
-     * @return Gradient listener.
-     * @throws NotAvailableException Raised if gradient listener has not yet 
-     * been provided.
-     */
-    public GradientFunctionEvaluatorListener getGradientListener()</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
 <td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L215">215</a></td></tr>
 <tr class="a">
@@ -2448,6 +2143,53 @@ com.irurueta:irurueta-numerical
                             nIters = newNIters;
                         }
                     }</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
+<td>com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java</td>
+<td><a href="./xref/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.html#L256">256</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.java</td>
+<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeConjugateGradientMultiOptimizer.html#L220">220</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>                        dgg += (xi[j] + g[j]) * xi[j];
+                    } else {
+                        //This statement for Fletcher-Reeves
+                        dgg += xi[j] * xi[j];
+                    }
+                }
+                
+                if (gg == 0.0) {
+                    //minimum found
+                    validResult = true;
+                    break;
+                }
+                
+                double gam = dgg / gg;
+                for (int j = 0; j &lt; n; j++) {
+                    g[j] = -xi[j];
+                    xi[j] = h[j] = g[j] + gam * h[j];
+                }
+            }
+            
+            if (!validResult) {
+                //too many iterations
+                locked = false;
+                throw new OptimizationException();
+            }
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
+            locked = false;
+        }
+        
+        //set result
+        xmin = p;
+        resultAvailable = true;
+        fmin = fret;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -2861,6 +2603,85 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
+<td>com/irurueta/numerical/optimization/BrentSingleOptimizer.java</td>
+<td><a href="./xref/com/irurueta/numerical/optimization/BrentSingleOptimizer.html#L114">114</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java</td>
+<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.html#L137">137</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>    }
+
+    /**
+     * Returns tolerance value, which is the accuracy to be obtained when a
+     * minimum is estimated.
+     * The algorithm will iterate until the result converges below this value of
+     * accuracy or until the maximum number of iterations is achieved (and in 
+     * such case, convergence will be assumed to have failed).
+     * @return Tolerance value.
+     */
+    public double getTolerance() {
+        return tolerance;
+    }
+
+    /**
+     * Sets algorithm's tolerance.
+     * The algorithm will iterate until the result converges below this value of
+     * accuracy or until the maximum number of iterations is achieved (an in 
+     * such case, convergence will be assumed to have failed).
+     * @param tolerance Tolerance or accuracy to be obtained in estimated 
+     * minimum.
+     * @throws LockedException Raised if this instance is locked. This instance
+     * will be locked while doing some operations. Attempting to change any 
+     * parameter while being locked will raise this exception.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public void setTolerance(double tolerance)
+            throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        internalSetTolerance(tolerance);
+    }
+    
+    /**
+     * This function estimates a function minimum within provided or computed
+     * bracket of values.
+     * Given a function f, and given a bracketing triplet of abscissas ax, bx,
+     * cx (such that bx is between ax and cx, and f(bx) is less than both f(ax)
+     * and f(cx), this routine isolates the minimum to a fractional prevision of
+     * about tolerance using Brent's method. The abscissa of the minimum is 
+     * returned as xmin, and the function value of the minimum is returned as
+     * fmin, the returned function value.
+     * @throws LockedException Raised if this instance is locked, because
+     * estimation is being computed.
+     * @throws NotReadyException Raised if this instance is not ready because
+     * either a listener or a bracket has not yet been provided or computed.
+     * @throws OptimizationException Raised if the algorithm failed because of
+     * lack of convergence or because function couldn't be evaluated.
+     */
+    @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void minimize() throws LockedException, NotReadyException,
+            OptimizationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
+        
+        locked = true;
+        double[] v1 = new double[1];
+        double[] v2 = new double[2];
+        double[] v3 = new double[3];        
+        
+        try {</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L379">379</a></td></tr>
 <tr class="b">
@@ -2981,78 +2802,6 @@ com.irurueta:irurueta-numerical
     @Override
     public InliersData getInliersData() {
         return getBestNumberInliersData();</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.html#L138">138</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/optimization/GoldenSingleOptimizer.java</td>
-<td><a href="./xref/com/irurueta/numerical/optimization/GoldenSingleOptimizer.html#L86">86</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>    }
-    
-    /**
-     * Returns tolerance value. Estimated result will be found with an accuracy 
-     * below or equal to provided tolerance value.
-     * @return Tolerance value.
-     */
-    public double getTolerance() {
-        return tolerance;
-    }
-    
-    /**
-     * Sets tolerance value. Estimated result will be found with an accuracy
-     * below or equal to provided tolerance value.
-     * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
-     */
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * This function estimates a function minimum within provided or computed
-     * bracket of values.
-     * Given a function f that computes a function and also its derivative 
-     * function df, and given a bracketing triplet of abscissas ax, bx, cx (such
-     * that bx is between ax and cx, and f(bx) is less than both f(ax) and 
-     * f(cx), this routine isolates the minimum to a fractional precision of 
-     * about tolerance using a modification of Brent's method that uses 
-     * derivatives. The abscissa of the minimum is returned as xmin and the 
-     * minimum function value is returned as fmin.
-     * @throws LockedException Raised if this instance is locked, because
-     * estimation is being computed.
-     * @throws NotReadyException Raised if this instance is not ready because
-     * either a listener or a bracket has not yet been provided or computed.
-     * @throws OptimizationException Raised if the algorithm failed because of
-     * lack of convergence or because function couldn't be evaluated.
-     */    
-    @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
-        
-        locked = true;
-        
-        double[] v1 = new double[1];
-        double[] v2 = new double[2];
-        double[] v3 = new double[3];
-        
-        try {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>

@@ -139,15 +139,14 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     public DerivativeLineMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener,
-            double[] point, double[] direction) 
-            throws IllegalArgumentException {
-<span class="fc" id="L144">        super(listener);</span>
-<span class="fc" id="L145">        internalSetStartPointAndDirection(point, direction);</span>
-<span class="fc" id="L146">        n = 0;</span>
-<span class="fc" id="L147">        this.gradientListener = gradientListener;</span>
-<span class="fc" id="L148">        evaluator = null;</span>
-<span class="fc" id="L149">        dbrent = null;        </span>
-<span class="fc" id="L150">    }</span>
+            double[] point, double[] direction) {
+<span class="fc" id="L143">        super(listener);</span>
+<span class="fc" id="L144">        internalSetStartPointAndDirection(point, direction);</span>
+<span class="fc" id="L145">        n = 0;</span>
+<span class="fc" id="L146">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L147">        evaluator = null;</span>
+<span class="fc" id="L148">        dbrent = null;        </span>
+<span class="fc" id="L149">    }</span>
     
     /**
      * Returns boolean indicating whether start point has already been provided
@@ -156,7 +155,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */
 
     public boolean isStartPointAvailable() {
-<span class="fc bfc" id="L159" title="All 2 branches covered.">        return p != null;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        return p != null;</span>
     }
     
     /**
@@ -167,10 +166,10 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * provided and is not available.
      */    
     public double[] getStartPoint() throws NotAvailableException {
-<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
-<span class="fc" id="L171">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
+<span class="fc" id="L170">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L173">        return p;</span>
+<span class="fc" id="L172">        return p;</span>
     }
     
     /**
@@ -179,7 +178,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */    
     public boolean isDirectionAvailable() {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        return xi != null;</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        return xi != null;</span>
     }
     
     /**
@@ -192,10 +191,10 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * provided and is not available.
      */    
     public double[] getDirection() throws NotAvailableException {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (!isDirectionAvailable()) {</span>
-<span class="fc" id="L196">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (!isDirectionAvailable()) {</span>
+<span class="fc" id="L195">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L198">        return xi;</span>
+<span class="fc" id="L197">        return xi;</span>
     }
     
     /**
@@ -215,14 +214,14 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */    
     private void internalSetStartPointAndDirection(double[] point, 
-            double[] direction) throws IllegalArgumentException {
-<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (point.length != direction.length) {</span>
-<span class="fc" id="L220">            throw new IllegalArgumentException();</span>
+            double[] direction) {
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (point.length != direction.length) {</span>
+<span class="fc" id="L219">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L223">        p = point;</span>
-<span class="fc" id="L224">        xi = direction;        </span>
-<span class="fc" id="L225">    }</span>
+<span class="fc" id="L222">        p = point;</span>
+<span class="fc" id="L223">        xi = direction;        </span>
+<span class="fc" id="L224">    }</span>
     
     /**
      * Internal method to set start point and direction to start the search for
@@ -241,12 +240,12 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */    
     public void setStartPointAndDirection(double[] point, double[] direction)
-            throws LockedException, IllegalArgumentException {
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L246">            throw new LockedException();</span>
+            throws LockedException {
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L245">            throw new LockedException();</span>
         }
-<span class="fc" id="L248">        internalSetStartPointAndDirection(point, direction);</span>
-<span class="fc" id="L249">    }</span>
+<span class="fc" id="L247">        internalSetStartPointAndDirection(point, direction);</span>
+<span class="fc" id="L248">    }</span>
     
     /**
      * Returns boolean indicating whether this instance is considered to be
@@ -257,8 +256,8 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */    
     @Override
     public boolean isReady() {
-<span class="nc bnc" id="L260" title="All 4 branches missed.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</span>
-<span class="nc bnc" id="L261" title="All 4 branches missed.">                isStartPointAvailable() &amp;&amp; isDirectionAvailable();</span>
+<span class="nc bnc" id="L259" title="All 4 branches missed.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</span>
+<span class="nc bnc" id="L260" title="All 4 branches missed.">                isStartPointAvailable() &amp;&amp; isDirectionAvailable();</span>
     }
     
     /**
@@ -273,10 +272,10 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */
     public GradientFunctionEvaluatorListener getGradientListener()
             throws NotAvailableException {
-<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
-<span class="fc" id="L277">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
+<span class="fc" id="L276">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L279">        return gradientListener;</span>
+<span class="fc" id="L278">        return gradientListener;</span>
     }
     
     /**
@@ -291,11 +290,11 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     public void setGradientListener(
             GradientFunctionEvaluatorListener gradientListener)
             throws LockedException {
-<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L295">            throw new LockedException();</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L294">            throw new LockedException();</span>
         }
-<span class="fc" id="L297">        this.gradientListener = gradientListener;</span>
-<span class="fc" id="L298">    }</span>
+<span class="fc" id="L296">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L297">    }</span>
     
     /**
      * Returns boolean indicating whether the gradient listener has been 
@@ -303,7 +302,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean isGradientListenerAvailable() {
-<span class="fc bfc" id="L306" title="All 2 branches covered.">        return gradientListener != null;</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        return gradientListener != null;</span>
     }       
     
     /**
@@ -313,44 +312,46 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */
     @SuppressWarnings(&quot;Duplicates&quot;)
     protected double linmin() {
-        double ax, xx, linxmin;
-<span class="fc" id="L317">        n = p.length;</span>
+        double ax;
+        double xx;
+        double linxmin;
+<span class="fc" id="L318">        n = p.length;</span>
         
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (evaluator == null) {</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        if (evaluator == null) {</span>
             //attempt to reuse evaluator
-<span class="fc" id="L321">            evaluator = new DirectionalDerivativeEvaluator(listener, </span>
+<span class="fc" id="L322">            evaluator = new DirectionalDerivativeEvaluator(listener, </span>
                     gradientListener, p, xi);
         }
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">        if (evaluator.getListener() != listener) {</span>
             //update listener
-<span class="nc" id="L326">            evaluator.setListener(listener);</span>
+<span class="nc" id="L327">            evaluator.setListener(listener);</span>
         }
-<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        if (evaluator.getGradientListener() != gradientListener) {</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (evaluator.getGradientListener() != gradientListener) {</span>
             //update gradient listener
-<span class="nc" id="L330">            evaluator.setGradientListener(gradientListener);</span>
+<span class="nc" id="L331">            evaluator.setGradientListener(gradientListener);</span>
         }
-<span class="pc bpc" id="L332" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
-<span class="nc" id="L333">            evaluator.setPointAndDirection(p, xi);</span>
+<span class="pc bpc" id="L333" title="2 of 4 branches missed.">        if (evaluator.getPoint() != p || evaluator.getDirection() != xi) {</span>
+<span class="nc" id="L334">            evaluator.setPointAndDirection(p, xi);</span>
         }
         
-<span class="fc" id="L336">        ax = 0.0;</span>
-<span class="fc" id="L337">        xx = 1.0;</span>
+<span class="fc" id="L337">        ax = 0.0;</span>
+<span class="fc" id="L338">        xx = 1.0;</span>
                 
         try {
-<span class="fc bfc" id="L340" title="All 2 branches covered.">            if (dbrent == null) {</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">            if (dbrent == null) {</span>
                 //attempt to reuse brent single optimizer
-<span class="fc" id="L342">                dbrent = new DerivativeBrentSingleOptimizer(</span>
-<span class="fc" id="L343">                        new SingleDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L343">                dbrent = new DerivativeBrentSingleOptimizer(</span>
+<span class="fc" id="L344">                        new SingleDimensionFunctionEvaluatorListener() {</span>
 
                     @Override
                     public double evaluate(double point) throws EvaluationException {
-<span class="fc" id="L347">                        return evaluator.evaluateAt(point);</span>
+<span class="fc" id="L348">                        return evaluator.evaluateAt(point);</span>
                     }
-<span class="fc" id="L349">                }, new SingleDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L350">                }, new SingleDimensionFunctionEvaluatorListener() {</span>
 
                     @Override
                     public double evaluate(double point) throws EvaluationException {
-<span class="fc" id="L353">                        return evaluator.differentiateAt(point);</span>
+<span class="fc" id="L354">                        return evaluator.differentiateAt(point);</span>
                     }
                 }, DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
                     DerivativeBrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
@@ -358,20 +359,20 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
                     DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
             
-<span class="fc" id="L361">            dbrent.computeBracket(ax, xx);</span>
-<span class="fc" id="L362">            dbrent.minimize();</span>
-<span class="fc" id="L363">            linxmin = dbrent.getResult();</span>
+<span class="fc" id="L362">            dbrent.computeBracket(ax, xx);</span>
+<span class="fc" id="L363">            dbrent.minimize();</span>
+<span class="fc" id="L364">            linxmin = dbrent.getResult();</span>
             
-<span class="fc bfc" id="L365" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L366">                xi[j] *= linxmin;</span>
-<span class="fc" id="L367">                p[j] += xi[j];</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L367">                xi[j] *= linxmin;</span>
+<span class="fc" id="L368">                p[j] += xi[j];</span>
             }
             
-<span class="fc" id="L370">            return dbrent.getEvaluationAtResult();</span>
-<span class="nc" id="L371">        } catch (Throwable t) {</span>
+<span class="fc" id="L371">            return dbrent.getEvaluationAtResult();</span>
+<span class="nc" id="L372">        } catch (NumericalException t) {</span>
             //if minimization fails we assume that obtained result is the worst
             //possible one
-<span class="nc" id="L374">            return Double.MAX_VALUE;</span>
+<span class="nc" id="L375">            return Double.MAX_VALUE;</span>
         }
     }
 }

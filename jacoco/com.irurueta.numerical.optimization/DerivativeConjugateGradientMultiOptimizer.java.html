@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.GradientFunctionEvaluatorListener;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 
 /**
  * This class searches for a multi dimension function local minimum.
@@ -94,10 +91,10 @@ public class DerivativeConjugateGradientMultiOptimizer
      * Empty constructor.
      */    
     public DerivativeConjugateGradientMultiOptimizer() {
-<span class="fc" id="L97">        super();</span>
-<span class="fc" id="L98">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L99">        usePolakRibiere = DEFAULT_USE_POLAK_RIBIERE;</span>
-<span class="fc" id="L100">    }    </span>
+<span class="fc" id="L94">        super();</span>
+<span class="fc" id="L95">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L96">        usePolakRibiere = DEFAULT_USE_POLAK_RIBIERE;</span>
+<span class="fc" id="L97">    }    </span>
   
     /**
      * Constructor.
@@ -124,11 +121,11 @@ public class DerivativeConjugateGradientMultiOptimizer
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener,
             double[] point, double[] direction, double tolerance, 
-            boolean usePolakRibiere) throws IllegalArgumentException {
-<span class="fc" id="L128">        super(listener, gradientListener, point, direction);</span>
-<span class="fc" id="L129">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L130">        this.usePolakRibiere = usePolakRibiere;</span>
-<span class="fc" id="L131">    }</span>
+            boolean usePolakRibiere) {
+<span class="fc" id="L125">        super(listener, gradientListener, point, direction);</span>
+<span class="fc" id="L126">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L127">        this.usePolakRibiere = usePolakRibiere;</span>
+<span class="fc" id="L128">    }</span>
     
     /**
      * This function estimates a function minimum.
@@ -149,104 +146,107 @@ public class DerivativeConjugateGradientMultiOptimizer
      * lack of convergence or because function couldn't be evaluated.
      */        
     @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void minimize() throws LockedException, NotReadyException, 
             OptimizationException {
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L155">            throw new LockedException();</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L153">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L158">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L156">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L161">        locked = true;</span>
+<span class="fc" id="L159">        locked = true;</span>
         
-<span class="fc" id="L163">        int n = p.length;</span>
+<span class="fc" id="L161">        int n = p.length;</span>
         
         //set vector of directions
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (!isDirectionAvailable()) {</span>
-<span class="fc" id="L167">            xi = new double[n];            </span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (!isDirectionAvailable()) {</span>
+<span class="fc" id="L165">            xi = new double[n];            </span>
         } else {
-<span class="nc bnc" id="L169" title="All 2 branches missed.">            if (xi.length != n) {</span>
-<span class="nc" id="L170">                xi = new double[n];</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            if (xi.length != n) {</span>
+<span class="nc" id="L168">                xi = new double[n];</span>
             }
         }
         
-<span class="fc" id="L174">        boolean validResult = false;</span>
+<span class="fc" id="L172">        boolean validResult = false;</span>
         try {
-            double gg, dgg;
+            double gg;
+            double dgg;
             
-<span class="fc" id="L178">            double[] g = new double[n];</span>
-<span class="fc" id="L179">            double[] h = new double[n];</span>
+<span class="fc" id="L177">            double[] g = new double[n];</span>
+<span class="fc" id="L178">            double[] h = new double[n];</span>
             
-<span class="fc" id="L181">            double fp = listener.evaluate(p);</span>
-<span class="fc" id="L182">            gradientListener.evaluateGradient(p, xi);</span>
+<span class="fc" id="L180">            double fp = listener.evaluate(p);</span>
+<span class="fc" id="L181">            gradientListener.evaluateGradient(p, xi);</span>
             
-<span class="fc bfc" id="L184" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L185">                g[j] = -xi[j];</span>
-<span class="fc" id="L186">                xi[j] = h[j] = g[j];</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L184">                g[j] = -xi[j];</span>
+<span class="fc" id="L185">                xi[j] = h[j] = g[j];</span>
             }
-<span class="pc bpc" id="L188" title="1 of 2 branches missed.">            for (int its = 0; its &lt; ITMAX; its++) {</span>
-<span class="fc" id="L189">                iter = its;</span>
-<span class="fc" id="L190">                fret = linmin();</span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">                if (2.0 * Math.abs(fret - fp) &lt;= tolerance * (Math.abs(fret) + Math.abs(fp) + EPS)) {</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">            for (int its = 0; its &lt; ITMAX; its++) {</span>
+<span class="fc" id="L188">                iter = its;</span>
+<span class="fc" id="L189">                fret = linmin();</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">                if (2.0 * Math.abs(fret - fp) &lt;= tolerance * (Math.abs(fret) + Math.abs(fp) + EPS)) {</span>
                     //minimum found
-<span class="fc" id="L193">                    validResult = true;</span>
-<span class="fc" id="L194">                    break;</span>
+<span class="fc" id="L192">                    validResult = true;</span>
+<span class="fc" id="L193">                    break;</span>
                 }
                 
-<span class="fc" id="L197">                fp = fret;</span>
+<span class="fc" id="L196">                fp = fret;</span>
                 
-<span class="fc" id="L199">                gradientListener.evaluateGradient(p, xi);</span>
+<span class="fc" id="L198">                gradientListener.evaluateGradient(p, xi);</span>
                 
-<span class="fc" id="L201">                double test = 0.0;</span>
-<span class="fc" id="L202">                double den = Math.max(Math.abs(fp), 1.0);</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L204">                    double temp = Math.abs(xi[j]) *</span>
-<span class="fc" id="L205">                            Math.max(Math.abs(p[j]), 1.0) / den;</span>
+<span class="fc" id="L200">                double test = 0.0;</span>
+<span class="fc" id="L201">                double den = Math.max(Math.abs(fp), 1.0);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L203">                    double temp = Math.abs(xi[j]) *</span>
+<span class="fc" id="L204">                            Math.max(Math.abs(p[j]), 1.0) / den;</span>
                     
-<span class="fc bfc" id="L207" title="All 2 branches covered.">                    if(temp &gt; test) test = temp;</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">                    if(temp &gt; test) test = temp;</span>
                 }
-<span class="fc bfc" id="L209" title="All 2 branches covered.">                if (test &lt; GTOL) {</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">                if (test &lt; GTOL) {</span>
                     //minimum found
-<span class="fc" id="L211">                    validResult = true;</span>
-<span class="fc" id="L212">                    break;</span>
+<span class="fc" id="L210">                    validResult = true;</span>
+<span class="fc" id="L211">                    break;</span>
                 }
                 
-<span class="fc" id="L215">                dgg = gg = 0.0;</span>
-<span class="fc bfc" id="L216" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L217">                    gg += g[j] * g[j];</span>
+<span class="fc" id="L214">                dgg = gg = 0.0;</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L216">                    gg += g[j] * g[j];</span>
                     
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">                    if (isPolakRibiereEnabled()) {</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                    if (isPolakRibiereEnabled()) {</span>
                         //This statement for Polak-Ribiere
-<span class="fc" id="L221">                        dgg += xi[j] + g[j] * xi[j];</span>
+<span class="fc" id="L220">                        dgg += xi[j] + g[j] * xi[j];</span>
                     } else {
                         //This statement for Fletcher-Reeves
-<span class="nc" id="L224">                        dgg += xi[j] * xi[j];</span>
+<span class="nc" id="L223">                        dgg += xi[j] * xi[j];</span>
                     }
                 }
                 
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">                if (gg == 0.0) {</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">                if (gg == 0.0) {</span>
                     //minimum found
-<span class="nc" id="L230">                    validResult = true;</span>
-<span class="nc" id="L231">                    break;</span>
+<span class="nc" id="L229">                    validResult = true;</span>
+<span class="nc" id="L230">                    break;</span>
                 }
                 
-<span class="fc" id="L234">                double gam = dgg / gg;</span>
-<span class="fc bfc" id="L235" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L236">                    g[j] = -xi[j];</span>
-<span class="fc" id="L237">                    xi[j] = h[j] = g[j] + gam * h[j];</span>
+<span class="fc" id="L233">                double gam = dgg / gg;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L235">                    g[j] = -xi[j];</span>
+<span class="fc" id="L236">                    xi[j] = h[j] = g[j] + gam * h[j];</span>
                 }
             }
             
-<span class="pc bpc" id="L241" title="1 of 2 branches missed.">            if (!validResult) {</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            if (!validResult) {</span>
                 //too many iterations
-<span class="nc" id="L243">                locked = false;</span>
-<span class="nc" id="L244">                throw new OptimizationException();</span>
+<span class="nc" id="L242">                locked = false;</span>
+<span class="nc" id="L243">                throw new OptimizationException();</span>
             }
-<span class="nc" id="L246">        } catch (Throwable t) {</span>
-<span class="nc" id="L247">            locked = false;</span>
-<span class="nc" id="L248">            throw new OptimizationException(t);</span>
-<span class="fc" id="L249">        }</span>
+<span class="nc" id="L245">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L246">            throw new OptimizationException(e);</span>
+        } finally {
+<span class="fc" id="L248">            locked = false;</span>
+        }
         
         //set result
 <span class="fc" id="L252">        xmin = p;</span>
@@ -284,31 +284,13 @@ public class DerivativeConjugateGradientMultiOptimizer
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
-<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L290">            throw new LockedException();</span>
+    public void setTolerance(double tolerance) throws LockedException {
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L289">            throw new LockedException();</span>
         }
-<span class="fc" id="L292">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L293">    }</span>
-    
-    /**
-     * Internal method to set tolerance or accuracy to be expected on estimated
-     * local minimum.
-     * This method does not check whether this instance is locked.
-     * @param tolerance Tolerance or accuracy to be expected on estimated local
-     * minimum.
-     * @throws IllegalArgumentException Raised if provided tolerance is 
-     * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L306" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L307">            throw new IllegalArgumentException();</span>
-        }
-<span class="fc" id="L309">        this.tolerance = tolerance;</span>
-<span class="fc" id="L310">    }</span>
-    
+<span class="fc" id="L291">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L292">    }</span>
+
     /**
      * Returns boolean indicating whether Polak-Ribiere method is used or
      * Fletcher-Reeves is used instead.
@@ -316,7 +298,7 @@ public class DerivativeConjugateGradientMultiOptimizer
      * is used.
      */    
     public boolean isPolakRibiereEnabled() {
-<span class="fc" id="L319">        return usePolakRibiere;</span>
+<span class="fc" id="L301">        return usePolakRibiere;</span>
     }
     
     /**
@@ -328,22 +310,12 @@ public class DerivativeConjugateGradientMultiOptimizer
      * @throws LockedException Raised if this instance is locked.
      */    
     public void setUsePolakRibiere(boolean useIt) throws LockedException {
-<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L332">            throw new LockedException();</span>
+<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L314">            throw new LockedException();</span>
         }
-<span class="fc" id="L334">        this.usePolakRibiere = useIt;</span>
-<span class="fc" id="L335">    }</span>
-    
-    /**
-     * Internal method to set start point where local minimum is searched 
-     * nearby.
-     * This method does not check whether this instance is locked.
-     * @param point Start point to search for a local minimum.
-     */    
-    private void internalSetStartPoint(double[] point) {
-<span class="fc" id="L344">        p = point;</span>
-<span class="fc" id="L345">    }</span>
-    
+<span class="fc" id="L316">        this.usePolakRibiere = useIt;</span>
+<span class="fc" id="L317">    }</span>
+
     /**
      * Sets start point where local minimum is searched nearby.
      * @param point Start point to search for a local minimum.
@@ -351,10 +323,44 @@ public class DerivativeConjugateGradientMultiOptimizer
      */    
     public void setStartPoint(double[] point)
             throws LockedException {
-<span class="pc bpc" id="L354" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L355">            throw new LockedException();</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L327">            throw new LockedException();</span>
         }
-<span class="fc" id="L357">        internalSetStartPoint(point);</span>
-<span class="fc" id="L358">    }</span>
+<span class="fc" id="L329">        internalSetStartPoint(point);</span>
+<span class="fc" id="L330">    }</span>
+
+    /**
+     * Return number of iterations that were needed to estimate a minimum.
+     * @return number of iterations that were needed.
+     */
+    public int getIterations() {
+<span class="nc" id="L337">        return iter;</span>
+    }
+
+    /**
+     * Internal method to set tolerance or accuracy to be expected on estimated
+     * local minimum.
+     * This method does not check whether this instance is locked.
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     * minimum.
+     * @throws IllegalArgumentException Raised if provided tolerance is
+     * negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L351">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L353">        this.tolerance = tolerance;</span>
+<span class="fc" id="L354">    }</span>
+
+    /**
+     * Internal method to set start point where local minimum is searched
+     * nearby.
+     * This method does not check whether this instance is locked.
+     * @param point Start point to search for a local minimum.
+     */
+    private void internalSetStartPoint(double[] point) {
+<span class="fc" id="L363">        p = point;</span>
+<span class="fc" id="L364">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
