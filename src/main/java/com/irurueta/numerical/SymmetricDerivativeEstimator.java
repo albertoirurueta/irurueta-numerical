@@ -45,26 +45,22 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
     @Override
     @SuppressWarnings("Duplicates")
     public double derivative(double x) throws EvaluationException {
-        try {
-            double h = EPS * Math.abs(x);
-            if (h == 0.0) {
-                h = EPS; //Trick to reduce finite-precision error
-            }
-            
-            double xh1 = x + h;
-            double xh2 = x - h;
-            //because of machine precision h could be different in both cases
-            double h1 = xh1 - x;
-            double h2 = x - xh2;
-            
-            double hh = h1 + h2; //this is more or less equal to 2.0 * h
-            
-            double fh1 = listener.evaluate(xh1);
-            double fh2 = listener.evaluate(xh2);
-            
-            return (fh1 - fh2) / hh;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
+        double h = EPS * Math.abs(x);
+        if (h == 0.0) {
+            h = EPS; //Trick to reduce finite-precision error
         }
+            
+        double xh1 = x + h;
+        double xh2 = x - h;
+        //because of machine precision h could be different in both cases
+        double h1 = xh1 - x;
+        double h2 = x - xh2;
+            
+        double hh = h1 + h2; //this is more or less equal to 2.0 * h
+            
+        double fh1 = listener.evaluate(xh1);
+        double fh2 = listener.evaluate(xh2);
+            
+        return (fh1 - fh2) / hh;
     }
 }

@@ -27,8 +27,8 @@ public interface GradientFunctionEvaluatorListener {
      * contain an already instantiated array having the same length as params.
      * The values of this gradient will be rewritten after executing this method
      * and this array will contain the estimated or evaluated gradient
-     * @throws Exception Raised if something fails.
+     * @throws EvaluationException Raised if something fails.
      */
     void evaluateGradient(double[] params, double[] result)
-            throws Exception;
+            throws EvaluationException;
 }

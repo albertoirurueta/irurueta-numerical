@@ -29,7 +29,7 @@ public interface MultiDimensionFunctionEvaluatorListener {
      * This must be an array of length equal to the dimensionality of the 
      * function.
      * @return Value returned by the function.
-     * @throws Exception Raised if something failed during the evaluation.
+     * @throws EvaluationException Raised if something failed during the evaluation.
      */    
-    double evaluate(double[] point) throws Exception;
+    double evaluate(double[] point) throws EvaluationException;
 }

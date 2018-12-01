@@ -133,10 +133,6 @@ public class DirectionalEvaluator {
         for(int i = 0; i < point.length; i++){
             p[i] = point[i] + x * direction[i];
         }
-        try {
-            return listener.evaluate(p);
-        } catch (Exception e) {
-            throw new EvaluationException(e);
-        }
-    }    
+        return listener.evaluate(p);
+    }
 }

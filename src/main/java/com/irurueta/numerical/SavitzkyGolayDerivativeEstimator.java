@@ -55,6 +55,7 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
      * evaluated.
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public double derivative(double x) throws EvaluationException {
         //fit a polynomial of degree 2 by evaluating function at x-h, x and x+h
         double h = EPS * Math.abs(x);
@@ -65,19 +66,10 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
         double xh1 = x + h;
         double xh2 = x - h;
         
-        double f;
-        double fh1;
-        double fh2;
-        try {
-            f = listener.evaluate(x);
-            fh1 = listener.evaluate(xh1);
-            fh2 = listener.evaluate(xh2);
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
-        }
-        
+        double f = listener.evaluate(x);
+        double fh1 = listener.evaluate(xh1);
+        double fh2 = listener.evaluate(xh2);
+
         //express the problem as:
         //a * x^2 + b * x + c = f(x)
         //b * xh1^2 + b * xh1 + c = f(xh1)
@@ -126,7 +118,7 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
             aParam = params[0];
             bParam = params[1];
 
-        } catch (Exception e) {
+        } catch (AlgebraException e) {
             return Double.NaN;
         }
         

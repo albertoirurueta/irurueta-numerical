@@ -53,20 +53,16 @@ public class DerivativeEstimator {
      * evaluated
      */
     public double derivative(double x) throws EvaluationException {
-        try {
-            double fold = listener.evaluate(x);
+        double fold = listener.evaluate(x);
         
-            double h = EPS * Math.abs(x);
-            if(h == 0.0) h = EPS; //Trick to reduce finite-precision error
-            double xh = x + h;
-            h = xh - x;
-            double fh = listener.evaluate(xh);
-        
-            return (fh - fold) / h;
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
+        double h = EPS * Math.abs(x);
+        if(h == 0.0) {
+            h = EPS; //Trick to reduce finite-precision error
         }
+        double xh = x + h;
+        h = xh - x;
+        double fh = listener.evaluate(xh);
+        
+        return (fh - fold) / h;
     }
 }

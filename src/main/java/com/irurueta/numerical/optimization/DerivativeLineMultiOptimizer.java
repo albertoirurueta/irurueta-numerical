@@ -310,7 +310,8 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * Searches for a minimum along a given line of input values.
      * The line being searched is obtained by using a start point and direction.
      * @return Returns function evaluation at minimum that has been found.
-     */    
+     */
+    @SuppressWarnings("Duplicates")
     protected double linmin() {
         double ax, xx, linxmin;
         n = p.length;
@@ -342,13 +343,13 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
                         new SingleDimensionFunctionEvaluatorListener() {
 
                     @Override
-                    public double evaluate(double point) throws Exception {
+                    public double evaluate(double point) throws EvaluationException {
                         return evaluator.evaluateAt(point);
                     }
                 }, new SingleDimensionFunctionEvaluatorListener() {
 
                     @Override
-                    public double evaluate(double point) throws Exception {
+                    public double evaluate(double point) throws EvaluationException {
                         return evaluator.differentiateAt(point);
                     }
                 }, DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,

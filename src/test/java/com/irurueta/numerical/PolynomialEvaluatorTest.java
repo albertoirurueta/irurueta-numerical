@@ -129,35 +129,46 @@ public class PolynomialEvaluatorTest {
     
     @Test
     public void testEvaluateReal() {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-        int degree = length - 1;
-        
-        double[] polyParams = new double[length];
-        randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
-        double value = 0.0;
-        for (int i = 0; i < length; i++) {
-            value += polyParams[i]*Math.pow(x, degree - i);
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+            int degree = length - 1;
+
+            double[] polyParams = new double[length];
+            randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            double value = 0.0;
+            for (int i = 0; i < length; i++) {
+                value += polyParams[i] * Math.pow(x, degree - i);
+            }
+
+            double value2 = PolynomialEvaluator.evaluate(polyParams, x);
+            if (Math.abs(value2 - value) > ABSOLUTE_ERROR) {
+                continue;
+            }
+
+            assertEquals(value2, value, ABSOLUTE_ERROR);
+
+            //Force IllegalArgumentException
+            double evaluate = 0.0;
+            try {
+                evaluate = PolynomialEvaluator.evaluate(null, x);
+                fail("IllegalArgumentException expected but not thrown");
+            } catch (IllegalArgumentException ignore) { }
+            try {
+                evaluate = PolynomialEvaluator.evaluate(new double[0], x);
+                fail("IllegalArgumentException expected but not thrown");
+            } catch (IllegalArgumentException ignore) { }
+            assertEquals(evaluate, 0.0, 0.0);
+
+            numValid++;
+            break;
         }
-        
-        assertEquals(PolynomialEvaluator.evaluate(polyParams, x), value, 
-                ABSOLUTE_ERROR);
-        
-        //Force IllegalArgumentException
-        double evaluate = 0.0;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new double[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertEquals(evaluate, 0.0, 0.0);
+
+        assertTrue(numValid > 0);
     }
     
     @Test

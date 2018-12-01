@@ -17,6 +17,7 @@ package com.irurueta.numerical.optimization;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
@@ -459,7 +460,7 @@ public class SimplexMultiOptimizerTest
     }
 
     @Override
-    public double evaluate(double[] point) throws Exception {
+    public double evaluate(double[] point) throws EvaluationException {
         int dims = Math.min(Math.min(point.length, minimum.length),
                 width.length);
 

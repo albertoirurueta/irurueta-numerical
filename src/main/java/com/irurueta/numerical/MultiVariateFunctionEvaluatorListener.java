@@ -25,9 +25,9 @@ public interface MultiVariateFunctionEvaluatorListener {
      * as a vectorial value
      * @param point multidimensional point where function will be evaluated
      * @param result vector where function evaluation will be stored
-     * @throws Exception if something failed during the evaluation
+     * @throws EvaluationException if something failed during the evaluation
      */
-    void evaluate(double[] point, double[] result) throws Exception;
+    void evaluate(double[] point, double[] result) throws EvaluationException;
     
     /**
      * Number of variables of function f. This is equal to the length of the

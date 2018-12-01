@@ -97,12 +97,8 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
         }
         
         //Compute gradient at such point
-        try {
-            gradientListener.evaluateGradient(p, dft);
-        } catch (Exception e) {
-            throw new EvaluationException(e);
-        }
-        
+        gradientListener.evaluateGradient(p, dft);
+
         //Obtain 1D derivative on corresponding direction
         double df1 = 0.0;
         for (int i = 0; i < length; i++) {

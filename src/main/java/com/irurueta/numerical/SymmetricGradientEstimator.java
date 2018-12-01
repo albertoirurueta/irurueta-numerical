@@ -75,41 +75,37 @@ public class SymmetricGradientEstimator extends GradientEstimator {
             xh2 = new double[n];
             System.arraycopy(point, 0, xh2, 0, n);
         }
-                
-        try {
-            double temp;
-            double h;
-            double h1;
-            double h2;
-            double hh;
-            double fh1;
-            double fh2;
 
-            for (int j = 0; j < n; j++) {
-                temp = point[j];
-                h = EPS * Math.abs(temp);
-                if (h == 0.0) h = EPS; //Trich to reduce finite-precision error
-                xh1[j] = temp + h;
-                xh2[j] = temp - h;
-                //because of machine precision h could be different in both cases
+        double temp;
+        double h;
+        double h1;
+        double h2;
+        double hh;
+        double fh1;
+        double fh2;
 
-                h1 = xh1[j] - temp;
-                h2 = temp - xh2[j];
-
-                hh = h1 + h2; //this is more or less equal to 2.0 * h
-
-                fh1 = listener.evaluate(xh1);
-                fh2 = listener.evaluate(xh2);
-
-                xh1[j] = temp;
-                xh2[j] = temp;
-
-                result[j] = (fh1 - fh2) / hh;
+        for (int j = 0; j < n; j++) {
+            temp = point[j];
+            h = EPS * Math.abs(temp);
+            if (h == 0.0) {
+                h = EPS; //Trich to reduce finite-precision error
             }
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
+            xh1[j] = temp + h;
+            xh2[j] = temp - h;
+            //because of machine precision h could be different in both cases
+
+            h1 = xh1[j] - temp;
+            h2 = temp - xh2[j];
+
+            hh = h1 + h2; //this is more or less equal to 2.0 * h
+
+            fh1 = listener.evaluate(xh1);
+            fh2 = listener.evaluate(xh2);
+
+            xh1[j] = temp;
+            xh2[j] = temp;
+
+            result[j] = (fh1 - fh2) / hh;
         }
-    }    
+    }
 }

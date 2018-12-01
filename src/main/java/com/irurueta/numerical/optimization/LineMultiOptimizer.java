@@ -218,6 +218,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * The line being searched is obtained by using a start point and direction.
      * @return Returns function evaluation at minimum that has been found.
      */
+    @SuppressWarnings("Duplicates")
     protected double linmin() {
         double ax, xx, linxmin;
         n = p.length;
@@ -244,7 +245,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
                         new SingleDimensionFunctionEvaluatorListener() {
 
                     @Override
-                    public double evaluate(double point) throws Exception {
+                    public double evaluate(double point) throws EvaluationException {
                         return evaluator.evaluateAt(point);
                     }
                 }, BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 

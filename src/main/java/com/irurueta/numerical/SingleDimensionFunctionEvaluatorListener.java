@@ -27,7 +27,7 @@ public interface SingleDimensionFunctionEvaluatorListener {
      * returns the result.
      * @param point Point where function will be evaluated.
      * @return Value returned by the function.
-     * @throws Exception Raised if something failed during the evaluation.
+     * @throws EvaluationException Raised if something failed during the evaluation.
      */
-    double evaluate(double point) throws Exception;
+    double evaluate(double point) throws EvaluationException;
 }

@@ -16,6 +16,7 @@
 package com.irurueta.numerical;
 
 import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
 
 /**
  * Class to estimate the Jacobian of a multi variate and multidimensional 
@@ -57,13 +58,11 @@ public class JacobianEstimator {
      */
     public Matrix jacobian(double[] point) throws EvaluationException {
         try {
-            Matrix result = new Matrix(listener.getNumberOfVariables(), 
+            Matrix result = new Matrix(listener.getNumberOfVariables(),
                     point.length);
             jacobian(point, result);
             return result;
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (WrongSizeException e) {
             throw new EvaluationException(e);
         }
     }
@@ -99,27 +98,23 @@ public class JacobianEstimator {
             xh = new double[numdims];            
         }
         System.arraycopy(point, 0, xh, 0, numdims);
-        
-        try {
-            double temp;
-            double h;
-            listener.evaluate(point, fold);
-            for (int j = 0; j < numdims; j++) {
-                temp = point[j];
-                h = EPS * Math.abs(temp);
-                if(h == 0.0) h = EPS;
-                xh[j] = temp + h;
-                h = xh[j] - temp;
-                listener.evaluate(xh, fh);
-                xh[j] = temp;
-                for (int i = 0; i < numvars; i++) {
-                    result.setElementAt(i, j, (fh[i] - fold[i]) / h);
-                }
+
+        double temp;
+        double h;
+        listener.evaluate(point, fold);
+        for (int j = 0; j < numdims; j++) {
+            temp = point[j];
+            h = EPS * Math.abs(temp);
+            if(h == 0.0) {
+                h = EPS;
             }
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
+            xh[j] = temp + h;
+            h = xh[j] - temp;
+            listener.evaluate(xh, fh);
+            xh[j] = temp;
+            for (int i = 0; i < numvars; i++) {
+                result.setElementAt(i, j, (fh[i] - fold[i]) / h);
+            }
         }
     }
 }

@@ -81,26 +81,22 @@ public class GradientEstimator {
             xh = new double[length];
         }
         System.arraycopy(point, 0, xh, 0, length);
-        
-        try {
-            double temp;
-            double h;
-            double fh;
-            double fold = listener.evaluate(point);
-            for (int j = 0; j < length; j++) {
-                temp = point[j];
-                h = EPS * Math.abs(temp);
-                if(h == 0.0) h = EPS;
-                xh[j] = temp + h;
-                h = xh[j] - temp;
-                fh = listener.evaluate(xh);
-                xh[j] = temp;
-                result[j] = (fh - fold) / h;
+
+        double temp;
+        double h;
+        double fh;
+        double fold = listener.evaluate(point);
+        for (int j = 0; j < length; j++) {
+            temp = point[j];
+            h = EPS * Math.abs(temp);
+            if(h == 0.0) {
+                h = EPS;
             }
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
+            xh[j] = temp + h;
+            h = xh[j] - temp;
+            fh = listener.evaluate(xh);
+            xh[j] = temp;
+            result[j] = (fh - fold) / h;
         }
     }
 }

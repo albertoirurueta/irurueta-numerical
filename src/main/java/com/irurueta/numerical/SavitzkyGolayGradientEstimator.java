@@ -71,14 +71,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
         double[] xh1 = new double[n];
         double[] xh2 = new double[n];
         
-        double f;
-        try {
-            f = listener.evaluate(point);
-        } catch (EvaluationException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new EvaluationException(e);
-        }
+        double f = listener.evaluate(point);
         System.arraycopy(point, 0, xh1, 0, n);
         System.arraycopy(point, 0, xh2, 0, n);
         
@@ -103,17 +96,9 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             double p1 = xh1[j] = temp + h;
             double p2 = xh2[j] = temp - h;
             
-            double fh1;
-            double fh2;
-            try {
-                fh1 = listener.evaluate(xh1);
-                fh2 = listener.evaluate(xh2);
-            } catch (EvaluationException e) {
-                throw e;
-            } catch (Exception e) {
-                throw new EvaluationException(e);
-            }
-            
+            double fh1 = listener.evaluate(xh1);
+            double fh2 = listener.evaluate(xh2);
+
             xh1[j] = temp;
             xh2[j] = temp;
 
@@ -129,7 +114,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             a.setElementAt(1, 2, 1.0);
             a.setElementAt(2, 2, 1.0);
 
-            //noralize to increase accuracy
+            //normalize to increase accuracy
             double normA = Utils.normF(a);
             a.multiplyByScalar(1.0 / normA);
 
@@ -159,7 +144,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
                 //partial derivative on dimension j is:
                 //2.0 * a * x + b , therefore:
                 result[j] = 2.0 * aParam * temp + bParam;
-            } catch (Exception e) {
+            } catch (AlgebraException e) {
                 result[j] = Double.NaN;
             }                        
         }
