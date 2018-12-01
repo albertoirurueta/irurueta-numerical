@@ -236,32 +236,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
 <span class="nc" id="L236">        cx = DEFAULT_MAX_EVAL_POINT;  </span>
 <span class="nc" id="L237">        bracketAvailable = true;</span>
 <span class="nc" id="L238">    }</span>
-    
-    /**
-     * Internal method to set a bracket of values. This method does not check
-     * whether this instance is locked.
-     * @param minEvalPoint Minimum bracket evaluation point.
-     * @param middleEvalPoint Middle bracket evaluation point.
-     * @param maxEvalPoint Maximum bracket evaluation point.
-     * @throws InvalidBracketRangeException Raised if the following condition is
-     * not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
-     */
-    private void internalSetBracket(double minEvalPoint, double middleEvalPoint,
-            double maxEvalPoint) throws InvalidBracketRangeException {
-        
-<span class="pc bpc" id="L252" title="1 of 6 branches missed.">        if ((minEvalPoint &gt; middleEvalPoint) ||</span>
-                (middleEvalPoint &gt; maxEvalPoint) ||
-                (minEvalPoint &gt; maxEvalPoint)) {
-<span class="fc" id="L255">            throw new InvalidBracketRangeException();</span>
-        }
-        
-<span class="fc" id="L258">        ax = minEvalPoint;</span>
-<span class="fc" id="L259">        bx = middleEvalPoint;</span>
-<span class="fc" id="L260">        cx = maxEvalPoint;</span>
-        
-<span class="fc" id="L262">        bracketAvailable = true;</span>
-<span class="fc" id="L263">    }</span>
-    
+
     /**
      * Sets a bracket of values to later search for a minimum. A local minimum
      * will only be search within the minimum and maximum evaluation points of
@@ -282,11 +257,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
             double maxEvalPoint) throws LockedException, 
             InvalidBracketRangeException {
         
-<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L286">            throw new LockedException();</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L261">            throw new LockedException();</span>
         }
-<span class="fc" id="L288">        internalSetBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L289">    }</span>
+<span class="fc" id="L263">        internalSetBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L264">    }</span>
     
     /**
      * Returns boolean indicating whether a bracket has been provided or 
@@ -294,7 +269,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @return true if a bracket has been provided, false otherwise.
      */
     public boolean isBracketAvailable() {
-<span class="fc" id="L297">        return bracketAvailable;</span>
+<span class="fc" id="L272">        return bracketAvailable;</span>
     }
     
     /**
@@ -303,11 +278,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws NotAvailableException Raised if not provided or computed.
      */
     public double getMinEvaluationPoint() throws NotAvailableException {
-<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
-<span class="nc" id="L307">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
+<span class="nc" id="L282">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L310">        return ax;</span>
+<span class="fc" id="L285">        return ax;</span>
     }
     
     /**
@@ -316,11 +291,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws NotAvailableException Raised if not provided or computed.
      */
     public double getMiddleEvaluationPoint() throws NotAvailableException {
-<span class="pc bpc" id="L319" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
-<span class="nc" id="L320">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
+<span class="nc" id="L295">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L323">        return bx;</span>
+<span class="fc" id="L298">        return bx;</span>
     }
     
     /**
@@ -329,11 +304,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws NotAvailableException Raised if not provided or computed.
      */
     public double getMaxEvaluationPoint() throws NotAvailableException {
-<span class="pc bpc" id="L332" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
-<span class="nc" id="L333">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
+<span class="nc" id="L308">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L336">        return cx;</span>
+<span class="fc" id="L311">        return cx;</span>
     }
     
     /**
@@ -344,11 +319,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * available.
      */
     public double getEvaluationAtMin() throws NotAvailableException {
-<span class="fc bfc" id="L347" title="All 2 branches covered.">        if (!areBracketEvaluationsAvailable()) {</span>
-<span class="fc" id="L348">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (!areBracketEvaluationsAvailable()) {</span>
+<span class="fc" id="L323">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L351">        return fa;</span>
+<span class="fc" id="L326">        return fa;</span>
     }
     
     /**
@@ -359,11 +334,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * available.
      */
     public double getEvaluationAtMiddle() throws NotAvailableException {
-<span class="fc bfc" id="L362" title="All 2 branches covered.">        if (!areBracketEvaluationsAvailable()) {</span>
-<span class="fc" id="L363">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">        if (!areBracketEvaluationsAvailable()) {</span>
+<span class="fc" id="L338">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L366">        return fb;</span>
+<span class="fc" id="L341">        return fb;</span>
     }
     
     /**
@@ -374,11 +349,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * available.
      */
     public double getEvaluationAtMax() throws NotAvailableException {
-<span class="fc bfc" id="L377" title="All 2 branches covered.">        if (!areBracketEvaluationsAvailable()) {</span>
-<span class="fc" id="L378">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (!areBracketEvaluationsAvailable()) {</span>
+<span class="fc" id="L353">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L381">        return fc;</span>
+<span class="fc" id="L356">        return fc;</span>
     }
     
     /**
@@ -402,142 +377,143 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws OptimizationException Raised if a bracket couldn't be found .
      * because convergence was not achieved or function evaluation failed.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void computeBracket(double minEvalPoint, double middleEvalPoint)
             throws LockedException, NotReadyException, 
             InvalidBracketRangeException, OptimizationException {
         
-<span class="pc bpc" id="L409" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L410">            throw new LockedException();</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L386">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L412" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L413">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L389">            throw new NotReadyException();</span>
         }
-<span class="pc bpc" id="L415" title="1 of 2 branches missed.">        if (minEvalPoint &gt; middleEvalPoint) {</span>
-<span class="nc" id="L416">            throw new InvalidBracketRangeException();</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">        if (minEvalPoint &gt; middleEvalPoint) {</span>
+<span class="nc" id="L392">            throw new InvalidBracketRangeException();</span>
         }
         
-<span class="fc" id="L419">        locked = true;</span>
+<span class="fc" id="L395">        locked = true;</span>
         
-<span class="fc" id="L421">        double[] a = new double[1];</span>
-<span class="fc" id="L422">        double[] b = new double[1];</span>
-<span class="fc" id="L423">        double[] c = new double[1];</span>
+<span class="fc" id="L397">        double[] a = new double[1];</span>
+<span class="fc" id="L398">        double[] b = new double[1];</span>
+<span class="fc" id="L399">        double[] c = new double[1];</span>
         
         try {
-<span class="fc" id="L426">            ax = minEvalPoint;</span>
-<span class="fc" id="L427">            bx = middleEvalPoint;</span>
+<span class="fc" id="L402">            ax = minEvalPoint;</span>
+<span class="fc" id="L403">            bx = middleEvalPoint;</span>
             double fu;
-<span class="fc" id="L429">            fa = listener.evaluate(ax);</span>
-<span class="fc" id="L430">            fb = listener.evaluate(bx);</span>
+<span class="fc" id="L405">            fa = listener.evaluate(ax);</span>
+<span class="fc" id="L406">            fb = listener.evaluate(bx);</span>
             
             //switch roles of a and b so that we can go downhill in the 
             //direction from a to b
-<span class="fc bfc" id="L434" title="All 2 branches covered.">            if (fb &gt; fa) {</span>
-<span class="fc" id="L435">                a[0] = ax;</span>
-<span class="fc" id="L436">                b[0] = bx;</span>
-<span class="fc" id="L437">                swap(a, b);</span>
-<span class="fc" id="L438">                ax = a[0];</span>
-<span class="fc" id="L439">                bx = b[0];</span>
+<span class="fc bfc" id="L410" title="All 2 branches covered.">            if (fb &gt; fa) {</span>
+<span class="fc" id="L411">                a[0] = ax;</span>
+<span class="fc" id="L412">                b[0] = bx;</span>
+<span class="fc" id="L413">                swap(a, b);</span>
+<span class="fc" id="L414">                ax = a[0];</span>
+<span class="fc" id="L415">                bx = b[0];</span>
                 
-<span class="fc" id="L441">                a[0] = fa;</span>
-<span class="fc" id="L442">                b[0] = fb;</span>
-<span class="fc" id="L443">                swap(a, b);</span>
-<span class="fc" id="L444">                a[0] = fa;</span>
-<span class="fc" id="L445">                b[0] = fb;</span>
+<span class="fc" id="L417">                a[0] = fa;</span>
+<span class="fc" id="L418">                b[0] = fb;</span>
+<span class="fc" id="L419">                swap(a, b);</span>
+<span class="fc" id="L420">                a[0] = fa;</span>
+<span class="fc" id="L421">                b[0] = fb;</span>
             }
             
             //First guess for c
-<span class="fc" id="L449">            cx = bx + GOLD * (bx - ax);</span>
-<span class="fc" id="L450">            fc = listener.evaluate(cx);</span>
+<span class="fc" id="L425">            cx = bx + GOLD * (bx - ax);</span>
+<span class="fc" id="L426">            fc = listener.evaluate(cx);</span>
             
             //Keep returning here until we bracket.
-<span class="fc bfc" id="L453" title="All 2 branches covered.">            while (fb &gt; fc) {</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">            while (fb &gt; fc) {</span>
                 //Compute u by parabolic extrapolation from a, b, c. TINY is
                 //used to prevent any possible division by zero.
-<span class="fc" id="L456">                double r = (bx - ax) * (fb - fc);</span>
-<span class="fc" id="L457">                double q = (bx - cx) * (fb - fa);</span>
-<span class="fc" id="L458">                double u = bx - ((bx - cx) * q - (bx - ax) * r) /</span>
-<span class="fc" id="L459">                        (2.0 * sign(Math.max(Math.abs(q - r), TINY), q - r));</span>
-<span class="fc" id="L460">                double ulim = bx + GLIMIT * (cx - bx);</span>
+<span class="fc" id="L432">                double r = (bx - ax) * (fb - fc);</span>
+<span class="fc" id="L433">                double q = (bx - cx) * (fb - fa);</span>
+<span class="fc" id="L434">                double u = bx - ((bx - cx) * q - (bx - ax) * r) /</span>
+<span class="fc" id="L435">                        (2.0 * sign(Math.max(Math.abs(q - r), TINY), q - r));</span>
+<span class="fc" id="L436">                double ulim = bx + GLIMIT * (cx - bx);</span>
                 
                 //We won't go farther than this. Test various possibilities:
-<span class="fc bfc" id="L463" title="All 2 branches covered.">                if ((bx - u) * (u - cx) &gt; 0.0) {</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">                if ((bx - u) * (u - cx) &gt; 0.0) {</span>
                     //Parabolic u is between b and c: try it.
-<span class="fc" id="L465">                    fu = listener.evaluate(u);</span>
-<span class="fc bfc" id="L466" title="All 2 branches covered.">                    if (fu &lt; fc) {</span>
+<span class="fc" id="L441">                    fu = listener.evaluate(u);</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">                    if (fu &lt; fc) {</span>
                         //Got a minimum between b and c.
-<span class="fc" id="L468">                        ax = bx;</span>
-<span class="fc" id="L469">                        bx = u;</span>
-<span class="fc" id="L470">                        fa = fb;</span>
-<span class="fc" id="L471">                        fb = fu;</span>
-<span class="fc" id="L472">                        break;</span>
+<span class="fc" id="L444">                        ax = bx;</span>
+<span class="fc" id="L445">                        bx = u;</span>
+<span class="fc" id="L446">                        fa = fb;</span>
+<span class="fc" id="L447">                        fb = fu;</span>
+<span class="fc" id="L448">                        break;</span>
                         
-<span class="pc bpc" id="L474" title="1 of 2 branches missed.">                    } else if (fu &gt; fb) {</span>
+<span class="pc bpc" id="L450" title="1 of 2 branches missed.">                    } else if (fu &gt; fb) {</span>
                         //Got a minimum between a and u
-<span class="nc" id="L476">                        cx = u;</span>
-<span class="nc" id="L477">                        fc = fu;</span>
-<span class="nc" id="L478">                        break;</span>
+<span class="nc" id="L452">                        cx = u;</span>
+<span class="nc" id="L453">                        fc = fu;</span>
+<span class="nc" id="L454">                        break;</span>
                     }
                     
                     //Parabolic fit was no use. Use default magnification.
-<span class="fc" id="L482">                    u = cx + GOLD * (cx - bx);</span>
-<span class="fc" id="L483">                    fu = listener.evaluate(u);</span>
+<span class="fc" id="L458">                    u = cx + GOLD * (cx - bx);</span>
+<span class="fc" id="L459">                    fu = listener.evaluate(u);</span>
                     
-<span class="fc bfc" id="L485" title="All 2 branches covered.">                } else if ((cx - u) * (u - ulim) &gt; 0.0) {</span>
+<span class="fc bfc" id="L461" title="All 2 branches covered.">                } else if ((cx - u) * (u - ulim) &gt; 0.0) {</span>
                     //Parabolic fit is between c and its allowed limit
-<span class="fc" id="L487">                    fu = listener.evaluate(u);</span>
+<span class="fc" id="L463">                    fu = listener.evaluate(u);</span>
                     
-<span class="fc bfc" id="L489" title="All 2 branches covered.">                    if (fu &lt; fc) {</span>
-<span class="fc" id="L490">                        a[0] = bx;</span>
-<span class="fc" id="L491">                        b[0] = cx;</span>
-<span class="fc" id="L492">                        c[0] = u;</span>
-<span class="fc" id="L493">                        shft3(a, b, c, u + GOLD * (u - cx));</span>
-<span class="fc" id="L494">                        bx = a[0];</span>
-<span class="fc" id="L495">                        cx = b[0];</span>
-<span class="fc" id="L496">                        u = c[0];</span>
+<span class="fc bfc" id="L465" title="All 2 branches covered.">                    if (fu &lt; fc) {</span>
+<span class="fc" id="L466">                        a[0] = bx;</span>
+<span class="fc" id="L467">                        b[0] = cx;</span>
+<span class="fc" id="L468">                        c[0] = u;</span>
+<span class="fc" id="L469">                        shft3(a, b, c, u + GOLD * (u - cx));</span>
+<span class="fc" id="L470">                        bx = a[0];</span>
+<span class="fc" id="L471">                        cx = b[0];</span>
+<span class="fc" id="L472">                        u = c[0];</span>
                         
-<span class="fc" id="L498">                        a[0] = fb;</span>
-<span class="fc" id="L499">                        b[0] = fc;</span>
-<span class="fc" id="L500">                        c[0] = fu;</span>
-<span class="fc" id="L501">                        shft3(a, b, c, listener.evaluate(u));</span>
-<span class="fc" id="L502">                        fb = a[0];</span>
-<span class="fc" id="L503">                        fc = b[0];</span>
-<span class="fc" id="L504">                        fu = c[0];</span>
+<span class="fc" id="L474">                        a[0] = fb;</span>
+<span class="fc" id="L475">                        b[0] = fc;</span>
+<span class="fc" id="L476">                        c[0] = fu;</span>
+<span class="fc" id="L477">                        shft3(a, b, c, listener.evaluate(u));</span>
+<span class="fc" id="L478">                        fb = a[0];</span>
+<span class="fc" id="L479">                        fc = b[0];</span>
+<span class="fc" id="L480">                        fu = c[0];</span>
                     }
-<span class="fc bfc" id="L506" title="All 2 branches covered.">                } else if ((u - ulim) * (ulim - cx) &gt;= 0.0) {</span>
+<span class="fc bfc" id="L482" title="All 2 branches covered.">                } else if ((u - ulim) * (ulim - cx) &gt;= 0.0) {</span>
                     //Limit parabolic u to maximum allowed value.
-<span class="fc" id="L508">                    u = ulim;</span>
-<span class="fc" id="L509">                    fu = listener.evaluate(u);</span>
+<span class="fc" id="L484">                    u = ulim;</span>
+<span class="fc" id="L485">                    fu = listener.evaluate(u);</span>
                 } else {
                     //Reject parabolic u, use default magnification
-<span class="fc" id="L512">                    u = cx + GOLD * (cx - bx);</span>
-<span class="fc" id="L513">                    fu = listener.evaluate(u);</span>
+<span class="fc" id="L488">                    u = cx + GOLD * (cx - bx);</span>
+<span class="fc" id="L489">                    fu = listener.evaluate(u);</span>
                 }
                 //Eliminate oldest point and continue
-<span class="fc" id="L516">                a[0] = ax;</span>
-<span class="fc" id="L517">                b[0] = bx;</span>
-<span class="fc" id="L518">                c[0] = cx;</span>
-<span class="fc" id="L519">                shft3(a, b, c, u);</span>
-<span class="fc" id="L520">                ax = a[0];</span>
-<span class="fc" id="L521">                bx = b[0];</span>
-<span class="fc" id="L522">                cx = c[0];</span>
+<span class="fc" id="L492">                a[0] = ax;</span>
+<span class="fc" id="L493">                b[0] = bx;</span>
+<span class="fc" id="L494">                c[0] = cx;</span>
+<span class="fc" id="L495">                shft3(a, b, c, u);</span>
+<span class="fc" id="L496">                ax = a[0];</span>
+<span class="fc" id="L497">                bx = b[0];</span>
+<span class="fc" id="L498">                cx = c[0];</span>
                 
-<span class="fc" id="L524">                a[0] = fa;</span>
-<span class="fc" id="L525">                b[0] = fb;</span>
-<span class="fc" id="L526">                c[0] = fc;</span>
-<span class="fc" id="L527">                shft3(a, b, c, fu);</span>
-<span class="fc" id="L528">                fa = a[0];</span>
-<span class="fc" id="L529">                fb = b[0];</span>
-<span class="fc" id="L530">                fc = c[0];</span>
-<span class="fc" id="L531">            }</span>
-<span class="nc" id="L532">        } catch (Throwable t) {</span>
-<span class="nc" id="L533">            locked = false;</span>
-<span class="nc" id="L534">            throw new OptimizationException(t);</span>
-<span class="fc" id="L535">        }</span>
+<span class="fc" id="L500">                a[0] = fa;</span>
+<span class="fc" id="L501">                b[0] = fb;</span>
+<span class="fc" id="L502">                c[0] = fc;</span>
+<span class="fc" id="L503">                shft3(a, b, c, fu);</span>
+<span class="fc" id="L504">                fa = a[0];</span>
+<span class="fc" id="L505">                fb = b[0];</span>
+<span class="fc" id="L506">                fc = c[0];</span>
+<span class="fc" id="L507">            }</span>
+<span class="nc" id="L508">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L509">            throw new OptimizationException(e);</span>
+        } finally {
+<span class="fc" id="L511">            locked = false;</span>
+        }
         
-<span class="fc" id="L537">        bracketAvailable = true;</span>
-<span class="fc" id="L538">        bracketEvaluationAvailable = true;</span>
-<span class="fc" id="L539">        locked = false;        </span>
-<span class="fc" id="L540">    }</span>
+<span class="fc" id="L514">        bracketAvailable = true;</span>
+<span class="fc" id="L515">        bracketEvaluationAvailable = true;</span>
+<span class="fc" id="L516">    }</span>
     
     /**
      * Computes a bracket of values using provided value as a starting point, 
@@ -562,8 +538,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     public void computeBracket(double minEvalPoint) throws LockedException,
             NotReadyException, OptimizationException, 
             InvalidBracketRangeException {
-<span class="nc" id="L565">        computeBracket(minEvalPoint, DEFAULT_MIDDLE_EVAL_POINT);</span>
-<span class="nc" id="L566">    }</span>
+<span class="nc" id="L541">        computeBracket(minEvalPoint, DEFAULT_MIDDLE_EVAL_POINT);</span>
+<span class="nc" id="L542">    }</span>
 
     /**
      * Computes a bracket of values using the whole range of possible values as
@@ -587,9 +563,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     public void computeBracket() throws LockedException, NotReadyException,
             OptimizationException {
         try {
-<span class="fc" id="L590">            computeBracket(DEFAULT_MIN_EVAL_POINT, DEFAULT_MIDDLE_EVAL_POINT);</span>
-<span class="pc" id="L591">        } catch (InvalidBracketRangeException ignore) { }</span>
-<span class="fc" id="L592">    }</span>
+<span class="fc" id="L566">            computeBracket(DEFAULT_MIN_EVAL_POINT, DEFAULT_MIDDLE_EVAL_POINT);</span>
+<span class="nc" id="L567">        } catch (InvalidBracketRangeException ignore) {</span>
+            //never happens
+<span class="fc" id="L569">        }</span>
+<span class="fc" id="L570">    }</span>
     
     /**
      * Computes function evaluations at provided or estimated bracket locations.
@@ -604,27 +582,27 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     public void evaluateBracket() throws LockedException, NotReadyException,
             OptimizationException {
         
-<span class="pc bpc" id="L607" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L608">            throw new LockedException();</span>
+<span class="pc bpc" id="L585" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L586">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L610" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L611">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L588" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L589">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L614">        locked = true;</span>
+<span class="fc" id="L592">        locked = true;</span>
         
         try {
-<span class="fc" id="L617">            fa = listener.evaluate(ax);</span>
-<span class="fc" id="L618">            fb = listener.evaluate(bx);</span>
-<span class="fc" id="L619">            fc = listener.evaluate(cx);</span>
-<span class="nc" id="L620">        } catch (Throwable t) {</span>
-<span class="nc" id="L621">            locked = false;</span>
-<span class="nc" id="L622">            throw new OptimizationException();</span>
-<span class="fc" id="L623">        }</span>
+<span class="fc" id="L595">            fa = listener.evaluate(ax);</span>
+<span class="fc" id="L596">            fb = listener.evaluate(bx);</span>
+<span class="fc" id="L597">            fc = listener.evaluate(cx);</span>
+<span class="nc" id="L598">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L599">            throw new OptimizationException(e);</span>
+        } finally {
+<span class="fc" id="L601">            locked = false;</span>
+        }
         
-<span class="fc" id="L625">        bracketEvaluationAvailable = true;</span>
-<span class="fc" id="L626">        locked = false;</span>
-<span class="fc" id="L627">    }</span>
+<span class="fc" id="L604">        bracketEvaluationAvailable = true;</span>
+<span class="fc" id="L605">    }</span>
     
     /**
      * Returns boolean indicating whether bracket evaluations are available for
@@ -632,21 +610,9 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @return True if bracket evaluations are available, false otherwise.
      */
     public boolean areBracketEvaluationsAvailable() {
-<span class="fc" id="L635">        return bracketEvaluationAvailable;</span>
+<span class="fc" id="L613">        return bracketEvaluationAvailable;</span>
     }
-    
-    /**
-     * Internal method to swap two values. Value inside a[0] will be swapped 
-     * with value provided in b[0].
-     * @param a Value to be swapped.
-     * @param b Value to be swapped.
-     */    
-    private void swap(double[] a, double[] b) {
-<span class="fc" id="L645">        double tmp = a[0];</span>
-<span class="fc" id="L646">        a[0] = b[0];</span>
-<span class="fc" id="L647">        b[0] = tmp;</span>
-<span class="fc" id="L648">    }</span>
-    
+
     /**
      * Internal method to determine whether a and b have the same sign.
      * @param a Value to be compared.
@@ -654,7 +620,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @return Returns a if a and b have the same sign or -a otherwise.
      */    
     protected double sign(double a, double b) {
-<span class="pc bpc" id="L657" title="2 of 6 branches missed.">        return b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a);</span>
+<span class="fc bfc" id="L623" title="All 2 branches covered.">        if (b &gt;= 0.0) {</span>
+<span class="pc bpc" id="L624" title="1 of 2 branches missed.">            return a &gt;= 0.0 ? a : -a;</span>
+        } else {
+<span class="pc bpc" id="L626" title="1 of 2 branches missed.">            return a &gt;= 0.0 ? -a : a;</span>
+        }
     }
     
     /**
@@ -665,9 +635,9 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @param c a value to be shifted into b.
      */
     protected void shft2(double[] a, double[] b, double c) {
-<span class="fc" id="L668">        a[0] = b[0];</span>
-<span class="fc" id="L669">        b[0] = c;</span>
-<span class="fc" id="L670">    }</span>
+<span class="fc" id="L638">        a[0] = b[0];</span>
+<span class="fc" id="L639">        b[0] = c;</span>
+<span class="fc" id="L640">    }</span>
 
     /**
      * Pushes b value into a, and c value into b and d value into c. a, b and c
@@ -680,10 +650,10 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @param d a value to be shifted into c.
      */    
     protected void shft3(double[] a, double[] b, double[] c, double d) {
-<span class="fc" id="L683">        a[0] = b[0];</span>
-<span class="fc" id="L684">        b[0] = c[0];</span>
-<span class="fc" id="L685">        c[0] = d;</span>
-<span class="fc" id="L686">    }</span>
+<span class="fc" id="L653">        a[0] = b[0];</span>
+<span class="fc" id="L654">        b[0] = c[0];</span>
+<span class="fc" id="L655">        c[0] = d;</span>
+<span class="fc" id="L656">    }</span>
     
     /**
      * Moves d, e and f into a[0], b[0] and c[0]. Previously existing values
@@ -697,9 +667,45 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      */
     protected void mov3(double[] a, double[] b, double[] c, double d,
             double e, double f) {
-<span class="fc" id="L700">        a[0] = d;</span>
-<span class="fc" id="L701">        b[0] = e;</span>
-<span class="fc" id="L702">        c[0] = f;</span>
-<span class="fc" id="L703">    }</span>
+<span class="fc" id="L670">        a[0] = d;</span>
+<span class="fc" id="L671">        b[0] = e;</span>
+<span class="fc" id="L672">        c[0] = f;</span>
+<span class="fc" id="L673">    }</span>
+
+    /**
+     * Internal method to swap two values. Value inside a[0] will be swapped
+     * with value provided in b[0].
+     * @param a Value to be swapped.
+     * @param b Value to be swapped.
+     */
+    private void swap(double[] a, double[] b) {
+<span class="fc" id="L682">        double tmp = a[0];</span>
+<span class="fc" id="L683">        a[0] = b[0];</span>
+<span class="fc" id="L684">        b[0] = tmp;</span>
+<span class="fc" id="L685">    }</span>
+
+    /**
+     * Internal method to set a bracket of values. This method does not check
+     * whether this instance is locked.
+     * @param minEvalPoint Minimum bracket evaluation point.
+     * @param middleEvalPoint Middle bracket evaluation point.
+     * @param maxEvalPoint Maximum bracket evaluation point.
+     * @throws InvalidBracketRangeException Raised if the following condition is
+     * not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
+     */
+    private void internalSetBracket(double minEvalPoint, double middleEvalPoint,
+                                    double maxEvalPoint) throws InvalidBracketRangeException {
+
+<span class="fc bfc" id="L699" title="All 4 branches covered.">        if ((minEvalPoint &gt; middleEvalPoint) ||</span>
+                (middleEvalPoint &gt; maxEvalPoint)) { //which also means || (minEvalPoint &gt; maxEvalPoint))
+<span class="fc" id="L701">            throw new InvalidBracketRangeException();</span>
+        }
+
+<span class="fc" id="L704">        ax = minEvalPoint;</span>
+<span class="fc" id="L705">        bx = middleEvalPoint;</span>
+<span class="fc" id="L706">        cx = maxEvalPoint;</span>
+
+<span class="fc" id="L708">        bracketAvailable = true;</span>
+<span class="fc" id="L709">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

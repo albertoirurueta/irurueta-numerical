@@ -61,10 +61,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length
      */
-    public MultiDimensionLinearFitter(Matrix x, double[] y, double[] sig)
-            throws IllegalArgumentException {
-<span class="fc" id="L66">        super(x, y, sig);</span>
-<span class="fc" id="L67">    }</span>
+    public MultiDimensionLinearFitter(Matrix x, double[] y, double[] sig) {
+<span class="fc" id="L65">        super(x, y, sig);</span>
+<span class="fc" id="L66">    }</span>
 
     /**
      * Constructor
@@ -77,10 +76,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays 
      * don't have the same length
      */
-    public MultiDimensionLinearFitter(Matrix x, double[] y, double sig)
-            throws IllegalArgumentException {
-<span class="fc" id="L82">        super(x, y, sig);</span>
-<span class="fc" id="L83">    }</span>
+    public MultiDimensionLinearFitter(Matrix x, double[] y, double sig) {
+<span class="fc" id="L80">        super(x, y, sig);</span>
+<span class="fc" id="L81">    }</span>
     
     /**
      * Constructor
@@ -90,9 +88,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      */
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L93">        super();</span>
-<span class="fc" id="L94">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L91">        super();</span>
+<span class="fc" id="L92">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L93">    }</span>
     
     /**
      * Constructor
@@ -108,11 +106,10 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * don't have the same length
      */
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double[] sig)
-            throws FittingException, IllegalArgumentException {
-<span class="fc" id="L113">        super(x, y, sig);</span>
-<span class="fc" id="L114">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L115">    }</span>
+            Matrix x, double[] y, double[] sig) throws FittingException {
+<span class="fc" id="L110">        super(x, y, sig);</span>
+<span class="fc" id="L111">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L112">    }</span>
     
     /**
      * Constructor
@@ -129,11 +126,10 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * don't have the same length
      */    
     public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double sig)
-            throws FittingException, IllegalArgumentException {
-<span class="fc" id="L134">        super(x, y, sig);</span>
-<span class="fc" id="L135">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L136">    }     </span>
+            Matrix x, double[] y, double sig) throws FittingException {
+<span class="fc" id="L130">        super(x, y, sig);</span>
+<span class="fc" id="L131">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L132">    }     </span>
     
     /**
      * Returns function evaluator to evaluate function at a given point and
@@ -141,7 +137,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @return function evaluator
      */    
     public LinearFitterMultiDimensionFunctionEvaluator getFunctionEvaluator() {
-<span class="fc" id="L144">        return evaluator;</span>
+<span class="fc" id="L140">        return evaluator;</span>
     }
     
     /**
@@ -152,8 +148,8 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      */
     public void setFunctionEvaluator(LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L155">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L151">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L152">    }</span>
     
     /**
      * Internal method to set function evaluator to evaluate function at a given 
@@ -165,18 +161,18 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
             throws FittingException {
         
         try {
-<span class="fc" id="L168">            this.evaluator = evaluator;    </span>
+<span class="fc" id="L164">            this.evaluator = evaluator;    </span>
         
-<span class="pc bpc" id="L170" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
-<span class="fc" id="L171">                afunc = evaluator.createResultArray();</span>
-<span class="fc" id="L172">                ma = afunc.length;</span>
-<span class="fc" id="L173">                a = new double[ma];</span>
-<span class="fc" id="L174">                covar = new Matrix(ma, ma);</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
+<span class="fc" id="L167">                afunc = evaluator.createResultArray();</span>
+<span class="fc" id="L168">                ma = afunc.length;</span>
+<span class="fc" id="L169">                a = new double[ma];</span>
+<span class="fc" id="L170">                covar = new Matrix(ma, ma);</span>
             }
-<span class="nc" id="L176">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L177">            throw new FittingException(e);</span>
-<span class="fc" id="L178">        }</span>
-<span class="fc" id="L179">    }</span>
+<span class="nc" id="L172">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L173">            throw new FittingException(e);</span>
+<span class="fc" id="L174">        }</span>
+<span class="fc" id="L175">    }</span>
             
     /**
      * Indicates whether provided instance has enough data to start the function
@@ -186,9 +182,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L189" title="1 of 6 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp; </span>
-<span class="pc bpc" id="L190" title="1 of 2 branches missed.">                x.getRows() == y.length &amp;&amp; </span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">                x.getColumns() == evaluator.getNumberOfDimensions();</span>
+<span class="pc bpc" id="L185" title="1 of 6 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp; </span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                x.getRows() == y.length &amp;&amp; </span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">                x.getColumns() == evaluator.getNumberOfDimensions();</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
