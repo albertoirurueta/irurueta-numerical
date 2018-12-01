@@ -15,12 +15,10 @@
  */
 package com.irurueta.numerical.optimization;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 
 /**
  * This class searches for a multi dimension function local minimum.
@@ -94,8 +92,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public PowellMultiOptimizer(
-            MultiDimensionFunctionEvaluatorListener listener, double tolerance)
-            throws IllegalArgumentException {
+            MultiDimensionFunctionEvaluatorListener listener, double tolerance) {
         super(listener);
         internalSetTolerance(tolerance);
         iter = 0;
@@ -122,8 +119,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      */
     public PowellMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener, double[] point, 
-            Matrix directions, double tolerance) 
-            throws IllegalArgumentException {
+            Matrix directions, double tolerance) {
         super(listener);
         internalSetPointAndDirections(point, directions);
         internalSetTolerance(tolerance);
@@ -156,34 +152,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
     public boolean areDirectionsAvailable() {
         return ximat != null;
     }
-    
-    /**
-     * Internal method to set start point and set of directions to start looking
-     * for minimum.
-     * This method does not check whether this instance is locked.
-     * @param point Start point where algorithm will be started. Start point 
-     * should be close to the local minimum to be found. Provided array must 
-     * have a length equal to the number of dimensions of the function being
-     * evaluated, otherwise and exception will be raised when searching for the
-     * minimum.
-     * @param directions Set of directions to start looking for a minimum. 
-     * Provided matrix must have the same rows as the number of dimensions of 
-     * the function being evaluated. Each column will be a direction to search
-     * for a minimum.
-     * @throws IllegalArgumentException Raised if provided point and direction
-     * don't have the same length.
-     */
-    private void internalSetPointAndDirections(double[] point, 
-            Matrix directions) throws IllegalArgumentException {
-        if ((point.length != directions.getRows()) || 
-                (point.length != directions.getColumns())) {
-            throw new IllegalArgumentException();
-        }
-        p = point;
-        ximat = directions;
-        xi = null;
-    }
-    
+
     /**
      * Sets start point and set of directions to start looking for minimum.
      * @param point Start point where algorithm will be started. Start point 
@@ -200,7 +169,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * don't have the same length.
      */    
     public void setPointAndDirections(double[] point, Matrix directions)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -236,8 +205,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -252,8 +220,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -371,16 +338,16 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
                     }
                 }
             }
-        } catch (Throwable t) {
+        } catch (AlgebraException | EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         //set result
         xmin = p;
         resultAvailable = true;
         fmin = fret;
-        locked = false;
     }
     
     /**
@@ -393,7 +360,34 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
     public boolean isReady() {
         return isListenerAvailable() && isStartPointAvailable();
     }
-    
+
+    /**
+     * Internal method to set start point and set of directions to start looking
+     * for minimum.
+     * This method does not check whether this instance is locked.
+     * @param point Start point where algorithm will be started. Start point
+     * should be close to the local minimum to be found. Provided array must
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param directions Set of directions to start looking for a minimum.
+     * Provided matrix must have the same rows as the number of dimensions of
+     * the function being evaluated. Each column will be a direction to search
+     * for a minimum.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     * don't have the same length.
+     */
+    private void internalSetPointAndDirections(double[] point,
+                                               Matrix directions) {
+        if ((point.length != directions.getRows()) ||
+                (point.length != directions.getColumns())) {
+            throw new IllegalArgumentException();
+        }
+        p = point;
+        ximat = directions;
+        xi = null;
+    }
+
     /**
      * Internal method to build or rebuild the set of directions if needed.
      * @throws NotReadyException Raised if no start point has yet been provided.
@@ -412,7 +406,9 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
         
         try {
             ximat = Matrix.identity(n, n);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**

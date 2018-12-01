@@ -94,8 +94,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */
     public LineMultiOptimizer(MultiDimensionFunctionEvaluatorListener listener,
-            double[] point, double[] direction) 
-            throws IllegalArgumentException {
+            double[] point, double[] direction) {
         super(listener);
         internalSetStartPointAndDirection(point, direction);
         n = 0;
@@ -150,32 +149,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
         }
         return xi;
     }
-    
-    /**
-     * Internal method to set start point and direction to start the search for
-     * a local minimum.
-     * This method does not check whether this instance is locked.
-     * @param point Start point where algorithm will be started. Start point 
-     * should be close to the local minimum to be found. Provided array must 
-     * have a length equal to the number of dimensions of the function being
-     * evaluated, otherwise and exception will be raised when searching for the
-     * minimum.
-     * @param direction Direction to start looking for a minimum. Provided array
-     * must have the same length as the number of dimensions of the function 
-     * being evaluated. Provided direction is considered as a vector pointing
-     * to the minimum to be found.
-     * @throws IllegalArgumentException Raised if provided point and direction
-     * don't have the same length.
-     */
-    private void internalSetStartPointAndDirection(double[] point, 
-            double[] direction) throws IllegalArgumentException {
-        if (point.length != direction.length) {
-            throw new IllegalArgumentException();
-        }
-        p = point;
-        xi = direction;
-    }
-    
+
     /**
      * Internal method to set start point and direction to start the search for
      * a local minimum.
@@ -193,7 +167,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * don't have the same length.
      */
     public void setStartPointAndDirection(double[] point, double[] direction)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -220,7 +194,9 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      */
     @SuppressWarnings("Duplicates")
     protected double linmin() {
-        double ax, xx, linxmin;
+        double ax;
+        double xx;
+        double linxmin;
         n = p.length;
         
         if (evaluator == null) {
@@ -264,15 +240,40 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
             }
             
             return brent.getEvaluationAtResult();
-        } catch (Throwable t) {
+        } catch (NumericalException e) {
             //if minimization fails, try to evaluate at best point found so far
             try {
                 return listener.evaluate(p);
-            } catch (Throwable t2) {
+            } catch (EvaluationException e2) {
                 //if minimization fails here we assume that obtained result is 
                 //the worst possible one
                 return Double.MAX_VALUE;
             }
         }
+    }
+
+    /**
+     * Internal method to set start point and direction to start the search for
+     * a local minimum.
+     * This method does not check whether this instance is locked.
+     * @param point Start point where algorithm will be started. Start point
+     * should be close to the local minimum to be found. Provided array must
+     * have a length equal to the number of dimensions of the function being
+     * evaluated, otherwise and exception will be raised when searching for the
+     * minimum.
+     * @param direction Direction to start looking for a minimum. Provided array
+     * must have the same length as the number of dimensions of the function
+     * being evaluated. Provided direction is considered as a vector pointing
+     * to the minimum to be found.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     * don't have the same length.
+     */
+    private void internalSetStartPointAndDirection(double[] point,
+                                                   double[] direction) {
+        if (point.length != direction.length) {
+            throw new IllegalArgumentException();
+        }
+        p = point;
+        xi = direction;
     }
 }

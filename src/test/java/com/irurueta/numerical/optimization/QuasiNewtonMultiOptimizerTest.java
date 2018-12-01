@@ -129,6 +129,7 @@ public class QuasiNewtonMultiOptimizerTest {
         assertEquals(optimizer.getTolerance(), 
                 QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
         assertFalse(optimizer.isStartPointAvailable());
+        assertEquals(optimizer.getIterations(), 0);
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
@@ -162,6 +163,7 @@ public class QuasiNewtonMultiOptimizerTest {
         assertNotNull(optimizer);
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
         assertFalse(optimizer.isStartPointAvailable());
+        assertEquals(optimizer.getIterations(), 0);
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
@@ -206,6 +208,7 @@ public class QuasiNewtonMultiOptimizerTest {
         assertTrue(optimizer.isListenerAvailable());
         assertTrue(optimizer.isReady());
         assertFalse(optimizer.isResultAvailable());
+        assertEquals(optimizer.getIterations(), 0);
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
@@ -402,6 +405,7 @@ public class QuasiNewtonMultiOptimizerTest {
         assertTrue(optimizer.isReady());
         assertFalse(optimizer.isLocked());
         assertTrue(optimizer.isResultAvailable());
+        assertTrue(optimizer.getIterations() >= 0);
         
         //pick result
         double[] result = optimizer.getResult();

@@ -67,7 +67,7 @@ public class Polynomial implements Serializable {
      * @param numberOfParameters number of parameters of polynomial to create.
      * @throws IllegalArgumentException if number of parameters is less than 1.
      */
-    public Polynomial(int numberOfParameters) throws IllegalArgumentException {
+    public Polynomial(int numberOfParameters) {
         if (numberOfParameters < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException(
                     "at least 1 parameter is required");
@@ -83,7 +83,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided array does not have at least
      * length 2.
      */
-    public Polynomial(double... polyParams) throws IllegalArgumentException {
+    public Polynomial(double... polyParams) {
         setPolyParams(polyParams);
     }
         
@@ -106,8 +106,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided array does not have at least 
      * length 2.
      */
-    public final void setPolyParams(double... polyParams) 
-            throws IllegalArgumentException {
+    public final void setPolyParams(double... polyParams) {
         if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException("must have at least length 1");
         }
@@ -135,6 +134,7 @@ public class Polynomial implements Serializable {
      * @param other other polynomial to be added.
      * @param result instance where result will be stored.
      */
+    @SuppressWarnings("Duplicates")
     public void add(Polynomial other, Polynomial result) {
         int maxLength = Math.max(mPolyParams.length, other.mPolyParams.length);
         int minLength = Math.min(mPolyParams.length, other.mPolyParams.length);
@@ -147,19 +147,17 @@ public class Polynomial implements Serializable {
         for (int i = 0; i < minLength; i++) {
             resultPolyParams[i] = mPolyParams[i] + other.mPolyParams[i];
         }
-        
-        if (mPolyParams.length > other.mPolyParams.length) {
-            if (result != this) {
+
+        if (maxLength - minLength >= 0) {
+            if (mPolyParams.length > other.mPolyParams.length) {
                 //this is longer than other
-                if (maxLength - minLength >= 0)
-                    System.arraycopy(mPolyParams, minLength, resultPolyParams,
-                            minLength, maxLength - minLength);
-            }
-        } else {
-            //other is longer than this
-            if (maxLength - minLength >= 0)
+                System.arraycopy(mPolyParams, minLength, resultPolyParams,
+                        minLength, maxLength - minLength);
+            } else {
+                //other is longer than this
                 System.arraycopy(other.mPolyParams, minLength, resultPolyParams,
                         minLength, maxLength - minLength);
+            }
         }
         
         result.mPolyParams = resultPolyParams;
@@ -193,6 +191,7 @@ public class Polynomial implements Serializable {
      * @param other other polynomial to be subtracted from this one.
      * @param result instance where result will be stored.
      */
+    @SuppressWarnings("Duplicates")
     public void subtract(Polynomial other, Polynomial result) {
         int maxLength = Math.max(mPolyParams.length, other.mPolyParams.length);
         int minLength = Math.min(mPolyParams.length, other.mPolyParams.length);
@@ -205,19 +204,18 @@ public class Polynomial implements Serializable {
         for (int i = 0; i < minLength; i++) {
             resultPolyParams[i] = mPolyParams[i] - other.mPolyParams[i];
         }
-        
-        if (mPolyParams.length > other.mPolyParams.length) {
-            if (result != this) {
+
+        if (maxLength - minLength >= 0) {
+            if (mPolyParams.length > other.mPolyParams.length) {
                 //this is longer than other
-                if (maxLength - minLength >= 0)
-                    System.arraycopy(mPolyParams, minLength, resultPolyParams,
-                            minLength, maxLength - minLength);
+                System.arraycopy(mPolyParams, minLength, resultPolyParams,
+                        minLength, maxLength - minLength);
+            } else {
+                //other is longer than this
+                for (int i = minLength; i < maxLength; i++) {
+                    resultPolyParams[i] = -other.mPolyParams[i];
+                }
             }
-        } else {
-            //other is longer than this
-            for (int i = minLength; i < maxLength; i++) {
-                resultPolyParams[i] = - other.mPolyParams[i];
-            }            
         }
         
         result.mPolyParams = resultPolyParams;

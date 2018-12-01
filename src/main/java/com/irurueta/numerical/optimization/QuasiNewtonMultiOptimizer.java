@@ -15,6 +15,7 @@
  */
 package com.irurueta.numerical.optimization;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.numerical.*;
 
@@ -112,7 +113,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     public QuasiNewtonMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener, 
-            double tolerance) throws IllegalArgumentException {
+            double tolerance) {
         super(listener);
         internalSetTolerance(tolerance);
         p = null;
@@ -137,8 +138,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     public QuasiNewtonMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
             GradientFunctionEvaluatorListener gradientListener,
-            double[] startPoint, double tolerance)
-            throws IllegalArgumentException {
+            double[] startPoint, double tolerance) {
         super(listener);
         internalSetTolerance(tolerance);
         p = startPoint;
@@ -183,8 +183,17 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
         int n = p.length;
         
         try {
-            double den, fac, fad, fae, fp, stpmax, sum = 0.0, sumdg, sumxi, 
-                    temp, test;
+            double den;
+            double fac;
+            double fad;
+            double fae;
+            double fp;
+            double stpmax;
+            double sum = 0.0;
+            double sumdg;
+            double sumxi;
+            double temp;
+            double test;
             double[] dg = new double[n];
             double[] g = new double[n];
             double[] hdg = new double[n];
@@ -293,17 +302,16 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                 locked = false;
                 throw new OptimizationException();
             }
-        } catch (Throwable t) {
+        } catch (AlgebraException | EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
         
         //set result
         xmin = p;
         resultAvailable = true;
         fmin = fret;
-        
-        locked = false;
     }
     
     /**
@@ -336,8 +344,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -352,8 +359,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -434,7 +440,15 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     public boolean isGradientListenerAvailable() {
         return gradientListener != null;
     }
-    
+
+    /**
+     * Return number of iterations that were needed to estimate a minimum.
+     * @return number of iterations that were needed.
+     */
+    public int getIterations() {
+        return iter;
+    }
+
     /**
      * Computes the squared value of provided double.
      * @param x Value to be squared.
@@ -460,9 +474,22 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     private void lnsrch(double[] xold, double fold, double[] g, double[] p, 
             double[] x, double[] f, double stpmax, boolean[] check) 
             throws OptimizationException {
-        double a, alam, alam2 = 0.0, alamin, b, disc, f2 = 0.0;
-        double rhs1, rhs2, slope = 0.0, sum = 0.0, temp, test, tmplam;
-        int i, n = xold.length;
+        double a;
+        double alam;
+        double alam2 = 0.0;
+        double alamin;
+        double b;
+        double disc;
+        double f2 = 0.0;
+        double rhs1;
+        double rhs2;
+        double slope = 0.0;
+        double sum = 0.0;
+        double temp;
+        double test;
+        double tmplam;
+        int i;
+        int n = xold.length;
         check[0] = false;
         
         for (i = 0; i < n; i++) {
@@ -494,8 +521,8 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             }
             try {
                 f[0] = listener.evaluate(x);
-            } catch (Throwable t) {
-                throw new OptimizationException(t);
+            } catch (EvaluationException e) {
+                throw new OptimizationException(e);
             }
             
             if (alam < alamin) {

@@ -17,10 +17,7 @@ package com.irurueta.numerical.optimization;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
-import com.irurueta.numerical.NotAvailableException;
-import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.*;
 
 import java.util.Arrays;
 
@@ -111,8 +108,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public SimplexMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener, 
-            double[] startPoint, double delta, double tolerance)
-            throws IllegalArgumentException {
+            double[] startPoint, double delta, double tolerance) {
         super(listener);
         nfunc = mpts = ndim = 0;
         y = null;
@@ -134,8 +130,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public SimplexMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener,
-            double[] startPoint, double[] deltas, double tolerance)
-            throws IllegalArgumentException {
+            double[] startPoint, double[] deltas, double tolerance) {
         super(listener);
         nfunc = mpts = ndim = 0;
         y = null;
@@ -155,7 +150,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      */
     public SimplexMultiOptimizer(
             MultiDimensionFunctionEvaluatorListener listener, Matrix simplex, 
-            double tolerance) throws IllegalArgumentException {
+            double tolerance) {
         super(listener);
         nfunc = mpts = ndim = 0;
         y = null;
@@ -228,7 +223,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * have the same length.
      */
     public void setSimplex(double[] startPoint, double[] deltas)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -248,8 +243,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if startPoint and deltas don't
      * have the same length.
      */
-    private void internalSetSimplex(double[] startPoint, double[] deltas)
-            throws IllegalArgumentException {
+    private void internalSetSimplex(double[] startPoint, double[] deltas) {
         int localndim = startPoint.length;
         
         if(deltas.length != localndim) {
@@ -355,8 +349,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */       
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -372,8 +365,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided tolerance is 
      * negative.
      */        
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -406,7 +398,9 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
         
         //clean previous result and previous function evaluations
         try {
-            int ihi, ilo, inhi;
+            int ihi;
+            int ilo;
+            int inhi;
             mpts = p.getRows();
             ndim = p.getColumns();
             
@@ -471,12 +465,10 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                     //save result
                     xmin = pmin;
                     resultAvailable = true;
-                    
-                    locked = false;
+
                     return;
                 }
                 if (nfunc >= NMAX) {
-                    locked = false;
                     throw new OptimizationException();
                 }
                 
@@ -506,9 +498,10 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                     --nfunc;
                 }
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new OptimizationException(e);
+        } finally {
             locked = false;
-            throw new OptimizationException(t);
         }
     }
     
@@ -549,11 +542,11 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param fac another value.
      * @param listener a listener to evaluate function to optimize.
      * @return a value returned by the evaluated function.
-     * @throws Throwable Raised if function evaluation fails.
+     * @throws EvaluationException Raised if function evaluation fails.
      */
     private double amotry(Matrix p, double[] y, double[] psum, int ihi, 
             double fac, MultiDimensionFunctionEvaluatorListener listener)
-            throws Throwable {
+            throws EvaluationException {
         double[] ptry = new double[ndim];
         double fac1 = (1.0 - fac) / ndim;
         double fac2 = fac1 - fac;
