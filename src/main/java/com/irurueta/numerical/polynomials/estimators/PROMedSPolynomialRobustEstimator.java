@@ -171,8 +171,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(int degree,
             List<PolynomialEvaluation> evaluations,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, evaluations, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }

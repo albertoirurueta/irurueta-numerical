@@ -177,8 +177,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -208,7 +207,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * is being computed.
      */
     public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -342,7 +341,8 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
             List<T> iterResults = new ArrayList<>();
             bestResult = null;
             int currentInliers;
-            float previousProgress = 0.0f, progress;
+            float previousProgress = 0.0f;
+            float progress;
             int[] subsetIndices = new int[subsetSize];
             
             BitSet inliers = null;
@@ -522,7 +522,18 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
             }
             mNumInliers = 0;
         }
-        
+
+        /**
+         * Returns efficient array indicating which samples are considered 
+         * inliers and which ones aren't.
+         * @return array indicating which samples are considered inliers and 
+         * which ones aren't.
+         */        
+        @Override
+        public BitSet getInliers() {
+            return mInliers;
+        }
+
         /**
          * Updates data contained in this instance.
          * @param inliers efficiently stores which samples are considered
@@ -530,17 +541,17 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
          * @param residuals residuals obtained for each sample of data.
          * @param numInliers number of inliers found on current iteration.
          */
-        protected void update(BitSet inliers, double[] residuals, 
-                int numInliers) {
+        protected void update(BitSet inliers, double[] residuals,
+                              int numInliers) {
             int totalSamples = 0;
             if (inliers != null) {
                 totalSamples = inliers.length();
             }
             if (residuals != null) {
-               totalSamples = residuals.length; 
+                totalSamples = residuals.length;
             }
-            
-            if(mInliers != null && inliers != null && mResiduals != null && 
+
+            if(mInliers != null && inliers != null && mResiduals != null &&
                     residuals != null) {
                 //update inliers and residuals
                 for (int i = 0; i < totalSamples; i++) {
@@ -558,16 +569,5 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
             }
             mNumInliers = numInliers;
         }
-
-        /**
-         * Returns efficient array indicating which samples are considered 
-         * inliers and which ones aren't.
-         * @return array indicating which samples are considered inliers and 
-         * which ones aren't.
-         */        
-        @Override
-        public BitSet getInliers() {
-            return mInliers;
-        }        
     }
 }

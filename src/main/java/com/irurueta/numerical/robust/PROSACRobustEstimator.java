@@ -280,8 +280,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -310,8 +309,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -348,7 +346,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * is being computed.
      */
     public void setMaxOutliersProportion(double maxOutliersProportion) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -380,8 +378,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setEta0(double eta0) throws IllegalArgumentException, 
-            LockedException {
+    public void setEta0(double eta0) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -418,8 +415,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setBeta(double beta) throws IllegalArgumentException, 
-            LockedException {
+    public void setBeta(double beta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -563,7 +559,8 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             //iteration
             List<T> iterResults = new ArrayList<>();
             bestResult = null;
-            float previousProgress = 0.0f, progress;
+            float previousProgress = 0.0f;
+            float progress;
             //subset indices obtained from a subset selector
             int[] subsetIndices = new int[subsetSize];
             //subset indices referred to the real samples positions after taking
@@ -587,9 +584,9 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             int currentIter = 0;    //iteration number (t)
             int sampleSize = subsetSize; //(n) we draw samples from the set U_n
                                          //of the top n (sampleSize) data points
-            double Tn = (double)nIters; //average number of samples {M_i}_{i=1}^{Tn}
+            double tn = (double)nIters; //average number of samples {M_i}_{i=1}^{tn}
                                         //that contains samples from U_n only
-            int TnPrime = 1; //integer version of Tn
+            int tnPrime = 1; //integer version of tn
             int kNStar = nIters; //number of samples to draw to reach the 
                                 //maximality constraint
             
@@ -603,9 +600,9 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 }
             }
             
-            //initialize Tn
+            //initialize tn
             for (int i = 0; i < subsetSize; i++) {
-                Tn *= (double)(sampleSize - i) / (double)(totalSamples - i);
+                tn *= (double)(sampleSize - i) / (double)(totalSamples - i);
             }
         
             if (subsetSelector == null) {
@@ -633,20 +630,20 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 //choice of the hypothesis generation set
                 
                 //The growth function is defined as
-                //g(t) = min{n : TnPrime > t} where n is sampleSize
-                //Thus sampleSize should be incremented if currentIter > TnPrime
-                if ((currentIter > TnPrime) && (sampleSize < sampleSizeStar)) {
-                    double TnPlus1 = (Tn * (double)(sampleSize + 1)) /
+                //g(t) = min{n : tnPrime > t} where n is sampleSize
+                //Thus sampleSize should be incremented if currentIter > tnPrime
+                if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
+                    double tnPlus1 = (tn * (double)(sampleSize + 1)) /
                             (double)(sampleSize + 1 - subsetSize);
                     sampleSize++;
-                    TnPrime += (int)Math.ceil(TnPlus1 - Tn);
-                    Tn = TnPlus1;
+                    tnPrime += (int)Math.ceil(tnPlus1 - tn);
+                    tn = tnPlus1;
                 }
                 
                 //Draw semi-random sample
-                if (currentIter > TnPrime) {
+                if (currentIter > tnPrime) {
                     //during the finishing stage (sampleSize == sampleSizeStar &&
-                    //currentIter > TnPrime), draw a standard RANSAC sample
+                    //currentIter > tnPrime), draw a standard RANSAC sample
                     //The sample contains subsetSize points seleted from U_n at
                     //random
                     subsetSelector.computeRandomSubsets(subsetSize, 
@@ -670,118 +667,116 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 
                 int inliersCurrent; //total number of inliers for a
                                         //given result     
-                if (iterResults != null) {
-                    for (T iterResult : iterResults) {
-                        //compute inliers
-                        inliersCurrent = computeInliers(iterResult, threshold, 
-                                inliers, totalSamples, listener, residuals);
+                for (T iterResult : iterResults) {
+                    //compute inliers
+                    inliersCurrent = computeInliers(iterResult, threshold,
+                            inliers, totalSamples, listener, residuals);
 
-                        if (inliersCurrent > inliersBest) {
-                            //update best number of inliers
-                            inliersBest = inliersCurrent;
-                            //keep current result
-                            bestResult = iterResult;
-                            
-                            //update best inlier data
-                            if (mBestInliersData != null) {
-                                mBestInliersData.update(inliers, residuals, 
-                                        inliersBest);
-                            }
+                    if (inliersCurrent > inliersBest) {
+                        //update best number of inliers
+                        inliersBest = inliersCurrent;
+                        //keep current result
+                        bestResult = iterResult;
 
-                            //select new termination length sampleSizeStar if possible
-                            //only when a new sample is better than the others found
-                            //so far
-                            int sampleSizeBest = totalSamples; //best value found so
-                                                    //far in terms of inliers ration
-                            int inliersSampleSizeBest = inliersCurrent;
+                        //update best inlier data
+                        if (mBestInliersData != null) {
+                            mBestInliersData.update(inliers, residuals,
+                                    inliersBest);
+                        }
 
-                            int sampleSizeTest; //test value for the termination 
-                                                //length
-                            int inliersSampleSizeTest;  //number of inliers for that
-                                                        //test value
-                            double epsilonSampleSizeBest = 
-                                    (double)inliersSampleSizeBest /
-                                    (double)sampleSizeBest;
+                        //select new termination length sampleSizeStar if possible
+                        //only when a new sample is better than the others found
+                        //so far
+                        int sampleSizeBest = totalSamples; //best value found so
+                                                //far in terms of inliers ration
+                        int inliersSampleSizeBest = inliersCurrent;
 
-                            for (sampleSizeTest = totalSamples, 
-                                    inliersSampleSizeTest = inliersCurrent; 
-                                    sampleSizeTest > subsetSize; sampleSizeTest--) {
-                                //Loop invariants:
-                                //- inliersSampleSizeTest is the number of inliers 
-                                //  for the sampleSizeTest first correspondences
-                                //- sampleSizeBest is the value between 
-                                //  sampleSizeTest+1 and totalSamples that maximizes
-                                //  the ratio inliersSampleSizeBest/sampleSizeBest
+                        int sampleSizeTest; //test value for the termination
+                                            //length
+                        int inliersSampleSizeTest;  //number of inliers for that
+                                                    //test value
+                        double epsilonSampleSizeBest =
+                                (double)inliersSampleSizeBest /
+                                (double)sampleSizeBest;
 
-                                //- Non-randomness: In >= Imin(n*)
-                                //- Maximality: the number of samples that were drawn 
-                                //  so far must be enough so that the probability of
-                                //  having missed a set of inliers is below eta=0.01.
-                                //  This is the classical RANSAC termination criterion, 
-                                //  except that it takes into account only the 
-                                //  sampleSize first samples (not the total number 
-                                //  of samples)
-                                //  kNStar = log(eta0) / log(1 - (inliersNStar/
-                                //  sampleSizeStar)^subsetSize
-                                //  We have to minimize kNStar, e.g. maximize 
-                                //  inliersNStar/sampleSizeStar, a straightforward
-                                //  implementation would use the following test:
-                                //  if(inliersSampleSizeTest > epsilonSampleSizeBest *
-                                //  sampleSizeTest){ ... blah blah blah
-                                //  However, since In is binomial, and in the case of
-                                //  evenly distributed inliers, a better test would be
-                                //  to reduce sampleSizeStar only if there's a 
-                                //  significant improvement in epsilon. Thus we use a
-                                //  Chi-squared test (P=0.10), together with the normal
-                                //  approximation to the binomial (mu = 
-                                //  epsilonSampleSizeStart * sampleSizeTest, sigma =
-                                //  sqrt(sampleSizeTest * epsilonSampleSizeStar * (1 -
-                                //  epsilonSampleSizeStar))).
-                                //  There is a significant difference between the two
-                                //  tests (e.g. with the computeInliers function 
-                                //  provided)
-                                //  We do the cheap test first, and the expensive test
-                                //  only if the cheap one passes
-                                if ((inliersSampleSizeTest * sampleSizeBest > 
-                                        inliersSampleSizeBest * sampleSizeTest) &&
-                                        (inliersSampleSizeTest > 
-                                        epsilonSampleSizeBest * sampleSizeTest +
-                                        Math.sqrt(sampleSizeTest * epsilonSampleSizeBest * 
-                                        (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
+                        for (sampleSizeTest = totalSamples,
+                                inliersSampleSizeTest = inliersCurrent;
+                                sampleSizeTest > subsetSize; sampleSizeTest--) {
+                            //Loop invariants:
+                            //- inliersSampleSizeTest is the number of inliers
+                            //  for the sampleSizeTest first correspondences
+                            //- sampleSizeBest is the value between
+                            //  sampleSizeTest+1 and totalSamples that maximizes
+                            //  the ratio inliersSampleSizeBest/sampleSizeBest
 
-                                    if (inliersSampleSizeTest < 
-                                            Imin(subsetSize, sampleSizeTest, mBeta)) {
-                                        //equation not satisfied, no need to test for
-                                        //smaller sampleSizeTest values anyway
-                                        break; //jump out of the for(sampleSizeTest) loop
-                                    }
-                                    sampleSizeBest = sampleSizeTest;
-                                    inliersSampleSizeBest = inliersSampleSizeTest;
-                                    epsilonSampleSizeBest = 
-                                            (double)inliersSampleSizeBest /
-                                            (double)sampleSizeBest;
+                            //- Non-randomness: In >= imin(n*)
+                            //- Maximality: the number of samples that were drawn
+                            //  so far must be enough so that the probability of
+                            //  having missed a set of inliers is below eta=0.01.
+                            //  This is the classical RANSAC termination criterion,
+                            //  except that it takes into account only the
+                            //  sampleSize first samples (not the total number
+                            //  of samples)
+                            //  kNStar = log(eta0) / log(1 - (inliersNStar/
+                            //  sampleSizeStar)^subsetSize
+                            //  We have to minimize kNStar, e.g. maximize
+                            //  inliersNStar/sampleSizeStar, a straightforward
+                            //  implementation would use the following test:
+                            //  if(inliersSampleSizeTest > epsilonSampleSizeBest *
+                            //  sampleSizeTest){ ... blah blah blah
+                            //  However, since In is binomial, and in the case of
+                            //  evenly distributed inliers, a better test would be
+                            //  to reduce sampleSizeStar only if there's a
+                            //  significant improvement in epsilon. Thus we use a
+                            //  Chi-squared test (P=0.10), together with the normal
+                            //  approximation to the binomial (mu =
+                            //  epsilonSampleSizeStart * sampleSizeTest, sigma =
+                            //  sqrt(sampleSizeTest * epsilonSampleSizeStar * (1 -
+                            //  epsilonSampleSizeStar))).
+                            //  There is a significant difference between the two
+                            //  tests (e.g. with the computeInliers function
+                            //  provided)
+                            //  We do the cheap test first, and the expensive test
+                            //  only if the cheap one passes
+                            if ((inliersSampleSizeTest * sampleSizeBest >
+                                    inliersSampleSizeBest * sampleSizeTest) &&
+                                    (inliersSampleSizeTest >
+                                    epsilonSampleSizeBest * sampleSizeTest +
+                                    Math.sqrt(sampleSizeTest * epsilonSampleSizeBest *
+                                    (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
+
+                                if (inliersSampleSizeTest <
+                                        imin(subsetSize, sampleSizeTest, mBeta)) {
+                                    //equation not satisfied, no need to test for
+                                    //smaller sampleSizeTest values anyway
+                                    break; //jump out of the for(sampleSizeTest) loop
                                 }
-
-                                //prepare for next loop iteration
-                                inliersSampleSizeTest -=
-                                        inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
-                            } //for (sampleSizeTest...
-
-                            //is the best one we found even better than sampleSizeStar?
-                            if (inliersSampleSizeBest * sampleSizeStar >
-                                    inliersNStar * sampleSizeBest) {
-
-                                //update all values
-                                sampleSizeStar = sampleSizeBest;
-                                inliersNStar = inliersSampleSizeBest;
-                                kNStar = computeIterations((double)inliersNStar / 
-                                        (double)sampleSizeStar, subsetSize, 
-                                        1.0 - mEta0);
+                                sampleSizeBest = sampleSizeTest;
+                                inliersSampleSizeBest = inliersSampleSizeTest;
+                                epsilonSampleSizeBest =
+                                        (double)inliersSampleSizeBest /
+                                        (double)sampleSizeBest;
                             }
-                        }                    
+
+                            //prepare for next loop iteration
+                            inliersSampleSizeTest -=
+                                    inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
+                        } //for (sampleSizeTest...
+
+                        //is the best one we found even better than sampleSizeStar?
+                        if (inliersSampleSizeBest * sampleSizeStar >
+                                inliersNStar * sampleSizeBest) {
+
+                            //update all values
+                            sampleSizeStar = sampleSizeBest;
+                            inliersNStar = inliersSampleSizeBest;
+                            kNStar = computeIterations((double)inliersNStar /
+                                    (double)sampleSizeStar, subsetSize,
+                                    1.0 - mEta0);
+                        }
                     }
                 }
-                                                
+
                 listener.onEstimateNextIteration(this, currentIter);
             } //while(currentIter < kNStar ...
             
@@ -961,7 +956,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @param beta beta value.
      * @return i-m.
      */
-    private static int Imin(int subsetSize, int sampleSize, double beta) {
+    private static int imin(int subsetSize, int sampleSize, double beta) {
         double mu = sampleSize * beta;
         double sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
         
@@ -989,7 +984,18 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             }
             mNumInliers = 0;
         }
-        
+
+        /**
+         * Returns efficient array indicating which samples are considered
+         * inliers and which ones aren't.
+         * @return array indicating which samples are considered inliers and
+         * which ones aren't.
+         */
+        @Override
+        public BitSet getInliers() {
+            return mInliers;
+        }
+
         /**
          * Updates data contained in this instance.
          * @param inliers efficiently stores which samples are considered
@@ -997,8 +1003,8 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
          * @param residuals residuals obtained for each sample of data.
          * @param numInliers number of inliers found on current iteration.
          */
-        protected void update(BitSet inliers, double[] residuals, 
-                int numInliers) {
+        protected void update(BitSet inliers, double[] residuals,
+                              int numInliers) {
             int totalSamples = 0;
             if (inliers != null) {
                 totalSamples = inliers.length();
@@ -1006,7 +1012,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             if (residuals != null) {
                 totalSamples = residuals.length;
             }
-            
+
             if (mInliers != null && inliers != null && mResiduals != null &&
                     residuals != null) {
                 //update inliers and residuals
@@ -1026,17 +1032,5 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             }
             mNumInliers = numInliers;
         }
-
-        /**
-         * Returns efficient array indicating which samples are considered
-         * inliers and which ones aren't.
-         * @return array indicating which samples are considered inliers and
-         * which ones aren't.
-         */
-        @Override
-        public BitSet getInliers() {
-            return mInliers;
-        }
-        
     }
 }

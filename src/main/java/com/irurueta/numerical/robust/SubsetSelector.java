@@ -44,7 +44,7 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero
      * or negative.
      */
-    public SubsetSelector(int numSamples) throws IllegalArgumentException {
+    public SubsetSelector(int numSamples) {
         setNumSamples(numSamples);
     }
     
@@ -62,8 +62,7 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero or
      * negative.
      */
-    public final void setNumSamples(int numSamples) 
-            throws IllegalArgumentException {
+    public final void setNumSamples(int numSamples) {
         if (numSamples < MIN_NUM_SAMPLES) {
             throw new IllegalArgumentException();
         }
@@ -191,7 +190,7 @@ public abstract class SubsetSelector {
      * or negative.
      */
     public static SubsetSelector create(int numSamples, 
-            SubsetSelectorType type) throws IllegalArgumentException {
+            SubsetSelectorType type) {
         switch (type) {
             case FAST_RANDOM_SUBSET_SELECTOR:
             default:
@@ -207,8 +206,7 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero or
      * negative.
      */
-    public static SubsetSelector create(int numSamples) 
-            throws IllegalArgumentException {
+    public static SubsetSelector create(int numSamples) {
         return create(numSamples, DEFAULT_SUBSET_SELECTOR_TYPE);
     }
 }

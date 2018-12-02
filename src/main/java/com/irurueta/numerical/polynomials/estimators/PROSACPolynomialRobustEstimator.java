@@ -210,7 +210,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public PROSACPolynomialRobustEstimator(
             PolynomialRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);

@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * This class estimates the root of a single dimension continuous function using
@@ -80,7 +77,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
     public BrentSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener,
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -106,8 +103,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -124,8 +120,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -144,6 +139,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * numerical instability or convergence problems, or no roots are found).
      */    
     @Override
+    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         if (isLocked()) {
@@ -158,14 +154,25 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         double x1 = minEvalPoint;
         double x2 = maxEvalPoint;
         double tol = tolerance;
-        double a = x1, b = x2, c = x2, d = 0.0, e = 0.0, fc, p, q,
-                r, s, tol1, xm;
-        double fa, fb;
+        double a = x1;
+        double b = x2;
+        double c = x2;
+        double d = 0.0;
+        double e = 0.0;
+        double fc;
+        double p;
+        double q;
+        double r;
+        double s;
+        double tol1;
+        double xm;
+        double fa;
+        double fb;
         try {
             fa = listener.evaluate(a);
             fb = listener.evaluate(b);
-        } catch (Throwable t) {
-            throw new RootEstimationException(t);
+        } catch (EvaluationException ex) {
+            throw new RootEstimationException(ex);
         }
         
         if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
@@ -234,8 +241,8 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
             }
             try {
                 fb = listener.evaluate(b);
-            } catch (Throwable t) {
-                throw new RootEstimationException(t);
+            } catch (EvaluationException ex) {
+                throw new RootEstimationException(ex);
             }
         }
         //maximum number of iterations exceeded

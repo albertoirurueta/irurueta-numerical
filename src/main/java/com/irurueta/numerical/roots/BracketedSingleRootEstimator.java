@@ -271,43 +271,40 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
         //expand initial bracket until function contains a sign change
         double x1 = minEvalPoint;
         double x2 = maxEvalPoint;
-        double f1, f2;
+        double f1;
+        double f2;
         try {
             f1 = listener.evaluate(x1);
             f2 = listener.evaluate(x2);
-        } catch (Throwable t) {
-            locked = false;
-            throw new RootEstimationException(t);
-        }
-        
-        boolean found = false;
-        try {
+
+            boolean found = false;
             for (int j = 0; j < NTRY; j++) {
                 if (f1 * f2 < 0.0) {
                     found = true;
                     break;
                 }
                 if (Math.abs(f1) < Math.abs(f2)) {
-                    f1 = listener.evaluate(x1 += FACTOR * (x1 - x2));
+                    x1 += FACTOR * (x1 - x2);
+                    f1 = listener.evaluate(x1);
                 } else {
-                    f2 = listener.evaluate(x2 += FACTOR * (x2 - x1));
+                    x2 += FACTOR * (x2 - x1);
+                    f2 = listener.evaluate(x2);
                 }
             }
-        } catch (Throwable t) {
+
+            if (!found) {
+                throw new RootEstimationException();
+            }
+
+            this.minEvalPoint = x1;
+            this.maxEvalPoint = x2;
+            bracketAvailable = true;
+
+        } catch (EvaluationException e) {
+            throw new RootEstimationException(e);
+        } finally {
             locked = false;
-            throw new RootEstimationException(t);
         }
-        
-        if (!found) {
-            locked = false;
-            throw new RootEstimationException();
-        }
-        
-        this.minEvalPoint = x1;
-        this.maxEvalPoint = x2;
-        bracketAvailable = true;
-        
-        locked = false;
     }
     
     /**
@@ -355,7 +352,9 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
             RootEstimationException {
         try {
             computeBracket(0.0, BRACKET_EPS);
-        } catch (InvalidBracketRangeException ignore) { }
+        } catch (InvalidBracketRangeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -377,6 +376,10 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      * @return Returns a if a and b have the same sign or -a otherwise.
      */
     protected double sign(double a, double b) {
-        return b >= 0.0 ? (a >= 0.0 ? a : -a) : (a >= 0.0 ? -a : a);
+        if (b >= 0.0) {
+            return a >= 0.0 ? a : -a;
+        } else {
+            return a >= 0.0 ? -a : a;
+        }
     }
 }

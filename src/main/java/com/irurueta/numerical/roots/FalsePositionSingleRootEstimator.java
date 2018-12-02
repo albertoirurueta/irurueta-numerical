@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of 
@@ -81,7 +78,7 @@ public class FalsePositionSingleRootEstimator
     public FalsePositionSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -96,25 +93,7 @@ public class FalsePositionSingleRootEstimator
     public double getTolerance() {
         return tolerance;
     }    
-    
-    /**
-     * Internal method to set tolerance to find a root. This method does not
-     * check whether this instance is locked.
-     * Whenever the variation of the estimated root is smaller than provided
-     * tolerance, then the algorithm is assumed to be converged, and the 
-     * estimated root is ensured to have an accuracy that equals provided 
-     * tolerance.
-     * @param tolerance Tolerance to find a root.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance < MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
+
     /**
      * Sets tolerance to find a root. Whenever the variation of the estimated
      * root is smaller than provided tolerance, then the algorithm is assumed to
@@ -125,8 +104,7 @@ public class FalsePositionSingleRootEstimator
      * some computations.
      * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -145,6 +123,7 @@ public class FalsePositionSingleRootEstimator
      * numerical instability or convergence problems, or no roots are found).
      */        
     @Override
+    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         if (isLocked()) {
@@ -164,7 +143,9 @@ public class FalsePositionSingleRootEstimator
             double x1 = minEvalPoint;
             double x2 = maxEvalPoint;
             double xacc = tolerance;
-            double xl, xh, del;
+            double xl;
+            double xh;
+            double del;
             double fl = listener.evaluate(x1);
             double fh = listener.evaluate(x2);
             if (fl * fh > 0.0) {
@@ -207,8 +188,8 @@ public class FalsePositionSingleRootEstimator
                     return;
                 }
             }
-        } catch (Throwable t) {
-            throw new RootEstimationException(t);
+        } catch (EvaluationException e) {
+            throw new RootEstimationException(e);
         }
         //too many iterations and error exceeds desired tolerance
         locked = false;
@@ -225,5 +206,22 @@ public class FalsePositionSingleRootEstimator
     @Override
     public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
+    }
+
+    /**
+     * Internal method to set tolerance to find a root. This method does not
+     * check whether this instance is locked.
+     * Whenever the variation of the estimated root is smaller than provided
+     * tolerance, then the algorithm is assumed to be converged, and the
+     * estimated root is ensured to have an accuracy that equals provided
+     * tolerance.
+     * @param tolerance Tolerance to find a root.
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
     }
 }

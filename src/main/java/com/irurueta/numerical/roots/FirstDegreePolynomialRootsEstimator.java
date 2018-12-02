@@ -60,8 +60,7 @@ public class FirstDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */
-    public FirstDegreePolynomialRootsEstimator(double[] polyParams)
-            throws IllegalArgumentException {
+    public FirstDegreePolynomialRootsEstimator(double[] polyParams) {
         super();
         internalSetPolynomialParameters(polyParams);
     }
@@ -77,7 +76,7 @@ public class FirstDegreePolynomialRootsEstimator
      * array is not valid.
      */
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -94,8 +93,7 @@ public class FirstDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException Raised if the length of the provided
      * array is not valid.
      */
-    private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException {
+    private void internalSetPolynomialParameters(double[] polyParams) {
         if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
         }
@@ -140,6 +138,7 @@ public class FirstDegreePolynomialRootsEstimator
      * @deprecated
      */
     @Override
+    @Deprecated
     public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
@@ -151,8 +150,8 @@ public class FirstDegreePolynomialRootsEstimator
      * @deprecated 
      */
     @Override
-    protected void internalSetPolynomialParameters(Complex[] polyParams) 
-            throws IllegalArgumentException {
+    @Deprecated
+    protected void internalSetPolynomialParameters(Complex[] polyParams) {
         //complex values are not supported
         throw new IllegalArgumentException();
     }
@@ -199,15 +198,14 @@ public class FirstDegreePolynomialRootsEstimator
      */
     public static boolean isFirstDegree(double[] polyParams) {
         int length = polyParams.length;
-        if (length >= VALID_POLY_PARAMS_LENGTH) {
-            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
-                for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
-                    if (Math.abs(polyParams[i]) > EPS) {
-                        return false;
-                    }
+        if (length >= VALID_POLY_PARAMS_LENGTH &&
+                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+            for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+                if (Math.abs(polyParams[i]) > EPS) {
+                    return false;
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }
