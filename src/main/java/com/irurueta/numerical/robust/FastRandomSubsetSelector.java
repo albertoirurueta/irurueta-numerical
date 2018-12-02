@@ -55,8 +55,7 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero
      * or negative
      */
-    public FastRandomSubsetSelector(int numSamples) 
-            throws IllegalArgumentException {
+    public FastRandomSubsetSelector(int numSamples) {
         this(numSamples, DEFAULT_SEED_RANDOMIZER_WITH_TIME);
     }
     
@@ -69,7 +68,7 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      * or negative.
      */
     public FastRandomSubsetSelector(int numSamples, 
-            boolean seedRandomizerWithTime) throws IllegalArgumentException {
+            boolean seedRandomizerWithTime) {
         super(numSamples);
         createRandomizer(seedRandomizerWithTime);
         mSelectedIndices = new HashSet<>();
@@ -84,15 +83,6 @@ public class FastRandomSubsetSelector extends SubsetSelector {
         return SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR;
     }
 
-    /**
-     * Returns internal randomizer to generate uniformly distributed random
-     * values.
-     * @return internal randomizer.
-     */
-    protected UniformRandomizer getRandomizer() {
-        return mRandomizer;
-    }
-    
     /**
      * Computes a random subset of indices within range of number of samples to
      * be used on robust estimators.
@@ -228,7 +218,16 @@ public class FastRandomSubsetSelector extends SubsetSelector {
         
         mSelectedIndices.clear();
     }
-    
+
+    /**
+     * Returns internal randomizer to generate uniformly distributed random
+     * values.
+     * @return internal randomizer.
+     */
+    protected UniformRandomizer getRandomizer() {
+        return mRandomizer;
+    }
+
     /**
      * Initializes randomizer for an instance of this class.
      * @param seedWithTime if true randomizer will be initialized using current

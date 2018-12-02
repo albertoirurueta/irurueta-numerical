@@ -328,8 +328,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -358,8 +357,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -430,8 +428,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setInlierFactor(double inlierFactor)
-            throws IllegalArgumentException, LockedException {
+    public void setInlierFactor(double inlierFactor) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -497,7 +494,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * is being computed.
      */
     public void setMaxOutliersProportion(double maxOutliersProportion) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -529,8 +526,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setEta0(double eta0) throws IllegalArgumentException, 
-            LockedException {
+    public void setEta0(double eta0) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -567,8 +563,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setBeta(double beta) throws IllegalArgumentException, 
-            LockedException {
+    public void setBeta(double beta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -830,7 +825,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                                 //  sampleSizeTest+1 and totalSamples that maximizes
                                 //  the ratio inliersSampleSizeBest/sampleSizeBest
 
-                                //- Non-randomness: In >= Imin(n*)
+                                //- Non-randomness: In >= imin(n*)
                                 //- Maximality: the number of samples that were drawn 
                                 //  so far must be enough so that the probability of
                                 //  having missed a set of inliers is below eta=0.01.
@@ -867,7 +862,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                                         (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
 
                                     if (inliersSampleSizeTest < 
-                                            Imin(subsetSize, sampleSizeTest, mBeta)) {
+                                            imin(subsetSize, sampleSizeTest, mBeta)) {
                                         //equation not satisfied, no need to test for
                                         //smaller sampleSizeTest values anyway
                                         break; //jump out of the for(sampleSizeTest) loop
@@ -1148,7 +1143,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param beta beta value.
      * @return i-m.
      */
-    private static int Imin(int subsetSize, int sampleSize, double beta) {
+    private static int imin(int subsetSize, int sampleSize, double beta) {
         double mu = sampleSize * beta;
         double sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
         

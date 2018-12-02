@@ -214,8 +214,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -244,8 +243,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -277,8 +275,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -315,8 +312,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setInlierFactor(double inlierFactor)
-            throws IllegalArgumentException, LockedException {
+    public void setInlierFactor(double inlierFactor) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -403,7 +399,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             bestResult = null; //best result found so far
             //progress and previous progress to determine when progress
             //notification must occur
-            float previousProgress = 0.0f, progress;
+            float previousProgress = 0.0f;
+            float progress;
             //indices of subset picked in one iteration
             int[] subsetIndices = new int[subsetSize];
             double[] residualsTemp = new double[totalSamples];
@@ -556,8 +553,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
     @Override
     public RobustEstimatorMethod getMethod() {
         return RobustEstimatorMethod.LMedS;
-    }    
-    
+    }
+
     /**
      * Computes inliers data for current iteration.
      * @param <T> type of result to be estimated.
@@ -616,7 +613,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
                     normEstimatedThreshold, true);
         }
     }
-    
+
     /**
      * Contains data related to inliers estimated in one iteration.
      */
@@ -626,83 +623,51 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * samples.
          */
         private double mBestMedianResidual;
-        
+
         /**
          * Standard deviation of error among all provided samples respect to
          * currently estimated result.
          */
         private double mStandardDeviation;
-        
+
         /**
          * Efficiently stores which samples are considered inliers and which
          * ones aren't.
          */
         private BitSet mInliers;
-                
+
         /**
-         * Median of error found on current iteration among all provided 
+         * Median of error found on current iteration among all provided
          * samples.
          */
         private double mMedianResidual;
-        
+
         /**
          * Estimated threshold to determine whether samples are inliers or not.
          */
         private double mEstimatedThreshold;
-        
+
         /**
          * Indicates whether median residual computed in current iteration has
          * improved respect to previous iterations.
          */
         private boolean mMedianResidualImproved;
-        
+
         /**
          * Constructor.
          * @param totalSamples total number of samples.
          */
         protected LMedSInliersData(int totalSamples) {
-            mBestMedianResidual = mStandardDeviation = mMedianResidual = 
+            mBestMedianResidual = mStandardDeviation = mMedianResidual =
                     mEstimatedThreshold = Double.MAX_VALUE;
             mInliers = new BitSet(totalSamples);
             mResiduals = new double[totalSamples];
-            mNumInliers = 0;     
+            mNumInliers = 0;
             mMedianResidualImproved = false;
         }
-        
+
         /**
-         * Updates data contained in this instance.
-         * @param bestMedianResidual best median of error found so far taking 
-         * into account all provided samples.
-         * @param standardDeviation standard deviation of error among all 
-         * provided samples respect to currently estimated result.
-         * @param inliers efficiently stores which samples are considered 
-         * inliers and which ones aren't.
-         * @param residuals residuals obtained for each sample of data.
-         * @param numInliers number of inliers found on current iteration.
-         * @param medianResidual median of error found on current iteration 
-         * among all provided samples.
-         * @param estimatedThreshold estimated threshold to determine whether 
-         * samples are inliers or not.
-         * @param medianResidualImproved indicates whether median residual 
-         * computed in current iteration has improved respect to previous
-         * iteration.
-         */
-        protected void update(double bestMedianResidual, double standardDeviation,
-                BitSet inliers, double[] residuals, int numInliers, 
-                double medianResidual, double estimatedThreshold, 
-                boolean medianResidualImproved) {
-            mBestMedianResidual = bestMedianResidual;
-            mStandardDeviation = standardDeviation;
-            mInliers = inliers;
-            mResiduals = residuals;
-            mNumInliers = numInliers;
-            mMedianResidual = medianResidual;
-            mEstimatedThreshold = estimatedThreshold;
-            mMedianResidualImproved = medianResidualImproved;
-        }
-        
-        /**
-         * Returns best median of error found so far taking into account all 
+         * Returns best median of error found so far taking into account all
          * provided samples.
          * @return best median of error found so far taking into account all
          * provided samples.
@@ -710,9 +675,9 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         public double getBestMedianResidual() {
             return mBestMedianResidual;
         }
-        
+
         /**
-         * Returns standard deviation of error among all provided samples 
+         * Returns standard deviation of error among all provided samples
          * respect to currently estimated result.
          * @return standard deviation of error among all provided samples
          * respect to currently estimated result.
@@ -722,9 +687,9 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         /**
-         * Returns efficient array indicating which samples are considered 
+         * Returns efficient array indicating which samples are considered
          * inliers and which ones aren't.
-         * @return array indicating which samples are considered inliers and 
+         * @return array indicating which samples are considered inliers and
          * which ones aren't.
          */
         @Override
@@ -743,7 +708,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         /**
-         * Returns estimated threshold to determine whether samples are inliers 
+         * Returns estimated threshold to determine whether samples are inliers
          * or not.
          * @return estimated threshold to determine whether samples are inliers
          * or not.
@@ -753,12 +718,44 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         /**
-         * Returns boolean indicating whether median residual computed in 
+         * Returns boolean indicating whether median residual computed in
          * current iteration has improved respect to previous iterations.
          * @return true if median residual improved, false otherwise.
          */
         public boolean isMedianResidualImproved() {
             return mMedianResidualImproved;
+        }
+
+        /**
+         * Updates data contained in this instance.
+         * @param bestMedianResidual best median of error found so far taking
+         * into account all provided samples.
+         * @param standardDeviation standard deviation of error among all
+         * provided samples respect to currently estimated result.
+         * @param inliers efficiently stores which samples are considered
+         * inliers and which ones aren't.
+         * @param residuals residuals obtained for each sample of data.
+         * @param numInliers number of inliers found on current iteration.
+         * @param medianResidual median of error found on current iteration
+         * among all provided samples.
+         * @param estimatedThreshold estimated threshold to determine whether
+         * samples are inliers or not.
+         * @param medianResidualImproved indicates whether median residual
+         * computed in current iteration has improved respect to previous
+         * iteration.
+         */
+        protected void update(double bestMedianResidual, double standardDeviation,
+                              BitSet inliers, double[] residuals, int numInliers,
+                              double medianResidual, double estimatedThreshold,
+                              boolean medianResidualImproved) {
+            mBestMedianResidual = bestMedianResidual;
+            mStandardDeviation = standardDeviation;
+            mInliers = inliers;
+            mResiduals = residuals;
+            mNumInliers = numInliers;
+            mMedianResidual = medianResidual;
+            mEstimatedThreshold = estimatedThreshold;
+            mMedianResidualImproved = medianResidualImproved;
         }
     }
 }

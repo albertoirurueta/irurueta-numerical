@@ -157,8 +157,8 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
+    @SuppressWarnings("Duplicates")
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -187,8 +187,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -252,6 +251,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * (i.e. numerical instability, no solution available, etc).
      */      
     @Override
+    @SuppressWarnings("Duplicates")
     public T estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
         if (isLocked()) {
@@ -287,7 +287,8 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
             int currentInliers;
             //progress and previous progress to determine when progress
             //notification must occur
-            float previousProgress = 0.0f, progress;
+            float previousProgress = 0.0f;
+            float progress;
             //indices of subset picked in one iteration
             int[] subsetIndices = new int[subsetSize];
             double[] residualsTemp = new double[totalSamples];
@@ -532,32 +533,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
             mNumInliers = 0;     
             mMedianResidualImproved = false;
         }
-        
-        /**
-         * Updates data contained in this instance.
-         * @param bestMedianResidual best median of error found so far taking 
-         * into account all provided samples.
-         * @param inliers efficiently stores which samples are considered 
-         * inliers and which ones aren't.
-         * @param residuals residuals obtained for each sample of data.
-         * @param numInliers number of inliers found on current iteration.
-         * @param medianResidual median of error found on current iteration 
-         * among all provided samples.
-         * @param medianResidualImproved indicates whether median residual 
-         * computed in current iteration has improved respect to previous
-         * iteration.
-         */
-        protected void update(double bestMedianResidual, BitSet inliers, 
-                double[] residuals, int numInliers, double medianResidual, 
-                boolean medianResidualImproved) {
-            mBestMedianResidual = bestMedianResidual;
-            mInliers = inliers;
-            mResiduals = residuals;
-            mNumInliers = numInliers;
-            mMedianResidual = medianResidual;
-            mMedianResidualImproved = medianResidualImproved;
-        }
-        
+
         /**
          * Returns best median of error found so far taking into account all 
          * provided samples.
@@ -596,6 +572,32 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          */
         public boolean isMedianResidualImproved() {
             return mMedianResidualImproved;
+        }
+
+        /**
+         * Updates data contained in this instance.
+         * @param bestMedianResidual best median of error found so far taking
+         * into account all provided samples.
+         * @param inliers efficiently stores which samples are considered
+         * inliers and which ones aren't.
+         * @param residuals residuals obtained for each sample of data.
+         * @param numInliers number of inliers found on current iteration.
+         * @param medianResidual median of error found on current iteration
+         * among all provided samples.
+         * @param medianResidualImproved indicates whether median residual
+         * computed in current iteration has improved respect to previous
+         * iteration.
+         */
+        @SuppressWarnings("Duplicates")
+        protected void update(double bestMedianResidual, BitSet inliers,
+                              double[] residuals, int numInliers, double medianResidual,
+                              boolean medianResidualImproved) {
+            mBestMedianResidual = bestMedianResidual;
+            mInliers = inliers;
+            mResiduals = residuals;
+            mNumInliers = numInliers;
+            mMedianResidual = medianResidual;
+            mMedianResidualImproved = medianResidualImproved;
         }
     }    
 }
