@@ -155,8 +155,7 @@ public abstract class PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */    
-    public PolynomialRobustEstimator(int degree) 
-            throws IllegalArgumentException {
+    public PolynomialRobustEstimator(int degree) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -170,8 +169,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      * less than the required minimum.
      */
-    public PolynomialRobustEstimator(List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+    public PolynomialRobustEstimator(List<PolynomialEvaluation> evaluations) {
         this();
         internalSetEvaluations(evaluations);
     }   
@@ -196,8 +194,7 @@ public abstract class PolynomialRobustEstimator {
      * provided degree.
      */
     public PolynomialRobustEstimator(int degree, 
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         this(degree);
         internalSetEvaluations(evaluations);
     }    
@@ -210,8 +207,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public PolynomialRobustEstimator(int degree, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         this(degree);
         mListener = listener;
     }
@@ -225,8 +221,7 @@ public abstract class PolynomialRobustEstimator {
      * less than the required minimum.
      */
     public PolynomialRobustEstimator(List<PolynomialEvaluation> evaluations,
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         this(evaluations);
         mListener = listener;
     }    
@@ -242,8 +237,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public PolynomialRobustEstimator(int degree, 
             List<PolynomialEvaluation> evaluations, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         this(degree, evaluations);
         mListener = listener;
     }    
@@ -267,7 +261,7 @@ public abstract class PolynomialRobustEstimator {
      * settings.
      */
     public void setEvaluations(List<PolynomialEvaluation> evaluations) 
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -331,7 +325,7 @@ public abstract class PolynomialRobustEstimator {
      * is being computed.
      */
     public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -365,7 +359,7 @@ public abstract class PolynomialRobustEstimator {
      * is being computed.
      */
     public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -395,7 +389,7 @@ public abstract class PolynomialRobustEstimator {
      * is being computed.
      */
     public void setMaxIterations(int maxIterations)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -443,8 +437,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      * @throws LockedException if this instance is locked.
      */
-    public void setDegree(int degree) throws IllegalArgumentException, 
-            LockedException {
+    public void setDegree(int degree) throws LockedException {
         if(isLocked()) {
             throw new LockedException();
         }
@@ -483,6 +476,7 @@ public abstract class PolynomialRobustEstimator {
      * @return quality scores corresponding to each evaluation.
      */
     public double[] getQualityScores() {
+        //quality scores ignored
         return null;
     }
     
@@ -498,7 +492,9 @@ public abstract class PolynomialRobustEstimator {
      * smaller than minimum required number of evaluations.
      */
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+            IllegalArgumentException {
+        //quality scores ignored
+    }
     
     /**
      * Estimates polynomial.
@@ -534,8 +530,7 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public static PolynomialRobustEstimator create(int degree) 
-            throws IllegalArgumentException {
+    public static PolynomialRobustEstimator create(int degree) {
         return create(degree, DEFAULT_ROBUST_METHOD);
     }
 
@@ -571,8 +566,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialRobustEstimator create(int degree,
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         return create(degree, evaluations, DEFAULT_ROBUST_METHOD);
     }
     
@@ -586,8 +580,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialRobustEstimator create(int degree,
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         return create(degree, listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -617,8 +610,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(int degree,
             List<PolynomialEvaluation> evaluations, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         return create(degree, evaluations, listener, DEFAULT_ROBUST_METHOD);
     }
     
@@ -652,7 +644,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialRobustEstimator create(int degree,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch(method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree);
@@ -729,8 +721,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(int degree,
             List<PolynomialEvaluation> evaluations,
-            RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch(method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree, evaluations);
@@ -759,8 +750,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(int degree,
             PolynomialRobustEstimatorListener listener,
-            RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch(method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree, listener);
@@ -822,8 +812,7 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(int degree,
             List<PolynomialEvaluation> evaluations, 
             PolynomialRobustEstimatorListener listener,
-            RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch(method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree, evaluations, 
@@ -881,8 +870,9 @@ public abstract class PolynomialRobustEstimator {
             case INTEGRAL_INTERVAL:
                 return getAlgebraicDistance(
                         (IntegralIntervalPolynomialEvaluation)eval, polynomial);
+            default:
+                return Double.MAX_VALUE;
         }
-        return Double.MAX_VALUE;
     }
     
     /**
@@ -987,7 +977,9 @@ public abstract class PolynomialRobustEstimator {
         double y2 = polynomial.evaluate(x);
         
         double slope = polynomial.evaluateDerivative(x);
-        double a, b, c;
+        double a;
+        double b;
+        double c;
         if (Math.abs(slope) > 1.0) {
             a = 1.0;
             b = -1.0 / slope;
@@ -1011,8 +1003,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided list of polynomials is null
      * or too small.
      */
-    private void internalSetEvaluations(List<PolynomialEvaluation> evaluations)
-            throws IllegalArgumentException {
+    private void internalSetEvaluations(List<PolynomialEvaluation> evaluations) {
         if (evaluations == null || 
                 evaluations.size() < getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();

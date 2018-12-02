@@ -59,7 +59,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(int degree) throws IllegalArgumentException {
+    public LMSEPolynomialEstimator(int degree) {
         super(degree);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -89,8 +89,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public LMSEPolynomialEstimator(int degree, 
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -102,8 +101,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public LMSEPolynomialEstimator(int degree, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         super(degree, listener);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -128,8 +126,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     public LMSEPolynomialEstimator(int degree, 
             List<PolynomialEvaluation> evaluations, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         super(degree, evaluations, listener);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }

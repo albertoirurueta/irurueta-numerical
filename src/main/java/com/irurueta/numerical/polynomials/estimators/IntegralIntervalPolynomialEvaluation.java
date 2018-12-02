@@ -64,8 +64,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
     public IntegralIntervalPolynomialEvaluation(double startX, double endX, 
-            double evaluation, int integralOrder) 
-            throws IllegalArgumentException {
+            double evaluation, int integralOrder) {
         super(evaluation);
         mStartX = startX;
         mEndX = endX;
@@ -129,8 +128,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param integralOrder integral order.
      * @throws IllegalArgumentException if integral order is less than 1.
      */
-    public final void setIntegralOrder(int integralOrder)
-            throws IllegalArgumentException {
+    public final void setIntegralOrder(int integralOrder) {
         if(integralOrder < MIN_INTEGRAL_ORDER) {
             throw new IllegalArgumentException(
                     "integral order must be at least 1");

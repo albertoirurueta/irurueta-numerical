@@ -76,7 +76,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //test constructor with degre
@@ -96,7 +96,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //Force IllegalArgumentException
         estimator = null;
@@ -127,7 +127,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 
         
         //Force IllegalArgumentException
@@ -170,7 +170,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //test constructor with degree, evaluations and weights
@@ -190,7 +190,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 
         
         //Force IllegalArgumentException
@@ -234,7 +234,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //Force IllegalArgumentException
         estimator = null;
@@ -262,7 +262,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 
         
         //Force IllegalArgumentException
@@ -308,7 +308,7 @@ public class WeightedPolynomialEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 
         
         //Force IllegalArgumentException

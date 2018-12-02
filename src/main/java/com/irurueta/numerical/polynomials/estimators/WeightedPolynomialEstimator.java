@@ -76,8 +76,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public WeightedPolynomialEstimator(int degree) 
-            throws IllegalArgumentException {
+    public WeightedPolynomialEstimator(int degree) {
         super(degree);
     }
     
@@ -91,7 +90,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * don't have the same size.
      */
     public WeightedPolynomialEstimator(List<PolynomialEvaluation> evaluations, 
-            double[] weights) throws IllegalArgumentException {
+            double[] weights) {
         super();
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
@@ -115,8 +114,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * don't have the same size, or if provided degree is less than 1.
      */
     public WeightedPolynomialEstimator(int degree, 
-            List<PolynomialEvaluation> evaluations, double[] weights)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations, double[] weights) {
         super(degree);
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
@@ -128,8 +126,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public WeightedPolynomialEstimator(int degree, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         super(degree, listener);
     }
     
@@ -144,8 +141,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * don't have the same size.
      */
     public WeightedPolynomialEstimator(List<PolynomialEvaluation> evaluations, 
-            double[] weights, PolynomialEstimatorListener listener)
-            throws IllegalArgumentException {
+            double[] weights, PolynomialEstimatorListener listener) {
         super(listener);
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
@@ -163,8 +159,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      */
     public WeightedPolynomialEstimator(int degree, 
             List<PolynomialEvaluation> evaluations, double[] weights, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         super(degree, listener);
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
@@ -178,8 +173,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * @throws IllegalArgumentException always thrown.
      */
     @Override
-    public void setEvaluations(List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+    public void setEvaluations(List<PolynomialEvaluation> evaluations) {
         throw new IllegalArgumentException(
                 "evaluations and weights must be provided at once");
     }    
@@ -196,7 +190,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * don't have the same size.
      */
     public void setEvaluationsAndWeights(List<PolynomialEvaluation> evaluations,
-            double[] weights) throws LockedException, IllegalArgumentException {
+            double[] weights) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -218,7 +212,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      */
     public void setDegreeEvaluationsAndWeights(int degree, 
             List<PolynomialEvaluation> evaluations, double[] weights) 
-            throws IllegalArgumentException, LockedException {        
+            throws LockedException {
         setDegree(degree);
         setEvaluationsAndWeights(evaluations, weights);
     }
@@ -263,7 +257,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * @throws LockedException if this instance is locked.
      */
     public void setMaxEvaluations(int maxEvaluations) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -340,7 +334,8 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
             Matrix a = new Matrix(nEvaluations, mDegree + 1);
             Matrix b = new Matrix(nEvaluations, 1);
             
-            int index = 0, counter = 0;
+            int index = 0;
+            int counter = 0;
             double weight;
             for (PolynomialEvaluation evaluation : mEvaluations) {
                 if (selected[index]) {
@@ -400,7 +395,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      */    
     @Override
     public PolynomialEstimatorType getType() {
-        return PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR;
+        return PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR;
     }
     
     /**
@@ -435,8 +430,7 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
      * don't have the same size.
      */
     private void internalSetEvaluationsAndWeights(
-            List<PolynomialEvaluation> evaluations, double[] weights) 
-            throws IllegalArgumentException  {
+            List<PolynomialEvaluation> evaluations, double[] weights) {
         if (weights == null || evaluations == null ||
                 weights.length != evaluations.size()) {
             throw new IllegalArgumentException();

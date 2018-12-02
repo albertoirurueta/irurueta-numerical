@@ -75,7 +75,7 @@ public abstract class PolynomialEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(int degree) throws IllegalArgumentException {
+    public PolynomialEstimator(int degree) {
         internalSetDegree(degree);
     } 
     
@@ -104,8 +104,7 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public PolynomialEstimator(int degree, 
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         this(degree);
         mEvaluations = evaluations;
     }    
@@ -117,8 +116,7 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public PolynomialEstimator(int degree, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         this(degree);
         mListener = listener;
     }
@@ -143,8 +141,7 @@ public abstract class PolynomialEstimator {
      */
     public PolynomialEstimator(int degree, 
             List<PolynomialEvaluation> evaluations, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         this(degree, evaluations);
         mListener = listener;
     }
@@ -163,8 +160,7 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      * @throws LockedException if this instance is locked.
      */
-    public void setDegree(int degree) throws IllegalArgumentException, 
-            LockedException {
+    public void setDegree(int degree) throws LockedException {
         if(isLocked()) {
             throw new LockedException();
         }
@@ -207,7 +203,7 @@ public abstract class PolynomialEstimator {
      */
     public void setDegreeAndEvaluations(int degree, 
             List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException, LockedException {        
+            throws LockedException {
         setDegree(degree);
         setEvaluations(evaluations);
     }
@@ -244,8 +240,7 @@ public abstract class PolynomialEstimator {
      * @return number of required evaluations.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public static int getMinNumberOfEvaluations(int degree) 
-            throws IllegalArgumentException {
+    public static int getMinNumberOfEvaluations(int degree) {
         if (degree < MIN_DEGREE) {
             throw new IllegalArgumentException();
         }
@@ -294,19 +289,7 @@ public abstract class PolynomialEstimator {
         
         mListener = listener;
     }
-    
-    /**
-     * Internal method to set degree of polynomial to be estimated.
-     * @param degree degree of polynomial to be estimated.
-     * @throws IllegalArgumentException if provided degree is less than 1.
-     */
-    private void internalSetDegree(int degree) throws IllegalArgumentException {
-        if(degree < MIN_DEGREE) {
-            throw new IllegalArgumentException("degree must be at least 1");
-        }
-        mDegree = degree;
-    }    
-    
+
     /**
      * Estimates a polynomial based on provided evaluations.
      * @return estimated polynomial.
@@ -339,8 +322,7 @@ public abstract class PolynomialEstimator {
      * @return an instance of a polynomial estimator.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public static PolynomialEstimator create(int degree) 
-            throws IllegalArgumentException {
+    public static PolynomialEstimator create(int degree) {
         return create(degree, DEFAULT_ESTIMATOR_TYPE);
     }
     
@@ -375,8 +357,7 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialEstimator create(int degree, 
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         return create(degree, evaluations, DEFAULT_ESTIMATOR_TYPE);
     }
     
@@ -389,8 +370,7 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialEstimator create(int degree, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         return create(degree, listener, DEFAULT_ESTIMATOR_TYPE);
     }
     
@@ -418,8 +398,7 @@ public abstract class PolynomialEstimator {
      */
     public static PolynomialEstimator create(int degree, 
             List<PolynomialEvaluation> evaluations, 
-            PolynomialEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener) {
         return create(degree, evaluations, listener, DEFAULT_ESTIMATOR_TYPE);
     }
     
@@ -431,7 +410,7 @@ public abstract class PolynomialEstimator {
      */
     public static PolynomialEstimator create(PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 return new WeightedPolynomialEstimator();
             case LMSE_POLYNOMIAL_ESTIMATOR:
             default:
@@ -448,9 +427,9 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialEstimator create(int degree, 
-            PolynomialEstimatorType type) throws IllegalArgumentException {
+            PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 return new WeightedPolynomialEstimator(degree);
             case LMSE_POLYNOMIAL_ESTIMATOR:
             default:
@@ -469,7 +448,7 @@ public abstract class PolynomialEstimator {
             List<PolynomialEvaluation> evaluations, 
             PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 double[] weights = new double[evaluations.size()];
                 Arrays.fill(weights, 1.0);
                 return new WeightedPolynomialEstimator(evaluations, weights);
@@ -490,7 +469,7 @@ public abstract class PolynomialEstimator {
             PolynomialEstimatorListener listener, 
             PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 return new WeightedPolynomialEstimator(listener);
             case LMSE_POLYNOMIAL_ESTIMATOR:
             default:
@@ -509,9 +488,9 @@ public abstract class PolynomialEstimator {
      */
     public static PolynomialEstimator create(int degree, 
             List<PolynomialEvaluation> evaluations, 
-            PolynomialEstimatorType type) throws IllegalArgumentException {
+            PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 double[] weights = new double[evaluations.size()];
                 Arrays.fill(weights, 1.0);                
                 return new WeightedPolynomialEstimator(degree, evaluations, 
@@ -532,10 +511,9 @@ public abstract class PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialEstimator create(int degree,
-            PolynomialEstimatorListener listener, PolynomialEstimatorType type)
-            throws IllegalArgumentException {
+            PolynomialEstimatorListener listener, PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 return new WeightedPolynomialEstimator(degree, listener);
             case LMSE_POLYNOMIAL_ESTIMATOR:
             default:
@@ -556,7 +534,7 @@ public abstract class PolynomialEstimator {
             PolynomialEstimatorListener listener, 
             PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 double[] weights = new double[evaluations.size()];
                 Arrays.fill(weights, 1.0);                                
                 return new WeightedPolynomialEstimator(evaluations, weights, 
@@ -580,9 +558,9 @@ public abstract class PolynomialEstimator {
     public static PolynomialEstimator create(int degree,
             List<PolynomialEvaluation> evaluations,
             PolynomialEstimatorListener listener,
-            PolynomialEstimatorType type) throws IllegalArgumentException {
+            PolynomialEstimatorType type) {
         switch (type) {
-            case WEIGHTED_POLyNOMIAL_ESTIMATOR:
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
                 double[] weights = new double[evaluations.size()];
                 Arrays.fill(weights, 1.0);                                                
                 return new WeightedPolynomialEstimator(degree, evaluations, 
@@ -760,5 +738,17 @@ public abstract class PolynomialEstimator {
             a.setElementAt(row, i, a.getElementAt(row, i) / norm);
         }
         b.setElementAtIndex(row, b.getElementAtIndex(row) / norm);
+    }
+
+    /**
+     * Internal method to set degree of polynomial to be estimated.
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    private void internalSetDegree(int degree) {
+        if(degree < MIN_DEGREE) {
+            throw new IllegalArgumentException("degree must be at least 1");
+        }
+        mDegree = degree;
     }
 }

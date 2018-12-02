@@ -89,8 +89,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PROMedSPolynomialRobustEstimator(int degree)
-            throws IllegalArgumentException {
+    public PROMedSPolynomialRobustEstimator(int degree) {
         super(degree);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -102,8 +101,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * less than the required minimum.
      */
     public PROMedSPolynomialRobustEstimator(
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(evaluations);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -128,8 +126,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * provided degree.
      */
     public PROMedSPolynomialRobustEstimator(int degree,
-            List<PolynomialEvaluation> evaluations)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -142,8 +139,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public PROMedSPolynomialRobustEstimator(int degree,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -158,8 +154,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(
             List<PolynomialEvaluation> evaluations, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(evaluations, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -204,8 +199,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * provided quality scores length is smaller than minimum required size
      * for provided degree (degree + 1).
      */
-    public PROMedSPolynomialRobustEstimator(int degree, double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROMedSPolynomialRobustEstimator(int degree, double[] qualityScores) {
         super(degree);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -221,8 +215,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * degree (2 evaluations).
      */
     public PROMedSPolynomialRobustEstimator(
-            List<PolynomialEvaluation> evaluations, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations, double[] qualityScores) {
         super(evaluations);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -239,7 +232,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(
             PolynomialRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -256,8 +249,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * required size for provided degree (degree + 1).
      */
     public PROMedSPolynomialRobustEstimator(int degree,
-            List<PolynomialEvaluation> evaluations, double[] qualityScores)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations, double[] qualityScores) {
         super(degree, evaluations);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -276,7 +268,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(int degree,
             PolynomialRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(degree, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -296,7 +288,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     public PROMedSPolynomialRobustEstimator(
             List<PolynomialEvaluation> evaluations, 
             PolynomialRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(evaluations, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -317,7 +309,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     public PROMedSPolynomialRobustEstimator(int degree,
             List<PolynomialEvaluation> evaluations,
             PolynomialRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(degree, evaluations, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -367,7 +359,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * estimation is already in progress
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -398,8 +390,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * smaller than required minimum size.
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -559,8 +550,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than required minimum size.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if(qualityScores.length < 
                 mPolynomialEstimator.getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();

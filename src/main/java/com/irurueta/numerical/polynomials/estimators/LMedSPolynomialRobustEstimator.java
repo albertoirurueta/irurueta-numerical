@@ -76,8 +76,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMedSPolynomialRobustEstimator(int degree) 
-            throws IllegalArgumentException {
+    public LMedSPolynomialRobustEstimator(int degree) {
         super(degree);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -89,8 +88,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * less than the required minimum.
      */
     public LMedSPolynomialRobustEstimator(
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(evaluations);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -115,8 +113,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * provided degree.
      */
     public LMedSPolynomialRobustEstimator(int degree,
-            List<PolynomialEvaluation> evaluations)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -129,8 +126,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public LMedSPolynomialRobustEstimator(int degree,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -162,8 +158,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public LMedSPolynomialRobustEstimator(int degree,
             List<PolynomialEvaluation> evaluations,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, evaluations, listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -212,8 +207,10 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * estimation is already in progress
      */
     public void setStopthreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-        if(isLocked()) throw new LockedException();
+            throws LockedException {
+        if(isLocked()) {
+            throw new LockedException();
+        }
         if(stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
         }

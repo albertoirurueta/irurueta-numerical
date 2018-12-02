@@ -68,8 +68,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PROSACPolynomialRobustEstimator(int degree)
-            throws IllegalArgumentException {
+    public PROSACPolynomialRobustEstimator(int degree) {
         super(degree);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -81,8 +80,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * less than the required minimum.
      */
     public PROSACPolynomialRobustEstimator(
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(evaluations);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -107,8 +105,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * provided degree.
      */
     public PROSACPolynomialRobustEstimator(int degree,
-            List<PolynomialEvaluation> evaluations)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -121,8 +118,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public PROSACPolynomialRobustEstimator(int degree,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -137,8 +133,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public PROSACPolynomialRobustEstimator(
             List<PolynomialEvaluation> evaluations, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(evaluations, listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -155,8 +150,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public PROSACPolynomialRobustEstimator(int degree,
             List<PolynomialEvaluation> evaluations,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, evaluations, listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -183,8 +177,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * provided quality scores length is smaller than minimum required size
      * for provided degree (degree + 1).
      */
-    public PROSACPolynomialRobustEstimator(int degree, double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROSACPolynomialRobustEstimator(int degree, double[] qualityScores) {
         super(degree);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -200,8 +193,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * degree (2 evaluations).
      */
     public PROSACPolynomialRobustEstimator(
-            List<PolynomialEvaluation> evaluations, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations, double[] qualityScores) {
         super(evaluations);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -235,8 +227,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * required size for provided degree (degree + 1).
      */
     public PROSACPolynomialRobustEstimator(int degree,
-            List<PolynomialEvaluation> evaluations, double[] qualityScores)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations, double[] qualityScores) {
         super(degree, evaluations);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -255,7 +246,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public PROSACPolynomialRobustEstimator(int degree,
             PolynomialRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(degree, listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -275,7 +266,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
     public PROSACPolynomialRobustEstimator(
             List<PolynomialEvaluation> evaluations, 
             PolynomialRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(evaluations, listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -296,7 +287,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
     public PROSACPolynomialRobustEstimator(int degree,
             List<PolynomialEvaluation> evaluations,
             PolynomialRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(degree, evaluations, listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -321,10 +312,13 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * zero.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException,
-            LockedException {
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+    public void setThreshold(double threshold) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }
             
@@ -348,8 +342,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * smaller than required minimum size.
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -510,8 +503,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than required minimum size.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if(qualityScores.length < 
                 mPolynomialEstimator.getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();

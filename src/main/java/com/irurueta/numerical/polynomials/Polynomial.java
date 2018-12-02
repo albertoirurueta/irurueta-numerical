@@ -386,6 +386,7 @@ public class Polynomial implements Serializable {
      * Computes derivative of polynomial.
      * @param result instance where derivative will be stored.
      */
+    @SuppressWarnings("Duplicates")
     public void derivative(Polynomial result) {
         int resultLength = mPolyParams.length - 1;
         int resultLength2 = Math.max(resultLength, 1);
@@ -443,6 +444,7 @@ public class Polynomial implements Serializable {
      * Computes second derivative of polynomial.
      * @param result instance where second derivative will be stored.
      */
+    @SuppressWarnings("Duplicates")
     public void secondDerivative(Polynomial result) {
         int resultLength = mPolyParams.length - 2;
         int resultLength2 = Math.max(resultLength, 1);
@@ -503,10 +505,10 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1.
      * 
      */
-    public void nthDerivative(int order, Polynomial result) 
-            throws IllegalArgumentException {
+    @SuppressWarnings("Duplicates")
+    public void nthDerivative(int order, Polynomial result) {
         if (order < MIN_ORDER) {
-            throw new IllegalArgumentException("order must be at least 1");
+            throw new IllegalArgumentException();
         }
         
         int resultLength = mPolyParams.length - order;
@@ -534,7 +536,7 @@ public class Polynomial implements Serializable {
      * @param order order of derivative to compute. Must be at least 1.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public void nthDerivative(int order) throws IllegalArgumentException {
+    public void nthDerivative(int order) {
         nthDerivative(order, this);
     }
     
@@ -544,8 +546,7 @@ public class Polynomial implements Serializable {
      * @return a new instance containing nth-order derivative.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public Polynomial nthDerivativeAndReturnNew(int order) 
-            throws IllegalArgumentException {
+    public Polynomial nthDerivativeAndReturnNew(int order) {
         int resultLength = Math.max(mPolyParams.length - order, 1);
         Polynomial result = new Polynomial(resultLength);
         nthDerivative(order, result);
@@ -559,8 +560,7 @@ public class Polynomial implements Serializable {
      * @return result of evaluation of nth-derivative.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public double evaluateNthDerivative(double x, int order) 
-            throws IllegalArgumentException {
+    public double evaluateNthDerivative(double x, int order) {
         if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
         }
@@ -654,6 +654,7 @@ public class Polynomial implements Serializable {
      * @param endX end of integration interval.
      * @return result of integration.
      */
+    @SuppressWarnings("Duplicates")
     public double integrateInterval(double startX, double endX) {
         
         double resultStart = 0.0;
@@ -684,8 +685,8 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public void nthIntegration(int order, Polynomial result, double[] constants) 
-            throws IllegalArgumentException {
+    @SuppressWarnings("Duplicates")
+    public void nthIntegration(int order, Polynomial result, double[] constants) {
         if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
         }
@@ -727,8 +728,7 @@ public class Polynomial implements Serializable {
      * @param result instance where resulting polynomial will be stored.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public void nthIntegration(int order, Polynomial result) 
-            throws IllegalArgumentException {
+    public void nthIntegration(int order, Polynomial result) {
         nthIntegration(order, result, null);
     }
     
@@ -742,8 +742,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public void nthIntegration(int order, double[] constants) 
-            throws IllegalArgumentException {
+    public void nthIntegration(int order, double[] constants) {
         nthIntegration(order, this, constants);
     }
     
@@ -766,8 +765,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public Polynomial nthIntegrationAndReturnNew(int order, double[] constants) 
-            throws IllegalArgumentException {
+    public Polynomial nthIntegrationAndReturnNew(int order, double[] constants) {
         Polynomial result = new Polynomial();
         nthIntegration(order, result, constants);
         return result;
@@ -780,8 +778,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public Polynomial nthIntegrationAndReturnNew(int order) 
-            throws IllegalArgumentException {
+    public Polynomial nthIntegrationAndReturnNew(int order) {
         return nthIntegrationAndReturnNew(order, null);
     }
     
@@ -796,14 +793,14 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
+    @SuppressWarnings("Duplicates")
     public double nthOrderIntegrateInterval(double startX, double endX, 
-            int order, double[] constants) throws IllegalArgumentException {
+            int order, double[] constants) {
         if (order < MIN_ORDER) {
-            throw new IllegalArgumentException("order must be at least 1");
+            throw new IllegalArgumentException();
         }
         if (constants != null && constants.length != order) {
-            throw new IllegalArgumentException(
-                    "length of constants must be order");
+            throw new IllegalArgumentException();
         }
 
         double resultStart = 0.0;
@@ -850,7 +847,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1.
      */
     public double nthOrderIntegrateInterval(double startX, double endX,
-            int order) throws IllegalArgumentException {
+            int order) {
         return nthOrderIntegrateInterval(startX, endX, order, null);
     }
     
@@ -986,15 +983,15 @@ public class Polynomial implements Serializable {
      * numerical instabilities.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public double[] getMaxima(double threshold) throws NumericalException,
-            IllegalArgumentException {
+    @SuppressWarnings("Duplicates")
+    public double[] getMaxima(double threshold) throws NumericalException {
         if (threshold < 0.0) {
-            throw new IllegalArgumentException("threshold must be positive");
+            throw new IllegalArgumentException();
         }
         
         Polynomial derivative = derivativeAndReturnNew();
         
-        //roots of derivative contains either minima or máxima.
+        //roots of derivative contains either minima or maxima.
         Complex[] derivativeRoots = derivative.getRoots();
         List<Complex> maxima = new ArrayList<>();
         if (derivativeRoots != null) {
@@ -1049,15 +1046,15 @@ public class Polynomial implements Serializable {
      * numerical instabilities.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public double[] getMinima(double threshold) throws NumericalException,
-            IllegalArgumentException {
+    @SuppressWarnings("Duplicates")
+    public double[] getMinima(double threshold) throws NumericalException {
         if (threshold < 0.0) {
-            throw new IllegalArgumentException("threshold must be positive");
+            throw new IllegalArgumentException();
         }
         
         Polynomial derivative = derivativeAndReturnNew();
         
-        //roots of derivative contains either minima or máxima.
+        //roots of derivative contains either minima or maxima.
         Complex[] derivativeRoots = derivative.getRoots();
         List<Complex> minima = new ArrayList<>();
         if (derivativeRoots != null) {
@@ -1115,7 +1112,7 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public double[] getExtrema(double threshold) 
-            throws NumericalException, IllegalArgumentException {
+            throws NumericalException {
         if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }

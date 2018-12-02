@@ -27,5 +27,5 @@ public enum PolynomialEstimatorType {
     /**
      * Polynomial estimator using weighted evaluations.
      */
-    WEIGHTED_POLyNOMIAL_ESTIMATOR
+    WEIGHTED_POLYNOMIAL_ESTIMATOR
 }

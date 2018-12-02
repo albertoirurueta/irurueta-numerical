@@ -62,8 +62,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public RANSACPolynomialRobustEstimator(int degree)
-            throws IllegalArgumentException {
+    public RANSACPolynomialRobustEstimator(int degree) {
         super(degree);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -75,8 +74,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * less than the required minimum.
      */
     public RANSACPolynomialRobustEstimator(
-            List<PolynomialEvaluation> evaluations) 
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(evaluations);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -101,8 +99,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * provided degree.
      */
     public RANSACPolynomialRobustEstimator(int degree,
-            List<PolynomialEvaluation> evaluations)
-            throws IllegalArgumentException {
+            List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -115,8 +112,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public RANSACPolynomialRobustEstimator(int degree,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -131,8 +127,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public RANSACPolynomialRobustEstimator(
             List<PolynomialEvaluation> evaluations, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(evaluations, listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -149,8 +144,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public RANSACPolynomialRobustEstimator(int degree,
             List<PolynomialEvaluation> evaluations,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
+            PolynomialRobustEstimatorListener listener) {
         super(degree, evaluations, listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -174,8 +168,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * zero.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException,
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

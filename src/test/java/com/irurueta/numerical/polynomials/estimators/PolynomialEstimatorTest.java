@@ -294,7 +294,7 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
     public void testCreateWeighted() {
         //default type
         PolynomialEstimator estimator = PolynomialEstimator.create(
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -305,11 +305,11 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //default type with degree
         estimator = PolynomialEstimator.create(2,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -320,13 +320,13 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //default type with evaluations
         List<PolynomialEvaluation> evaluations = new ArrayList<>();
         estimator = PolynomialEstimator.create(evaluations,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -337,12 +337,12 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //default type with listener
         estimator = PolynomialEstimator.create(this,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -353,12 +353,12 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //default type with degree and evaluations
         estimator = PolynomialEstimator.create(2, evaluations,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -369,12 +369,12 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //default type with degree and listener
         estimator = PolynomialEstimator.create(2, this,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -385,12 +385,12 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //default type with evaluations and listener
         estimator = PolynomialEstimator.create(evaluations, this,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -401,12 +401,12 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         
         //default type with degree, evaluations and listener
         estimator = PolynomialEstimator.create(2, evaluations, this,
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
         
         //check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -417,7 +417,7 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.getType(), 
-                PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);             
+                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
     }
     
     @Override

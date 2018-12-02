@@ -53,7 +53,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
     public DerivativePolynomialEvaluation(double x, double evaluation, 
-            int derivativeOrder) throws IllegalArgumentException {
+            int derivativeOrder) {
         super(evaluation);
         mX = x;
         setDerivativeOrder(derivativeOrder);
@@ -96,8 +96,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @param derivativeOrder order of derivative.
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
-    public final void setDerivativeOrder(int derivativeOrder) 
-            throws IllegalArgumentException {
+    public final void setDerivativeOrder(int derivativeOrder) {
         if(derivativeOrder < MIN_DERIVATIVE_ORDER) {
             throw new IllegalArgumentException(
                     "derivative order must be at least 1");
