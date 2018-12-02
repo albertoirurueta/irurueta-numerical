@@ -1347,22 +1347,21 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L98">98</a></td></tr>
+<td>com/irurueta/numerical/roots/BrentSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/BrentSingleRootEstimator.html#L77">77</a></td></tr>
 <tr class="b">
-<td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L100">100</a></td></tr>
+<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L74">74</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
-<pre>    public NewtonRaphsonSingleRootEstimator(
+<pre>    public BrentSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener,
-            SingleDimensionFunctionEvaluatorListener derivativeListener,
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
-        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
+            throws InvalidBracketRangeException {
+        super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-        
+     
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -1373,7 +1372,7 @@ com.irurueta:irurueta-numerical
     public double getTolerance() {
         return tolerance;
     }
-
+    
     /**
      * Internal method to set tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -1383,15 +1382,14 @@ com.irurueta:irurueta-numerical
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+     */
+    private void internalSetTolerance(double tolerance) {
         if (tolerance &lt; MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
         this.tolerance = tolerance;
     }
-    
+
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -1401,9 +1399,8 @@ com.irurueta:irurueta-numerical
      * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+     */
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -1420,11 +1417,11 @@ com.irurueta:irurueta-numerical
      * @throws RootEstimationException Raised if the root estimation failed for
      * some other reason (usually inability to evaluate the function, 
      * numerical instability or convergence problems, or no roots are found).
-     */        
+     */    
     @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-        
         if (isLocked()) {
             throw new LockedException();
         }
@@ -1433,13 +1430,10 @@ com.irurueta:irurueta-numerical
         }
         
         locked = true;
-        rootAvailable = false;
         
         double x1 = minEvalPoint;
         double x2 = maxEvalPoint;
-        double xacc = tolerance;
-        
-        double rtn = 0.5 * (x1 + x2);</pre></div></td></tr></table>
+        double tol = tolerance;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -1557,96 +1551,6 @@ com.irurueta:irurueta-numerical
             @Override
             public boolean isReady() {
                 return LMedSPolynomialRobustEstimator.this.isReady();</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L77">77</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/roots/SecantSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L77">77</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>    public RidderSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint, double maxEvalPoint,
-            double tolerance) throws InvalidBracketRangeException,
-            IllegalArgumentException {
-        super(listener, minEvalPoint, maxEvalPoint);
-        internalSetTolerance(tolerance);
-    }
-                   
-    /**
-     * Returns tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * the tolerance value.
-     * @return Tolerance value.
-     */       
-    public double getTolerance() {
-        return tolerance;
-    }
-    
-    /**
-     * Internal method to set tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * This method does not check whether this instance is locked or not.
-     * @param tolerance Tolerance value.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */        
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance &lt; MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
-    /**
-     * Sets tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */       
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * Estimates a local root for a given single dimension function being 
-     * evaluated by provided listener.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if either a listener has not
-     * yet been provided or a bracket has not been provided or computed.
-     * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */         
-    @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
-        
-        locked = true;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -1971,20 +1875,20 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L103">103</a></td></tr>
+<td>com/irurueta/numerical/roots/BrentSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/BrentSingleRootEstimator.html#L81">81</a></td></tr>
 <tr class="b">
-<td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L105">105</a></td></tr>
+<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L78">78</a></td></tr>
 <tr class="a">
-<td>com/irurueta/numerical/roots/SecantSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L81">81</a></td></tr>
+<td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L102">102</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
-<pre>        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
+<pre>        super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-        
+     
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -1995,7 +1899,7 @@ com.irurueta:irurueta-numerical
     public double getTolerance() {
         return tolerance;
     }
-
+    
     /**
      * Internal method to set tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -2005,15 +1909,14 @@ com.irurueta:irurueta-numerical
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+     */
+    private void internalSetTolerance(double tolerance) {
         if (tolerance &lt; MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
         this.tolerance = tolerance;
     }
-    
+
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -2023,9 +1926,8 @@ com.irurueta:irurueta-numerical
      * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+     */
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -2042,101 +1944,11 @@ com.irurueta:irurueta-numerical
      * @throws RootEstimationException Raised if the root estimation failed for
      * some other reason (usually inability to evaluate the function, 
      * numerical instability or convergence problems, or no roots are found).
-     */        
+     */    
     @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-        
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
-        
-        locked = true;
-        rootAvailable = false;</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L103">103</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L82">82</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L105">105</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
-        internalSetTolerance(tolerance);
-    }
-        
-    /**
-     * Returns tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * the tolerance value.
-     * @return Tolerance value.
-     */
-    public double getTolerance() {
-        return tolerance;
-    }
-
-    /**
-     * Internal method to set tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * This method does not check whether this instance is locked or not.
-     * @param tolerance Tolerance value.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance &lt; MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
-    /**
-     * Sets tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * Estimates a local root for a given single dimension function being 
-     * evaluated by provided listener.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if either a listener has not
-     * yet been provided or a bracket has not been provided or computed.
-     * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */        
-    @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
-        
         if (isLocked()) {
             throw new LockedException();
         }
@@ -2146,16 +1958,91 @@ com.irurueta:irurueta-numerical
         
         locked = true;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
+<tr class="b">
+<td>com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.html#L78">78</a></td></tr>
 <tr class="a">
+<td>com/irurueta/numerical/roots/SecantSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L74">74</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>    public FalsePositionSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener, 
+            double minEvalPoint, double maxEvalPoint, double tolerance)
+            throws InvalidBracketRangeException {
+        super(listener, minEvalPoint, maxEvalPoint);
+        internalSetTolerance(tolerance);
+    }
+      
+    /**
+     * Returns tolerance to find a root. Whenever the variation of the estimated 
+     * root is smaller than returned tolerance, then the algorithm is assumed to
+     * be converged, and the estimated root is ensured to have an accuracy that 
+     * equals the returned tolerance.
+     * @return Tolerance to find a root.
+     */    
+    public double getTolerance() {
+        return tolerance;
+    }    
+
+    /**
+     * Sets tolerance to find a root. Whenever the variation of the estimated
+     * root is smaller than provided tolerance, then the algorithm is assumed to
+     * be converged, and the estimated root is ensured to have an accuracy that
+     * equals provided tolerance.
+     * @param tolerance Tolerance to find a root.
+     * @throws LockedException Raised if this instance is locked while doing
+     * some computations.
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
+     */    
+    public void setTolerance(double tolerance) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        internalSetTolerance(tolerance);
+    }
+    
+    /**
+     * Estimates a single root of the provided single dimension function 
+     * contained within a given bracket of values.
+     * @throws LockedException Exception raised if this instance is already 
+     * locked.
+     * @throws NotReadyException Exception raised if not enough parameters have
+     * been provided in order to start the estimation.
+     * @throws RootEstimationException Raised if the root estimation failed for
+     * some other reason (usually inability to evaluate the function, 
+     * numerical instability or convergence problems, or no roots are found).
+     */        
+    @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void estimate() throws LockedException, NotReadyException,
+            RootEstimationException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
+        
+        locked = true;
+        rootAvailable = false;
+        
+        try {
+            double[] v1 = new double[1];</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>com/irurueta/numerical/optimization/BrentSingleOptimizer.java</td>
 <td><a href="./xref/com/irurueta/numerical/optimization/BrentSingleOptimizer.html#L114">114</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.java</td>
 <td><a href="./xref/com/irurueta/numerical/optimization/DerivativeBrentSingleOptimizer.html#L137">137</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>    }
 
@@ -2225,16 +2112,16 @@ com.irurueta:irurueta-numerical
         
         try {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L254">254</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L151">151</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>        nIters = mMaxIterations;
         bestResult = null;
@@ -2315,16 +2202,16 @@ com.irurueta:irurueta-numerical
      */
     public double getMaxOutliersProportion() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L392">392</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L446">446</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>                    }
                 }
@@ -2367,16 +2254,16 @@ com.irurueta:irurueta-numerical
     public InliersData getInliersData() {
         return getBestNumberInliersData();</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L370">370</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.html#L323">323</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>    }
             
@@ -2439,16 +2326,16 @@ com.irurueta:irurueta-numerical
             throw new NotReadyException();
         }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
 <td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L632">632</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
 <td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L645">645</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
@@ -2489,19 +2376,19 @@ com.irurueta:irurueta-numerical
 	    int m;
 	    double ymod;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/LMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/LMedSRobustEstimator.html#L462">462</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L353">353</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L424">424</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>                                Math.pow(probInlier, (double)subsetSize);
 
@@ -2526,16 +2413,16 @@ com.irurueta:irurueta-numerical
                             nIters = newNIters;
                         }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L161">161</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L180">180</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
@@ -2598,16 +2485,16 @@ com.irurueta:irurueta-numerical
      */
     public MSACInliersData getBestResultInliersData() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.html#L337">337</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L307">307</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    }
     
@@ -2681,16 +2568,16 @@ com.irurueta:irurueta-numerical
      */
     public boolean isGeometricDistanceUsed() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/LMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/LMedSRobustEstimator.html#L193">193</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L259">259</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    }
     
@@ -2764,25 +2651,25 @@ com.irurueta:irurueta-numerical
      */
     public double getStopThreshold() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.html#L337">337</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/LMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/LMedSRobustEstimator.html#L193">193</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L307">307</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L259">259</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L156">156</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>    }
     
@@ -2856,16 +2743,16 @@ com.irurueta:irurueta-numerical
      */
     public boolean isGeometricDistanceUsed() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L451">451</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L240">240</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
 <pre>    public PROSACInliersData getBestInliersData() {
         return mBestInliersData;

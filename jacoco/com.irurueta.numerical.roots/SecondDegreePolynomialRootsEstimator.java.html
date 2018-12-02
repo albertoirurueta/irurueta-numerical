@@ -63,11 +63,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */    
-    public SecondDegreePolynomialRootsEstimator(double[] polyParams)
-            throws IllegalArgumentException {
-<span class="fc" id="L68">        super();</span>
-<span class="fc" id="L69">        internalSetPolynomialParameters(polyParams);</span>
-<span class="fc" id="L70">    }</span>
+    public SecondDegreePolynomialRootsEstimator(double[] polyParams) {
+<span class="fc" id="L67">        super();</span>
+<span class="fc" id="L68">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L69">    }</span>
 
     /**
      * Set array of second degree polynomial parameters.
@@ -80,35 +79,13 @@ public class SecondDegreePolynomialRootsEstimator
      * array is not valid.
      */
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L85">            throw new LockedException();</span>
+            throws LockedException {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L84">            throw new LockedException();</span>
         }
-<span class="fc" id="L87">        internalSetPolynomialParameters(polyParams);</span>
-<span class="fc" id="L88">    }</span>
-    
-    /**
-     * Internal method to set array of second degree polynomial parameters.
-     * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and 
-     * the array must be provided as [c, b, a].
-     * Note: This class only supports real polynomial parameters
-     * This method does not check if this instance is locked.
-     * @param polyParams Array containing polynomial parameters.
-     * @throws IllegalArgumentException Raised if the length of the provided
-     * array is not valid.
-     */    
-    private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (polyParams.length &lt; VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc" id="L103">            throw new IllegalArgumentException();</span>
-        }
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (!isSecondDegree(polyParams)) {</span>
-<span class="fc" id="L106">            throw new IllegalArgumentException();</span>
-        }
-        
-<span class="fc" id="L109">        this.realPolyParams = polyParams;</span>
-<span class="fc" id="L110">    }</span>
-    
+<span class="fc" id="L86">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L87">    }</span>
+
     /**
      * Returns array of second degree polynomial parameters.
      * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and 
@@ -119,10 +96,10 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided
      */    
     public double[] getRealPolynomialParameters() throws NotAvailableException {
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (!arePolynomialParametersAvailable()) {</span>
-<span class="fc" id="L123">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (!arePolynomialParametersAvailable()) {</span>
+<span class="fc" id="L100">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L125">        return realPolyParams;</span>
+<span class="fc" id="L102">        return realPolyParams;</span>
     }
     
     /**
@@ -133,7 +110,7 @@ public class SecondDegreePolynomialRootsEstimator
      */    
     @Override
     public boolean arePolynomialParametersAvailable() {
-<span class="fc bfc" id="L136" title="All 2 branches covered.">        return realPolyParams != null;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        return realPolyParams != null;</span>
     }
 
     /**
@@ -144,23 +121,11 @@ public class SecondDegreePolynomialRootsEstimator
      * @deprecated
      */    
     @Override
+    @Deprecated
     public Complex[] getPolynomialParameters() throws NotAvailableException {
-<span class="fc" id="L148">        throw new NotAvailableException();</span>
+<span class="fc" id="L126">        throw new NotAvailableException();</span>
     }
-    
 
-    /**
-     * This method will always raise an IllegalArgumentException because this
-     * class only supports REAL polynomial parameters
-     * @deprecated 
-     */    
-    @Override
-    protected void internalSetPolynomialParameters(Complex[] polyParams) 
-            throws IllegalArgumentException {
-        //complex values are not supported
-<span class="fc" id="L161">        throw new IllegalArgumentException();</span>
-    }
-    
     /**
      * Estimates the roots of provided polynomial.
      * @throws LockedException Raised if this instance is locked estimating 
@@ -174,42 +139,42 @@ public class SecondDegreePolynomialRootsEstimator
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L178">            throw new LockedException();</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L143">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L181">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L146">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L184">        locked = true;</span>
+<span class="fc" id="L149">        locked = true;</span>
         
-<span class="fc" id="L186">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
+<span class="fc" id="L151">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
         
-<span class="fc" id="L188">        double c = realPolyParams[0];</span>
-<span class="fc" id="L189">        double b = realPolyParams[1];</span>
-<span class="fc" id="L190">        double a = realPolyParams[2];</span>
+<span class="fc" id="L153">        double c = realPolyParams[0];</span>
+<span class="fc" id="L154">        double b = realPolyParams[1];</span>
+<span class="fc" id="L155">        double a = realPolyParams[2];</span>
         
-<span class="fc" id="L192">        Complex x1 = new Complex();</span>
-<span class="fc" id="L193">        Complex x2 = new Complex();</span>
-<span class="fc" id="L194">        solveQuadratic(a, b, c, x1, x2);</span>
+<span class="fc" id="L157">        Complex x1 = new Complex();</span>
+<span class="fc" id="L158">        Complex x2 = new Complex();</span>
+<span class="fc" id="L159">        solveQuadratic(a, b, c, x1, x2);</span>
         
-<span class="pc bpc" id="L196" title="2 of 4 branches missed.">        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||</span>
-<span class="pc bpc" id="L197" title="2 of 4 branches missed.">                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary())) {</span>
-<span class="nc" id="L198">            locked = false;</span>
-<span class="nc" id="L199">            throw new RootEstimationException();</span>
+<span class="pc bpc" id="L161" title="2 of 4 branches missed.">        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||</span>
+<span class="pc bpc" id="L162" title="2 of 4 branches missed.">                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary())) {</span>
+<span class="nc" id="L163">            locked = false;</span>
+<span class="nc" id="L164">            throw new RootEstimationException();</span>
         }
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (x1.getReal() &lt; x2.getReal()) {</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (x1.getReal() &lt; x2.getReal()) {</span>
             //x1 goes first
-<span class="nc" id="L203">            roots[0] = x1;</span>
-<span class="nc" id="L204">            roots[1] = x2;</span>
+<span class="nc" id="L168">            roots[0] = x1;</span>
+<span class="nc" id="L169">            roots[1] = x2;</span>
         } else {
             //x2 goes first
-<span class="fc" id="L207">            roots[0] = x2;</span>
-<span class="fc" id="L208">            roots[1] = x1;</span>
+<span class="fc" id="L172">            roots[0] = x2;</span>
+<span class="fc" id="L173">            roots[1] = x1;</span>
         }
         
-<span class="fc" id="L211">        locked = false;</span>
-<span class="fc" id="L212">    }    </span>
+<span class="fc" id="L176">        locked = false;</span>
+<span class="fc" id="L177">    }    </span>
     
     /**
      * Returns boolean indicating whether provided array of polynomial 
@@ -221,18 +186,17 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if is a second degree polynomial, false otherwise
      */    
     public static boolean isSecondDegree(double[] polyParams) {
-<span class="fc" id="L224">        int length = polyParams.length;</span>
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L226" title="All 2 branches covered.">            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
-<span class="fc bfc" id="L227" title="All 2 branches covered.">                for (int i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">                    if (Math.abs(polyParams[i]) &gt; EPS) {</span>
-<span class="nc" id="L229">                        return false;</span>
-                    }
+<span class="fc" id="L189">        int length = polyParams.length;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp;</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            for (int i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
+<span class="nc" id="L194">                    return false;</span>
                 }
-<span class="fc" id="L232">                return true;</span>
             }
+<span class="fc" id="L197">            return true;</span>
         }
-<span class="fc" id="L235">        return false;</span>
+<span class="fc" id="L199">        return false;</span>
     }
     
     /**
@@ -246,10 +210,10 @@ public class SecondDegreePolynomialRootsEstimator
      * an array of polynomial parameters has not yet been provided.
      */    
     public boolean isSecondDegree() throws NotReadyException {
-<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L250">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L214">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L252">        return isSecondDegree(realPolyParams);</span>
+<span class="fc" id="L216">        return isSecondDegree(realPolyParams);</span>
     }
     
     /**
@@ -262,10 +226,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if roots are distinct and real, false otherwise
      */
     public boolean hasTwoDistinctRealRoots(double[] polyParams) {
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L266" title="All 2 branches covered.">            return getDiscriminant(polyParams) &gt; EPS;</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            return getDiscriminant(polyParams) &gt; EPS;</span>
         }
-<span class="nc" id="L268">        return false;</span>
+<span class="nc" id="L232">        return false;</span>
     }
     
     /**
@@ -279,10 +243,10 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided
      */
     public boolean hasTwoDistinctRealRoots() throws NotReadyException{
-<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L283">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L247">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L285">        return hasTwoDistinctRealRoots(realPolyParams);</span>
+<span class="fc" id="L249">        return hasTwoDistinctRealRoots(realPolyParams);</span>
     }
     
     /**
@@ -294,10 +258,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if it has double root, false otherwise
      */
     public static boolean hasDoubleRoot(double[] polyParams){
-<span class="pc bpc" id="L297" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L298" title="All 2 branches covered.">            return Math.abs(getDiscriminant(polyParams)) &lt;= EPS;</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">            return Math.abs(getDiscriminant(polyParams)) &lt;= EPS;</span>
         }
-<span class="nc" id="L300">        return false;</span>
+<span class="nc" id="L264">        return false;</span>
     }
     
     /**
@@ -310,10 +274,10 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided.
      */
     public boolean hasDoubleRoot() throws NotReadyException{
-<span class="fc bfc" id="L313" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L314">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L278">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L316">        return hasDoubleRoot(realPolyParams);</span>
+<span class="fc" id="L280">        return hasDoubleRoot(realPolyParams);</span>
     }
     
     /**
@@ -326,10 +290,10 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if roots are complex conjugate, false otherwise
      */
     public static boolean hasTwoComplexConjugateRoots(double[] polyParams){
-<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L330" title="All 2 branches covered.">            return getDiscriminant(polyParams) &lt; -EPS;</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">            return getDiscriminant(polyParams) &lt; -EPS;</span>
         }
-<span class="nc" id="L332">        return false;</span>
+<span class="nc" id="L296">        return false;</span>
     }
     
     /**
@@ -343,12 +307,24 @@ public class SecondDegreePolynomialRootsEstimator
      * been provided
      */    
     public boolean hasTwoComplexConjugateRoots() throws NotReadyException{
-<span class="fc bfc" id="L346" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L347">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L311">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L349">        return hasTwoComplexConjugateRoots(realPolyParams);</span>
+<span class="fc" id="L313">        return hasTwoComplexConjugateRoots(realPolyParams);</span>
     }
-    
+
+    /**
+     * This method will always raise an IllegalArgumentException because this
+     * class only supports REAL polynomial parameters
+     * @deprecated
+     */
+    @Override
+    @Deprecated
+    protected void internalSetPolynomialParameters(Complex[] polyParams) {
+        //complex values are not supported
+<span class="fc" id="L325">        throw new IllegalArgumentException();</span>
+    }
+
     /**
      * Internal method to compute the discriminant of a 2nd degree polynomial.
      * Discriminants are helpful to determine properties of a 2nd degree 
@@ -358,13 +334,13 @@ public class SecondDegreePolynomialRootsEstimator
      */
     private static double getDiscriminant(double[] polyParams) {
 
-<span class="fc" id="L361">        double c = polyParams[0];</span>
-<span class="fc" id="L362">        double b = polyParams[1];</span>
-<span class="fc" id="L363">        double a = polyParams[2];</span>
+<span class="fc" id="L337">        double c = polyParams[0];</span>
+<span class="fc" id="L338">        double b = polyParams[1];</span>
+<span class="fc" id="L339">        double a = polyParams[2];</span>
 
-<span class="fc" id="L365">        return b * b - 4.0 * a * c;</span>
+<span class="fc" id="L341">        return b * b - 4.0 * a * c;</span>
     }
-    
+
     /**
      * Finds 2nd degree polynomial roots
      * @param a 1st parameter
@@ -376,21 +352,42 @@ public class SecondDegreePolynomialRootsEstimator
     private void solveQuadratic(double a, double b, double c, Complex x1,
             Complex x2) {
         
-<span class="fc" id="L379">        double discriminant = b * b - 4.0 * a * c;</span>
+<span class="fc" id="L355">        double discriminant = b * b - 4.0 * a * c;</span>
         
-<span class="fc bfc" id="L381" title="All 2 branches covered.">        if (discriminant &gt;= 0.0) {</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">        if (discriminant &gt;= 0.0) {</span>
             //real solutions (double or distinct)
-<span class="fc" id="L383">            x1.setRealAndImaginary((-b + Math.sqrt(discriminant)) / (2.0 * a), </span>
+<span class="fc" id="L359">            x1.setRealAndImaginary((-b + Math.sqrt(discriminant)) / (2.0 * a), </span>
                     0.0);
-<span class="fc" id="L385">            x2.setRealAndImaginary((-b - Math.sqrt(discriminant)) / (2.0 * a), </span>
+<span class="fc" id="L361">            x2.setRealAndImaginary((-b - Math.sqrt(discriminant)) / (2.0 * a), </span>
                     0.0);            
         } else {
             //complex conjugate solutions
-<span class="fc" id="L389">            double real = -b / (2.0 * a);</span>
-<span class="fc" id="L390">            double imag = Math.sqrt(Math.abs(discriminant)) / (2.0 * a);</span>
-<span class="fc" id="L391">            x1.setRealAndImaginary(real, imag);</span>
-<span class="fc" id="L392">            x2.setRealAndImaginary(real, -imag);</span>
+<span class="fc" id="L365">            double real = -b / (2.0 * a);</span>
+<span class="fc" id="L366">            double imag = Math.sqrt(Math.abs(discriminant)) / (2.0 * a);</span>
+<span class="fc" id="L367">            x1.setRealAndImaginary(real, imag);</span>
+<span class="fc" id="L368">            x2.setRealAndImaginary(real, -imag);</span>
         }
-<span class="fc" id="L394">    }</span>
+<span class="fc" id="L370">    }</span>
+
+    /**
+     * Internal method to set array of second degree polynomial parameters.
+     * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and
+     * the array must be provided as [c, b, a].
+     * Note: This class only supports real polynomial parameters
+     * This method does not check if this instance is locked.
+     * @param polyParams Array containing polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the provided
+     * array is not valid.
+     */
+    private void internalSetPolynomialParameters(double[] polyParams) {
+<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (polyParams.length &lt; VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L384">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L386" title="All 2 branches covered.">        if (!isSecondDegree(polyParams)) {</span>
+<span class="fc" id="L387">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L390">        this.realPolyParams = polyParams;</span>
+<span class="fc" id="L391">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of 
@@ -57,9 +54,9 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * Empty constructor.
      */
     public SecantSingleRootEstimator() {
-<span class="fc" id="L60">        super();</span>
-<span class="fc" id="L61">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L57">        super();</span>
+<span class="fc" id="L58">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L59">    }</span>
     
     /**
      * Constructor.
@@ -77,10 +74,10 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
     public SecantSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
-<span class="fc" id="L81">        super(listener, minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L82">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L83">    }</span>
+            throws InvalidBracketRangeException {
+<span class="fc" id="L78">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L79">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L80">    }</span>
             
     /**
      * Returns tolerance value.
@@ -90,27 +87,9 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * @return Tolerance value.
      */    
     public double getTolerance() {
-<span class="fc" id="L93">        return tolerance;</span>
+<span class="fc" id="L90">        return tolerance;</span>
     }
-    
-    /**
-     * Internal method to set tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * This method does not check whether this instance is locked or not.
-     * @param tolerance Tolerance value.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L109">            throw new IllegalArgumentException();</span>
-        }
-<span class="fc" id="L111">        this.tolerance = tolerance;</span>
-<span class="fc" id="L112">    }</span>
-    
+
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -121,13 +100,12 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L127">            throw new LockedException();</span>
+    public void setTolerance(double tolerance) throws LockedException {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L105">            throw new LockedException();</span>
         }
-<span class="fc" id="L129">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L130">    }</span>
+<span class="fc" id="L107">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L108">    }</span>
     
     /**
      * Estimates a local root for a given single dimension function being 
@@ -141,61 +119,63 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * numerical instability or convergence problems, or no roots are found).
      */       
     @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L147">            throw new LockedException();</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L126">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L150">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L129">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L153">        locked = true;</span>
-<span class="fc" id="L154">        rootAvailable = false;</span>
+<span class="fc" id="L132">        locked = true;</span>
+<span class="fc" id="L133">        rootAvailable = false;</span>
         
         try {
-<span class="fc" id="L157">            double x1 = minEvalPoint;</span>
-<span class="fc" id="L158">            double x2 = maxEvalPoint;</span>
-<span class="fc" id="L159">            double xacc = tolerance;</span>
-            double xl, rts;
-<span class="fc" id="L161">            double fl = listener.evaluate(x1);</span>
-<span class="fc" id="L162">            double f = listener.evaluate(x2);</span>
-<span class="fc" id="L163">            double[] v1 = new double[1];</span>
-<span class="fc" id="L164">            double[] v2 = new double[1];</span>
+<span class="fc" id="L136">            double x1 = minEvalPoint;</span>
+<span class="fc" id="L137">            double x2 = maxEvalPoint;</span>
+<span class="fc" id="L138">            double xacc = tolerance;</span>
+            double xl;
+            double rts;
+<span class="fc" id="L141">            double fl = listener.evaluate(x1);</span>
+<span class="fc" id="L142">            double f = listener.evaluate(x2);</span>
+<span class="fc" id="L143">            double[] v1 = new double[1];</span>
+<span class="fc" id="L144">            double[] v2 = new double[1];</span>
         
-<span class="fc bfc" id="L166" title="All 2 branches covered.">            if (Math.abs(fl) &lt; Math.abs(f)) {</span>
-<span class="fc" id="L167">                rts = x1;</span>
-<span class="fc" id="L168">                xl = x2;</span>
-<span class="fc" id="L169">                v1[0] = fl;</span>
-<span class="fc" id="L170">                v2[0] = f;</span>
-<span class="fc" id="L171">                swap(v1, v2);</span>
-<span class="fc" id="L172">                fl = v1[0];</span>
-<span class="fc" id="L173">                f = v2[0];</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">            if (Math.abs(fl) &lt; Math.abs(f)) {</span>
+<span class="fc" id="L147">                rts = x1;</span>
+<span class="fc" id="L148">                xl = x2;</span>
+<span class="fc" id="L149">                v1[0] = fl;</span>
+<span class="fc" id="L150">                v2[0] = f;</span>
+<span class="fc" id="L151">                swap(v1, v2);</span>
+<span class="fc" id="L152">                fl = v1[0];</span>
+<span class="fc" id="L153">                f = v2[0];</span>
             } else {
-<span class="fc" id="L175">                xl = x1;</span>
-<span class="fc" id="L176">                rts = x2;</span>
+<span class="fc" id="L155">                xl = x1;</span>
+<span class="fc" id="L156">                rts = x2;</span>
             }
-<span class="fc bfc" id="L178" title="All 2 branches covered.">            for (int j = 0; j &lt; MAXIT; j++) {</span>
-<span class="fc" id="L179">                double dx = (xl - rts) * f / (f - fl);</span>
-<span class="fc" id="L180">                xl = rts;</span>
-<span class="fc" id="L181">                fl = f;</span>
-<span class="fc" id="L182">                rts += dx;</span>
-<span class="fc" id="L183">                f = listener.evaluate(rts);</span>
-<span class="fc bfc" id="L184" title="All 4 branches covered.">                if (Math.abs(dx) &lt; xacc || f == 0.0) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            for (int j = 0; j &lt; MAXIT; j++) {</span>
+<span class="fc" id="L159">                double dx = (xl - rts) * f / (f - fl);</span>
+<span class="fc" id="L160">                xl = rts;</span>
+<span class="fc" id="L161">                fl = f;</span>
+<span class="fc" id="L162">                rts += dx;</span>
+<span class="fc" id="L163">                f = listener.evaluate(rts);</span>
+<span class="fc bfc" id="L164" title="All 4 branches covered.">                if (Math.abs(dx) &lt; xacc || f == 0.0) {</span>
                     //Result obtained
-<span class="fc" id="L186">                    root = rts;</span>
-<span class="fc" id="L187">                    rootAvailable = true;</span>
-<span class="fc" id="L188">                    locked = false;</span>
-<span class="fc" id="L189">                    return;</span>
+<span class="fc" id="L166">                    root = rts;</span>
+<span class="fc" id="L167">                    rootAvailable = true;</span>
+<span class="fc" id="L168">                    locked = false;</span>
+<span class="fc" id="L169">                    return;</span>
                 }
             }
-<span class="nc" id="L192">        } catch (Throwable t) {</span>
-<span class="nc" id="L193">            locked = false;</span>
-<span class="nc" id="L194">            throw new RootEstimationException(t);</span>
-<span class="fc" id="L195">        }</span>
+<span class="nc" id="L172">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L173">            throw new RootEstimationException(e);</span>
+        } finally {
+<span class="fc" id="L175">            locked = false;</span>
+        }
         //too many iterations and error exceeds desired tolerance
-<span class="fc" id="L197">        locked = false;</span>
-<span class="fc" id="L198">        throw new RootEstimationException();</span>
+<span class="fc" id="L178">        throw new RootEstimationException();</span>
     }
     
     /**
@@ -207,7 +187,24 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      */        
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L210" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+<span class="pc bpc" id="L190" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
     }
+
+    /**
+     * Internal method to set tolerance value.
+     * Tolerance is the accuracy to be achieved when estimating a root.
+     * If a root is found by this class, it is ensured to have an accuracy below
+     * provided tolerance value.
+     * This method does not check whether this instance is locked or not.
+     * @param tolerance Tolerance value.
+     * @throws IllegalArgumentException Raised if provided tolerance value is
+     * negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L205">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L207">        this.tolerance = tolerance;</span>
+<span class="fc" id="L208">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

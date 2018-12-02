@@ -40,7 +40,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical,AccurateMaximumLikelihood
 com.irurueta:irurueta-numerical,com.irurueta.numerical,DirectionalEvaluator,8,66,1,3,3,15,2,7,1,6
 com.irurueta:irurueta-numerical,com.irurueta.numerical,SymmetricGradientEstimator,6,132,4,10,2,25,4,5,0,2
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,FastRandomSubsetSelector,8,201,5,33,2,58,5,21,0,7
-com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROSACRobustEstimator,46,804,19,89,13,200,19,64,0,29
+com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROSACRobustEstimator,47,803,20,88,14,199,20,63,0,29
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,SubsetSelectorType,0,14,0,0,0,2,0,1,0,1
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROMedSRobustEstimator.PROMedSInliersData,3,152,0,2,1,38,1,12,1,11
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,RobustEstimatorException,0,16,0,0,0,8,0,4,0,4
@@ -66,7 +66,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,RootEstimator,3,9,0
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,FalsePositionSingleRootEstimator,26,200,5,19,8,56,5,14,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SafeNewtonRaphsonSingleRootEstimator,83,243,11,25,27,66,10,15,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecondDegreePolynomialRootsEstimator,34,348,11,43,10,77,11,35,0,19
-com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecantSingleRootEstimator,21,176,4,16,6,50,4,13,0,7
+com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecantSingleRootEstimator,18,175,4,16,5,49,4,13,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,NewtonRaphsonSingleRootEstimator,25,132,4,10,7,39,4,10,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SingleRootEstimator,7,61,1,7,2,21,2,10,1,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,LaguerrePolynomialRootsEstimator,27,494,7,33,7,109,7,23,0,10
@@ -74,7 +74,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,BracketedSingleRoot
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,RidderSingleRootEstimator,61,245,13,31,21,64,13,16,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,PolynomialRootsEstimator,4,53,1,9,1,15,1,11,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,BisectionSingleRootEstimator,22,156,6,18,6,44,6,13,0,7
-com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,BrentSingleRootEstimator,31,347,7,43,9,81,7,25,0,7
+com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,BrentSingleRootEstimator,31,347,6,44,9,81,6,26,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,DerivativeSingleRootEstimator,49,61,2,10,19,18,8,11,6,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,RootEstimationException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,FirstDegreePolynomialRootsEstimator,10,157,3,21,3,44,3,22,0,13
@@ -90,7 +90,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,Optimizer,6,
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,SingleOptimizer,7,74,1,9,2,23,2,12,1,8
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,MultiOptimizer,6,71,1,9,2,24,2,12,1,8
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,LineMultiOptimizer,43,208,11,19,10,49,9,17,1,10
-com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,QuasiNewtonMultiOptimizer,59,941,12,88,16,171,12,55,0,17
+com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,QuasiNewtonMultiOptimizer,77,923,15,85,19,168,14,53,0,17
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,LineMultiOptimizer.new SingleDimensionFunctionEvaluatorListener() {...},0,12,0,0,0,2,0,2,0,2
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,DerivativeBrentSingleOptimizer,26,689,7,79,7,140,7,46,0,10
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,OptimizationException,0,16,0,0,0,8,0,4,0,4

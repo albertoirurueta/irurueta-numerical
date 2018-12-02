@@ -105,7 +105,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * is not valid. It has to be greater or equal than 2.
      */
     public LaguerrePolynomialRootsEstimator(Complex[] polyParams, 
-            boolean polishRoots) throws IllegalArgumentException {
+            boolean polishRoots) {
 <span class="fc" id="L109">        super();</span>
 <span class="fc" id="L110">        this.polishRoots = polishRoots;</span>
 <span class="fc" id="L111">        internalSetPolynomialParameters(polyParams);</span>
@@ -117,33 +117,12 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @throws IllegalArgumentException Raised if length of provided parameters
      * is not valid. It has to be greater or equal than 2.
      */
-    public LaguerrePolynomialRootsEstimator(Complex[] polyParams)
-            throws IllegalArgumentException {
-<span class="fc" id="L122">        super();</span>
-<span class="fc" id="L123">        this.polishRoots = DEFAULT_POLISH_ROOTS;</span>
-<span class="fc" id="L124">        internalSetPolynomialParameters(polyParams);</span>
-<span class="fc" id="L125">    }</span>
-    
-    /**
-     * Internal method to set parameters of a polynomial, taking into account 
-     * that a polynomial of degree n is defined as:
-     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
-     * then the array of parameters is [an, a(n - 1), ... a1, a0]
-     * Polynomial parameters can be either real or complex values
-     * This method does not check if this class is locked.
-     * @param polyParams Polynomial parameters.
-     * @throws IllegalArgumentException Raised if the length of the array is not
-     * valid.
-     */    
-    @Override
-    protected final void internalSetPolynomialParameters(
-            Complex[] polyParams) throws IllegalArgumentException {
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc" id="L142">            throw new IllegalArgumentException();</span>
-        }
-<span class="fc" id="L144">        this.polyParams = polyParams;</span>
-<span class="fc" id="L145">    }</span>
-    
+    public LaguerrePolynomialRootsEstimator(Complex[] polyParams) {
+<span class="fc" id="L121">        super();</span>
+<span class="fc" id="L122">        this.polishRoots = DEFAULT_POLISH_ROOTS;</span>
+<span class="fc" id="L123">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L124">    }</span>
+
     /**
      * Estimates the roots of provided polynomial.
      * @throws LockedException Raised if this instance is locked estimating a
@@ -157,63 +136,64 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L161">            throw new LockedException();</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L140">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L164">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L143">            throw new NotReadyException();</span>
         }
         
         //polynomial must be at least degree 1
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="nc" id="L169">            throw new RootEstimationException();</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="nc" id="L148">            throw new RootEstimationException();</span>
         }
         
-<span class="fc" id="L172">        locked = true;</span>
+<span class="fc" id="L151">        locked = true;</span>
         
-<span class="fc" id="L174">        Complex[] a = polyParams;</span>
-<span class="fc" id="L175">        roots = new Complex[a.length - 1];</span>
+<span class="fc" id="L153">        Complex[] a = polyParams;</span>
+<span class="fc" id="L154">        roots = new Complex[a.length - 1];</span>
         
         int i;
-<span class="fc" id="L178">        int[] its = new int[1];</span>
-<span class="fc" id="L179">        Complex x = new Complex();</span>
-        Complex b, c;
-<span class="fc" id="L181">        int m = a.length - 1;</span>
+<span class="fc" id="L157">        int[] its = new int[1];</span>
+<span class="fc" id="L158">        Complex x = new Complex();</span>
+        Complex b;
+        Complex c;
+<span class="fc" id="L161">        int m = a.length - 1;</span>
         
-<span class="fc" id="L183">        Complex[] ad = Arrays.copyOf(a, a.length);</span>
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (int j = m - 1; j &gt;= 0; j--) {</span>
-<span class="fc" id="L185">            x.setRealAndImaginary(0.0, 0.0);</span>
-<span class="fc" id="L186">            Complex[] ad_v = Arrays.copyOf(ad, j + 2);</span>
-<span class="fc" id="L187">            internalLaguer(ad_v, x, its);</span>
-<span class="fc bfc" id="L188" title="All 2 branches covered.">            if(Math.abs(x.getImaginary()) &lt;= 2.0 * EPS * Math.abs(x.getReal()))</span>
-<span class="fc" id="L189">                x.clone().setRealAndImaginary(x.getReal(), 0.0);</span>
-<span class="fc" id="L190">            roots[j] = x.clone();</span>
-<span class="fc" id="L191">            b = ad[j + 1].clone();</span>
-<span class="fc bfc" id="L192" title="All 2 branches covered.">            for (int jj = j; jj &gt;= 0; jj--) {</span>
-<span class="fc" id="L193">                c = ad[jj].clone();</span>
-<span class="fc" id="L194">                ad[jj] = b.clone();</span>
-<span class="fc" id="L195">                b.multiply(x);</span>
-<span class="fc" id="L196">                b.add(c);</span>
+<span class="fc" id="L163">        Complex[] ad = Arrays.copyOf(a, a.length);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for (int j = m - 1; j &gt;= 0; j--) {</span>
+<span class="fc" id="L165">            x.setRealAndImaginary(0.0, 0.0);</span>
+<span class="fc" id="L166">            Complex[] adV = Arrays.copyOf(ad, j + 2);</span>
+<span class="fc" id="L167">            internalLaguer(adV, x, its);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            if(Math.abs(x.getImaginary()) &lt;= 2.0 * EPS * Math.abs(x.getReal()))</span>
+<span class="fc" id="L169">                x.clone().setRealAndImaginary(x.getReal(), 0.0);</span>
+<span class="fc" id="L170">            roots[j] = x.clone();</span>
+<span class="fc" id="L171">            b = ad[j + 1].clone();</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">            for (int jj = j; jj &gt;= 0; jj--) {</span>
+<span class="fc" id="L173">                c = ad[jj].clone();</span>
+<span class="fc" id="L174">                ad[jj] = b.clone();</span>
+<span class="fc" id="L175">                b.multiply(x);</span>
+<span class="fc" id="L176">                b.add(c);</span>
             }
         }
-<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        if (polishRoots) {</span>
-<span class="fc bfc" id="L200" title="All 2 branches covered.">            for (int j = 0; j &lt; m; j++) {</span>
-<span class="fc" id="L201">                internalLaguer(a, roots[j], its);</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (polishRoots) {</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            for (int j = 0; j &lt; m; j++) {</span>
+<span class="fc" id="L181">                internalLaguer(a, roots[j], its);</span>
             }
         }
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (int j = 1; j &lt; m; j++) {</span>
-<span class="fc" id="L205">            x = roots[j].clone();</span>
-<span class="fc bfc" id="L206" title="All 2 branches covered.">            for (i = j - 1; i &gt;= 0; i--) {</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">                if (roots[i].getReal() &lt;= x.getReal()) {</span>
-<span class="fc" id="L208">                    break;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (int j = 1; j &lt; m; j++) {</span>
+<span class="fc" id="L185">            x = roots[j].clone();</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            for (i = j - 1; i &gt;= 0; i--) {</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">                if (roots[i].getReal() &lt;= x.getReal()) {</span>
+<span class="fc" id="L188">                    break;</span>
                 }
-<span class="fc" id="L210">                roots[i + 1] = roots[i].clone();</span>
+<span class="fc" id="L190">                roots[i + 1] = roots[i].clone();</span>
             }
-<span class="fc" id="L212">            roots[i + 1] = x.clone();</span>
+<span class="fc" id="L192">            roots[i + 1] = x.clone();</span>
         }
         
-<span class="fc" id="L215">        locked = false;</span>
-<span class="fc" id="L216">    }</span>
+<span class="fc" id="L195">        locked = false;</span>
+<span class="fc" id="L196">    }</span>
     
     /**
      * Returns boolean indicating whether roots are refined after an initial
@@ -221,7 +201,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @return True if roots are refined, false otherwise.
      */
     public boolean areRootsPolished() {
-<span class="fc" id="L224">        return polishRoots;</span>
+<span class="fc" id="L204">        return polishRoots;</span>
     }
     
     /**
@@ -231,12 +211,32 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @throws LockedException Raised if this instance is locked.
      */
     public void setPolishRootsEnabled(boolean enable) throws LockedException {
-<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L235">            throw new LockedException();</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L215">            throw new LockedException();</span>
         }
-<span class="fc" id="L237">        polishRoots = enable;</span>
+<span class="fc" id="L217">        polishRoots = enable;</span>
+<span class="fc" id="L218">    }</span>
+
+    /**
+     * Internal method to set parameters of a polynomial, taking into account
+     * that a polynomial of degree n is defined as:
+     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+     * then the array of parameters is [an, a(n - 1), ... a1, a0]
+     * Polynomial parameters can be either real or complex values
+     * This method does not check if this class is locked.
+     * @param polyParams Polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the array is not
+     * valid.
+     */
+    @Override
+    protected final void internalSetPolynomialParameters(
+            Complex[] polyParams) {
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L235">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L237">        this.polyParams = polyParams;</span>
 <span class="fc" id="L238">    }</span>
-    
+
     /**
      * Internal method to compute a root after decomposing and decreasing the
      * degree of the polynomial.
@@ -251,77 +251,80 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
     private void internalLaguer(Complex[] a, Complex x, int[] its) 
             throws RootEstimationException {
         
-        Complex x1, b, g, g2;
-<span class="fc" id="L255">        Complex dx = new Complex();</span>
-<span class="fc" id="L256">        Complex d = new Complex();</span>
-<span class="fc" id="L257">        Complex f = new Complex();</span>
-<span class="fc" id="L258">        Complex h = new Complex();</span>
-<span class="fc" id="L259">        Complex sq = new Complex();</span>
-<span class="fc" id="L260">        Complex gp = new Complex();</span>
-<span class="fc" id="L261">        Complex gm = new Complex();</span>
-<span class="fc" id="L262">        int m = a.length - 1;</span>
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        for (int iter = 1; iter &lt;= MAXIT; iter++) {</span>
-<span class="fc" id="L264">            its[0] = iter;</span>
-<span class="fc" id="L265">            b = a[m].clone();</span>
-<span class="fc" id="L266">            double err = b.getModulus();</span>
-<span class="fc" id="L267">            d.setRealAndImaginary(0.0, 0.0);</span>
-<span class="fc" id="L268">            f.setRealAndImaginary(0.0, 0.0);</span>
-<span class="fc" id="L269">            double abx = x.getModulus();</span>
-<span class="fc bfc" id="L270" title="All 2 branches covered.">            for (int j = m - 1; j &gt;= 0; j--) {</span>
-<span class="fc" id="L271">                f.multiply(x);</span>
-<span class="fc" id="L272">                f.add(d);</span>
+        Complex x1;
+        Complex b;
+        Complex g;
+        Complex g2;
+<span class="fc" id="L258">        Complex dx = new Complex();</span>
+<span class="fc" id="L259">        Complex d = new Complex();</span>
+<span class="fc" id="L260">        Complex f = new Complex();</span>
+<span class="fc" id="L261">        Complex h = new Complex();</span>
+<span class="fc" id="L262">        Complex sq = new Complex();</span>
+<span class="fc" id="L263">        Complex gp = new Complex();</span>
+<span class="fc" id="L264">        Complex gm = new Complex();</span>
+<span class="fc" id="L265">        int m = a.length - 1;</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        for (int iter = 1; iter &lt;= MAXIT; iter++) {</span>
+<span class="fc" id="L267">            its[0] = iter;</span>
+<span class="fc" id="L268">            b = a[m].clone();</span>
+<span class="fc" id="L269">            double err = b.getModulus();</span>
+<span class="fc" id="L270">            d.setRealAndImaginary(0.0, 0.0);</span>
+<span class="fc" id="L271">            f.setRealAndImaginary(0.0, 0.0);</span>
+<span class="fc" id="L272">            double abx = x.getModulus();</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">            for (int j = m - 1; j &gt;= 0; j--) {</span>
+<span class="fc" id="L274">                f.multiply(x);</span>
+<span class="fc" id="L275">                f.add(d);</span>
                 
-<span class="fc" id="L274">                d.multiply(x);</span>
-<span class="fc" id="L275">                d.add(b);</span>
+<span class="fc" id="L277">                d.multiply(x);</span>
+<span class="fc" id="L278">                d.add(b);</span>
                 
-<span class="fc" id="L277">                b.multiply(x);</span>
-<span class="fc" id="L278">                b.add(a[j]);</span>
+<span class="fc" id="L280">                b.multiply(x);</span>
+<span class="fc" id="L281">                b.add(a[j]);</span>
                 
-<span class="fc" id="L280">                err = b.getModulus() + abx * err;</span>
+<span class="fc" id="L283">                err = b.getModulus() + abx * err;</span>
             }
-<span class="fc" id="L282">            err *= LAGUER_EPS;</span>
-<span class="fc bfc" id="L283" title="All 2 branches covered.">            if (b.getModulus() &lt;= err) {</span>
-<span class="fc" id="L284">                return;</span>
+<span class="fc" id="L285">            err *= LAGUER_EPS;</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">            if (b.getModulus() &lt;= err) {</span>
+<span class="fc" id="L287">                return;</span>
             }
-<span class="fc" id="L286">            g = d.divideAndReturnNew(b);</span>
-<span class="fc" id="L287">            g2 = g.powAndReturnNew(2.0);</span>
-<span class="fc" id="L288">            f.divide(b, h);</span>
-<span class="fc" id="L289">            h.multiplyByScalar(-2.0);</span>
-<span class="fc" id="L290">            h.add(g2);</span>
+<span class="fc" id="L289">            g = d.divideAndReturnNew(b);</span>
+<span class="fc" id="L290">            g2 = g.powAndReturnNew(2.0);</span>
+<span class="fc" id="L291">            f.divide(b, h);</span>
+<span class="fc" id="L292">            h.multiplyByScalar(-2.0);</span>
+<span class="fc" id="L293">            h.add(g2);</span>
             
-<span class="fc" id="L292">            h.multiplyByScalar(m, sq);</span>
-<span class="fc" id="L293">            sq.subtract(g2);</span>
-<span class="fc" id="L294">            sq.multiplyByScalar(m - 1);</span>
-<span class="fc" id="L295">            sq.sqrt();</span>
+<span class="fc" id="L295">            h.multiplyByScalar(m, sq);</span>
+<span class="fc" id="L296">            sq.subtract(g2);</span>
+<span class="fc" id="L297">            sq.multiplyByScalar(m - 1);</span>
+<span class="fc" id="L298">            sq.sqrt();</span>
             
-<span class="fc" id="L297">            g.add(sq, gp);</span>
-<span class="fc" id="L298">            g.subtract(sq, gm);</span>
+<span class="fc" id="L300">            g.add(sq, gp);</span>
+<span class="fc" id="L301">            g.subtract(sq, gm);</span>
             
-<span class="fc" id="L300">            double abp = gp.getModulus();</span>
-<span class="fc" id="L301">            double abm = gm.getModulus();</span>
-<span class="fc bfc" id="L302" title="All 2 branches covered.">            if (abp &lt; abm) {</span>
-<span class="fc" id="L303">                gp = gm;</span>
+<span class="fc" id="L303">            double abp = gp.getModulus();</span>
+<span class="fc" id="L304">            double abm = gm.getModulus();</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">            if (abp &lt; abm) {</span>
+<span class="fc" id="L306">                gp = gm;</span>
             }
-<span class="pc bpc" id="L305" title="1 of 2 branches missed.">            if (Math.max(abp, abm) &gt; 0.0) {</span>
-<span class="fc" id="L306">                dx.setRealAndImaginary(m, 0.0);</span>
-<span class="fc" id="L307">                dx.divide(gp);</span>
+<span class="pc bpc" id="L308" title="1 of 2 branches missed.">            if (Math.max(abp, abm) &gt; 0.0) {</span>
+<span class="fc" id="L309">                dx.setRealAndImaginary(m, 0.0);</span>
+<span class="fc" id="L310">                dx.divide(gp);</span>
             } else {
-<span class="nc" id="L309">                dx.setModulusAndPhase(1.0 + abx, iter);</span>
+<span class="nc" id="L312">                dx.setModulusAndPhase(1.0 + abx, iter);</span>
             }
-<span class="fc" id="L311">            x1 = x.subtractAndReturnNew(dx);</span>
-<span class="pc bpc" id="L312" title="1 of 2 branches missed.">            if (x.equals(x1)) {</span>
-<span class="nc" id="L313">                return;</span>
+<span class="fc" id="L314">            x1 = x.subtractAndReturnNew(dx);</span>
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">            if (x.equals(x1)) {</span>
+<span class="nc" id="L316">                return;</span>
             }
-<span class="fc bfc" id="L315" title="All 2 branches covered.">            if (iter % MT != 0) {</span>
-<span class="fc" id="L316">                x.copyFrom(x1);</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">            if (iter % MT != 0) {</span>
+<span class="fc" id="L319">                x.copyFrom(x1);</span>
             } else {
-<span class="fc" id="L318">                int pos = Math.min(iter/MT, frac.length - 1);</span>
-<span class="fc" id="L319">                x.subtract(dx.multiplyByScalarAndReturnNew(frac[pos]));</span>
+<span class="fc" id="L321">                int pos = Math.min(iter/MT, frac.length - 1);</span>
+<span class="fc" id="L322">                x.subtract(dx.multiplyByScalarAndReturnNew(frac[pos]));</span>
             }
         }
         //too many iterations in Laguerre
-<span class="nc" id="L323">        locked = false;</span>
-<span class="nc" id="L324">        throw new RootEstimationException();</span>
-    }    
+<span class="nc" id="L326">        locked = false;</span>
+<span class="nc" id="L327">        throw new RootEstimationException();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
