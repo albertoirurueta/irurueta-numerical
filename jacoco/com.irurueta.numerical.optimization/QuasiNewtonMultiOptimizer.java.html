@@ -547,11 +547,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L547">                        disc = b * b - 3.0 * a * slope;</span>
 <span class="pc bpc" id="L548" title="1 of 2 branches missed.">                        if (disc &lt; 0.0) {</span>
 <span class="nc" id="L549">                            tmplam = 0.5 * alam;</span>
-<span class="fc bfc" id="L550" title="All 2 branches covered.">                        } else if (b &lt;= 0.0) {</span>
+<span class="pc bpc" id="L550" title="1 of 2 branches missed.">                        } else if (b &lt;= 0.0) {</span>
 <span class="fc" id="L551">                            tmplam = (-b + Math.sqrt(disc)) /</span>
                                 (3.0 * a);
                         } else {
-<span class="fc" id="L554">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
+<span class="nc" id="L554">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
                         }
                     }
 <span class="fc bfc" id="L557" title="All 2 branches covered.">                    if (tmplam &gt; 0.5 * alam) {</span>

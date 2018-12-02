@@ -779,7 +779,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                                 residualsTemp, listener, sorter, inliersData);
 <span class="fc" id="L780">                        inliersCurrent = inliersData.getNumInliers();                                        </span>
 
-<span class="pc bpc" id="L782" title="1 of 2 branches missed.">                        if (inliersData.isMedianResidualImproved()) {</span>
+<span class="fc bfc" id="L782" title="All 2 branches covered.">                        if (inliersData.isMedianResidualImproved()) {</span>
 <span class="fc" id="L783">                            improved = true;</span>
 
                             //keep current solution
@@ -790,7 +790,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 <span class="fc" id="L790">                            threshold = inliersData.getEstimatedThreshold();                        </span>
                         }
 
-<span class="pc bpc" id="L793" title="1 of 2 branches missed.">                        if (inliersCurrent &gt; inliersBest) {</span>
+<span class="fc bfc" id="L793" title="All 2 branches covered.">                        if (inliersCurrent &gt; inliersBest) {</span>
                             //update best number of inliers
 <span class="fc" id="L795">                            inliersBest = inliersCurrent;</span>
                             //keep current solution
@@ -862,10 +862,10 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                                         (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
 
 <span class="fc" id="L864">                                    if (inliersSampleSizeTest &lt; </span>
-<span class="pc bpc" id="L865" title="1 of 2 branches missed.">                                            imin(subsetSize, sampleSizeTest, mBeta)) {</span>
+<span class="fc bfc" id="L865" title="All 2 branches covered.">                                            imin(subsetSize, sampleSizeTest, mBeta)) {</span>
                                         //equation not satisfied, no need to test for
                                         //smaller sampleSizeTest values anyway
-<span class="nc" id="L868">                                        break; //jump out of the for(sampleSizeTest) loop</span>
+<span class="fc" id="L868">                                        break; //jump out of the for(sampleSizeTest) loop</span>
                                     }
 <span class="fc" id="L870">                                    sampleSizeBest = sampleSizeTest;</span>
 <span class="fc" id="L871">                                    inliersSampleSizeBest = inliersSampleSizeTest;</span>
@@ -1000,7 +1000,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 
 <span class="fc" id="L1001">        System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);</span>
 <span class="fc" id="L1002">        double medianResidual = sorter.median(residualsTemp);</span>
-<span class="pc bpc" id="L1003" title="1 of 2 branches missed.">        if (medianResidual &lt; bestMedianResidual) {</span>
+<span class="fc bfc" id="L1003" title="All 2 branches covered.">        if (medianResidual &lt; bestMedianResidual) {</span>
 <span class="fc" id="L1004">            bestMedianResidual = medianResidual;</span>
 <span class="fc" id="L1005">            medianResidualImproved = true;</span>
         }
@@ -1048,13 +1048,13 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
         }
         
         //store values in inliers data, only if residuals improve
-<span class="pc bpc" id="L1051" title="1 of 2 branches missed.">        if (medianResidualImproved) {</span>
+<span class="fc bfc" id="L1051" title="All 2 branches covered.">        if (medianResidualImproved) {</span>
 <span class="fc" id="L1052">            inliersData.update(bestMedianResidual, standardDeviation, </span>
                     lmedsInlierModelEnabled, residuals, numInliers,
                     medianResidual, normEstimatedThreshold,
                     medianResidualImproved);
         } else {
-<span class="nc" id="L1057">            inliersData.mMedianResidualImproved = false;</span>
+<span class="fc" id="L1057">            inliersData.mMedianResidualImproved = false;</span>
         }
 <span class="fc" id="L1059">    }</span>
     

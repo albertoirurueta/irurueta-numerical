@@ -55,7 +55,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,InvalidSubsetSizeE
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,LMedSRobustEstimator.LMedSInliersData,3,71,0,0,1,21,1,7,1,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,MSACRobustEstimator,30,444,12,46,8,125,12,32,0,15
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,NotEnoughSamplesException,0,16,0,0,0,8,0,4,0,4
-com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROMedSRobustEstimator,79,995,34,100,19,257,31,68,0,32
+com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROMedSRobustEstimator,74,1000,29,105,17,259,26,73,0,32
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,RobustEstimatorMethod,0,54,0,0,0,6,0,1,0,1
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,SubsetSelectorException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,RobustEstimator,0,83,0,12,0,27,0,15,0,9
@@ -64,7 +64,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,RANSACRobustEstima
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,ThirdDegreePolynomialRootsEstimator,56,685,20,60,14,120,20,41,0,21
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,RootEstimator,3,9,0,0,2,4,2,2,2,2
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,FalsePositionSingleRootEstimator,26,200,5,19,8,56,5,14,0,7
-com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SafeNewtonRaphsonSingleRootEstimator,83,243,11,25,27,66,10,15,0,7
+com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SafeNewtonRaphsonSingleRootEstimator,93,233,12,24,31,62,11,14,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecondDegreePolynomialRootsEstimator,34,348,11,43,10,77,11,35,0,19
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecantSingleRootEstimator,18,175,4,16,5,49,4,13,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,NewtonRaphsonSingleRootEstimator,25,132,4,10,7,39,4,10,0,7
@@ -90,16 +90,16 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,Optimizer,6,
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,SingleOptimizer,7,74,1,9,2,23,2,12,1,8
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,MultiOptimizer,6,71,1,9,2,24,2,12,1,8
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,LineMultiOptimizer,43,208,11,19,10,49,9,17,1,10
-com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,QuasiNewtonMultiOptimizer,77,923,15,85,19,168,14,53,0,17
+com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,QuasiNewtonMultiOptimizer,85,915,16,84,20,167,15,52,0,17
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,LineMultiOptimizer.new SingleDimensionFunctionEvaluatorListener() {...},0,12,0,0,0,2,0,2,0,2
-com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,DerivativeBrentSingleOptimizer,26,689,7,79,7,140,7,46,0,10
+com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,DerivativeBrentSingleOptimizer,26,689,8,78,7,140,8,45,0,10
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,OptimizationException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,BrentSingleOptimizer,22,450,5,51,6,91,5,31,0,8
 com.irurueta:irurueta-numerical,com.irurueta.numerical.optimization,DerivativeConjugateGradientMultiOptimizer,60,337,12,32,15,75,12,22,1,11
 com.irurueta:irurueta-numerical,com.irurueta.numerical.signal.processing,MeasurementNoiseCovarianceEstimator,17,163,1,5,5,30,1,8,0,6
 com.irurueta:irurueta-numerical,com.irurueta.numerical.signal.processing,Convolver1D,5,668,3,77,1,162,3,80,0,42
 com.irurueta:irurueta-numerical,com.irurueta.numerical.signal.processing,SignalProcessingException,0,16,0,0,0,8,0,4,0,4
-com.irurueta:irurueta-numerical,com.irurueta.numerical.signal.processing,KalmanFilter,43,651,5,63,11,137,4,59,0,29
+com.irurueta:irurueta-numerical,com.irurueta.numerical.signal.processing,KalmanFilter,43,649,5,63,11,137,4,59,0,29
 com.irurueta:irurueta-numerical,com.irurueta.numerical.signal.processing,ConvolverEdgeMethod,0,44,0,0,0,5,0,1,0,1
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,LMedSPolynomialRobustEstimator.new LMedSRobustEstimatorListener() {...},0,135,4,6,0,29,4,11,0,10
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,PolynomialEvaluationType,0,44,0,0,0,5,0,1,0,1
@@ -110,7 +110,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,PR
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,DerivativePolynomialEvaluation,0,46,0,2,0,18,0,9,0,8
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,IntegralIntervalPolynomialEvaluation,5,59,1,1,1,24,1,12,0,12
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,DirectPolynomialEvaluation,0,19,0,0,0,9,0,5,0,5
-com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,PROSACPolynomialRobustEstimator.new PROSACRobustEstimatorListener() {...},12,131,5,5,3,28,5,12,1,11
+com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,PROSACPolynomialRobustEstimator.new PROSACRobustEstimatorListener() {...},0,143,4,6,0,31,4,13,0,12
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,PROMedSPolynomialRobustEstimator,96,163,4,14,35,52,12,21,8,16
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,LMedSPolynomialRobustEstimator,8,126,2,6,2,42,2,14,0,12
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials.estimators,PolynomialEstimatorType,0,24,0,0,0,3,0,1,0,1

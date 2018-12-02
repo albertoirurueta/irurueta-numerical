@@ -84,7 +84,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * @throws SignalProcessingException if something fails.
      */
     public MeasurementNoiseCovarianceEstimator(int measureParams) 
-<span class="fc" id="L87">            throws SignalProcessingException, IllegalArgumentException {</span>
+<span class="fc" id="L87">            throws SignalProcessingException {</span>
         
 <span class="fc bfc" id="L89" title="All 2 branches covered.">        if (measureParams &lt; 1) {</span>
 <span class="fc" id="L90">            throw new IllegalArgumentException(</span>
@@ -115,45 +115,44 @@ public class MeasurementNoiseCovarianceEstimator {
      * to the number of measure parameters set for this instance.
      * @throws SignalProcessingException if something fails.
      */
-    public Matrix update(double[] sample) throws IllegalArgumentException, 
-            SignalProcessingException {
+    public Matrix update(double[] sample) throws SignalProcessingException {
         
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (sample.length != mp) {</span>
-<span class="nc" id="L122">            throw new IllegalArgumentException(&quot;wrong sample size&quot;);</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (sample.length != mp) {</span>
+<span class="nc" id="L121">            throw new IllegalArgumentException(&quot;wrong sample size&quot;);</span>
         }
         
-<span class="fc" id="L125">        long nextCount = sampleCount + 1;</span>
+<span class="fc" id="L124">        long nextCount = sampleCount + 1;</span>
         
         //update sample average
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (int i = 0; i &lt; mp; i++) {</span>
-<span class="fc" id="L129">            sampleAverage[i] = (sampleAverage[i]*sampleCount + sample[i]) / </span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (int i = 0; i &lt; mp; i++) {</span>
+<span class="fc" id="L128">            sampleAverage[i] = (sampleAverage[i]*sampleCount + sample[i]) / </span>
                     nextCount;
         }
         
         //compute sample without mean        
-<span class="fc" id="L134">        ArrayUtils.subtract(sample, sampleAverage, sampleNoMean);</span>
+<span class="fc" id="L133">        ArrayUtils.subtract(sample, sampleAverage, sampleNoMean);</span>
         
         //copy sample without mean into matrix form
-<span class="fc" id="L137">        sampleMatrix.setSubmatrix(0, 0,</span>
+<span class="fc" id="L136">        sampleMatrix.setSubmatrix(0, 0,</span>
                 mp - 1, 0, sampleNoMean);
         //compute transpose of matrix form
-<span class="fc" id="L140">        sampleMatrix.transpose(transposedSampleMatrix);</span>
+<span class="fc" id="L139">        sampleMatrix.transpose(transposedSampleMatrix);</span>
         
         try {
             //compute covariance matrix for a single sample
-<span class="fc" id="L144">            sampleMatrix.multiply(transposedSampleMatrix, singleCov);</span>
+<span class="fc" id="L143">            sampleMatrix.multiply(transposedSampleMatrix, singleCov);</span>
             
             //update covariance matrix
-<span class="fc" id="L147">            measurementNoiseCov.multiplyByScalar(sampleCount);</span>
-<span class="fc" id="L148">            measurementNoiseCov.add(singleCov);</span>
-<span class="fc" id="L149">            measurementNoiseCov.multiplyByScalar(1.0 / nextCount);</span>
-<span class="nc" id="L150">        } catch (AlgebraException ex) {</span>
-<span class="nc" id="L151">            throw new SignalProcessingException(ex);</span>
-<span class="fc" id="L152">        }</span>
+<span class="fc" id="L146">            measurementNoiseCov.multiplyByScalar(sampleCount);</span>
+<span class="fc" id="L147">            measurementNoiseCov.add(singleCov);</span>
+<span class="fc" id="L148">            measurementNoiseCov.multiplyByScalar(1.0 / nextCount);</span>
+<span class="nc" id="L149">        } catch (AlgebraException ex) {</span>
+<span class="nc" id="L150">            throw new SignalProcessingException(ex);</span>
+<span class="fc" id="L151">        }</span>
         
-<span class="fc" id="L154">        sampleCount = nextCount;</span>
+<span class="fc" id="L153">        sampleCount = nextCount;</span>
         
-<span class="fc" id="L156">        return measurementNoiseCov;</span>
+<span class="fc" id="L155">        return measurementNoiseCov;</span>
     }
     
     /**
@@ -161,7 +160,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * @return number of measurement vector dimensions (measure parameters).
      */
     public int getMeasureParams() {
-<span class="fc" id="L164">        return mp;</span>
+<span class="fc" id="L163">        return mp;</span>
     }
     
     /**
@@ -169,7 +168,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * @return estimated measurement noise covariance matrix.
      */
     public Matrix getMeasurementNoiseCov() {
-<span class="fc" id="L172">        return measurementNoiseCov;</span>
+<span class="fc" id="L171">        return measurementNoiseCov;</span>
     }
     
     /**
@@ -177,7 +176,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * @return estimated sample average.
      */
     public double[] getSampleAverage() {
-<span class="fc" id="L180">        return sampleAverage;</span>
+<span class="fc" id="L179">        return sampleAverage;</span>
     }    
     
     /**
@@ -185,7 +184,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * @return number of samples used for estimation.
      */
     public long getSampleCount() {
-<span class="fc" id="L188">        return sampleCount;</span>
+<span class="fc" id="L187">        return sampleCount;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
