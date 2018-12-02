@@ -505,7 +505,7 @@ public class KalmanFilter implements Serializable {
      */
     public void setStatePost(Matrix statePost) {
 <span class="fc bfc" id="L507" title="All 4 branches covered.">        if (statePost.getColumns() != 1 || statePost.getRows() != dp) {</span>
-<span class="fc" id="L508">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc" id="L508">            throw new IllegalArgumentException();</span>
         }
 <span class="fc" id="L510">        this.statePost = statePost;</span>
 <span class="fc" id="L511">    }</span>
@@ -692,12 +692,11 @@ public class KalmanFilter implements Serializable {
 <span class="fc bfc" id="L692" title="All 2 branches covered.">        if (measurementNoiseCov.getRows() != mp ||</span>
 <span class="fc bfc" id="L693" title="All 2 branches covered.">                measurementNoiseCov.getColumns() != mp ||</span>
 <span class="fc bfc" id="L694" title="All 2 branches covered.">                !Utils.isSymmetric(measurementNoiseCov)) {</span>
-<span class="fc" id="L695">            throw new IllegalArgumentException(</span>
-                    &quot;Wrong matrix size or matrix is not symmetric&quot;);
+<span class="fc" id="L695">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L699">        this.measurementNoiseCov = measurementNoiseCov;</span>
-<span class="fc" id="L700">    }</span>
+<span class="fc" id="L698">        this.measurementNoiseCov = measurementNoiseCov;</span>
+<span class="fc" id="L699">    }</span>
     
     /**
      * Obtains the priori error estimate covariance matrix 
@@ -707,7 +706,7 @@ public class KalmanFilter implements Serializable {
      * @return the priori error estimate covariance matrix
      */
     public Matrix getErrorCovPre() {
-<span class="fc" id="L710">        return errorCovPre;</span>
+<span class="fc" id="L709">        return errorCovPre;</span>
     }
     
     /**
@@ -725,13 +724,13 @@ public class KalmanFilter implements Serializable {
      * and columns or it is not symmetric
      */
     public void setErrorCovPre(Matrix errorCovPre) {
-<span class="fc bfc" id="L728" title="All 4 branches covered.">        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||</span>
-<span class="fc bfc" id="L729" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPre)) {</span>
-<span class="fc" id="L730">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L727" title="All 4 branches covered.">        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||</span>
+<span class="fc bfc" id="L728" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPre)) {</span>
+<span class="fc" id="L729">            throw new IllegalArgumentException(</span>
                     &quot;Wrong matrix size or matrix is not symmetric&quot;);
         }
-<span class="fc" id="L733">        this.errorCovPre = errorCovPre;</span>
-<span class="fc" id="L734">    }</span>
+<span class="fc" id="L732">        this.errorCovPre = errorCovPre;</span>
+<span class="fc" id="L733">    }</span>
     
     /**
      * Obtains the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).
@@ -743,7 +742,7 @@ public class KalmanFilter implements Serializable {
      * @return the Kalman gain matrix
      */
     public Matrix getGain() {
-<span class="fc" id="L746">        return gain;</span>
+<span class="fc" id="L745">        return gain;</span>
     }
     
     /**
@@ -762,11 +761,11 @@ public class KalmanFilter implements Serializable {
      * and mp columns
      */
     public void setGain(Matrix gain) {
-<span class="fc bfc" id="L765" title="All 4 branches covered.">        if (gain.getRows() != dp || gain.getColumns() != mp) {</span>
-<span class="fc" id="L766">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc bfc" id="L764" title="All 4 branches covered.">        if (gain.getRows() != dp || gain.getColumns() != mp) {</span>
+<span class="fc" id="L765">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
         }
-<span class="fc" id="L768">        this.gain = gain;</span>
-<span class="fc" id="L769">    }</span>
+<span class="fc" id="L767">        this.gain = gain;</span>
+<span class="fc" id="L768">    }</span>
     
     /**
      * Obtains the posteriori error estimate covariance matrix 
@@ -776,7 +775,7 @@ public class KalmanFilter implements Serializable {
      * @return the priori error estimate covariance matrix
      */
     public Matrix getErrorCovPost() {
-<span class="fc" id="L779">        return errorCovPost;</span>
+<span class="fc" id="L778">        return errorCovPost;</span>
     }
     
     /**
@@ -794,12 +793,12 @@ public class KalmanFilter implements Serializable {
      * and columns or it is not symmetric
      */
     public void setErrorCovPost(Matrix errorCovPost) {
-<span class="fc bfc" id="L797" title="All 4 branches covered.">        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||</span>
-<span class="fc bfc" id="L798" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPost)) {</span>
-<span class="fc" id="L799">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L796" title="All 4 branches covered.">        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||</span>
+<span class="fc bfc" id="L797" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPost)) {</span>
+<span class="fc" id="L798">            throw new IllegalArgumentException(</span>
                     &quot;Wrong matrix size or matrix is not symmetric&quot;);
         }
-<span class="fc" id="L802">        this.errorCovPost = errorCovPost;</span>
-<span class="fc" id="L803">    }    </span>
+<span class="fc" id="L801">        this.errorCovPost = errorCovPost;</span>
+<span class="fc" id="L802">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
