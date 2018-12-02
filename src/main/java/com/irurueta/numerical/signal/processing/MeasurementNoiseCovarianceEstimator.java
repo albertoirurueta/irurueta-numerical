@@ -84,7 +84,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * @throws SignalProcessingException if something fails.
      */
     public MeasurementNoiseCovarianceEstimator(int measureParams) 
-            throws SignalProcessingException, IllegalArgumentException {
+            throws SignalProcessingException {
         
         if (measureParams < 1) {
             throw new IllegalArgumentException(
@@ -115,8 +115,7 @@ public class MeasurementNoiseCovarianceEstimator {
      * to the number of measure parameters set for this instance.
      * @throws SignalProcessingException if something fails.
      */
-    public Matrix update(double[] sample) throws IllegalArgumentException, 
-            SignalProcessingException {
+    public Matrix update(double[] sample) throws SignalProcessingException {
         
         if (sample.length != mp) {
             throw new IllegalArgumentException("wrong sample size");

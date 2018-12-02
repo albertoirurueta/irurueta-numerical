@@ -194,7 +194,7 @@ public class KalmanFilter implements Serializable {
      * @throws SignalProcessingException if something else fails.
      */
     public KalmanFilter(int dynamParams, int measureParams, int controlParams)
-            throws IllegalArgumentException, SignalProcessingException {
+            throws SignalProcessingException {
         
         if (dynamParams <= 0 || measureParams <= 0) {
             throw new IllegalArgumentException(
@@ -263,7 +263,7 @@ public class KalmanFilter implements Serializable {
      * @throws SignalProcessingException if something else fails.
      */
     public KalmanFilter(int dynamParams, int measureParams)
-            throws IllegalArgumentException, SignalProcessingException {
+            throws SignalProcessingException {
         this(dynamParams, measureParams, 0);
     }
     
@@ -417,7 +417,7 @@ public class KalmanFilter implements Serializable {
      * @throws SignalProcessingException if something else fails
      */
     public void setMeasureParameters(int measureParameters) 
-            throws IllegalArgumentException, SignalProcessingException {
+            throws SignalProcessingException {
         if (measureParameters <= 0) {
             throw new IllegalArgumentException("");
         }
@@ -477,9 +477,9 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have 1
      * columnd and dp rows
      */
-    public void setStatePre(Matrix statePre) throws IllegalArgumentException{
+    public void setStatePre(Matrix statePre) {
         if (statePre.getColumns() != 1 || statePre.getRows() != dp) {
-            throw new IllegalArgumentException("Wrong matrix size");
+            throw new IllegalArgumentException();
         }
         this.statePre = statePre;
     }
@@ -503,7 +503,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have 1
      * columnd and dp rows
      */
-    public void setStatePost(Matrix statePost) throws IllegalArgumentException {
+    public void setStatePost(Matrix statePost) {
         if (statePost.getColumns() != 1 || statePost.getRows() != dp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
@@ -533,8 +533,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp rows
      * and columns
      */
-    public void setTransitionMatrix(Matrix transitionMatrix) 
-            throws IllegalArgumentException {
+    public void setTransitionMatrix(Matrix transitionMatrix) {
         
         if (transitionMatrix.getRows() != dp ||
                 transitionMatrix.getColumns() != dp) {
@@ -564,8 +563,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp
      * rows and cp columns
      */
-    public void setControlMatrix(Matrix controlMatrix) 
-            throws IllegalArgumentException {
+    public void setControlMatrix(Matrix controlMatrix) {
         if (cp > 0) {
             if (controlMatrix == null || (controlMatrix.getRows() != dp ||
                 controlMatrix.getColumns() != cp)) {
@@ -607,8 +605,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have mp rows
      * and dp columns.
      */
-    public void setMeasurementMatrix(Matrix measurementMatrix) 
-            throws IllegalArgumentException {
+    public void setMeasurementMatrix(Matrix measurementMatrix) {
         if (measurementMatrix.getRows() != mp ||
                 measurementMatrix.getColumns() != dp) {
             throw new IllegalArgumentException("Wrong matrix size");
@@ -648,13 +645,11 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp
      * rows and columns or it is not symmetric
      */
-    public void setProcessNoiseCov(Matrix processNoiseCov) 
-            throws IllegalArgumentException {
+    public void setProcessNoiseCov(Matrix processNoiseCov) {
         if (processNoiseCov.getRows() != dp ||
                 processNoiseCov.getColumns() != dp || 
                 !Utils.isSymmetric(processNoiseCov)) {
-            throw new IllegalArgumentException(
-                    "Wrong matrix size or matrix is not symmetric");
+            throw new IllegalArgumentException();
         }
         
         this.processNoiseCov = processNoiseCov;
@@ -693,8 +688,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have mp
      * rows and columns or it is not symmetric
      */
-    public void setMeasurementNoiseCov(Matrix measurementNoiseCov) 
-            throws IllegalArgumentException {
+    public void setMeasurementNoiseCov(Matrix measurementNoiseCov) {
         if (measurementNoiseCov.getRows() != mp ||
                 measurementNoiseCov.getColumns() != mp ||
                 !Utils.isSymmetric(measurementNoiseCov)) {
@@ -730,8 +724,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp rows
      * and columns or it is not symmetric
      */
-    public void setErrorCovPre(Matrix errorCovPre) 
-            throws IllegalArgumentException {
+    public void setErrorCovPre(Matrix errorCovPre) {
         if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||
                 !Utils.isSymmetric(errorCovPre)) {
             throw new IllegalArgumentException(
@@ -768,7 +761,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp rows
      * and mp columns
      */
-    public void setGain(Matrix gain) throws IllegalArgumentException {
+    public void setGain(Matrix gain) {
         if (gain.getRows() != dp || gain.getColumns() != mp) {
             throw new IllegalArgumentException("Wrong matrix size");
         }
@@ -800,8 +793,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException if provided matrix does not have dp rows
      * and columns or it is not symmetric
      */
-    public void setErrorCovPost(Matrix errorCovPost) 
-            throws IllegalArgumentException {
+    public void setErrorCovPost(Matrix errorCovPost) {
         if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||
                 !Utils.isSymmetric(errorCovPost)) {
             throw new IllegalArgumentException(

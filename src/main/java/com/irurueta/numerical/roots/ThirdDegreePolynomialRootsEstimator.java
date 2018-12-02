@@ -149,6 +149,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * only supports REAL polynomial parameters.
      * @return this method always throws an exception.
      * @throws com.irurueta.numerical.NotAvailableException always thrown
+     * @deprecated
      */
     @Deprecated
     @Override

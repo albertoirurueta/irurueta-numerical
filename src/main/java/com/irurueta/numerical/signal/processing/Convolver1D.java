@@ -142,7 +142,7 @@ public class Convolver1D {
      * @param kernelCenter position of kernel center.
      * @throws IllegalArgumentException if provided position is negative.
      */
-    public void setKernelCenter(int kernelCenter) throws IllegalArgumentException {
+    public void setKernelCenter(int kernelCenter) {
         if (kernelCenter < 0) {
             throw new IllegalArgumentException("kernel center must be zero " + 
                     "or greater and within kernel's boundaries");
@@ -232,7 +232,7 @@ public class Convolver1D {
      * @throws IllegalArgumentException if provided result array does not have
      * proper length.
      */
-    public void convolve(double[] result) throws IllegalArgumentException {
+    public void convolve(double[] result) {
         convolve(mSignal, mKernel, mKernelCenter, mEdgeMethod, mConstantValue, 
                 result, mListener);
     }
@@ -273,7 +273,7 @@ public class Convolver1D {
      * have proper length.
      */
     public static void convolve(double[] signal, double[] kernel, 
-            double[] result) throws IllegalArgumentException {
+            double[] result) {
         convolve(signal, kernel, DEFAULT_KERNEL_CENTER, result, 
                 null);
     }
@@ -290,8 +290,7 @@ public class Convolver1D {
      * have proper length.
      */
     public static void convolve(double[] signal, double[] kernel, 
-            double[] result, Convolver1DListener listener) 
-            throws IllegalArgumentException {
+            double[] result, Convolver1DListener listener) {
         convolve(signal, kernel, DEFAULT_KERNEL_CENTER, result, listener);
     }
     
@@ -308,8 +307,7 @@ public class Convolver1D {
      * boundaries.
      */
     public static double[] convolve(double[] signal, double[] kernel, 
-            int kernelCenter) 
-            throws IllegalArgumentException {
+            int kernelCenter) {
         return convolve(signal, kernel, kernelCenter, 
                 (Convolver1DListener)null);
     }
@@ -328,8 +326,7 @@ public class Convolver1D {
      * boundaries.
      */
     public static double[] convolve(double[] signal, double[] kernel, 
-            int kernelCenter, Convolver1DListener listener) 
-            throws IllegalArgumentException {
+            int kernelCenter, Convolver1DListener listener) {
         return convolve(signal, kernel, kernelCenter, DEFAULT_EDGE_METHOD, 
                 listener);
     }
@@ -348,8 +345,7 @@ public class Convolver1D {
      * have proper length or if kernel center is not within kernel's boundaries.
      */
     public static void convolve(double[] signal, double[] kernel, 
-            int kernelCenter, double[] result) 
-            throws IllegalArgumentException {
+            int kernelCenter, double[] result) {
         convolve(signal, kernel, kernelCenter, result, 
                 null);
     }
@@ -369,8 +365,7 @@ public class Convolver1D {
      * have proper length or if kernel center is not within kernel's boundaries.
      */
     public static void convolve(double[] signal, double[] kernel, 
-            int kernelCenter, double[] result, Convolver1DListener listener) 
-            throws IllegalArgumentException {
+            int kernelCenter, double[] result, Convolver1DListener listener) {
         convolve(signal, kernel, kernelCenter, DEFAULT_EDGE_METHOD, result, 
                 listener);
     }
@@ -390,8 +385,7 @@ public class Convolver1D {
      * boundaries.
      */
     public static double[] convolve(double[] signal, double[] kernel, 
-            int kernelCenter, ConvolverEdgeMethod edgeMethod) 
-            throws IllegalArgumentException {
+            int kernelCenter, ConvolverEdgeMethod edgeMethod) {
         return convolve(signal, kernel, kernelCenter, edgeMethod, 
                 (Convolver1DListener)null);
     }
@@ -413,7 +407,7 @@ public class Convolver1D {
      */
     public static double[] convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
-            Convolver1DListener listener) throws IllegalArgumentException {
+            Convolver1DListener listener) {
         return convolve(signal, kernel, kernelCenter, edgeMethod, 
                 DEFAULT_CONSTANT_VALUE, listener);
     }
@@ -434,8 +428,7 @@ public class Convolver1D {
      * have proper length or if kernel center is not within kernel's boundaries.
      */
     public static void convolve(double[] signal, double[] kernel,
-            int kernelCenter, ConvolverEdgeMethod edgeMethod, double[] result) 
-            throws IllegalArgumentException {
+            int kernelCenter, ConvolverEdgeMethod edgeMethod, double[] result) {
         convolve(signal, kernel, kernelCenter, edgeMethod, result, 
                 null);
     }
@@ -458,7 +451,7 @@ public class Convolver1D {
      */
     public static void convolve(double[] signal, double[] kernel,
             int kernelCenter, ConvolverEdgeMethod edgeMethod, double[] result,
-            Convolver1DListener listener) throws IllegalArgumentException {
+            Convolver1DListener listener) {
         convolve(signal, kernel, kernelCenter, edgeMethod, 
                 DEFAULT_CONSTANT_VALUE, result, listener);
     }
@@ -479,7 +472,7 @@ public class Convolver1D {
      */
     public static double[] convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
-            double constantValue) throws IllegalArgumentException {
+            double constantValue) {
         return convolve(signal, kernel, kernelCenter, edgeMethod, 
                 constantValue, (Convolver1DListener)null);
     }
@@ -501,8 +494,7 @@ public class Convolver1D {
      */
     public static double[] convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
-            double constantValue, Convolver1DListener listener) 
-            throws IllegalArgumentException {
+            double constantValue, Convolver1DListener listener) {
         
         double[] result = new double[signal.length + kernel.length - 1];
         convolve(signal, kernel, kernelCenter, edgeMethod, constantValue, 
@@ -551,8 +543,7 @@ public class Convolver1D {
      */
     public static void convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
-            double constantValue, double[] result, Convolver1DListener listener) 
-            throws IllegalArgumentException {
+            double constantValue, double[] result, Convolver1DListener listener) {
         if (kernelCenter < 0 || kernelCenter >= kernel.length) {
             throw new IllegalArgumentException(
                     "kernel center must be within kernel boundaries");
@@ -592,6 +583,7 @@ public class Convolver1D {
      * @param result array where result is stored.
      * @param listener listener attending events generated during convolution.
      */
+    @SuppressWarnings("Duplicates")
     private static void internalConvolveZero(double[] signal, double[] kernel,
             int kernelCenter, double[] result, Convolver1DListener listener) {
         int kernelLength = kernel.length;
