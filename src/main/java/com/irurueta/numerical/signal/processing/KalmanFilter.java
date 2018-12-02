@@ -505,7 +505,7 @@ public class KalmanFilter implements Serializable {
      */
     public void setStatePost(Matrix statePost) {
         if (statePost.getColumns() != 1 || statePost.getRows() != dp) {
-            throw new IllegalArgumentException("Wrong matrix size");
+            throw new IllegalArgumentException();
         }
         this.statePost = statePost;
     }
@@ -692,8 +692,7 @@ public class KalmanFilter implements Serializable {
         if (measurementNoiseCov.getRows() != mp ||
                 measurementNoiseCov.getColumns() != mp ||
                 !Utils.isSymmetric(measurementNoiseCov)) {
-            throw new IllegalArgumentException(
-                    "Wrong matrix size or matrix is not symmetric");
+            throw new IllegalArgumentException();
         }
         
         this.measurementNoiseCov = measurementNoiseCov;

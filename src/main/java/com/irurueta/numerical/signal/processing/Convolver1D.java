@@ -18,7 +18,7 @@ package com.irurueta.numerical.signal.processing;
 /**
  * Convolves a 1D signal with a 1D kernel.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class Convolver1D {
     
     /**
@@ -519,8 +519,7 @@ public class Convolver1D {
      */
     public static void convolve(double[] signal, double[] kernel, 
             int kernelCenter, ConvolverEdgeMethod edgeMethod, 
-            double constantValue, double[] result) 
-            throws IllegalArgumentException {
+            double constantValue, double[] result) {
         convolve(signal, kernel, kernelCenter, edgeMethod, constantValue, 
                 result, null);
     }
