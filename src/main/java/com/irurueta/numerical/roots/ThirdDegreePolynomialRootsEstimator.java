@@ -46,7 +46,7 @@ public class ThirdDegreePolynomialRootsEstimator
     /**
      * Constant defining the squared root of three.
      */
-    public static double ROOTTHREE = Math.sqrt(3.0);
+    public static final double ROOT_THREE = Math.sqrt(3.0);
     
     /**
      * Number of parameters valid for a third degree polynomial.
@@ -73,8 +73,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */        
-    public ThirdDegreePolynomialRootsEstimator(double[] polyParams) 
-            throws IllegalArgumentException {
+    public ThirdDegreePolynomialRootsEstimator(double[] polyParams) {
         super();      
         internalSetPolynomialParameters(polyParams);
     }
@@ -90,7 +89,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * array is not valid.
      */    
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -107,8 +106,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException Raised if the length of the provided
      * array is not valid.
      */        
-    private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException {
+    private void internalSetPolynomialParameters(double[] polyParams) {
         if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
         }
@@ -157,21 +155,7 @@ public class ThirdDegreePolynomialRootsEstimator
     public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
-    
 
-    /**
-     * This method will always raise an IllegalArgumentException because this
-     * class only supports REAL polynomial parameters.
-     * @throws IllegalArgumentException always thrown.
-     * @deprecated 
-     */        
-    @Override
-    protected void internalSetPolynomialParameters(Complex[] polyParams) 
-            throws IllegalArgumentException {
-        //complex values are not supported
-        throw new IllegalArgumentException();
-    }
-    
     /**
      * Estimates the roots of provided polynomial.
      * @throws LockedException Raised if this instance is locked estimating 
@@ -265,15 +249,14 @@ public class ThirdDegreePolynomialRootsEstimator
      */        
     public static boolean isThirdDegree(double[] polyParams) {
         int length = polyParams.length;
-        if (length >= VALID_POLY_PARAMS_LENGTH) {
-            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
-                for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
-                    if (Math.abs(polyParams[i]) > EPS) {
-                        return false;
-                    }
+        if (length >= VALID_POLY_PARAMS_LENGTH &&
+                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+            for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+                if (Math.abs(polyParams[i]) > EPS) {
+                    return false;
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }
@@ -378,7 +361,20 @@ public class ThirdDegreePolynomialRootsEstimator
         if(!isReady()) throw new NotReadyException();        
         return hasOneRealRootAndTwoComplexConjugateRoots(realPolyParams);
     }
-    
+
+    /**
+     * This method will always raise an IllegalArgumentException because this
+     * class only supports REAL polynomial parameters.
+     * @throws IllegalArgumentException always thrown.
+     * @deprecated
+     */
+    @Override
+    @Deprecated
+    protected void internalSetPolynomialParameters(Complex[] polyParams) {
+        //complex values are not supported
+        throw new IllegalArgumentException();
+    }
+
     /**
      * Internal method to compute the discriminant of a 3rd degree polynomial.
      * Discriminants are helpful to determine properties of a 3rd degree 
@@ -423,11 +419,10 @@ public class ThirdDegreePolynomialRootsEstimator
             Complex x1, Complex x2, Complex x3){
         
         //find the discriminant
-        double f, g, h;
-        f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;
-        g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c / 
+        double f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;
+        double g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c /
                 Math.pow(a, 2.0) + 27.0 * d / a) / 27.0;
-        h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;
+        double h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;
         double absF = Math.abs(f);
         double absG = Math.abs(g);
         double absH = Math.abs(h);
@@ -445,14 +440,15 @@ public class ThirdDegreePolynomialRootsEstimator
         else if (h <= 0.0)
         {
             // 3 real roots
-            double i, j, k, m, n, p;
+
             // complicated maths making use of the method
-            i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);
-            j = cubeRoot(i);
-            k = Math.acos(-(g / (2.0 * i)));
-            m = Math.cos(k / 3.0);
-            n = ROOTTHREE * Math.sin(k / 3.0);
-            p = -(b / (3.0 * a));
+            double i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);
+            double j = cubeRoot(i);
+            double k = Math.acos(-(g / (2.0 * i)));
+            double m = Math.cos(k / 3.0);
+            double n = ROOT_THREE * Math.sin(k / 3.0);
+            double p = -(b / (3.0 * a));
+
             // print solutions
             x1.setRealAndImaginary(2.0 * j * m + p, 0.0);
             x2.setRealAndImaginary(-j * (m + n) + p, 0.0);
@@ -461,19 +457,20 @@ public class ThirdDegreePolynomialRootsEstimator
         else if (h > 0)
         {
             // 1 real root and 2 complex roots
-            double r, s, t, u, p;
+
             // complicated maths making use of the method
-            r = -(g / 2) + Math.pow(h, 0.5);
-            s = cubeRoot(r);
-            t = -(g / 2) - Math.pow(h, 0.5);
-            u = cubeRoot(t);
-            p = -(b / (3 * a));
+            double r = -(g / 2) + Math.pow(h, 0.5);
+            double s = cubeRoot(r);
+            double t = -(g / 2) - Math.pow(h, 0.5);
+            double u = cubeRoot(t);
+            double p = -(b / (3 * a));
+
             // print solutions
             x1.setRealAndImaginary((s + u) + p, 0.0);
             double real = -(s + u) / 2 + p;
             x2.setReal(real);
             x3.setReal(real);
-            double imag = (s - u) * ROOTTHREE / 2;
+            double imag = (s - u) * ROOT_THREE / 2;
             x2.setImaginary(imag);
             x3.setImaginary(imag);
         }

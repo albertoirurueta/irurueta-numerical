@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Finds a single dimensional function's root within a bracket of values using
@@ -76,7 +73,7 @@ public class NewtonRaphsonSingleRootEstimator
     public NewtonRaphsonSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -99,7 +96,7 @@ public class NewtonRaphsonSingleRootEstimator
             SingleDimensionFunctionEvaluatorListener listener,
             SingleDimensionFunctionEvaluatorListener derivativeListener,
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -116,24 +113,6 @@ public class NewtonRaphsonSingleRootEstimator
     }
 
     /**
-     * Internal method to set tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * This method does not check whether this instance is locked or not.
-     * @param tolerance Tolerance value.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance < MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
-    /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
@@ -143,8 +122,7 @@ public class NewtonRaphsonSingleRootEstimator
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -163,6 +141,7 @@ public class NewtonRaphsonSingleRootEstimator
      * numerical instability or convergence problems, or no roots are found).
      */        
     @Override
+    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         
@@ -181,13 +160,14 @@ public class NewtonRaphsonSingleRootEstimator
         double xacc = tolerance;
         
         double rtn = 0.5 * (x1 + x2);
-        double f, df;
+        double f;
+        double df;
         for (int j = 0; j < JMAX; j++) {
             try {
                 f = listener.evaluate(rtn);
                 df = derivativeListener.evaluate(rtn);
-            } catch (Throwable t) {
-                throw new RootEstimationException(t);
+            } catch (EvaluationException e) {
+                throw new RootEstimationException(e);
             }
             
             double dx = f / df;
@@ -208,5 +188,22 @@ public class NewtonRaphsonSingleRootEstimator
         //maximum number of iterations exceeded
         locked = false;
         throw new RootEstimationException();
+    }
+
+    /**
+     * Internal method to set tolerance value.
+     * Tolerance is the accuracy to be achieved when estimating a root.
+     * If a root is found by this class, it is ensured to have an accuracy below
+     * provided tolerance value.
+     * This method does not check whether this instance is locked or not.
+     * @param tolerance Tolerance value.
+     * @throws IllegalArgumentException Raised if provided tolerance value is
+     * negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
     }
 }

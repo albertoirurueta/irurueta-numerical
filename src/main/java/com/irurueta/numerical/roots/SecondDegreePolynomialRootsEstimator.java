@@ -63,8 +63,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException  Raised if the length of the provided
      * array is not valid.
      */    
-    public SecondDegreePolynomialRootsEstimator(double[] polyParams)
-            throws IllegalArgumentException {
+    public SecondDegreePolynomialRootsEstimator(double[] polyParams) {
         super();
         internalSetPolynomialParameters(polyParams);
     }
@@ -80,35 +79,13 @@ public class SecondDegreePolynomialRootsEstimator
      * array is not valid.
      */
     public void setPolynomialParameters(double[] polyParams)
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         internalSetPolynomialParameters(polyParams);
     }
-    
-    /**
-     * Internal method to set array of second degree polynomial parameters.
-     * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and 
-     * the array must be provided as [c, b, a].
-     * Note: This class only supports real polynomial parameters
-     * This method does not check if this instance is locked.
-     * @param polyParams Array containing polynomial parameters.
-     * @throws IllegalArgumentException Raised if the length of the provided
-     * array is not valid.
-     */    
-    private void internalSetPolynomialParameters(double[] polyParams) 
-            throws IllegalArgumentException {
-        if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
-            throw new IllegalArgumentException();
-        }
-        if (!isSecondDegree(polyParams)) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.realPolyParams = polyParams;
-    }
-    
+
     /**
      * Returns array of second degree polynomial parameters.
      * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and 
@@ -144,23 +121,11 @@ public class SecondDegreePolynomialRootsEstimator
      * @deprecated
      */    
     @Override
+    @Deprecated
     public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
-    
 
-    /**
-     * This method will always raise an IllegalArgumentException because this
-     * class only supports REAL polynomial parameters
-     * @deprecated 
-     */    
-    @Override
-    protected void internalSetPolynomialParameters(Complex[] polyParams) 
-            throws IllegalArgumentException {
-        //complex values are not supported
-        throw new IllegalArgumentException();
-    }
-    
     /**
      * Estimates the roots of provided polynomial.
      * @throws LockedException Raised if this instance is locked estimating 
@@ -222,15 +187,14 @@ public class SecondDegreePolynomialRootsEstimator
      */    
     public static boolean isSecondDegree(double[] polyParams) {
         int length = polyParams.length;
-        if (length >= VALID_POLY_PARAMS_LENGTH) {
-            if (Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
-                for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
-                    if (Math.abs(polyParams[i]) > EPS) {
-                        return false;
-                    }
+        if (length >= VALID_POLY_PARAMS_LENGTH &&
+                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+            for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+                if (Math.abs(polyParams[i]) > EPS) {
+                    return false;
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }
@@ -348,7 +312,19 @@ public class SecondDegreePolynomialRootsEstimator
         }
         return hasTwoComplexConjugateRoots(realPolyParams);
     }
-    
+
+    /**
+     * This method will always raise an IllegalArgumentException because this
+     * class only supports REAL polynomial parameters
+     * @deprecated
+     */
+    @Override
+    @Deprecated
+    protected void internalSetPolynomialParameters(Complex[] polyParams) {
+        //complex values are not supported
+        throw new IllegalArgumentException();
+    }
+
     /**
      * Internal method to compute the discriminant of a 2nd degree polynomial.
      * Discriminants are helpful to determine properties of a 2nd degree 
@@ -364,7 +340,7 @@ public class SecondDegreePolynomialRootsEstimator
 
         return b * b - 4.0 * a * c;
     }
-    
+
     /**
      * Finds 2nd degree polynomial roots
      * @param a 1st parameter
@@ -391,5 +367,26 @@ public class SecondDegreePolynomialRootsEstimator
             x1.setRealAndImaginary(real, imag);
             x2.setRealAndImaginary(real, -imag);
         }
+    }
+
+    /**
+     * Internal method to set array of second degree polynomial parameters.
+     * A second degree polynomial is defined by p(x) = a * x^2 + b * x + c, and
+     * the array must be provided as [c, b, a].
+     * Note: This class only supports real polynomial parameters
+     * This method does not check if this instance is locked.
+     * @param polyParams Array containing polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the provided
+     * array is not valid.
+     */
+    private void internalSetPolynomialParameters(double[] polyParams) {
+        if (polyParams.length < VALID_POLY_PARAMS_LENGTH) {
+            throw new IllegalArgumentException();
+        }
+        if (!isSecondDegree(polyParams)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.realPolyParams = polyParams;
     }
 }

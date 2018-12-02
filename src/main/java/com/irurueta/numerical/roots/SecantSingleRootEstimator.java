@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of 
@@ -77,7 +74,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
     public SecantSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -92,25 +89,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
     public double getTolerance() {
         return tolerance;
     }
-    
-    /**
-     * Internal method to set tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * This method does not check whether this instance is locked or not.
-     * @param tolerance Tolerance value.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance < MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
+
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -121,8 +100,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */    
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -141,6 +119,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * numerical instability or convergence problems, or no roots are found).
      */       
     @Override
+    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         if (isLocked()) {
@@ -157,7 +136,8 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
             double x1 = minEvalPoint;
             double x2 = maxEvalPoint;
             double xacc = tolerance;
-            double xl, rts;
+            double xl;
+            double rts;
             double fl = listener.evaluate(x1);
             double f = listener.evaluate(x2);
             double[] v1 = new double[1];
@@ -189,12 +169,12 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
                     return;
                 }
             }
-        } catch (Throwable t) {
+        } catch (EvaluationException e) {
+            throw new RootEstimationException(e);
+        } finally {
             locked = false;
-            throw new RootEstimationException(t);
         }
         //too many iterations and error exceeds desired tolerance
-        locked = false;
         throw new RootEstimationException();
     }
     
@@ -208,5 +188,22 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
     @Override
     public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
+    }
+
+    /**
+     * Internal method to set tolerance value.
+     * Tolerance is the accuracy to be achieved when estimating a root.
+     * If a root is found by this class, it is ensured to have an accuracy below
+     * provided tolerance value.
+     * This method does not check whether this instance is locked or not.
+     * @param tolerance Tolerance value.
+     * @throws IllegalArgumentException Raised if provided tolerance value is
+     * negative.
+     */
+    private void internalSetTolerance(double tolerance) {
+        if (tolerance < MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
     }
 }

@@ -105,7 +105,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * is not valid. It has to be greater or equal than 2.
      */
     public LaguerrePolynomialRootsEstimator(Complex[] polyParams, 
-            boolean polishRoots) throws IllegalArgumentException {
+            boolean polishRoots) {
         super();
         this.polishRoots = polishRoots;
         internalSetPolynomialParameters(polyParams);
@@ -117,33 +117,12 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @throws IllegalArgumentException Raised if length of provided parameters
      * is not valid. It has to be greater or equal than 2.
      */
-    public LaguerrePolynomialRootsEstimator(Complex[] polyParams)
-            throws IllegalArgumentException {
+    public LaguerrePolynomialRootsEstimator(Complex[] polyParams) {
         super();
         this.polishRoots = DEFAULT_POLISH_ROOTS;
         internalSetPolynomialParameters(polyParams);
     }
-    
-    /**
-     * Internal method to set parameters of a polynomial, taking into account 
-     * that a polynomial of degree n is defined as:
-     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
-     * then the array of parameters is [an, a(n - 1), ... a1, a0]
-     * Polynomial parameters can be either real or complex values
-     * This method does not check if this class is locked.
-     * @param polyParams Polynomial parameters.
-     * @throws IllegalArgumentException Raised if the length of the array is not
-     * valid.
-     */    
-    @Override
-    protected final void internalSetPolynomialParameters(
-            Complex[] polyParams) throws IllegalArgumentException {
-        if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
-            throw new IllegalArgumentException();
-        }
-        this.polyParams = polyParams;
-    }
-    
+
     /**
      * Estimates the roots of provided polynomial.
      * @throws LockedException Raised if this instance is locked estimating a
@@ -177,14 +156,15 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
         int i;
         int[] its = new int[1];
         Complex x = new Complex();
-        Complex b, c;
+        Complex b;
+        Complex c;
         int m = a.length - 1;
         
         Complex[] ad = Arrays.copyOf(a, a.length);
         for (int j = m - 1; j >= 0; j--) {
             x.setRealAndImaginary(0.0, 0.0);
-            Complex[] ad_v = Arrays.copyOf(ad, j + 2);
-            internalLaguer(ad_v, x, its);
+            Complex[] adV = Arrays.copyOf(ad, j + 2);
+            internalLaguer(adV, x, its);
             if(Math.abs(x.getImaginary()) <= 2.0 * EPS * Math.abs(x.getReal()))
                 x.clone().setRealAndImaginary(x.getReal(), 0.0);
             roots[j] = x.clone();
@@ -236,7 +216,27 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
         }
         polishRoots = enable;
     }
-    
+
+    /**
+     * Internal method to set parameters of a polynomial, taking into account
+     * that a polynomial of degree n is defined as:
+     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+     * then the array of parameters is [an, a(n - 1), ... a1, a0]
+     * Polynomial parameters can be either real or complex values
+     * This method does not check if this class is locked.
+     * @param polyParams Polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the array is not
+     * valid.
+     */
+    @Override
+    protected final void internalSetPolynomialParameters(
+            Complex[] polyParams) {
+        if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
+            throw new IllegalArgumentException();
+        }
+        this.polyParams = polyParams;
+    }
+
     /**
      * Internal method to compute a root after decomposing and decreasing the
      * degree of the polynomial.
@@ -251,7 +251,10 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
     private void internalLaguer(Complex[] a, Complex x, int[] its) 
             throws RootEstimationException {
         
-        Complex x1, b, g, g2;
+        Complex x1;
+        Complex b;
+        Complex g;
+        Complex g2;
         Complex dx = new Complex();
         Complex d = new Complex();
         Complex f = new Complex();
@@ -322,5 +325,5 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
         //too many iterations in Laguerre
         locked = false;
         throw new RootEstimationException();
-    }    
+    }
 }

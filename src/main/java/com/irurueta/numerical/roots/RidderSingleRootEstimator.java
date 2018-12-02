@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of 
@@ -77,8 +74,7 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
     public RidderSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint,
-            double tolerance) throws InvalidBracketRangeException,
-            IllegalArgumentException {
+            double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -104,8 +100,7 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */        
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -122,8 +117,7 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */       
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -142,6 +136,7 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
      * numerical instability or convergence problems, or no roots are found).
      */         
     @Override
+    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         if (isLocked()) {
@@ -156,12 +151,13 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
         double x1 = minEvalPoint;
         double x2 = maxEvalPoint;
         double xacc = tolerance;
-        double fl, fh;
+        double fl;
+        double fh;
         try {
             fl = listener.evaluate(x1);
             fh = listener.evaluate(x2);
-        } catch (Throwable t) {
-            throw new RootEstimationException(t);
+        } catch (EvaluationException e) {
+            throw new RootEstimationException(e);
         }
         
         double ans;
@@ -211,8 +207,8 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
                     }
                 
                 }
-            } catch (Throwable t) {
-                throw new RootEstimationException(t);
+            } catch (EvaluationException e) {
+                throw new RootEstimationException(e);
             }
             if (!found) {
                 //too many iterations and error exceeds desired tolerance

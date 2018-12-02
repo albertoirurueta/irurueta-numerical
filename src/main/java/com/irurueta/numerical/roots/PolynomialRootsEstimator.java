@@ -58,20 +58,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
         }
         return polyParams;
     }
-    
-    /**
-     * Internal method to set parameters of a polynomial, taking into account 
-     * that a polynomial of degree n is defined as:
-     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
-     * then the array of parameters is [a0, a1, ... a(n - 1), an]
-     * This method does not check if this class is locked.
-     * @param polyParams Polynomial parameters.
-     * @throws IllegalArgumentException Raised if the length of the array is not
-     * valid depending on the subclass implementation.
-     */
-    protected abstract void internalSetPolynomialParameters(
-            Complex[] polyParams) throws IllegalArgumentException;
-    
+
     /**
      * Sets parameters of a polynomial, taking into account 
      * that a polynomial of degree n is defined as:
@@ -83,7 +70,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      * valid depending on the subclass implementation.
      */
     public void setPolynomialParameters(Complex[] polyParams) 
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -134,4 +121,17 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
     public boolean areRootsAvailable() {
         return roots != null;
     }
+
+    /**
+     * Internal method to set parameters of a polynomial, taking into account
+     * that a polynomial of degree n is defined as:
+     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+     * then the array of parameters is [a0, a1, ... a(n - 1), an]
+     * This method does not check if this class is locked.
+     * @param polyParams Polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the array is not
+     * valid depending on the subclass implementation.
+     */
+    protected abstract void internalSetPolynomialParameters(
+            Complex[] polyParams);
 }

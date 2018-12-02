@@ -15,10 +15,7 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.InvalidBracketRangeException;
-import com.irurueta.numerical.LockedException;
-import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.*;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of 
@@ -78,7 +75,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
     public SafeNewtonRaphsonSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener, 
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -101,7 +98,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
             SingleDimensionFunctionEvaluatorListener listener,
             SingleDimensionFunctionEvaluatorListener derivativeListener,
             double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+            throws InvalidBracketRangeException {
         super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -127,8 +124,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */        
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
+    private void internalSetTolerance(double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -145,8 +141,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */      
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
+    public void setTolerance(double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -165,6 +160,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
      * numerical instability or convergence problems, or no roots are found).
      */       
     @Override
+    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
         RootEstimationException {
         
@@ -182,13 +178,15 @@ public class SafeNewtonRaphsonSingleRootEstimator
         double x2 = maxEvalPoint;
         double xacc = tolerance;
         
-        double xh, xl;
-        double fl, fh;
+        double xh;
+        double xl;
+        double fl;
+        double fh;
         try {
             fl = listener.evaluate(x1);
             fh = listener.evaluate(x2);
-        } catch (Throwable t) {
-            throw new RootEstimationException(t);
+        } catch (EvaluationException e) {
+            throw new RootEstimationException(e);
         }
         
         if ((fl > 0.0 && fh > 0.0) || (fl < 0.0 && fh < 0.0)) {
@@ -218,12 +216,13 @@ public class SafeNewtonRaphsonSingleRootEstimator
         double rts = 0.5 * (x1 + x2);
         double dxold = Math.abs(x2 - x1);
         double dx = dxold;
-        double f, df;
+        double f;
+        double df;
         try {
             f = listener.evaluate(rts);
             df = derivativeListener.evaluate(rts);
-        } catch (Throwable t) {
-            throw new RootEstimationException(t);
+        } catch (EvaluationException e) {
+            throw new RootEstimationException(e);
         }
         
         for (int j = 0; j < MAXIT; j++) {
@@ -260,8 +259,8 @@ public class SafeNewtonRaphsonSingleRootEstimator
             try {
                 f = listener.evaluate(rts);
                 df = derivativeListener.evaluate(rts);
-            } catch (Throwable t) {
-                throw new RootEstimationException(t);
+            } catch (EvaluationException e) {
+                throw new RootEstimationException(e);
             }
             
             if (f < 0.0) {
