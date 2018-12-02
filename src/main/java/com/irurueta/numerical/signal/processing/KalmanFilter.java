@@ -537,7 +537,7 @@ public class KalmanFilter implements Serializable {
         
         if (transitionMatrix.getRows() != dp ||
                 transitionMatrix.getColumns() != dp) {
-            throw new IllegalArgumentException("Wrong matrix size");
+            throw new IllegalArgumentException();
         }
         this.transitionMatrix = transitionMatrix;
     }
