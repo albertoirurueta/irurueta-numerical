@@ -575,11 +575,11 @@
 <a class="jxr_linenumber" name="L567" href="#L567">567</a>         <strong class="jxr_keyword">if</strong> (cp &gt; 0) {
 <a class="jxr_linenumber" name="L568" href="#L568">568</a>             <strong class="jxr_keyword">if</strong> (controlMatrix == <strong class="jxr_keyword">null</strong> || (controlMatrix.getRows() != dp ||
 <a class="jxr_linenumber" name="L569" href="#L569">569</a>                 controlMatrix.getColumns() != cp)) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Wrong matrix size"</span>);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L571" href="#L571">571</a>             }
 <a class="jxr_linenumber" name="L572" href="#L572">572</a>         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L573" href="#L573">573</a>             <em class="jxr_comment">//control matrix cannot be set</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Control matrix cannot be set"</span>);
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L575" href="#L575">575</a>         }
 <a class="jxr_linenumber" name="L576" href="#L576">576</a>         <strong class="jxr_keyword">this</strong>.controlMatrix = controlMatrix;
 <a class="jxr_linenumber" name="L577" href="#L577">577</a>     }
@@ -616,7 +616,7 @@
 <a class="jxr_linenumber" name="L608" href="#L608">608</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMeasurementMatrix(Matrix measurementMatrix) {
 <a class="jxr_linenumber" name="L609" href="#L609">609</a>         <strong class="jxr_keyword">if</strong> (measurementMatrix.getRows() != mp ||
 <a class="jxr_linenumber" name="L610" href="#L610">610</a>                 measurementMatrix.getColumns() != dp) {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Wrong matrix size"</span>);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L612" href="#L612">612</a>         }
 <a class="jxr_linenumber" name="L613" href="#L613">613</a>         <strong class="jxr_keyword">this</strong>.measurementMatrix = measurementMatrix;
 <a class="jxr_linenumber" name="L614" href="#L614">614</a>     }
@@ -734,81 +734,79 @@
 <a class="jxr_linenumber" name="L726" href="#L726">726</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setErrorCovPre(Matrix errorCovPre) {
 <a class="jxr_linenumber" name="L727" href="#L727">727</a>         <strong class="jxr_keyword">if</strong> (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||
 <a class="jxr_linenumber" name="L728" href="#L728">728</a>                 !Utils.isSymmetric(errorCovPre)) {
-<a class="jxr_linenumber" name="L729" href="#L729">729</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L730" href="#L730">730</a>                     <span class="jxr_string">"Wrong matrix size or matrix is not symmetric"</span>);
-<a class="jxr_linenumber" name="L731" href="#L731">731</a>         }
-<a class="jxr_linenumber" name="L732" href="#L732">732</a>         <strong class="jxr_keyword">this</strong>.errorCovPre = errorCovPre;
-<a class="jxr_linenumber" name="L733" href="#L733">733</a>     }
-<a class="jxr_linenumber" name="L734" href="#L734">734</a>     
-<a class="jxr_linenumber" name="L735" href="#L735">735</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">     * Obtains the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).</em>
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">     * This matrix is used to correct the predicted state, if the gain values </em>
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">     * are small then the filter is accurately tracking the system state and the</em>
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">     * prediction error remains small too.</em>
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">     * The gain matrix has dp rows and mp columns, where dp is the number of </em>
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">     * dynamic parameters and mp is the number of measure parameters.</em>
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">     * @return the Kalman gain matrix</em>
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L744" href="#L744">744</a>     <strong class="jxr_keyword">public</strong> Matrix getGain() {
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>         <strong class="jxr_keyword">return</strong> gain;
-<a class="jxr_linenumber" name="L746" href="#L746">746</a>     }
-<a class="jxr_linenumber" name="L747" href="#L747">747</a>     
-<a class="jxr_linenumber" name="L748" href="#L748">748</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">     * Sets the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).</em>
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">     * This matrix is used to correct the predicted state, if the gain values </em>
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">     * are small then the filter is accurately tracking the system state and the</em>
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">     * prediction error remains small too.</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">     * The gain matrix must have dp rows and mp columns, where dp is the number </em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">     * of dynamic parameters and mp is the number of measure parameters set for</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">     * this Kalman filter instance.</em>
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">     * This setter method can be used for initial setup purposes, however this</em>
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">     * matrix rarely needs to be set, and instead it is better to let the filter</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">     * converge to the actual system state.</em>
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">     * @param gain new gain matrix</em>
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided matrix does not have dp rows</em>
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">     * and mp columns</em>
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L763" href="#L763">763</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setGain(Matrix gain) {
-<a class="jxr_linenumber" name="L764" href="#L764">764</a>         <strong class="jxr_keyword">if</strong> (gain.getRows() != dp || gain.getColumns() != mp) {
-<a class="jxr_linenumber" name="L765" href="#L765">765</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Wrong matrix size"</span>);
-<a class="jxr_linenumber" name="L766" href="#L766">766</a>         }
-<a class="jxr_linenumber" name="L767" href="#L767">767</a>         <strong class="jxr_keyword">this</strong>.gain = gain;
-<a class="jxr_linenumber" name="L768" href="#L768">768</a>     }
-<a class="jxr_linenumber" name="L769" href="#L769">769</a>     
-<a class="jxr_linenumber" name="L770" href="#L770">770</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">     * Obtains the posteriori error estimate covariance matrix </em>
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">     * (P(k)): P(k)=(I-K(k)*H)*P'(k).</em>
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">     * It is a square symmetric matrix having dp rows and columns, where dp</em>
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">     * is the number of dynamic parameters of the system state</em>
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">     * @return the priori error estimate covariance matrix</em>
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L777" href="#L777">777</a>     <strong class="jxr_keyword">public</strong> Matrix getErrorCovPost() {
-<a class="jxr_linenumber" name="L778" href="#L778">778</a>         <strong class="jxr_keyword">return</strong> errorCovPost;
-<a class="jxr_linenumber" name="L779" href="#L779">779</a>     }
-<a class="jxr_linenumber" name="L780" href="#L780">780</a>     
-<a class="jxr_linenumber" name="L781" href="#L781">781</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">     * Sets the posteriori error estimate covariance matrix </em>
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">     * (P(k)): P(k)=(I-K(k)*H)*P'(k).</em>
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">     * Provided matrix must be square and symmetric having dp rows and columns,</em>
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">     * where dp is the number of the dynamic parameters of the system state set</em>
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">     * for this Kalman filter instance.</em>
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">     * This setter method can be used for initial setup purposes, however this</em>
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">     * value will rarely need to be set, and instead the getter method will be </em>
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> <em class="jxr_javadoccomment">     * used to obtain the error of the posteriori system state once the filter</em>
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> <em class="jxr_javadoccomment">     * converges</em>
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> <em class="jxr_javadoccomment">     * @param errorCovPost new posteriori error estimate covariance matrix</em>
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided matrix does not have dp rows</em>
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">     * and columns or it is not symmetric</em>
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L795" href="#L795">795</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setErrorCovPost(Matrix errorCovPost) {
-<a class="jxr_linenumber" name="L796" href="#L796">796</a>         <strong class="jxr_keyword">if</strong> (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||
-<a class="jxr_linenumber" name="L797" href="#L797">797</a>                 !Utils.isSymmetric(errorCovPost)) {
-<a class="jxr_linenumber" name="L798" href="#L798">798</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L799" href="#L799">799</a>                     <span class="jxr_string">"Wrong matrix size or matrix is not symmetric"</span>);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a>         }
-<a class="jxr_linenumber" name="L801" href="#L801">801</a>         <strong class="jxr_keyword">this</strong>.errorCovPost = errorCovPost;
-<a class="jxr_linenumber" name="L802" href="#L802">802</a>     }    
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> }
+<a class="jxr_linenumber" name="L729" href="#L729">729</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L730" href="#L730">730</a>         }
+<a class="jxr_linenumber" name="L731" href="#L731">731</a>         <strong class="jxr_keyword">this</strong>.errorCovPre = errorCovPre;
+<a class="jxr_linenumber" name="L732" href="#L732">732</a>     }
+<a class="jxr_linenumber" name="L733" href="#L733">733</a>     
+<a class="jxr_linenumber" name="L734" href="#L734">734</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">     * Obtains the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">     * This matrix is used to correct the predicted state, if the gain values </em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">     * are small then the filter is accurately tracking the system state and the</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">     * prediction error remains small too.</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">     * The gain matrix has dp rows and mp columns, where dp is the number of </em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">     * dynamic parameters and mp is the number of measure parameters.</em>
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">     * @return the Kalman gain matrix</em>
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L743" href="#L743">743</a>     <strong class="jxr_keyword">public</strong> Matrix getGain() {
+<a class="jxr_linenumber" name="L744" href="#L744">744</a>         <strong class="jxr_keyword">return</strong> gain;
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>     }
+<a class="jxr_linenumber" name="L746" href="#L746">746</a>     
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">     * Sets the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">     * This matrix is used to correct the predicted state, if the gain values </em>
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">     * are small then the filter is accurately tracking the system state and the</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">     * prediction error remains small too.</em>
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">     * The gain matrix must have dp rows and mp columns, where dp is the number </em>
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">     * of dynamic parameters and mp is the number of measure parameters set for</em>
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">     * this Kalman filter instance.</em>
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">     * This setter method can be used for initial setup purposes, however this</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">     * matrix rarely needs to be set, and instead it is better to let the filter</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">     * converge to the actual system state.</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">     * @param gain new gain matrix</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided matrix does not have dp rows</em>
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">     * and mp columns</em>
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setGain(Matrix gain) {
+<a class="jxr_linenumber" name="L763" href="#L763">763</a>         <strong class="jxr_keyword">if</strong> (gain.getRows() != dp || gain.getColumns() != mp) {
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Wrong matrix size"</span>);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>         }
+<a class="jxr_linenumber" name="L766" href="#L766">766</a>         <strong class="jxr_keyword">this</strong>.gain = gain;
+<a class="jxr_linenumber" name="L767" href="#L767">767</a>     }
+<a class="jxr_linenumber" name="L768" href="#L768">768</a>     
+<a class="jxr_linenumber" name="L769" href="#L769">769</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">     * Obtains the posteriori error estimate covariance matrix </em>
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">     * (P(k)): P(k)=(I-K(k)*H)*P'(k).</em>
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">     * It is a square symmetric matrix having dp rows and columns, where dp</em>
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">     * is the number of dynamic parameters of the system state</em>
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">     * @return the priori error estimate covariance matrix</em>
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a>     <strong class="jxr_keyword">public</strong> Matrix getErrorCovPost() {
+<a class="jxr_linenumber" name="L777" href="#L777">777</a>         <strong class="jxr_keyword">return</strong> errorCovPost;
+<a class="jxr_linenumber" name="L778" href="#L778">778</a>     }
+<a class="jxr_linenumber" name="L779" href="#L779">779</a>     
+<a class="jxr_linenumber" name="L780" href="#L780">780</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">     * Sets the posteriori error estimate covariance matrix </em>
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">     * (P(k)): P(k)=(I-K(k)*H)*P'(k).</em>
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">     * Provided matrix must be square and symmetric having dp rows and columns,</em>
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">     * where dp is the number of the dynamic parameters of the system state set</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">     * for this Kalman filter instance.</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">     * This setter method can be used for initial setup purposes, however this</em>
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">     * value will rarely need to be set, and instead the getter method will be </em>
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">     * used to obtain the error of the posteriori system state once the filter</em>
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> <em class="jxr_javadoccomment">     * converges</em>
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> <em class="jxr_javadoccomment">     * @param errorCovPost new posteriori error estimate covariance matrix</em>
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided matrix does not have dp rows</em>
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> <em class="jxr_javadoccomment">     * and columns or it is not symmetric</em>
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L794" href="#L794">794</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setErrorCovPost(Matrix errorCovPost) {
+<a class="jxr_linenumber" name="L795" href="#L795">795</a>         <strong class="jxr_keyword">if</strong> (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||
+<a class="jxr_linenumber" name="L796" href="#L796">796</a>                 !Utils.isSymmetric(errorCovPost)) {
+<a class="jxr_linenumber" name="L797" href="#L797">797</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L798" href="#L798">798</a>         }
+<a class="jxr_linenumber" name="L799" href="#L799">799</a>         <strong class="jxr_keyword">this</strong>.errorCovPost = errorCovPost;
+<a class="jxr_linenumber" name="L800" href="#L800">800</a>     }    
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

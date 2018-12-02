@@ -567,11 +567,11 @@ public class KalmanFilter implements Serializable {
 <span class="pc bpc" id="L567" title="1 of 2 branches missed.">        if (cp &gt; 0) {</span>
 <span class="pc bpc" id="L568" title="1 of 4 branches missed.">            if (controlMatrix == null || (controlMatrix.getRows() != dp ||</span>
 <span class="fc bfc" id="L569" title="All 2 branches covered.">                controlMatrix.getColumns() != cp)) {</span>
-<span class="fc" id="L570">                throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc" id="L570">                throw new IllegalArgumentException();</span>
             }
         } else {
             //control matrix cannot be set
-<span class="nc" id="L574">            throw new IllegalArgumentException(&quot;Control matrix cannot be set&quot;);</span>
+<span class="nc" id="L574">            throw new IllegalArgumentException();</span>
         }
 <span class="fc" id="L576">        this.controlMatrix = controlMatrix;</span>
 <span class="fc" id="L577">    }</span>
@@ -608,7 +608,7 @@ public class KalmanFilter implements Serializable {
     public void setMeasurementMatrix(Matrix measurementMatrix) {
 <span class="fc bfc" id="L609" title="All 2 branches covered.">        if (measurementMatrix.getRows() != mp ||</span>
 <span class="fc bfc" id="L610" title="All 2 branches covered.">                measurementMatrix.getColumns() != dp) {</span>
-<span class="fc" id="L611">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc" id="L611">            throw new IllegalArgumentException();</span>
         }
 <span class="fc" id="L613">        this.measurementMatrix = measurementMatrix;</span>
 <span class="fc" id="L614">    }</span>
@@ -726,11 +726,10 @@ public class KalmanFilter implements Serializable {
     public void setErrorCovPre(Matrix errorCovPre) {
 <span class="fc bfc" id="L727" title="All 4 branches covered.">        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||</span>
 <span class="fc bfc" id="L728" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPre)) {</span>
-<span class="fc" id="L729">            throw new IllegalArgumentException(</span>
-                    &quot;Wrong matrix size or matrix is not symmetric&quot;);
+<span class="fc" id="L729">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L732">        this.errorCovPre = errorCovPre;</span>
-<span class="fc" id="L733">    }</span>
+<span class="fc" id="L731">        this.errorCovPre = errorCovPre;</span>
+<span class="fc" id="L732">    }</span>
     
     /**
      * Obtains the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).
@@ -742,7 +741,7 @@ public class KalmanFilter implements Serializable {
      * @return the Kalman gain matrix
      */
     public Matrix getGain() {
-<span class="fc" id="L745">        return gain;</span>
+<span class="fc" id="L744">        return gain;</span>
     }
     
     /**
@@ -761,11 +760,11 @@ public class KalmanFilter implements Serializable {
      * and mp columns
      */
     public void setGain(Matrix gain) {
-<span class="fc bfc" id="L764" title="All 4 branches covered.">        if (gain.getRows() != dp || gain.getColumns() != mp) {</span>
-<span class="fc" id="L765">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc bfc" id="L763" title="All 4 branches covered.">        if (gain.getRows() != dp || gain.getColumns() != mp) {</span>
+<span class="fc" id="L764">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
         }
-<span class="fc" id="L767">        this.gain = gain;</span>
-<span class="fc" id="L768">    }</span>
+<span class="fc" id="L766">        this.gain = gain;</span>
+<span class="fc" id="L767">    }</span>
     
     /**
      * Obtains the posteriori error estimate covariance matrix 
@@ -775,7 +774,7 @@ public class KalmanFilter implements Serializable {
      * @return the priori error estimate covariance matrix
      */
     public Matrix getErrorCovPost() {
-<span class="fc" id="L778">        return errorCovPost;</span>
+<span class="fc" id="L777">        return errorCovPost;</span>
     }
     
     /**
@@ -793,12 +792,11 @@ public class KalmanFilter implements Serializable {
      * and columns or it is not symmetric
      */
     public void setErrorCovPost(Matrix errorCovPost) {
-<span class="fc bfc" id="L796" title="All 4 branches covered.">        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||</span>
-<span class="fc bfc" id="L797" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPost)) {</span>
-<span class="fc" id="L798">            throw new IllegalArgumentException(</span>
-                    &quot;Wrong matrix size or matrix is not symmetric&quot;);
+<span class="fc bfc" id="L795" title="All 4 branches covered.">        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||</span>
+<span class="fc bfc" id="L796" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPost)) {</span>
+<span class="fc" id="L797">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L801">        this.errorCovPost = errorCovPost;</span>
-<span class="fc" id="L802">    }    </span>
+<span class="fc" id="L799">        this.errorCovPost = errorCovPost;</span>
+<span class="fc" id="L800">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

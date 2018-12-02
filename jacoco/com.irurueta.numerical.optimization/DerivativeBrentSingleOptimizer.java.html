@@ -263,8 +263,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     //pointed to by the derivative at x
 <span class="fc" id="L264">                    u1 = x + d1;</span>
 <span class="fc" id="L265">                    u2 = x + d2;</span>
-<span class="pc bpc" id="L266" title="1 of 4 branches missed.">                    ok1 = (a - u1) * (u1 - b) &gt; 0.0 &amp;&amp; dx * d1 &lt;= 0.0;</span>
-<span class="pc bpc" id="L267" title="1 of 4 branches missed.">                    ok2 = (a - u2) * (u2 - b) &gt; 0.0 &amp;&amp; dx * d2 &lt;= 0.0;</span>
+<span class="fc bfc" id="L266" title="All 4 branches covered.">                    ok1 = (a - u1) * (u1 - b) &gt; 0.0 &amp;&amp; dx * d1 &lt;= 0.0;</span>
+<span class="fc bfc" id="L267" title="All 4 branches covered.">                    ok2 = (a - u2) * (u2 - b) &gt; 0.0 &amp;&amp; dx * d2 &lt;= 0.0;</span>
                     //Movement on the step before last
 <span class="fc" id="L269">                    olde = e;</span>
 <span class="fc" id="L270">                    e = d;</span>
@@ -373,7 +373,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
 <span class="fc" id="L373">                        w = v1[0];</span>
 <span class="fc" id="L374">                        fw = v2[0];</span>
 <span class="fc" id="L375">                        dw = v3[0];</span>
-<span class="pc bpc" id="L376" title="2 of 6 branches missed.">                    } else if (fu &lt; fv || v == x || v == w) {</span>
+<span class="pc bpc" id="L376" title="1 of 6 branches missed.">                    } else if (fu &lt; fv || v == x || v == w) {</span>
 <span class="fc" id="L377">                        v1[0] = v;</span>
 <span class="fc" id="L378">                        v2[0] = fv;</span>
 <span class="fc" id="L379">                        v3[0] = dv;</span>
