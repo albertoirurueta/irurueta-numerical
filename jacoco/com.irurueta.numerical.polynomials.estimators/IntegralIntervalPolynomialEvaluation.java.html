@@ -64,13 +64,12 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
     public IntegralIntervalPolynomialEvaluation(double startX, double endX, 
-            double evaluation, int integralOrder) 
-            throws IllegalArgumentException {
-<span class="fc" id="L69">        super(evaluation);</span>
-<span class="fc" id="L70">        mStartX = startX;</span>
-<span class="fc" id="L71">        mEndX = endX;</span>
-<span class="fc" id="L72">        setIntegralOrder(integralOrder);</span>
-<span class="fc" id="L73">    }</span>
+            double evaluation, int integralOrder) {
+<span class="fc" id="L68">        super(evaluation);</span>
+<span class="fc" id="L69">        mStartX = startX;</span>
+<span class="fc" id="L70">        mEndX = endX;</span>
+<span class="fc" id="L71">        setIntegralOrder(integralOrder);</span>
+<span class="fc" id="L72">    }</span>
     
     /**
      * Constructor.
@@ -81,15 +80,15 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      */
     public IntegralIntervalPolynomialEvaluation(double startX, double endX,
             double evaluation) {
-<span class="fc" id="L84">        this(startX, endX, evaluation, MIN_INTEGRAL_ORDER);</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L83">        this(startX, endX, evaluation, MIN_INTEGRAL_ORDER);</span>
+<span class="fc" id="L84">    }</span>
     
     /**
      * Gets start point of interval being integrated.
      * @return start point of interval being integrated.
      */
     public double getStartX() {
-<span class="fc" id="L92">        return mStartX;</span>
+<span class="fc" id="L91">        return mStartX;</span>
     }
     
     /**
@@ -97,15 +96,15 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param startX start point of interval being integrated.
      */
     public void setStartX(double startX) {
-<span class="fc" id="L100">        mStartX = startX;</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L99">        mStartX = startX;</span>
+<span class="fc" id="L100">    }</span>
 
     /**
      * Gets end point of interval being integrated.
      * @return end point of interval being integrated.
      */
     public double getEndX() {
-<span class="fc" id="L108">        return mEndX;</span>
+<span class="fc" id="L107">        return mEndX;</span>
     }
     
     /**
@@ -113,15 +112,15 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param endX end point of interval being integrated.
      */
     public void setEndX(double endX) {
-<span class="fc" id="L116">        mEndX = endX;</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L115">        mEndX = endX;</span>
+<span class="fc" id="L116">    }</span>
 
     /**
      * Gets integral order.
      * @return integral order.
      */
     public int getIntegralOrder() {
-<span class="fc" id="L124">        return mIntegralOrder;</span>
+<span class="fc" id="L123">        return mIntegralOrder;</span>
     }
     
     /**
@@ -129,22 +128,21 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param integralOrder integral order.
      * @throws IllegalArgumentException if integral order is less than 1.
      */
-    public final void setIntegralOrder(int integralOrder)
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if(integralOrder &lt; MIN_INTEGRAL_ORDER) {</span>
-<span class="nc" id="L135">            throw new IllegalArgumentException(</span>
+    public final void setIntegralOrder(int integralOrder) {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if(integralOrder &lt; MIN_INTEGRAL_ORDER) {</span>
+<span class="nc" id="L133">            throw new IllegalArgumentException(</span>
                     &quot;integral order must be at least 1&quot;);
         }
         
-<span class="fc" id="L139">        mIntegralOrder = integralOrder;</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L137">        mIntegralOrder = integralOrder;</span>
+<span class="fc" id="L138">    }</span>
 
     /**
      * Gets constant terms of integral.
      * @return constant terms of integral.
      */
     public double[] getConstants() {
-<span class="fc" id="L147">        return mConstants;</span>
+<span class="fc" id="L145">        return mConstants;</span>
     }
     
     /**
@@ -152,8 +150,8 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param constants constant terms of integral.
      */
     public void setConstants(double[] constants) {
-<span class="fc" id="L155">        mConstants = constants;</span>
-<span class="fc" id="L156">    }    </span>
+<span class="fc" id="L153">        mConstants = constants;</span>
+<span class="fc" id="L154">    }    </span>
         
     /**
      * Gets type of polynomial evaluation.
@@ -161,7 +159,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      */
     @Override
     public PolynomialEvaluationType getType() {
-<span class="fc" id="L164">        return PolynomialEvaluationType.INTEGRAL_INTERVAL;</span>
+<span class="fc" id="L162">        return PolynomialEvaluationType.INTEGRAL_INTERVAL;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

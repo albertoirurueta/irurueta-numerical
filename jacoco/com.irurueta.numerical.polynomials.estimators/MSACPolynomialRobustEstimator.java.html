@@ -62,11 +62,10 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public MSACPolynomialRobustEstimator(int degree)
-            throws IllegalArgumentException {
-<span class="fc" id="L67">        super(degree);</span>
-<span class="fc" id="L68">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L69">    }</span>
+    public MSACPolynomialRobustEstimator(int degree) {
+<span class="fc" id="L66">        super(degree);</span>
+<span class="fc" id="L67">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L68">    }</span>
     
     /**
      * Constructor.
@@ -75,11 +74,10 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * less than the required minimum.
      */
     public MSACPolynomialRobustEstimator(
-            List&lt;PolynomialEvaluation&gt; evaluations) 
-            throws IllegalArgumentException {
-<span class="fc" id="L80">        super(evaluations);</span>
-<span class="fc" id="L81">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L82">    }</span>
+            List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L78">        super(evaluations);</span>
+<span class="fc" id="L79">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L80">    }</span>
     
     /**
      * Constructor.
@@ -88,9 +86,9 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public MSACPolynomialRobustEstimator(
             PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L91">        super(listener);</span>
-<span class="fc" id="L92">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L89">        super(listener);</span>
+<span class="fc" id="L90">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L91">    }</span>
     
     /**
      * Constructor.
@@ -101,11 +99,10 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * provided degree.
      */
     public MSACPolynomialRobustEstimator(int degree,
-            List&lt;PolynomialEvaluation&gt; evaluations)
-            throws IllegalArgumentException {
-<span class="fc" id="L106">        super(degree, evaluations);</span>
-<span class="fc" id="L107">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L108">    }</span>
+            List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L103">        super(degree, evaluations);</span>
+<span class="fc" id="L104">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
     
     /**
      * Constructor.
@@ -115,11 +112,10 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public MSACPolynomialRobustEstimator(int degree,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
-<span class="fc" id="L120">        super(degree, listener);</span>
-<span class="fc" id="L121">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L122">    }</span>
+            PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L116">        super(degree, listener);</span>
+<span class="fc" id="L117">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L118">    }</span>
     
     /**
      * Constructor.
@@ -131,11 +127,10 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public MSACPolynomialRobustEstimator(
             List&lt;PolynomialEvaluation&gt; evaluations, 
-            PolynomialRobustEstimatorListener listener) 
-            throws IllegalArgumentException {
-<span class="fc" id="L136">        super(evaluations, listener);</span>
-<span class="fc" id="L137">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L138">    }</span>
+            PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L131">        super(evaluations, listener);</span>
+<span class="fc" id="L132">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L133">    }</span>
     
     /**
      * Constructor.
@@ -149,11 +144,10 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public MSACPolynomialRobustEstimator(int degree,
             List&lt;PolynomialEvaluation&gt; evaluations,
-            PolynomialRobustEstimatorListener listener)
-            throws IllegalArgumentException {
-<span class="fc" id="L154">        super(degree, evaluations, listener);</span>
-<span class="fc" id="L155">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L156">    }</span>
+            PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L148">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L149">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L150">    }</span>
     
     /**
      * Returns threshold to determine whether polynomials are inliers or not
@@ -162,7 +156,7 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * when testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L165">        return mThreshold;</span>
+<span class="fc" id="L159">        return mThreshold;</span>
     }
     
     /**
@@ -174,12 +168,15 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * zero.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException,
-            LockedException {
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if(isLocked()) throw new LockedException();</span>
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        if(threshold &lt;= MIN_THRESHOLD) throw new IllegalArgumentException();</span>
-<span class="fc" id="L181">        mThreshold = threshold;</span>
-<span class="fc" id="L182">    }</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L173">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L176">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L178">        mThreshold = threshold;</span>
+<span class="fc" id="L179">    }</span>
             
 
     /**
@@ -195,105 +192,105 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if(isLocked()) throw new LockedException();</span>
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        if(!isReady()) throw new NotReadyException();</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if(isLocked()) throw new LockedException();</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if(!isReady()) throw new NotReadyException();</span>
         
-<span class="fc" id="L201">        MSACRobustEstimator&lt;Polynomial&gt; innerEstimator =</span>
+<span class="fc" id="L198">        MSACRobustEstimator&lt;Polynomial&gt; innerEstimator =</span>
                 new MSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L203">                new MSACRobustEstimatorListener&lt;Polynomial&gt;(){</span>
+<span class="fc" id="L200">                new MSACRobustEstimatorListener&lt;Polynomial&gt;(){</span>
                     
             //subset of evaluations picked on each iteration
-<span class="fc" id="L206">            private List&lt;PolynomialEvaluation&gt; mSubsetEvaluations =</span>
+<span class="fc" id="L203">            private List&lt;PolynomialEvaluation&gt; mSubsetEvaluations =</span>
                     new ArrayList&lt;&gt;();
                     
             @Override
             public double getThreshold() {
-<span class="fc" id="L211">                return mThreshold;</span>
+<span class="fc" id="L208">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L216">                return mEvaluations.size();</span>
+<span class="fc" id="L213">                return mEvaluations.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L221">                return mPolynomialEstimator.getMinNumberOfEvaluations();</span>
+<span class="fc" id="L218">                return mPolynomialEstimator.getMinNumberOfEvaluations();</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Polynomial&gt; solutions) {
-<span class="fc" id="L227">                mSubsetEvaluations.clear();</span>
-<span class="fc bfc" id="L228" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L229">                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));</span>
+<span class="fc" id="L224">                mSubsetEvaluations.clear();</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L226">                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));</span>
                 }
                 
                 try {
-<span class="fc" id="L233">                    mPolynomialEstimator.setLMSESolutionAllowed(false);</span>
-<span class="fc" id="L234">                    mPolynomialEstimator.setEvaluations(mSubsetEvaluations);</span>
+<span class="fc" id="L230">                    mPolynomialEstimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L231">                    mPolynomialEstimator.setEvaluations(mSubsetEvaluations);</span>
                     
-<span class="fc" id="L236">                    Polynomial polynomial = mPolynomialEstimator.estimate();</span>
-<span class="fc" id="L237">                    solutions.add(polynomial);</span>
-<span class="fc" id="L238">                } catch (Exception e) {</span>
+<span class="fc" id="L233">                    Polynomial polynomial = mPolynomialEstimator.estimate();</span>
+<span class="fc" id="L234">                    solutions.add(polynomial);</span>
+<span class="fc" id="L235">                } catch (Exception e) {</span>
                     //if anything fails, no solution is added
-<span class="fc" id="L240">                }</span>
-<span class="fc" id="L241">            }</span>
+<span class="fc" id="L237">                }</span>
+<span class="fc" id="L238">            }</span>
 
             @Override
             public double computeResidual(Polynomial currentEstimation, int i) {
-<span class="fc" id="L245">                PolynomialEvaluation eval = mEvaluations.get(i);</span>
-<span class="fc" id="L246">                return getDistance(eval, currentEstimation);</span>
+<span class="fc" id="L242">                PolynomialEvaluation eval = mEvaluations.get(i);</span>
+<span class="fc" id="L243">                return getDistance(eval, currentEstimation);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L251">                return MSACPolynomialRobustEstimator.this.isReady();</span>
+<span class="fc" id="L248">                return MSACPolynomialRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Polynomial&gt; estimator) {
-<span class="pc bpc" id="L256" title="1 of 2 branches missed.">                if(mListener != null) {</span>
-<span class="fc" id="L257">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L254">                    mListener.onEstimateStart(</span>
                             MSACPolynomialRobustEstimator.this);
                 }
-<span class="fc" id="L260">            }</span>
+<span class="fc" id="L257">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Polynomial&gt; estimator) {
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">                if(mListener != null) {</span>
-<span class="fc" id="L265">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L262">                    mListener.onEstimateEnd(</span>
                             MSACPolynomialRobustEstimator.this);
                 }
-<span class="fc" id="L268">            }</span>
+<span class="fc" id="L265">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Polynomial&gt; estimator, int iteration) {
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">                if(mListener != null) {</span>
-<span class="fc" id="L274">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L271">                    mListener.onEstimateNextIteration(</span>
                             MSACPolynomialRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L277">            }</span>
+<span class="fc" id="L274">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Polynomial&gt; estimator, float progress) {
-<span class="pc bpc" id="L282" title="1 of 2 branches missed.">                if(mListener != null) {</span>
-<span class="fc" id="L283">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L280">                    mListener.onEstimateProgressChange(</span>
                             MSACPolynomialRobustEstimator.this, progress);
                 }
-<span class="fc" id="L286">            }</span>
+<span class="fc" id="L283">            }</span>
         });
         
         try {
-<span class="fc" id="L290">            mLocked = true;</span>
-<span class="fc" id="L291">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L292">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L293">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L294">            return innerEstimator.estimate();</span>
+<span class="fc" id="L287">            mLocked = true;</span>
+<span class="fc" id="L288">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L289">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L290">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L291">            return innerEstimator.estimate();</span>
         } finally {
-<span class="fc" id="L296">            mLocked = false;</span>
+<span class="fc" id="L293">            mLocked = false;</span>
         }
     }
 
@@ -303,7 +300,7 @@ public class MSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L306">        return RobustEstimatorMethod.MSAC;</span>
+<span class="fc" id="L303">        return RobustEstimatorMethod.MSAC;</span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

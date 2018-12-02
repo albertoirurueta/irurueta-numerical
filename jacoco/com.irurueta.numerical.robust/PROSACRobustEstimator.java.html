@@ -750,10 +750,10 @@ public class PROSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                                         (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
 
 <span class="fc" id="L752">                                    if (inliersSampleSizeTest &lt; </span>
-<span class="fc bfc" id="L753" title="All 2 branches covered.">                                            Imin(subsetSize, sampleSizeTest, mBeta)) {</span>
+<span class="pc bpc" id="L753" title="1 of 2 branches missed.">                                            Imin(subsetSize, sampleSizeTest, mBeta)) {</span>
                                         //equation not satisfied, no need to test for
                                         //smaller sampleSizeTest values anyway
-<span class="fc" id="L756">                                        break; //jump out of the for(sampleSizeTest) loop</span>
+<span class="nc" id="L756">                                        break; //jump out of the for(sampleSizeTest) loop</span>
                                     }
 <span class="fc" id="L758">                                    sampleSizeBest = sampleSizeTest;</span>
 <span class="fc" id="L759">                                    inliersSampleSizeBest = inliersSampleSizeTest;</span>

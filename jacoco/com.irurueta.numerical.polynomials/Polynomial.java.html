@@ -386,41 +386,42 @@ public class Polynomial implements Serializable {
      * Computes derivative of polynomial.
      * @param result instance where derivative will be stored.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void derivative(Polynomial result) {
-<span class="fc" id="L390">        int resultLength = mPolyParams.length - 1;</span>
-<span class="fc" id="L391">        int resultLength2 = Math.max(resultLength, 1);</span>
+<span class="fc" id="L391">        int resultLength = mPolyParams.length - 1;</span>
+<span class="fc" id="L392">        int resultLength2 = Math.max(resultLength, 1);</span>
         
-<span class="fc" id="L393">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="fc bfc" id="L394" title="All 4 branches covered.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
-<span class="fc" id="L395">            resultPolyParams = new double[resultLength2];</span>
+<span class="fc" id="L394">        double[] resultPolyParams = result.mPolyParams;</span>
+<span class="fc bfc" id="L395" title="All 4 branches covered.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
+<span class="fc" id="L396">            resultPolyParams = new double[resultLength2];</span>
         }
-<span class="fc bfc" id="L397" title="All 2 branches covered.">        if (resultLength == 0) {</span>
-<span class="fc" id="L398">            resultPolyParams[0] = 0.0;</span>
-        }
-        
-<span class="fc bfc" id="L401" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; resultLength; i++, j++) {</span>
-<span class="fc" id="L402">            resultPolyParams[i] = j*mPolyParams[j];</span>
+<span class="fc bfc" id="L398" title="All 2 branches covered.">        if (resultLength == 0) {</span>
+<span class="fc" id="L399">            resultPolyParams[0] = 0.0;</span>
         }
         
-<span class="fc" id="L405">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L406">    }</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; resultLength; i++, j++) {</span>
+<span class="fc" id="L403">            resultPolyParams[i] = j*mPolyParams[j];</span>
+        }
+        
+<span class="fc" id="L406">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L407">    }</span>
     
     /**
      * Replaces this instance by its derivative.
      */
     public void derivative() {
-<span class="fc" id="L412">        derivative(this);</span>
-<span class="fc" id="L413">    }</span>
+<span class="fc" id="L413">        derivative(this);</span>
+<span class="fc" id="L414">    }</span>
     
     /**
      * Computes derivative of polynomial.
      * @return a new instance containing derivative.
      */
     public Polynomial derivativeAndReturnNew() {
-<span class="fc" id="L420">        int resultLength = Math.max(mPolyParams.length - 1, 1);</span>
-<span class="fc" id="L421">        Polynomial result = new Polynomial(resultLength);</span>
-<span class="fc" id="L422">        derivative(result);</span>
-<span class="fc" id="L423">        return result;</span>
+<span class="fc" id="L421">        int resultLength = Math.max(mPolyParams.length - 1, 1);</span>
+<span class="fc" id="L422">        Polynomial result = new Polynomial(resultLength);</span>
+<span class="fc" id="L423">        derivative(result);</span>
+<span class="fc" id="L424">        return result;</span>
     }
     
     /**
@@ -429,55 +430,56 @@ public class Polynomial implements Serializable {
      * @return result of evaluation of derivative.
      */
     public double evaluateDerivative(double x) {        
-<span class="fc" id="L432">        double result = 0.0;</span>
-<span class="fc" id="L433">        double powX = 1.0;</span>
-<span class="fc bfc" id="L434" title="All 2 branches covered.">        for (int j = 1; j &lt; mPolyParams.length; j++) {</span>
-<span class="fc" id="L435">            result += j*mPolyParams[j] * powX;</span>
-<span class="fc" id="L436">            powX *= x;</span>
+<span class="fc" id="L433">        double result = 0.0;</span>
+<span class="fc" id="L434">        double powX = 1.0;</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        for (int j = 1; j &lt; mPolyParams.length; j++) {</span>
+<span class="fc" id="L436">            result += j*mPolyParams[j] * powX;</span>
+<span class="fc" id="L437">            powX *= x;</span>
         }
         
-<span class="fc" id="L439">        return result;</span>
+<span class="fc" id="L440">        return result;</span>
     }
     
     /**
      * Computes second derivative of polynomial.
      * @param result instance where second derivative will be stored.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public void secondDerivative(Polynomial result) {
-<span class="fc" id="L447">        int resultLength = mPolyParams.length - 2;</span>
-<span class="fc" id="L448">        int resultLength2 = Math.max(resultLength, 1);</span>
+<span class="fc" id="L449">        int resultLength = mPolyParams.length - 2;</span>
+<span class="fc" id="L450">        int resultLength2 = Math.max(resultLength, 1);</span>
         
-<span class="fc" id="L450">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="pc bpc" id="L451" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
-<span class="fc" id="L452">            resultPolyParams = new double[resultLength2];</span>
+<span class="fc" id="L452">        double[] resultPolyParams = result.mPolyParams;</span>
+<span class="pc bpc" id="L453" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
+<span class="fc" id="L454">            resultPolyParams = new double[resultLength2];</span>
         }
-<span class="fc bfc" id="L454" title="All 2 branches covered.">        if (resultLength == 0) {</span>
-<span class="fc" id="L455">            resultPolyParams[0] = 0.0;</span>
-        }
-        
-<span class="fc bfc" id="L458" title="All 2 branches covered.">        for (int i = 0, j = 2, k = 1; i &lt; resultLength; i++, j++, k++) {</span>
-<span class="fc" id="L459">            resultPolyParams[i] = j*k*mPolyParams[j];</span>
+<span class="fc bfc" id="L456" title="All 2 branches covered.">        if (resultLength == 0) {</span>
+<span class="fc" id="L457">            resultPolyParams[0] = 0.0;</span>
         }
         
-<span class="fc" id="L462">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L463">    }</span>
+<span class="fc bfc" id="L460" title="All 2 branches covered.">        for (int i = 0, j = 2, k = 1; i &lt; resultLength; i++, j++, k++) {</span>
+<span class="fc" id="L461">            resultPolyParams[i] = j*k*mPolyParams[j];</span>
+        }
+        
+<span class="fc" id="L464">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L465">    }</span>
     
     /**
      * Replaces this instance by its second derivative.
      */
     public void secondDerivative() {
-<span class="fc" id="L469">        secondDerivative(this);</span>
-<span class="fc" id="L470">    }</span>
+<span class="fc" id="L471">        secondDerivative(this);</span>
+<span class="fc" id="L472">    }</span>
     
     /**
      * Computes second derivative of polynomial.
      * @return a new instance containing second derivative.
      */
     public Polynomial secondDerivativeAndReturnNew() {
-<span class="fc" id="L477">        int resultLength = Math.max(mPolyParams.length - 2, 1);</span>
-<span class="fc" id="L478">        Polynomial result = new Polynomial(resultLength);</span>
-<span class="fc" id="L479">        secondDerivative(result);</span>
-<span class="fc" id="L480">        return result;</span>
+<span class="fc" id="L479">        int resultLength = Math.max(mPolyParams.length - 2, 1);</span>
+<span class="fc" id="L480">        Polynomial result = new Polynomial(resultLength);</span>
+<span class="fc" id="L481">        secondDerivative(result);</span>
+<span class="fc" id="L482">        return result;</span>
     }
     
     /**
@@ -486,14 +488,14 @@ public class Polynomial implements Serializable {
      * @return result of evaluation of second derivative.
      */
     public double evaluateSecondDerivative(double x) {        
-<span class="fc" id="L489">        double result = 0.0;</span>
-<span class="fc" id="L490">        double powX = 1.0;</span>
-<span class="fc bfc" id="L491" title="All 2 branches covered.">        for (int j = 2, k = 1; j &lt; mPolyParams.length; j++, k++) {</span>
-<span class="fc" id="L492">            result += j*k*mPolyParams[j] * powX;</span>
-<span class="fc" id="L493">            powX *= x;</span>
+<span class="fc" id="L491">        double result = 0.0;</span>
+<span class="fc" id="L492">        double powX = 1.0;</span>
+<span class="fc bfc" id="L493" title="All 2 branches covered.">        for (int j = 2, k = 1; j &lt; mPolyParams.length; j++, k++) {</span>
+<span class="fc" id="L494">            result += j*k*mPolyParams[j] * powX;</span>
+<span class="fc" id="L495">            powX *= x;</span>
         }
         
-<span class="fc" id="L496">        return result;</span>
+<span class="fc" id="L498">        return result;</span>
     }
     
     /**
@@ -503,40 +505,40 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1.
      * 
      */
-    public void nthDerivative(int order, Polynomial result) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L508" title="All 2 branches covered.">        if (order &lt; MIN_ORDER) {</span>
-<span class="fc" id="L509">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void nthDerivative(int order, Polynomial result) {
+<span class="fc bfc" id="L510" title="All 2 branches covered.">        if (order &lt; MIN_ORDER) {</span>
+<span class="fc" id="L511">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L512">        int resultLength = mPolyParams.length - order;</span>
-<span class="fc" id="L513">        int resultLength2 = Math.max(resultLength, 1);</span>
+<span class="fc" id="L514">        int resultLength = mPolyParams.length - order;</span>
+<span class="fc" id="L515">        int resultLength2 = Math.max(resultLength, 1);</span>
         
-<span class="fc" id="L515">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="fc bfc" id="L516" title="All 4 branches covered.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
-<span class="fc" id="L517">            resultPolyParams = new double[resultLength2];</span>
+<span class="fc" id="L517">        double[] resultPolyParams = result.mPolyParams;</span>
+<span class="fc bfc" id="L518" title="All 4 branches covered.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
+<span class="fc" id="L519">            resultPolyParams = new double[resultLength2];</span>
         }
-<span class="fc bfc" id="L519" title="All 2 branches covered.">        if (resultLength == 0) resultPolyParams[0] = 0.0;</span>
+<span class="fc bfc" id="L521" title="All 2 branches covered.">        if (resultLength == 0) resultPolyParams[0] = 0.0;</span>
         
-<span class="fc bfc" id="L521" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; resultLength; i++, j++) {</span>
-<span class="fc" id="L522">            int param = j;</span>
-<span class="fc bfc" id="L523" title="All 2 branches covered.">            for(int k = 1; k &lt; order; k++) {</span>
-<span class="fc" id="L524">                param *= j - k;</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; resultLength; i++, j++) {</span>
+<span class="fc" id="L524">            int param = j;</span>
+<span class="fc bfc" id="L525" title="All 2 branches covered.">            for(int k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L526">                param *= j - k;</span>
             }
-<span class="fc" id="L526">            resultPolyParams[i] = param*mPolyParams[j];</span>
+<span class="fc" id="L528">            resultPolyParams[i] = param*mPolyParams[j];</span>
         }
         
-<span class="fc" id="L529">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L530">    }</span>
+<span class="fc" id="L531">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L532">    }</span>
     
     /**
      * Replaces this instance by its nth-order derivative.
      * @param order order of derivative to compute. Must be at least 1.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public void nthDerivative(int order) throws IllegalArgumentException {
-<span class="fc" id="L538">        nthDerivative(order, this);</span>
-<span class="fc" id="L539">    }</span>
+    public void nthDerivative(int order) {
+<span class="fc" id="L540">        nthDerivative(order, this);</span>
+<span class="fc" id="L541">    }</span>
     
     /**
      * Computes nth-order derivative of polynomial.
@@ -544,12 +546,11 @@ public class Polynomial implements Serializable {
      * @return a new instance containing nth-order derivative.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public Polynomial nthDerivativeAndReturnNew(int order) 
-            throws IllegalArgumentException {
-<span class="fc" id="L549">        int resultLength = Math.max(mPolyParams.length - order, 1);</span>
-<span class="fc" id="L550">        Polynomial result = new Polynomial(resultLength);</span>
-<span class="fc" id="L551">        nthDerivative(order, result);</span>
-<span class="fc" id="L552">        return result;</span>
+    public Polynomial nthDerivativeAndReturnNew(int order) {
+<span class="fc" id="L550">        int resultLength = Math.max(mPolyParams.length - order, 1);</span>
+<span class="fc" id="L551">        Polynomial result = new Polynomial(resultLength);</span>
+<span class="fc" id="L552">        nthDerivative(order, result);</span>
+<span class="fc" id="L553">        return result;</span>
     }
     
     /**
@@ -559,8 +560,7 @@ public class Polynomial implements Serializable {
      * @return result of evaluation of nth-derivative.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public double evaluateNthDerivative(double x, int order) 
-            throws IllegalArgumentException {
+    public double evaluateNthDerivative(double x, int order) {
 <span class="pc bpc" id="L564" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
 <span class="nc" id="L565">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
         }
@@ -654,23 +654,24 @@ public class Polynomial implements Serializable {
      * @param endX end of integration interval.
      * @return result of integration.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public double integrateInterval(double startX, double endX) {
         
-<span class="fc" id="L659">        double resultStart = 0.0;</span>
-<span class="fc" id="L660">        double resultEnd = 0.0;</span>
-<span class="fc" id="L661">        double powStartX = startX;</span>
-<span class="fc" id="L662">        double powEndX = endX;</span>
+<span class="fc" id="L660">        double resultStart = 0.0;</span>
+<span class="fc" id="L661">        double resultEnd = 0.0;</span>
+<span class="fc" id="L662">        double powStartX = startX;</span>
+<span class="fc" id="L663">        double powEndX = endX;</span>
         double polyParam;
-<span class="fc bfc" id="L664" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; mPolyParams.length; i++, j++) {</span>
-<span class="fc" id="L665">            polyParam = mPolyParams[i] / (double)j;</span>
-<span class="fc" id="L666">            resultStart += polyParam * powStartX;</span>
-<span class="fc" id="L667">            powStartX *= startX;</span>
+<span class="fc bfc" id="L665" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; mPolyParams.length; i++, j++) {</span>
+<span class="fc" id="L666">            polyParam = mPolyParams[i] / (double)j;</span>
+<span class="fc" id="L667">            resultStart += polyParam * powStartX;</span>
+<span class="fc" id="L668">            powStartX *= startX;</span>
             
-<span class="fc" id="L669">            resultEnd += polyParam * powEndX;</span>
-<span class="fc" id="L670">            powEndX *= endX;</span>
+<span class="fc" id="L670">            resultEnd += polyParam * powEndX;</span>
+<span class="fc" id="L671">            powEndX *= endX;</span>
         }
         
-<span class="fc" id="L673">        return resultEnd - resultStart;</span>
+<span class="fc" id="L674">        return resultEnd - resultStart;</span>
     }
     
     /**
@@ -684,42 +685,42 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public void nthIntegration(int order, Polynomial result, double[] constants) 
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L689" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
-<span class="nc" id="L690">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void nthIntegration(int order, Polynomial result, double[] constants) {
+<span class="pc bpc" id="L690" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
+<span class="nc" id="L691">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
         }
-<span class="pc bpc" id="L692" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
-<span class="nc" id="L693">            throw new IllegalArgumentException(</span>
+<span class="pc bpc" id="L693" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
+<span class="nc" id="L694">            throw new IllegalArgumentException(</span>
                     &quot;length of constants must be order&quot;);
         }
-<span class="fc" id="L696">        int resultLength = mPolyParams.length + order;</span>
-<span class="fc" id="L697">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="pc bpc" id="L698" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength || result == this) {</span>
-<span class="fc" id="L699">            resultPolyParams = new double[resultLength];</span>
+<span class="fc" id="L697">        int resultLength = mPolyParams.length + order;</span>
+<span class="fc" id="L698">        double[] resultPolyParams = result.mPolyParams;</span>
+<span class="pc bpc" id="L699" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength || result == this) {</span>
+<span class="fc" id="L700">            resultPolyParams = new double[resultLength];</span>
         }
 
-<span class="fc bfc" id="L702" title="All 2 branches covered.">        for (int i = 0; i &lt; order; i++) {</span>
-<span class="fc bfc" id="L703" title="All 2 branches covered.">            if (constants != null) {</span>
-<span class="fc" id="L704">                int param = 1;</span>
-<span class="fc bfc" id="L705" title="All 2 branches covered.">                for (int k = 1; k &lt;= i; k++) {</span>
-<span class="fc" id="L706">                    param *= k;</span>
+<span class="fc bfc" id="L703" title="All 2 branches covered.">        for (int i = 0; i &lt; order; i++) {</span>
+<span class="fc bfc" id="L704" title="All 2 branches covered.">            if (constants != null) {</span>
+<span class="fc" id="L705">                int param = 1;</span>
+<span class="fc bfc" id="L706" title="All 2 branches covered.">                for (int k = 1; k &lt;= i; k++) {</span>
+<span class="fc" id="L707">                    param *= k;</span>
                 }
-<span class="fc" id="L708">                resultPolyParams[i] = constants[i] / (double)param;</span>
-<span class="fc" id="L709">            } else {</span>
-<span class="fc" id="L710">                resultPolyParams[i] = 0.0;</span>
+<span class="fc" id="L709">                resultPolyParams[i] = constants[i] / (double)param;</span>
+<span class="fc" id="L710">            } else {</span>
+<span class="fc" id="L711">                resultPolyParams[i] = 0.0;</span>
             }
         }
-<span class="fc bfc" id="L713" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; mPolyParams.length; i++, j++) {</span>
-<span class="fc" id="L714">            int param = j;</span>
-<span class="fc bfc" id="L715" title="All 2 branches covered.">            for (int k = 1; k &lt; order; k++) {</span>
-<span class="fc" id="L716">                param *= j - k;</span>
+<span class="fc bfc" id="L714" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; mPolyParams.length; i++, j++) {</span>
+<span class="fc" id="L715">            int param = j;</span>
+<span class="fc bfc" id="L716" title="All 2 branches covered.">            for (int k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L717">                param *= j - k;</span>
             }
-<span class="fc" id="L718">            resultPolyParams[j] = mPolyParams[i] / (double)param;</span>
+<span class="fc" id="L719">            resultPolyParams[j] = mPolyParams[i] / (double)param;</span>
         }
         
-<span class="fc" id="L721">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L722">    }    </span>
+<span class="fc" id="L722">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L723">    }    </span>
     
     /**
      * Computes polynomial containing the nth-order integration of current one.
@@ -727,8 +728,7 @@ public class Polynomial implements Serializable {
      * @param result instance where resulting polynomial will be stored.
      * @throws IllegalArgumentException if provided order is less than 1.
      */
-    public void nthIntegration(int order, Polynomial result) 
-            throws IllegalArgumentException {
+    public void nthIntegration(int order, Polynomial result) {
 <span class="fc" id="L732">        nthIntegration(order, result, null);</span>
 <span class="fc" id="L733">    }</span>
     
@@ -742,18 +742,17 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public void nthIntegration(int order, double[] constants) 
-            throws IllegalArgumentException {
-<span class="fc" id="L747">        nthIntegration(order, this, constants);</span>
-<span class="fc" id="L748">    }</span>
+    public void nthIntegration(int order, double[] constants) {
+<span class="fc" id="L746">        nthIntegration(order, this, constants);</span>
+<span class="fc" id="L747">    }</span>
     
     /**
      * Computes polynomial containing the nth-order integration of current one.
      * @param order order of integration to compute. Must be at least 1.
      */
     public void nthIntegration(int order) {
-<span class="fc" id="L755">        nthIntegration(order, (double[])null);</span>
-<span class="fc" id="L756">    }</span>
+<span class="fc" id="L754">        nthIntegration(order, (double[])null);</span>
+<span class="fc" id="L755">    }</span>
     
     /**
      * Computes polynomial containing the nth-order integration of current one.
@@ -766,11 +765,10 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public Polynomial nthIntegrationAndReturnNew(int order, double[] constants) 
-            throws IllegalArgumentException {
-<span class="fc" id="L771">        Polynomial result = new Polynomial();</span>
-<span class="fc" id="L772">        nthIntegration(order, result, constants);</span>
-<span class="fc" id="L773">        return result;</span>
+    public Polynomial nthIntegrationAndReturnNew(int order, double[] constants) {
+<span class="fc" id="L769">        Polynomial result = new Polynomial();</span>
+<span class="fc" id="L770">        nthIntegration(order, result, constants);</span>
+<span class="fc" id="L771">        return result;</span>
     }
     
     /**
@@ -780,9 +778,8 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
-    public Polynomial nthIntegrationAndReturnNew(int order) 
-            throws IllegalArgumentException {
-<span class="fc" id="L785">        return nthIntegrationAndReturnNew(order, null);</span>
+    public Polynomial nthIntegrationAndReturnNew(int order) {
+<span class="fc" id="L782">        return nthIntegrationAndReturnNew(order, null);</span>
     }
     
     /**
@@ -796,49 +793,49 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      * constants does not have length equal to order.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public double nthOrderIntegrateInterval(double startX, double endX, 
-            int order, double[] constants) throws IllegalArgumentException {
-<span class="pc bpc" id="L801" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
-<span class="nc" id="L802">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
+            int order, double[] constants) {
+<span class="pc bpc" id="L799" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
+<span class="nc" id="L800">            throw new IllegalArgumentException();</span>
         }
-<span class="pc bpc" id="L804" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
-<span class="nc" id="L805">            throw new IllegalArgumentException(</span>
-                    &quot;length of constants must be order&quot;);
+<span class="pc bpc" id="L802" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
+<span class="nc" id="L803">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L809">        double resultStart = 0.0;</span>
-<span class="fc" id="L810">        double resultEnd = 0.0;</span>
-<span class="fc" id="L811">        double powStartX = 1.0;</span>
-<span class="fc" id="L812">        double powEndX = 1.0;</span>
+<span class="fc" id="L806">        double resultStart = 0.0;</span>
+<span class="fc" id="L807">        double resultEnd = 0.0;</span>
+<span class="fc" id="L808">        double powStartX = 1.0;</span>
+<span class="fc" id="L809">        double powEndX = 1.0;</span>
         double polyParam;
-<span class="fc bfc" id="L814" title="All 2 branches covered.">        for (int i = 0; i &lt; order; i++) {</span>
-<span class="fc bfc" id="L815" title="All 2 branches covered.">            if (constants != null) {</span>
-<span class="fc" id="L816">                int param = 1;</span>
-<span class="fc bfc" id="L817" title="All 2 branches covered.">                for (int k = 1; k &lt;= i; k++) {</span>
-<span class="fc" id="L818">                    param *= k;</span>
+<span class="fc bfc" id="L811" title="All 2 branches covered.">        for (int i = 0; i &lt; order; i++) {</span>
+<span class="fc bfc" id="L812" title="All 2 branches covered.">            if (constants != null) {</span>
+<span class="fc" id="L813">                int param = 1;</span>
+<span class="fc bfc" id="L814" title="All 2 branches covered.">                for (int k = 1; k &lt;= i; k++) {</span>
+<span class="fc" id="L815">                    param *= k;</span>
                 }
-<span class="fc" id="L820">                polyParam = constants[i] / (double) param;</span>
-<span class="fc" id="L821">                resultStart += polyParam * powStartX;</span>
-<span class="fc" id="L822">                resultEnd += polyParam * powEndX;</span>
+<span class="fc" id="L817">                polyParam = constants[i] / (double) param;</span>
+<span class="fc" id="L818">                resultStart += polyParam * powStartX;</span>
+<span class="fc" id="L819">                resultEnd += polyParam * powEndX;</span>
             }
-<span class="fc" id="L824">            powStartX *= startX;</span>
-<span class="fc" id="L825">            powEndX *= endX;</span>
+<span class="fc" id="L821">            powStartX *= startX;</span>
+<span class="fc" id="L822">            powEndX *= endX;</span>
         }
         
-<span class="fc bfc" id="L828" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; mPolyParams.length; i++, j++) {</span>
-<span class="fc" id="L829">            int param = j;</span>
-<span class="fc bfc" id="L830" title="All 2 branches covered.">            for (int k = 1; k &lt; order; k++) {</span>
-<span class="fc" id="L831">                param *= j - k;</span>
+<span class="fc bfc" id="L825" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; mPolyParams.length; i++, j++) {</span>
+<span class="fc" id="L826">            int param = j;</span>
+<span class="fc bfc" id="L827" title="All 2 branches covered.">            for (int k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L828">                param *= j - k;</span>
             }
-<span class="fc" id="L833">            polyParam = mPolyParams[i] / (double)param;</span>
-<span class="fc" id="L834">            resultStart += polyParam * powStartX;</span>
-<span class="fc" id="L835">            powStartX *= startX;</span>
+<span class="fc" id="L830">            polyParam = mPolyParams[i] / (double)param;</span>
+<span class="fc" id="L831">            resultStart += polyParam * powStartX;</span>
+<span class="fc" id="L832">            powStartX *= startX;</span>
             
-<span class="fc" id="L837">            resultEnd += polyParam * powEndX;</span>
-<span class="fc" id="L838">            powEndX *= endX;</span>
+<span class="fc" id="L834">            resultEnd += polyParam * powEndX;</span>
+<span class="fc" id="L835">            powEndX *= endX;</span>
         }
         
-<span class="fc" id="L841">        return resultEnd - resultStart;        </span>
+<span class="fc" id="L838">        return resultEnd - resultStart;        </span>
     }
     
     /**
@@ -850,8 +847,8 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1.
      */
     public double nthOrderIntegrateInterval(double startX, double endX,
-            int order) throws IllegalArgumentException {
-<span class="fc" id="L854">        return nthOrderIntegrateInterval(startX, endX, order, null);</span>
+            int order) {
+<span class="fc" id="L851">        return nthOrderIntegrateInterval(startX, endX, order, null);</span>
     }
     
     /**
@@ -859,27 +856,27 @@ public class Polynomial implements Serializable {
      * @param result instance where result will be stored.
      */
     public void trim(Polynomial result) {
-<span class="fc" id="L862">        int degree = getDegree();</span>
-<span class="fc" id="L863">        int resultLength = degree + 1;</span>
+<span class="fc" id="L859">        int degree = getDegree();</span>
+<span class="fc" id="L860">        int resultLength = degree + 1;</span>
         
         double[] resultPolyParams;
-<span class="fc bfc" id="L866" title="All 2 branches covered.">        if (result.mPolyParams.length != resultLength) {</span>
-<span class="fc" id="L867">            resultPolyParams = new double[resultLength];</span>
+<span class="fc bfc" id="L863" title="All 2 branches covered.">        if (result.mPolyParams.length != resultLength) {</span>
+<span class="fc" id="L864">            resultPolyParams = new double[resultLength];</span>
         } else {
-<span class="fc" id="L869">            resultPolyParams = result.mPolyParams;</span>
+<span class="fc" id="L866">            resultPolyParams = result.mPolyParams;</span>
         }
-<span class="fc" id="L871">        System.arraycopy(mPolyParams, 0, resultPolyParams, 0, resultLength);</span>
+<span class="fc" id="L868">        System.arraycopy(mPolyParams, 0, resultPolyParams, 0, resultLength);</span>
         
-<span class="fc" id="L873">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L874">    }</span>
+<span class="fc" id="L870">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L871">    }</span>
     
     /**
      * Trims this polynomial to remove all terms above degree that can be 
      * neglected.
      */
     public void trim() {
-<span class="fc" id="L881">        trim(this);</span>
-<span class="fc" id="L882">    }</span>
+<span class="fc" id="L878">        trim(this);</span>
+<span class="fc" id="L879">    }</span>
     
     /**
      * Trims this polynomial to remove all terms above degree that can be 
@@ -887,9 +884,9 @@ public class Polynomial implements Serializable {
      * @return a new trimmed polynomial.
      */
     public Polynomial trimAndReturnNew() {
-<span class="fc" id="L890">        Polynomial result = new Polynomial();</span>
-<span class="fc" id="L891">        trim(result);</span>
-<span class="fc" id="L892">        return result;</span>
+<span class="fc" id="L887">        Polynomial result = new Polynomial();</span>
+<span class="fc" id="L888">        trim(result);</span>
+<span class="fc" id="L889">        return result;</span>
     }
 
     /**
@@ -900,13 +897,13 @@ public class Polynomial implements Serializable {
      * @param result instance where normalized polynomial will be stored.
      */
     public void normalize(Polynomial result) {
-<span class="fc" id="L903">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="fc bfc" id="L904" title="All 2 branches covered.">        if (resultPolyParams.length != mPolyParams.length) {</span>
-<span class="fc" id="L905">            resultPolyParams = new double[mPolyParams.length];</span>
+<span class="fc" id="L900">        double[] resultPolyParams = result.mPolyParams;</span>
+<span class="fc bfc" id="L901" title="All 2 branches covered.">        if (resultPolyParams.length != mPolyParams.length) {</span>
+<span class="fc" id="L902">            resultPolyParams = new double[mPolyParams.length];</span>
         }
-<span class="fc" id="L907">        ArrayUtils.normalize(mPolyParams, resultPolyParams);</span>
-<span class="fc" id="L908">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L909">    }</span>
+<span class="fc" id="L904">        ArrayUtils.normalize(mPolyParams, resultPolyParams);</span>
+<span class="fc" id="L905">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L906">    }</span>
     
     /**
      * Normalizes this polynomial so that the array of parameters has unitary
@@ -915,8 +912,8 @@ public class Polynomial implements Serializable {
      * propierties of polynomials might change.
      */
     public void normalize() {
-<span class="fc" id="L918">        normalize(this);</span>
-<span class="fc" id="L919">    }</span>
+<span class="fc" id="L915">        normalize(this);</span>
+<span class="fc" id="L916">    }</span>
     
     /**
      * Normalizes parameters of this polynomial so that the array of parameters
@@ -926,9 +923,9 @@ public class Polynomial implements Serializable {
      * @return a new normalized polynomial instance.
      */
     public Polynomial normalizeAndReturnNew() {
-<span class="fc" id="L929">        Polynomial result = new Polynomial(mPolyParams.length);</span>
-<span class="fc" id="L930">        normalize(result);</span>
-<span class="fc" id="L931">        return result;</span>
+<span class="fc" id="L926">        Polynomial result = new Polynomial(mPolyParams.length);</span>
+<span class="fc" id="L927">        normalize(result);</span>
+<span class="fc" id="L928">        return result;</span>
     }
     
     /**
@@ -937,23 +934,23 @@ public class Polynomial implements Serializable {
      * @param result instance where result of normalization will be stored.
      */
     public void normalizeHighestDegreeTerm(Polynomial result) {
-<span class="fc" id="L940">        int degree = getDegree();</span>
-<span class="fc" id="L941">        double term = mPolyParams[degree];</span>
-<span class="fc" id="L942">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="fc bfc" id="L943" title="All 2 branches covered.">        if (resultPolyParams.length != mPolyParams.length) {</span>
-<span class="fc" id="L944">            resultPolyParams = new double[mPolyParams.length];</span>
+<span class="fc" id="L937">        int degree = getDegree();</span>
+<span class="fc" id="L938">        double term = mPolyParams[degree];</span>
+<span class="fc" id="L939">        double[] resultPolyParams = result.mPolyParams;</span>
+<span class="fc bfc" id="L940" title="All 2 branches covered.">        if (resultPolyParams.length != mPolyParams.length) {</span>
+<span class="fc" id="L941">            resultPolyParams = new double[mPolyParams.length];</span>
         }
-<span class="fc" id="L946">        ArrayUtils.multiplyByScalar(mPolyParams, 1.0 / term, resultPolyParams);</span>
-<span class="fc" id="L947">        result.mPolyParams = resultPolyParams;</span>
-<span class="fc" id="L948">    }</span>
+<span class="fc" id="L943">        ArrayUtils.multiplyByScalar(mPolyParams, 1.0 / term, resultPolyParams);</span>
+<span class="fc" id="L944">        result.mPolyParams = resultPolyParams;</span>
+<span class="fc" id="L945">    }</span>
     
     /**
      * Normalizes parameters of this polynomial so that the highest degree term
      * becomes 1.0.
      */
     public void normalizeHighestDegreeTerm() {
-<span class="fc" id="L955">        normalizeHighestDegreeTerm(this);</span>
-<span class="fc" id="L956">    }</span>
+<span class="fc" id="L952">        normalizeHighestDegreeTerm(this);</span>
+<span class="fc" id="L953">    }</span>
     
     /**
      * Normalizes parameters of this polynomial so that the highest degree term
@@ -961,9 +958,9 @@ public class Polynomial implements Serializable {
      * @return a new normalized polynomial.
      */
     public Polynomial normalizeHighestDegreeTermAndReturnNew() {
-<span class="fc" id="L964">        Polynomial result = new Polynomial(mPolyParams.length);</span>
-<span class="fc" id="L965">        normalizeHighestDegreeTerm(result);</span>
-<span class="fc" id="L966">        return result;</span>
+<span class="fc" id="L961">        Polynomial result = new Polynomial(mPolyParams.length);</span>
+<span class="fc" id="L962">        normalizeHighestDegreeTerm(result);</span>
+<span class="fc" id="L963">        return result;</span>
     }
     
     /**
@@ -973,7 +970,7 @@ public class Polynomial implements Serializable {
      * numerical instabilities.
      */
     public double[] getMaxima() throws NumericalException {
-<span class="fc" id="L976">        return getMaxima(EPS);</span>
+<span class="fc" id="L973">        return getMaxima(EPS);</span>
     }
     
     /**
@@ -986,47 +983,47 @@ public class Polynomial implements Serializable {
      * numerical instabilities.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public double[] getMaxima(double threshold) throws NumericalException,
-            IllegalArgumentException {
-<span class="fc bfc" id="L991" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
-<span class="fc" id="L992">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public double[] getMaxima(double threshold) throws NumericalException {
+<span class="fc bfc" id="L988" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
+<span class="fc" id="L989">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L995">        Polynomial derivative = derivativeAndReturnNew();</span>
+<span class="fc" id="L992">        Polynomial derivative = derivativeAndReturnNew();</span>
         
-        //roots of derivative contains either minima or máxima.
-<span class="fc" id="L998">        Complex[] derivativeRoots = derivative.getRoots();</span>
-<span class="fc" id="L999">        List&lt;Complex&gt; maxima = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L1000" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
-<span class="fc bfc" id="L1001" title="All 2 branches covered.">            for (Complex derivativeRoot : derivativeRoots) {</span>
-<span class="pc bpc" id="L1002" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
+        //roots of derivative contains either minima or maxima.
+<span class="fc" id="L995">        Complex[] derivativeRoots = derivative.getRoots();</span>
+<span class="fc" id="L996">        List&lt;Complex&gt; maxima = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L997" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
+<span class="fc bfc" id="L998" title="All 2 branches covered.">            for (Complex derivativeRoot : derivativeRoots) {</span>
+<span class="pc bpc" id="L999" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
                     //root is imaginary (not allowed)
-<span class="nc" id="L1004">                    continue;</span>
+<span class="nc" id="L1001">                    continue;</span>
                 }
                 
-<span class="fc" id="L1007">                double x = derivativeRoot.getReal();</span>
-<span class="fc" id="L1008">                double secondDerivativeEval = evaluateSecondDerivative(x);</span>
-<span class="fc bfc" id="L1009" title="All 2 branches covered.">                if (secondDerivativeEval &lt; 0.0) {</span>
+<span class="fc" id="L1004">                double x = derivativeRoot.getReal();</span>
+<span class="fc" id="L1005">                double secondDerivativeEval = evaluateSecondDerivative(x);</span>
+<span class="fc bfc" id="L1006" title="All 2 branches covered.">                if (secondDerivativeEval &lt; 0.0) {</span>
                     //is maxima
-<span class="fc" id="L1011">                    maxima.add(derivativeRoot);</span>
+<span class="fc" id="L1008">                    maxima.add(derivativeRoot);</span>
                 }
             }
         }
         
         //return real parts of maxima, since we only allow real roots of first
         //derivative
-<span class="fc bfc" id="L1018" title="All 2 branches covered.">        if (maxima.isEmpty()) {</span>
-<span class="fc" id="L1019">            return null;</span>
+<span class="fc bfc" id="L1015" title="All 2 branches covered.">        if (maxima.isEmpty()) {</span>
+<span class="fc" id="L1016">            return null;</span>
         }
         
-<span class="fc" id="L1022">        double[] result = new double[maxima.size()];</span>
-<span class="fc" id="L1023">        int i = 0;</span>
-<span class="fc bfc" id="L1024" title="All 2 branches covered.">        for (Complex m : maxima) {</span>
-<span class="fc" id="L1025">            result[i] = m.getReal();</span>
-<span class="fc" id="L1026">            i++;</span>
-<span class="fc" id="L1027">        }</span>
+<span class="fc" id="L1019">        double[] result = new double[maxima.size()];</span>
+<span class="fc" id="L1020">        int i = 0;</span>
+<span class="fc bfc" id="L1021" title="All 2 branches covered.">        for (Complex m : maxima) {</span>
+<span class="fc" id="L1022">            result[i] = m.getReal();</span>
+<span class="fc" id="L1023">            i++;</span>
+<span class="fc" id="L1024">        }</span>
         
-<span class="fc" id="L1029">        return result;</span>
+<span class="fc" id="L1026">        return result;</span>
     }
     
     /**
@@ -1036,7 +1033,7 @@ public class Polynomial implements Serializable {
      * numerical instabilities.
      */
     public double[] getMinima() throws NumericalException {
-<span class="fc" id="L1039">        return getMinima(EPS);</span>
+<span class="fc" id="L1036">        return getMinima(EPS);</span>
     }
     
     /**
@@ -1049,47 +1046,47 @@ public class Polynomial implements Serializable {
      * numerical instabilities.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public double[] getMinima(double threshold) throws NumericalException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L1054" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
-<span class="nc" id="L1055">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public double[] getMinima(double threshold) throws NumericalException {
+<span class="pc bpc" id="L1051" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
+<span class="nc" id="L1052">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1058">        Polynomial derivative = derivativeAndReturnNew();</span>
+<span class="fc" id="L1055">        Polynomial derivative = derivativeAndReturnNew();</span>
         
-        //roots of derivative contains either minima or máxima.
-<span class="fc" id="L1061">        Complex[] derivativeRoots = derivative.getRoots();</span>
-<span class="fc" id="L1062">        List&lt;Complex&gt; minima = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L1063" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
-<span class="fc bfc" id="L1064" title="All 2 branches covered.">            for (Complex derivativeRoot : derivativeRoots) {</span>
-<span class="pc bpc" id="L1065" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
+        //roots of derivative contains either minima or maxima.
+<span class="fc" id="L1058">        Complex[] derivativeRoots = derivative.getRoots();</span>
+<span class="fc" id="L1059">        List&lt;Complex&gt; minima = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L1060" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
+<span class="fc bfc" id="L1061" title="All 2 branches covered.">            for (Complex derivativeRoot : derivativeRoots) {</span>
+<span class="pc bpc" id="L1062" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
                     //root is imaginary (not allowed)
-<span class="nc" id="L1067">                    continue;</span>
+<span class="nc" id="L1064">                    continue;</span>
                 }
                 
-<span class="fc" id="L1070">                double x = derivativeRoot.getReal();</span>
-<span class="fc" id="L1071">                double secondDerivativeEval = evaluateSecondDerivative(x);</span>
-<span class="fc bfc" id="L1072" title="All 2 branches covered.">                if (secondDerivativeEval &gt;= 0.0) {</span>
+<span class="fc" id="L1067">                double x = derivativeRoot.getReal();</span>
+<span class="fc" id="L1068">                double secondDerivativeEval = evaluateSecondDerivative(x);</span>
+<span class="fc bfc" id="L1069" title="All 2 branches covered.">                if (secondDerivativeEval &gt;= 0.0) {</span>
                     //is minima
-<span class="fc" id="L1074">                    minima.add(derivativeRoot);</span>
+<span class="fc" id="L1071">                    minima.add(derivativeRoot);</span>
                 }
             }
         }
         
         //return real parts of minima, since we only allow real roots of first
         //derivative
-<span class="fc bfc" id="L1081" title="All 2 branches covered.">        if (minima.isEmpty()) {</span>
-<span class="fc" id="L1082">            return null;</span>
+<span class="fc bfc" id="L1078" title="All 2 branches covered.">        if (minima.isEmpty()) {</span>
+<span class="fc" id="L1079">            return null;</span>
         }
         
-<span class="fc" id="L1085">        double[] result = new double[minima.size()];</span>
-<span class="fc" id="L1086">        int i = 0;</span>
-<span class="fc bfc" id="L1087" title="All 2 branches covered.">        for (Complex m : minima) {</span>
-<span class="fc" id="L1088">            result[i] = m.getReal();</span>
-<span class="fc" id="L1089">            i++;</span>
-<span class="fc" id="L1090">        }</span>
+<span class="fc" id="L1082">        double[] result = new double[minima.size()];</span>
+<span class="fc" id="L1083">        int i = 0;</span>
+<span class="fc bfc" id="L1084" title="All 2 branches covered.">        for (Complex m : minima) {</span>
+<span class="fc" id="L1085">            result[i] = m.getReal();</span>
+<span class="fc" id="L1086">            i++;</span>
+<span class="fc" id="L1087">        }</span>
         
-<span class="fc" id="L1092">        return result;        </span>
+<span class="fc" id="L1089">        return result;        </span>
     }
     
     /**
@@ -1100,7 +1097,7 @@ public class Polynomial implements Serializable {
      * to numerical instabilities.
      */
     public double[] getExtrema() throws NumericalException {
-<span class="fc" id="L1103">        return getExtrema(EPS);</span>
+<span class="fc" id="L1100">        return getExtrema(EPS);</span>
     }
     
     /**
@@ -1115,41 +1112,41 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public double[] getExtrema(double threshold) 
-            throws NumericalException, IllegalArgumentException {
-<span class="pc bpc" id="L1119" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
-<span class="nc" id="L1120">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
+            throws NumericalException {
+<span class="pc bpc" id="L1116" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
+<span class="nc" id="L1117">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
         }
         
-<span class="fc" id="L1123">        Polynomial derivative = derivativeAndReturnNew();</span>
+<span class="fc" id="L1120">        Polynomial derivative = derivativeAndReturnNew();</span>
         
         //roots of derivative contains either minima or máxima.
-<span class="fc" id="L1126">        Complex[] derivativeRoots = derivative.getRoots();</span>
-<span class="fc" id="L1127">        List&lt;Complex&gt; minimaOrMaxima = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L1128" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
-<span class="fc bfc" id="L1129" title="All 2 branches covered.">            for (Complex derivativeRoot : derivativeRoots) {</span>
-<span class="pc bpc" id="L1130" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
+<span class="fc" id="L1123">        Complex[] derivativeRoots = derivative.getRoots();</span>
+<span class="fc" id="L1124">        List&lt;Complex&gt; minimaOrMaxima = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L1125" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
+<span class="fc bfc" id="L1126" title="All 2 branches covered.">            for (Complex derivativeRoot : derivativeRoots) {</span>
+<span class="pc bpc" id="L1127" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
                     //root is imaginary (not allowed)
-<span class="nc" id="L1132">                    continue;</span>
+<span class="nc" id="L1129">                    continue;</span>
                 }
 
-<span class="fc" id="L1135">                minimaOrMaxima.add(derivativeRoot);</span>
+<span class="fc" id="L1132">                minimaOrMaxima.add(derivativeRoot);</span>
             }
         }
         
         //return real parts of roots, since we only allow real roots of first
         //derivative
-<span class="fc bfc" id="L1141" title="All 2 branches covered.">        if (minimaOrMaxima.isEmpty()) {</span>
-<span class="fc" id="L1142">            return null;</span>
+<span class="fc bfc" id="L1138" title="All 2 branches covered.">        if (minimaOrMaxima.isEmpty()) {</span>
+<span class="fc" id="L1139">            return null;</span>
         }
         
-<span class="fc" id="L1145">        double[] result = new double[minimaOrMaxima.size()];</span>
-<span class="fc" id="L1146">        int i = 0;</span>
-<span class="fc bfc" id="L1147" title="All 2 branches covered.">        for (Complex m : minimaOrMaxima) {</span>
-<span class="fc" id="L1148">            result[i] = m.getReal();</span>
-<span class="fc" id="L1149">            i++;</span>
-<span class="fc" id="L1150">        }</span>
+<span class="fc" id="L1142">        double[] result = new double[minimaOrMaxima.size()];</span>
+<span class="fc" id="L1143">        int i = 0;</span>
+<span class="fc bfc" id="L1144" title="All 2 branches covered.">        for (Complex m : minimaOrMaxima) {</span>
+<span class="fc" id="L1145">            result[i] = m.getReal();</span>
+<span class="fc" id="L1146">            i++;</span>
+<span class="fc" id="L1147">        }</span>
         
-<span class="fc" id="L1152">        return result;        </span>
+<span class="fc" id="L1149">        return result;        </span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -265,305 +265,322 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a>     @Test
 <a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testEstimate() <strong class="jxr_keyword">throws</strong> LockedException, NotReadyException, 
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>             RobustEstimatorException {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; TIMES; i++) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>             <strong class="jxr_keyword">int</strong> numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>             <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a> listener = 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a>(numSamples, 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>                     PERCENTAGE_OUTLIER, THRESHOLD);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>             RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator = 
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>                     <strong class="jxr_keyword">new</strong> RANSACRobustEstimator&lt;&gt;();
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>             
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>             estimator.setComputeAndKeepInliersEnabled(false);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>             estimator.setComputeAndKeepResidualsEnabled(false);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>             <em class="jxr_comment">//Force NotReadyException</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>                 estimator.estimate();
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>                 fail(<span class="jxr_string">"NotReadyException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>             } <strong class="jxr_keyword">catch</strong> (NotReadyException ignore) { }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <em class="jxr_comment">//set listener</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>             estimator.setListener(listener);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>             listener.reset();
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>             assertEquals(listener.getStartCounter(), 0);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>             assertEquals(listener.getEndCounter(), 0);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>             assertFalse(estimator.isLocked());
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>             <em class="jxr_comment">//estimate</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>             <strong class="jxr_keyword">double</strong>[] params = estimator.estimate();
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>             <em class="jxr_comment">//check status after estimation</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>             assertFalse(estimator.isLocked());
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>             assertEquals(listener.getStartCounter(), 1);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>             assertEquals(listener.getEndCounter(), 1);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>             <em class="jxr_comment">//check correctness of estimation</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>             assertEquals(params.length, listener.getParams().length);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>             assertEquals(params.length, NUM_PARAMS);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>             assertArrayEquals(params, listener.getParams(), 10.0*ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>             
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>             assertNull(estimator.getBestInliersData());
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>             assertNull(estimator.getInliersData());
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>         }
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>     }
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>     @Test
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testEstimateWithInliersData() <strong class="jxr_keyword">throws</strong> LockedException, 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>             NotReadyException, RobustEstimatorException {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>         <strong class="jxr_keyword">int</strong> numValid = 0;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>             <strong class="jxr_keyword">int</strong> numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>             <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a> listener = 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a>(numSamples, 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>                     PERCENTAGE_OUTLIER, THRESHOLD);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>             RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator = 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>                     <strong class="jxr_keyword">new</strong> RANSACRobustEstimator&lt;&gt;();
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>             
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>             estimator.setComputeAndKeepInliersEnabled(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>             estimator.setComputeAndKeepResidualsEnabled(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>             <em class="jxr_comment">//Force NotReadyException</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>                 estimator.estimate();
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>                 fail(<span class="jxr_string">"NotReadyException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>             } <strong class="jxr_keyword">catch</strong> (NotReadyException ignore) { }
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>             <em class="jxr_comment">//set listener</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>             estimator.setListener(listener);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>             listener.reset();
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>             assertEquals(listener.getStartCounter(), 0);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>             assertEquals(listener.getEndCounter(), 0);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>             assertFalse(estimator.isLocked());
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>             <em class="jxr_comment">//estimate</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>             <strong class="jxr_keyword">double</strong>[] params = estimator.estimate();
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>             <em class="jxr_comment">//check status after estimation</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>             assertFalse(estimator.isLocked());
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>             assertEquals(listener.getStartCounter(), 1);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>             assertEquals(listener.getEndCounter(), 1);
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>             <em class="jxr_comment">//check correctness of estimation</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>             assertEquals(params.length, listener.getParams().length);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>             assertEquals(params.length, NUM_PARAMS);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>             <strong class="jxr_keyword">boolean</strong> failed = false;
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.length; i++) {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>                 <strong class="jxr_keyword">if</strong> (Math.abs(params[i] - listener.getParams()[i]) &gt; ABSOLUTE_ERROR) {
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>                     failed = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>                 }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>             }
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>             <strong class="jxr_keyword">if</strong> (failed) {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>                 <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>             }
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>             
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>             RANSACInliersData inliersData = estimator.getBestInliersData();
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>             assertNotNull(inliersData);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>             assertSame(inliersData, estimator.getInliersData());
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>             assertTrue(inliersData.getNumInliers() &gt; 0);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>             assertNotNull(inliersData.getInliers());
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>             assertNotNull(inliersData.getResiduals());
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>             numValid++;
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>             <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>         }
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>         assertTrue(numValid &gt; 0);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>     }
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>     
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] computeParams() {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>         <em class="jxr_comment">//we will estimate parameters a and b for equation y = a*x + b</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>         <strong class="jxr_keyword">double</strong>[] params = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[NUM_PARAMS];
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>         <em class="jxr_comment">//a parameter</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>         params[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>         <em class="jxr_comment">//b parameter</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>         params[1] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>         <strong class="jxr_keyword">return</strong> params;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>     }
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>     
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> computeSamples(<strong class="jxr_keyword">double</strong>[] params, <strong class="jxr_keyword">int</strong> numSamples, 
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>             <strong class="jxr_keyword">int</strong> percentageOutliers, <strong class="jxr_keyword">double</strong>[] ys, <strong class="jxr_keyword">double</strong>[] xs) {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>         
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; numSamples; i++) {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>             <em class="jxr_comment">//compute x values</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>             xs[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>             <em class="jxr_comment">//compute exact y values</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>             ys[i] = params[0] * xs[i] + params[1];
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>             <strong class="jxr_keyword">if</strong> (randomizer.nextInt(0, 100) &lt; percentageOutliers) {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                 <em class="jxr_comment">//is outlier, so we add a certain amount of error</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 <strong class="jxr_keyword">double</strong> error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>                 ys[i] += error;
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>             }
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>         }        
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>         <strong class="jxr_keyword">int</strong> numValid = 0;
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>             <strong class="jxr_keyword">int</strong> numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>             <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a> listener = 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a>(numSamples, 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>                     PERCENTAGE_OUTLIER, THRESHOLD);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>             RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator = 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>                     <strong class="jxr_keyword">new</strong> RANSACRobustEstimator&lt;&gt;();
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>             
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>             estimator.setComputeAndKeepInliersEnabled(false);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>             estimator.setComputeAndKeepResidualsEnabled(false);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>             <em class="jxr_comment">//Force NotReadyException</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>                 estimator.estimate();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>                 fail(<span class="jxr_string">"NotReadyException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>             } <strong class="jxr_keyword">catch</strong> (NotReadyException ignore) { }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>             <em class="jxr_comment">//set listener</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>             estimator.setListener(listener);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>             listener.reset();
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>             assertEquals(listener.getStartCounter(), 0);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>             assertEquals(listener.getEndCounter(), 0);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>             assertFalse(estimator.isLocked());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>             <em class="jxr_comment">//estimate</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>             <strong class="jxr_keyword">double</strong>[] params = estimator.estimate();
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>             <em class="jxr_comment">//check status after estimation</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>             assertFalse(estimator.isLocked());
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>             assertEquals(listener.getStartCounter(), 1);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>             assertEquals(listener.getEndCounter(), 1);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>             <em class="jxr_comment">//check correctness of estimation</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>             assertEquals(params.length, listener.getParams().length);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>             assertEquals(params.length, NUM_PARAMS);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>             <strong class="jxr_keyword">boolean</strong> failed = false;
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.length; i++) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>                 <strong class="jxr_keyword">if</strong> (Math.abs(params[i] - listener.getParams()[i]) &gt; 10.0 * ABSOLUTE_ERROR) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>                     failed = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>                 }
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>             }
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>             <strong class="jxr_keyword">if</strong> (failed) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>                 <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>             }
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>             assertArrayEquals(params, listener.getParams(), 10.0*ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>             
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>             assertNull(estimator.getBestInliersData());
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>             assertNull(estimator.getInliersData());
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>             numValid++;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         }
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         assertTrue(numValid &gt; 0);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     @Test
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testEstimateWithInliersData() <strong class="jxr_keyword">throws</strong> LockedException, 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>             NotReadyException, RobustEstimatorException {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>         <strong class="jxr_keyword">int</strong> numValid = 0;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>             <strong class="jxr_keyword">int</strong> numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>             <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a> listener = 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a>(numSamples, 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>                     PERCENTAGE_OUTLIER, THRESHOLD);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>             RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator = 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>                     <strong class="jxr_keyword">new</strong> RANSACRobustEstimator&lt;&gt;();
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>             
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>             estimator.setComputeAndKeepInliersEnabled(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>             estimator.setComputeAndKeepResidualsEnabled(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>             <em class="jxr_comment">//Force NotReadyException</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>                 estimator.estimate();
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>                 fail(<span class="jxr_string">"NotReadyException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>             } <strong class="jxr_keyword">catch</strong> (NotReadyException ignore) { }
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>             <em class="jxr_comment">//set listener</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>             estimator.setListener(listener);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>             listener.reset();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>             assertEquals(listener.getStartCounter(), 0);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>             assertEquals(listener.getEndCounter(), 0);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>             assertFalse(estimator.isLocked());
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>             <em class="jxr_comment">//estimate</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>             <strong class="jxr_keyword">double</strong>[] params = estimator.estimate();
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>             <em class="jxr_comment">//check status after estimation</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>             assertFalse(estimator.isLocked());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>             assertEquals(listener.getStartCounter(), 1);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>             assertEquals(listener.getEndCounter(), 1);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>             <em class="jxr_comment">//check correctness of estimation</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>             assertEquals(params.length, listener.getParams().length);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>             assertEquals(params.length, NUM_PARAMS);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>             <strong class="jxr_keyword">boolean</strong> failed = false;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.length; i++) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                 <strong class="jxr_keyword">if</strong> (Math.abs(params[i] - listener.getParams()[i]) &gt; ABSOLUTE_ERROR) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                     failed = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 }
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>             }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>             <strong class="jxr_keyword">if</strong> (failed) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>                 <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>             }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>             
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>             RANSACInliersData inliersData = estimator.getBestInliersData();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>             assertNotNull(inliersData);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>             assertSame(inliersData, estimator.getInliersData());
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>             assertTrue(inliersData.getNumInliers() &gt; 0);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>             assertNotNull(inliersData.getInliers());
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>             assertNotNull(inliersData.getResiduals());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>             numValid++;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>         }
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>         assertTrue(numValid &gt; 0);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     }
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>     
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] computeParams() {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>         <em class="jxr_comment">//we will estimate parameters a and b for equation y = a*x + b</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>         <strong class="jxr_keyword">double</strong>[] params = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[NUM_PARAMS];
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         <em class="jxr_comment">//a parameter</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>         params[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         <em class="jxr_comment">//b parameter</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>         params[1] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>         <strong class="jxr_keyword">return</strong> params;
 <a class="jxr_linenumber" name="L397" href="#L397">397</a>     }
 <a class="jxr_linenumber" name="L398" href="#L398">398</a>     
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a> <strong class="jxr_keyword">implements</strong> 
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>             RANSACRobustEstimatorListener&lt;<strong class="jxr_keyword">double</strong>[]&gt; {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> computeSamples(<strong class="jxr_keyword">double</strong>[] params, <strong class="jxr_keyword">int</strong> numSamples, 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>             <strong class="jxr_keyword">int</strong> percentageOutliers, <strong class="jxr_keyword">double</strong>[] ys, <strong class="jxr_keyword">double</strong>[] xs) {
 <a class="jxr_linenumber" name="L401" href="#L401">401</a>         
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] params;
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] xs;
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] ys;
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> numSamples;
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> threshold;
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>         
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> startCounter;
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> endCounter;
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> previousProgress;
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>         
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>         <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a>(<strong class="jxr_keyword">int</strong> numSamples,
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>                 <strong class="jxr_keyword">int</strong> percentageOutliers, <strong class="jxr_keyword">double</strong> threshold) {
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>             <strong class="jxr_keyword">this</strong>.numSamples = numSamples;
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>             params = computeParams();
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>             xs = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[numSamples];
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>             ys = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[numSamples];
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>             computeSamples(params, numSamples, percentageOutliers, ys, xs);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>             <strong class="jxr_keyword">this</strong>.threshold = threshold;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>             reset();
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>         }
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>         
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] getParams(){
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>             <strong class="jxr_keyword">return</strong> params;
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>         }
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>         @Override
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getTotalSamples() {
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>             <strong class="jxr_keyword">return</strong> numSamples;
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>         }
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>         @Override
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getSubsetSize() {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>             <em class="jxr_comment">//only two matches x and y are required to determine a and b as </em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>             <em class="jxr_comment">//follows:</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>             <em class="jxr_comment">//y1 = a* x1 + b --&gt; b = y1 - a * x1</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>             <em class="jxr_comment">//y2 = a * x2 + b --&gt; y2 = a * x2 + y1 - a * x1 --&gt;</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>             <em class="jxr_comment">//y2 - y1 = (x2 - x1)*a --&gt; a = (y2 - y1) / (x2 - x1)</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>             
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>             <em class="jxr_comment">//Hence:</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>             <em class="jxr_comment">//a = (y2 - y1) / (x2 - x1)</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>             <em class="jxr_comment">//b = y1 - (y2 - y1) / (x2 - x1) * x1</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>             <strong class="jxr_keyword">return</strong> NUM_PARAMS; 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>         }
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>         
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>         @Override
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getThreshold() {
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>             <strong class="jxr_keyword">return</strong> threshold;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>         }        
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>         @Override
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> estimatePreliminarSolutions(<strong class="jxr_keyword">int</strong>[] samplesIndices, 
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                 List&lt;<strong class="jxr_keyword">double</strong>[]&gt; solutions) {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>             
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>             <strong class="jxr_keyword">if</strong>(samplesIndices.length != NUM_PARAMS) 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>             <strong class="jxr_keyword">int</strong> index1 = samplesIndices[0];
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>             <strong class="jxr_keyword">int</strong> index2 = samplesIndices[1];
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>             
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>             <strong class="jxr_keyword">double</strong> y1 = ys[index1];
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>             <strong class="jxr_keyword">double</strong> y2 = ys[index2];
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>             <strong class="jxr_keyword">double</strong> x1 = xs[index1];
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>             <strong class="jxr_keyword">double</strong> x2 = xs[index2];
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>             
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>             <strong class="jxr_keyword">double</strong> a = (y2 - y1) / (x2 - x1);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>             <strong class="jxr_keyword">double</strong> b = y1 - a * x1;
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>             
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>             <strong class="jxr_keyword">double</strong>[] solution = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[NUM_PARAMS];
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>             solution[0] = a;
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>             solution[1] = b;
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; numSamples; i++) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>             <em class="jxr_comment">//compute x values</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>             xs[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>             <em class="jxr_comment">//compute exact y values</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>             ys[i] = params[0] * xs[i] + params[1];
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>             <strong class="jxr_keyword">if</strong> (randomizer.nextInt(0, 100) &lt; percentageOutliers) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>                 <em class="jxr_comment">//is outlier, so we add a certain amount of error</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>                 <strong class="jxr_keyword">double</strong> error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>                 ys[i] += error;
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>             }
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>         }        
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>     }
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a> <strong class="jxr_keyword">implements</strong> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>             RANSACRobustEstimatorListener&lt;<strong class="jxr_keyword">double</strong>[]&gt; {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>         
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] params;
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] xs;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong>[] ys;
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> numSamples;
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> threshold;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>         
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> startCounter;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> endCounter;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">float</strong> previousProgress;
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>         
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>         <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimatorTest.html">TestRANSACRobustEstimatorListener</a>(<strong class="jxr_keyword">int</strong> numSamples,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>                 <strong class="jxr_keyword">int</strong> percentageOutliers, <strong class="jxr_keyword">double</strong> threshold) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>             <strong class="jxr_keyword">this</strong>.numSamples = numSamples;
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>             params = computeParams();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>             xs = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[numSamples];
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>             ys = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[numSamples];
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>             computeSamples(params, numSamples, percentageOutliers, ys, xs);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>             <strong class="jxr_keyword">this</strong>.threshold = threshold;
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>             reset();
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>         }
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>         
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] getParams(){
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>             <strong class="jxr_keyword">return</strong> params;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>         }
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>         @Override
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getTotalSamples() {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>             <strong class="jxr_keyword">return</strong> numSamples;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>         }
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>         @Override
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getSubsetSize() {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>             <em class="jxr_comment">//only two matches x and y are required to determine a and b as </em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>             <em class="jxr_comment">//follows:</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>             <em class="jxr_comment">//y1 = a* x1 + b --&gt; b = y1 - a * x1</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>             <em class="jxr_comment">//y2 = a * x2 + b --&gt; y2 = a * x2 + y1 - a * x1 --&gt;</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>             <em class="jxr_comment">//y2 - y1 = (x2 - x1)*a --&gt; a = (y2 - y1) / (x2 - x1)</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>             
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>             <em class="jxr_comment">//Hence:</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>             <em class="jxr_comment">//a = (y2 - y1) / (x2 - x1)</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>             <em class="jxr_comment">//b = y1 - (y2 - y1) / (x2 - x1) * x1</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>             <strong class="jxr_keyword">return</strong> NUM_PARAMS; 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         }
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         @Override
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getThreshold() {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>             <strong class="jxr_keyword">return</strong> threshold;
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>         }        
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>         @Override
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> estimatePreliminarSolutions(<strong class="jxr_keyword">int</strong>[] samplesIndices, 
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>                 List&lt;<strong class="jxr_keyword">double</strong>[]&gt; solutions) {
 <a class="jxr_linenumber" name="L471" href="#L471">471</a>             
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>             solutions.add(solution);
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>         }
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>         
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>         @Override
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> computeResidual(<strong class="jxr_keyword">double</strong>[] currentEstimation, <strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>             <strong class="jxr_keyword">double</strong> a = currentEstimation[0];
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>             <strong class="jxr_keyword">double</strong> b = currentEstimation[1];
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>             <strong class="jxr_keyword">double</strong> estimatedY = a * xs[i] + b;
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>             <strong class="jxr_keyword">double</strong> y = ys[i];
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>             
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>             <strong class="jxr_keyword">return</strong>  Math.abs(estimatedY - y);
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>         }
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>         @Override
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isReady() {
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>             <strong class="jxr_keyword">return</strong> params != <strong class="jxr_keyword">null</strong> &amp;&amp; xs != <strong class="jxr_keyword">null</strong> &amp;&amp; ys != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>         }
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>         @Override
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateStart(RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator) {            
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>             testIsLocked((RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>             startCounter++;
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>         }
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>             <strong class="jxr_keyword">if</strong>(samplesIndices.length != NUM_PARAMS) 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>             <strong class="jxr_keyword">int</strong> index1 = samplesIndices[0];
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>             <strong class="jxr_keyword">int</strong> index2 = samplesIndices[1];
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>             
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>             <strong class="jxr_keyword">double</strong> y1 = ys[index1];
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>             <strong class="jxr_keyword">double</strong> y2 = ys[index2];
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>             <strong class="jxr_keyword">double</strong> x1 = xs[index1];
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>             <strong class="jxr_keyword">double</strong> x2 = xs[index2];
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>             
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>             <strong class="jxr_keyword">double</strong> a = (y2 - y1) / (x2 - x1);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>             <strong class="jxr_keyword">double</strong> b = y1 - a * x1;
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>             
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>             <strong class="jxr_keyword">double</strong>[] solution = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[NUM_PARAMS];
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>             solution[0] = a;
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>             solution[1] = b;
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>             
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>             solutions.add(solution);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>         }
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>         
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>         @Override
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> computeResidual(<strong class="jxr_keyword">double</strong>[] currentEstimation, <strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>             <strong class="jxr_keyword">double</strong> a = currentEstimation[0];
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>             <strong class="jxr_keyword">double</strong> b = currentEstimation[1];
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>         @Override
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateEnd(RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator) {
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>             testIsLocked((RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator);
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>             endCounter++;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>             <strong class="jxr_keyword">double</strong> estimatedY = a * xs[i] + b;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>             <strong class="jxr_keyword">double</strong> y = ys[i];
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>             
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>             <strong class="jxr_keyword">return</strong>  Math.abs(estimatedY - y);
 <a class="jxr_linenumber" name="L501" href="#L501">501</a>         }
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 
 <a class="jxr_linenumber" name="L503" href="#L503">503</a>         @Override
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateNextIteration(RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator, 
-<a class="jxr_linenumber" name="L505" href="#L505">505</a>                 <strong class="jxr_keyword">int</strong> iteration) {
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>             RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; ransacEstimator = 
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>                     (RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator;
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>             testIsLocked(ransacEstimator);
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>             assertTrue(iteration &gt; 0);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>             assertTrue(ransacEstimator.getNIters() &gt;= 0);
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>             assertNotNull(ransacEstimator.getBestResult());
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isReady() {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>             <strong class="jxr_keyword">return</strong> params != <strong class="jxr_keyword">null</strong> &amp;&amp; xs != <strong class="jxr_keyword">null</strong> &amp;&amp; ys != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>         }
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>         @Override
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateStart(RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator) {            
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>             testIsLocked((RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>             startCounter++;
 <a class="jxr_linenumber" name="L512" href="#L512">512</a>         }
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 
 <a class="jxr_linenumber" name="L514" href="#L514">514</a>         @Override
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateProgressChange(
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>                 RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator, <strong class="jxr_keyword">float</strong> progress) {
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>             testIsLocked((RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator);
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>             assertTrue(progress &gt;= 0.0f);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>             assertTrue(progress &lt;= 1.0f);
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>             assertTrue(progress &gt;= previousProgress);
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>             previousProgress = progress;
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>         }
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>         <strong class="jxr_keyword">int</strong> getStartCounter() {
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>             <strong class="jxr_keyword">return</strong> startCounter;
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>         }
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>         <strong class="jxr_keyword">int</strong> getEndCounter() {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>             <strong class="jxr_keyword">return</strong> endCounter;
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>         }
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>         
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> testIsLocked(RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator) {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>             assertTrue(estimator.isLocked());
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>             <em class="jxr_comment">//test that estimator cannot be modified while locked</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>                 estimator.setConfidence(0.5);
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>                 estimator.setListener(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>                 estimator.setMaxIterations(1);
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>                 estimator.setProgressDelta(0.5f);
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>         }
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>         
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> reset() {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>             startCounter = endCounter = 0;
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>             previousProgress = 0.0f;            
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>         }
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>     }
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> }
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateEnd(RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator) {
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>             testIsLocked((RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>             endCounter++;
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>         }
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>         @Override
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateNextIteration(RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator, 
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>                 <strong class="jxr_keyword">int</strong> iteration) {
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>             RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; ransacEstimator = 
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>                     (RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator;
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>             testIsLocked(ransacEstimator);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>             assertTrue(iteration &gt; 0);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>             assertTrue(ransacEstimator.getNIters() &gt;= 0);
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>             assertNotNull(ransacEstimator.getBestResult());
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>         }
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>         @Override
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateProgressChange(
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>                 RobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator, <strong class="jxr_keyword">float</strong> progress) {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>             testIsLocked((RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt;)estimator);
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>             assertTrue(progress &gt;= 0.0f);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>             assertTrue(progress &lt;= 1.0f);
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>             assertTrue(progress &gt;= previousProgress);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>             previousProgress = progress;
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>         }
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>         <strong class="jxr_keyword">int</strong> getStartCounter() {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>             <strong class="jxr_keyword">return</strong> startCounter;
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         }
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>         <strong class="jxr_keyword">int</strong> getEndCounter() {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>             <strong class="jxr_keyword">return</strong> endCounter;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>         }
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>         
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> testIsLocked(RANSACRobustEstimator&lt;<strong class="jxr_keyword">double</strong>[]&gt; estimator) {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>             assertTrue(estimator.isLocked());
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>             <em class="jxr_comment">//test that estimator cannot be modified while locked</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>                 estimator.setConfidence(0.5);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>                 estimator.setListener(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>                 estimator.setMaxIterations(1);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>                 estimator.setProgressDelta(0.5f);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>                 fail(<span class="jxr_string">"LockedException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>             } <strong class="jxr_keyword">catch</strong> (LockedException ignore) { }
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>         }
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>         
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> reset() {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>             startCounter = endCounter = 0;
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>             previousProgress = 0.0f;            
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>         }
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>     }
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

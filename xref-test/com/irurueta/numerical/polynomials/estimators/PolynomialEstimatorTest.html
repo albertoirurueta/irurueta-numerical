@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testCreateWeighted() {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>         <em class="jxr_comment">//default type</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a>         PolynomialEstimator estimator = PolynomialEstimator.create(
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a>         
 <a class="jxr_linenumber" name="L299" href="#L299">299</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L300" href="#L300">300</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -313,11 +313,11 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L306" href="#L306">306</a>         assertNull(estimator.getListener());
 <a class="jxr_linenumber" name="L307" href="#L307">307</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a>         
 <a class="jxr_linenumber" name="L310" href="#L310">310</a>         <em class="jxr_comment">//default type with degree</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a>         estimator = PolynomialEstimator.create(2,
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a>         
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -328,13 +328,13 @@
 <a class="jxr_linenumber" name="L320" href="#L320">320</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L321" href="#L321">321</a>         assertNull(estimator.getListener());
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a>         
 <a class="jxr_linenumber" name="L325" href="#L325">325</a>         
 <a class="jxr_linenumber" name="L326" href="#L326">326</a>         <em class="jxr_comment">//default type with evaluations</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a>         List&lt;PolynomialEvaluation&gt; evaluations = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L328" href="#L328">328</a>         estimator = PolynomialEstimator.create(evaluations,
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L330" href="#L330">330</a>         
 <a class="jxr_linenumber" name="L331" href="#L331">331</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -345,12 +345,12 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L338" href="#L338">338</a>         assertNull(estimator.getListener());
 <a class="jxr_linenumber" name="L339" href="#L339">339</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L341" href="#L341">341</a>         
 <a class="jxr_linenumber" name="L342" href="#L342">342</a>         
 <a class="jxr_linenumber" name="L343" href="#L343">343</a>         <em class="jxr_comment">//default type with listener</em>
 <a class="jxr_linenumber" name="L344" href="#L344">344</a>         estimator = PolynomialEstimator.create(<strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a>         
 <a class="jxr_linenumber" name="L347" href="#L347">347</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L348" href="#L348">348</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -361,12 +361,12 @@
 <a class="jxr_linenumber" name="L353" href="#L353">353</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L354" href="#L354">354</a>         assertSame(estimator.getListener(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L355" href="#L355">355</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L357" href="#L357">357</a>         
 <a class="jxr_linenumber" name="L358" href="#L358">358</a>         
 <a class="jxr_linenumber" name="L359" href="#L359">359</a>         <em class="jxr_comment">//default type with degree and evaluations</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a>         estimator = PolynomialEstimator.create(2, evaluations,
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a>         
 <a class="jxr_linenumber" name="L363" href="#L363">363</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L364" href="#L364">364</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -377,12 +377,12 @@
 <a class="jxr_linenumber" name="L369" href="#L369">369</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L370" href="#L370">370</a>         assertNull(estimator.getListener());
 <a class="jxr_linenumber" name="L371" href="#L371">371</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a>         
 <a class="jxr_linenumber" name="L374" href="#L374">374</a>         
 <a class="jxr_linenumber" name="L375" href="#L375">375</a>         <em class="jxr_comment">//default type with degree and listener</em>
 <a class="jxr_linenumber" name="L376" href="#L376">376</a>         estimator = PolynomialEstimator.create(2, <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L378" href="#L378">378</a>         
 <a class="jxr_linenumber" name="L379" href="#L379">379</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L380" href="#L380">380</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -393,12 +393,12 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L386" href="#L386">386</a>         assertSame(estimator.getListener(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a>         
 <a class="jxr_linenumber" name="L390" href="#L390">390</a>         
 <a class="jxr_linenumber" name="L391" href="#L391">391</a>         <em class="jxr_comment">//default type with evaluations and listener</em>
 <a class="jxr_linenumber" name="L392" href="#L392">392</a>         estimator = PolynomialEstimator.create(evaluations, <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L394" href="#L394">394</a>         
 <a class="jxr_linenumber" name="L395" href="#L395">395</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -409,12 +409,12 @@
 <a class="jxr_linenumber" name="L401" href="#L401">401</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L402" href="#L402">402</a>         assertSame(estimator.getListener(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L403" href="#L403">403</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);        
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a>         
 <a class="jxr_linenumber" name="L406" href="#L406">406</a>         
 <a class="jxr_linenumber" name="L407" href="#L407">407</a>         <em class="jxr_comment">//default type with degree, evaluations and listener</em>
 <a class="jxr_linenumber" name="L408" href="#L408">408</a>         estimator = PolynomialEstimator.create(2, evaluations, <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L410" href="#L410">410</a>         
 <a class="jxr_linenumber" name="L411" href="#L411">411</a>         <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L412" href="#L412">412</a>         assertTrue(estimator instanceof WeightedPolynomialEstimator);
@@ -425,7 +425,7 @@
 <a class="jxr_linenumber" name="L417" href="#L417">417</a>         assertFalse(estimator.isLocked());
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>         assertSame(estimator.getListener(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L419" href="#L419">419</a>         assertEquals(estimator.getType(), 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>                 PolynomialEstimatorType.WEIGHTED_POLyNOMIAL_ESTIMATOR);             
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>                 PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
 <a class="jxr_linenumber" name="L422" href="#L422">422</a>     
 <a class="jxr_linenumber" name="L423" href="#L423">423</a>     @Override

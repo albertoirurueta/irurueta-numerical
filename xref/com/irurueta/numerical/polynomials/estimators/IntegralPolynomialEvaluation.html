@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if order of integral is less than 1.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.html">IntegralPolynomialEvaluation</a>(<strong class="jxr_keyword">double</strong> x, <strong class="jxr_keyword">double</strong> evaluation, 
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              <strong class="jxr_keyword">double</strong>[] constants, <strong class="jxr_keyword">int</strong> integralOrder) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              <strong class="jxr_keyword">double</strong>[] constants, <strong class="jxr_keyword">int</strong> integralOrder) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">super</strong>(evaluation);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          mX = x;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          mConstants = constants;
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if order of integral is less than 1.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../com/irurueta/numerical/polynomials/estimators/IntegralPolynomialEvaluation.html">IntegralPolynomialEvaluation</a>(<strong class="jxr_keyword">double</strong> x, <strong class="jxr_keyword">double</strong> evaluation, 
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>              <strong class="jxr_keyword">int</strong> integralOrder) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>              <strong class="jxr_keyword">int</strong> integralOrder) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">this</strong>(x, evaluation, <strong class="jxr_keyword">null</strong>, integralOrder);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      
@@ -151,25 +151,24 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">     * @param integralOrder integral order.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if integral order is less than 1.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setIntegralOrder(<strong class="jxr_keyword">int</strong> integralOrder)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>             <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>         <strong class="jxr_keyword">if</strong>(integralOrder &lt; MIN_INTEGRAL_ORDER) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>                     <span class="jxr_string">"integral order must be at least 1"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>         }
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>         
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>         mIntegralOrder = integralOrder;
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>     }
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>         
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">     * Gets type of polynomial evaluation.</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">     * @return type of polynomial evaluation.</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>     @Override
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../com/irurueta/numerical/polynomials/estimators/PolynomialEvaluationType.html">PolynomialEvaluationType</a> getType() {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">return</strong> PolynomialEvaluationType.INTEGRAL_EVALUATION;
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     }    
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> }
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setIntegralOrder(<strong class="jxr_keyword">int</strong> integralOrder) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">if</strong>(integralOrder &lt; MIN_INTEGRAL_ORDER) {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>                     <span class="jxr_string">"integral order must be at least 1"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         mIntegralOrder = integralOrder;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     }
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">     * Gets type of polynomial evaluation.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">     * @return type of polynomial evaluation.</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     @Override
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../com/irurueta/numerical/polynomials/estimators/PolynomialEvaluationType.html">PolynomialEvaluationType</a> getType() {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         <strong class="jxr_keyword">return</strong> PolynomialEvaluationType.INTEGRAL_EVALUATION;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     }    
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

@@ -59,7 +59,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
     public IntegralPolynomialEvaluation(double x, double evaluation, 
-            double[] constants, int integralOrder) throws IllegalArgumentException {
+            double[] constants, int integralOrder) {
 <span class="fc" id="L63">        super(evaluation);</span>
 <span class="fc" id="L64">        mX = x;</span>
 <span class="fc" id="L65">        mConstants = constants;</span>
@@ -85,7 +85,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
     public IntegralPolynomialEvaluation(double x, double evaluation, 
-            int integralOrder) throws IllegalArgumentException {
+            int integralOrder) {
 <span class="fc" id="L89">        this(x, evaluation, null, integralOrder);</span>
 <span class="fc" id="L90">    }</span>
     
@@ -143,15 +143,14 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @param integralOrder integral order.
      * @throws IllegalArgumentException if integral order is less than 1.
      */
-    public final void setIntegralOrder(int integralOrder)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if(integralOrder &lt; MIN_INTEGRAL_ORDER) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException(</span>
+    public final void setIntegralOrder(int integralOrder) {
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if(integralOrder &lt; MIN_INTEGRAL_ORDER) {</span>
+<span class="fc" id="L148">            throw new IllegalArgumentException(</span>
                     &quot;integral order must be at least 1&quot;);
         }
         
-<span class="fc" id="L153">        mIntegralOrder = integralOrder;</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L152">        mIntegralOrder = integralOrder;</span>
+<span class="fc" id="L153">    }</span>
         
     /**
      * Gets type of polynomial evaluation.
@@ -159,7 +158,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      */
     @Override
     public PolynomialEvaluationType getType() {
-<span class="fc" id="L162">        return PolynomialEvaluationType.INTEGRAL_EVALUATION;</span>
+<span class="fc" id="L161">        return PolynomialEvaluationType.INTEGRAL_EVALUATION;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

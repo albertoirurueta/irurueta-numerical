@@ -53,7 +53,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
     public DerivativePolynomialEvaluation(double x, double evaluation, 
-            int derivativeOrder) throws IllegalArgumentException {
+            int derivativeOrder) {
 <span class="fc" id="L57">        super(evaluation);</span>
 <span class="fc" id="L58">        mX = x;</span>
 <span class="fc" id="L59">        setDerivativeOrder(derivativeOrder);</span>
@@ -96,15 +96,14 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @param derivativeOrder order of derivative.
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
-    public final void setDerivativeOrder(int derivativeOrder) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if(derivativeOrder &lt; MIN_DERIVATIVE_ORDER) {</span>
-<span class="fc" id="L102">            throw new IllegalArgumentException(</span>
+    public final void setDerivativeOrder(int derivativeOrder) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if(derivativeOrder &lt; MIN_DERIVATIVE_ORDER) {</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException(</span>
                     &quot;derivative order must be at least 1&quot;);
         }
         
-<span class="fc" id="L106">        mDerivativeOrder = derivativeOrder;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L105">        mDerivativeOrder = derivativeOrder;</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Gets type of polynomial evaluation.
@@ -112,7 +111,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      */
     @Override
     public PolynomialEvaluationType getType() {
-<span class="fc" id="L115">        return PolynomialEvaluationType.DERIVATIVE_EVALUATION;</span>
+<span class="fc" id="L114">        return PolynomialEvaluationType.DERIVATIVE_EVALUATION;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
