@@ -177,16 +177,15 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L183">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L182">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L185" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L186">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L184" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L185">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L188">        mConfidence = confidence;</span>
-<span class="fc" id="L189">    }</span>
+<span class="fc" id="L187">        mConfidence = confidence;</span>
+<span class="fc" id="L188">    }</span>
     
     /**
      * Maximum allowed number of iterations. When the maximum number of 
@@ -195,7 +194,7 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L198">        return mMaxIterations;</span>
+<span class="fc" id="L197">        return mMaxIterations;</span>
     }
     
     /**
@@ -208,22 +207,22 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * is being computed.
      */
     public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L213">            throw new LockedException();</span>
+            throws LockedException {
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L212">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L216">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L215">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L218">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L219">    }</span>
+<span class="fc" id="L217">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L218">    }</span>
     
     /**
      * Returns number of iterations to be done to obtain required confidence.
      * @return number of iterations to be done to obtain required confidence.
      */
     public int getNIters() {
-<span class="fc" id="L226">        return nIters;</span>
+<span class="fc" id="L225">        return nIters;</span>
     }
     
     /**
@@ -231,7 +230,7 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * @return best solution that has been found so far during an estimation.
      */
     public T getBestResult() {
-<span class="fc" id="L234">        return bestResult;</span>
+<span class="fc" id="L233">        return bestResult;</span>
     }
     
     /**
@@ -239,7 +238,7 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * @return data related to inliers found for best result.
      */
     public RANSACInliersData getBestInliersData() {
-<span class="fc" id="L242">        return mBestInliersData;</span>
+<span class="fc" id="L241">        return mBestInliersData;</span>
     }
     
     /**
@@ -248,7 +247,7 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L251">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L250">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -259,11 +258,11 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L263">            throw new LockedException();</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L262">            throw new LockedException();</span>
         }
-<span class="fc" id="L265">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L266">    }</span>
+<span class="fc" id="L264">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L265">    }</span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -271,7 +270,7 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L274">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L273">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -282,11 +281,11 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L286">            throw new LockedException();</span>
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L285">            throw new LockedException();</span>
         }
-<span class="fc" id="L288">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L289">    }</span>
+<span class="fc" id="L287">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L288">    }</span>
             
     /**
      * Indicates if estimator is ready to start the estimation process.
@@ -294,10 +293,10 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (!super.isReady()) {</span>
-<span class="fc" id="L298">            return false;</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">        if (!super.isReady()) {</span>
+<span class="fc" id="L297">            return false;</span>
         }
-<span class="fc" id="L300">        return (mListener instanceof RANSACRobustEstimatorListener);</span>
+<span class="fc" id="L299">        return (mListener instanceof RANSACRobustEstimatorListener);</span>
     }    
     
     /**
@@ -312,37 +311,38 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
     @Override
     public T estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="pc bpc" id="L315" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L316">            throw new LockedException();</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L315">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L319">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L318">            throw new NotReadyException();</span>
         }
         
         try {
-<span class="fc" id="L323">            RANSACRobustEstimatorListener&lt;T&gt; listener = </span>
+<span class="fc" id="L322">            RANSACRobustEstimatorListener&lt;T&gt; listener = </span>
                     (RANSACRobustEstimatorListener&lt;T&gt;)mListener;
             
-<span class="fc" id="L326">            mLocked = true;</span>
+<span class="fc" id="L325">            mLocked = true;</span>
             
-<span class="fc" id="L328">            listener.onEstimateStart(this);</span>
+<span class="fc" id="L327">            listener.onEstimateStart(this);</span>
         
-<span class="fc" id="L330">            int totalSamples = listener.getTotalSamples();</span>
-<span class="fc" id="L331">            int subsetSize = listener.getSubsetSize();    </span>
-<span class="fc" id="L332">            double threshold = listener.getThreshold();</span>
+<span class="fc" id="L329">            int totalSamples = listener.getTotalSamples();</span>
+<span class="fc" id="L330">            int subsetSize = listener.getSubsetSize();    </span>
+<span class="fc" id="L331">            double threshold = listener.getThreshold();</span>
             //only positive thresholds are allowed
-<span class="pc bpc" id="L334" title="1 of 2 branches missed.">            if(threshold &lt; MIN_THRESHOLD) throw new RobustEstimatorException();</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">            if(threshold &lt; MIN_THRESHOLD) throw new RobustEstimatorException();</span>
             
-<span class="fc" id="L336">            int bestNumInliers = 0;</span>
-<span class="fc" id="L337">            nIters = Integer.MAX_VALUE;</span>
+<span class="fc" id="L335">            int bestNumInliers = 0;</span>
+<span class="fc" id="L336">            nIters = Integer.MAX_VALUE;</span>
             int newNIters;
-<span class="fc" id="L339">            int currentIter = 0;</span>
+<span class="fc" id="L338">            int currentIter = 0;</span>
             //reusable list that will contain preliminar solutions on each 
             //iteration
-<span class="fc" id="L342">            List&lt;T&gt; iterResults = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L343">            bestResult = null;</span>
+<span class="fc" id="L341">            List&lt;T&gt; iterResults = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L342">            bestResult = null;</span>
             int currentInliers;
-<span class="fc" id="L345">            float previousProgress = 0.0f, progress;</span>
+<span class="fc" id="L344">            float previousProgress = 0.0f;</span>
+            float progress;
 <span class="fc" id="L346">            int[] subsetIndices = new int[subsetSize];</span>
             
 <span class="fc" id="L348">            BitSet inliers = null;</span>
@@ -522,42 +522,6 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
             }
 <span class="fc" id="L523">            mNumInliers = 0;</span>
 <span class="fc" id="L524">        }</span>
-        
-        /**
-         * Updates data contained in this instance.
-         * @param inliers efficiently stores which samples are considered
-         * inliers and which ones aren't.
-         * @param residuals residuals obtained for each sample of data.
-         * @param numInliers number of inliers found on current iteration.
-         */
-        protected void update(BitSet inliers, double[] residuals, 
-                int numInliers) {
-<span class="fc" id="L535">            int totalSamples = 0;</span>
-<span class="pc bpc" id="L536" title="1 of 2 branches missed.">            if (inliers != null) {</span>
-<span class="fc" id="L537">                totalSamples = inliers.length();</span>
-            }
-<span class="pc bpc" id="L539" title="1 of 2 branches missed.">            if (residuals != null) {</span>
-<span class="fc" id="L540">               totalSamples = residuals.length; </span>
-            }
-            
-<span class="pc bpc" id="L543" title="4 of 8 branches missed.">            if(mInliers != null &amp;&amp; inliers != null &amp;&amp; mResiduals != null &amp;&amp; </span>
-                    residuals != null) {
-                //update inliers and residuals
-<span class="fc bfc" id="L546" title="All 2 branches covered.">                for (int i = 0; i &lt; totalSamples; i++) {</span>
-<span class="fc" id="L547">                    mInliers.set(i, inliers.get(i));</span>
-<span class="fc" id="L548">                    mResiduals[i] = residuals[i];</span>
-                }
-<span class="nc bnc" id="L550" title="All 4 branches missed.">            } else if (mInliers != null &amp;&amp; inliers != null) {</span>
-                //update inliers but not the residuals
-<span class="nc bnc" id="L552" title="All 2 branches missed.">                for (int i = 0; i &lt; totalSamples; i++) {</span>
-<span class="nc" id="L553">                    mInliers.set(i, inliers.get(i));</span>
-                }
-<span class="nc bnc" id="L555" title="All 4 branches missed.">            } else if (mResiduals != null &amp;&amp; residuals != null) {</span>
-                //update residuals but not inliers
-<span class="nc" id="L557">                System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);</span>
-            }
-<span class="fc" id="L559">            mNumInliers = numInliers;</span>
-<span class="fc" id="L560">        }</span>
 
         /**
          * Returns efficient array indicating which samples are considered 
@@ -567,8 +531,44 @@ public class RANSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          */        
         @Override
         public BitSet getInliers() {
-<span class="fc" id="L570">            return mInliers;</span>
-        }        
+<span class="fc" id="L534">            return mInliers;</span>
+        }
+
+        /**
+         * Updates data contained in this instance.
+         * @param inliers efficiently stores which samples are considered
+         * inliers and which ones aren't.
+         * @param residuals residuals obtained for each sample of data.
+         * @param numInliers number of inliers found on current iteration.
+         */
+        protected void update(BitSet inliers, double[] residuals,
+                              int numInliers) {
+<span class="fc" id="L546">            int totalSamples = 0;</span>
+<span class="pc bpc" id="L547" title="1 of 2 branches missed.">            if (inliers != null) {</span>
+<span class="fc" id="L548">                totalSamples = inliers.length();</span>
+            }
+<span class="pc bpc" id="L550" title="1 of 2 branches missed.">            if (residuals != null) {</span>
+<span class="fc" id="L551">                totalSamples = residuals.length;</span>
+            }
+
+<span class="pc bpc" id="L554" title="4 of 8 branches missed.">            if(mInliers != null &amp;&amp; inliers != null &amp;&amp; mResiduals != null &amp;&amp;</span>
+                    residuals != null) {
+                //update inliers and residuals
+<span class="fc bfc" id="L557" title="All 2 branches covered.">                for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc" id="L558">                    mInliers.set(i, inliers.get(i));</span>
+<span class="fc" id="L559">                    mResiduals[i] = residuals[i];</span>
+                }
+<span class="nc bnc" id="L561" title="All 4 branches missed.">            } else if (mInliers != null &amp;&amp; inliers != null) {</span>
+                //update inliers but not the residuals
+<span class="nc bnc" id="L563" title="All 2 branches missed.">                for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="nc" id="L564">                    mInliers.set(i, inliers.get(i));</span>
+                }
+<span class="nc bnc" id="L566" title="All 4 branches missed.">            } else if (mResiduals != null &amp;&amp; residuals != null) {</span>
+                //update residuals but not inliers
+<span class="nc" id="L568">                System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);</span>
+            }
+<span class="fc" id="L570">            mNumInliers = numInliers;</span>
+<span class="fc" id="L571">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

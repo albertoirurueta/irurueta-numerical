@@ -491,10 +491,9 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than minimum required number of evaluations.
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         //quality scores ignored
-<span class="fc" id="L497">    }</span>
+<span class="fc" id="L496">    }</span>
     
     /**
      * Estimates polynomial.
@@ -520,7 +519,7 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      */
     public static PolynomialRobustEstimator create() {
-<span class="fc" id="L523">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L522">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -531,7 +530,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialRobustEstimator create(int degree) {
-<span class="fc" id="L534">        return create(degree, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L533">        return create(degree, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -542,7 +541,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(
             List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L545">        return create(evaluations, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L544">        return create(evaluations, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -554,7 +553,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(
             PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L557">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L556">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -567,7 +566,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(int degree,
             List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L570">        return create(degree, evaluations, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L569">        return create(degree, evaluations, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -581,7 +580,7 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(int degree,
             PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L584">        return create(degree, listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L583">        return create(degree, listener, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -595,7 +594,7 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(
             List&lt;PolynomialEvaluation&gt; evaluations, 
             PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L598">        return create(evaluations, listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L597">        return create(evaluations, listener, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -611,7 +610,7 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(int degree,
             List&lt;PolynomialEvaluation&gt; evaluations, 
             PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L614">        return create(degree, evaluations, listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L613">        return create(degree, evaluations, listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -621,18 +620,18 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L624" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L623" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L626">                return new RANSACPolynomialRobustEstimator();</span>
+<span class="fc" id="L625">                return new RANSACPolynomialRobustEstimator();</span>
             case LMedS:
-<span class="fc" id="L628">                return new LMedSPolynomialRobustEstimator();</span>
+<span class="fc" id="L627">                return new LMedSPolynomialRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L630">                return new MSACPolynomialRobustEstimator();</span>
+<span class="fc" id="L629">                return new MSACPolynomialRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L632">                return new PROMedSPolynomialRobustEstimator();</span>
+<span class="fc" id="L631">                return new PROMedSPolynomialRobustEstimator();</span>
             case PROSAC:
             default:
-<span class="fc" id="L635">                return new PROSACPolynomialRobustEstimator();</span>
+<span class="fc" id="L634">                return new PROSACPolynomialRobustEstimator();</span>
         }
     }
     
@@ -645,18 +644,18 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(int degree,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L648" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L647" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L650">                return new RANSACPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L649">                return new RANSACPolynomialRobustEstimator(degree);</span>
             case LMedS:
-<span class="fc" id="L652">                return new LMedSPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L651">                return new LMedSPolynomialRobustEstimator(degree);</span>
             case MSAC:
-<span class="fc" id="L654">                return new MSACPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L653">                return new MSACPolynomialRobustEstimator(degree);</span>
             case PROMedS:
-<span class="fc" id="L656">                return new PROMedSPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L655">                return new PROMedSPolynomialRobustEstimator(degree);</span>
             case PROSAC:
             default:
-<span class="fc" id="L659">                return new PROSACPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L658">                return new PROSACPolynomialRobustEstimator(degree);</span>
         }
     }
 
@@ -670,18 +669,18 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(
             List&lt;PolynomialEvaluation&gt; evaluations, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L673" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L672" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L675">                return new RANSACPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L674">                return new RANSACPolynomialRobustEstimator(evaluations);</span>
             case LMedS:
-<span class="fc" id="L677">                return new LMedSPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L676">                return new LMedSPolynomialRobustEstimator(evaluations);</span>
             case MSAC:
-<span class="fc" id="L679">                return new MSACPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L678">                return new MSACPolynomialRobustEstimator(evaluations);</span>
             case PROMedS:
-<span class="fc" id="L681">                return new PROMedSPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L680">                return new PROMedSPolynomialRobustEstimator(evaluations);</span>
             case PROSAC:
             default:
-<span class="fc" id="L684">                return new PROSACPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L683">                return new PROSACPolynomialRobustEstimator(evaluations);</span>
         }
     }
 
@@ -695,18 +694,18 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(
             PolynomialRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L698" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L697" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L700">                return new RANSACPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L699">                return new RANSACPolynomialRobustEstimator(listener);</span>
             case LMedS:
-<span class="fc" id="L702">                return new LMedSPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L701">                return new LMedSPolynomialRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L704">                return new MSACPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L703">                return new MSACPolynomialRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L706">                return new PROMedSPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L705">                return new PROMedSPolynomialRobustEstimator(listener);</span>
             case PROSAC:
             default:
-<span class="fc" id="L709">                return new PROSACPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L708">                return new PROSACPolynomialRobustEstimator(listener);</span>
         }
     }
 
@@ -722,19 +721,19 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(int degree,
             List&lt;PolynomialEvaluation&gt; evaluations,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L725" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L724" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L727">                return new RANSACPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L726">                return new RANSACPolynomialRobustEstimator(degree, evaluations);</span>
             case LMedS:
-<span class="fc" id="L729">                return new LMedSPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L728">                return new LMedSPolynomialRobustEstimator(degree, evaluations);</span>
             case MSAC:
-<span class="fc" id="L731">                return new MSACPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L730">                return new MSACPolynomialRobustEstimator(degree, evaluations);</span>
             case PROMedS:
-<span class="fc" id="L733">                return new PROMedSPolynomialRobustEstimator(degree, </span>
+<span class="fc" id="L732">                return new PROMedSPolynomialRobustEstimator(degree, </span>
                         evaluations);
             case PROSAC:
             default:
-<span class="fc" id="L737">                return new PROSACPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L736">                return new PROSACPolynomialRobustEstimator(degree, evaluations);</span>
         }
     }
     
@@ -751,18 +750,18 @@ public abstract class PolynomialRobustEstimator {
     public static PolynomialRobustEstimator create(int degree,
             PolynomialRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L754" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L753" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L756">                return new RANSACPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L755">                return new RANSACPolynomialRobustEstimator(degree, listener);</span>
             case LMedS:
-<span class="fc" id="L758">                return new LMedSPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L757">                return new LMedSPolynomialRobustEstimator(degree, listener);</span>
             case MSAC:
-<span class="fc" id="L760">                return new MSACPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L759">                return new MSACPolynomialRobustEstimator(degree, listener);</span>
             case PROMedS:
-<span class="fc" id="L762">                return new PROMedSPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L761">                return new PROMedSPolynomialRobustEstimator(degree, listener);</span>
             case PROSAC:
             default:
-<span class="fc" id="L765">                return new PROSACPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L764">                return new PROSACPolynomialRobustEstimator(degree, listener);</span>
         }
     }
 
@@ -779,21 +778,21 @@ public abstract class PolynomialRobustEstimator {
             List&lt;PolynomialEvaluation&gt; evaluations, 
             PolynomialRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L782" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L781" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L784">                return new RANSACPolynomialRobustEstimator(evaluations, </span>
+<span class="fc" id="L783">                return new RANSACPolynomialRobustEstimator(evaluations, </span>
                         listener);
             case LMedS:
-<span class="fc" id="L787">                return new LMedSPolynomialRobustEstimator(evaluations, </span>
+<span class="fc" id="L786">                return new LMedSPolynomialRobustEstimator(evaluations, </span>
                         listener);
             case MSAC:
-<span class="fc" id="L790">                return new MSACPolynomialRobustEstimator(evaluations, listener);</span>
+<span class="fc" id="L789">                return new MSACPolynomialRobustEstimator(evaluations, listener);</span>
             case PROMedS:
-<span class="fc" id="L792">                return new PROMedSPolynomialRobustEstimator(evaluations, </span>
+<span class="fc" id="L791">                return new PROMedSPolynomialRobustEstimator(evaluations, </span>
                         listener);
             case PROSAC:
             default:
-<span class="fc" id="L796">                return new PROSACPolynomialRobustEstimator(evaluations, </span>
+<span class="fc" id="L795">                return new PROSACPolynomialRobustEstimator(evaluations, </span>
                         listener);
         }
     }
@@ -813,22 +812,22 @@ public abstract class PolynomialRobustEstimator {
             List&lt;PolynomialEvaluation&gt; evaluations, 
             PolynomialRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L816" title="All 5 branches covered.">        switch(method) {</span>
+<span class="fc bfc" id="L815" title="All 5 branches covered.">        switch(method) {</span>
             case RANSAC:
-<span class="fc" id="L818">                return new RANSACPolynomialRobustEstimator(degree, evaluations, </span>
+<span class="fc" id="L817">                return new RANSACPolynomialRobustEstimator(degree, evaluations, </span>
                         listener);
             case LMedS:
-<span class="fc" id="L821">                return new LMedSPolynomialRobustEstimator(degree, evaluations,</span>
+<span class="fc" id="L820">                return new LMedSPolynomialRobustEstimator(degree, evaluations,</span>
                         listener);
             case MSAC:
-<span class="fc" id="L824">                return new MSACPolynomialRobustEstimator(degree, evaluations, </span>
+<span class="fc" id="L823">                return new MSACPolynomialRobustEstimator(degree, evaluations, </span>
                         listener);
             case PROMedS:
-<span class="fc" id="L827">                return new PROMedSPolynomialRobustEstimator(degree, evaluations,</span>
+<span class="fc" id="L826">                return new PROMedSPolynomialRobustEstimator(degree, evaluations,</span>
                         listener);
             case PROSAC:
             default:
-<span class="fc" id="L831">                return new PROSACPolynomialRobustEstimator(degree, evaluations,</span>
+<span class="fc" id="L830">                return new PROSACPolynomialRobustEstimator(degree, evaluations,</span>
                         listener);
         }
     }
@@ -842,10 +841,10 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getDistance(PolynomialEvaluation eval, 
             Polynomial polynomial) {
-<span class="fc bfc" id="L845" title="All 2 branches covered.">        if(mUseGeometricDistance) {</span>
-<span class="fc" id="L846">            return getGeometricOrAlgebraicDistance(eval, polynomial);</span>
+<span class="fc bfc" id="L844" title="All 2 branches covered.">        if(mUseGeometricDistance) {</span>
+<span class="fc" id="L845">            return getGeometricOrAlgebraicDistance(eval, polynomial);</span>
         } else {
-<span class="fc" id="L848">            return getAlgebraicDistance(eval, polynomial);</span>
+<span class="fc" id="L847">            return getAlgebraicDistance(eval, polynomial);</span>
         }
     }
     
@@ -857,21 +856,21 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getAlgebraicDistance(PolynomialEvaluation eval, 
             Polynomial polynomial) {
-<span class="pc bpc" id="L860" title="1 of 5 branches missed.">        switch(eval.getType()) {</span>
+<span class="pc bpc" id="L859" title="1 of 5 branches missed.">        switch(eval.getType()) {</span>
             case DIRECT_EVALUATION:
-<span class="fc" id="L862">                return getAlgebraicDistance((DirectPolynomialEvaluation)eval, </span>
+<span class="fc" id="L861">                return getAlgebraicDistance((DirectPolynomialEvaluation)eval, </span>
                         polynomial);
             case DERIVATIVE_EVALUATION:
-<span class="fc" id="L865">                return getAlgebraicDistance(</span>
+<span class="fc" id="L864">                return getAlgebraicDistance(</span>
                         (DerivativePolynomialEvaluation)eval, polynomial);
             case INTEGRAL_EVALUATION:
-<span class="fc" id="L868">                return getAlgebraicDistance((IntegralPolynomialEvaluation)eval,</span>
+<span class="fc" id="L867">                return getAlgebraicDistance((IntegralPolynomialEvaluation)eval,</span>
                         polynomial);
             case INTEGRAL_INTERVAL:
-<span class="fc" id="L871">                return getAlgebraicDistance(</span>
+<span class="fc" id="L870">                return getAlgebraicDistance(</span>
                         (IntegralIntervalPolynomialEvaluation)eval, polynomial);
             default:
-<span class="nc" id="L874">                return Double.MAX_VALUE;</span>
+<span class="nc" id="L873">                return Double.MAX_VALUE;</span>
         }
     }
     
@@ -884,10 +883,10 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getAlgebraicDistance(DirectPolynomialEvaluation eval, 
             Polynomial polynomial) {
-<span class="fc" id="L887">        double x = eval.getX();</span>
-<span class="fc" id="L888">        double y1 = eval.getEvaluation();</span>
-<span class="fc" id="L889">        double y2 = polynomial.evaluate(x);</span>
-<span class="fc" id="L890">        return Math.abs(y2 - y1);</span>
+<span class="fc" id="L886">        double x = eval.getX();</span>
+<span class="fc" id="L887">        double y1 = eval.getEvaluation();</span>
+<span class="fc" id="L888">        double y2 = polynomial.evaluate(x);</span>
+<span class="fc" id="L889">        return Math.abs(y2 - y1);</span>
     }
     
     /**
@@ -899,11 +898,11 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getAlgebraicDistance(DerivativePolynomialEvaluation eval,
             Polynomial polynomial) {
-<span class="fc" id="L902">        double x = eval.getX();</span>
-<span class="fc" id="L903">        int order = eval.getDerivativeOrder();</span>
-<span class="fc" id="L904">        double d1 = eval.getEvaluation();</span>
-<span class="fc" id="L905">        double d2 = polynomial.evaluateNthDerivative(x, order);</span>
-<span class="fc" id="L906">        return Math.abs(d2 - d1);</span>
+<span class="fc" id="L901">        double x = eval.getX();</span>
+<span class="fc" id="L902">        int order = eval.getDerivativeOrder();</span>
+<span class="fc" id="L903">        double d1 = eval.getEvaluation();</span>
+<span class="fc" id="L904">        double d2 = polynomial.evaluateNthDerivative(x, order);</span>
+<span class="fc" id="L905">        return Math.abs(d2 - d1);</span>
     }
     
     /**
@@ -915,13 +914,13 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getAlgebraicDistance(IntegralPolynomialEvaluation eval,
             Polynomial polynomial) {
-<span class="fc" id="L918">        double x = eval.getX();</span>
-<span class="fc" id="L919">        int order = eval.getIntegralOrder();</span>
-<span class="fc" id="L920">        double[] constants = eval.getConstants();</span>
-<span class="fc" id="L921">        double i1 = eval.getEvaluation();</span>
-<span class="fc" id="L922">        double i2 = polynomial.nthIntegrationAndReturnNew(order, constants).</span>
-<span class="fc" id="L923">                evaluate(x);</span>
-<span class="fc" id="L924">        return Math.abs(i2 - i1);</span>
+<span class="fc" id="L917">        double x = eval.getX();</span>
+<span class="fc" id="L918">        int order = eval.getIntegralOrder();</span>
+<span class="fc" id="L919">        double[] constants = eval.getConstants();</span>
+<span class="fc" id="L920">        double i1 = eval.getEvaluation();</span>
+<span class="fc" id="L921">        double i2 = polynomial.nthIntegrationAndReturnNew(order, constants).</span>
+<span class="fc" id="L922">                evaluate(x);</span>
+<span class="fc" id="L923">        return Math.abs(i2 - i1);</span>
     }
     
     /**
@@ -933,14 +932,14 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getAlgebraicDistance(
             IntegralIntervalPolynomialEvaluation eval, Polynomial polynomial) {
-<span class="fc" id="L936">        double startX = eval.getStartX();</span>
-<span class="fc" id="L937">        double endX = eval.getEndX();</span>
-<span class="fc" id="L938">        int order = eval.getIntegralOrder();</span>
-<span class="fc" id="L939">        double[] constants = eval.getConstants();</span>
-<span class="fc" id="L940">        double i1 = eval.getEvaluation();</span>
-<span class="fc" id="L941">        double i2 = polynomial.nthOrderIntegrateInterval(startX, endX, order, </span>
+<span class="fc" id="L935">        double startX = eval.getStartX();</span>
+<span class="fc" id="L936">        double endX = eval.getEndX();</span>
+<span class="fc" id="L937">        int order = eval.getIntegralOrder();</span>
+<span class="fc" id="L938">        double[] constants = eval.getConstants();</span>
+<span class="fc" id="L939">        double i1 = eval.getEvaluation();</span>
+<span class="fc" id="L940">        double i2 = polynomial.nthOrderIntegrateInterval(startX, endX, order, </span>
                 constants);
-<span class="fc" id="L943">        return Math.abs(i2 - i1);</span>
+<span class="fc" id="L942">        return Math.abs(i2 - i1);</span>
     }
     
     /**
@@ -954,11 +953,11 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getGeometricOrAlgebraicDistance(PolynomialEvaluation eval, 
             Polynomial polynomial) {
-<span class="fc bfc" id="L957" title="All 2 branches covered.">        if(eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION) {</span>
-<span class="fc" id="L958">            return getGeometricDistance((DirectPolynomialEvaluation)eval, </span>
+<span class="fc bfc" id="L956" title="All 2 branches covered.">        if(eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION) {</span>
+<span class="fc" id="L957">            return getGeometricDistance((DirectPolynomialEvaluation)eval, </span>
                     polynomial);
         } else {
-<span class="fc" id="L961">            return getAlgebraicDistance(eval, polynomial);</span>
+<span class="fc" id="L960">            return getAlgebraicDistance(eval, polynomial);</span>
         }
     }
     
@@ -972,28 +971,28 @@ public abstract class PolynomialRobustEstimator {
      */
     protected double getGeometricDistance(DirectPolynomialEvaluation eval, 
             Polynomial polynomial) {
-<span class="fc" id="L975">        double x = eval.getX();</span>
-<span class="fc" id="L976">        double y1 = eval.getEvaluation();</span>
-<span class="fc" id="L977">        double y2 = polynomial.evaluate(x);</span>
+<span class="fc" id="L974">        double x = eval.getX();</span>
+<span class="fc" id="L975">        double y1 = eval.getEvaluation();</span>
+<span class="fc" id="L976">        double y2 = polynomial.evaluate(x);</span>
         
-<span class="fc" id="L979">        double slope = polynomial.evaluateDerivative(x);</span>
+<span class="fc" id="L978">        double slope = polynomial.evaluateDerivative(x);</span>
         double a;
         double b;
         double c;
-<span class="fc bfc" id="L983" title="All 2 branches covered.">        if (Math.abs(slope) &gt; 1.0) {</span>
-<span class="fc" id="L984">            a = 1.0;</span>
-<span class="fc" id="L985">            b = -1.0 / slope;</span>
-<span class="fc" id="L986">            c = -x + y2/slope;</span>
+<span class="fc bfc" id="L982" title="All 2 branches covered.">        if (Math.abs(slope) &gt; 1.0) {</span>
+<span class="fc" id="L983">            a = 1.0;</span>
+<span class="fc" id="L984">            b = -1.0 / slope;</span>
+<span class="fc" id="L985">            c = -x + y2/slope;</span>
         } else {
-<span class="fc" id="L988">            a = -slope;</span>
-<span class="fc" id="L989">            b = 1.0;</span>
-<span class="fc" id="L990">            c = slope*x - y2;</span>
+<span class="fc" id="L987">            a = -slope;</span>
+<span class="fc" id="L988">            b = 1.0;</span>
+<span class="fc" id="L989">            c = slope*x - y2;</span>
         }
         
-<span class="fc" id="L993">        double num = x*a + y1*b + c;</span>
-<span class="fc" id="L994">        double den = Math.sqrt(a*a + b*b);</span>
+<span class="fc" id="L992">        double num = x*a + y1*b + c;</span>
+<span class="fc" id="L993">        double den = Math.sqrt(a*a + b*b);</span>
         
-<span class="fc" id="L996">        return Math.abs(num / den);              </span>
+<span class="fc" id="L995">        return Math.abs(num / den);              </span>
     }
     
     /**
@@ -1004,11 +1003,11 @@ public abstract class PolynomialRobustEstimator {
      * or too small.
      */
     private void internalSetEvaluations(List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc bfc" id="L1007" title="All 2 branches covered.">        if (evaluations == null || </span>
-<span class="fc bfc" id="L1008" title="All 2 branches covered.">                evaluations.size() &lt; getMinNumberOfEvaluations()) {</span>
-<span class="fc" id="L1009">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1006" title="All 2 branches covered.">        if (evaluations == null || </span>
+<span class="fc bfc" id="L1007" title="All 2 branches covered.">                evaluations.size() &lt; getMinNumberOfEvaluations()) {</span>
+<span class="fc" id="L1008">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L1011">        mEvaluations = evaluations;</span>
-<span class="fc" id="L1012">    }    </span>
+<span class="fc" id="L1010">        mEvaluations = evaluations;</span>
+<span class="fc" id="L1011">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -147,8 +147,8 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * @throws LockedException if this estimator is locked because an estimation</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">     * is being computed</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setProgressDelta(<strong class="jxr_keyword">float</strong> progressDelta) 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>             <strong class="jxr_keyword">throws</strong> IllegalArgumentException, <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     @SuppressWarnings(<span class="jxr_string">"Duplicates"</span>)
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setProgressDelta(<strong class="jxr_keyword">float</strong> progressDelta) <strong class="jxr_keyword">throws</strong> LockedException {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         }

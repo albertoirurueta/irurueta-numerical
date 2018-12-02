@@ -44,7 +44,7 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero
      * or negative.
      */
-<span class="fc" id="L47">    public SubsetSelector(int numSamples) throws IllegalArgumentException {</span>
+<span class="fc" id="L47">    public SubsetSelector(int numSamples) {</span>
 <span class="fc" id="L48">        setNumSamples(numSamples);</span>
 <span class="fc" id="L49">    }</span>
     
@@ -62,13 +62,12 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero or
      * negative.
      */
-    public final void setNumSamples(int numSamples) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (numSamples &lt; MIN_NUM_SAMPLES) {</span>
-<span class="fc" id="L68">            throw new IllegalArgumentException();</span>
+    public final void setNumSamples(int numSamples) {
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (numSamples &lt; MIN_NUM_SAMPLES) {</span>
+<span class="fc" id="L67">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L70">        mNumSamples = numSamples;        </span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L69">        mNumSamples = numSamples;        </span>
+<span class="fc" id="L70">    }</span>
     
     /**
      * Computes a random subset of indices within range of number of samples to
@@ -87,9 +86,9 @@ public abstract class SubsetSelector {
      */
     public int[] computeRandomSubsets(int subsetSize) 
             throws NotEnoughSamplesException, InvalidSubsetSizeException {
-<span class="fc" id="L90">        int[] result = new int[subsetSize];</span>
-<span class="fc" id="L91">        computeRandomSubsets(subsetSize, result);</span>
-<span class="fc" id="L92">        return result;</span>
+<span class="fc" id="L89">        int[] result = new int[subsetSize];</span>
+<span class="fc" id="L90">        computeRandomSubsets(subsetSize, result);</span>
+<span class="fc" id="L91">        return result;</span>
     }
     
     /**
@@ -122,10 +121,10 @@ public abstract class SubsetSelector {
             int subsetSize, boolean pickLast) 
             throws NotEnoughSamplesException, InvalidSubsetSizeException, 
             InvalidSubsetRangeException {
-<span class="fc" id="L125">        int[] result = new int[subsetSize];</span>
-<span class="fc" id="L126">        computeRandomSubsetsInRange(minPos, maxPos, subsetSize, pickLast, </span>
+<span class="fc" id="L124">        int[] result = new int[subsetSize];</span>
+<span class="fc" id="L125">        computeRandomSubsetsInRange(minPos, maxPos, subsetSize, pickLast, </span>
                 result);
-<span class="fc" id="L128">        return result;</span>
+<span class="fc" id="L127">        return result;</span>
     }
     
     /**
@@ -191,11 +190,11 @@ public abstract class SubsetSelector {
      * or negative.
      */
     public static SubsetSelector create(int numSamples, 
-            SubsetSelectorType type) throws IllegalArgumentException {
-<span class="fc" id="L195">        switch (type) {</span>
+            SubsetSelectorType type) {
+<span class="fc" id="L194">        switch (type) {</span>
             case FAST_RANDOM_SUBSET_SELECTOR:
             default:
-<span class="fc" id="L198">                return new FastRandomSubsetSelector(numSamples);</span>
+<span class="fc" id="L197">                return new FastRandomSubsetSelector(numSamples);</span>
         }
     }
     
@@ -207,9 +206,8 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero or
      * negative.
      */
-    public static SubsetSelector create(int numSamples) 
-            throws IllegalArgumentException {
-<span class="fc" id="L212">        return create(numSamples, DEFAULT_SUBSET_SELECTOR_TYPE);</span>
+    public static SubsetSelector create(int numSamples) {
+<span class="fc" id="L210">        return create(numSamples, DEFAULT_SUBSET_SELECTOR_TYPE);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

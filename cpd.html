@@ -744,88 +744,12 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L718">718</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L735">735</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
-<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L702">702</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>	    }
-
-        //fill in the symmetric side
-	    for (j = 1; j &lt; mfit; j++) {
-            for (k = 0; k &lt; j; k++) {
-                alpha.setElementAt(k, j, alpha.getElementAt(j, k));
-            }
-        }
-    }
-
-    /**
-     * Expand in storage the covariance matrix covar, so as to take into account
-     * parameters that are being held fixed. (For the latter, return zero 
-     * covariances).
-     * @param covar covariance matrix.
-     */
-    private void covsrt(Matrix covar) {
-	    int i;
-	    int j;
-	    int k;
-	    for (i = mfit; i &lt; ma; i++) {
-            for (j = 0; j &lt; i + 1; j++) {
-                covar.setElementAt(i, j, 0.0);
-                covar.setElementAt(j, i, 0.0);
-            }
-        }
-
-	    k = mfit - 1;
-	    for (j = ma - 1; j &gt;= 0; j--) {
-            if (ia[j]) {
-                double[] buffer = covar.getBuffer();
-        		for (i = 0; i &lt; ma; i++) {
-                    int pos1 = covar.getIndex(i, k);
-                    int pos2 = covar.getIndex(i, j);
-                    swap(buffer, buffer, pos1, pos2);
-                }
-		        for (i = 0; i &lt; ma; i++) {
-                    int pos1 = covar.getIndex(k, i);
-                    int pos2 = covar.getIndex(j, i);
-                    swap(buffer, buffer, pos1, pos2);
-                }
-
-		        k--;
-            }
-	    }
-    }
-    
-    /**
-     * Swaps values of arrays at provided positions.
-     * @param array1 1st array.
-     * @param array2 2nd array.
-     * @param pos1 1st position.
-     * @param pos2 2nd position.
-     */
-    private void swap(double[] array1, double[] array2, int pos1, int pos2) {
-        double value1 = array1[pos1];
-        double value2 = array2[pos2];
-        array1[pos1] = value2;
-        array2[pos2] = value1;
-    }        
-}</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L1059">1059</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L876">876</a></td></tr>
-<tr class="b"><td colspan='2'>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L871">871</a></td></tr>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    }
     
@@ -914,7 +838,88 @@ com.irurueta:irurueta-numerical
      * @param beta beta value.
      * @return i-m.
      */
-    private static int imin(int subsetSize, int sampleSize, double beta) {</pre></div></td></tr></table>
+    private static int imin(int subsetSize, int sampleSize, double beta) {
+        double mu = sampleSize * beta;
+        double sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
+        
+        return (int)Math.ceil(subsetSize + mu + sigma * Math.sqrt(CHI_SQUARED));
+    } </pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFitter.html#L718">718</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtMultiVariateFitter.html#L735">735</a></td></tr>
+<tr class="a">
+<td>com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java</td>
+<td><a href="./xref/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html#L702">702</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>	    }
+
+        //fill in the symmetric side
+	    for (j = 1; j &lt; mfit; j++) {
+            for (k = 0; k &lt; j; k++) {
+                alpha.setElementAt(k, j, alpha.getElementAt(j, k));
+            }
+        }
+    }
+
+    /**
+     * Expand in storage the covariance matrix covar, so as to take into account
+     * parameters that are being held fixed. (For the latter, return zero 
+     * covariances).
+     * @param covar covariance matrix.
+     */
+    private void covsrt(Matrix covar) {
+	    int i;
+	    int j;
+	    int k;
+	    for (i = mfit; i &lt; ma; i++) {
+            for (j = 0; j &lt; i + 1; j++) {
+                covar.setElementAt(i, j, 0.0);
+                covar.setElementAt(j, i, 0.0);
+            }
+        }
+
+	    k = mfit - 1;
+	    for (j = ma - 1; j &gt;= 0; j--) {
+            if (ia[j]) {
+                double[] buffer = covar.getBuffer();
+        		for (i = 0; i &lt; ma; i++) {
+                    int pos1 = covar.getIndex(i, k);
+                    int pos2 = covar.getIndex(i, j);
+                    swap(buffer, buffer, pos1, pos2);
+                }
+		        for (i = 0; i &lt; ma; i++) {
+                    int pos1 = covar.getIndex(k, i);
+                    int pos2 = covar.getIndex(j, i);
+                    swap(buffer, buffer, pos1, pos2);
+                }
+
+		        k--;
+            }
+	    }
+    }
+    
+    /**
+     * Swaps values of arrays at provided positions.
+     * @param array1 1st array.
+     * @param array2 2nd array.
+     * @param pos1 1st position.
+     * @param pos2 2nd position.
+     */
+    private void swap(double[] array1, double[] array2, int pos1, int pos2) {
+        double value1 = array1[pos1];
+        double value2 = array2[pos2];
+        array1[pos1] = value2;
+        array2[pos2] = value1;
+    }        
+}</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -968,7 +973,7 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L982">982</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L977">977</a></td></tr>
 <tr class="a">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L515">515</a></td></tr>
@@ -984,7 +989,18 @@ com.irurueta:irurueta-numerical
             }
             mNumInliers = 0;
         }
-        
+
+        /**
+         * Returns efficient array indicating which samples are considered
+         * inliers and which ones aren't.
+         * @return array indicating which samples are considered inliers and
+         * which ones aren't.
+         */
+        @Override
+        public BitSet getInliers() {
+            return mInliers;
+        }
+
         /**
          * Updates data contained in this instance.
          * @param inliers efficiently stores which samples are considered
@@ -992,8 +1008,8 @@ com.irurueta:irurueta-numerical
          * @param residuals residuals obtained for each sample of data.
          * @param numInliers number of inliers found on current iteration.
          */
-        protected void update(BitSet inliers, double[] residuals, 
-                int numInliers) {
+        protected void update(BitSet inliers, double[] residuals,
+                              int numInliers) {
             int totalSamples = 0;
             if (inliers != null) {
                 totalSamples = inliers.length();
@@ -1001,7 +1017,7 @@ com.irurueta:irurueta-numerical
             if (residuals != null) {
                 totalSamples = residuals.length;
             }
-            
+
             if (mInliers != null &amp;&amp; inliers != null &amp;&amp; mResiduals != null &amp;&amp;
                     residuals != null) {
                 //update inliers and residuals
@@ -1021,18 +1037,6 @@ com.irurueta:irurueta-numerical
             }
             mNumInliers = numInliers;
         }
-
-        /**
-         * Returns efficient array indicating which samples are considered
-         * inliers and which ones aren't.
-         * @return array indicating which samples are considered inliers and
-         * which ones aren't.
-         */
-        @Override
-        public BitSet getInliers() {
-            return mInliers;
-        }
-        
     }
 }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
@@ -1105,64 +1109,239 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L719">719</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L468">468</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L620">620</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L320">320</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
-<pre>            while (continueIteration) {
-                if (kNStar &gt; 0) {
-                    progress = Math.min((float)currentIter / (float)kNStar, 
-                            1.0f);
-                } else {
-                    progress = 1.0f;
-                }
-                if (progress - previousProgress &gt; mProgressDelta) {
-                    previousProgress = progress;
-                    listener.onEstimateProgressChange(this, progress);                    
-                }     
-                currentIter++;                
-                
-                //choice of the hypothesis generation set
-                
-                //The growth function is defined as
-                //g(t) = min{n : TnPrime &gt; t} where n is sampleSize
-                //Thus sampleSize should be incremented if currentIter &gt; TnPrime
-                if ((currentIter &gt; TnPrime) &amp;&amp; (sampleSize &lt; sampleSizeStar)) {
-                    double TnPlus1 = (Tn * (double)(sampleSize + 1)) /
-                            (double)(sampleSize + 1 - subsetSize);
-                    sampleSize++;
-                    TnPrime += (int)Math.ceil(TnPlus1 - Tn);
-                    Tn = TnPlus1;
-                }
-                
-                //Draw semi-random sample
-                if (currentIter &gt; TnPrime) {
-                    //during the finishing stage (sampleSize == sampleSizeStar &amp;&amp;
-                    //currentIter &gt; TnPrime), draw a standard RANSAC sample
-                    //The sample contains subsetSize points seleted from U_n at
-                    //random
-                    subsetSelector.computeRandomSubsets(subsetSize, 
-                            subsetIndices);
-                } else {
-                    //The sample contains subsetSize-1 points selected from
-                    //U_sampleSize_1 at random and u_sampleSize
-                    
-                    subsetSelector.computeRandomSubsetsInRange(0, sampleSize, 
-                            subsetSize, true, subsetIndices);
-                }
-                
-                transformIndices(subsetIndices, sortedIndices, 
-                        transformedSubsetIndices);
-                                
-                //clear list of preliminar solutions before calling listener
-                iterResults.clear();                 
-                //compute solution for current iteration
-                listener.estimatePreliminarSolutions(transformedSubsetIndices, 
-                        iterResults);
-                
-                int inliersCurrent; //total number of inliers for a</pre></div></td></tr></table>
+<pre>    }
+        
+    /**
+     * Returns maximum allowed outliers proportion in the input data. This is
+     * used to compute number of iterations to be done (nIters). It typically
+     * can be as high as 0.95. Higher values, up to 1 are possible but not
+     * recommended.
+     * In this implementation, PROSAC won't stop before having reached the 
+     * corresponding inliers rate on the complete data set.
+     * @return maximum allowed outliers proportion in the input data.
+     */
+    public double getMaxOutliersProportion() {
+        return mMaxOutliersProportion;
+    }
+    
+    /**
+     * Sets maximum allowed outliers proportion in the input data. This is used
+     * to compute number of iterations to be done (nIters). It typically can be
+     * as high as 0.95. Higher values, up to 1 are possible but not recommended.
+     * In this implementation, PROSAC won't stop before having reached the
+     * corresponding inliers rate on the complete data set.
+     * @param maxOutliersProportion maximum allowed outliers proportion in the
+     * input data.
+     * @throws IllegalArgumentException if provided value is less than 0.0 or
+     * greater than 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxOutliersProportion(double maxOutliersProportion) 
+            throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (maxOutliersProportion &lt; MIN_MAX_OUTLIERS_PROPORTION ||
+                maxOutliersProportion &gt; MAX_MAX_OUTLIERS_PROPORTION) {
+            throw new IllegalArgumentException();
+        }
+        
+        mMaxOutliersProportion = maxOutliersProportion;
+    }
+    
+    /**
+     * Return eta0, which is the maximum probability that a solution with more 
+     * than inliersNStar inliers in U_nStar exists and was not found after k
+     * samples (typically set to 5%).
+     * @return eta0 value.
+     */
+    public double getEta0() {
+        return mEta0;
+    }
+    
+    /**
+     * Sets eta0, which is the maximum probability that a solution with more 
+     * than inliersNStar inliers in U_nStar exists and was not found after k
+     * samples (typically set to 5%).
+     * @param eta0 eta0 value to be set.
+     * @throws IllegalArgumentException if provided value is less than 0.0 or
+     * greater than 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setEta0(double eta0) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (eta0 &lt; MIN_ETA0 || eta0 &gt; MAX_ETA0) {
+            throw new IllegalArgumentException();
+        }
+        
+        mEta0 = eta0;
+    }
+    
+    /**
+     * Returns beta, which is the probability that a match is declared inlier by 
+     * mistake, i.e. the ratio of the &quot;inlier&quot; surface by the total surface. The
+     * inlier surface is a disc with radius 1.96s for homography/displacement
+     * computation, or a band with width 1.96s*2 for epipolar geometry (s is
+     * the detection noise), and the total surface is the surface of the image
+     * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!
+     * @return beta value.
+     */
+    public double getBeta() {
+        return mBeta;
+    }
+    
+    /**
+     * Sets beta, which is the probability that a match is declared inlier by 
+     * mistake, i.e. the ratio of the &quot;inlier&quot; surface by the total surface. The
+     * inlier surface is a disc with radius 1.96s for homography/displacement
+     * computation, or a band with width 1.96s*2 for epipolar geometry (s is
+     * the detection noise), and the total surface is the surface of the image
+     * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!
+     * @param beta beta value to be set.
+     * @throws IllegalArgumentException if provided value is less than 0.0 or
+     * greater than 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setBeta(double beta) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (beta &lt; MIN_BETA || beta &gt; MAX_BETA) {
+            throw new IllegalArgumentException();
+        }
+        
+        mBeta = beta;
+    }
+    
+    /**
+     * Returns number of iterations to be done to obtain required confidence.
+     * This does not need to be equal to the actual number of iterations the
+     * algorithm finally required to obtain a solution.
+     * @return number of iterations to be done to obtain required confidence.
+     */
+    public int getNIters() {
+        return nIters;
+    }
+    
+    /**
+     * Returns best solution that has been found so far during an estimation.
+     * @return best solution that has been found so far during an estimation.
+     */
+    public T getBestResult() {
+        return bestResult;
+    }    </pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
+<td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L806">806</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L690">690</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>                            int sampleSizeBest = totalSamples; //best value found so
+                                                    //far in terms of inliers ration
+                            int inliersSampleSizeBest = inliersCurrent;
+
+                            int sampleSizeTest; //test value for the termination 
+                                                //length
+                            int inliersSampleSizeTest;  //number of inliers for that
+                                                        //test value
+                            double epsilonSampleSizeBest = 
+                                    (double)inliersSampleSizeBest /
+                                    (double)sampleSizeBest;
+
+                            for (sampleSizeTest = totalSamples, 
+                                    inliersSampleSizeTest = inliersCurrent; 
+                                    sampleSizeTest &gt; subsetSize; sampleSizeTest--) {
+                                //Loop invariants:
+                                //- inliersSampleSizeTest is the number of inliers 
+                                //  for the sampleSizeTest first correspondences
+                                //- sampleSizeBest is the value between 
+                                //  sampleSizeTest+1 and totalSamples that maximizes
+                                //  the ratio inliersSampleSizeBest/sampleSizeBest
+
+                                //- Non-randomness: In &gt;= imin(n*)
+                                //- Maximality: the number of samples that were drawn 
+                                //  so far must be enough so that the probability of
+                                //  having missed a set of inliers is below eta=0.01.
+                                //  This is the classical RANSAC termination criterion, 
+                                //  except that it takes into account only the 
+                                //  sampleSize first samples (not the total number 
+                                //  of samples)
+                                //  kNStar = log(eta0) / log(1 - (inliersNStar/
+                                //  sampleSizeStar)^subsetSize
+                                //  We have to minimize kNStar, e.g. maximize 
+                                //  inliersNStar/sampleSizeStar, a straightforward
+                                //  implementation would use the following test:
+                                //  if(inliersSampleSizeTest &gt; epsilonSampleSizeBest *
+                                //  sampleSizeTest){ ... blah blah blah
+                                //  However, since In is binomial, and in the case of
+                                //  evenly distributed inliers, a better test would be
+                                //  to reduce sampleSizeStar only if there's a 
+                                //  significant improvement in epsilon. Thus we use a
+                                //  Chi-squared test (P=0.10), together with the normal
+                                //  approximation to the binomial (mu = 
+                                //  epsilonSampleSizeStart * sampleSizeTest, sigma =
+                                //  sqrt(sampleSizeTest * epsilonSampleSizeStar * (1 -
+                                //  epsilonSampleSizeStar))).
+                                //  There is a significant difference between the two
+                                //  tests (e.g. with the computeInliers function 
+                                //  provided)
+                                //  We do the cheap test first, and the expensive test
+                                //  only if the cheap one passes
+                                if ((inliersSampleSizeTest * sampleSizeBest &gt; 
+                                        inliersSampleSizeBest * sampleSizeTest) &amp;&amp;
+                                        (inliersSampleSizeTest &gt; 
+                                        epsilonSampleSizeBest * sampleSizeTest +
+                                        Math.sqrt(sampleSizeTest * epsilonSampleSizeBest * 
+                                        (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
+
+                                    if (inliersSampleSizeTest &lt; 
+                                            imin(subsetSize, sampleSizeTest, mBeta)) {
+                                        //equation not satisfied, no need to test for
+                                        //smaller sampleSizeTest values anyway
+                                        break; //jump out of the for(sampleSizeTest) loop
+                                    }
+                                    sampleSizeBest = sampleSizeTest;
+                                    inliersSampleSizeBest = inliersSampleSizeTest;
+                                    epsilonSampleSizeBest = 
+                                            (double)inliersSampleSizeBest /
+                                            (double)sampleSizeBest;
+                                }
+
+                                //prepare for next loop iteration
+                                inliersSampleSizeTest -=
+                                        inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
+                            } //for (sampleSizeTest...
+
+                            //is the best one we found even better than sampleSizeStar?
+                            if (inliersSampleSizeBest * sampleSizeStar &gt;
+                                    inliersNStar * sampleSizeBest) {
+
+                                //update all values
+                                sampleSizeStar = sampleSizeBest;
+                                inliersNStar = inliersSampleSizeBest;
+                                kNStar = computeIterations((double)inliersNStar / 
+                                        (double)sampleSizeStar, subsetSize, 
+                                        1.0 - mEta0);
+                            }
+                        } //if(inliersCurrent &gt; inliersBest)                    
+                    }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -1266,104 +1445,11 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/numerical/roots/BrentSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/BrentSingleRootEstimator.html#L80">80</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L77">77</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>    public BrentSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
-        super(listener, minEvalPoint, maxEvalPoint);
-        internalSetTolerance(tolerance);
-    }
-     
-    /**
-     * Returns tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * the tolerance value.
-     * @return Tolerance value.
-     */
-    public double getTolerance() {
-        return tolerance;
-    }
-    
-    /**
-     * Internal method to set tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * This method does not check whether this instance is locked or not.
-     * @param tolerance Tolerance value.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance &lt; MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-
-    /**
-     * Sets tolerance value.
-     * Tolerance is the accuracy to be achieved when estimating a root.
-     * If a root is found by this class, it is ensured to have an accuracy below
-     * provided tolerance value.
-     * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
-     * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */
-    public void setTolerance(double tolerance) throws LockedException,
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * Estimates a local root for a given single dimension function being 
-     * evaluated by provided listener.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if either a listener has not
-     * yet been provided or a bracket has not been provided or computed.
-     * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */    
-    @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
-        
-        locked = true;
-        
-        double x1 = minEvalPoint;
-        double x2 = maxEvalPoint;
-        double tol = tolerance;</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.html#L209">209</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L443">443</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L442">442</a></td></tr>
 <tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.html#L396">396</a></td></tr>
@@ -1424,7 +1510,7 @@ com.irurueta:irurueta-numerical
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/MSACPolynomialRobustEstimator.html#L211">211</a></td></tr>
 <tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L445">445</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L444">444</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.html#L398">398</a></td></tr>
@@ -1476,105 +1562,6 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
-<td>com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.html#L81">81</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/roots/SecantSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L77">77</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>    public FalsePositionSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
-        super(listener, minEvalPoint, maxEvalPoint);
-        internalSetTolerance(tolerance);
-    }
-      
-    /**
-     * Returns tolerance to find a root. Whenever the variation of the estimated 
-     * root is smaller than returned tolerance, then the algorithm is assumed to
-     * be converged, and the estimated root is ensured to have an accuracy that 
-     * equals the returned tolerance.
-     * @return Tolerance to find a root.
-     */    
-    public double getTolerance() {
-        return tolerance;
-    }    
-    
-    /**
-     * Internal method to set tolerance to find a root. This method does not
-     * check whether this instance is locked.
-     * Whenever the variation of the estimated root is smaller than provided
-     * tolerance, then the algorithm is assumed to be converged, and the 
-     * estimated root is ensured to have an accuracy that equals provided 
-     * tolerance.
-     * @param tolerance Tolerance to find a root.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance &lt; MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
-    /**
-     * Sets tolerance to find a root. Whenever the variation of the estimated
-     * root is smaller than provided tolerance, then the algorithm is assumed to
-     * be converged, and the estimated root is ensured to have an accuracy that
-     * equals provided tolerance.
-     * @param tolerance Tolerance to find a root.
-     * @throws LockedException Raised if this instance is locked while doing
-     * some computations.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * Estimates a single root of the provided single dimension function 
-     * contained within a given bracket of values.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if not enough parameters have
-     * been provided in order to start the estimation.
-     * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */        
-    @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
-        
-        locked = true;
-        rootAvailable = false;
-        
-        try {
-            double[] v1 = new double[1];</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/BrentSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/BrentSingleRootEstimator.html#L80">80</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.html#L81">81</a></td></tr>
-<tr class="b">
 <td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L77">77</a></td></tr>
 <tr class="a">
@@ -1582,21 +1569,22 @@ com.irurueta:irurueta-numerical
 <td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L77">77</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
-<pre>    public BrentSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            double minEvalPoint, double maxEvalPoint, double tolerance)
-            throws InvalidBracketRangeException, IllegalArgumentException {
+<pre>    public RidderSingleRootEstimator(
+            SingleDimensionFunctionEvaluatorListener listener, 
+            double minEvalPoint, double maxEvalPoint,
+            double tolerance) throws InvalidBracketRangeException,
+            IllegalArgumentException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-     
+                   
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * the tolerance value.
      * @return Tolerance value.
-     */
+     */       
     public double getTolerance() {
         return tolerance;
     }
@@ -1610,7 +1598,7 @@ com.irurueta:irurueta-numerical
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */
+     */        
     private void internalSetTolerance(double tolerance) 
             throws IllegalArgumentException {
         if (tolerance &lt; MIN_TOLERANCE) {
@@ -1618,7 +1606,7 @@ com.irurueta:irurueta-numerical
         }
         this.tolerance = tolerance;
     }
-
+    
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -1628,7 +1616,7 @@ com.irurueta:irurueta-numerical
      * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */
+     */       
     public void setTolerance(double tolerance) throws LockedException,
             IllegalArgumentException {
         if (isLocked()) {
@@ -1647,7 +1635,7 @@ com.irurueta:irurueta-numerical
      * @throws RootEstimationException Raised if the root estimation failed for
      * some other reason (usually inability to evaluate the function, 
      * numerical instability or convergence problems, or no roots are found).
-     */    
+     */         
     @Override
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
@@ -1983,207 +1971,20 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/FalsePositionSingleRootEstimator.html#L85">85</a></td></tr>
-<tr class="b">
 <td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L103">103</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L105">105</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>com/irurueta/numerical/roots/SecantSingleRootEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/roots/SecantSingleRootEstimator.html#L81">81</a></td></tr>
-<tr class="a"><td colspan='2'>
+<tr class="b"><td colspan='2'>
 <div>
-<pre>        super(listener, minEvalPoint, maxEvalPoint);
+<pre>        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-      
-    /**
-     * Returns tolerance to find a root. Whenever the variation of the estimated 
-     * root is smaller than returned tolerance, then the algorithm is assumed to
-     * be converged, and the estimated root is ensured to have an accuracy that 
-     * equals the returned tolerance.
-     * @return Tolerance to find a root.
-     */    
-    public double getTolerance() {
-        return tolerance;
-    }    
-    
-    /**
-     * Internal method to set tolerance to find a root. This method does not
-     * check whether this instance is locked.
-     * Whenever the variation of the estimated root is smaller than provided
-     * tolerance, then the algorithm is assumed to be converged, and the 
-     * estimated root is ensured to have an accuracy that equals provided 
-     * tolerance.
-     * @param tolerance Tolerance to find a root.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative.
-     */    
-    private void internalSetTolerance(double tolerance) 
-            throws IllegalArgumentException {
-        if (tolerance &lt; MIN_TOLERANCE) {
-            throw new IllegalArgumentException();
-        }
-        this.tolerance = tolerance;
-    }
-    
-    /**
-     * Sets tolerance to find a root. Whenever the variation of the estimated
-     * root is smaller than provided tolerance, then the algorithm is assumed to
-     * be converged, and the estimated root is ensured to have an accuracy that
-     * equals provided tolerance.
-     * @param tolerance Tolerance to find a root.
-     * @throws LockedException Raised if this instance is locked while doing
-     * some computations.
-     * @throws IllegalArgumentException Raised if provided tolerance is negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException, 
-            IllegalArgumentException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        internalSetTolerance(tolerance);
-    }
-    
-    /**
-     * Estimates a single root of the provided single dimension function 
-     * contained within a given bracket of values.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if not enough parameters have
-     * been provided in order to start the estimation.
-     * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */        
-    @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (!isReady()) {
-            throw new NotReadyException();
-        }
         
-        locked = true;
-        rootAvailable = false;</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L254">254</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L151">151</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>        nIters = mMaxIterations;
-        bestResult = null;
-        mBestInliersData = null;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        
-    }
-    
-    /**
-     * Returns amount of confidence expressed as a value between 0 and 1.0 
-     * (which is equivalent to 100%). The amount of confidence indicates the
-     * probability that the estimated result is correct. Usually this value will
-     * be close to 1.0, but not exactly 1.0.
-     * @return  amount of confidence as a value between 0.0 and 1.0.
-     */
-    public double getConfidence() {
-        return mConfidence;
-    }
-
-    /**
-     * Sets amount of confidence expressed as a value between 0 and 1.0 (which 
-     * is equivalent to 100%). The amount of confidence indicates the 
-     * probability that the estimated result is correct. Usually this value will 
-     * be close to 1.0, but not exactly 1.0.
-     * @param confidence confidence to be set as a value between 0.0 and 1.0.
-     * @throws IllegalArgumentException if provided value is not between 0.0 and
-     * 1.0.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
-     */
-    public void setConfidence(double confidence) 
-            throws IllegalArgumentException, LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {
-            throw new IllegalArgumentException();
-        }
-        mConfidence = confidence;
-    }  
-    
-    /**
-     * Maximum allowed number of iterations. When the maximum number of 
-     * iterations is exceeded, result will not be available, however an 
-     * approximate result will be available for retrieval.
-     * @return maximum allowed number of iterations.
-     */
-    public int getMaxIterations() {
-        return mMaxIterations;
-    }
-    
-    /**
-     * Sets maximum allowed number of iterations. When the maximum number of 
-     * iterations is exceeded, result will not be available, however an 
-     * approximate result will be available for retrieval.
-     * @param maxIterations maximum allowed number of iterations to be set.
-     * @throws IllegalArgumentException if provided value is less than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
-     */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        if (maxIterations &lt; MIN_ITERATIONS) {
-            throw new IllegalArgumentException();
-        }
-        mMaxIterations = maxIterations;
-    }
-    
-    /**
-     * Returns maximum allowed outliers proportion in the input data. This is
-     * used to compute number of iterations to be done (nIters). It typically
-     * can be as high as 0.95. Higher values, up to 1 are possible but not
-     * recommended.
-     * In this implementation, PROSAC won't stop before having reached the 
-     * corresponding inliers rate on the complete data set.
-     * @return maximum allowed outliers proportion in the input data.
-     */
-    public double getMaxOutliersProportion() {</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/numerical/roots/BrentSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/BrentSingleRootEstimator.html#L84">84</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L103">103</a></td></tr>
-<tr class="a">
-<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L82">82</a></td></tr>
-<tr class="b">
-<td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L105">105</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>        super(listener, minEvalPoint, maxEvalPoint);
-        internalSetTolerance(tolerance);
-    }
-     
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -2194,7 +1995,7 @@ com.irurueta:irurueta-numerical
     public double getTolerance() {
         return tolerance;
     }
-    
+
     /**
      * Internal method to set tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -2204,7 +2005,7 @@ com.irurueta:irurueta-numerical
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */
+     */    
     private void internalSetTolerance(double tolerance) 
             throws IllegalArgumentException {
         if (tolerance &lt; MIN_TOLERANCE) {
@@ -2212,7 +2013,7 @@ com.irurueta:irurueta-numerical
         }
         this.tolerance = tolerance;
     }
-
+    
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
@@ -2222,7 +2023,7 @@ com.irurueta:irurueta-numerical
      * @throws LockedException Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
-     */
+     */    
     public void setTolerance(double tolerance) throws LockedException,
             IllegalArgumentException {
         if (isLocked()) {
@@ -2241,10 +2042,101 @@ com.irurueta:irurueta-numerical
      * @throws RootEstimationException Raised if the root estimation failed for
      * some other reason (usually inability to evaluate the function, 
      * numerical instability or convergence problems, or no roots are found).
-     */    
+     */        
     @Override
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
+        
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
+        
+        locked = true;
+        rootAvailable = false;</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/NewtonRaphsonSingleRootEstimator.html#L103">103</a></td></tr>
+<tr class="a">
+<td>com/irurueta/numerical/roots/RidderSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/RidderSingleRootEstimator.html#L82">82</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html#L105">105</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
+        internalSetTolerance(tolerance);
+    }
+        
+    /**
+     * Returns tolerance value.
+     * Tolerance is the accuracy to be achieved when estimating a root.
+     * If a root is found by this class, it is ensured to have an accuracy below
+     * the tolerance value.
+     * @return Tolerance value.
+     */
+    public double getTolerance() {
+        return tolerance;
+    }
+
+    /**
+     * Internal method to set tolerance value.
+     * Tolerance is the accuracy to be achieved when estimating a root.
+     * If a root is found by this class, it is ensured to have an accuracy below
+     * provided tolerance value.
+     * This method does not check whether this instance is locked or not.
+     * @param tolerance Tolerance value.
+     * @throws IllegalArgumentException Raised if provided tolerance value is
+     * negative.
+     */    
+    private void internalSetTolerance(double tolerance) 
+            throws IllegalArgumentException {
+        if (tolerance &lt; MIN_TOLERANCE) {
+            throw new IllegalArgumentException();
+        }
+        this.tolerance = tolerance;
+    }
+    
+    /**
+     * Sets tolerance value.
+     * Tolerance is the accuracy to be achieved when estimating a root.
+     * If a root is found by this class, it is ensured to have an accuracy below
+     * provided tolerance value.
+     * @param tolerance Tolerance value.
+     * @throws LockedException Raised if this instance is locked.
+     * @throws IllegalArgumentException Raised if provided tolerance value is
+     * negative.
+     */    
+    public void setTolerance(double tolerance) throws LockedException,
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        internalSetTolerance(tolerance);
+    }
+    
+    /**
+     * Estimates a local root for a given single dimension function being 
+     * evaluated by provided listener.
+     * @throws LockedException Exception raised if this instance is already 
+     * locked.
+     * @throws NotReadyException Exception raised if either a listener has not
+     * yet been provided or a bracket has not been provided or computed.
+     * @throws RootEstimationException Raised if the root estimation failed for
+     * some other reason (usually inability to evaluate the function, 
+     * numerical instability or convergence problems, or no roots are found).
+     */        
+    @Override
+    public void estimate() throws LockedException, NotReadyException,
+            RootEstimationException {
+        
         if (isLocked()) {
             throw new LockedException();
         }
@@ -2337,6 +2229,96 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
+<td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L254">254</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L151">151</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>        nIters = mMaxIterations;
+        bestResult = null;
+        mBestInliersData = null;
+        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        
+    }
+    
+    /**
+     * Returns amount of confidence expressed as a value between 0 and 1.0 
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @return  amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+        return mConfidence;
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0 and 1.0 (which 
+     * is equivalent to 100%). The amount of confidence indicates the 
+     * probability that the estimated result is correct. Usually this value will 
+     * be close to 1.0, but not exactly 1.0.
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     * 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setConfidence(double confidence) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {
+            throw new IllegalArgumentException();
+        }
+        mConfidence = confidence;
+    }  
+    
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+        return mMaxIterations;
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (maxIterations &lt; MIN_ITERATIONS) {
+            throw new IllegalArgumentException();
+        }
+        mMaxIterations = maxIterations;
+    }
+    
+    /**
+     * Returns maximum allowed outliers proportion in the input data. This is
+     * used to compute number of iterations to be done (nIters). It typically
+     * can be as high as 0.95. Higher values, up to 1 are possible but not
+     * recommended.
+     * In this implementation, PROSAC won't stop before having reached the 
+     * corresponding inliers rate on the complete data set.
+     * @return maximum allowed outliers proportion in the input data.
+     */
+    public double getMaxOutliersProportion() {</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
 <td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L392">392</a></td></tr>
 <tr class="b">
@@ -2390,7 +2372,7 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L371">371</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROMedSPolynomialRobustEstimator.html#L370">370</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PROSACPolynomialRobustEstimator.html#L323">323</a></td></tr>
@@ -2548,80 +2530,73 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
-<td>com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/FirstDegreePolynomialRootsEstimator.html#L102">102</a></td></tr>
+<td>com/irurueta/numerical/robust/MSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/MSACRobustEstimator.html#L161">161</a></td></tr>
 <tr class="a">
-<td>com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.html#L105">105</a></td></tr>
+<td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L180">180</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
-<pre>        if (!isFirstDegree(polyParams)) {
+<pre>    public void setConfidence(double confidence) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        
-        this.realPolyParams = polyParams;
+        mConfidence = confidence;
     }
     
     /**
-     * Returns array of first degree polynomial parameters.
-     * A first degree polynomial is defined by p(x) = a * x + b, and the array
-     * is returned as [b, a].
-     * Note: This class only supports real polynomial parameters.
-     * @return Array of first degree polynomial parameters.
-     * @throws NotAvailableException if parameters are not available for retrieval.
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @return maximum allowed number of iterations.
      */
-    public double[] getRealPolynomialParameters() throws NotAvailableException {
-        if(!arePolynomialParametersAvailable()) {
-            throw new NotAvailableException();
+    public int getMaxIterations() {
+        return mMaxIterations;
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
         }
-        return realPolyParams;
+        if (maxIterations &lt; MIN_ITERATIONS) {
+            throw new IllegalArgumentException();
+        }
+        mMaxIterations = maxIterations;
     }
     
     /**
-     * Returns boolean indicating whether REAL polynomial parameters have been 
-     * provided and is available for retrieval.
-     * Note: This class only supports real polynomial parameters.
-     * @return True if available, false otherwise.
+     * Returns number of iterations to be done to obtain required confidence.
+     * @return number of iterations to be done to obtain required confidence.
      */
-    @Override
-    public boolean arePolynomialParametersAvailable() {
-        return realPolyParams != null;
-    }
-
-    /**
-     * This method will always raise a NotAvailableException because this class
-     * only supports REAL polynomial parameters.
-     * @return throws NotAvailableException.
-     * @throws NotAvailableException alwasy throws this exception.
-     * @deprecated
-     */
-    @Override
-    public Complex[] getPolynomialParameters() throws NotAvailableException {
-        throw new NotAvailableException();
-    }
-    
-
-    /**
-     * This method will always raise an IllegalArgumentException because this
-     * class only supports REAL polynomial parameters.
-     * @deprecated 
-     */
-    @Override
-    protected void internalSetPolynomialParameters(Complex[] polyParams) 
-            throws IllegalArgumentException {
-        //complex values are not supported
-        throw new IllegalArgumentException();
+    public int getNIters() {
+        return nIters;
     }
     
     /**
-     * Estimates the root of provided polynomial.
-     * @throws LockedException Raised if this instance is locked estimating a
-     * root.
-     * @throws NotReadyException Raised if this instance is not ready because
-     * polynomial parameters have not been provided.
+     * Returns best solution that has been found so far during an estimation.
+     * @return best solution that has been found so far during an estimation.
      */
-    @Override
-    public void estimate() throws LockedException, NotReadyException {</pre></div></td></tr></table>
+    public T getBestResult() {
+        return bestResult;
+    }    
+    
+    /**
+     * Returns data related to best inliers found for best result.
+     * @return data related to inliers found for best result.
+     */
+    public MSACInliersData getBestResultInliersData() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -2710,6 +2685,89 @@ com.irurueta:irurueta-numerical
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>com/irurueta/numerical/robust/LMedSRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/LMedSRobustEstimator.html#L193">193</a></td></tr>
+<tr class="a">
+<td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L259">259</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>    }
+    
+    /**
+     * Returns amount of confidence expressed as a value between 0 and 1.0 
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @return  amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+        return mConfidence;
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0 and 1.0 (which 
+     * is equivalent to 100%). The amount of confidence indicates the 
+     * probability that the estimated result is correct. Usually this value will 
+     * be close to 1.0, but not exactly 1.0.
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     * 1.0.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setConfidence(double confidence) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {
+            throw new IllegalArgumentException();
+        }
+        mConfidence = confidence;
+    }    
+    
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+        return mMaxIterations;
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (maxIterations &lt; MIN_ITERATIONS) {
+            throw new IllegalArgumentException();
+        }
+        mMaxIterations = maxIterations;
+    }    
+    
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best threshold is not small enough. Once a better solution is found 
+     * yielding a threshold smaller than this value, the algorithm will stop.
+     * @return threshold to be used to keep the algorithm iterating in case that
+     * best threshold is not small enough.
+     */
+    public double getStopThreshold() {</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/polynomials/estimators/PolynomialRobustEstimator.html#L337">337</a></td></tr>
 <tr class="a">
@@ -2718,6 +2776,12 @@ com.irurueta:irurueta-numerical
 <tr class="b">
 <td>com/irurueta/numerical/robust/PROMedSRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/numerical/robust/PROMedSRobustEstimator.html#L307">307</a></td></tr>
+<tr class="a">
+<td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L259">259</a></td></tr>
+<tr class="b">
+<td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
+<td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L156">156</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>    }
@@ -2797,10 +2861,10 @@ com.irurueta:irurueta-numerical
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/numerical/robust/PROSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L455">455</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/robust/PROSACRobustEstimator.html#L451">451</a></td></tr>
 <tr class="b">
 <td>com/irurueta/numerical/robust/RANSACRobustEstimator.java</td>
-<td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L241">241</a></td></tr>
+<td><a href="./xref/com/irurueta/numerical/robust/RANSACRobustEstimator.html#L240">240</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>    public PROSACInliersData getBestInliersData() {

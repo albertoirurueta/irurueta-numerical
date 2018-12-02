@@ -185,172 +185,172 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">     * @throws LockedException if this estimator is locked because an estimation</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">     * is being computed.</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConfidence(<strong class="jxr_keyword">double</strong> confidence) 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>             <strong class="jxr_keyword">throws</strong> IllegalArgumentException, <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>         }
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">if</strong> (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>         }
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>         mConfidence = confidence;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     }
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">     * Maximum allowed number of iterations. When the maximum number of </em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">     * iterations is exceeded, result will not be available, however an </em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">     * approximate result will be available for retrieval.</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">     * @return maximum allowed number of iterations.</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getMaxIterations() {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>         <strong class="jxr_keyword">return</strong> mMaxIterations;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     }
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>     
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">     * Sets maximum allowed number of iterations. When the maximum number of </em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">     * iterations is exceeded, result will not be available, however an </em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">     * approximate result will be available for retrieval.</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">     * @param maxIterations maximum allowed number of iterations to be set.</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided value is less than 1.</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">     * @throws LockedException if this estimator is locked because an estimation</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     * is being computed.</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMaxIterations(<strong class="jxr_keyword">int</strong> maxIterations) 
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>             <strong class="jxr_keyword">throws</strong> IllegalArgumentException, <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>         }
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>         <strong class="jxr_keyword">if</strong> (maxIterations &lt; MIN_ITERATIONS) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>         }
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>         mMaxIterations = maxIterations;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>     }
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>     
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">     * Returns number of iterations to be done to obtain required confidence.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">     * @return number of iterations to be done to obtain required confidence.</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getNIters() {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>         <strong class="jxr_keyword">return</strong> nIters;
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>     }
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>     
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * Returns best solution that has been found so far during an estimation.</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     * @return best solution that has been found so far during an estimation.</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">public</strong> T getBestResult() {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>         <strong class="jxr_keyword">return</strong> bestResult;
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>     }
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>     
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">     * Gets data related to inliers found for best result.</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">     * @return data related to inliers found for best result.</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimator.html">RANSACInliersData</a> getBestInliersData() {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>         <strong class="jxr_keyword">return</strong> mBestInliersData;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>     }
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>     
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">     * Indicates whether inliers must be computed and kept.</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">     * @return true if inliers must be computed and kept, false if inliers</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">     * only need to be computed but not kept.</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isComputeAndKeepInliersEnabled() {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>         <strong class="jxr_keyword">return</strong> mComputeAndKeepInliers;
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>     }
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>     
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * Specifies whether inliers must be computed and kept.</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     * @param computeAndKeepInliers true if inliers must be computed and kept,</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     * false if inliers only need to be computed but not kept.</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setComputeAndKeepInliersEnabled(<strong class="jxr_keyword">boolean</strong> computeAndKeepInliers)
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>         }
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>         mComputeAndKeepInliers = computeAndKeepInliers;
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>     }
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>     
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">     * Indicates whether residuals must be computed and kept.</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">     * @return true if residuals must be computed and kept, false if residuals</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">     * only need to be computed but not kept.</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isComputeAndKeepResidualsEnabled() {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>         <strong class="jxr_keyword">return</strong> mComputeAndKeepResiduals;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>     }
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>     
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">     * Specifies whether residuals must be computed and kept.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">     * @param computeAndKeepResiduals true if residuals must be computed and </em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">     * kept, false if residuals only need to be computed but not kept.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setComputeAndKeepResidualsEnabled(
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>             <strong class="jxr_keyword">boolean</strong> computeAndKeepResiduals) <strong class="jxr_keyword">throws</strong> LockedException {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>         }
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>         mComputeAndKeepResiduals = computeAndKeepResiduals;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>     }
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>             
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">     * Indicates if estimator is ready to start the estimation process.</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">     * @return true if ready, false otherwise.</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     @Override
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isReady() {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>         <strong class="jxr_keyword">if</strong> (!<strong class="jxr_keyword">super</strong>.isReady()) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>         }
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>         <strong class="jxr_keyword">return</strong> (mListener instanceof RANSACRobustEstimatorListener);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     }    
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>     
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">     * Robustly estimates an instance of T.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">     * @return estimated object.</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">     * @throws LockedException if robust estimator is locked.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     * @throws NotReadyException if provided input data is not enough to start</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">     * the estimation.</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">     * @throws RobustEstimatorException if estimation fails for any reason</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">     * (i.e. numerical instability, no solution available, etc).</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     @Override
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">public</strong> T estimate() <strong class="jxr_keyword">throws</strong> LockedException, NotReadyException, 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>             <a href="../../../../com/irurueta/numerical/robust/RobustEstimatorException.html">RobustEstimatorException</a> {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         }
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>         <strong class="jxr_keyword">if</strong> (!isReady()) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/NotReadyException.html">NotReadyException</a>();
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>         }
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>         
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>             RANSACRobustEstimatorListener&lt;T&gt; listener = 
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>                     (RANSACRobustEstimatorListener&lt;T&gt;)mListener;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>             
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>             mLocked = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>             
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>             listener.onEstimateStart(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>             <strong class="jxr_keyword">int</strong> totalSamples = listener.getTotalSamples();
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>             <strong class="jxr_keyword">int</strong> subsetSize = listener.getSubsetSize();    
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>             <strong class="jxr_keyword">double</strong> threshold = listener.getThreshold();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>             <em class="jxr_comment">//only positive thresholds are allowed</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>             <strong class="jxr_keyword">if</strong>(threshold &lt; MIN_THRESHOLD) <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RobustEstimatorException();
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>             
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>             <strong class="jxr_keyword">int</strong> bestNumInliers = 0;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>             nIters = Integer.MAX_VALUE;
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>             <strong class="jxr_keyword">int</strong> newNIters;
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>             <strong class="jxr_keyword">int</strong> currentIter = 0;
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>             <em class="jxr_comment">//reusable list that will contain preliminar solutions on each </em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>             <em class="jxr_comment">//iteration</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>             List&lt;T&gt; iterResults = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>             bestResult = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>             <strong class="jxr_keyword">int</strong> currentInliers;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>             <strong class="jxr_keyword">float</strong> previousProgress = 0.0f, progress;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConfidence(<strong class="jxr_keyword">double</strong> confidence) <strong class="jxr_keyword">throws</strong> LockedException {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>         <strong class="jxr_keyword">if</strong> (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>         }
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>         mConfidence = confidence;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">     * Maximum allowed number of iterations. When the maximum number of </em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">     * iterations is exceeded, result will not be available, however an </em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">     * approximate result will be available for retrieval.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">     * @return maximum allowed number of iterations.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getMaxIterations() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>         <strong class="jxr_keyword">return</strong> mMaxIterations;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     }
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">     * Sets maximum allowed number of iterations. When the maximum number of </em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">     * iterations is exceeded, result will not be available, however an </em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">     * approximate result will be available for retrieval.</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">     * @param maxIterations maximum allowed number of iterations to be set.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided value is less than 1.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">     * @throws LockedException if this estimator is locked because an estimation</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">     * is being computed.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMaxIterations(<strong class="jxr_keyword">int</strong> maxIterations) 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>         }
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>         <strong class="jxr_keyword">if</strong> (maxIterations &lt; MIN_ITERATIONS) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>         }
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         mMaxIterations = maxIterations;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>     }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>     
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">     * Returns number of iterations to be done to obtain required confidence.</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">     * @return number of iterations to be done to obtain required confidence.</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getNIters() {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>         <strong class="jxr_keyword">return</strong> nIters;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>     
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     * Returns best solution that has been found so far during an estimation.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * @return best solution that has been found so far during an estimation.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     <strong class="jxr_keyword">public</strong> T getBestResult() {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>         <strong class="jxr_keyword">return</strong> bestResult;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     }
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">     * Gets data related to inliers found for best result.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">     * @return data related to inliers found for best result.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/numerical/robust/RANSACRobustEstimator.html">RANSACInliersData</a> getBestInliersData() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <strong class="jxr_keyword">return</strong> mBestInliersData;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>     
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">     * Indicates whether inliers must be computed and kept.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">     * @return true if inliers must be computed and kept, false if inliers</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">     * only need to be computed but not kept.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isComputeAndKeepInliersEnabled() {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>         <strong class="jxr_keyword">return</strong> mComputeAndKeepInliers;
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>     }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>     
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">     * Specifies whether inliers must be computed and kept.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * @param computeAndKeepInliers true if inliers must be computed and kept,</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     * false if inliers only need to be computed but not kept.</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setComputeAndKeepInliersEnabled(<strong class="jxr_keyword">boolean</strong> computeAndKeepInliers)
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>         }
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         mComputeAndKeepInliers = computeAndKeepInliers;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     }
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">     * Indicates whether residuals must be computed and kept.</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">     * @return true if residuals must be computed and kept, false if residuals</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">     * only need to be computed but not kept.</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isComputeAndKeepResidualsEnabled() {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>         <strong class="jxr_keyword">return</strong> mComputeAndKeepResiduals;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     }
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>     
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">     * Specifies whether residuals must be computed and kept.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">     * @param computeAndKeepResiduals true if residuals must be computed and </em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">     * kept, false if residuals only need to be computed but not kept.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setComputeAndKeepResidualsEnabled(
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>             <strong class="jxr_keyword">boolean</strong> computeAndKeepResiduals) <strong class="jxr_keyword">throws</strong> LockedException {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         }
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>         mComputeAndKeepResiduals = computeAndKeepResiduals;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     }
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>             
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">     * Indicates if estimator is ready to start the estimation process.</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">     * @return true if ready, false otherwise.</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     @Override
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isReady() {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         <strong class="jxr_keyword">if</strong> (!<strong class="jxr_keyword">super</strong>.isReady()) {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>             <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>         }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         <strong class="jxr_keyword">return</strong> (mListener instanceof RANSACRobustEstimatorListener);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>     }    
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>     
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">     * Robustly estimates an instance of T.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">     * @return estimated object.</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">     * @throws LockedException if robust estimator is locked.</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">     * @throws NotReadyException if provided input data is not enough to start</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     * the estimation.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">     * @throws RobustEstimatorException if estimation fails for any reason</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">     * (i.e. numerical instability, no solution available, etc).</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">     */</em>    
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     @Override
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     <strong class="jxr_keyword">public</strong> T estimate() <strong class="jxr_keyword">throws</strong> LockedException, NotReadyException, 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>             <a href="../../../../com/irurueta/numerical/robust/RobustEstimatorException.html">RobustEstimatorException</a> {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         }
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         <strong class="jxr_keyword">if</strong> (!isReady()) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/NotReadyException.html">NotReadyException</a>();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>         }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>         
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>             RANSACRobustEstimatorListener&lt;T&gt; listener = 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>                     (RANSACRobustEstimatorListener&lt;T&gt;)mListener;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>             
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>             mLocked = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>             
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>             listener.onEstimateStart(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>         
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>             <strong class="jxr_keyword">int</strong> totalSamples = listener.getTotalSamples();
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>             <strong class="jxr_keyword">int</strong> subsetSize = listener.getSubsetSize();    
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>             <strong class="jxr_keyword">double</strong> threshold = listener.getThreshold();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>             <em class="jxr_comment">//only positive thresholds are allowed</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>             <strong class="jxr_keyword">if</strong>(threshold &lt; MIN_THRESHOLD) <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RobustEstimatorException();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>             
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>             <strong class="jxr_keyword">int</strong> bestNumInliers = 0;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>             nIters = Integer.MAX_VALUE;
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>             <strong class="jxr_keyword">int</strong> newNIters;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>             <strong class="jxr_keyword">int</strong> currentIter = 0;
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>             <em class="jxr_comment">//reusable list that will contain preliminar solutions on each </em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>             <em class="jxr_comment">//iteration</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>             List&lt;T&gt; iterResults = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>             bestResult = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>             <strong class="jxr_keyword">int</strong> currentInliers;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>             <strong class="jxr_keyword">float</strong> previousProgress = 0.0f;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>             <strong class="jxr_keyword">float</strong> progress;
 <a class="jxr_linenumber" name="L346" href="#L346">346</a>             <strong class="jxr_keyword">int</strong>[] subsetIndices = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[subsetSize];
 <a class="jxr_linenumber" name="L347" href="#L347">347</a>             
 <a class="jxr_linenumber" name="L348" href="#L348">348</a>             BitSet inliers = <strong class="jxr_keyword">null</strong>;
@@ -530,53 +530,53 @@
 <a class="jxr_linenumber" name="L522" href="#L522">522</a>             }
 <a class="jxr_linenumber" name="L523" href="#L523">523</a>             mNumInliers = 0;
 <a class="jxr_linenumber" name="L524" href="#L524">524</a>         }
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>         
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
 <a class="jxr_linenumber" name="L526" href="#L526">526</a>         <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">         * Updates data contained in this instance.</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">         * @param inliers efficiently stores which samples are considered</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">         * inliers and which ones aren't.</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">         * @param residuals residuals obtained for each sample of data.</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">         * @param numInliers number of inliers found on current iteration.</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">         */</em>
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>         <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> update(BitSet inliers, <strong class="jxr_keyword">double</strong>[] residuals, 
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>                 <strong class="jxr_keyword">int</strong> numInliers) {
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>             <strong class="jxr_keyword">int</strong> totalSamples = 0;
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>             <strong class="jxr_keyword">if</strong> (inliers != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>                 totalSamples = inliers.length();
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>             }
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>             <strong class="jxr_keyword">if</strong> (residuals != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>                totalSamples = residuals.length; 
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>             }
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>             
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>             <strong class="jxr_keyword">if</strong>(mInliers != <strong class="jxr_keyword">null</strong> &amp;&amp; inliers != <strong class="jxr_keyword">null</strong> &amp;&amp; mResiduals != <strong class="jxr_keyword">null</strong> &amp;&amp; 
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>                     residuals != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>                 <em class="jxr_comment">//update inliers and residuals</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; totalSamples; i++) {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>                     mInliers.set(i, inliers.get(i));
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>                     mResiduals[i] = residuals[i];
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>                 }
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mInliers != <strong class="jxr_keyword">null</strong> &amp;&amp; inliers != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>                 <em class="jxr_comment">//update inliers but not the residuals</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; totalSamples; i++) {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>                     mInliers.set(i, inliers.get(i));
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>                 }
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mResiduals != <strong class="jxr_keyword">null</strong> &amp;&amp; residuals != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>                 <em class="jxr_comment">//update residuals but not inliers</em>
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>                 System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>             }
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>             mNumInliers = numInliers;
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>         }
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>         <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">         * Returns efficient array indicating which samples are considered </em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">         * inliers and which ones aren't.</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">         * @return array indicating which samples are considered inliers and </em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">         * which ones aren't.</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">         */</em>        
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>         @Override
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>         <strong class="jxr_keyword">public</strong> BitSet getInliers() {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>             <strong class="jxr_keyword">return</strong> mInliers;
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>         }        
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">         * Returns efficient array indicating which samples are considered </em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">         * inliers and which ones aren't.</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">         * @return array indicating which samples are considered inliers and </em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">         * which ones aren't.</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">         */</em>        
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>         @Override
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>         <strong class="jxr_keyword">public</strong> BitSet getInliers() {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>             <strong class="jxr_keyword">return</strong> mInliers;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>         }
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>         <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">         * Updates data contained in this instance.</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">         * @param inliers efficiently stores which samples are considered</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">         * inliers and which ones aren't.</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">         * @param residuals residuals obtained for each sample of data.</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">         * @param numInliers number of inliers found on current iteration.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">         */</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> update(BitSet inliers, <strong class="jxr_keyword">double</strong>[] residuals,
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>                               <strong class="jxr_keyword">int</strong> numInliers) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>             <strong class="jxr_keyword">int</strong> totalSamples = 0;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>             <strong class="jxr_keyword">if</strong> (inliers != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>                 totalSamples = inliers.length();
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>             }
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>             <strong class="jxr_keyword">if</strong> (residuals != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>                 totalSamples = residuals.length;
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>             }
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>             <strong class="jxr_keyword">if</strong>(mInliers != <strong class="jxr_keyword">null</strong> &amp;&amp; inliers != <strong class="jxr_keyword">null</strong> &amp;&amp; mResiduals != <strong class="jxr_keyword">null</strong> &amp;&amp;
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>                     residuals != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>                 <em class="jxr_comment">//update inliers and residuals</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; totalSamples; i++) {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>                     mInliers.set(i, inliers.get(i));
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>                     mResiduals[i] = residuals[i];
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>                 }
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mInliers != <strong class="jxr_keyword">null</strong> &amp;&amp; inliers != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>                 <em class="jxr_comment">//update inliers but not the residuals</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; totalSamples; i++) {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>                     mInliers.set(i, inliers.get(i));
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>                 }
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mResiduals != <strong class="jxr_keyword">null</strong> &amp;&amp; residuals != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>                 <em class="jxr_comment">//update residuals but not inliers</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>                 System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>             }
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>             mNumInliers = numInliers;
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>         }
 <a class="jxr_linenumber" name="L572" href="#L572">572</a>     }
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> }
 </pre>

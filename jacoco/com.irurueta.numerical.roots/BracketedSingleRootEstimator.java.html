@@ -271,44 +271,41 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
         //expand initial bracket until function contains a sign change
 <span class="fc" id="L272">        double x1 = minEvalPoint;</span>
 <span class="fc" id="L273">        double x2 = maxEvalPoint;</span>
-        double f1, f2;
+        double f1;
+        double f2;
         try {
-<span class="fc" id="L276">            f1 = listener.evaluate(x1);</span>
-<span class="fc" id="L277">            f2 = listener.evaluate(x2);</span>
-<span class="nc" id="L278">        } catch (Throwable t) {</span>
-<span class="nc" id="L279">            locked = false;</span>
-<span class="nc" id="L280">            throw new RootEstimationException(t);</span>
-<span class="fc" id="L281">        }</span>
-        
-<span class="fc" id="L283">        boolean found = false;</span>
-        try {
-<span class="fc bfc" id="L285" title="All 2 branches covered.">            for (int j = 0; j &lt; NTRY; j++) {</span>
-<span class="fc bfc" id="L286" title="All 2 branches covered.">                if (f1 * f2 &lt; 0.0) {</span>
-<span class="fc" id="L287">                    found = true;</span>
-<span class="fc" id="L288">                    break;</span>
+<span class="fc" id="L277">            f1 = listener.evaluate(x1);</span>
+<span class="fc" id="L278">            f2 = listener.evaluate(x2);</span>
+
+<span class="fc" id="L280">            boolean found = false;</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">            for (int j = 0; j &lt; NTRY; j++) {</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">                if (f1 * f2 &lt; 0.0) {</span>
+<span class="fc" id="L283">                    found = true;</span>
+<span class="fc" id="L284">                    break;</span>
                 }
-<span class="fc bfc" id="L290" title="All 2 branches covered.">                if (Math.abs(f1) &lt; Math.abs(f2)) {</span>
-<span class="fc" id="L291">                    f1 = listener.evaluate(x1 += FACTOR * (x1 - x2));</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">                if (Math.abs(f1) &lt; Math.abs(f2)) {</span>
+<span class="fc" id="L287">                    x1 += FACTOR * (x1 - x2);</span>
+<span class="fc" id="L288">                    f1 = listener.evaluate(x1);</span>
                 } else {
-<span class="fc" id="L293">                    f2 = listener.evaluate(x2 += FACTOR * (x2 - x1));</span>
+<span class="fc" id="L290">                    x2 += FACTOR * (x2 - x1);</span>
+<span class="fc" id="L291">                    f2 = listener.evaluate(x2);</span>
                 }
             }
-<span class="nc" id="L296">        } catch (Throwable t) {</span>
-<span class="nc" id="L297">            locked = false;</span>
-<span class="nc" id="L298">            throw new RootEstimationException(t);</span>
-<span class="fc" id="L299">        }</span>
-        
-<span class="fc bfc" id="L301" title="All 2 branches covered.">        if (!found) {</span>
-<span class="fc" id="L302">            locked = false;</span>
-<span class="fc" id="L303">            throw new RootEstimationException();</span>
+
+<span class="fc bfc" id="L295" title="All 2 branches covered.">            if (!found) {</span>
+<span class="fc" id="L296">                throw new RootEstimationException();</span>
+            }
+
+<span class="fc" id="L299">            this.minEvalPoint = x1;</span>
+<span class="fc" id="L300">            this.maxEvalPoint = x2;</span>
+<span class="fc" id="L301">            bracketAvailable = true;</span>
+
+<span class="nc" id="L303">        } catch (EvaluationException e) {</span>
+<span class="nc" id="L304">            throw new RootEstimationException(e);</span>
+        } finally {
+<span class="fc" id="L306">            locked = false;</span>
         }
-        
-<span class="fc" id="L306">        this.minEvalPoint = x1;</span>
-<span class="fc" id="L307">        this.maxEvalPoint = x2;</span>
-<span class="fc" id="L308">        bracketAvailable = true;</span>
-        
-<span class="fc" id="L310">        locked = false;</span>
-<span class="fc" id="L311">    }</span>
+<span class="fc" id="L308">    }</span>
     
     /**
      * Starting from provided point, this method expands the range (i.e. 
@@ -333,8 +330,8 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
     public void computeBracket(double point) throws LockedException,
             NotReadyException, InvalidBracketRangeException, 
             RootEstimationException {
-<span class="nc" id="L336">        computeBracket(point, FACTOR * point + BRACKET_EPS);</span>
-<span class="nc" id="L337">    }</span>
+<span class="nc" id="L333">        computeBracket(point, FACTOR * point + BRACKET_EPS);</span>
+<span class="nc" id="L334">    }</span>
 
     /**
      * Starting at zero, this method expands the range (i.e. bracket of values) 
@@ -354,9 +351,11 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
     public void computeBracket() throws LockedException, NotReadyException,
             RootEstimationException {
         try {
-<span class="nc" id="L357">            computeBracket(0.0, BRACKET_EPS);</span>
-<span class="nc" id="L358">        } catch (InvalidBracketRangeException ignore) { }</span>
-<span class="nc" id="L359">    }</span>
+<span class="nc" id="L354">            computeBracket(0.0, BRACKET_EPS);</span>
+<span class="nc" id="L355">        } catch (InvalidBracketRangeException ignore) {</span>
+            //never happens
+<span class="nc" id="L357">        }</span>
+<span class="nc" id="L358">    }</span>
     
     /**
      * Internal method to swap two values. Value inside a[0] will be swapped 
@@ -365,10 +364,10 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      * @param b Value to be swapped.
      */
     protected void swap(double[] a, double[] b) {
-<span class="fc" id="L368">        double tmp = a[0];</span>
-<span class="fc" id="L369">        a[0] = b[0];</span>
-<span class="fc" id="L370">        b[0] = tmp;</span>
-<span class="fc" id="L371">    }</span>
+<span class="fc" id="L367">        double tmp = a[0];</span>
+<span class="fc" id="L368">        a[0] = b[0];</span>
+<span class="fc" id="L369">        b[0] = tmp;</span>
+<span class="fc" id="L370">    }</span>
     
     /**
      * Internal method to determine whether a and b have the same sign.
@@ -377,7 +376,11 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      * @return Returns a if a and b have the same sign or -a otherwise.
      */
     protected double sign(double a, double b) {
-<span class="fc bfc" id="L380" title="All 6 branches covered.">        return b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a);</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (b &gt;= 0.0) {</span>
+<span class="fc bfc" id="L380" title="All 2 branches covered.">            return a &gt;= 0.0 ? a : -a;</span>
+        } else {
+<span class="fc bfc" id="L382" title="All 2 branches covered.">            return a &gt;= 0.0 ? -a : a;</span>
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
