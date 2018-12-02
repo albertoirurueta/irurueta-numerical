@@ -509,11 +509,11 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Polynomial&gt; estimator, float progress) {
-<span class="pc bpc" id="L512" title="1 of 2 branches missed.">                if(mListener != null) {</span>
-<span class="fc" id="L513">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L512" title="All 2 branches missed.">                if(mListener != null) {</span>
+<span class="nc" id="L513">                    mListener.onEstimateProgressChange(</span>
                             PROMedSPolynomialRobustEstimator.this, progress);
                 }
-<span class="fc" id="L516">            }</span>
+<span class="nc" id="L516">            }</span>
             
             @Override
             public double[] getQualityScores() {

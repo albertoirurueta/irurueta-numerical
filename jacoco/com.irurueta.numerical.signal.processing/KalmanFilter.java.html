@@ -537,7 +537,7 @@ public class KalmanFilter implements Serializable {
         
 <span class="fc bfc" id="L538" title="All 2 branches covered.">        if (transitionMatrix.getRows() != dp ||</span>
 <span class="fc bfc" id="L539" title="All 2 branches covered.">                transitionMatrix.getColumns() != dp) {</span>
-<span class="fc" id="L540">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc" id="L540">            throw new IllegalArgumentException();</span>
         }
 <span class="fc" id="L542">        this.transitionMatrix = transitionMatrix;</span>
 <span class="fc" id="L543">    }</span>
