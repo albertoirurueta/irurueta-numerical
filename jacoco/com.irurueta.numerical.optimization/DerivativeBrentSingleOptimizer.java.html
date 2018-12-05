@@ -286,7 +286,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                         } else {
                             //Bisect, not golden section.
                             //noinspection all
-<span class="fc bfc" id="L289" title="All 2 branches covered.">                            e = dx &gt;= 0.0 ? a - x : b - x;</span>
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                            e = dx &gt;= 0.0 ? a - x : b - x;</span>
 <span class="fc" id="L290">                            d = 0.5 * (e);</span>
                             //Decide which segment by the sign of the derivative
                         }

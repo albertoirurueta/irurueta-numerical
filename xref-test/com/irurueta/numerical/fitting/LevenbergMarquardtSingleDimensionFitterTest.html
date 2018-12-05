@@ -1497,7 +1497,7 @@
 <a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 
 <a class="jxr_linenumber" name="L1490" href="#L1490">1490</a>                 sigmas[i] = dist.getStandardDeviation();
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a>                 errorRandomizer.setStandardDeviation(sigmas[i]);
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a>                 errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 <a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a>                 error = errorRandomizer.nextDouble();
 <a class="jxr_linenumber" name="L1495" href="#L1495">1495</a>                 y[i] += error;
@@ -1682,7 +1682,7 @@
 <a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 
 <a class="jxr_linenumber" name="L1675" href="#L1675">1675</a>                 sigmas[i] = dist.getStandardDeviation();
 <a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 
-<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a>                 errorRandomizer.setStandardDeviation(sigmas[i]);
+<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a>                 errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 <a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 
 <a class="jxr_linenumber" name="L1679" href="#L1679">1679</a>                 error = errorRandomizer.nextDouble();
 <a class="jxr_linenumber" name="L1680" href="#L1680">1680</a>                 y[i] += error;
@@ -1879,7 +1879,7 @@
 <a class="jxr_linenumber" name="L1871" href="#L1871">1871</a>                 sigmas[i] = Math.sqrt(dist.getCovariance().
 <a class="jxr_linenumber" name="L1872" href="#L1872">1872</a>                         getElementAt(0, 0));
 <a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 
-<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a>                 errorRandomizer.setStandardDeviation(sigmas[i]);
+<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a>                 errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 <a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 
 <a class="jxr_linenumber" name="L1876" href="#L1876">1876</a>                 error = errorRandomizer.nextDouble();
 <a class="jxr_linenumber" name="L1877" href="#L1877">1877</a>                 y[i] += error;
@@ -2100,7 +2100,7 @@
 <a class="jxr_linenumber" name="L2092" href="#L2092">2092</a>                 sigmas[i] = Math.sqrt(dist.getCovariance().
 <a class="jxr_linenumber" name="L2093" href="#L2093">2093</a>                         getElementAt(0, 0));
 <a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 
-<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a>                 errorRandomizer.setStandardDeviation(sigmas[i]);
+<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a>                 errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 <a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 
 <a class="jxr_linenumber" name="L2097" href="#L2097">2097</a>                 error = errorRandomizer.nextDouble();
 <a class="jxr_linenumber" name="L2098" href="#L2098">2098</a>                 y[i] += error;
@@ -2346,7 +2346,7 @@
 <a class="jxr_linenumber" name="L2338" href="#L2338">2338</a>                 sigmas[i] = Math.sqrt(dist.getCovariance().
 <a class="jxr_linenumber" name="L2339" href="#L2339">2339</a>                         getElementAt(0, 0));
 <a class="jxr_linenumber" name="L2340" href="#L2340">2340</a> 
-<a class="jxr_linenumber" name="L2341" href="#L2341">2341</a>                 errorRandomizer.setStandardDeviation(sigmas[i]);
+<a class="jxr_linenumber" name="L2341" href="#L2341">2341</a>                 errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 <a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> 
 <a class="jxr_linenumber" name="L2343" href="#L2343">2343</a>                 error = errorRandomizer.nextDouble();
 <a class="jxr_linenumber" name="L2344" href="#L2344">2344</a>                 y[i] += error;
