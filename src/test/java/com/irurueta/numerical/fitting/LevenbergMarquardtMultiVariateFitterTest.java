@@ -2242,7 +2242,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                 sigmas[i] = dist.getStandardDeviation();
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
@@ -2444,7 +2444,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                 sigmas[i] = dist.getStandardDeviation();
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
@@ -2659,7 +2659,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
@@ -2896,7 +2896,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
@@ -3159,7 +3159,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
                     sigmas[i] = Double.MIN_VALUE;
                 }
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
@@ -3435,7 +3435,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
@@ -3757,7 +3757,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
 
-                errorRandomizer.setStandardDeviation(sigmas[i]);
+                errorRandomizer.setStandardDeviation(Math.max(sigmas[i], Double.MIN_VALUE));
 
                 error = errorRandomizer.nextDouble();
                 value += error;
