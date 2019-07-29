@@ -69,7 +69,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
     /**
      * Empty constructor.
      */
-    BisectionSingleRootEstimator() {
+    public BisectionSingleRootEstimator() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
@@ -90,7 +90,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      * maxEvalPoint.
      * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
-    BisectionSingleRootEstimator(
+    public BisectionSingleRootEstimator(
             SingleDimensionFunctionEvaluatorListener listener,
             double minEvalPoint, double maxEvalPoint, double tolerance)
             throws InvalidBracketRangeException {
