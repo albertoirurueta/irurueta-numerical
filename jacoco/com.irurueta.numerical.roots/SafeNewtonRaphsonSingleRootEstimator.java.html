@@ -226,12 +226,12 @@ public class SafeNewtonRaphsonSingleRootEstimator
 <span class="fc" id="L226">        }</span>
         
 <span class="pc bpc" id="L228" title="1 of 2 branches missed.">        for (int j = 0; j &lt; MAXIT; j++) {</span>
-<span class="pc bpc" id="L229" title="1 of 2 branches missed.">            if ((((rts - xh) * df - f) * ((rts - xl) * df - f) &gt; 0.0)</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">            if ((((rts - xh) * df - f) * ((rts - xl) * df - f) &gt; 0.0)</span>
 <span class="pc bpc" id="L230" title="1 of 2 branches missed.">                || (Math.abs(2.0 * f) &gt; Math.abs(dxold * df))) {</span>
-<span class="nc" id="L231">                dxold = dx;</span>
-<span class="nc" id="L232">                dx = 0.5*(xh - xl);</span>
-<span class="nc" id="L233">                rts = xl + dx;</span>
-<span class="nc bnc" id="L234" title="All 2 branches missed.">                if (xl == rts) {</span>
+<span class="fc" id="L231">                dxold = dx;</span>
+<span class="fc" id="L232">                dx = 0.5*(xh - xl);</span>
+<span class="fc" id="L233">                rts = xl + dx;</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">                if (xl == rts) {</span>
 <span class="nc" id="L235">                    root = rts;</span>
 <span class="nc" id="L236">                    rootAvailable = true;</span>
 <span class="nc" id="L237">                    locked = false;</span>
@@ -242,11 +242,11 @@ public class SafeNewtonRaphsonSingleRootEstimator
 <span class="fc" id="L242">                dx = f / df;</span>
 <span class="fc" id="L243">                double temp=rts;</span>
 <span class="fc" id="L244">                rts -= dx;</span>
-<span class="fc bfc" id="L245" title="All 2 branches covered.">                if (temp == rts) {</span>
-<span class="fc" id="L246">                    root = rts;</span>
-<span class="fc" id="L247">                    rootAvailable = true;</span>
-<span class="fc" id="L248">                    locked = false;</span>
-<span class="fc" id="L249">                    return;</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">                if (temp == rts) {</span>
+<span class="nc" id="L246">                    root = rts;</span>
+<span class="nc" id="L247">                    rootAvailable = true;</span>
+<span class="nc" id="L248">                    locked = false;</span>
+<span class="nc" id="L249">                    return;</span>
                 }
             }
 <span class="fc bfc" id="L252" title="All 2 branches covered.">            if (Math.abs(dx) &lt; xacc) {</span>

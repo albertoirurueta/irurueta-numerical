@@ -23,7 +23,7 @@ under the License.
     <link>https://github.com/albertoirurueta/irurueta-numerical</link>
     <description>com.irurueta:irurueta-numerical - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2017 - 2018</copyright>
+    <copyright>&#169;2017 - 2019</copyright>
     <item>
       <title>File: 131,
              Errors: 1199,
@@ -125,7 +125,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
@@ -144,20 +144,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeLineMultiOptimizer.java">com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NumericalException.java">com/irurueta/numerical/NumericalException.java</a>
                 </td>
                 <td>
@@ -168,6 +154,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.optimization.DerivativeLineMultiOptimizer.java">com/irurueta/numerical/optimization/DerivativeLineMultiOptimizer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
                 </td>
               </tr>
                           <tr>
@@ -265,7 +265,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  19
+                  20
                 </td>
               </tr>
                           <tr>
@@ -335,7 +335,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  61
+                  60
                 </td>
               </tr>
                           <tr>
@@ -354,20 +354,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorListener.java">com/irurueta/numerical/robust/RobustEstimatorListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.WeightSelection.java">com/irurueta/numerical/robust/WeightSelection.java</a>
                 </td>
                 <td>
@@ -378,6 +364,20 @@ under the License.
                 </td>
                 <td>
                   4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorListener.java">com/irurueta/numerical/robust/RobustEstimatorListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -508,6 +508,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelectorException.java">com/irurueta/numerical/robust/SubsetSelectorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetSizeException.java">com/irurueta/numerical/robust/InvalidSubsetSizeException.java</a>
                 </td>
                 <td>
@@ -522,7 +536,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.SubsetSelectorException.java">com/irurueta/numerical/robust/SubsetSelectorException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorException.java">com/irurueta/numerical/robust/RobustEstimatorException.java</a>
                 </td>
                 <td>
                   0
@@ -546,20 +560,6 @@ under the License.
                 </td>
                 <td>
                   56
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorException.java">com/irurueta/numerical/robust/RobustEstimatorException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
                 </td>
               </tr>
                           <tr>
@@ -657,7 +657,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  14
+                  13
                 </td>
               </tr>
                           <tr>
@@ -788,6 +788,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.HistogramMaximumLikelihoodEstimator.java">com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.polynomials.estimators.WeightedPolynomialEstimator.java">com/irurueta/numerical/polynomials/estimators/WeightedPolynomialEstimator.java</a>
                 </td>
                 <td>
@@ -812,20 +826,6 @@ under the License.
                 </td>
                 <td>
                   31
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.HistogramMaximumLikelihoodEstimator.java">com/irurueta/numerical/HistogramMaximumLikelihoodEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
                 </td>
               </tr>
                           <tr>
@@ -858,7 +858,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorMethod.java">com/irurueta/numerical/robust/RobustEstimatorMethod.java</a>
                 </td>
                 <td>
                   0
@@ -872,7 +872,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.RobustEstimatorMethod.java">com/irurueta/numerical/robust/RobustEstimatorMethod.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator.java">com/irurueta/numerical/fitting/LevenbergMarquardtMultiDimensionFunctionEvaluator.java</a>
                 </td>
                 <td>
                   0
@@ -956,20 +956,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BisectionSingleRootEstimator.java">com/irurueta/numerical/roots/BisectionSingleRootEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator.java">com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java</a>
                 </td>
                 <td>
@@ -980,6 +966,20 @@ under the License.
                 </td>
                 <td>
                   10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.roots.BisectionSingleRootEstimator.java">com/irurueta/numerical/roots/BisectionSingleRootEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
               </tr>
                           <tr>
@@ -1096,20 +1096,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener.java">com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.ComplexPolynomialEvaluator.java">com/irurueta/numerical/ComplexPolynomialEvaluator.java</a>
                 </td>
                 <td>
@@ -1124,7 +1110,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SingleDimensionLinearFitter.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener.java">com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -1133,7 +1119,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InliersData.java">com/irurueta/numerical/robust/InliersData.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -1152,7 +1152,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InliersData.java">com/irurueta/numerical/robust/InliersData.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.SingleDimensionLinearFitter.java">com/irurueta/numerical/fitting/SingleDimensionLinearFitter.java</a>
                 </td>
                 <td>
                   0
@@ -1161,7 +1161,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  5
                 </td>
               </tr>
                           <tr>
@@ -1236,20 +1236,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SymmetricGradientEstimator.java">com/irurueta/numerical/SymmetricGradientEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.NotAvailableException.java">com/irurueta/numerical/NotAvailableException.java</a>
                 </td>
                 <td>
@@ -1264,7 +1250,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.PolynomialEvaluator.java">com/irurueta/numerical/PolynomialEvaluator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.SymmetricGradientEstimator.java">com/irurueta/numerical/SymmetricGradientEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1288,6 +1274,20 @@ under the License.
                 </td>
                 <td>
                   21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.PolynomialEvaluator.java">com/irurueta/numerical/PolynomialEvaluator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                           <tr>
@@ -1418,7 +1418,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MaximumLikelihoodEstimatorMethod.java">com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetRangeException.java">com/irurueta/numerical/robust/InvalidSubsetRangeException.java</a>
                 </td>
                 <td>
                   0
@@ -1432,7 +1432,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.robust.InvalidSubsetRangeException.java">com/irurueta/numerical/robust/InvalidSubsetRangeException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.MaximumLikelihoodEstimatorMethod.java">com/irurueta/numerical/MaximumLikelihoodEstimatorMethod.java</a>
                 </td>
                 <td>
                   0
@@ -1600,20 +1600,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.Fitter.java">com/irurueta/numerical/fitting/Fitter.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.AccurateMaximumLikelihoodEstimator.java">com/irurueta/numerical/AccurateMaximumLikelihoodEstimator.java</a>
                 </td>
                 <td>
@@ -1624,6 +1610,20 @@ under the License.
                 </td>
                 <td>
                   7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-numerical/checkstyle.html#com.irurueta.numerical.fitting.Fitter.java">com/irurueta/numerical/fitting/Fitter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
                 </td>
               </tr>
                           <tr>
