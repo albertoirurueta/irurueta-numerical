@@ -33,7 +33,7 @@ public class KalmanFilterTest {
     private static final int N_SAMPLES = 500;
     private static final boolean WRITE_TO_CONSOLE = false;
     private static final boolean DO_NOT_SKIP = true;
-    private static final int TIMES = 50;
+    private static final int TIMES = 100;
 
     private static final String ACCELERATION_MOTION =
             "./src/test/java/com/irurueta/numerical/signal/processing/acceleration-motion.dat";
