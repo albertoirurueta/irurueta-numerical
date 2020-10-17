@@ -41,6 +41,8 @@ public class SvdMultiDimensionLinearFitterTest {
     
     //For functions like: a*1 + b*x + c*y + d*x*y + e*x^2 + f*y^2
     private static final int NUM_QUADRATIC_PARAMS = 6;
+
+    private static final int TIMES = 10;
     
     public SvdMultiDimensionLinearFitterTest() { }
     
@@ -425,84 +427,104 @@ public class SvdMultiDimensionLinearFitterTest {
     @Test
     public void testFitQuadratic() throws FittingException, NotReadyException, 
             WrongSizeException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-        
-        double[] params = new double[NUM_QUADRATIC_PARAMS];
-        for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {
-            params[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                    MAX_RANDOM_VALUE);
-        }
-        
-        Matrix x = Matrix.createWithUniformRandomValues(npoints, 2, 
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE, new Random());
-        double[] y = new double[npoints];
-        GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-            new Random(), 0.0, sigma);
-        double error, x1, x2;
-        for (int i = 0; i < npoints; i++) {
-            x1 = x.getElementAt(i, 0);
-            x2 = x.getElementAt(i, 1);
-            //function is: a*1 + b*x + c*y + d*x*y + e*x^2 + f*y^2
-            y[i] = params[0] + params[1]*x1 + params[2]*x2 + params[3]*x1*x2 +
-                    params[4]*x1*x1 + params[5]*x2*x2;
-            error = errorRandomizer.nextDouble();
-            y[i] += error;
-        }
-        
-        LinearFitterMultiDimensionFunctionEvaluator evaluator =
-                new LinearFitterMultiDimensionFunctionEvaluator() {
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 2; //x, y coordinates
-            }
-                    
-            @Override
-            public double[] createResultArray() {
-                //parameters a, b, c, d, e, f for function:
-                //a + b*x + c*y + d*x*y + e*x*x + f*y*y
-                return new double[NUM_QUADRATIC_PARAMS];
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+            final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+
+            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+
+            double[] params = new double[NUM_QUADRATIC_PARAMS];
+            for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {
+                params[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
             }
 
-            @Override
-            public void evaluate(double[] point, double[] result) {
-                double x = point[0];
-                double y = point[1];
-                
-                result[0] = 1.0;
-                result[1] = x;
-                result[2] = y;
-                result[3] = x*y;
-                result[4] = x*x;
-                result[5] = y*y;
+            Matrix x = Matrix.createWithUniformRandomValues(npoints, 2,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE, new Random());
+            double[] y = new double[npoints];
+            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+                    new Random(), 0.0, sigma);
+            double error, x1, x2;
+            for (int i = 0; i < npoints; i++) {
+                x1 = x.getElementAt(i, 0);
+                x2 = x.getElementAt(i, 1);
+                //function is: a*1 + b*x + c*y + d*x*y + e*x^2 + f*y^2
+                y[i] = params[0] + params[1] * x1 + params[2] * x2 + params[3] * x1 * x2 +
+                        params[4] * x1 * x1 + params[5] * x2 * x2;
+                error = errorRandomizer.nextDouble();
+                y[i] += error;
             }
-        };
-        
-        SvdMultiDimensionLinearFitter fitter = 
-                new SvdMultiDimensionLinearFitter(evaluator, x, y, 1.0);
-        
-        //check default values
-        assertNotNull(fitter.getA());
-        assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertFalse(fitter.isResultAvailable());
-        assertTrue(fitter.isReady());
 
-        //fit
-        fitter.fit();
-        
-        //check correctness
-        assertTrue(fitter.isResultAvailable());
-        assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, NUM_QUADRATIC_PARAMS);
-        for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {
-            assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
+            LinearFitterMultiDimensionFunctionEvaluator evaluator =
+                    new LinearFitterMultiDimensionFunctionEvaluator() {
+
+                        @Override
+                        public int getNumberOfDimensions() {
+                            return 2; //x, y coordinates
+                        }
+
+                        @Override
+                        public double[] createResultArray() {
+                            //parameters a, b, c, d, e, f for function:
+                            //a + b*x + c*y + d*x*y + e*x*x + f*y*y
+                            return new double[NUM_QUADRATIC_PARAMS];
+                        }
+
+                        @Override
+                        public void evaluate(double[] point, double[] result) {
+                            double x = point[0];
+                            double y = point[1];
+
+                            result[0] = 1.0;
+                            result[1] = x;
+                            result[2] = y;
+                            result[3] = x * y;
+                            result[4] = x * x;
+                            result[5] = y * y;
+                        }
+                    };
+
+            SvdMultiDimensionLinearFitter fitter =
+                    new SvdMultiDimensionLinearFitter(evaluator, x, y, 1.0);
+
+            //check default values
+            assertNotNull(fitter.getA());
+            assertNotNull(fitter.getCovar());
+            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertFalse(fitter.isResultAvailable());
+            assertTrue(fitter.isReady());
+
+            //fit
+            fitter.fit();
+
+            //check correctness
+            assertTrue(fitter.isResultAvailable());
+            assertNotNull(fitter.getA());
+            assertEquals(fitter.getA().length, NUM_QUADRATIC_PARAMS);
+
+            boolean failed = false;
+            for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {
+                if (Math.abs(fitter.getA()[i] - params[i]) > ABSOLUTE_ERROR) {
+                    failed = true;
+                    break;
+                }
+                assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
+            }
+
+            if (failed) {
+                continue;
+            }
+
+            assertNotNull(fitter.getCovar());
+            assertTrue(fitter.getChisq() > 0);
+
+            numValid++;
+            break;
         }
-        assertNotNull(fitter.getCovar());
-        assertTrue(fitter.getChisq() > 0);                  
+
+        assertTrue(numValid > 0);
     }
 }
