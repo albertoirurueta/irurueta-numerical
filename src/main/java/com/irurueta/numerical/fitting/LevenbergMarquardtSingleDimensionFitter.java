@@ -695,10 +695,10 @@ public class LevenbergMarquardtSingleDimensionFitter
             }
 
             //add to mse
-            mse += dy * dy / (double)degreesOfFreedom;
+            mse += dy * dy / (double) Math.abs(degreesOfFreedom);
 
             //and find chi square
-            chisq += dy * dy * sig2i / (double)degreesOfFreedom;
+            chisq += dy * dy * sig2i / (double) degreesOfFreedom;
 	    }
 
 	    //fill in the symmetric side
