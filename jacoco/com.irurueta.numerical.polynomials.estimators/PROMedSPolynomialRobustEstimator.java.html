@@ -509,11 +509,11 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Polynomial&gt; estimator, float progress) {
-<span class="nc bnc" id="L512" title="All 2 branches missed.">                if(mListener != null) {</span>
-<span class="nc" id="L513">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L512" title="1 of 2 branches missed.">                if(mListener != null) {</span>
+<span class="fc" id="L513">                    mListener.onEstimateProgressChange(</span>
                             PROMedSPolynomialRobustEstimator.this, progress);
                 }
-<span class="nc" id="L516">            }</span>
+<span class="fc" id="L516">            }</span>
             
             @Override
             public double[] getQualityScores() {
@@ -558,4 +558,4 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
 <span class="fc" id="L558">        mQualityScores = qualityScores;        </span>
 <span class="fc" id="L559">    }         </span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

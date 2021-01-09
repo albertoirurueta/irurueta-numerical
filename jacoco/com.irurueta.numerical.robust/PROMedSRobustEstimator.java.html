@@ -723,9 +723,9 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                 } else {
 <span class="nc" id="L724">                    progress = 1.0f;</span>
                 }
-<span class="pc bpc" id="L726" title="1 of 2 branches missed.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
-<span class="nc" id="L727">                    previousProgress = progress;</span>
-<span class="nc" id="L728">                    listener.onEstimateProgressChange(this, progress);                    </span>
+<span class="fc bfc" id="L726" title="All 2 branches covered.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
+<span class="fc" id="L727">                    previousProgress = progress;</span>
+<span class="fc" id="L728">                    listener.onEstimateProgressChange(this, progress);                    </span>
                 }     
 <span class="fc" id="L730">                currentIter++;                </span>
                 
@@ -1381,4 +1381,4 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
     }
     
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
