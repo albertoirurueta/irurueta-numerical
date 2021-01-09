@@ -703,7 +703,7 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
 
 <span class="fc" id="L704">	    chisq = 0.0;</span>
 <span class="fc" id="L705">	    mse = 0.0;</span>
-<span class="fc" id="L706">        int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc" id="L706">	    int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
 <span class="fc bfc" id="L707" title="All 2 branches covered.">	    for (i = 0; i &lt; ndat; i++) {</span>
             //summation loop over all data
 <span class="fc" id="L709">            x.getSubmatrixAsArray(i, 0, i, xCols - 1,</span>
@@ -727,10 +727,10 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
                 }
 
                 //add to mse
-<span class="fc" id="L730">                mse += dy * dy / (double)(degreesOfFreedom);</span>
+<span class="fc" id="L730">                mse += dy * dy / (double) Math.abs(degreesOfFreedom);</span>
 
                 //and find chi square
-<span class="fc" id="L733">                chisq += dy * dy * sig2i / (double)(degreesOfFreedom);</span>
+<span class="fc" id="L733">                chisq += dy * dy * sig2i / (double) degreesOfFreedom;</span>
             }
 	    }
 

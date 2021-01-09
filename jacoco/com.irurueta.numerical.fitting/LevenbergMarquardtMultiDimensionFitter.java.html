@@ -322,7 +322,7 @@ public class LevenbergMarquardtMultiDimensionFitter
 
     /**
      * Returns degrees of freedom of computed chi square value.
-     * Degrees of fredom is equal to the number of sampled data minus the
+     * Degrees of freedom is equal to the number of sampled data minus the
      * number of estimated parameters.
      * @return degrees of freedom of computed chi square value.
      */
@@ -687,7 +687,7 @@ public class LevenbergMarquardtMultiDimensionFitter
 
 <span class="fc" id="L688">	    chisq = 0.;</span>
 <span class="fc" id="L689">	    mse = 0.0;</span>
-<span class="fc" id="L690">        int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc" id="L690">	    int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
 <span class="fc bfc" id="L691" title="All 2 branches covered.">	    for (i = 0; i &lt; ndat; i++) {</span>
             //summation loop over all data
 <span class="fc" id="L693">            x.getSubmatrixAsArray(i, 0, i, xCols - 1,</span>
@@ -711,10 +711,10 @@ public class LevenbergMarquardtMultiDimensionFitter
             }
 
             //add to mse
-<span class="fc" id="L714">            mse += dy * dy / (double)(degreesOfFreedom);</span>
+<span class="fc" id="L714">            mse += dy * dy / (double) Math.abs(degreesOfFreedom);</span>
 
             //and find chi square
-<span class="fc" id="L717">            chisq += dy * dy * sig2i / (double)(degreesOfFreedom);</span>
+<span class="fc" id="L717">            chisq += dy * dy * sig2i / (double) degreesOfFreedom;</span>
 	    }
 
         //fill in the symmetric side

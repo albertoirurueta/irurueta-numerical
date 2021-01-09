@@ -703,10 +703,10 @@
 <a class="jxr_linenumber" name="L695" href="#L695">695</a>             }
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 
 <a class="jxr_linenumber" name="L697" href="#L697">697</a>             <em class="jxr_comment">//add to mse</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a>             mse += dy * dy / (<strong class="jxr_keyword">double</strong>)degreesOfFreedom;
+<a class="jxr_linenumber" name="L698" href="#L698">698</a>             mse += dy * dy / (<strong class="jxr_keyword">double</strong>) Math.abs(degreesOfFreedom);
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 
 <a class="jxr_linenumber" name="L700" href="#L700">700</a>             <em class="jxr_comment">//and find chi square</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a>             chisq += dy * dy * sig2i / (<strong class="jxr_keyword">double</strong>)degreesOfFreedom;
+<a class="jxr_linenumber" name="L701" href="#L701">701</a>             chisq += dy * dy * sig2i / (<strong class="jxr_keyword">double</strong>) degreesOfFreedom;
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 	    }
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 	    <em class="jxr_comment">//fill in the symmetric side</em>
@@ -771,6 +771,6 @@
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>
 </body>
 </html>
