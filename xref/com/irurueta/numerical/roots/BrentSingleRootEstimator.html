@@ -83,8 +83,8 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if tolerance is negative.</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/numerical/roots/BrentSingleRootEstimator.html">BrentSingleRootEstimator</a>(
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <a href="../../../../com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html">SingleDimensionFunctionEvaluatorListener</a> listener,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">double</strong> minEvalPoint, <strong class="jxr_keyword">double</strong> maxEvalPoint, <strong class="jxr_keyword">double</strong> tolerance)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html">SingleDimensionFunctionEvaluatorListener</a> listener,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> minEvalPoint, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> maxEvalPoint, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> tolerance)
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/InvalidBracketRangeException.html">InvalidBracketRangeException</a> {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">super</strong>(listener, minEvalPoint, maxEvalPoint);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          internalSetTolerance(tolerance);
@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if provided tolerance value is</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">     * negative.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetTolerance(<strong class="jxr_keyword">double</strong> tolerance) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetTolerance(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> tolerance) {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">if</strong> (tolerance &lt; MIN_TOLERANCE) {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>         }
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if provided tolerance value is</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">     * negative.</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTolerance(<strong class="jxr_keyword">double</strong> tolerance) <strong class="jxr_keyword">throws</strong> LockedException {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTolerance(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> tolerance) <strong class="jxr_keyword">throws</strong> LockedException {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         }
@@ -159,9 +159,9 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>         
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>         locked = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>         
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">double</strong> x1 = minEvalPoint;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>         <strong class="jxr_keyword">double</strong> x2 = maxEvalPoint;
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">double</strong> tol = tolerance;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> x1 = minEvalPoint;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> x2 = maxEvalPoint;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> tol = tolerance;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">double</strong> a = x1;
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">double</strong> b = x2;
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>         <strong class="jxr_keyword">double</strong> c = x2;
@@ -179,12 +179,12 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>             fa = listener.evaluate(a);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>             fb = listener.evaluate(b);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>         } <strong class="jxr_keyword">catch</strong> (EvaluationException ex) {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> EvaluationException ex) {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/roots/RootEstimationException.html">RootEstimationException</a>(ex);
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>         }
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>         
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">if</strong> ((fa &gt; 0.0 &amp;&amp; fb &gt; 0.0) || (fa &lt; 0.0 &amp;&amp; fb &lt; 0.0)) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>             <em class="jxr_comment">//root must be bracketed</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>             <em class="jxr_comment">// root must be bracketed</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>             locked = false;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/roots/RootEstimationException.html">RootEstimationException</a>();
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>         }
@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>             tol1 = 2.0 * EPS * Math.abs(b) + 0.5 * tol;
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>             xm = 0.5 * (c - b);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>             <strong class="jxr_keyword">if</strong> (Math.abs(xm) &lt;= tol1 || fb == 0.0) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>                 <em class="jxr_comment">//root found</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>                 <em class="jxr_comment">// root found</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>                 root = b;
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>                 rootAvailable = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>                 locked = false;
@@ -227,9 +227,9 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>                     q = -q;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>                 }
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>                 p = Math.abs(p);
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>                 <strong class="jxr_keyword">double</strong> min1 = 3.0 * xm * q - Math.abs(tol1 * q);
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>                 <strong class="jxr_keyword">double</strong> min2 = Math.abs(e * q);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>                 <strong class="jxr_keyword">if</strong> (2.0 * p &lt; (min1 &lt; min2 ? min1 : min2)) {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> min1 = 3.0 * xm * q - Math.abs(tol1 * q);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> min2 = Math.abs(e * q);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>                 <strong class="jxr_keyword">if</strong> (2.0 * p &lt; (Math.min(min1, min2))) {
 <a class="jxr_linenumber" name="L225" href="#L225">225</a>                     e = d;
 <a class="jxr_linenumber" name="L226" href="#L226">226</a>                     d = p / q;
 <a class="jxr_linenumber" name="L227" href="#L227">227</a>                 } <strong class="jxr_keyword">else</strong> {
@@ -249,11 +249,11 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>             }
 <a class="jxr_linenumber" name="L242" href="#L242">242</a>             <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>                 fb = listener.evaluate(b);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>             } <strong class="jxr_keyword">catch</strong> (EvaluationException ex) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>             } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> EvaluationException ex) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/roots/RootEstimationException.html">RootEstimationException</a>(ex);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>             }
 <a class="jxr_linenumber" name="L247" href="#L247">247</a>         }
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>         <em class="jxr_comment">//maximum number of iterations exceeded</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         <em class="jxr_comment">// maximum number of iterations exceeded</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a>         locked = false;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/roots/RootEstimationException.html">RootEstimationException</a>();
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>     }

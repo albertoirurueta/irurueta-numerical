@@ -21,7 +21,7 @@ package com.irurueta.numerical;
  * point in order to determine the gradient at such point.
  */
 public class GradientEstimator {
-    
+
     /**
      * Constant considered as machine precision.
      */
@@ -30,74 +30,76 @@ public class GradientEstimator {
     /**
      * Listener to evaluate a multidimensional function.
      */
-    MultiDimensionFunctionEvaluatorListener listener;
-    
+    protected final MultiDimensionFunctionEvaluatorListener listener;
+
     /**
      * Internal array to hold input parameter's values.
      */
     private double[] xh;
-    
+
     /**
      * Constructor.
+     *
      * @param listener Listener to evaluate a multidimensional function.
      */
-<span class="fc" id="L44">    public GradientEstimator(MultiDimensionFunctionEvaluatorListener listener) {</span>
-<span class="fc" id="L45">        this.listener = listener;</span>
-<span class="fc" id="L46">    }</span>
-    
+<span class="fc" id="L45">    public GradientEstimator(final MultiDimensionFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L46">        this.listener = listener;</span>
+<span class="fc" id="L47">    }</span>
+
     /**
      * Returns the gradient of a multidimensional function at provided point.
+     *
      * @param point Input point.
      * @return Gradient.
      * @throws EvaluationException Raised if function cannot be evaluated.
      */
-    public double[] gradient(double[] point) throws EvaluationException {
-<span class="fc" id="L55">        double[] result = new double[point.length];</span>
-<span class="fc" id="L56">        gradient(point, result);</span>
-<span class="fc" id="L57">        return result;</span>
+    public double[] gradient(final double[] point) throws EvaluationException {
+<span class="fc" id="L57">        final double[] result = new double[point.length];</span>
+<span class="fc" id="L58">        gradient(point, result);</span>
+<span class="fc" id="L59">        return result;</span>
     }
-    
+
     /**
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
      * array can be reused and hence is more memory efficient.
-     * @param point Input point.
+     *
+     * @param point  Input point.
      * @param result Output parameter containing estimated array. This parameter
-     * must be an array of length equal to point.
-     * @throws EvaluationException Raised if function cannot be evaluated.
+     *               must be an array of length equal to point.
+     * @throws EvaluationException      Raised if function cannot be evaluated.
      * @throws IllegalArgumentException Raised if length of result and point are
-     * not equal.
+     *                                  not equal.
      */
-    @SuppressWarnings(&quot;Duplicates&quot;)
-    public void gradient(double[] point, double[] result) 
+    public void gradient(final double[] point, final double[] result)
             throws EvaluationException {
-<span class="fc" id="L75">        int length = point.length;</span>
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (result.length != length) {</span>
-<span class="nc" id="L77">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L77">        final int length = point.length;</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (result.length != length) {</span>
+<span class="nc" id="L79">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="pc bpc" id="L80" title="1 of 4 branches missed.">        if (xh == null || xh.length != length) {</span>
-<span class="fc" id="L81">            xh = new double[length];</span>
+
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">        if (xh == null || xh.length != length) {</span>
+<span class="fc" id="L83">            xh = new double[length];</span>
         }
-<span class="fc" id="L83">        System.arraycopy(point, 0, xh, 0, length);</span>
+<span class="fc" id="L85">        System.arraycopy(point, 0, xh, 0, length);</span>
 
         double temp;
         double h;
         double fh;
-<span class="fc" id="L88">        double fold = listener.evaluate(point);</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int j = 0; j &lt; length; j++) {</span>
-<span class="fc" id="L90">            temp = point[j];</span>
-<span class="fc" id="L91">            h = EPS * Math.abs(temp);</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if(h == 0.0) {</span>
-<span class="nc" id="L93">                h = EPS;</span>
+<span class="fc" id="L90">        final double fold = listener.evaluate(point);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (int j = 0; j &lt; length; j++) {</span>
+<span class="fc" id="L92">            temp = point[j];</span>
+<span class="fc" id="L93">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+<span class="nc" id="L95">                h = EPS;</span>
             }
-<span class="fc" id="L95">            xh[j] = temp + h;</span>
-<span class="fc" id="L96">            h = xh[j] - temp;</span>
-<span class="fc" id="L97">            fh = listener.evaluate(xh);</span>
-<span class="fc" id="L98">            xh[j] = temp;</span>
-<span class="fc" id="L99">            result[j] = (fh - fold) / h;</span>
+<span class="fc" id="L97">            xh[j] = temp + h;</span>
+<span class="fc" id="L98">            h = xh[j] - temp;</span>
+<span class="fc" id="L99">            fh = listener.evaluate(xh);</span>
+<span class="fc" id="L100">            xh[j] = temp;</span>
+<span class="fc" id="L101">            result[j] = (fh - fold) / h;</span>
         }
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L103">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

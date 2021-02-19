@@ -16,95 +16,99 @@
 package com.irurueta.numerical;
 
 /**
- * This class evaluates a multidimensional function and obtains its gradient 
+ * This class evaluates a multidimensional function and obtains its gradient
  * along a line; such line is defined by an input point and a given direction.
- * Using provided input point and direction, the multidimensional function's 
+ * Using provided input point and direction, the multidimensional function's
  * input parameters are determined so they all lay on a line.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
-    
+
     /**
      * Listener to evaluate a multidimensional function's gradient.
-     */    
+     */
     private GradientFunctionEvaluatorListener gradientListener;
-    
+
     /**
      * Array containing gradient at point p. This is used internally.
      */
     double[] dft;
-    
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a multidimensional function.
-     * @param gradientListener Listener to evaluate a multidimensional 
-     * function's gradient.
-     * @param point Point used as a reference to determine the function's input
-     * parameters along a line.
-     * @param direction Vector indicating the direction of the line where the 
-     * function is evaluated.
+     *
+     * @param listener         Listener to evaluate a multidimensional function.
+     * @param gradientListener Listener to evaluate a multidimensional
+     *                         function's gradient.
+     * @param point            Point used as a reference to determine the function's input
+     *                         parameters along a line.
+     * @param direction        Vector indicating the direction of the line where the
+     *                         function is evaluated.
      * @throws IllegalArgumentException Raised if point and direction don't have
-     * the same length.
+     *                                  the same length.
      */
     public DirectionalDerivativeEvaluator(
-            MultiDimensionFunctionEvaluatorListener listener,
-            GradientFunctionEvaluatorListener gradientListener, double[] point, 
-            double[] direction) {
-<span class="fc" id="L53">        super(listener, point, direction);</span>
-        
-<span class="fc" id="L55">        this.gradientListener = gradientListener;        </span>
-<span class="fc" id="L56">        dft = new double[point.length];</span>
-<span class="fc" id="L57">    }</span>
-    
+            final MultiDimensionFunctionEvaluatorListener listener,
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point,
+            final double[] direction) {
+<span class="fc" id="L54">        super(listener, point, direction);</span>
+
+<span class="fc" id="L56">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L57">        dft = new double[point.length];</span>
+<span class="fc" id="L58">    }</span>
+
     /**
-     * Returns gradient listener that evaluates a multidimensional function 
+     * Returns gradient listener that evaluates a multidimensional function
      * gradient.
-     * If the gradient expression is not known (e.g. is not a closed 
-     * expression), then a GradientEstimator can be used internally in the 
+     * If the gradient expression is not known (e.g. is not a closed
+     * expression), then a GradientEstimator can be used internally in the
      * listener implementation.
+     *
      * @return Gradient listener.
      */
     public GradientFunctionEvaluatorListener getGradientListener() {
-<span class="fc" id="L68">        return gradientListener;</span>
+<span class="fc" id="L70">        return gradientListener;</span>
     }
-    
+
     /**
-     * Sets gradient listener that evaluates a multidimensional function 
+     * Sets gradient listener that evaluates a multidimensional function
      * gradient.
-     * If the gradient expression is not known (e.g. is not a closed 
-     * expression), then a GradientEstimator can be used internally in the 
+     * If the gradient expression is not known (e.g. is not a closed
+     * expression), then a GradientEstimator can be used internally in the
      * listener implementation being provided.
+     *
      * @param gradientListener Gradient listener
      */
     public void setGradientListener(
-            GradientFunctionEvaluatorListener gradientListener) {
-<span class="nc" id="L81">        this.gradientListener = gradientListener;</span>
-<span class="nc" id="L82">    }</span>
-    
+            final GradientFunctionEvaluatorListener gradientListener) {
+<span class="nc" id="L84">        this.gradientListener = gradientListener;</span>
+<span class="nc" id="L85">    }</span>
+
     /**
      * Computes derivative on current direction of a function at distance x from
      * current point and using current listener and gradient listener.
-     * @param x Distance from current point using current direction where 
-     * function is being evaluated.
+     *
+     * @param x Distance from current point using current direction where
+     *          function is being evaluated.
      * @return Result of evaluating function.
      * @throws EvaluationException Thrown if function evaluation fails.
      */
-    public double differentiateAt(double x) throws EvaluationException {
-<span class="fc" id="L93">        int length = point.length;</span>
-        
-<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L96">            p[i] = point[i] + x * direction[i];</span>
-        }
-        
-        //Compute gradient at such point
-<span class="fc" id="L100">        gradientListener.evaluateGradient(p, dft);</span>
+    public double differentiateAt(final double x) throws EvaluationException {
+<span class="fc" id="L97">        final int length = point.length;</span>
 
-        //Obtain 1D derivative on corresponding direction
-<span class="fc" id="L103">        double df1 = 0.0;</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L105">            df1 += dft[i] * direction[i];</span>
-        }        
-<span class="fc" id="L107">        return df1;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L100">            p[i] = point[i] + x * direction[i];</span>
+        }
+
+        // Compute gradient at such point
+<span class="fc" id="L104">        gradientListener.evaluateGradient(p, dft);</span>
+
+        // Obtain 1D derivative on corresponding direction
+<span class="fc" id="L107">        double df1 = 0.0;</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L109">            df1 += dft[i] * direction[i];</span>
+        }
+<span class="fc" id="L111">        return df1;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

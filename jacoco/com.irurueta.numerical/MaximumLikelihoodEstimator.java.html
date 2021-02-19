@@ -16,18 +16,18 @@
 package com.irurueta.numerical;
 
 /**
- * Abstract class to estimate the most likely value from a series of data 
+ * Abstract class to estimate the most likely value from a series of data
  * assumed to be normally distributed.
  * Assuming such condition, the subclasses of this class should be able to find
  * the maximum of the probability distribution of all provided input data.
- * Such probability distribution function is computed by aggregating all the 
+ * Such probability distribution function is computed by aggregating all the
  * samples as a series of Gaussian functions with a small sigma and centered at
  * the exact value of the sample.
  * Subclasses of this class will either build a histogram of such aggregation of
  * Gaussians to find the most likely value, or might even find a more accurate
  * result by refining the maximum using a maximum detector method.
- * 
- * It is suggested to always use the latter (implemented as 
+ * &lt;p&gt;
+ * It is suggested to always use the latter (implemented as
  * AccurateMaximumLikelihoodEstimator), as it will provide much more accurate
  * results at a slightly higher computational cost.
  */
@@ -38,516 +38,550 @@ public abstract class MaximumLikelihoodEstimator {
      * Default Gaussian sigma assigned to each sample.
      */
     public static final double DEFAULT_GAUSSIAN_SIGMA = 1.0;
-    
+
     /**
      * Minimum allowed Gaussian sigma to be set for each sample. Attempting to
      * set Gaussian sigmas lower than this value will raise an exception.
      */
     public static final double MIN_GAUSSIAN_SIGMA = 0.0;
-    
+
     /**
      * Default method to find the most likely value. By default the accurate
      * method is used which refines the solution found by using a histogram and
      * a maximum detector.
      */
-<span class="fc" id="L53">    public static final MaximumLikelihoodEstimatorMethod DEFAULT_METHOD = </span>
+<span class="fc" id="L53">    public static final MaximumLikelihoodEstimatorMethod DEFAULT_METHOD =</span>
             MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR;
-    
+
     /**
      * Array containing input data to be used to find the most likely value.
      */
     protected double[] inputData;
-    
+
     /**
      * Minimum value found on provided input data array.
      */
     protected double minValue;
-    
+
     /**
      * Maximum value found on provided input data array.
      */
     protected double maxValue;
-    
+
     /**
-     * Boolean indicating whether minimum and maximum values in array are 
+     * Boolean indicating whether minimum and maximum values in array are
      * already available.
      */
     protected boolean areMinMaxAvailable;
-    
+
     /**
-     * Boolean indicating whether this instance is locked because some 
+     * Boolean indicating whether this instance is locked because some
      * computations are being done. While this instance is locked, attempting to
      * change its status or parameters will raise an exception.
      */
     protected boolean locked;
-    
+
     /**
      * Actual Gaussian sigma to be used on each sample when aggregating Gaussian
      * functions centered at each input data sample value.
      */
     protected double gaussianSigma;
-    
+
     /**
      * Constructor.
+     *
      * @param gaussianSigma Gaussian sigma to be used on each sample
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
+     *                                  negative or zero.
      */
-<span class="fc" id="L96">    public MaximumLikelihoodEstimator(double gaussianSigma) {</span>
-<span class="fc" id="L97">        inputData = null;</span>
-<span class="fc" id="L98">        minValue = maxValue = 0.0;</span>
-<span class="fc" id="L99">        areMinMaxAvailable = false;</span>
-<span class="fc" id="L100">        locked = false;</span>
-<span class="fc" id="L101">        internalSetGaussianSigma(gaussianSigma);</span>
-<span class="fc" id="L102">    }</span>
-    
+<span class="fc" id="L97">    public MaximumLikelihoodEstimator(final double gaussianSigma) {</span>
+<span class="fc" id="L98">        inputData = null;</span>
+<span class="fc" id="L99">        minValue = maxValue = 0.0;</span>
+<span class="fc" id="L100">        areMinMaxAvailable = false;</span>
+<span class="fc" id="L101">        locked = false;</span>
+<span class="fc" id="L102">        internalSetGaussianSigma(gaussianSigma);</span>
+<span class="fc" id="L103">    }</span>
+
     /**
      * Empty constructor.
      */
-<span class="fc" id="L107">    public MaximumLikelihoodEstimator() {</span>
-<span class="fc" id="L108">        inputData = null;</span>
-<span class="fc" id="L109">        minValue = maxValue = 0.0;</span>
-<span class="fc" id="L110">        areMinMaxAvailable = false;</span>
-<span class="fc" id="L111">        locked = false;</span>
-<span class="fc" id="L112">        gaussianSigma = DEFAULT_GAUSSIAN_SIGMA;</span>
-<span class="fc" id="L113">    }</span>
-    
+<span class="fc" id="L108">    public MaximumLikelihoodEstimator() {</span>
+<span class="fc" id="L109">        inputData = null;</span>
+<span class="fc" id="L110">        minValue = maxValue = 0.0;</span>
+<span class="fc" id="L111">        areMinMaxAvailable = false;</span>
+<span class="fc" id="L112">        locked = false;</span>
+<span class="fc" id="L113">        gaussianSigma = DEFAULT_GAUSSIAN_SIGMA;</span>
+<span class="fc" id="L114">    }</span>
+
     /**
      * Constructor.
-     * @param inputData Array containing input data where most likely value must
-     * be estimated from.
+     *
+     * @param inputData     Array containing input data where most likely value must
+     *                      be estimated from.
      * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
+     *                                  negative or zero.
      */
-<span class="fc" id="L123">    public MaximumLikelihoodEstimator(double[] inputData, double gaussianSigma) {</span>
-<span class="fc" id="L124">        this.inputData = inputData;</span>
-<span class="fc" id="L125">        minValue = maxValue = 0.0;</span>
-<span class="fc" id="L126">        areMinMaxAvailable = false;</span>
-<span class="fc" id="L127">        locked = false;</span>
-<span class="fc" id="L128">        internalSetGaussianSigma(gaussianSigma);</span>
-<span class="fc" id="L129">    }</span>
-    
+<span class="fc" id="L125">    public MaximumLikelihoodEstimator(final double[] inputData, final double gaussianSigma) {</span>
+<span class="fc" id="L126">        this.inputData = inputData;</span>
+<span class="fc" id="L127">        minValue = maxValue = 0.0;</span>
+<span class="fc" id="L128">        areMinMaxAvailable = false;</span>
+<span class="fc" id="L129">        locked = false;</span>
+<span class="fc" id="L130">        internalSetGaussianSigma(gaussianSigma);</span>
+<span class="fc" id="L131">    }</span>
+
     /**
      * Constructor.
-     * @param minValue Minimum value assumed to be contained within input data
-     * array.
-     * @param maxValue Maximum value assumed to be contained within input data
-     * array.
-     * @param inputData Array containing input data where most likely value must
-     * be estimated from.
+     *
+     * @param minValue      Minimum value assumed to be contained within input data
+     *                      array.
+     * @param maxValue      Maximum value assumed to be contained within input data
+     *                      array.
+     * @param inputData     Array containing input data where most likely value must
+     *                      be estimated from.
      * @param gaussianSigma Gaussian sigma to be used on each sample.
-     * @throws IllegalArgumentException Raised if provided Gaussian sigma is 
-     * negative or zero, or if minValue &amp;lt; maxValue.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero, or if minValue &amp;lt; maxValue.
      */
-    public MaximumLikelihoodEstimator(double minValue, double maxValue,
-<span class="fc" id="L144">            double[] inputData, double gaussianSigma) {</span>
-<span class="fc" id="L145">        this.inputData = inputData;</span>
-<span class="fc" id="L146">        locked = false;</span>
-<span class="fc" id="L147">        internalSetMinMaxValues(minValue, maxValue);</span>
-<span class="fc" id="L148">        internalSetGaussianSigma(gaussianSigma);</span>
-<span class="fc" id="L149">    }</span>
-    
+    public MaximumLikelihoodEstimator(final double minValue, final double maxValue,
+<span class="fc" id="L147">                                      final double[] inputData, final double gaussianSigma) {</span>
+<span class="fc" id="L148">        this.inputData = inputData;</span>
+<span class="fc" id="L149">        locked = false;</span>
+<span class="fc" id="L150">        internalSetMinMaxValues(minValue, maxValue);</span>
+<span class="fc" id="L151">        internalSetGaussianSigma(gaussianSigma);</span>
+<span class="fc" id="L152">    }</span>
+
     /**
      * Returns method to be used for maximum likelihood estimation on subclasses
      * of this class.
+     *
      * @return Method for maximum likelihood estimation.
      */
     public abstract MaximumLikelihoodEstimatorMethod getMethod();
-    
+
     /**
      * Returns minimum value found on provided input data array.
+     *
      * @return Minimum value found on provided input data array.
      * @throws NotAvailableException Raised if this value has not yet been set
-     * or computed.
+     *                               or computed.
      */
     public double getMinValue() throws NotAvailableException {
-<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (!areMinMaxValuesAvailable()) {</span>
-<span class="fc" id="L166">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (!areMinMaxValuesAvailable()) {</span>
+<span class="fc" id="L171">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L168">        return minValue;</span>
+<span class="fc" id="L173">        return minValue;</span>
     }
-    
+
     /**
      * Returns maximum value found on provided input data array.
+     *
      * @return Maximum value found on provided input data array.
      * @throws NotAvailableException Raised if this value has not yet been set
-     * or computed.
+     *                               or computed.
      */
     public double getMaxValue() throws NotAvailableException {
-<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (!areMinMaxValuesAvailable()) {</span>
-<span class="fc" id="L179">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (!areMinMaxValuesAvailable()) {</span>
+<span class="fc" id="L185">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L181">        return maxValue;</span>
+<span class="fc" id="L187">        return maxValue;</span>
     }
-    
+
     /**
      * Sets minimum and maximum value assumed to be found in input data array.
+     *
      * @param minValue Minimum value in input data array.
      * @param maxValue Maximum value in input data array.
-     * @throws LockedException Exception raised if this instance is locked.
-     * This method can only be executed when computations finish and this 
-     * instance becomes unlocked.
+     * @throws LockedException          Exception raised if this instance is locked.
+     *                                  This method can only be executed when computations finish and this
+     *                                  instance becomes unlocked.
      * @throws IllegalArgumentException Exception raised if minValue &amp;lt; maxValue.
      */
-    public void setMinMaxValues(double minValue, double maxValue)
+    public void setMinMaxValues(final double minValue, final double maxValue)
             throws LockedException {
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L196">            throw new LockedException();</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L203">            throw new LockedException();</span>
         }
-<span class="fc" id="L198">        internalSetMinMaxValues(minValue, maxValue);</span>
-<span class="fc" id="L199">    }</span>
-    
+<span class="fc" id="L205">        internalSetMinMaxValues(minValue, maxValue);</span>
+<span class="fc" id="L206">    }</span>
+
     /**
-     * Returns boolean indicating whether minimum and maximum values in array 
+     * Returns boolean indicating whether minimum and maximum values in array
      * are already available.
+     *
      * @return Boolean indicating whether minimum and maximum values in array
      * are already available.
      */
     public boolean areMinMaxValuesAvailable() {
-<span class="fc" id="L208">        return areMinMaxAvailable;</span>
+<span class="fc" id="L216">        return areMinMaxAvailable;</span>
     }
-    
+
     /**
-     * Returns boolean indicating whether this instance is locked because some 
+     * Returns boolean indicating whether this instance is locked because some
      * computations are being done. While this instance is locked, attempting to
      * change its status or parameters will raise an exception.
+     *
      * @return Returns boolean indicating whether this instance is locked.
      */
     public boolean isLocked() {
-<span class="fc" id="L218">        return locked;</span>
+<span class="fc" id="L227">        return locked;</span>
     }
-    
+
     /**
-     * Returns array containing input data to be used to find the most likely 
+     * Returns array containing input data to be used to find the most likely
      * value.
+     *
      * @return Returns array containing input data.
      * @throws NotAvailableException Exception raised if input data has not yet
-     * been provided.
+     *                               been provided.
      */
     public double[] getInputData() throws NotAvailableException {
-<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (!isInputDataAvailable()) {</span>
-<span class="fc" id="L230">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (!isInputDataAvailable()) {</span>
+<span class="fc" id="L240">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L232">        return inputData;</span>
+<span class="fc" id="L242">        return inputData;</span>
     }
-    
+
     /**
-     * Sets array containing input data to be used to find the most likely 
+     * Sets array containing input data to be used to find the most likely
      * value.
+     *
      * @param inputData Array containing input data.
      * @throws LockedException Exception raised if this instance is locked.
-     * This method can only be executed when computations finish and this 
-     * instance becomes unlocked.
+     *                         This method can only be executed when computations finish and this
+     *                         instance becomes unlocked.
      */
-    public void setInputData(double[] inputData) throws LockedException {
-<span class="pc bpc" id="L244" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L245">            throw new LockedException();</span>
+    public void setInputData(final double[] inputData) throws LockedException {
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L256">            throw new LockedException();</span>
         }
-<span class="fc" id="L247">        this.inputData = inputData;</span>
-<span class="fc" id="L248">    }</span>
-    
+<span class="fc" id="L258">        this.inputData = inputData;</span>
+<span class="fc" id="L259">    }</span>
+
     /**
-     * Sets array containing input data to be used to find the most likely 
+     * Sets array containing input data to be used to find the most likely
      * value along with the minimum and maximum values assumed to be contained
      * in it.
+     *
      * @param inputData Array containing input data.
-     * @param minValue Minimum value assumed to be contained in provided input
-     * data array.
-     * @param maxValue Maximum value assumed to be contained in provided input
-     * data array.
-     * @throws LockedException Exception raised if this instance is locked.
-     * This method can only be executed when computations finish and this
-     * instance becomes unlocked.
+     * @param minValue  Minimum value assumed to be contained in provided input
+     *                  data array.
+     * @param maxValue  Maximum value assumed to be contained in provided input
+     *                  data array.
+     * @throws LockedException          Exception raised if this instance is locked.
+     *                                  This method can only be executed when computations finish and this
+     *                                  instance becomes unlocked.
      * @throws IllegalArgumentException Exception raised if minValue &amp;lt; maxValue.
      */
-    public void setInputData(double[] inputData, double minValue, 
-            double maxValue) throws LockedException {
-<span class="nc" id="L266">        setMinMaxValues(minValue, maxValue);</span>
-<span class="nc" id="L267">        this.inputData = inputData;</span>
-<span class="nc" id="L268">    }</span>
-    
+    public void setInputData(final double[] inputData, final double minValue,
+                             final double maxValue) throws LockedException {
+<span class="nc" id="L278">        setMinMaxValues(minValue, maxValue);</span>
+<span class="nc" id="L279">        this.inputData = inputData;</span>
+<span class="nc" id="L280">    }</span>
+
     /**
      * Returns boolean indicating whether input data has already been provided
      * or not.
-     * @return True if input data is available and can be retrieved. 
+     *
+     * @return True if input data is available and can be retrieved.
      */
     public boolean isInputDataAvailable() {
-<span class="fc bfc" id="L276" title="All 2 branches covered.">        return inputData != null;</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        return inputData != null;</span>
     }
-    
+
     /**
      * Returns boolean indicating if enough parameters have been provided in
      * order to start the computation of the maximum likelihood value.
      * Usually providing input data is enough to make this instance ready, but
      * this is dependent of specific implementations of subclasses.
+     *
      * @return True if this instance is ready to start the computation of the
      * maximum likelihood value.
      */
     public boolean isReady() {
-<span class="fc" id="L288">        return isInputDataAvailable();</span>
+<span class="fc" id="L302">        return isInputDataAvailable();</span>
     }
-    
+
     /**
-     * Returns Gaussian sigma to be used on each sample when aggregating 
+     * Returns Gaussian sigma to be used on each sample when aggregating
      * Gaussian functions centered at each input data sample value.
+     *
      * @return Gaussian sigma to be used on each sample.
      */
     public double getGaussianSigma() {
-<span class="fc" id="L297">        return gaussianSigma;</span>
+<span class="fc" id="L312">        return gaussianSigma;</span>
     }
 
     /**
      * Sets Gaussian sigma to be used on each sample when aggregating Gaussian
      * functions centered at each input data sample value.
+     *
      * @param gaussianSigma Gaussian sigma to be used on each sample.
-     * @throws LockedException Exception raised if this instance is locked.
-     * This method can only be executed when computations finish and this
-     * instance becomes unlocked
+     * @throws LockedException          Exception raised if this instance is locked.
+     *                                  This method can only be executed when computations finish and this
+     *                                  instance becomes unlocked
      * @throws IllegalArgumentException Exception raised if provided Gaussian
-     * sigma is negative or zero.
+     *                                  sigma is negative or zero.
      */
-    public void setGaussianSigma(double gaussianSigma) 
+    public void setGaussianSigma(final double gaussianSigma)
             throws LockedException {
-<span class="pc bpc" id="L312" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L313">            throw new LockedException();</span>
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L329">            throw new LockedException();</span>
         }
-<span class="fc" id="L315">        internalSetGaussianSigma(gaussianSigma);</span>
-<span class="fc" id="L316">    }</span>
-    
+<span class="fc" id="L331">        internalSetGaussianSigma(gaussianSigma);</span>
+<span class="fc" id="L332">    }</span>
+
     /**
      * Starts the estimation of the most likely value contained within provided
      * input data array.
+     *
      * @return The most likely value.
-     * @throws LockedException Exception raised if this instance is locked.
-     * This method can only be executed when computations finish and this
-     * instance becomes unlocked.
+     * @throws LockedException   Exception raised if this instance is locked.
+     *                           This method can only be executed when computations finish and this
+     *                           instance becomes unlocked.
      * @throws NotReadyException Exception raised if this instance is not yet
-     * ready
+     *                           ready
      * @see #isReady()
      */
     public abstract double estimate() throws LockedException, NotReadyException;
-    
+
     /**
      * Creates an instance of a subclass of this class based on provided method
      * and using provided Gaussian sigma.
+     *
      * @param gaussianSigma Gaussian sigma to be set for each sample.
-     * @param method Method to estimate maximum likelihood value.
+     * @param method        Method to estimate maximum likelihood value.
      * @return A maximum likelihood estimator.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
+     *                                  negative or zero.
      */
-    public static MaximumLikelihoodEstimator create(double gaussianSigma,
-            MaximumLikelihoodEstimatorMethod method) {
-<span class="fc bfc" id="L342" title="All 2 branches covered.">        switch (method) {</span>
+    public static MaximumLikelihoodEstimator create(
+            final double gaussianSigma, final MaximumLikelihoodEstimatorMethod method) {
+<span class="fc bfc" id="L360" title="All 2 branches covered.">        switch (method) {</span>
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-<span class="fc" id="L344">                return new HistogramMaximumLikelihoodEstimator(gaussianSigma,</span>
+<span class="fc" id="L362">                return new HistogramMaximumLikelihoodEstimator(gaussianSigma,</span>
                         HistogramMaximumLikelihoodEstimator.
-                        DEFAULT_NUMBER_OF_BINS);
+                                DEFAULT_NUMBER_OF_BINS);
             case ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR:
             default:
-<span class="fc" id="L349">                return new AccurateMaximumLikelihoodEstimator(gaussianSigma,</span>
+<span class="fc" id="L367">                return new AccurateMaximumLikelihoodEstimator(gaussianSigma,</span>
                         AccurateMaximumLikelihoodEstimator.
-                        DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
-                
+                                DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
+
         }
     }
-    
+
     /**
      * Creates an instance of a subclass of this class using default maximum
      * likelihood estimation method and provided Gaussian sigma.
+     *
      * @param gaussianSigma Gaussian sigma to be set for each sample.
      * @return A maximum likelihood estimator.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
+     *                                  negative or zero.
      */
-    public static MaximumLikelihoodEstimator create(double gaussianSigma) {
-<span class="fc" id="L365">        return create(gaussianSigma, DEFAULT_METHOD);</span>
+    public static MaximumLikelihoodEstimator create(final double gaussianSigma) {
+<span class="fc" id="L384">        return create(gaussianSigma, DEFAULT_METHOD);</span>
     }
-    
+
     /**
      * Creates an instance of a subclass of this class using default maximum
      * likelihood estimation method and default Gaussian sigma.
+     *
      * @return A maximum likelihood estimator.
      */
     public static MaximumLikelihoodEstimator create() {
-<span class="fc" id="L374">        return create(DEFAULT_GAUSSIAN_SIGMA);</span>
+<span class="fc" id="L394">        return create(DEFAULT_GAUSSIAN_SIGMA);</span>
     }
-    
+
     /**
      * Creates an instance of a subclass of this class based on provided method
      * and using provided Gaussian sigma and input data array.
-     * @param inputData Array containing input data to be used for the 
-     * estimation of the maximum likelihood value.
+     *
+     * @param inputData     Array containing input data to be used for the
+     *                      estimation of the maximum likelihood value.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
-     * @param method Method to estimate maximum likelihood value
+     * @param method        Method to estimate maximum likelihood value
      * @return A maximum likelihood estimator.
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
-     */    
-    public static MaximumLikelihoodEstimator create(double[] inputData,
-            double gaussianSigma, MaximumLikelihoodEstimatorMethod method) {
-<span class="fc bfc" id="L390" title="All 2 branches covered.">        switch (method) {</span>
+     *                                  negative or zero.
+     */
+    public static MaximumLikelihoodEstimator create(
+            final double[] inputData, final double gaussianSigma,
+            final MaximumLikelihoodEstimatorMethod method) {
+<span class="fc bfc" id="L412" title="All 2 branches covered.">        switch (method) {</span>
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-<span class="fc" id="L392">                return new HistogramMaximumLikelihoodEstimator(inputData,</span>
+<span class="fc" id="L414">                return new HistogramMaximumLikelihoodEstimator(inputData,</span>
                         gaussianSigma, HistogramMaximumLikelihoodEstimator.
                         DEFAULT_NUMBER_OF_BINS);
             case ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR:
             default:
-<span class="fc" id="L397">                return new AccurateMaximumLikelihoodEstimator(inputData,</span>
+<span class="fc" id="L419">                return new AccurateMaximumLikelihoodEstimator(inputData,</span>
                         gaussianSigma, AccurateMaximumLikelihoodEstimator.
                         DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
         }
     }
-    
+
     /**
-     * Creates an instance of a subclass of this class using default maximum 
+     * Creates an instance of a subclass of this class using default maximum
      * likelihood method, provided Gaussian sigma and input data array
-     * @param inputData Array containing input data to be used for the 
-     * estimation of the maximum likelihood value.
+     *
+     * @param inputData     Array containing input data to be used for the
+     *                      estimation of the maximum likelihood value.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
      * @return A maximum likelihood estimator
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
-     */        
-    public static MaximumLikelihoodEstimator create(double[] inputData,
-            double gaussianSigma) {
-<span class="fc" id="L415">        return create(inputData, gaussianSigma, DEFAULT_METHOD);</span>
+     *                                  negative or zero.
+     */
+    public static MaximumLikelihoodEstimator create(
+            final double[] inputData, final double gaussianSigma) {
+<span class="fc" id="L438">        return create(inputData, gaussianSigma, DEFAULT_METHOD);</span>
     }
-    
+
     /**
-     * Creates an instance of a subclass of this class using default maximum 
+     * Creates an instance of a subclass of this class using default maximum
      * likelihood method and Gaussian sigma, and provided input data array
-     * @param inputData Array containing input data to be used for the 
-     * estimation of the maximum likelihood value.
+     *
+     * @param inputData Array containing input data to be used for the
+     *                  estimation of the maximum likelihood value.
      * @return A maximum likelihood estimator
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero.
-     */            
-    public static MaximumLikelihoodEstimator create(double[] inputData) {
-<span class="fc" id="L428">        return create(inputData, DEFAULT_GAUSSIAN_SIGMA);</span>
-    }            
-    
+     *                                  negative or zero.
+     */
+    public static MaximumLikelihoodEstimator create(final double[] inputData) {
+<span class="fc" id="L452">        return create(inputData, DEFAULT_GAUSSIAN_SIGMA);</span>
+    }
+
     /**
      * Creates an instance of a subclass of this class based on provided method
      * and using provided Gaussian sigma, input data array and minimum/maximum
      * values assumed to be contained in provided array.
-     * @param minValue Minimum value assumed to be contained in input data array
-     * @param maxValue Maximum value assumed to be contained in input data array
-     * @param inputData Array containing input data to be used for the 
-     * estimation of the maximum likelihood value.
+     *
+     * @param minValue      Minimum value assumed to be contained in input data array
+     * @param maxValue      Maximum value assumed to be contained in input data array
+     * @param inputData     Array containing input data to be used for the
+     *                      estimation of the maximum likelihood value.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
-     * @param method Method to estimate maximum likelihood value
+     * @param method        Method to estimate maximum likelihood value
      * @return A maximum likelihood estimator
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero, or if minValue &amp;lt; maxValue.
-     */        
-    public static MaximumLikelihoodEstimator create(double minValue,
-            double maxValue, double[] inputData, double gaussianSigma,
-            MaximumLikelihoodEstimatorMethod method) {
-<span class="fc bfc" id="L448" title="All 2 branches covered.">        switch (method) {</span>
+     *                                  negative or zero, or if minValue &amp;lt; maxValue.
+     */
+    public static MaximumLikelihoodEstimator create(
+            final double minValue, final double maxValue, final double[] inputData,
+            final double gaussianSigma, final MaximumLikelihoodEstimatorMethod method) {
+<span class="fc bfc" id="L473" title="All 2 branches covered.">        switch (method) {</span>
             case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-<span class="fc" id="L450">                return new HistogramMaximumLikelihoodEstimator(minValue, </span>
+<span class="fc" id="L475">                return new HistogramMaximumLikelihoodEstimator(minValue,</span>
                         maxValue, inputData, gaussianSigma,
                         HistogramMaximumLikelihoodEstimator.
-                        DEFAULT_NUMBER_OF_BINS);
+                                DEFAULT_NUMBER_OF_BINS);
             case ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR:
             default:
-<span class="fc" id="L456">                return new AccurateMaximumLikelihoodEstimator(minValue,</span>
-                        maxValue, inputData, gaussianSigma, 
+<span class="fc" id="L481">                return new AccurateMaximumLikelihoodEstimator(minValue,</span>
+                        maxValue, inputData, gaussianSigma,
                         AccurateMaximumLikelihoodEstimator.
-                        DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
+                                DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
         }
-    }    
-    
+    }
+
     /**
      * Creates an instance of a subclass of this class using default maximum
      * likelihood method and using provided Gaussian sigma, input data array and
      * minimum/maximum values assumed to be contained in provided array.
-     * @param minValue Minimum value assumed to be contained in input data array
-     * @param maxValue Maximum value assumed to be contained in input data array
-     * @param inputData Array containing input data to be used for the 
-     * estimation of the maximum likelihood value.
+     *
+     * @param minValue      Minimum value assumed to be contained in input data array
+     * @param maxValue      Maximum value assumed to be contained in input data array
+     * @param inputData     Array containing input data to be used for the
+     *                      estimation of the maximum likelihood value.
      * @param gaussianSigma Gaussian sigma to be set for each sample.
      * @return A maximum likelihood estimator
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero, or if minValue &amp;lt; maxValue.
-     */            
-    public static MaximumLikelihoodEstimator create(double minValue,
-            double maxValue, double[] inputData, double gaussianSigma) {
-<span class="fc" id="L478">        return create(minValue, maxValue, inputData, gaussianSigma, </span>
+     *                                  negative or zero, or if minValue &amp;lt; maxValue.
+     */
+    public static MaximumLikelihoodEstimator create(
+            final double minValue, final double maxValue, final double[] inputData,
+            final double gaussianSigma) {
+<span class="fc" id="L505">        return create(minValue, maxValue, inputData, gaussianSigma,</span>
                 DEFAULT_METHOD);
     }
-    
+
     /**
      * Creates an instance of a subclass of this class using default maximum
-     * likelihood method and default Gaussian sigma, and using provided input 
-     * data array and minimum/maximum values assumed to be contained in provided 
+     * likelihood method and default Gaussian sigma, and using provided input
+     * data array and minimum/maximum values assumed to be contained in provided
      * array.
-     * @param minValue Minimum value assumed to be contained in input data array
-     * @param maxValue Maximum value assumed to be contained in input data array
-     * @param inputData Array containing input data to be used for the 
-     * estimation of the maximum likelihood value.
+     *
+     * @param minValue  Minimum value assumed to be contained in input data array
+     * @param maxValue  Maximum value assumed to be contained in input data array
+     * @param inputData Array containing input data to be used for the
+     *                  estimation of the maximum likelihood value.
      * @return A maximum likelihood estimator
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
-     * negative or zero, or if minValue &amp;lt; maxValue.
-     */                
-    public static MaximumLikelihoodEstimator create(double minValue,
-            double maxValue, double[] inputData) {
-<span class="fc" id="L497">        return create(minValue, maxValue, inputData, DEFAULT_GAUSSIAN_SIGMA);</span>
+     *                                  negative or zero, or if minValue &amp;lt; maxValue.
+     */
+    public static MaximumLikelihoodEstimator create(
+            final double minValue, final double maxValue, final double[] inputData) {
+<span class="fc" id="L525">        return create(minValue, maxValue, inputData, DEFAULT_GAUSSIAN_SIGMA);</span>
     }
-    
+
     /**
      * Internal method to compute minimum and maximum values of provided input
      * data array.
      */
     protected void computeMinMaxValues() {
-<span class="pc bpc" id="L505" title="1 of 2 branches missed.">        if (!isInputDataAvailable()) {</span>
-<span class="nc" id="L506">            return;</span>
+<span class="pc bpc" id="L533" title="1 of 2 branches missed.">        if (!isInputDataAvailable()) {</span>
+<span class="nc" id="L534">            return;</span>
         }
 
-<span class="fc" id="L509">        minValue = Integer.MAX_VALUE;</span>
-<span class="fc" id="L510">        maxValue = -Integer.MAX_VALUE;</span>
-                
+<span class="fc" id="L537">        minValue = Integer.MAX_VALUE;</span>
+<span class="fc" id="L538">        maxValue = -Integer.MAX_VALUE;</span>
+
         double value;
-<span class="fc bfc" id="L513" title="All 2 branches covered.">        for (double data : inputData) {</span>
-<span class="fc" id="L514">            value = data;</span>
-<span class="fc bfc" id="L515" title="All 2 branches covered.">            if (value &lt; minValue) minValue = value;</span>
-<span class="fc bfc" id="L516" title="All 2 branches covered.">            if (value &gt; maxValue) maxValue = value;</span>
+<span class="fc bfc" id="L541" title="All 2 branches covered.">        for (final double data : inputData) {</span>
+<span class="fc" id="L542">            value = data;</span>
+<span class="fc bfc" id="L543" title="All 2 branches covered.">            if (value &lt; minValue) {</span>
+<span class="fc" id="L544">                minValue = value;</span>
+            }
+<span class="fc bfc" id="L546" title="All 2 branches covered.">            if (value &gt; maxValue) {</span>
+<span class="fc" id="L547">                maxValue = value;</span>
+            }
         }
-        
-<span class="fc" id="L519">        areMinMaxAvailable = true;</span>
-<span class="fc" id="L520">    }</span>
+
+<span class="fc" id="L551">        areMinMaxAvailable = true;</span>
+<span class="fc" id="L552">    }</span>
 
     /**
      * Method to set internally minimum and maximum value found in input data
      * array.
+     *
      * @param minValue Minimum value in input data array.
      * @param maxValue Maximum value in input data array.
      * @throws IllegalArgumentException Exception raised if minValue &amp;lt; maxValue.
      */
-    private void internalSetMinMaxValues(double minValue, double maxValue) {
-<span class="fc bfc" id="L530" title="All 2 branches covered.">        if (minValue &gt; maxValue) {</span>
-<span class="fc" id="L531">            throw new IllegalArgumentException();</span>
+    private void internalSetMinMaxValues(final double minValue, final double maxValue) {
+<span class="fc bfc" id="L563" title="All 2 branches covered.">        if (minValue &gt; maxValue) {</span>
+<span class="fc" id="L564">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L534">        this.minValue = minValue;</span>
-<span class="fc" id="L535">        this.maxValue = maxValue;</span>
-<span class="fc" id="L536">        areMinMaxAvailable = true;</span>
-<span class="fc" id="L537">    }</span>
+<span class="fc" id="L567">        this.minValue = minValue;</span>
+<span class="fc" id="L568">        this.maxValue = maxValue;</span>
+<span class="fc" id="L569">        areMinMaxAvailable = true;</span>
+<span class="fc" id="L570">    }</span>
 
     /**
      * Internal method to set Gaussian sigma to be used on each sample when
      * aggregating Gaussian functions centered at each input data sample value.
+     *
      * @param gaussianSigma Gaussian sigma to be used on each sample.
      * @throws IllegalArgumentException Exception raised if provided Gaussian
-     * sigma is negative or zero.
+     *                                  sigma is negative or zero.
      */
-    private void internalSetGaussianSigma(double gaussianSigma) {
-<span class="fc bfc" id="L547" title="All 2 branches covered.">        if (gaussianSigma &lt;= MIN_GAUSSIAN_SIGMA) {</span>
-<span class="fc" id="L548">            throw new IllegalArgumentException();</span>
+    private void internalSetGaussianSigma(final double gaussianSigma) {
+<span class="fc bfc" id="L581" title="All 2 branches covered.">        if (gaussianSigma &lt;= MIN_GAUSSIAN_SIGMA) {</span>
+<span class="fc" id="L582">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L550">        this.gaussianSigma = gaussianSigma;</span>
-<span class="fc" id="L551">    }</span>
+<span class="fc" id="L584">        this.gaussianSigma = gaussianSigma;</span>
+<span class="fc" id="L585">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

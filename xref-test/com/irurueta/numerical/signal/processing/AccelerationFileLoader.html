@@ -34,16 +34,16 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">AccelerationFileLoader</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>      
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">static</strong> <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">Data</a> load(File f) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">int</strong> bufferSize = computeBufferSizes(f);        
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>          DataInputStream stream = <strong class="jxr_keyword">new</strong> DataInputStream(<strong class="jxr_keyword">new</strong> FileInputStream(f));
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">static</strong> <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">Data</a> load(<strong class="jxr_keyword">final</strong> File f) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> bufferSize = computeBufferSizes(f);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>          <strong class="jxr_keyword">final</strong> DataInputStream stream = <strong class="jxr_keyword">new</strong> DataInputStream(<strong class="jxr_keyword">new</strong> FileInputStream(f));
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">float</strong>[] accelerationX = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[bufferSize];
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>          <strong class="jxr_keyword">float</strong>[] accelerationY = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[bufferSize];
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">float</strong>[] accelerationZ = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[bufferSize];
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong>[] accelerationX = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[bufferSize];
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong>[] accelerationY = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[bufferSize];
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong>[] accelerationZ = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[bufferSize];
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <strong class="jxr_keyword">long</strong>[] timestamp = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">long</strong>[bufferSize];
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <strong class="jxr_keyword">long</strong>[] count = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">long</strong>[bufferSize];
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong>[] timestamp = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">long</strong>[bufferSize];
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong>[] count = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">long</strong>[bufferSize];
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; bufferSize; i++){
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>              count[i] = stream.readLong();
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          stream.close();
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">Data</a> data = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">Data</a>();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">final</strong> <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">Data</a> data = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/irurueta/numerical/signal/processing/AccelerationFileLoader.html">Data</a>();
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          data.accelerationX = accelerationX;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          data.accelerationY = accelerationY;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          data.accelerationZ = accelerationZ;
@@ -67,11 +67,11 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">return</strong> data;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> computeBufferSizes(File f) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">long</strong> fileLength = f.length();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> computeBufferSizes(<strong class="jxr_keyword">final</strong> File f) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> fileLength = f.length();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">int</strong> floatSize = Float.SIZE / Byte.SIZE;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">int</strong> longSize = Long.SIZE / Byte.SIZE;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> floatSize = Float.SIZE / Byte.SIZE;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> longSize = Long.SIZE / Byte.SIZE;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>)fileLength / (3*floatSize + 2*longSize);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      }

@@ -23,7 +23,7 @@ import com.irurueta.numerical.NotReadyException;
 
 /**
  * Fits provided data (x,y) to a function made of a linear combination of
- * functions used as a basis (i.e. f(x1, x2, ...) = a * f0(x1, x2, ...) + 
+ * functions used as a basis (i.e. f(x1, x2, ...) = a * f0(x1, x2, ...) +
  * b * f1(x1, x2, ...) + ...).
  * Where f0, f1, ... is the function basis which ideally should be formed by
  * orthogonal function.
@@ -32,12 +32,12 @@ import com.irurueta.numerical.NotReadyException;
  */
 @SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
-    
+
     /**
      * Default tolerance.
      */
     public static final double DEFAULT_TOL = 1e-12;
-    
+
     /**
      * Tolerance to define convergence threshold for SVD.
      */
@@ -45,184 +45,192 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
 
     /**
      * Constructor.
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points.
+     *
+     * @param x   input points x where a linear multi dimensional function
+     *            f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y   result of evaluation of linear multi dimensional function
+     *            f(x1, x2, ...) at provided x points.
      * @param sig standard deviations of each pair of points (x, y).
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length.
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length.
      */
-    public SvdMultiDimensionLinearFitter(Matrix x, double[] y, double[] sig) {
-<span class="fc" id="L57">        super(x, y, sig);</span>
-<span class="fc" id="L58">        tol = DEFAULT_TOL;</span>
-<span class="fc" id="L59">    }</span>
+    public SvdMultiDimensionLinearFitter(final Matrix x, final double[] y, final double[] sig) {
+<span class="fc" id="L58">        super(x, y, sig);</span>
+<span class="fc" id="L59">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * Constructor.
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length.
+     *
+     * @param x   input points x where a linear multi dimensional function
+     *            f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y   result of evaluation of linear multi dimensional function
+     *            f(x1, x2, ...) at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length.
      */
-    public SvdMultiDimensionLinearFitter(Matrix x, double[] y, double sig) {
-<span class="fc" id="L73">        super(x, y, sig);</span>
-<span class="fc" id="L74">        tol = DEFAULT_TOL;</span>
-<span class="fc" id="L75">    }</span>
-    
+    public SvdMultiDimensionLinearFitter(final Matrix x, final double[] y, final double sig) {
+<span class="fc" id="L75">        super(x, y, sig);</span>
+<span class="fc" id="L76">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L77">    }</span>
+
     /**
      * Constructor.
+     *
      * @param evaluator evaluator to evaluate function at provided point and
-     * obtain the evaluation of function basis at such point.
+     *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
-    public SvdMultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator)
+    public SvdMultiDimensionLinearFitter(final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L85">        super(evaluator);</span>
-<span class="fc" id="L86">        tol = DEFAULT_TOL;</span>
-<span class="fc" id="L87">    }</span>
-    
+<span class="fc" id="L88">        super(evaluator);</span>
+<span class="fc" id="L89">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L90">    }</span>
+
     /**
      * Constructor.
+     *
      * @param evaluator evaluator to evaluate function at provided point and
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points.
-     * @param sig standard deviations of each pair of points (x, y).
-     * @throws FittingException if evaluation fails.
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length.
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear multi dimensional function
+     *                  f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y         result of evaluation of linear multi dimensional function
+     *                  f(x1, x2, ...) at provided x points.
+     * @param sig       standard deviations of each pair of points (x, y).
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length.
      */
-    public SvdMultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double[] sig)
-            throws FittingException {
-<span class="fc" id="L105">        super(evaluator, x, y, sig); </span>
-<span class="fc" id="L106">        tol = DEFAULT_TOL;</span>
-<span class="fc" id="L107">    }</span>
-    
+    public SvdMultiDimensionLinearFitter(
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator, final Matrix x,
+            final double[] y, final double[] sig) throws FittingException {
+<span class="fc" id="L109">        super(evaluator, x, y, sig);</span>
+<span class="fc" id="L110">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L111">    }</span>
+
     /**
      * Constructor.
+     *
      * @param evaluator evaluator to evaluate function at provided point and
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws FittingException if evaluation fails.
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length.
-     */    
-    public SvdMultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double sig) throws FittingException {
-<span class="fc" id="L125">        super(evaluator, x, y, sig);</span>
-<span class="fc" id="L126">        tol = DEFAULT_TOL;</span>
-<span class="fc" id="L127">    }</span>
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear multi dimensional function
+     *                  f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y         result of evaluation of linear multi dimensional function
+     *                  f(x1, x2, ...) at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length.
+     */
+    public SvdMultiDimensionLinearFitter(
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator,
+            final Matrix x, final double[] y, final double sig) throws FittingException {
+<span class="fc" id="L131">        super(evaluator, x, y, sig);</span>
+<span class="fc" id="L132">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L133">    }</span>
 
     /**
      * Constructor.
      */
     SvdMultiDimensionLinearFitter() {
-<span class="fc" id="L133">        super();</span>
-<span class="fc" id="L134">        tol = DEFAULT_TOL;</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L139">        super();</span>
+<span class="fc" id="L140">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L141">    }</span>
 
     /**
      * Returns tolerance to define convergence threshold for SVD.
+     *
      * @return tolerance to define convergence threshold for SVD.
      */
     public double getTol() {
-<span class="fc" id="L142">        return tol;</span>
+<span class="fc" id="L149">        return tol;</span>
     }
-    
+
     /**
      * Sets tolerance to define convergence threshold for SVD.
+     *
      * @param tol tolerance to define convergence threshold for SVD.
      */
-    public void setTol(double tol) {
-<span class="fc" id="L150">        this.tol = tol;</span>
-<span class="fc" id="L151">    }    </span>
-    
+    public void setTol(final double tol) {
+<span class="fc" id="L158">        this.tol = tol;</span>
+<span class="fc" id="L159">    }</span>
+
     /**
      * Fits a function to provided data so that parameters associated to that
      * function can be estimated along with their covariance matrix and chi
      * square value.
-     * @throws FittingException if fitting fails.
+     *
+     * @throws FittingException  if fitting fails.
      * @throws NotReadyException if enough input data has not yet been provided.
-     */    
+     */
     @Override
     public void fit() throws FittingException, NotReadyException {
-<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L163">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L172">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L166">        double[] xRow = new double[x.getColumns()];</span>
-<span class="fc" id="L167">        int xCols = evaluator.getNumberOfDimensions();</span>
-        
+
+<span class="fc" id="L175">        final double[] xRow = new double[x.getColumns()];</span>
+<span class="fc" id="L176">        final int xCols = evaluator.getNumberOfDimensions();</span>
+
         try {
-<span class="fc" id="L170">            resultAvailable = false;</span>
-            
+<span class="fc" id="L179">            resultAvailable = false;</span>
+
             int i;
             int j;
             int k;
             double tmp;
-            double thresh;
+            final double thresh;
             double sum;
-<span class="fc" id="L178">            Matrix aa = new Matrix(ndat, ma);</span>
-<span class="fc" id="L179">            double[] b = new double[ndat];</span>
-<span class="fc bfc" id="L180" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L181">                x.getSubmatrixAsArray(i, 0, i, xCols - 1, xRow);</span>
-<span class="fc" id="L182">                evaluator.evaluate(xRow, afunc);</span>
-<span class="fc" id="L183">		        tmp = 1.0 / sig[i];</span>
-<span class="fc bfc" id="L184" title="All 2 branches covered.">		        for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc" id="L185">                    aa.setElementAt(i, j, afunc[j]*tmp);</span>
+<span class="fc" id="L187">            final Matrix aa = new Matrix(ndat, ma);</span>
+<span class="fc" id="L188">            final double[] b = new double[ndat];</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L190">                x.getSubmatrixAsArray(i, 0, i, xCols - 1, xRow);</span>
+<span class="fc" id="L191">                evaluator.evaluate(xRow, afunc);</span>
+<span class="fc" id="L192">                tmp = 1.0 / sig[i];</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L194">                    aa.setElementAt(i, j, afunc[j] * tmp);</span>
                 }
-<span class="fc" id="L187">		        b[i] = y[i] * tmp;</span>
+<span class="fc" id="L196">                b[i] = y[i] * tmp;</span>
             }
-            
-<span class="fc" id="L190">            SingularValueDecomposer svd = </span>
+
+<span class="fc" id="L199">            final SingularValueDecomposer svd =</span>
                     new SingularValueDecomposer(aa);
-<span class="fc" id="L192">            svd.decompose();</span>
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">            thresh = (tol &gt; 0. ? tol * svd.getSingularValues()[0] : -1.0);</span>
-<span class="fc" id="L194">            svd.solve(b, thresh, a);</span>
-<span class="fc" id="L195">            chisq = 0.0;</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L197">		        sum = 0.0;</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">		        for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc" id="L199">                    sum += aa.getElementAt(i, j)*a[j];</span>
+<span class="fc" id="L201">            svd.decompose();</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            thresh = (tol &gt; 0. ? tol * svd.getSingularValues()[0] : -1.0);</span>
+<span class="fc" id="L203">            svd.solve(b, thresh, a);</span>
+<span class="fc" id="L204">            chisq = 0.0;</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L206">                sum = 0.0;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L208">                    sum += aa.getElementAt(i, j) * a[j];</span>
                 }
-<span class="fc" id="L201">		        chisq += Math.pow(sum-b[i], 2.0);</span>
+<span class="fc" id="L210">                chisq += Math.pow(sum - b[i], 2.0);</span>
             }
-<span class="fc bfc" id="L203" title="All 2 branches covered.">            for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
-<span class="fc" id="L205">                    sum = 0.0;</span>
-<span class="fc" id="L206">                    double[] w = svd.getSingularValues();</span>
-<span class="fc" id="L207">                    double tsh = svd.getNegligibleSingularValueThreshold();</span>
-<span class="fc" id="L208">                    Matrix v = svd.getV();</span>
-<span class="fc bfc" id="L209" title="All 2 branches covered.">                    for (k = 0; k &lt; ma; k++) {</span>
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">                        if (w[k] &gt; tsh) {</span>
-<span class="fc" id="L211">                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / </span>
-<span class="fc" id="L212">                                    Math.pow(w[k], 2.0);</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L214">                    sum = 0.0;</span>
+<span class="fc" id="L215">                    final double[] w = svd.getSingularValues();</span>
+<span class="fc" id="L216">                    final double tsh = svd.getNegligibleSingularValueThreshold();</span>
+<span class="fc" id="L217">                    final Matrix v = svd.getV();</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                    for (k = 0; k &lt; ma; k++) {</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">                        if (w[k] &gt; tsh) {</span>
+<span class="fc" id="L220">                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) /</span>
+<span class="fc" id="L221">                                    Math.pow(w[k], 2.0);</span>
                         }
                     }
-<span class="fc" id="L215">                    covar.setElementAt(j, i, sum);</span>
-<span class="fc" id="L216">                    covar.setElementAt(i, j, sum);</span>
-		        }
+<span class="fc" id="L224">                    covar.setElementAt(j, i, sum);</span>
+<span class="fc" id="L225">                    covar.setElementAt(i, j, sum);</span>
+                }
             }
-            
-<span class="fc" id="L220">            resultAvailable = true;</span>
 
-<span class="nc" id="L222">        } catch (AlgebraException | EvaluationException e) {</span>
-<span class="nc" id="L223">            throw new FittingException(e);</span>
-<span class="fc" id="L224">        }        </span>
-<span class="fc" id="L225">    }    </span>
-    
+<span class="fc" id="L229">            resultAvailable = true;</span>
+
+<span class="nc" id="L231">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L232">            throw new FittingException(e);</span>
+<span class="fc" id="L233">        }</span>
+<span class="fc" id="L234">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

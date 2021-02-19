@@ -15,7 +15,11 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.*;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
  * Finds a single dimensional function's root within a bracket of values using
@@ -24,92 +28,95 @@ import com.irurueta.numerical.*;
  * Secion 9.4. page 456.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
-public class NewtonRaphsonSingleRootEstimator 
-    extends DerivativeSingleRootEstimator {
-    
+public class NewtonRaphsonSingleRootEstimator
+        extends DerivativeSingleRootEstimator {
+
     /**
      * Maximum number of iterations.
      */
     public static final int JMAX = 20;
-    
+
     /**
      * Constant defining default accuracy of the estimated root.
-     */    
+     */
     public static final double DEFAULT_TOLERANCE = 1e-6;
-    
+
     /**
      * Constant defining minimum allowed tolerance.
-     */    
+     */
     public static final double MIN_TOLERANCE = 0.0;
-    
+
     /**
      * Tolerance value. The algorithm will iterate until the result converges
      * below this value of accuracy or until the maximum number of iterations is
      * achieved (and in such case, convergence will be assumed to have failed).
-     */    
+     */
     private double tolerance;
-       
+
     /**
      * Empty constructor.
      */
     public NewtonRaphsonSingleRootEstimator() {
-<span class="fc" id="L56">        super();</span>
-<span class="fc" id="L57">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L58">    }</span>
-    
+<span class="fc" id="L60">        super();</span>
+<span class="fc" id="L61">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L62">    }</span>
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root.
+     *                     root will be searched.
+     * @param tolerance    Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
-     */        
+     *                                      maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
+     */
     public NewtonRaphsonSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint, double maxEvalPoint, double tolerance)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
-<span class="fc" id="L77">        super(listener, minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L78">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L79">    }</span>
-        
+<span class="fc" id="L82">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L83">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L84">    }</span>
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener           Listener to evaluate a single dimension function f(x)
+     *                           to find its roots.
      * @param derivativeListener Listener to evaluate the function's derivative.
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
-     * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root.
+     * @param minEvalPoint       Smallest value inside the bracket of values where the
+     *                           root will be searched.
+     * @param maxEvalPoint       Largest value inside the bracket of values where the
+     *                           root will be searched.
+     * @param tolerance          Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
-     */            
+     *                                      maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
+     */
     public NewtonRaphsonSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            SingleDimensionFunctionEvaluatorListener derivativeListener,
-            double minEvalPoint, double maxEvalPoint, double tolerance)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final SingleDimensionFunctionEvaluatorListener derivativeListener,
+            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
-<span class="fc" id="L100">        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L101">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L102">    }</span>
-        
+<span class="fc" id="L106">        super(listener, derivativeListener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L107">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L108">    }</span>
+
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * the tolerance value.
+     *
      * @return Tolerance value.
      */
     public double getTolerance() {
-<span class="fc" id="L112">        return tolerance;</span>
+<span class="fc" id="L119">        return tolerance;</span>
     }
 
     /**
@@ -117,77 +124,79 @@ public class NewtonRaphsonSingleRootEstimator
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * provided tolerance value.
+     *
      * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
+     * @throws LockedException          Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException {
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L127">            throw new LockedException();</span>
+     *                                  negative.
+     */
+    public void setTolerance(final double tolerance) throws LockedException {
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L135">            throw new LockedException();</span>
         }
-<span class="fc" id="L129">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L130">    }</span>
-    
+<span class="fc" id="L137">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L138">    }</span>
+
     /**
-     * Estimates a local root for a given single dimension function being 
+     * Estimates a local root for a given single dimension function being
      * evaluated by provided listener.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if either a listener has not
-     * yet been provided or a bracket has not been provided or computed.
+     *
+     * @throws LockedException         Exception raised if this instance is already
+     *                                 locked.
+     * @throws NotReadyException       Exception raised if either a listener has not
+     *                                 yet been provided or a bracket has not been provided or computed.
      * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */        
+     *                                 some other reason (usually inability to evaluate the function,
+     *                                 numerical instability or convergence problems, or no roots are found).
+     */
     @Override
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-        
-<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L149">            throw new LockedException();</span>
+
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L158">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L152">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L161">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L155">        locked = true;</span>
-<span class="fc" id="L156">        rootAvailable = false;</span>
-        
-<span class="fc" id="L158">        double x1 = minEvalPoint;</span>
-<span class="fc" id="L159">        double x2 = maxEvalPoint;</span>
-<span class="fc" id="L160">        double xacc = tolerance;</span>
-        
-<span class="fc" id="L162">        double rtn = 0.5 * (x1 + x2);</span>
+
+<span class="fc" id="L164">        locked = true;</span>
+<span class="fc" id="L165">        rootAvailable = false;</span>
+
+<span class="fc" id="L167">        final double x1 = minEvalPoint;</span>
+<span class="fc" id="L168">        final double x2 = maxEvalPoint;</span>
+<span class="fc" id="L169">        final double xacc = tolerance;</span>
+
+<span class="fc" id="L171">        double rtn = 0.5 * (x1 + x2);</span>
         double f;
         double df;
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        for (int j = 0; j &lt; JMAX; j++) {</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        for (int j = 0; j &lt; JMAX; j++) {</span>
             try {
-<span class="fc" id="L167">                f = listener.evaluate(rtn);</span>
-<span class="fc" id="L168">                df = derivativeListener.evaluate(rtn);</span>
-<span class="nc" id="L169">            } catch (EvaluationException e) {</span>
-<span class="nc" id="L170">                throw new RootEstimationException(e);</span>
-<span class="fc" id="L171">            }</span>
-            
-<span class="fc" id="L173">            double dx = f / df;</span>
-<span class="fc" id="L174">            rtn -= dx;</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">            if ((x1 - rtn) * (rtn - x2) &lt; 0.0) {</span>
-                //jumped out of brackets
-<span class="fc" id="L177">                locked = false;</span>
-<span class="fc" id="L178">                throw new RootEstimationException();</span>
+<span class="fc" id="L176">                f = listener.evaluate(rtn);</span>
+<span class="fc" id="L177">                df = derivativeListener.evaluate(rtn);</span>
+<span class="nc" id="L178">            } catch (final EvaluationException e) {</span>
+<span class="nc" id="L179">                throw new RootEstimationException(e);</span>
+<span class="fc" id="L180">            }</span>
+
+<span class="fc" id="L182">            final double dx = f / df;</span>
+<span class="fc" id="L183">            rtn -= dx;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">            if ((x1 - rtn) * (rtn - x2) &lt; 0.0) {</span>
+                // jumped out of brackets
+<span class="fc" id="L186">                locked = false;</span>
+<span class="fc" id="L187">                throw new RootEstimationException();</span>
             }
-<span class="fc bfc" id="L180" title="All 2 branches covered.">            if (Math.abs(dx) &lt; xacc) {</span>
-                //root found
-<span class="fc" id="L182">                root = rtn;</span>
-<span class="fc" id="L183">                rootAvailable = true;</span>
-<span class="fc" id="L184">                locked = false;</span>
-<span class="fc" id="L185">                return;</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">            if (Math.abs(dx) &lt; xacc) {</span>
+                // root found
+<span class="fc" id="L191">                root = rtn;</span>
+<span class="fc" id="L192">                rootAvailable = true;</span>
+<span class="fc" id="L193">                locked = false;</span>
+<span class="fc" id="L194">                return;</span>
             }
         }
-        //maximum number of iterations exceeded
-<span class="nc" id="L189">        locked = false;</span>
-<span class="nc" id="L190">        throw new RootEstimationException();</span>
+        // maximum number of iterations exceeded
+<span class="nc" id="L198">        locked = false;</span>
+<span class="nc" id="L199">        throw new RootEstimationException();</span>
     }
 
     /**
@@ -196,15 +205,16 @@ public class NewtonRaphsonSingleRootEstimator
      * If a root is found by this class, it is ensured to have an accuracy below
      * provided tolerance value.
      * This method does not check whether this instance is locked or not.
+     *
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
+     *                                  negative.
      */
-    private void internalSetTolerance(double tolerance) {
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L205">            throw new IllegalArgumentException();</span>
+    private void internalSetTolerance(final double tolerance) {
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L215">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L207">        this.tolerance = tolerance;</span>
-<span class="fc" id="L208">    }</span>
+<span class="fc" id="L217">        this.tolerance = tolerance;</span>
+<span class="fc" id="L218">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

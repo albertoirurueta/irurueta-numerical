@@ -18,11 +18,11 @@ package com.irurueta.numerical;
 /**
  * This class evaluates a multidimensional function along a line, such line is
  * defined by an input point and a given direction.
- * Using provided input point and direction, the multidimensional function's 
+ * Using provided input point and direction, the multidimensional function's
  * input parameters are determined so they all lay on a line.
  */
 public class DirectionalEvaluator {
-    
+
     /**
      * Listener to evaluate a multidimensional function.
      */
@@ -33,107 +33,114 @@ public class DirectionalEvaluator {
      * along a line.
      */
     protected double[] point;
-    
+
     /**
      * Vector indicating the direction of the line where the function is
      * evaluated.
      */
     protected double[] direction;
-    
+
     /**
      * Point currently being evaluated in the multidimensional function.
      * This is used internally.
      */
     protected double[] p;
-    
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a multidimensional function.
-     * @param point Point used as a reference to determine the function's input
-     * parameters along a line.
-     * @param direction Vector indicating the direction of the line where the 
-     * function is evaluated.
+     *
+     * @param listener  Listener to evaluate a multidimensional function.
+     * @param point     Point used as a reference to determine the function's input
+     *                  parameters along a line.
+     * @param direction Vector indicating the direction of the line where the
+     *                  function is evaluated.
      * @throws IllegalArgumentException Raised if point and direction don't have
-     * the same length.
+     *                                  the same length.
      */
     public DirectionalEvaluator(
-            MultiDimensionFunctionEvaluatorListener listener, double[] point, 
-<span class="fc" id="L61">            double[] direction) {</span>
-        
-<span class="fc" id="L63">        setPointAndDirection(point, direction);</span>
-<span class="fc" id="L64">        this.listener = listener;        </span>
-<span class="fc" id="L65">        p = new double[point.length];</span>
-<span class="fc" id="L66">    }</span>
-    
+            final MultiDimensionFunctionEvaluatorListener listener, final double[] point,
+<span class="fc" id="L62">            final double[] direction) {</span>
+
+<span class="fc" id="L64">        setPointAndDirection(point, direction);</span>
+<span class="fc" id="L65">        this.listener = listener;</span>
+<span class="fc" id="L66">        p = new double[point.length];</span>
+<span class="fc" id="L67">    }</span>
+
     /**
      * Returns listener to evaluate a multidimensional function.
+     *
      * @return Listener to evaluate a multidimensional function.
      */
     public MultiDimensionFunctionEvaluatorListener getListener() {
-<span class="fc" id="L73">        return listener;</span>
+<span class="fc" id="L75">        return listener;</span>
     }
-    
+
     /**
      * Sets listener to evaluate a multidimensional function.
-     * @param listener  Listener to evaluate a multidimensional function.
+     *
+     * @param listener Listener to evaluate a multidimensional function.
      */
-    public void setListener(MultiDimensionFunctionEvaluatorListener listener) {
-<span class="nc" id="L81">        this.listener = listener;</span>
-<span class="nc" id="L82">    }</span>
-    
+    public void setListener(final MultiDimensionFunctionEvaluatorListener listener) {
+<span class="nc" id="L84">        this.listener = listener;</span>
+<span class="nc" id="L85">    }</span>
+
     /**
      * Returns point used as a reference to determine the function's input
      * parameters along a line.
+     *
      * @return Point used as a reference to determine the function's input
      * parameters along a line
      */
     public double[] getPoint() {
-<span class="fc" id="L91">        return point;</span>
+<span class="fc" id="L95">        return point;</span>
     }
-    
+
     /**
-     * Returns array indicating the direction of the line where the function is 
+     * Returns array indicating the direction of the line where the function is
      * evaluated.
+     *
      * @return Array indicating the direction of the line where the function is
      * evaluated.
      */
     public double[] getDirection() {
-<span class="fc" id="L101">        return direction;</span>
+<span class="fc" id="L106">        return direction;</span>
     }
-        
+
     /**
-     * Sets point used as a reference to determine the function's input 
-     * parameters along a line and the direction of the line where the 
+     * Sets point used as a reference to determine the function's input
+     * parameters along a line and the direction of the line where the
      * function is evaluated.
-     * @param point Point used as a reference to determine the function's input
-     * parameters along a line.
+     *
+     * @param point     Point used as a reference to determine the function's input
+     *                  parameters along a line.
      * @param direction Array indicating the direction of the line where the
-     * function is evaluated.
+     *                  function is evaluated.
      * @throws IllegalArgumentException Raised if point and direction don't have
-     * the same length.
+     *                                  the same length.
      */
-    public final void setPointAndDirection(double[] point, double[] direction) {
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (point.length != direction.length) {</span>
-<span class="nc" id="L117">            throw new IllegalArgumentException();</span>
+    public final void setPointAndDirection(final double[] point, final double[] direction) {
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (point.length != direction.length) {</span>
+<span class="nc" id="L123">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L120">        this.point = point;</span>
-<span class="fc" id="L121">        this.direction = direction;</span>
-<span class="fc" id="L122">    }</span>
-    
+
+<span class="fc" id="L126">        this.point = point;</span>
+<span class="fc" id="L127">        this.direction = direction;</span>
+<span class="fc" id="L128">    }</span>
+
     /**
      * Evaluates a function using current listener at a distance x from current
      * point using current direction
-     * @param x Distance from provided point using provided direction where 
-     * function is being evaluated
+     *
+     * @param x Distance from provided point using provided direction where
+     *          function is being evaluated
      * @return Result of evaluating the function
      * @throws EvaluationException Thrown if function evaluation fails
      */
-    public double evaluateAt(double x) throws EvaluationException {
-<span class="fc bfc" id="L133" title="All 2 branches covered.">        for(int i = 0; i &lt; point.length; i++){</span>
-<span class="fc" id="L134">            p[i] = point[i] + x * direction[i];</span>
+    public double evaluateAt(final double x) throws EvaluationException {
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (int i = 0; i &lt; point.length; i++) {</span>
+<span class="fc" id="L141">            p[i] = point[i] + x * direction[i];</span>
         }
-<span class="fc" id="L136">        return listener.evaluate(p);</span>
+<span class="fc" id="L143">        return listener.evaluate(p);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

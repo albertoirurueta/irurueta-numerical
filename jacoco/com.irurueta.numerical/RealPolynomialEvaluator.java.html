@@ -17,49 +17,52 @@ package com.irurueta.numerical;
 
 /**
  * Utility class to evaluate real polynomials.
- * This class is useful when the same real polynomial needs to be evaluated 
+ * This class is useful when the same real polynomial needs to be evaluated
  * multiple times.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class RealPolynomialEvaluator extends PolynomialEvaluator {
-    
+
     /**
      * Polynomial coefficients.
      * A polynomial of degree n is defined as:
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * Hence, the array of polynomial coefficients is [a0, a1, ... a(n-1), an]
      */
-    private double[] mPolyParams;
-    
+    private final double[] mPolyParams;
+
     /**
      * Constructor.
+     *
      * @param polyParams polynomial coefficients.
-     * @throws IllegalArgumentException if provided array is null or has length 
-     * 0.
+     * @throws IllegalArgumentException if provided array is null or has length
+     *                                  0.
      */
-<span class="fc" id="L40">    public RealPolynomialEvaluator(double[] polyParams) {</span>
-<span class="pc bpc" id="L41" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
-<span class="nc" id="L42">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L41">    public RealPolynomialEvaluator(final double[] polyParams) {</span>
+<span class="pc bpc" id="L42" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="nc" id="L43">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L45">        mPolyParams = polyParams;</span>
-<span class="fc" id="L46">    }</span>
-    
+
+<span class="fc" id="L46">        mPolyParams = polyParams;</span>
+<span class="fc" id="L47">    }</span>
+
     /**
      * Gets polynomial parameters.
+     *
      * @return polynomial parameters.
      */
     public double[] getPolyParams() {
-<span class="fc" id="L53">        return mPolyParams;</span>
+<span class="fc" id="L55">        return mPolyParams;</span>
     }
-    
+
     /**
      * Evaluates polynomial at provided point x.
+     *
      * @param x point where polynomial is evaluated.
      * @return result of evaluation.
      */
-    public double evaluate(double x) {
-<span class="fc" id="L62">        return evaluate(mPolyParams, x);</span>
+    public double evaluate(final double x) {
+<span class="fc" id="L65">        return evaluate(mPolyParams, x);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -18,43 +18,45 @@ package com.irurueta.numerical;
 import com.irurueta.algebra.Complex;
 
 /**
- * Utility class to evaluate polynomials having either real or complex 
+ * Utility class to evaluate polynomials having either real or complex
  * coefficients.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class PolynomialEvaluator {
-    
+
     /**
      * Empty constructor.
      */
-<span class="fc" id="L30">    protected PolynomialEvaluator() { }</span>
-    
+<span class="fc" id="L30">    protected PolynomialEvaluator() {</span>
+<span class="fc" id="L31">    }</span>
+
     /**
      * Evaluates polynomial formed by provided polynomial parameters at provided
      * point x. The polynomial of degree n is defined as:
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * hence, the array of parameters is [a0, a1, ... a(n-1), an].
+     *
      * @param polyParams array of polynomial parameters.
-     * @param x point where polynomial is evaluated.
+     * @param x          point where polynomial is evaluated.
      * @return result of evaluation.
-     * @throws IllegalArgumentException if provided array is null or has length 
-     * 0.
+     * @throws IllegalArgumentException if provided array is null or has length
+     *                                  0.
      */
-    public static double evaluate(double[] polyParams, double x) {
-<span class="fc bfc" id="L44" title="All 4 branches covered.">        if (polyParams == null || polyParams.length == 0) {</span>
-<span class="fc" id="L45">            throw new IllegalArgumentException();</span>
+    public static double evaluate(final double[] polyParams, final double x) {
+<span class="fc bfc" id="L46" title="All 4 branches covered.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="fc" id="L47">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L48">        int length = polyParams.length;</span>
-        
-<span class="fc" id="L50">        double result = 0.0;</span>
-<span class="fc" id="L51">        double powX = 1.0;</span>
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (int i = length - 1; i &gt;= 0; i--) {</span>
-<span class="fc" id="L53">            result += polyParams[i]*powX;            </span>
-<span class="fc" id="L54">            powX *= x;</span>
+
+<span class="fc" id="L50">        final int length = polyParams.length;</span>
+
+<span class="fc" id="L52">        double result = 0.0;</span>
+<span class="fc" id="L53">        double powX = 1.0;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (int i = length - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L55">            result += polyParams[i] * powX;</span>
+<span class="fc" id="L56">            powX *= x;</span>
         }
-        
-<span class="fc" id="L57">        return result;</span>
+
+<span class="fc" id="L59">        return result;</span>
     }
 
     /**
@@ -62,31 +64,32 @@ public class PolynomialEvaluator {
      * point x. The polynomial of degree n is defined as:
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * hence, the array of parameters is [a0, a1, ... a(n-1), an].
+     *
      * @param polyParams array of polynomial parameters.
-     * @param x point where polynomial is evaluated.
+     * @param x          point where polynomial is evaluated.
      * @return result of evaluation.
-     * @throws IllegalArgumentException if provided array is null or has length 
-     * 0.
+     * @throws IllegalArgumentException if provided array is null or has length
+     *                                  0.
      */
-    public static Complex evaluate(Complex[] polyParams, Complex x) {
-<span class="fc bfc" id="L72" title="All 4 branches covered.">        if (polyParams == null || polyParams.length == 0) {</span>
-<span class="fc" id="L73">            throw new IllegalArgumentException();</span>
+    public static Complex evaluate(final Complex[] polyParams, final Complex x) {
+<span class="fc bfc" id="L75" title="All 4 branches covered.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="fc" id="L76">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L76">        int length = polyParams.length;</span>
-        
-<span class="fc" id="L78">        Complex result = new Complex();</span>
-<span class="fc" id="L79">        Complex powX = new Complex(1.0, 0.0);</span>
-<span class="fc" id="L80">        Complex tmp = new Complex();</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (int i = length - 1; i &gt;= 0; i--) {</span>
-            
-<span class="fc" id="L83">            polyParams[i].multiply(powX, tmp);</span>
-<span class="fc" id="L84">            result.add(tmp);</span>
-            
-<span class="fc" id="L86">            powX.multiply(x);</span>
+
+<span class="fc" id="L79">        final int length = polyParams.length;</span>
+
+<span class="fc" id="L81">        final Complex result = new Complex();</span>
+<span class="fc" id="L82">        final Complex powX = new Complex(1.0, 0.0);</span>
+<span class="fc" id="L83">        final Complex tmp = new Complex();</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (int i = length - 1; i &gt;= 0; i--) {</span>
+
+<span class="fc" id="L86">            polyParams[i].multiply(powX, tmp);</span>
+<span class="fc" id="L87">            result.add(tmp);</span>
+
+<span class="fc" id="L89">            powX.multiply(x);</span>
         }
-                
-<span class="fc" id="L89">        return result;</span>
+
+<span class="fc" id="L92">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

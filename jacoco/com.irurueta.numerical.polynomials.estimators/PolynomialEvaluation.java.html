@@ -21,52 +21,48 @@ import java.io.Serializable;
  * Contains an evaluation of a polynomial and the point where the
  * polynomial has been evaluated.
  */
-public abstract class PolynomialEvaluation implements Serializable{    
+public abstract class PolynomialEvaluation implements Serializable {
     /**
      * Evaluation of polynomial at point x.
      */
     private double mEvaluation;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L33">    public PolynomialEvaluation() { }</span>
-    
+<span class="fc" id="L33">    public PolynomialEvaluation() {</span>
+<span class="fc" id="L34">    }</span>
+
     /**
      * Constructor.
+     *
      * @param evaluation evaluation of polynomial at a point x.
      */
-<span class="fc" id="L39">    public PolynomialEvaluation(double evaluation) {</span>
-<span class="fc" id="L40">        mEvaluation = evaluation;</span>
-<span class="fc" id="L41">    }</span>
-    
-    /**
-     * Constructor.
-     * @param x point where polynomial has been evaluated.
-     * @param evaluation evaluation of polynomial at point x.
-     */
-<span class="nc" id="L48">    public PolynomialEvaluation(double x, double evaluation) {</span>
-<span class="nc" id="L49">        mEvaluation = evaluation;</span>
-<span class="nc" id="L50">    }</span>
-        
+<span class="fc" id="L41">    public PolynomialEvaluation(final double evaluation) {</span>
+<span class="fc" id="L42">        mEvaluation = evaluation;</span>
+<span class="fc" id="L43">    }</span>
+
     /**
      * Gets evaluation of polynomial at point x.
+     *
      * @return evaluation of polynomial at point x.
      */
     public double getEvaluation() {
-<span class="fc" id="L57">        return mEvaluation;</span>
+<span class="fc" id="L51">        return mEvaluation;</span>
     }
-    
+
     /**
      * Sets evaluation of polynomial at point x.
+     *
      * @param evaluation evaluation of polynomial at point x.
      */
-    public void setEvaluation(double evaluation) {
-<span class="fc" id="L65">        mEvaluation = evaluation;</span>
-<span class="fc" id="L66">    }</span>
-    
+    public void setEvaluation(final double evaluation) {
+<span class="fc" id="L60">        mEvaluation = evaluation;</span>
+<span class="fc" id="L61">    }</span>
+
     /**
      * Gets type of polynomial evaluation.
+     *
      * @return type of polynomial evaluation.
      */
     public abstract PolynomialEvaluationType getType();

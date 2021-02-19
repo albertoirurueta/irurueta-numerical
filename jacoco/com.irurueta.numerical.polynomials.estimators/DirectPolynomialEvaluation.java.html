@@ -23,48 +23,52 @@ public class DirectPolynomialEvaluation extends PolynomialEvaluation {
     /**
      * Point where polynomial has been evaluated.
      */
-    private double mX;    
-    
+    private double mX;
+
     /**
      * Constructor.
      */
     public DirectPolynomialEvaluation() {
 <span class="fc" id="L32">        super();</span>
 <span class="fc" id="L33">    }</span>
-    
+
     /**
      * Constructor.
-     * @param x point where polynomial has been evaluated.
+     *
+     * @param x          point where polynomial has been evaluated.
      * @param evaluation evaluation of polynomial at point x.
      */
-    public DirectPolynomialEvaluation(double x, double evaluation) {
-<span class="fc" id="L41">        super(evaluation);</span>
-<span class="fc" id="L42">        mX = x;</span>
-<span class="fc" id="L43">    }</span>
-    
+    public DirectPolynomialEvaluation(final double x, final double evaluation) {
+<span class="fc" id="L42">        super(evaluation);</span>
+<span class="fc" id="L43">        mX = x;</span>
+<span class="fc" id="L44">    }</span>
+
     /**
      * Gets point where polynomial has been evaluated.
+     *
      * @return point where polynomial has been evaluated.
      */
     public double getX() {
-<span class="fc" id="L50">        return mX;</span>
+<span class="fc" id="L52">        return mX;</span>
     }
-    
+
     /**
      * Sets point where polynomial has been evaluated.
+     *
      * @param x point where polynomial has been evaluated.
      */
-    public void setX(double x) {
-<span class="fc" id="L58">        mX = x;</span>
-<span class="fc" id="L59">    }    </span>
-    
+    public void setX(final double x) {
+<span class="fc" id="L61">        mX = x;</span>
+<span class="fc" id="L62">    }</span>
+
     /**
      * Gets type of polynomial evaluation.
+     *
      * @return type of polynomial evaluation.
      */
     @Override
     public PolynomialEvaluationType getType() {
-<span class="fc" id="L67">        return PolynomialEvaluationType.DIRECT_EVALUATION;</span>
+<span class="fc" id="L71">        return PolynomialEvaluationType.DIRECT_EVALUATION;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

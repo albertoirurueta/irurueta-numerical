@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * @param listener Listener to evaluate a multidimensional function.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/numerical/optimization/MultiOptimizer.html">MultiOptimizer</a>(<a href="../../../../com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html">MultiDimensionFunctionEvaluatorListener</a> listener) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/numerical/optimization/MultiOptimizer.html">MultiOptimizer</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html">MultiDimensionFunctionEvaluatorListener</a> listener) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">super</strong>();
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">this</strong>.listener = listener;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          xmin = <strong class="jxr_keyword">null</strong>;
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     * @param listener Listener to evaluate a multidimensional function.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     * @throws LockedException Raised if this instance is locked.</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setListener(<a href="../../../../com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html">MultiDimensionFunctionEvaluatorListener</a> listener)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setListener(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html">MultiDimensionFunctionEvaluatorListener</a> listener)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a> {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">if</strong> (isLocked()) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/LockedException.html">LockedException</a>();

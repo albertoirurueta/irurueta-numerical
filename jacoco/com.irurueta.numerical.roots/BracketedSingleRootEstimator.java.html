@@ -18,368 +18,384 @@ package com.irurueta.numerical.roots;
 import com.irurueta.numerical.*;
 
 /**
- * Computes a root for a single dimension function inside a given bracket of 
+ * Computes a root for a single dimension function inside a given bracket of
  * values, in other words, root will only be searched within provided minimum
  * and maximum evaluation points.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
-    
+
     /**
      * Number tries to automatically compute a bracket of values for a given
      * function.
      */
     public static final int NTRY = 50;
-    
+
     /**
      * Factor to use to modify initial values when searching for a bracket.
      */
     public static final double FACTOR = 1.6;
-    
+
     /**
      * Default minimum evaluation point.
      */
     public static final double DEFAULT_MIN_EVAL_POINT = -Double.MAX_VALUE;
-    
+
     /**
      * Default maximum evaluation point.
      */
     public static final double DEFAULT_MAX_EVAL_POINT = Double.MAX_VALUE;
-    
+
     /**
      * Constant defining the value by which the largest bracket evaluation value
      * is increased respect the minimum.
      */
     public static final double BRACKET_EPS = 1e-8;
-    
+
     /**
      * Minimum evaluation point.
      */
     protected double minEvalPoint;
-    
+
     /**
      * Maximum evaluation point.
      */
     protected double maxEvalPoint;
-    
+
     /**
      * Boolean indicating whether a bracket has been computed and is available.
      */
     protected boolean bracketAvailable;
-    
+
     /**
      * Constructor.
+     *
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint.
+     *                                      maxEvalPoint.
      */
-    public BracketedSingleRootEstimator(double minEvalPoint, 
-            double maxEvalPoint) throws InvalidBracketRangeException {
-<span class="nc" id="L81">        super();</span>
-<span class="nc" id="L82">        internalSetBracket(minEvalPoint, maxEvalPoint);</span>
-<span class="nc" id="L83">    }</span>
-    
+    public BracketedSingleRootEstimator(
+            final double minEvalPoint,
+            final double maxEvalPoint) throws InvalidBracketRangeException {
+<span class="nc" id="L83">        super();</span>
+<span class="nc" id="L84">        internalSetBracket(minEvalPoint, maxEvalPoint);</span>
+<span class="nc" id="L85">    }</span>
+
     /**
      * Constructor.
+     *
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE.
+     *                     root will be searched. The largest value inside the bracket will be
+     *                     Double.MAX_VALUE.
      * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE.
+     *                                      the maximum value a double can contain, which is Double.MAX_VALUE.
      */
-    public BracketedSingleRootEstimator(double minEvalPoint) 
+    public BracketedSingleRootEstimator(final double minEvalPoint)
             throws InvalidBracketRangeException {
-<span class="nc" id="L95">        super();</span>
-<span class="nc" id="L96">        internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);</span>
-<span class="nc" id="L97">    }</span>
-    
+<span class="nc" id="L98">        super();</span>
+<span class="nc" id="L99">        internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);</span>
+<span class="nc" id="L100">    }</span>
+
     /**
      * Empty constructor.
      */
     public BracketedSingleRootEstimator() {
-<span class="fc" id="L103">        super();</span>
-<span class="fc" id="L104">        minEvalPoint = DEFAULT_MIN_EVAL_POINT;</span>
-<span class="fc" id="L105">        maxEvalPoint = DEFAULT_MAX_EVAL_POINT;</span>
-<span class="fc" id="L106">        bracketAvailable = true;</span>
-<span class="fc" id="L107">    }</span>
-    
+<span class="fc" id="L106">        super();</span>
+<span class="fc" id="L107">        minEvalPoint = DEFAULT_MIN_EVAL_POINT;</span>
+<span class="fc" id="L108">        maxEvalPoint = DEFAULT_MAX_EVAL_POINT;</span>
+<span class="fc" id="L109">        bracketAvailable = true;</span>
+<span class="fc" id="L110">    }</span>
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint.
+     *                                      maxEvalPoint.
      */
     public BracketedSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint, double maxEvalPoint) 
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
-<span class="fc" id="L124">        super(listener);</span>
-<span class="fc" id="L125">        internalSetBracket(minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L126">    }</span>
-    
+<span class="fc" id="L128">        super(listener);</span>
+<span class="fc" id="L129">        internalSetBracket(minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L130">    }</span>
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE.
+     *                     root will be searched. The largest value inside the bracket will be
+     *                     Double.MAX_VALUE.
      * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE.
+     *                                      the maximum value a double can contain, which is Double.MAX_VALUE.
      */
     public BracketedSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint) throws InvalidBracketRangeException {
-<span class="nc" id="L141">        super(listener);</span>
-<span class="nc" id="L142">        internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);</span>
-<span class="nc" id="L143">    }</span>
-    
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint) throws InvalidBracketRangeException {
+<span class="nc" id="L146">        super(listener);</span>
+<span class="nc" id="L147">        internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);</span>
+<span class="nc" id="L148">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *                 to find its roots.
      */
     public BracketedSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener) {
-<span class="nc" id="L152">        super(listener);</span>
-<span class="nc" id="L153">        minEvalPoint = DEFAULT_MIN_EVAL_POINT;</span>
-<span class="nc" id="L154">        maxEvalPoint = DEFAULT_MAX_EVAL_POINT;</span>
-<span class="nc" id="L155">        bracketAvailable = true;        </span>
-<span class="nc" id="L156">    }</span>
-    
+            final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="nc" id="L158">        super(listener);</span>
+<span class="nc" id="L159">        minEvalPoint = DEFAULT_MIN_EVAL_POINT;</span>
+<span class="nc" id="L160">        maxEvalPoint = DEFAULT_MAX_EVAL_POINT;</span>
+<span class="nc" id="L161">        bracketAvailable = true;</span>
+<span class="nc" id="L162">    }</span>
+
     /**
      * Sets the bracket of values (i.e. range of values) where the root will be
      * searched.
+     *
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @throws LockedException Raised if this instance is locked while doing
-     * some computations.
+     *                     root will be searched.
+     * @throws LockedException              Raised if this instance is locked while doing
+     *                                      some computations.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint.
+     *                                      maxEvalPoint.
      */
-    public void setBracket(double minEvalPoint, double maxEvalPoint)
+    public void setBracket(final double minEvalPoint, final double maxEvalPoint)
             throws LockedException, InvalidBracketRangeException {
-<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L173">            throw new LockedException();</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L180">            throw new LockedException();</span>
         }
-<span class="fc" id="L175">        internalSetBracket(minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L176">    }</span>
-    
+<span class="fc" id="L182">        internalSetBracket(minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L183">    }</span>
+
     /**
      * Internal method to set the bracket of values (i.e. range of values) where
      * the root will be searched.
+     *
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint.
+     *                                      maxEvalPoint.
      */
-    private void internalSetBracket(double minEvalPoint, double maxEvalPoint)
+    private void internalSetBracket(final double minEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (minEvalPoint &gt;= maxEvalPoint) {</span>
-<span class="fc" id="L191">            throw new InvalidBracketRangeException();</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (minEvalPoint &gt;= maxEvalPoint) {</span>
+<span class="fc" id="L199">            throw new InvalidBracketRangeException();</span>
         }
-        
-<span class="fc" id="L194">        this.minEvalPoint = minEvalPoint;</span>
-<span class="fc" id="L195">        this.maxEvalPoint = maxEvalPoint;</span>
-<span class="fc" id="L196">        bracketAvailable = true;</span>
-<span class="fc" id="L197">    }</span>
-    
+
+<span class="fc" id="L202">        this.minEvalPoint = minEvalPoint;</span>
+<span class="fc" id="L203">        this.maxEvalPoint = maxEvalPoint;</span>
+<span class="fc" id="L204">        bracketAvailable = true;</span>
+<span class="fc" id="L205">    }</span>
+
     /**
      * Returns boolean indicating whether bracket has been set or not.
+     *
      * @return True if bracket has been set, false otherwise.
      */
     public boolean isBracketAvailable() {
-<span class="fc" id="L204">        return bracketAvailable;</span>
+<span class="fc" id="L213">        return bracketAvailable;</span>
     }
-    
+
     /**
      * Returns smallest value inside the bracket of values where the root will
      * be searched.
+     *
      * @return Smallest value inside the bracket.
      * @throws NotAvailableException Raised if bracket has not been set.
      */
     public double getMinEvaluationPoint() throws NotAvailableException {
-<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
-<span class="nc" id="L215">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
+<span class="nc" id="L225">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L217">        return minEvalPoint;</span>
+<span class="fc" id="L227">        return minEvalPoint;</span>
     }
-    
+
     /**
      * Returns largest value inside the bracket of values where the root will
      * be searched.
+     *
      * @return Largest values inside the bracket.
      * @throws NotAvailableException Raised if bracket has not been set.
      */
     public double getMaxEvaluationPoint() throws NotAvailableException {
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
-<span class="nc" id="L228">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (!isBracketAvailable()) {</span>
+<span class="nc" id="L239">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L230">        return maxEvalPoint;</span>
+<span class="fc" id="L241">        return maxEvalPoint;</span>
     }
-    
+
     /**
      * Starting from provided minimum and maximum values, this method expands
-     * the range (i.e. bracket of values) until a zero crossing is found where 
+     * the range (i.e. bracket of values) until a zero crossing is found where
      * a root is present or until the bracket becomes unacceptably large, where
      * an exception will be raised.
      * Notice that this method searches for zero crossings, hence, functions
      * such as Math.pow(x - root, 2.0), will raise a RootEstimationException
      * because the only root present in them does not produce a zero crossing.
+     *
      * @param minEvalPoint Smallest initial value to estimate a new larger
-     * bracket.
-     * @param maxEvalPoint Largest initial value to estimate a new larger 
-     * bracket.
-     * @throws LockedException Raised if this instance is locked while doing
-     * some computations.
-     * @throws NotReadyException Raised if this instance is not ready (e.g. a
-     * listener has not yet been provided, etc.)
+     *                     bracket.
+     * @param maxEvalPoint Largest initial value to estimate a new larger
+     *                     bracket.
+     * @throws LockedException              Raised if this instance is locked while doing
+     *                                      some computations.
+     * @throws NotReadyException            Raised if this instance is not ready (e.g. a
+     *                                      listener has not yet been provided, etc.)
      * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
-     * maxEvalPoint
-     * @throws RootEstimationException Raised if a bracket couldn't be found
-     * inside the provided limits because no zero crossing was present or
-     * convergence was not achieved.
+     *                                      maxEvalPoint
+     * @throws RootEstimationException      Raised if a bracket couldn't be found
+     *                                      inside the provided limits because no zero crossing was present or
+     *                                      convergence was not achieved.
      */
-    public void computeBracket(double minEvalPoint, double maxEvalPoint)
-            throws LockedException, NotReadyException, 
+    public void computeBracket(final double minEvalPoint, final double maxEvalPoint)
+            throws LockedException, NotReadyException,
             InvalidBracketRangeException, RootEstimationException {
-        
-<span class="pc bpc" id="L259" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L260">            throw new LockedException();</span>
+
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L272">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L263">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L275">            throw new NotReadyException();</span>
         }
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">        if (minEvalPoint &gt;= maxEvalPoint) {</span>
-<span class="nc" id="L266">            throw new InvalidBracketRangeException();</span>
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        if (minEvalPoint &gt;= maxEvalPoint) {</span>
+<span class="nc" id="L278">            throw new InvalidBracketRangeException();</span>
         }
-        
-<span class="fc" id="L269">        locked = true;</span>
-        
-        //expand initial bracket until function contains a sign change
-<span class="fc" id="L272">        double x1 = minEvalPoint;</span>
-<span class="fc" id="L273">        double x2 = maxEvalPoint;</span>
+
+<span class="fc" id="L281">        locked = true;</span>
+
+        // expand initial bracket until function contains a sign change
+<span class="fc" id="L284">        double x1 = minEvalPoint;</span>
+<span class="fc" id="L285">        double x2 = maxEvalPoint;</span>
         double f1;
         double f2;
         try {
-<span class="fc" id="L277">            f1 = listener.evaluate(x1);</span>
-<span class="fc" id="L278">            f2 = listener.evaluate(x2);</span>
+<span class="fc" id="L289">            f1 = listener.evaluate(x1);</span>
+<span class="fc" id="L290">            f2 = listener.evaluate(x2);</span>
 
-<span class="fc" id="L280">            boolean found = false;</span>
-<span class="fc bfc" id="L281" title="All 2 branches covered.">            for (int j = 0; j &lt; NTRY; j++) {</span>
-<span class="fc bfc" id="L282" title="All 2 branches covered.">                if (f1 * f2 &lt; 0.0) {</span>
-<span class="fc" id="L283">                    found = true;</span>
-<span class="fc" id="L284">                    break;</span>
+<span class="fc" id="L292">            boolean found = false;</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">            for (int j = 0; j &lt; NTRY; j++) {</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">                if (f1 * f2 &lt; 0.0) {</span>
+<span class="fc" id="L295">                    found = true;</span>
+<span class="fc" id="L296">                    break;</span>
                 }
-<span class="fc bfc" id="L286" title="All 2 branches covered.">                if (Math.abs(f1) &lt; Math.abs(f2)) {</span>
-<span class="fc" id="L287">                    x1 += FACTOR * (x1 - x2);</span>
-<span class="fc" id="L288">                    f1 = listener.evaluate(x1);</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">                if (Math.abs(f1) &lt; Math.abs(f2)) {</span>
+<span class="fc" id="L299">                    x1 += FACTOR * (x1 - x2);</span>
+<span class="fc" id="L300">                    f1 = listener.evaluate(x1);</span>
                 } else {
-<span class="fc" id="L290">                    x2 += FACTOR * (x2 - x1);</span>
-<span class="fc" id="L291">                    f2 = listener.evaluate(x2);</span>
+<span class="fc" id="L302">                    x2 += FACTOR * (x2 - x1);</span>
+<span class="fc" id="L303">                    f2 = listener.evaluate(x2);</span>
                 }
             }
 
-<span class="fc bfc" id="L295" title="All 2 branches covered.">            if (!found) {</span>
-<span class="fc" id="L296">                throw new RootEstimationException();</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">            if (!found) {</span>
+<span class="fc" id="L308">                throw new RootEstimationException();</span>
             }
 
-<span class="fc" id="L299">            this.minEvalPoint = x1;</span>
-<span class="fc" id="L300">            this.maxEvalPoint = x2;</span>
-<span class="fc" id="L301">            bracketAvailable = true;</span>
+<span class="fc" id="L311">            this.minEvalPoint = x1;</span>
+<span class="fc" id="L312">            this.maxEvalPoint = x2;</span>
+<span class="fc" id="L313">            bracketAvailable = true;</span>
 
-<span class="nc" id="L303">        } catch (EvaluationException e) {</span>
-<span class="nc" id="L304">            throw new RootEstimationException(e);</span>
+<span class="nc" id="L315">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L316">            throw new RootEstimationException(e);</span>
         } finally {
-<span class="fc" id="L306">            locked = false;</span>
+<span class="fc" id="L318">            locked = false;</span>
         }
-<span class="fc" id="L308">    }</span>
-    
+<span class="fc" id="L320">    }</span>
+
     /**
-     * Starting from provided point, this method expands the range (i.e. 
+     * Starting from provided point, this method expands the range (i.e.
      * bracket of values) until a zero crossing is found where a root is present
-     * or until the bracket becomes unacceptably large, where an exception will 
+     * or until the bracket becomes unacceptably large, where an exception will
      * be raised.
      * Notice that this method searches for zero crossings, hence, functions
      * such as Math.pow(x - root, 2.0), will raise a RootEstimationException
      * because the only root present in them does not produce a zero crossing.
-     * @param point Initial value to start the bracket computation. Bracket 
-     * range is expanded starting at the point that was provided.
-     * @throws LockedException Raised if this instance is locked while doing
-     * some computations.
-     * @throws NotReadyException Raised if this instance is not ready (e.g. a
-     * listener has not yet been provided, etc.).
-     * @throws InvalidBracketRangeException Raised if point is close to 
-     * Double.MAX_VALUE.
-     * @throws RootEstimationException Raised if a bracket couldn't be found
-     * inside the provided limits because no zero crossing was present or
-     * convergence was not achieved.
-     */    
-    public void computeBracket(double point) throws LockedException,
-            NotReadyException, InvalidBracketRangeException, 
+     *
+     * @param point Initial value to start the bracket computation. Bracket
+     *              range is expanded starting at the point that was provided.
+     * @throws LockedException              Raised if this instance is locked while doing
+     *                                      some computations.
+     * @throws NotReadyException            Raised if this instance is not ready (e.g. a
+     *                                      listener has not yet been provided, etc.).
+     * @throws InvalidBracketRangeException Raised if point is close to
+     *                                      Double.MAX_VALUE.
+     * @throws RootEstimationException      Raised if a bracket couldn't be found
+     *                                      inside the provided limits because no zero crossing was present or
+     *                                      convergence was not achieved.
+     */
+    public void computeBracket(final double point) throws LockedException,
+            NotReadyException, InvalidBracketRangeException,
             RootEstimationException {
-<span class="nc" id="L333">        computeBracket(point, FACTOR * point + BRACKET_EPS);</span>
-<span class="nc" id="L334">    }</span>
+<span class="nc" id="L346">        computeBracket(point, FACTOR * point + BRACKET_EPS);</span>
+<span class="nc" id="L347">    }</span>
 
     /**
-     * Starting at zero, this method expands the range (i.e. bracket of values) 
-     * until a zero crossing is found where a root is present or until the 
+     * Starting at zero, this method expands the range (i.e. bracket of values)
+     * until a zero crossing is found where a root is present or until the
      * bracket becomes unacceptably large, where an exception will be raised.
      * Notice that this method searches for zero crossings, hence, functions
      * such as Math.pow(x - root, 2.0), will raise a RootEstimationException
      * because the only root present in them does not produce a zero crossing.
-     * @throws LockedException Raised if this instance is locked while doing
-     * some computations.
-     * @throws NotReadyException Raised if this instance is not ready (e.g. a
-     * listener has not yet been provided, etc.).
+     *
+     * @throws LockedException         Raised if this instance is locked while doing
+     *                                 some computations.
+     * @throws NotReadyException       Raised if this instance is not ready (e.g. a
+     *                                 listener has not yet been provided, etc.).
      * @throws RootEstimationException Raised if a bracket couldn't be found
-     * inside the provided limits because no zero crossing was present or
-     * convergence was not achieved.
-     */        
+     *                                 inside the provided limits because no zero crossing was present or
+     *                                 convergence was not achieved.
+     */
     public void computeBracket() throws LockedException, NotReadyException,
             RootEstimationException {
         try {
-<span class="nc" id="L354">            computeBracket(0.0, BRACKET_EPS);</span>
-<span class="nc" id="L355">        } catch (InvalidBracketRangeException ignore) {</span>
-            //never happens
-<span class="nc" id="L357">        }</span>
-<span class="nc" id="L358">    }</span>
-    
+<span class="nc" id="L368">            computeBracket(0.0, BRACKET_EPS);</span>
+<span class="nc" id="L369">        } catch (final InvalidBracketRangeException ignore) {</span>
+            // never happens
+<span class="nc" id="L371">        }</span>
+<span class="nc" id="L372">    }</span>
+
     /**
-     * Internal method to swap two values. Value inside a[0] will be swapped 
+     * Internal method to swap two values. Value inside a[0] will be swapped
      * with value provided in b[0].
+     *
      * @param a Value to be swapped.
      * @param b Value to be swapped.
      */
-    protected void swap(double[] a, double[] b) {
-<span class="fc" id="L367">        double tmp = a[0];</span>
-<span class="fc" id="L368">        a[0] = b[0];</span>
-<span class="fc" id="L369">        b[0] = tmp;</span>
-<span class="fc" id="L370">    }</span>
-    
+    protected void swap(final double[] a, final double[] b) {
+<span class="fc" id="L382">        final double tmp = a[0];</span>
+<span class="fc" id="L383">        a[0] = b[0];</span>
+<span class="fc" id="L384">        b[0] = tmp;</span>
+<span class="fc" id="L385">    }</span>
+
     /**
      * Internal method to determine whether a and b have the same sign.
+     *
      * @param a Value to be compared.
      * @param b Value to be compared.
      * @return Returns a if a and b have the same sign or -a otherwise.
      */
-    protected double sign(double a, double b) {
-<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (b &gt;= 0.0) {</span>
-<span class="fc bfc" id="L380" title="All 2 branches covered.">            return a &gt;= 0.0 ? a : -a;</span>
+    protected double sign(final double a, final double b) {
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (b &gt;= 0.0) {</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">            return a &gt;= 0.0 ? a : -a;</span>
         } else {
-<span class="fc bfc" id="L382" title="All 2 branches covered.">            return a &gt;= 0.0 ? -a : a;</span>
+<span class="fc bfc" id="L398" title="All 2 branches covered.">            return a &gt;= 0.0 ? -a : a;</span>
         }
     }
 }

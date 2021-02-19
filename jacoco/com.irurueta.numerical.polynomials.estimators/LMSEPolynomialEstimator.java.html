@@ -25,19 +25,19 @@ import com.irurueta.numerical.polynomials.Polynomial;
 import java.util.List;
 
 /**
- * This class defines an LMSE (Least Mean Square Error) estimator of a 
- * polynomial of a given degree using points where polynomials (or its 
+ * This class defines an LMSE (Least Mean Square Error) estimator of a
+ * polynomial of a given degree using points where polynomials (or its
  * derivatives or integrals) are evaluated.
  */
 @SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public class LMSEPolynomialEstimator extends PolynomialEstimator {
-    
+
     /**
      * Indicates if by default an LMSE (Least Mean Square Error) solution is
      * allowed if more evaluations than the required minimum are provided.
      */
     public static final boolean DEFAULT_ALLOW_LMSE_SOLUTION = false;
-    
+
     /**
      * Indicates if an LMSE (Least Mean Square Error) solution is allowed if
      * more evaluations than the required minimum are provided. If false, the
@@ -45,7 +45,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * are used.
      */
     private boolean mAllowLMSESolution;
-    
+
     /**
      * Constructor.
      */
@@ -53,195 +53,209 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
 <span class="fc" id="L53">        super();</span>
 <span class="fc" id="L54">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
 <span class="fc" id="L55">    }</span>
-    
+
     /**
      * Constructor.
+     *
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(int degree) {
-<span class="fc" id="L63">        super(degree);</span>
-<span class="fc" id="L64">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L65">    }</span>
-    
+    public LMSEPolynomialEstimator(final int degree) {
+<span class="fc" id="L64">        super(degree);</span>
+<span class="fc" id="L65">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L66">    }</span>
+
     /**
      * Constructor.
+     *
      * @param evaluations collection of polynomial evaluations.
      */
-    public LMSEPolynomialEstimator(List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L72">        super(evaluations);</span>
-<span class="fc" id="L73">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L74">    }</span>
-    
+    public LMSEPolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L74">        super(evaluations);</span>
+<span class="fc" id="L75">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L76">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events.
      */
-    public LMSEPolynomialEstimator(PolynomialEstimatorListener listener) {
-<span class="fc" id="L81">        super(listener);</span>
-<span class="fc" id="L82">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L83">    }</span>
-    
+    public LMSEPolynomialEstimator(final PolynomialEstimatorListener listener) {
+<span class="fc" id="L84">        super(listener);</span>
+<span class="fc" id="L85">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L86">    }</span>
+
     /**
      * Constructor.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(int degree, 
-            List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L93">        super(degree, evaluations);</span>
-<span class="fc" id="L94">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L95">    }</span>
-    
+    public LMSEPolynomialEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L97">        super(degree, evaluations);</span>
+<span class="fc" id="L98">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L99">    }</span>
+
     /**
      * Constructor.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree   degree of polynomial to be estimated.
      * @param listener listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(int degree, 
-            PolynomialEstimatorListener listener) {
-<span class="fc" id="L105">        super(degree, listener);</span>
-<span class="fc" id="L106">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L107">    }</span>
-    
+    public LMSEPolynomialEstimator(
+            final int degree, final PolynomialEstimatorListener listener) {
+<span class="fc" id="L110">        super(degree, listener);</span>
+<span class="fc" id="L111">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L112">    }</span>
+
     /**
      * Constructor.
+     *
      * @param evaluations collection of polynomial evaluations.
-     * @param listener listener to be notified of events.
+     * @param listener    listener to be notified of events.
      */
-    public LMSEPolynomialEstimator(List&lt;PolynomialEvaluation&gt; evaluations,
-            PolynomialEstimatorListener listener) {
-<span class="fc" id="L116">        super(evaluations, listener);</span>
-<span class="fc" id="L117">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L118">    }</span>
-    
+    public LMSEPolynomialEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialEstimatorListener listener) {
+<span class="fc" id="L123">        super(evaluations, listener);</span>
+<span class="fc" id="L124">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L125">    }</span>
+
     /**
      * Constructor.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
-     * @param listener listener to be notified of events.
+     * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(int degree, 
-            List&lt;PolynomialEvaluation&gt; evaluations, 
-            PolynomialEstimatorListener listener) {
-<span class="fc" id="L130">        super(degree, evaluations, listener);</span>
-<span class="fc" id="L131">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L132">    }</span>
-    
+    public LMSEPolynomialEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialEstimatorListener listener) {
+<span class="fc" id="L138">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L139">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L140">    }</span>
+
     /**
-     * Indicates if an LMSE (Least Mean Square Error) solution is allowed if 
-     * more evaluations than the required minimum are provided. If false, the
-     * exceeding evaluations are ignored, and only the first minimum required 
-     * are used.
-     * @return true if LMSE solution is allowed, false otherwise.
-     */
-    public boolean isLMSESolutionAllowed() {
-<span class="fc" id="L142">        return mAllowLMSESolution;</span>
-    }
-    
-    /**
-     * Specified if an LMSE (Least Mean Square Error) solution is allowed if 
+     * Indicates if an LMSE (Least Mean Square Error) solution is allowed if
      * more evaluations than the required minimum are provided. If false, the
      * exceeding evaluations are ignored, and only the first minimum required
      * are used.
+     *
+     * @return true if LMSE solution is allowed, false otherwise.
+     */
+    public boolean isLMSESolutionAllowed() {
+<span class="fc" id="L151">        return mAllowLMSESolution;</span>
+    }
+
+    /**
+     * Specified if an LMSE (Least Mean Square Error) solution is allowed if
+     * more evaluations than the required minimum are provided. If false, the
+     * exceeding evaluations are ignored, and only the first minimum required
+     * are used.
+     *
      * @param allowed true if LMSE solution is allowed, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setLMSESolutionAllowed(boolean allowed) throws LockedException {
-<span class="fc bfc" id="L154" title="All 2 branches covered.">        if(isLocked()) throw new LockedException();</span>
-<span class="fc" id="L155">        mAllowLMSESolution = allowed;</span>
-<span class="fc" id="L156">    }</span>
+    public void setLMSESolutionAllowed(final boolean allowed) throws LockedException {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L165">            throw new LockedException();</span>
+        }
+<span class="fc" id="L167">        mAllowLMSESolution = allowed;</span>
+<span class="fc" id="L168">    }</span>
 
     /**
      * Estimates a polynomial based on provided evaluations.
+     *
      * @return estimated polynomial.
-     * @throws LockedException if estimator is locked.
-     * @throws NotReadyException if estimator is not ready.
+     * @throws LockedException               if estimator is locked.
+     * @throws NotReadyException             if estimator is not ready.
      * @throws PolynomialEstimationException if polynomial estimation fails.
      */
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L169">            throw new LockedException();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L182">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L172">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L185">            throw new NotReadyException();</span>
         }
-        
+
         try {
-<span class="fc" id="L176">            mLocked = true;</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">            if(mListener != null) {</span>
-<span class="fc" id="L178">                mListener.onEstimateStart(this);</span>
+<span class="fc" id="L189">            mLocked = true;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L191">                mListener.onEstimateStart(this);</span>
             }
-            
-<span class="fc" id="L181">            int minNumberOfEvaluations = getMinNumberOfEvaluations();</span>
-            
-<span class="fc" id="L183">            Matrix a = new Matrix(mEvaluations.size(), mDegree + 1);</span>
-<span class="fc" id="L184">            Matrix b = new Matrix(mEvaluations.size(), 1);</span>
-            
-<span class="fc" id="L186">            int counter = 0;</span>
-<span class="fc bfc" id="L187" title="All 2 branches covered.">            for(PolynomialEvaluation evaluation : mEvaluations) {</span>
-<span class="pc bpc" id="L188" title="1 of 5 branches missed.">                switch(evaluation.getType()) {</span>
+
+<span class="fc" id="L194">            final int minNumberOfEvaluations = getMinNumberOfEvaluations();</span>
+
+<span class="fc" id="L196">            final Matrix a = new Matrix(mEvaluations.size(), mDegree + 1);</span>
+<span class="fc" id="L197">            final Matrix b = new Matrix(mEvaluations.size(), 1);</span>
+
+<span class="fc" id="L199">            int counter = 0;</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            for (PolynomialEvaluation evaluation : mEvaluations) {</span>
+<span class="pc bpc" id="L201" title="1 of 5 branches missed.">                switch (evaluation.getType()) {</span>
                     case DIRECT_EVALUATION:
-<span class="fc" id="L190">                        fillDirectEvaluation(</span>
-                                (DirectPolynomialEvaluation)evaluation, a, b, 
+<span class="fc" id="L203">                        fillDirectEvaluation(</span>
+                                (DirectPolynomialEvaluation) evaluation, a, b,
                                 counter);
-<span class="fc" id="L193">                        break;</span>
+<span class="fc" id="L206">                        break;</span>
                     case DERIVATIVE_EVALUATION:
-<span class="fc" id="L195">                        fillDerivativeEvaluation(</span>
-                                (DerivativePolynomialEvaluation)evaluation, a, 
+<span class="fc" id="L208">                        fillDerivativeEvaluation(</span>
+                                (DerivativePolynomialEvaluation) evaluation, a,
                                 b, counter);
-<span class="fc" id="L198">                        break;</span>
+<span class="fc" id="L211">                        break;</span>
                     case INTEGRAL_EVALUATION:
-<span class="fc" id="L200">                        fillIntegralEvaluation(</span>
-                                (IntegralPolynomialEvaluation)evaluation, a, b, 
+<span class="fc" id="L213">                        fillIntegralEvaluation(</span>
+                                (IntegralPolynomialEvaluation) evaluation, a, b,
                                 counter);
-<span class="fc" id="L203">                        break;</span>
+<span class="fc" id="L216">                        break;</span>
                     case INTEGRAL_INTERVAL:
-<span class="fc" id="L205">                        fillIntegralIntervalEvaluation(</span>
-                                (IntegralIntervalPolynomialEvaluation)evaluation, 
+<span class="fc" id="L218">                        fillIntegralIntervalEvaluation(</span>
+                                (IntegralIntervalPolynomialEvaluation) evaluation,
                                 a, b, counter);
-<span class="fc" id="L208">                        break;</span>
+<span class="fc" id="L221">                        break;</span>
                     default:
-<span class="nc" id="L210">                        continue;</span>
+<span class="nc" id="L223">                        continue;</span>
                 }
-                
-<span class="fc" id="L213">                normalize(a, b, counter);                </span>
-<span class="fc" id="L214">                counter++;</span>
-                
-<span class="fc bfc" id="L216" title="All 4 branches covered.">                if(!isLMSESolutionAllowed() &amp;&amp; </span>
+
+<span class="fc" id="L226">                normalize(a, b, counter);</span>
+<span class="fc" id="L227">                counter++;</span>
+
+<span class="fc bfc" id="L229" title="All 4 branches covered.">                if (!isLMSESolutionAllowed() &amp;&amp;</span>
                         counter &gt;= minNumberOfEvaluations) {
-<span class="fc" id="L218">                    break;</span>
+<span class="fc" id="L231">                    break;</span>
                 }
-<span class="fc" id="L220">            }</span>
-            
-<span class="fc" id="L222">            Matrix params = Utils.solve(a, b);</span>
-            
-<span class="fc" id="L224">            Polynomial result = new Polynomial(params.toArray());</span>
-            
-<span class="fc bfc" id="L226" title="All 2 branches covered.">            if(mListener != null) {</span>
-<span class="fc" id="L227">                mListener.onEstimateEnd(this);</span>
+<span class="fc" id="L233">            }</span>
+
+<span class="fc" id="L235">            final Matrix params = Utils.solve(a, b);</span>
+
+<span class="fc" id="L237">            final Polynomial result = new Polynomial(params.toArray());</span>
+
+<span class="fc bfc" id="L239" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L240">                mListener.onEstimateEnd(this);</span>
             }
-            
-<span class="fc" id="L230">            return result;</span>
-<span class="nc" id="L231">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L232">            throw new PolynomialEstimationException(e);</span>
+
+<span class="fc" id="L243">            return result;</span>
+<span class="nc" id="L244">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L245">            throw new PolynomialEstimationException(e);</span>
         } finally {
-<span class="fc" id="L234">            mLocked = false;</span>
+<span class="fc" id="L247">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns type of polynomial estimator.
+     *
      * @return type of polynomial estimator.
      */
     @Override
     public PolynomialEstimatorType getType() {
-<span class="fc" id="L244">        return PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR;</span>
-    }    
+<span class="fc" id="L258">        return PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

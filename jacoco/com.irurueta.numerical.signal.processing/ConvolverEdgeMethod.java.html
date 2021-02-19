@@ -17,7 +17,7 @@ package com.irurueta.numerical.signal.processing;
 
 /**
  * This enumerator indicates how edges should be treated during convolution.
- * Repeat and mirror edge extension methods can be used to prevent certain 
+ * Repeat and mirror edge extension methods can be used to prevent certain
  * artifacts when reaching edges of signal.
  */
 <span class="fc" id="L23">public enum ConvolverEdgeMethod {</span>
@@ -26,20 +26,20 @@ package com.irurueta.numerical.signal.processing;
      * assumed that the signal value is zero.
      */
 <span class="fc" id="L28">    ZERO_EDGE,</span>
-    
+
     /**
      * When convolution kernel reaches edge of signal being convoluted, it is
-     * assumed that the signal has a constant value (with a value that can be 
+     * assumed that the signal has a constant value (with a value that can be
      * setup).
      */
 <span class="fc" id="L35">    CONSTANT_EDGE,</span>
-    
+
     /**
      * When convolution kernel reaches edge of signal being convoluted, it is
      * assumed that the signal is repeated indefinitely.
      */
 <span class="fc" id="L41">    REPEAT_EDGE,</span>
-    
+
     /**
      * When convolution kernel reaches edge of signal being convoluted, it is
      * assumed that the signal is mirrored.

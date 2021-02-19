@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     * Hence, the array of polynomial coefficients is [a0, a1, ... a(n-1), an]</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> Complex[] mPolyParams;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Complex[] mPolyParams;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided array is null or has length </em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * 0.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/numerical/ComplexPolynomialEvaluator.html">ComplexPolynomialEvaluator</a>(Complex[] polyParams) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/numerical/ComplexPolynomialEvaluator.html">ComplexPolynomialEvaluator</a>(<strong class="jxr_keyword">final</strong> Complex[] polyParams) {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">if</strong> (polyParams == <strong class="jxr_keyword">null</strong> || polyParams.length == 0) {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>          }
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * @param x point where polynomial is evaluated.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * @return result of evaluation.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> Complex evaluate(Complex x) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> Complex evaluate(<strong class="jxr_keyword">final</strong> Complex x) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">return</strong> evaluate(mPolyParams, x);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      }    
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  }

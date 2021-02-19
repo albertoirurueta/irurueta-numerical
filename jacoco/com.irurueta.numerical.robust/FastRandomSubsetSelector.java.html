@@ -28,217 +28,230 @@ import java.util.Set;
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class FastRandomSubsetSelector extends SubsetSelector {
-    
+
     /**
      * Constant defining whether randomizer needs to be initialized with system
      * timer. By disabling this option it is ensured that the same result is
      * obtained on each execution.
      */
     public static final boolean DEFAULT_SEED_RANDOMIZER_WITH_TIME = false;
-    
+
+    /**
+     * Randomizer to pick random indexes.
+     */
     private UniformRandomizer mRandomizer;
-    
+
     /**
      * Set containing selected indices on a given run.
-     * This is kept around between executions to avoid excessive calls to 
+     * This is kept around between executions to avoid excessive calls to
      * garbage collector, as random subset generation is likely to be called
      * a large number of times during robust estimations. Because of that,
      * if a robust estimator is capable of spanning multiple executions at once
      * on different threads, then each thread needs to have a different subset
      * selector instance.
      */
-    private Set&lt;Integer&gt; mSelectedIndices;
-    
+    private final Set&lt;Integer&gt; mSelectedIndices;
+
     /**
      * Constructor.
+     *
      * @param numSamples number of samples to select subsets from
      * @throws IllegalArgumentException if provided number of samples is zero
-     * or negative
+     *                                  or negative
      */
-    public FastRandomSubsetSelector(int numSamples) {
-<span class="fc" id="L59">        this(numSamples, DEFAULT_SEED_RANDOMIZER_WITH_TIME);</span>
-<span class="fc" id="L60">    }</span>
-    
+    public FastRandomSubsetSelector(final int numSamples) {
+<span class="fc" id="L63">        this(numSamples, DEFAULT_SEED_RANDOMIZER_WITH_TIME);</span>
+<span class="fc" id="L64">    }</span>
+
     /**
      * Constructor.
-     * @param numSamples number of samples to select subsets from.
+     *
+     * @param numSamples             number of samples to select subsets from.
      * @param seedRandomizerWithTime true if randomizer seed must be initialized
-     * to system timer to obtain more random results.
+     *                               to system timer to obtain more random results.
      * @throws IllegalArgumentException if provided number of samples is zero
-     * or negative.
+     *                                  or negative.
      */
-    public FastRandomSubsetSelector(int numSamples, 
-            boolean seedRandomizerWithTime) {
-<span class="fc" id="L72">        super(numSamples);</span>
-<span class="fc" id="L73">        createRandomizer(seedRandomizerWithTime);</span>
-<span class="fc" id="L74">        mSelectedIndices = new HashSet&lt;&gt;();</span>
-<span class="fc" id="L75">    }</span>
-    
+    public FastRandomSubsetSelector(
+            final int numSamples, final boolean seedRandomizerWithTime) {
+<span class="fc" id="L77">        super(numSamples);</span>
+<span class="fc" id="L78">        createRandomizer(seedRandomizerWithTime);</span>
+<span class="fc" id="L79">        mSelectedIndices = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L80">    }</span>
+
     /**
      * Returns type of this subset selector.
+     *
      * @return type of this subset selector.
      */
     @Override
     public SubsetSelectorType getType() {
-<span class="fc" id="L83">        return SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR;</span>
+<span class="fc" id="L89">        return SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR;</span>
     }
 
     /**
      * Computes a random subset of indices within range of number of samples to
      * be used on robust estimators.
+     *
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples.
-     * @param result array containing indices to be picked. Provided array must
-     * be at least of length subsetSize. The former subsetSize entries of the
-     * array will be modified by this method.
-     * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples.
+     *                   than total number of samples.
+     * @param result     array containing indices to be picked. Provided array must
+     *                   be at least of length subsetSize. The former subsetSize entries of the
+     *                   array will be modified by this method.
+     * @throws NotEnoughSamplesException  if subset size is greater than the
+     *                                    total number of samples.
      * @throws InvalidSubsetSizeException if subset size is zero or if result
-     * array does not have at least a length of subsetSize.
+     *                                    array does not have at least a length of subsetSize.
      */
     @Override
-    public void computeRandomSubsets(int subsetSize, int[] result) 
+    public void computeRandomSubsets(final int subsetSize, final int[] result)
             throws NotEnoughSamplesException, InvalidSubsetSizeException {
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (subsetSize == 0) {</span>
-<span class="fc" id="L103">            throw new InvalidSubsetSizeException();</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (subsetSize == 0) {</span>
+<span class="fc" id="L110">            throw new InvalidSubsetSizeException();</span>
         }
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (result.length &lt; subsetSize) {</span>
-<span class="fc" id="L106">            throw new InvalidSubsetSizeException();</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (result.length &lt; subsetSize) {</span>
+<span class="fc" id="L113">            throw new InvalidSubsetSizeException();</span>
         }
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (mNumSamples &lt; subsetSize) {</span>
-<span class="fc" id="L109">            throw new NotEnoughSamplesException();</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (mNumSamples &lt; subsetSize) {</span>
+<span class="fc" id="L116">            throw new NotEnoughSamplesException();</span>
         }
-        
-        //On start set of selected indices is empty
-<span class="fc" id="L113">        mSelectedIndices.clear();        </span>
-        
-<span class="fc" id="L115">        int counter = 0;</span>
+
+        // On start set of selected indices is empty
+<span class="fc" id="L120">        mSelectedIndices.clear();</span>
+
+<span class="fc" id="L122">        int counter = 0;</span>
         int index;
         do {
-<span class="fc" id="L118">            index = mRandomizer.nextInt(0, mNumSamples);</span>
-            
-            //check whether this index has already been selected
-<span class="fc" id="L121">            Integer intIndex = index;</span>
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if (mSelectedIndices.contains(intIndex)) {</span>
-<span class="nc" id="L123">                continue;</span>
+<span class="fc" id="L125">            index = mRandomizer.nextInt(0, mNumSamples);</span>
+
+            // check whether this index has already been selected
+<span class="fc" id="L128">            final Integer intIndex = index;</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">            if (mSelectedIndices.contains(intIndex)) {</span>
+<span class="nc" id="L130">                continue;</span>
             }
-            
-            //if not selected, pick it now
-<span class="fc" id="L127">            mSelectedIndices.add(intIndex);</span>
-<span class="fc" id="L128">            result[counter] = index;</span>
-<span class="fc" id="L129">            counter++;</span>
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        } while (counter &lt; subsetSize);</span>
-        
-<span class="fc" id="L132">        mSelectedIndices.clear();</span>
-<span class="fc" id="L133">    }</span>
+
+            // if not selected, pick it now
+<span class="fc" id="L134">            mSelectedIndices.add(intIndex);</span>
+<span class="fc" id="L135">            result[counter] = index;</span>
+<span class="fc" id="L136">            counter++;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        } while (counter &lt; subsetSize);</span>
+
+<span class="fc" id="L139">        mSelectedIndices.clear();</span>
+<span class="fc" id="L140">    }</span>
 
     /**
      * Computes a random subset of indices within provided range of positions to
      * be used on robust estimators.
-     * @param minPos minimum position to be picked. This value must be greater 
-     * or equal than zero and smaller than the total number of samples and less
-     * than maxPos.
-     * @param maxPos maximum position to be picked. This value must be greater
-     * or equal than zero and smaller than the total number of samples and 
-     * greater than minPos.
+     *
+     * @param minPos     minimum position to be picked. This value must be greater
+     *                   or equal than zero and smaller than the total number of samples and less
+     *                   than maxPos.
+     * @param maxPos     maximum position to be picked. This value must be greater
+     *                   or equal than zero and smaller than the total number of samples and
+     *                   greater than minPos.
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples.
-     * @param pickLast true indicates that last sample in range must always be
-     * picked within subset. This is done to obtain faster execution times and
-     * greater stability on some algorithms.
-     * @param result array containing indices to be picked. Provided array must
-     * be at least of length subsetSize. The former subsetSize entries of the
-     * array will be modified by this method.
-     * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples or if maxPos is greater than the total number of
-     * samples.
-     * @throws InvalidSubsetSizeException if subset size is zero or if result
-     * array does not have at least a length of subsetSize, or ig subset size
-     * is greater than the allowed range of positions to be picked.
+     *                   than total number of samples.
+     * @param pickLast   true indicates that last sample in range must always be
+     *                   picked within subset. This is done to obtain faster execution times and
+     *                   greater stability on some algorithms.
+     * @param result     array containing indices to be picked. Provided array must
+     *                   be at least of length subsetSize. The former subsetSize entries of the
+     *                   array will be modified by this method.
+     * @throws NotEnoughSamplesException   if subset size is greater than the
+     *                                     total number of samples or if maxPos is greater than the total number of
+     *                                     samples.
+     * @throws InvalidSubsetSizeException  if subset size is zero or if result
+     *                                     array does not have at least a length of subsetSize, or ig subset size
+     *                                     is greater than the allowed range of positions to be picked.
      * @throws InvalidSubsetRangeException if maximum position is smaller than
-     * minimum position or maximum or minimum position are negative.
+     *                                     minimum position or maximum or minimum position are negative.
      */
     @Override
-    public void computeRandomSubsetsInRange(int minPos, int maxPos, 
-            int subsetSize, boolean pickLast, int[] result) 
-            throws NotEnoughSamplesException, InvalidSubsetSizeException, 
+    public void computeRandomSubsetsInRange(
+            final int minPos, final int maxPos,
+            final int subsetSize, final boolean pickLast, final int[] result)
+            throws NotEnoughSamplesException, InvalidSubsetSizeException,
             InvalidSubsetRangeException {
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (subsetSize == 0) {</span>
-<span class="fc" id="L167">            throw new InvalidSubsetSizeException();</span>
-        }
-<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (result.length &lt; subsetSize) {</span>
-<span class="fc" id="L170">            throw new InvalidSubsetSizeException();</span>
-        }
-<span class="pc bpc" id="L172" title="2 of 6 branches missed.">        if (minPos &gt;= maxPos || maxPos &lt; 0 || minPos &lt; 0 ) {</span>
-<span class="fc" id="L173">            throw new InvalidSubsetRangeException();</span>
-        }
-<span class="fc bfc" id="L175" title="All 2 branches covered.">        if ((maxPos - minPos) &lt; subsetSize) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (subsetSize == 0) {</span>
 <span class="fc" id="L176">            throw new InvalidSubsetSizeException();</span>
         }
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (mNumSamples &lt; subsetSize) {</span>
-<span class="nc" id="L179">            throw new NotEnoughSamplesException();</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (result.length &lt; subsetSize) {</span>
+<span class="fc" id="L179">            throw new InvalidSubsetSizeException();</span>
         }
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (maxPos &gt; mNumSamples) {</span>
-<span class="fc" id="L182">            throw new NotEnoughSamplesException();</span>
+<span class="pc bpc" id="L181" title="2 of 6 branches missed.">        if (minPos &gt;= maxPos || maxPos &lt; 0 || minPos &lt; 0) {</span>
+<span class="fc" id="L182">            throw new InvalidSubsetRangeException();</span>
         }
-        
-        //On start set of selected indices is empty
-<span class="fc" id="L186">        mSelectedIndices.clear();        </span>
-        
-<span class="fc" id="L188">        int counter = 0;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if ((maxPos - minPos) &lt; subsetSize) {</span>
+<span class="fc" id="L185">            throw new InvalidSubsetSizeException();</span>
+        }
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (mNumSamples &lt; subsetSize) {</span>
+<span class="nc" id="L188">            throw new NotEnoughSamplesException();</span>
+        }
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (maxPos &gt; mNumSamples) {</span>
+<span class="fc" id="L191">            throw new NotEnoughSamplesException();</span>
+        }
+
+        // On start set of selected indices is empty
+<span class="fc" id="L195">        mSelectedIndices.clear();</span>
+
+<span class="fc" id="L197">        int counter = 0;</span>
         int index;
-        
+
         Integer intIndex;
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (pickLast) {</span>
-            //this is done to accelerate computations and obtain more
-            //stable results in some cases
-            //pick last element in range
-<span class="fc" id="L196">            index = maxPos - 1;</span>
-<span class="fc" id="L197">            intIndex = index;</span>
-<span class="fc" id="L198">            mSelectedIndices.add(intIndex);</span>
-<span class="fc" id="L199">            result[counter] = index;</span>
-<span class="fc" id="L200">            counter++;</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (pickLast) {</span>
+            // this is done to accelerate computations and obtain more
+            // stable results in some cases
+            // pick last element in range
+<span class="fc" id="L205">            index = maxPos - 1;</span>
+<span class="fc" id="L206">            intIndex = index;</span>
+<span class="fc" id="L207">            mSelectedIndices.add(intIndex);</span>
+<span class="fc" id="L208">            result[counter] = index;</span>
+<span class="fc" id="L209">            counter++;</span>
         }
-        
-<span class="pc bpc" id="L203" title="1 of 4 branches missed.">        if (!pickLast || counter &lt; result.length) {</span>
-            //keep selecting only if not all elements have already been selected
+
+<span class="pc bpc" id="L212" title="1 of 4 branches missed.">        if (!pickLast || counter &lt; result.length) {</span>
+            // keep selecting only if not all elements have already been selected
             do {
-<span class="fc" id="L206">                index = mRandomizer.nextInt(minPos, maxPos);</span>
+<span class="fc" id="L215">                index = mRandomizer.nextInt(minPos, maxPos);</span>
 
-                //check whether this index has already been selected
-<span class="fc" id="L209">                intIndex = index;</span>
-<span class="fc bfc" id="L210" title="All 2 branches covered.">                if(mSelectedIndices.contains(intIndex)) continue;</span>
+                // check whether this index has already been selected
+<span class="fc" id="L218">                intIndex = index;</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">                if (mSelectedIndices.contains(intIndex)) {</span>
+<span class="fc" id="L220">                    continue;</span>
+                }
 
-                //if not selected, pick it now
-<span class="fc" id="L213">                mSelectedIndices.add(intIndex);</span>
-<span class="fc" id="L214">                result[counter] = index;</span>
-<span class="fc" id="L215">                counter++;</span>
-<span class="fc bfc" id="L216" title="All 2 branches covered.">            } while (counter &lt; subsetSize);</span>
+                // if not selected, pick it now
+<span class="fc" id="L224">                mSelectedIndices.add(intIndex);</span>
+<span class="fc" id="L225">                result[counter] = index;</span>
+<span class="fc" id="L226">                counter++;</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">            } while (counter &lt; subsetSize);</span>
         }
-        
-<span class="fc" id="L219">        mSelectedIndices.clear();</span>
-<span class="fc" id="L220">    }</span>
+
+<span class="fc" id="L230">        mSelectedIndices.clear();</span>
+<span class="fc" id="L231">    }</span>
 
     /**
      * Returns internal randomizer to generate uniformly distributed random
      * values.
+     *
      * @return internal randomizer.
      */
     protected UniformRandomizer getRandomizer() {
-<span class="fc" id="L228">        return mRandomizer;</span>
+<span class="fc" id="L240">        return mRandomizer;</span>
     }
 
     /**
      * Initializes randomizer for an instance of this class.
+     *
      * @param seedWithTime if true randomizer will be initialized using current
-     * time as seed. If false, randomizer will always generate the same 
-     * pseudo-random sequence on each JVM execution.
+     *                     time as seed. If false, randomizer will always generate the same
+     *                     pseudo-random sequence on each JVM execution.
      */
-    private void createRandomizer(boolean seedWithTime) {
-<span class="fc" id="L238">        mRandomizer = new UniformRandomizer(new Random());</span>
-<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        if (seedWithTime) {</span>
-<span class="nc" id="L240">            mRandomizer.setSeed(System.currentTimeMillis());</span>
+    private void createRandomizer(final boolean seedWithTime) {
+<span class="fc" id="L251">        mRandomizer = new UniformRandomizer(new Random());</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        if (seedWithTime) {</span>
+<span class="nc" id="L253">            mRandomizer.setSeed(System.currentTimeMillis());</span>
         }
-<span class="fc" id="L242">    }</span>
+<span class="fc" id="L255">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -31,7 +31,7 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * Hence, the array of polynomial coefficients is [a0, a1, ... a(n-1), an]
      */
-    private Complex[] mPolyParams;
+    private final Complex[] mPolyParams;
     
     /**
      * Constructor.
@@ -39,7 +39,7 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * @throws IllegalArgumentException if provided array is null or has length 
      * 0.
      */
-<span class="fc" id="L42">    public ComplexPolynomialEvaluator(Complex[] polyParams) {</span>
+<span class="fc" id="L42">    public ComplexPolynomialEvaluator(final Complex[] polyParams) {</span>
 <span class="pc bpc" id="L43" title="2 of 4 branches missed.">        if (polyParams == null || polyParams.length == 0) {</span>
 <span class="nc" id="L44">            throw new IllegalArgumentException();</span>
         }
@@ -60,7 +60,7 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * @param x point where polynomial is evaluated.
      * @return result of evaluation.
      */
-    public Complex evaluate(Complex x) {
+    public Complex evaluate(final Complex x) {
 <span class="fc" id="L64">        return evaluate(mPolyParams, x);</span>
     }    
 }

@@ -22,21 +22,22 @@ import java.util.BitSet;
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 <span class="fc" id="L24">public abstract class InliersData {</span>
-    
+
     /**
      * Residuals obtained for each sample of data.
      */
     protected double[] mResiduals;
-    
+
     /**
      * Number of inliers found on current iteration.
      */
     protected int mNumInliers;
-    
+
     /**
      * Returns efficient array indicating which samples are considered inliers
      * and which ones aren't or null if inliers are not kept.
-     * @return array indicating which samples are considered inliers and which 
+     *
+     * @return array indicating which samples are considered inliers and which
      * ones aren't, or null.
      */
     public abstract BitSet getInliers();
@@ -44,18 +45,20 @@ import java.util.BitSet;
     /**
      * Returns residuals obtained for each sample of data or null if residuals
      * are not kept.
+     *
      * @return residuals obtained for each sample of data.
      */
     public double[] getResiduals() {
-<span class="fc" id="L50">        return mResiduals;</span>
+<span class="fc" id="L52">        return mResiduals;</span>
     }
-    
+
     /**
      * Returns number of inliers found.
+     *
      * @return number of inliers found.
      */
     public int getNumInliers() {
-<span class="fc" id="L58">        return mNumInliers;</span>
+<span class="fc" id="L61">        return mNumInliers;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

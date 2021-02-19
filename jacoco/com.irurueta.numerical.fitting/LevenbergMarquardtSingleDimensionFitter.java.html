@@ -27,26 +27,26 @@ import com.irurueta.statistics.MaxIterationsExceededException;
 import java.util.Arrays;
 
 /**
- * Fits provided data (x,y) to a generic non-linear function using 
+ * Fits provided data (x,y) to a generic non-linear function using
  * Levenberg-Marquardt iterative algorithm.
  * This class is based on the implementation available at Numerical Recipes 3rd
  * Ed, page 801.
  */
 @SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
-public class LevenbergMarquardtSingleDimensionFitter 
+public class LevenbergMarquardtSingleDimensionFitter
         extends SingleDimensionFitter {
-    
+
     /**
      * Default convergence parameter. Number of times that tolerance is assumed
      * to be reached to consider that algorithm has finished iterating.
      */
     public static final int DEFAULT_NDONE = 4;
-    
+
     /**
      * Default maximum number of iterations.
      */
     public static final int DEFAULT_ITMAX = 5000;
-    
+
     /**
      * Default tolerance to reach convergence.
      */
@@ -56,43 +56,43 @@ public class LevenbergMarquardtSingleDimensionFitter
      * Indicates whether covariance must be adjusted or not after fitting is finished.
      */
     public static final boolean DEFAULT_ADJUST_COVARIANCE = true;
-    
+
     /**
      * Convergence parameter.
      */
 <span class="fc" id="L63">    private int ndone = DEFAULT_NDONE;</span>
-    
+
     /**
      * Maximum number of iterations.
      */
 <span class="fc" id="L68">    private int itmax = DEFAULT_ITMAX;</span>
-    
+
     /**
      * Tolerance to reach convergence.
      */
 <span class="fc" id="L73">    private double tol = DEFAULT_TOL;</span>
-    
+
     /**
      * Evaluator of functions.
      */
     private LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator;
-    
+
     /**
      * Number of function parameters to be estimated.
      */
     private int ma;
-    
+
     /**
      * Determines which parameters can be modified during estimation (if true)
      * and which ones are locked (if false).
      */
-    private boolean[] ia;    
-    
+    private boolean[] ia;
+
     /**
      * Curvature matrix.
      */
     private Matrix alpha;
-    
+
     /**
      * Number of parameters to be fitted.
      */
@@ -121,190 +121,203 @@ public class LevenbergMarquardtSingleDimensionFitter
      * By default covariance is adjusted after fitting finishes.
      */
 <span class="fc" id="L123">    private boolean adjustCovariance = DEFAULT_ADJUST_COVARIANCE;</span>
-        
+
     /**
      * Constructor.
      */
     public LevenbergMarquardtSingleDimensionFitter() {
 <span class="fc" id="L129">        super();</span>
 <span class="fc" id="L130">    }</span>
-    
-    /**
-     * Constructor.
-     * @param x input points x where function f(x) is evaluated.
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviations of each pair of points (x, y).
-     * @throws IllegalArgumentException if provided arrays don't have the same
-     * length.
-     */
-    public LevenbergMarquardtSingleDimensionFitter(double[] x, double[] y, 
-            double[] sig) {
-<span class="fc" id="L143">        super(x, y, sig);</span>
-<span class="fc" id="L144">    }</span>
-    
-    /**
-     * Constructor.
-     * @param x input points x where function f(x) is evaluated.
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
-     */
-    public LevenbergMarquardtSingleDimensionFitter(double[] x, double[] y, 
-            double sig) {
-<span class="fc" id="L158">        super(x, y, sig);</span>
-<span class="fc" id="L159">    }</span>
 
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @throws FittingException if evaluation fails.
-     */
-    public LevenbergMarquardtSingleDimensionFitter(
-            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
-<span class="fc" id="L170">        this();</span>
-<span class="fc" id="L171">        setFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L172">    }</span>
-    
-    /**
-     * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where function f(x) is evaluated.
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
+     *
+     * @param x   input points x where function f(x) is evaluated.
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
      * @param sig standard deviations of each pair of points (x, y).
      * @throws IllegalArgumentException if provided arrays don't have the same
-     * length.
-     * @throws FittingException if evaluation fails.
+     *                                  length.
      */
     public LevenbergMarquardtSingleDimensionFitter(
-            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
-            double[] x, double[] y, double[] sig) 
-            throws FittingException {
-<span class="fc" id="L190">        this(x, y, sig);</span>
-<span class="fc" id="L191">        setFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L192">    }</span>
-    
+            final double[] x, final double[] y, final double[] sig) {
+<span class="fc" id="L144">        super(x, y, sig);</span>
+<span class="fc" id="L145">    }</span>
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where function f(x) is evaluated.
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
+     *
+     * @param x   input points x where function f(x) is evaluated.
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public LevenbergMarquardtSingleDimensionFitter(
+            final double[] x, final double[] y, final double sig) {
+<span class="fc" id="L160">        super(x, y, sig);</span>
+<span class="fc" id="L161">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
-            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator, 
-            double[] x, double[] y, double sig) throws FittingException {
-<span class="fc" id="L210">        this(x, y, sig);</span>
-<span class="fc" id="L211">        setFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L212">    }    </span>
-    
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+<span class="fc" id="L173">        this();</span>
+<span class="fc" id="L174">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L175">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where function f(x) is evaluated.
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     * @throws FittingException         if evaluation fails.
+     */
+    public LevenbergMarquardtSingleDimensionFitter(
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
+            final double[] x, final double[] y, final double[] sig)
+            throws FittingException {
+<span class="fc" id="L194">        this(x, y, sig);</span>
+<span class="fc" id="L195">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L196">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where function f(x) is evaluated.
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     * @throws FittingException         if evaluation fails.
+     */
+    public LevenbergMarquardtSingleDimensionFitter(
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
+            final double[] x, final double[] y, final double sig) throws FittingException {
+<span class="fc" id="L215">        this(x, y, sig);</span>
+<span class="fc" id="L216">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L217">    }</span>
+
     /**
      * Returns convergence parameter.
+     *
      * @return convergence parameter.
      */
     public int getNdone() {
-<span class="fc" id="L219">        return ndone;</span>
+<span class="fc" id="L225">        return ndone;</span>
     }
-    
+
     /**
      * Sets convergence parameter.
+     *
      * @param ndone convergence parameter.
      * @throws IllegalArgumentException if provided value is less than 1.
      */
-    public void setNdone(int ndone) {
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (ndone &lt; 1) {</span>
-<span class="fc" id="L229">            throw new IllegalArgumentException();</span>
+    public void setNdone(final int ndone) {
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (ndone &lt; 1) {</span>
+<span class="fc" id="L236">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L231">        this.ndone = ndone;</span>
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L238">        this.ndone = ndone;</span>
+<span class="fc" id="L239">    }</span>
 
     /**
      * Returns maximum number of iterations.
+     *
      * @return maximum number of iterations.
      */
     public int getItmax() {
-<span class="fc" id="L239">        return itmax;</span>
+<span class="fc" id="L247">        return itmax;</span>
     }
-    
+
     /**
      * Sets maximum number of iterations.
+     *
      * @param itmax maximum number of iterations.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setItmax(int itmax) {
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (itmax &lt;= 0) {</span>
-<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
+    public void setItmax(final int itmax) {
+<span class="fc bfc" id="L257" title="All 2 branches covered.">        if (itmax &lt;= 0) {</span>
+<span class="fc" id="L258">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L251">        this.itmax = itmax;</span>
-<span class="fc" id="L252">    }    </span>
+<span class="fc" id="L260">        this.itmax = itmax;</span>
+<span class="fc" id="L261">    }</span>
 
     /**
      * Returns tolerance to reach convergence.
+     *
      * @return tolerance to reach convergence.
      */
     public double getTol() {
-<span class="fc" id="L259">        return tol;</span>
+<span class="fc" id="L269">        return tol;</span>
     }
-    
+
     /**
      * Sets tolerance to reach convergence.
+     *
      * @param tol tolerance to reach convergence.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setTol(double tol) {
-<span class="fc bfc" id="L268" title="All 2 branches covered.">        if (tol &lt;= 0.0) {</span>
-<span class="fc" id="L269">            throw new IllegalArgumentException();</span>
+    public void setTol(final double tol) {
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (tol &lt;= 0.0) {</span>
+<span class="fc" id="L280">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L271">        this.tol = tol;</span>
-<span class="fc" id="L272">    }</span>
-    
+<span class="fc" id="L282">        this.tol = tol;</span>
+<span class="fc" id="L283">    }</span>
+
     /**
      * Returns function evaluator to evaluate function at a given point and
      * obtain function derivatives respect to each provided parameter
+     *
      * @return function evaluator
      */
-    public LevenbergMarquardtSingleDimensionFunctionEvaluator 
-            getFunctionEvaluator() {
-<span class="fc" id="L281">        return evaluator;</span>
+    public LevenbergMarquardtSingleDimensionFunctionEvaluator getFunctionEvaluator() {
+<span class="fc" id="L292">        return evaluator;</span>
     }
-    
+
     /**
      * Sets function evaluator to evaluate function at a given point and obtain
      * function derivatives respect to each provided parameter
+     *
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
      */
     public final void setFunctionEvaluator(
-            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator) 
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L293">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L294">    }</span>
+<span class="fc" id="L305">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L306">    }</span>
 
     /**
      * Indicates whether provided instance has enough data to start the function
      * fitting.
-     * @return true if this instance is ready to start the function fitting, 
+     *
+     * @return true if this instance is ready to start the function fitting,
      * false otherwise
-     */    
+     */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L304" title="2 of 8 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp; </span>
+<span class="pc bpc" id="L317" title="2 of 8 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp;</span>
                 x.length == y.length;
     }
-    
+
     /**
      * Returns curvature matrix.
      * Curvature matrix is an indicatiion o fht curvature of the error of the
@@ -313,29 +326,32 @@ public class LevenbergMarquardtSingleDimensionFitter
      * fitted because a deep enough valley has been found to converge to an optimal
      * solution.
      * Typically curvature is proportional to the inverse of the covariance matrix.
+     *
      * @return curvature matrix.
      */
     public Matrix getAlpha() {
-<span class="fc" id="L319">        return alpha;</span>
+<span class="fc" id="L333">        return alpha;</span>
     }
 
     /**
      * Returns degrees of freedom of computed chi square value.
      * Degrees of fredom is equal to the number of sampled data minus the
      * number of estimated parameters.
+     *
      * @return degrees of freedom of computed chi square value.
      */
     public int getChisqDegreesOfFreedom() {
-<span class="fc" id="L329">        return ndat - ma;</span>
+<span class="fc" id="L344">        return ndat - ma;</span>
     }
 
     /**
      * Gets mean square error produced by estimated parameters respect to
      * provided sample data.
+     *
      * @return mean square error.
      */
     public double getMse() {
-<span class="fc" id="L338">        return mse;</span>
+<span class="fc" id="L354">        return mse;</span>
     }
 
     /**
@@ -344,26 +360,28 @@ public class LevenbergMarquardtSingleDimensionFitter
      * parameters to the actual parameter.
      * Thus, the smaller the chance of finding a smaller chi square value, then the
      * better the estimated fit is.
+     *
      * @return probability of finding a smaller chi square value (better fit), expressed
      * as a value between 0.0 and 1.0.
      * @throws MaxIterationsExceededException if convergence of incomplete
-     * gamma function cannot be reached. This is rarely thrown and happens
-     * usually for numerically unstable input values.
+     *                                        gamma function cannot be reached. This is rarely thrown and happens
+     *                                        usually for numerically unstable input values.
      */
     public double getP() throws MaxIterationsExceededException {
-<span class="fc" id="L354">        return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());</span>
+<span class="fc" id="L371">        return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());</span>
     }
 
     /**
      * Gets a measure of quality of estimated fit as a value between 0.0 and 1.0.
      * The larger the quality value is, the better the fit that has been estimated.
+     *
      * @return measure of quality of estimated fit.
      * @throws MaxIterationsExceededException if convergence of incomplete
-     * gamma function cannot be reached. This is rarely thrown and happens
-     * usually for numerically unstable input values.
+     *                                        gamma function cannot be reached. This is rarely thrown and happens
+     *                                        usually for numerically unstable input values.
      */
     public double getQ() throws MaxIterationsExceededException {
-<span class="fc" id="L366">        return 1.0 - getP();</span>
+<span class="fc" id="L384">        return 1.0 - getP();</span>
     }
 
     /**
@@ -386,10 +404,11 @@ public class LevenbergMarquardtSingleDimensionFitter
      * http://people.duke.edu/~hpgavin/ce281/lm.pdf
      * https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf
      * Numerical Recipes 3rd Ed, page 812
+     *
      * @return true if covariance must be adjusted, false otherwise.
      */
     public boolean isCovarianceAdjusted() {
-<span class="fc" id="L392">        return adjustCovariance;</span>
+<span class="fc" id="L411">        return adjustCovariance;</span>
     }
 
     /**
@@ -408,11 +427,12 @@ public class LevenbergMarquardtSingleDimensionFitter
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
      * By default covariance is adjusted after fitting finishes.
+     *
      * @param adjustCovariance true if covariance must be adjusted, false otherwise.
      */
-    public void setCovarianceAdjusted(boolean adjustCovariance) {
-<span class="fc" id="L414">        this.adjustCovariance = adjustCovariance;</span>
-<span class="fc" id="L415">    }</span>
+    public void setCovarianceAdjusted(final boolean adjustCovariance) {
+<span class="fc" id="L434">        this.adjustCovariance = adjustCovariance;</span>
+<span class="fc" id="L435">    }</span>
 
     /**
      * Fits a function to provided data so that parameters associated to that
@@ -423,150 +443,153 @@ public class LevenbergMarquardtSingleDimensionFitter
      * If it is close to zero, then the model overfits the error.
      * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
      * the quality of the fit.
-     * @throws FittingException if fitting fails.
+     *
+     * @throws FittingException  if fitting fails.
      * @throws NotReadyException if enough input data has not yet been provided.
-     */        
+     */
     @Override
     public void fit() throws FittingException, NotReadyException {
-<span class="pc bpc" id="L431" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L432">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L452" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L453">            throw new NotReadyException();</span>
         }
 
         try {
-<span class="fc" id="L436">            resultAvailable = false;        </span>
-        
+<span class="fc" id="L457">            resultAvailable = false;</span>
+
             int j;
             int k;
             int l;
             int iter;
-<span class="fc" id="L442">            int done = 0;</span>
-<span class="fc" id="L443">            double alamda = 0.001;</span>
+<span class="fc" id="L463">            int done = 0;</span>
+<span class="fc" id="L464">            double alamda = 0.001;</span>
             double ochisq;
-<span class="fc" id="L445">            double[] atry = new double[ma];</span>
-<span class="fc" id="L446">            double[] beta = new double[ma];</span>
-<span class="fc" id="L447">            double[] da = new double[ma];</span>
+<span class="fc" id="L466">            final double[] atry = new double[ma];</span>
+<span class="fc" id="L467">            final double[] beta = new double[ma];</span>
+<span class="fc" id="L468">            final double[] da = new double[ma];</span>
 
-            //number of parameters to be fitted
-<span class="fc" id="L450">            mfit = 0;</span>
-<span class="fc bfc" id="L451" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc bfc" id="L452" title="All 2 branches covered.">                if (ia[j]) {</span>
-<span class="fc" id="L453">                    mfit++;</span>
+            // number of parameters to be fitted
+<span class="fc" id="L471">            mfit = 0;</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc bfc" id="L473" title="All 2 branches covered.">                if (ia[j]) {</span>
+<span class="fc" id="L474">                    mfit++;</span>
                 }
             }
 
-<span class="fc" id="L457">            Matrix oneda = new Matrix(mfit, 1);</span>
-<span class="fc" id="L458">            Matrix temp = new Matrix(mfit, mfit);</span>
+<span class="fc" id="L478">            final Matrix oneda = new Matrix(mfit, 1);</span>
+<span class="fc" id="L479">            final Matrix temp = new Matrix(mfit, mfit);</span>
 
-            //initialization
-<span class="fc" id="L461">            mrqcof(a, alpha, beta);</span>
-<span class="fc bfc" id="L462" title="All 2 branches covered.">            for (j = 0 ; j &lt; ma; j++) {</span>
-<span class="fc" id="L463">                atry[j] = a[j];</span>
+            // initialization
+<span class="fc" id="L482">            mrqcof(a, alpha, beta);</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L484">                atry[j] = a[j];</span>
             }
 
-<span class="fc" id="L466">            ochisq = chisq;</span>
-<span class="pc bpc" id="L467" title="1 of 2 branches missed.">            for (iter = 0; iter &lt; itmax; iter++) {</span>
+<span class="fc" id="L487">            ochisq = chisq;</span>
+<span class="pc bpc" id="L488" title="1 of 2 branches missed.">            for (iter = 0; iter &lt; itmax; iter++) {</span>
 
-<span class="fc bfc" id="L469" title="All 2 branches covered.">                if (done == ndone) {</span>
-                    //last pass. Use zero alamda
-<span class="fc" id="L471">                    alamda = 0.0;</span>
+<span class="fc bfc" id="L490" title="All 2 branches covered.">                if (done == ndone) {</span>
+                    // last pass. Use zero alamda
+<span class="fc" id="L492">                    alamda = 0.0;</span>
                 }
 
-<span class="fc bfc" id="L474" title="All 2 branches covered.">                for (j = 0; j &lt; mfit; j++) {</span>
-                    //alter linearized fitting matrix, by augmenting diagonal 
-                    //elements
-<span class="fc bfc" id="L477" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
-<span class="fc" id="L478">                        covar.setElementAt(j, k, alpha.getElementAt(j, k));</span>
+<span class="fc bfc" id="L495" title="All 2 branches covered.">                for (j = 0; j &lt; mfit; j++) {</span>
+                    // alter linearized fitting matrix, by augmenting diagonal
+                    // elements
+<span class="fc bfc" id="L498" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L499">                        covar.setElementAt(j, k, alpha.getElementAt(j, k));</span>
                     }
-<span class="fc" id="L480">                    covar.setElementAt(j, j, alpha.getElementAt(j, j) * (1.0 + alamda));</span>
-<span class="fc bfc" id="L481" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
-<span class="fc" id="L482">                        temp.setElementAt(j, k, covar.getElementAt(j, k));</span>
+<span class="fc" id="L501">                    covar.setElementAt(j, j, alpha.getElementAt(j, j) * (1.0 + alamda));</span>
+<span class="fc bfc" id="L502" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L503">                        temp.setElementAt(j, k, covar.getElementAt(j, k));</span>
                     }
-<span class="fc" id="L484">                    oneda.setElementAt(j, 0, beta[j]);</span>
+<span class="fc" id="L505">                    oneda.setElementAt(j, 0, beta[j]);</span>
                 }
 
-                //matrix solution
-<span class="fc" id="L488">                GaussJordanElimination.process(temp, oneda);</span>
+                // matrix solution
+<span class="fc" id="L509">                GaussJordanElimination.process(temp, oneda);</span>
 
-<span class="fc bfc" id="L490" title="All 2 branches covered.">                for (j = 0; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L491" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
-<span class="fc" id="L492">                        covar.setElementAt(j, k, temp.getElementAt(j, k));</span>
+<span class="fc bfc" id="L511" title="All 2 branches covered.">                for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L512" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L513">                        covar.setElementAt(j, k, temp.getElementAt(j, k));</span>
                     }
-<span class="fc" id="L494">                    da[j] = oneda.getElementAt(j, 0);</span>
+<span class="fc" id="L515">                    da[j] = oneda.getElementAt(j, 0);</span>
                 }
 
-<span class="fc bfc" id="L497" title="All 2 branches covered.">                if (done == ndone) {</span>
-                    //Converged. Clean up and return
-<span class="fc" id="L499">                    covsrt(covar);</span>
-<span class="fc" id="L500">                    covsrt(alpha);</span>
+<span class="fc bfc" id="L518" title="All 2 branches covered.">                if (done == ndone) {</span>
+                    // Converged. Clean up and return
+<span class="fc" id="L520">                    covsrt(covar);</span>
+<span class="fc" id="L521">                    covsrt(alpha);</span>
 
-<span class="fc bfc" id="L502" title="All 2 branches covered.">                    if (adjustCovariance) {</span>
-<span class="fc" id="L503">                        adjustCovariance();</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">                    if (adjustCovariance) {</span>
+<span class="fc" id="L524">                        adjustCovariance();</span>
                     }
-                    
-<span class="fc" id="L506">                    resultAvailable = true;</span>
-                    
-<span class="fc" id="L508">                    return;</span>
+
+<span class="fc" id="L527">                    resultAvailable = true;</span>
+
+<span class="fc" id="L529">                    return;</span>
                 }
 
-                //did the trial succeed?
-<span class="fc bfc" id="L512" title="All 2 branches covered.">                for (j = 0, l = 0; l &lt; ma; l++) {</span>
-<span class="fc bfc" id="L513" title="All 2 branches covered.">                    if(ia[l]) {</span>
-<span class="fc" id="L514">                        atry[l] = a[l] + da[j++];</span>
+                // did the trial succeed?
+<span class="fc bfc" id="L533" title="All 2 branches covered.">                for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L534" title="All 2 branches covered.">                    if (ia[l]) {</span>
+<span class="fc" id="L535">                        atry[l] = a[l] + da[j++];</span>
                     }
                 }
 
-<span class="fc" id="L518">                mrqcof(atry, covar, da);</span>
-<span class="fc bfc" id="L519" title="All 2 branches covered.">                if (Math.abs(chisq - ochisq) &lt; Math.max(tol, tol * chisq)) {</span>
-<span class="fc" id="L520">                    done++;</span>
+<span class="fc" id="L539">                mrqcof(atry, covar, da);</span>
+<span class="fc bfc" id="L540" title="All 2 branches covered.">                if (Math.abs(chisq - ochisq) &lt; Math.max(tol, tol * chisq)) {</span>
+<span class="fc" id="L541">                    done++;</span>
                 }
 
-<span class="fc bfc" id="L523" title="All 2 branches covered.">                if (chisq &lt; ochisq) {</span>
-                    //success, accept the new solution
-<span class="fc" id="L525">                    alamda *= 0.1;</span>
-<span class="fc" id="L526">                    ochisq = chisq;</span>
-<span class="fc bfc" id="L527" title="All 2 branches covered.">                    for (j = 0; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L528" title="All 2 branches covered.">                        for (k = 0; k &lt; mfit; k++) {</span>
-<span class="fc" id="L529">                            alpha.setElementAt(j, k, covar.getElementAt(j, k));</span>
+<span class="fc bfc" id="L544" title="All 2 branches covered.">                if (chisq &lt; ochisq) {</span>
+                    // success, accept the new solution
+<span class="fc" id="L546">                    alamda *= 0.1;</span>
+<span class="fc" id="L547">                    ochisq = chisq;</span>
+<span class="fc bfc" id="L548" title="All 2 branches covered.">                    for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">                        for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L550">                            alpha.setElementAt(j, k, covar.getElementAt(j, k));</span>
                         }
-<span class="fc" id="L531">                        beta[j] = da[j];</span>
+<span class="fc" id="L552">                        beta[j] = da[j];</span>
                     }
-<span class="fc bfc" id="L533" title="All 2 branches covered.">                    for (l = 0; l &lt; ma; l++) {</span>
-<span class="fc" id="L534">                        a[l] = atry[l];</span>
+<span class="fc bfc" id="L554" title="All 2 branches covered.">                    for (l = 0; l &lt; ma; l++) {</span>
+<span class="fc" id="L555">                        a[l] = atry[l];</span>
                     }
                 } else {
-                    //failure, increase alamda
-<span class="fc" id="L538">                    alamda *= 10.0;</span>
-<span class="fc" id="L539">                    chisq = ochisq;</span>
+                    // failure, increase alamda
+<span class="fc" id="L559">                    alamda *= 10.0;</span>
+<span class="fc" id="L560">                    chisq = ochisq;</span>
                 }
             }
 
-            //too many iterations
-<span class="nc" id="L544">            throw new FittingException(&quot;too many iterations&quot;);</span>
-                
-<span class="nc" id="L546">        } catch (AlgebraException | EvaluationException e) {</span>
-<span class="nc" id="L547">            throw new FittingException(e);</span>
-        }                
+            // too many iterations
+<span class="nc" id="L565">            throw new FittingException(&quot;too many iterations&quot;);</span>
+
+<span class="nc" id="L567">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L568">            throw new FittingException(e);</span>
+        }
     }
-    
+
     /**
-     * Prevents parameter at position i of linear combination of basis functions 
+     * Prevents parameter at position i of linear combination of basis functions
      * to be modified during function fitting.
-     * @param i position of parameter to be retained.
+     *
+     * @param i   position of parameter to be retained.
      * @param val value to be set for parameter at position i.
      */
-    public void hold(int i, double val) {
-<span class="fc" id="L558">        ia[i] = false;</span>
-<span class="fc" id="L559">        a[i] = val;</span>
-<span class="fc" id="L560">    }</span>
-    
+    public void hold(final int i, final double val) {
+<span class="fc" id="L580">        ia[i] = false;</span>
+<span class="fc" id="L581">        a[i] = val;</span>
+<span class="fc" id="L582">    }</span>
+
     /**
      * Releases parameter at position i of linear combination of basis functions
      * so it can be modified again if needed.
+     *
      * @param i position of parameter to be released.
      */
-    public void free(int i) {
-<span class="fc" id="L568">        ia[i] = true;</span>
-<span class="fc" id="L569">    }</span>
+    public void free(final int i) {
+<span class="fc" id="L591">        ia[i] = true;</span>
+<span class="fc" id="L592">    }</span>
 
     /**
      * Adjusts covariance.
@@ -574,7 +597,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * of problem, otherwise estimated covariance will just be a measure of
      * goodness similar to chi square value because it will be the inverse of
      * the curvature matrix, which is just a solution of the covariance up to scale.
-     *
+     * &lt;p&gt;
      * Covariance is adjusted taking into account input samples, input standard
      * deviations of the samples and jacobians of the model function over estimated
      * parameters using the following expression: Cov = (J'*W*J)^-1 where:
@@ -587,36 +610,38 @@ public class LevenbergMarquardtSingleDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * @throws AlgebraException if there are numerical instabilities.
+     *
+     * @throws AlgebraException    if there are numerical instabilities.
      * @throws EvaluationException if function evaluation fails.
      */
     private void adjustCovariance() throws AlgebraException, EvaluationException {
 
-<span class="fc" id="L595">        Matrix invCov = new Matrix(a.length, a.length);</span>
-<span class="fc" id="L596">        Matrix tmp1 = new Matrix(a.length, 1);</span>
-<span class="fc" id="L597">        Matrix tmp2 = new Matrix(1, a.length);</span>
-<span class="fc" id="L598">        Matrix tmpInvCov = new Matrix(a.length, a.length);</span>
-<span class="fc" id="L599">        double[] derivatives = new double[a.length];</span>
-<span class="fc" id="L600">        int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();</span>
-<span class="fc bfc" id="L601" title="All 2 branches covered.">        for (int i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L602">            evaluator.evaluate(i, x[i], a, derivatives);</span>
+<span class="fc" id="L619">        final Matrix invCov = new Matrix(a.length, a.length);</span>
+<span class="fc" id="L620">        final Matrix tmp1 = new Matrix(a.length, 1);</span>
+<span class="fc" id="L621">        final Matrix tmp2 = new Matrix(1, a.length);</span>
+<span class="fc" id="L622">        final Matrix tmpInvCov = new Matrix(a.length, a.length);</span>
+<span class="fc" id="L623">        final double[] derivatives = new double[a.length];</span>
+<span class="fc" id="L624">        final int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc bfc" id="L625" title="All 2 branches covered.">        for (int i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L626">            evaluator.evaluate(i, x[i], a, derivatives);</span>
 
-<span class="fc" id="L604">            tmp1.fromArray(derivatives);</span>
-<span class="fc" id="L605">            tmp2.fromArray(derivatives);</span>
+<span class="fc" id="L628">            tmp1.fromArray(derivatives);</span>
+<span class="fc" id="L629">            tmp2.fromArray(derivatives);</span>
 
-<span class="fc" id="L607">            tmp1.multiply(tmp2, tmpInvCov);</span>
+<span class="fc" id="L631">            tmp1.multiply(tmp2, tmpInvCov);</span>
 
-<span class="fc" id="L609">            double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);</span>
-<span class="fc" id="L610">            tmpInvCov.multiplyByScalar(w);</span>
-<span class="fc" id="L611">            invCov.add(tmpInvCov);</span>
+<span class="fc" id="L633">            final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);</span>
+<span class="fc" id="L634">            tmpInvCov.multiplyByScalar(w);</span>
+<span class="fc" id="L635">            invCov.add(tmpInvCov);</span>
         }
 
-<span class="fc" id="L614">        covar = Utils.inverse(invCov);</span>
-<span class="fc" id="L615">    }</span>
+<span class="fc" id="L638">        covar = Utils.inverse(invCov);</span>
+<span class="fc" id="L639">    }</span>
 
     /**
      * Internal method to set function evaluator to evaluate function at a given
      * point and obtain function derivatives respect to each provided parameter
+     *
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
      */
@@ -625,140 +650,143 @@ public class LevenbergMarquardtSingleDimensionFitter
             throws FittingException {
 
         try {
-<span class="fc" id="L628">            this.evaluator = evaluator;</span>
+<span class="fc" id="L653">            this.evaluator = evaluator;</span>
 
-<span class="pc bpc" id="L630" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
-<span class="fc" id="L631">                a = evaluator.createInitialParametersArray();</span>
-<span class="fc" id="L632">                ma = a.length;</span>
-<span class="fc" id="L633">                covar = new Matrix(ma, ma);</span>
-<span class="fc" id="L634">                alpha = new Matrix(ma, ma);</span>
-<span class="fc" id="L635">                ia = new boolean[ma];</span>
-<span class="fc" id="L636">                Arrays.fill(ia, true);</span>
+<span class="pc bpc" id="L655" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
+<span class="fc" id="L656">                a = evaluator.createInitialParametersArray();</span>
+<span class="fc" id="L657">                ma = a.length;</span>
+<span class="fc" id="L658">                covar = new Matrix(ma, ma);</span>
+<span class="fc" id="L659">                alpha = new Matrix(ma, ma);</span>
+<span class="fc" id="L660">                ia = new boolean[ma];</span>
+<span class="fc" id="L661">                Arrays.fill(ia, true);</span>
             }
-<span class="nc" id="L638">        } catch(AlgebraException e) {</span>
-<span class="nc" id="L639">            throw new FittingException(e);</span>
-<span class="fc" id="L640">        }</span>
-<span class="fc" id="L641">    }</span>
-        
+<span class="nc" id="L663">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L664">            throw new FittingException(e);</span>
+<span class="fc" id="L665">        }</span>
+<span class="fc" id="L666">    }</span>
+
     /**
      * Used by {@link #fit()} to evaluate the linearized fitting matrix alpha, and
      * vector beta to calculate chi square.
-     * @param a estimated parameters so far.
+     *
+     * @param a     estimated parameters so far.
      * @param alpha curvature (i.e. fitting) matrix.
-     * @param beta array where derivative increments for each parameter are 
-     * stored.
+     * @param beta  array where derivative increments for each parameter are
+     *              stored.
      * @throws EvaluationException if function evaluation fails.
      */
-    private void mrqcof(double[] a, Matrix alpha, double[] beta)
+    private void mrqcof(final double[] a, final Matrix alpha, final double[] beta)
             throws EvaluationException {
 
-	    int i;
-	    int j;
-	    int k;
-	    int l;
-	    int m;
-	    double ymod;
-	    double wt;
-	    double sig2i;
-	    double dy;
-<span class="fc" id="L664">        double[] dyda = new double[ma];</span>
+        int i;
+        int j;
+        int k;
+        int l;
+        int m;
+        double ymod;
+        double wt;
+        double sig2i;
+        double dy;
+<span class="fc" id="L690">        final double[] dyda = new double[ma];</span>
 
-        //initialize (symmetric) alpha, beta
-<span class="fc bfc" id="L667" title="All 2 branches covered.">	    for (j = 0; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L668" title="All 2 branches covered.">            for (k = 0; k &lt;= j; k++) {</span>
-<span class="fc" id="L669">                alpha.setElementAt(j, k, 0.0);</span>
+        // initialize (symmetric) alpha, beta
+<span class="fc bfc" id="L693" title="All 2 branches covered.">        for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L694" title="All 2 branches covered.">            for (k = 0; k &lt;= j; k++) {</span>
+<span class="fc" id="L695">                alpha.setElementAt(j, k, 0.0);</span>
             }
-<span class="fc" id="L671">            beta[j] = 0.0;</span>
-	    }
+<span class="fc" id="L697">            beta[j] = 0.0;</span>
+        }
 
-<span class="fc" id="L674">	    chisq = 0.0;</span>
-<span class="fc" id="L675">	    mse = 0.0;</span>
-<span class="fc" id="L676">	    int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
-<span class="fc bfc" id="L677" title="All 2 branches covered.">	    for (i = 0; i &lt; ndat; i++) {</span>
-	        //summation loop over all data
-<span class="fc" id="L679">            ymod = evaluator.evaluate(i, x[i], a, dyda);</span>
+<span class="fc" id="L700">        chisq = 0.0;</span>
+<span class="fc" id="L701">        mse = 0.0;</span>
+<span class="fc" id="L702">        final int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc bfc" id="L703" title="All 2 branches covered.">        for (i = 0; i &lt; ndat; i++) {</span>
+            // summation loop over all data
+<span class="fc" id="L705">            ymod = evaluator.evaluate(i, x[i], a, dyda);</span>
 
-<span class="fc" id="L681">            sig2i = 1.0 / (sig[i] * sig[i]);</span>
-<span class="fc" id="L682">            dy = y[i] - ymod;</span>
-<span class="fc bfc" id="L683" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
-<span class="fc bfc" id="L684" title="All 2 branches covered.">                if (ia[l]) {</span>
-<span class="fc" id="L685">                    wt = dyda[l] * sig2i;</span>
-<span class="fc" id="L686">                    double[] alphaBuffer = alpha.getBuffer();</span>
-<span class="fc bfc" id="L687" title="All 2 branches covered.">                    for (k = 0, m = 0; m &lt; l + 1; m++) {</span>
-<span class="fc bfc" id="L688" title="All 2 branches covered.">                        if (ia[m]) {</span>
-<span class="fc" id="L689">                            int index = alpha.getIndex(j, k++);</span>
-<span class="fc" id="L690">                            alphaBuffer[index] += wt * dyda[m];</span>
-                        }                    
+<span class="fc" id="L707">            sig2i = 1.0 / (sig[i] * sig[i]);</span>
+<span class="fc" id="L708">            dy = y[i] - ymod;</span>
+<span class="fc bfc" id="L709" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L710" title="All 2 branches covered.">                if (ia[l]) {</span>
+<span class="fc" id="L711">                    wt = dyda[l] * sig2i;</span>
+<span class="fc" id="L712">                    final double[] alphaBuffer = alpha.getBuffer();</span>
+<span class="fc bfc" id="L713" title="All 2 branches covered.">                    for (k = 0, m = 0; m &lt; l + 1; m++) {</span>
+<span class="fc bfc" id="L714" title="All 2 branches covered.">                        if (ia[m]) {</span>
+<span class="fc" id="L715">                            final int index = alpha.getIndex(j, k++);</span>
+<span class="fc" id="L716">                            alphaBuffer[index] += wt * dyda[m];</span>
+                        }
                     }
-<span class="fc" id="L693">                    beta[j++] += dy * wt;</span>
+<span class="fc" id="L719">                    beta[j++] += dy * wt;</span>
                 }
             }
 
-            //add to mse
-<span class="fc" id="L698">            mse += dy * dy / (double) Math.abs(degreesOfFreedom);</span>
+            // add to mse
+<span class="fc" id="L724">            mse += dy * dy / (double) Math.abs(degreesOfFreedom);</span>
 
-            //and find chi square
-<span class="fc" id="L701">            chisq += dy * dy * sig2i / (double) degreesOfFreedom;</span>
-	    }
+            // and find chi square
+<span class="fc" id="L727">            chisq += dy * dy * sig2i / (double) degreesOfFreedom;</span>
+        }
 
-	    //fill in the symmetric side
-<span class="fc bfc" id="L705" title="All 2 branches covered.">	    for (j = 1; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L706" title="All 2 branches covered.">            for (k = 0; k &lt; j; k++) {</span>
-<span class="fc" id="L707">                alpha.setElementAt(k, j, alpha.getElementAt(j, k));</span>
+        // fill in the symmetric side
+<span class="fc bfc" id="L731" title="All 2 branches covered.">        for (j = 1; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L732" title="All 2 branches covered.">            for (k = 0; k &lt; j; k++) {</span>
+<span class="fc" id="L733">                alpha.setElementAt(k, j, alpha.getElementAt(j, k));</span>
             }
         }
-<span class="fc" id="L710">    }</span>
+<span class="fc" id="L736">    }</span>
 
     /**
      * Expand in storage the covariance matrix covar, so as to take into account
-     * parameters that are being held fixed. (For the latter, return zero 
+     * parameters that are being held fixed. (For the latter, return zero
      * covariances).
+     *
      * @param covar covariance matrix.
      */
     private void covsrt(Matrix covar) {
-	    int i;
-	    int j;
-	    int k;
-<span class="fc bfc" id="L722" title="All 2 branches covered.">	    for (i = mfit; i &lt; ma; i++) {</span>
-<span class="fc bfc" id="L723" title="All 2 branches covered.">            for (j = 0; j &lt; i + 1; j++) {</span>
-<span class="fc" id="L724">                covar.setElementAt(i, j, 0.0);</span>
-<span class="fc" id="L725">                covar.setElementAt(j, i, 0.0);</span>
+        int i;
+        int j;
+        int k;
+<span class="fc bfc" id="L749" title="All 2 branches covered.">        for (i = mfit; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L750" title="All 2 branches covered.">            for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L751">                covar.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L752">                covar.setElementAt(j, i, 0.0);</span>
             }
         }
 
-<span class="fc" id="L729">	    k = mfit - 1;</span>
-<span class="fc bfc" id="L730" title="All 2 branches covered.">	    for (j = ma - 1; j &gt;= 0; j--) {</span>
-<span class="fc bfc" id="L731" title="All 2 branches covered.">            if (ia[j]) {</span>
-<span class="fc" id="L732">                double[] buffer = covar.getBuffer();</span>
-<span class="fc bfc" id="L733" title="All 2 branches covered.">		        for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc" id="L734">                    int pos1 = covar.getIndex(i, k);</span>
-<span class="fc" id="L735">                    int pos2 = covar.getIndex(i, j);</span>
-<span class="fc" id="L736">                    swap(buffer, buffer, pos1, pos2);</span>
+<span class="fc" id="L756">        k = mfit - 1;</span>
+<span class="fc bfc" id="L757" title="All 2 branches covered.">        for (j = ma - 1; j &gt;= 0; j--) {</span>
+<span class="fc bfc" id="L758" title="All 2 branches covered.">            if (ia[j]) {</span>
+<span class="fc" id="L759">                final double[] buffer = covar.getBuffer();</span>
+<span class="fc bfc" id="L760" title="All 2 branches covered.">                for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L761">                    final int pos1 = covar.getIndex(i, k);</span>
+<span class="fc" id="L762">                    final int pos2 = covar.getIndex(i, j);</span>
+<span class="fc" id="L763">                    swap(buffer, buffer, pos1, pos2);</span>
                 }
 
-<span class="fc bfc" id="L739" title="All 2 branches covered.">		        for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc" id="L740">                    int pos1 = covar.getIndex(k, i);</span>
-<span class="fc" id="L741">                    int pos2 = covar.getIndex(j, i);</span>
-<span class="fc" id="L742">                    swap(buffer, buffer, pos1, pos2);</span>
+<span class="fc bfc" id="L766" title="All 2 branches covered.">                for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L767">                    final int pos1 = covar.getIndex(k, i);</span>
+<span class="fc" id="L768">                    final int pos2 = covar.getIndex(j, i);</span>
+<span class="fc" id="L769">                    swap(buffer, buffer, pos1, pos2);</span>
                 }
 
-<span class="fc" id="L745">		        k--;</span>
+<span class="fc" id="L772">                k--;</span>
             }
-	    }
-<span class="fc" id="L748">    }</span>
-    
+        }
+<span class="fc" id="L775">    }</span>
+
     /**
      * Swaps values of arrays at provided positions.
+     *
      * @param array1 1st array.
      * @param array2 2nd array.
-     * @param pos1 1st position.
-     * @param pos2 2nd position.
+     * @param pos1   1st position.
+     * @param pos2   2nd position.
      */
-    private void swap(double[] array1, double[] array2, int pos1, int pos2) {
-<span class="fc" id="L758">        double value1 = array1[pos1];</span>
-<span class="fc" id="L759">        double value2 = array2[pos2];</span>
-<span class="fc" id="L760">        array1[pos1] = value2;</span>
-<span class="fc" id="L761">        array2[pos2] = value1;</span>
-<span class="fc" id="L762">    }    </span>
+    private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
+<span class="fc" id="L786">        final double value1 = array1[pos1];</span>
+<span class="fc" id="L787">        final double value2 = array2[pos2];</span>
+<span class="fc" id="L788">        array1[pos1] = value2;</span>
+<span class="fc" id="L789">        array2[pos2] = value1;</span>
+<span class="fc" id="L790">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

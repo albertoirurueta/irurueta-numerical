@@ -19,7 +19,7 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 
 /**
- * Base class to fit provided multidimensional data (x1, x2, ..., y1, y2, ...) 
+ * Base class to fit provided multidimensional data (x1, x2, ..., y1, y2, ...)
  * to a function made of a linear combination of functions used as a basis
  * (i.e. f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...).
  * Where f0, f1, ... is the function basis which ideally should be formed by
@@ -27,164 +27,177 @@ import com.irurueta.algebra.Matrix;
  */
 @SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
-    
+
     /**
      * Evaluator of functions
      */
     protected LinearFitterMultiDimensionFunctionEvaluator evaluator;
-        
+
     /**
      * Array where results of function evaluations are stored
      */
     protected double[] afunc;
-    
+
     /**
      * Number of function basis used as a linear combination of functions being
      * fitted
      */
     protected int ma;
-    
+
     /**
      * Constructor
      */
     MultiDimensionLinearFitter() {
 <span class="fc" id="L51">        super();</span>
 <span class="fc" id="L52">    }</span>
-    
-    /**
-     * Constructor
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points
-     * @param sig standard deviations of each pair of points (x, y)
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length
-     */
-    public MultiDimensionLinearFitter(Matrix x, double[] y, double[] sig) {
-<span class="fc" id="L65">        super(x, y, sig);</span>
-<span class="fc" id="L66">    }</span>
 
     /**
      * Constructor
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length
-     */
-    public MultiDimensionLinearFitter(Matrix x, double[] y, double sig) {
-<span class="fc" id="L80">        super(x, y, sig);</span>
-<span class="fc" id="L81">    }</span>
-    
-    /**
-     * Constructor
-     * @param evaluator evaluator to evaluate function at provided point and
-     * obtain the evaluation of function basis at such point
-     * @throws FittingException if evaluation fails
-     */
-    public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException {
-<span class="fc" id="L91">        super();</span>
-<span class="fc" id="L92">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L93">    }</span>
-    
-    /**
-     * Constructor
-     * @param evaluator evaluator to evaluate function at provided point and
-     * obtain the evaluation of function basis at such point
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points
+     *
+     * @param x   input points x where a linear multi dimensional function
+     *            f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y   result of evaluation of linear multi dimensional function
+     *            f(x1, x2, ...) at provided x points
      * @param sig standard deviations of each pair of points (x, y)
-     * @throws FittingException if evaluation fails
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double[] sig) throws FittingException {
-<span class="fc" id="L110">        super(x, y, sig);</span>
-<span class="fc" id="L111">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L112">    }</span>
-    
+    public MultiDimensionLinearFitter(final Matrix x, final double[] y, final double[] sig) {
+<span class="fc" id="L66">        super(x, y, sig);</span>
+<span class="fc" id="L67">    }</span>
+
     /**
      * Constructor
+     *
+     * @param x   input points x where a linear multi dimensional function
+     *            f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y   result of evaluation of linear multi dimensional function
+     *            f(x1, x2, ...) at provided x points
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length
+     */
+    public MultiDimensionLinearFitter(final Matrix x, final double[] y, final double sig) {
+<span class="fc" id="L82">        super(x, y, sig);</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Constructor
+     *
      * @param evaluator evaluator to evaluate function at provided point and
-     * obtain the evaluation of function basis at such point
-     * @param x input points x where a linear multi dimensional function 
-     * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y result of evaluation of linear multi dimensional function 
-     * f(x1, x2, ...) at provided x points
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant
+     *                  obtain the evaluation of function basis at such point
      * @throws FittingException if evaluation fails
-     * @throws IllegalArgumentException if provided matrix rows and arrays 
-     * don't have the same length
-     */    
-    public MultiDimensionLinearFitter(LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            Matrix x, double[] y, double sig) throws FittingException {
-<span class="fc" id="L130">        super(x, y, sig);</span>
-<span class="fc" id="L131">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L132">    }     </span>
-    
+     */
+    public MultiDimensionLinearFitter(final LinearFitterMultiDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+<span class="fc" id="L94">        super();</span>
+<span class="fc" id="L95">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Constructor
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point
+     * @param x         input points x where a linear multi dimensional function
+     *                  f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y         result of evaluation of linear multi dimensional function
+     *                  f(x1, x2, ...) at provided x points
+     * @param sig       standard deviations of each pair of points (x, y)
+     * @throws FittingException         if evaluation fails
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length
+     */
+    public MultiDimensionLinearFitter(
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator,
+            final Matrix x, final double[] y, final double[] sig) throws FittingException {
+<span class="fc" id="L115">        super(x, y, sig);</span>
+<span class="fc" id="L116">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Constructor
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point
+     * @param x         input points x where a linear multi dimensional function
+     *                  f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
+     * @param y         result of evaluation of linear multi dimensional function
+     *                  f(x1, x2, ...) at provided x points
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant
+     * @throws FittingException         if evaluation fails
+     * @throws IllegalArgumentException if provided matrix rows and arrays
+     *                                  don't have the same length
+     */
+    public MultiDimensionLinearFitter(
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator,
+            final Matrix x, final double[] y, final double sig) throws FittingException {
+<span class="fc" id="L137">        super(x, y, sig);</span>
+<span class="fc" id="L138">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L139">    }</span>
+
     /**
      * Returns function evaluator to evaluate function at a given point and
      * obtain the evaluation of function basis at such point
+     *
      * @return function evaluator
-     */    
+     */
     public LinearFitterMultiDimensionFunctionEvaluator getFunctionEvaluator() {
-<span class="fc" id="L140">        return evaluator;</span>
+<span class="fc" id="L148">        return evaluator;</span>
     }
-    
+
     /**
      * Sets function evaluator to evaluate function at a given point and obtain
      * the evaluation of function basis at such point
+     *
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
      */
-    public void setFunctionEvaluator(LinearFitterMultiDimensionFunctionEvaluator evaluator)
+    public void setFunctionEvaluator(
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L151">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L152">    }</span>
-    
+<span class="fc" id="L161">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L162">    }</span>
+
     /**
-     * Internal method to set function evaluator to evaluate function at a given 
+     * Internal method to set function evaluator to evaluate function at a given
      * point and obtain the evaluation of function basis at such point
+     *
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
-     */    
-    private void internalSetFunctionEvaluator(LinearFitterMultiDimensionFunctionEvaluator evaluator) 
+     */
+    private void internalSetFunctionEvaluator(
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-        
+
         try {
-<span class="fc" id="L164">            this.evaluator = evaluator;    </span>
-        
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
-<span class="fc" id="L167">                afunc = evaluator.createResultArray();</span>
-<span class="fc" id="L168">                ma = afunc.length;</span>
-<span class="fc" id="L169">                a = new double[ma];</span>
-<span class="fc" id="L170">                covar = new Matrix(ma, ma);</span>
+<span class="fc" id="L176">            this.evaluator = evaluator;</span>
+
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
+<span class="fc" id="L179">                afunc = evaluator.createResultArray();</span>
+<span class="fc" id="L180">                ma = afunc.length;</span>
+<span class="fc" id="L181">                a = new double[ma];</span>
+<span class="fc" id="L182">                covar = new Matrix(ma, ma);</span>
             }
-<span class="nc" id="L172">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L173">            throw new FittingException(e);</span>
-<span class="fc" id="L174">        }</span>
-<span class="fc" id="L175">    }</span>
-            
+<span class="nc" id="L184">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L185">            throw new FittingException(e);</span>
+<span class="fc" id="L186">        }</span>
+<span class="fc" id="L187">    }</span>
+
     /**
      * Indicates whether provided instance has enough data to start the function
      * fitting.
-     * @return true if this instance is ready to start the function fitting, 
+     *
+     * @return true if this instance is ready to start the function fitting,
      * false otherwise
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L185" title="1 of 6 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp; </span>
-<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                x.getRows() == y.length &amp;&amp; </span>
-<span class="fc bfc" id="L187" title="All 2 branches covered.">                x.getColumns() == evaluator.getNumberOfDimensions();</span>
-    }    
+<span class="pc bpc" id="L198" title="1 of 6 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp;</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">                x.getRows() == y.length &amp;&amp;</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">                x.getColumns() == evaluator.getNumberOfDimensions();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

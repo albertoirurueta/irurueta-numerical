@@ -20,194 +20,206 @@ package com.irurueta.numerical.robust;
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public abstract class SubsetSelector {
-    
+
     /**
      * Constant defining minimum amount of allowed samples.
      */
     public static final int MIN_NUM_SAMPLES = 1;
-    
+
     /**
      * Defines default subset selector type.
      */
 <span class="fc" id="L32">    public static final SubsetSelectorType DEFAULT_SUBSET_SELECTOR_TYPE =</span>
             SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR;
-    
+
     /**
      * Total number of samples to pick subsets from.
      * Subsets need to be always smaller or equal than total number of samples.
      */
     protected int mNumSamples;
-    
+
     /**
      * Constructor.
+     *
      * @param numSamples number of samples to select subsets from.
      * @throws IllegalArgumentException if provided number of samples is zero
-     * or negative.
+     *                                  or negative.
      */
-<span class="fc" id="L47">    public SubsetSelector(int numSamples) {</span>
-<span class="fc" id="L48">        setNumSamples(numSamples);</span>
-<span class="fc" id="L49">    }</span>
-    
+<span class="fc" id="L48">    public SubsetSelector(final int numSamples) {</span>
+<span class="fc" id="L49">        setNumSamples(numSamples);</span>
+<span class="fc" id="L50">    }</span>
+
     /**
      * Returns number of samples to select subsets from.
+     *
      * @return number of samples to select subsets from.
      */
     public int getNumSamples() {
-<span class="fc" id="L56">        return mNumSamples;</span>
+<span class="fc" id="L58">        return mNumSamples;</span>
     }
-    
+
     /**
      * Sets number of samples to select subsets from.
+     *
      * @param numSamples number of samples to select subsets from.
      * @throws IllegalArgumentException if provided number of samples is zero or
-     * negative.
+     *                                  negative.
      */
-    public final void setNumSamples(int numSamples) {
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (numSamples &lt; MIN_NUM_SAMPLES) {</span>
-<span class="fc" id="L67">            throw new IllegalArgumentException();</span>
+    public final void setNumSamples(final int numSamples) {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (numSamples &lt; MIN_NUM_SAMPLES) {</span>
+<span class="fc" id="L70">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L69">        mNumSamples = numSamples;        </span>
-<span class="fc" id="L70">    }</span>
-    
+<span class="fc" id="L72">        mNumSamples = numSamples;</span>
+<span class="fc" id="L73">    }</span>
+
     /**
      * Computes a random subset of indices within range of number of samples to
      * be used on robust estimators.
      * If subsets need to be computed repeatedly in a small span of time then it
-     * is suggested to use computeRandomSubsets(int, int[]) for better memory 
+     * is suggested to use computeRandomSubsets(int, int[]) for better memory
      * usage.
+     *
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples.
+     *                   than total number of samples.
      * @return array containing indices to be picked.
-     * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples.
+     * @throws NotEnoughSamplesException  if subset size is greater than the
+     *                                    total number of samples.
      * @throws InvalidSubsetSizeException if subset size is zero or if result
-     * array does not have at least a length of subsetSize.
+     *                                    array does not have at least a length of subsetSize.
      * @see #computeRandomSubsets(int, int[])
      */
-    public int[] computeRandomSubsets(int subsetSize) 
+    public int[] computeRandomSubsets(final int subsetSize)
             throws NotEnoughSamplesException, InvalidSubsetSizeException {
-<span class="fc" id="L89">        int[] result = new int[subsetSize];</span>
-<span class="fc" id="L90">        computeRandomSubsets(subsetSize, result);</span>
-<span class="fc" id="L91">        return result;</span>
+<span class="fc" id="L93">        final int[] result = new int[subsetSize];</span>
+<span class="fc" id="L94">        computeRandomSubsets(subsetSize, result);</span>
+<span class="fc" id="L95">        return result;</span>
     }
-    
+
     /**
      * Computes a random subset of indices within provided range of positions to
      * be used on robust estimators.
      * If subsets need to be computed repeatedly in a small span of time then it
-     * is suggested to use computeRandomSubsets(int, int, int, bool, int[]) for 
+     * is suggested to use computeRandomSubsets(int, int, int, bool, int[]) for
      * better memory usage.
-     * @param minPos minimum position to be picked. This value must be greater 
-     * or equal than zero and smaller than the total number of samples and less
-     * than maxPos.
-     * @param maxPos maximum position to be picked. This value must be greater
-     * or equal than zero and smaller than the total number of samples and 
-     * greater than minPos.
+     *
+     * @param minPos     minimum position to be picked. This value must be greater
+     *                   or equal than zero and smaller than the total number of samples and less
+     *                   than maxPos.
+     * @param maxPos     maximum position to be picked. This value must be greater
+     *                   or equal than zero and smaller than the total number of samples and
+     *                   greater than minPos.
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples.
-     * @param pickLast true indicates that last sample in range must always be
-     * picked within subset. This is done to obtain faster execution times and
-     * greater stability on some algorithms.
+     *                   than total number of samples.
+     * @param pickLast   true indicates that last sample in range must always be
+     *                   picked within subset. This is done to obtain faster execution times and
+     *                   greater stability on some algorithms.
      * @return array containing indices to be picked.
-     * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples or if maxPos is greater than the total number of
-     * samples.
-     * @throws InvalidSubsetSizeException if subset size is zero, or if subset 
-     * size is greater than the allowed range of positions to be picked.
+     * @throws NotEnoughSamplesException   if subset size is greater than the
+     *                                     total number of samples or if maxPos is greater than the total number of
+     *                                     samples.
+     * @throws InvalidSubsetSizeException  if subset size is zero, or if subset
+     *                                     size is greater than the allowed range of positions to be picked.
      * @throws InvalidSubsetRangeException if maximum position is smaller than
-     * minimum position or maximum or minimum position are negative.
+     *                                     minimum position or maximum or minimum position are negative.
      */
-    public int[] computeRandomSubsetsInRange(int minPos, int maxPos, 
-            int subsetSize, boolean pickLast) 
-            throws NotEnoughSamplesException, InvalidSubsetSizeException, 
+    public int[] computeRandomSubsetsInRange(final int minPos, final int maxPos,
+                                             final int subsetSize, final boolean pickLast)
+            throws NotEnoughSamplesException, InvalidSubsetSizeException,
             InvalidSubsetRangeException {
-<span class="fc" id="L124">        int[] result = new int[subsetSize];</span>
-<span class="fc" id="L125">        computeRandomSubsetsInRange(minPos, maxPos, subsetSize, pickLast, </span>
+<span class="fc" id="L129">        final int[] result = new int[subsetSize];</span>
+<span class="fc" id="L130">        computeRandomSubsetsInRange(minPos, maxPos, subsetSize, pickLast,</span>
                 result);
-<span class="fc" id="L127">        return result;</span>
+<span class="fc" id="L132">        return result;</span>
     }
-    
+
     /**
      * Returns type of this subset selector.
+     *
      * @return type of this subset selector.
-     */    
+     */
     public abstract SubsetSelectorType getType();
-    
+
     /**
      * Computes a random subset of indices within range of number of samples to
      * be used on robust estimators.
+     *
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples.
-     * @param result array containing indices to be picked. Provided array must
-     * be at least of length subsetSize. The former subsetSize entries of the
-     * array will be modified by this method.
-     * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples.
+     *                   than total number of samples.
+     * @param result     array containing indices to be picked. Provided array must
+     *                   be at least of length subsetSize. The former subsetSize entries of the
+     *                   array will be modified by this method.
+     * @throws NotEnoughSamplesException  if subset size is greater than the
+     *                                    total number of samples.
      * @throws InvalidSubsetSizeException if subset size is zero or if result
-     * array does not have at least a length of subsetSize.
-     */    
-    public abstract void computeRandomSubsets(int subsetSize, int[] result) 
+     *                                    array does not have at least a length of subsetSize.
+     */
+    public abstract void computeRandomSubsets(final int subsetSize, final int[] result)
             throws NotEnoughSamplesException, InvalidSubsetSizeException;
 
     /**
      * Computes a random subset of indices within provided range of positions to
      * be used on robust estimators.
-     * @param minPos minimum position to be picked. This value must be greater 
-     * or equal than zero and smaller than the total number of samples and less
-     * than maxPos.
-     * @param maxPos maximum position to be picked. This value must be greater
-     * or equal than zero and smaller than the total number of samples and 
-     * greater than minPos.
+     *
+     * @param minPos     minimum position to be picked. This value must be greater
+     *                   or equal than zero and smaller than the total number of samples and less
+     *                   than maxPos.
+     * @param maxPos     maximum position to be picked. This value must be greater
+     *                   or equal than zero and smaller than the total number of samples and
+     *                   greater than minPos.
      * @param subsetSize subset size to be computed. This value must be smaller
-     * than total number of samples.
-     * @param pickLast true indicates that last sample in range must always be
-     * picked within subset. This is done to obtain faster execution times and
-     * greater stability on some algorithms.
-     * @param result array containing indices to be picked. Provided array must
-     * be at least of length subsetSize. The former subsetSize entries of the
-     * array will be modified by this method.
-     * @throws NotEnoughSamplesException if subset size is greater than the 
-     * total number of samples or if maxPos is greater than the total number of
-     * samples.
-     * @throws InvalidSubsetSizeException if subset size is zero or if result
-     * array does not have at least a length of subsetSize, or if subset size
-     * is greater than the allowed range of positions to be picked.
+     *                   than total number of samples.
+     * @param pickLast   true indicates that last sample in range must always be
+     *                   picked within subset. This is done to obtain faster execution times and
+     *                   greater stability on some algorithms.
+     * @param result     array containing indices to be picked. Provided array must
+     *                   be at least of length subsetSize. The former subsetSize entries of the
+     *                   array will be modified by this method.
+     * @throws NotEnoughSamplesException   if subset size is greater than the
+     *                                     total number of samples or if maxPos is greater than the total number of
+     *                                     samples.
+     * @throws InvalidSubsetSizeException  if subset size is zero or if result
+     *                                     array does not have at least a length of subsetSize, or if subset size
+     *                                     is greater than the allowed range of positions to be picked.
      * @throws InvalidSubsetRangeException if maximum position is smaller than
-     * minimum position or maximum or minimum position are negative.
-     */    
-    public abstract void computeRandomSubsetsInRange(int minPos, int maxPos, 
-            int subsetSize, boolean pickLast, int[] result) 
-            throws NotEnoughSamplesException, InvalidSubsetSizeException, 
+     *                                     minimum position or maximum or minimum position are negative.
+     */
+    public abstract void computeRandomSubsetsInRange(
+            final int minPos, final int maxPos, final int subsetSize,
+            final boolean pickLast, final int[] result)
+            throws NotEnoughSamplesException, InvalidSubsetSizeException,
             InvalidSubsetRangeException;
-    
+
     /**
      * Creates a new subset selector instance using provided total number of
      * samples and subset selector type.
+     *
      * @param numSamples number of samples to select subsets from.
-     * @param type subset selector type.
+     * @param type       subset selector type.
      * @return a subset selector.
      * @throws IllegalArgumentException if provided number of samples is zero
-     * or negative.
+     *                                  or negative.
      */
-    public static SubsetSelector create(int numSamples, 
-            SubsetSelectorType type) {
-<span class="fc" id="L194">        switch (type) {</span>
+    public static SubsetSelector create(
+            final int numSamples, final SubsetSelectorType type) {
+        //noinspection SwitchStatementWithTooFewBranches
+<span class="fc" id="L205">        switch (type) {</span>
             case FAST_RANDOM_SUBSET_SELECTOR:
             default:
-<span class="fc" id="L197">                return new FastRandomSubsetSelector(numSamples);</span>
+<span class="fc" id="L208">                return new FastRandomSubsetSelector(numSamples);</span>
         }
     }
-    
+
     /**
      * Creates a new subset selector instance using provided total number of
      * samples and default subset selector type.
+     *
      * @param numSamples number of samples to select subsets from.
      * @return a subset selector.
      * @throws IllegalArgumentException if provided number of samples is zero or
-     * negative.
+     *                                  negative.
      */
-    public static SubsetSelector create(int numSamples) {
-<span class="fc" id="L210">        return create(numSamples, DEFAULT_SUBSET_SELECTOR_TYPE);</span>
+    public static SubsetSelector create(final int numSamples) {
+<span class="fc" id="L222">        return create(numSamples, DEFAULT_SUBSET_SELECTOR_TYPE);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

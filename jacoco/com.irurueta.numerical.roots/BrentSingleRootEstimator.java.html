@@ -75,8 +75,8 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public BrentSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            double minEvalPoint, double maxEvalPoint, double tolerance)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
 <span class="fc" id="L81">        super(listener, minEvalPoint, maxEvalPoint);</span>
 <span class="fc" id="L82">        internalSetTolerance(tolerance);</span>
@@ -103,7 +103,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */
-    private void internalSetTolerance(double tolerance) {
+    private void internalSetTolerance(final double tolerance) {
 <span class="fc bfc" id="L107" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
 <span class="fc" id="L108">            throw new IllegalArgumentException();</span>
         }
@@ -120,7 +120,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */
-    public void setTolerance(double tolerance) throws LockedException {
+    public void setTolerance(final double tolerance) throws LockedException {
 <span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L125">            throw new LockedException();</span>
         }
@@ -151,9 +151,9 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         
 <span class="fc" id="L152">        locked = true;</span>
         
-<span class="fc" id="L154">        double x1 = minEvalPoint;</span>
-<span class="fc" id="L155">        double x2 = maxEvalPoint;</span>
-<span class="fc" id="L156">        double tol = tolerance;</span>
+<span class="fc" id="L154">        final double x1 = minEvalPoint;</span>
+<span class="fc" id="L155">        final double x2 = maxEvalPoint;</span>
+<span class="fc" id="L156">        final double tol = tolerance;</span>
 <span class="fc" id="L157">        double a = x1;</span>
 <span class="fc" id="L158">        double b = x2;</span>
 <span class="fc" id="L159">        double c = x2;</span>
@@ -171,12 +171,12 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         try {
 <span class="fc" id="L172">            fa = listener.evaluate(a);</span>
 <span class="fc" id="L173">            fb = listener.evaluate(b);</span>
-<span class="nc" id="L174">        } catch (EvaluationException ex) {</span>
+<span class="nc" id="L174">        } catch (final EvaluationException ex) {</span>
 <span class="nc" id="L175">            throw new RootEstimationException(ex);</span>
 <span class="fc" id="L176">        }</span>
         
 <span class="pc bpc" id="L178" title="1 of 8 branches missed.">        if ((fa &gt; 0.0 &amp;&amp; fb &gt; 0.0) || (fa &lt; 0.0 &amp;&amp; fb &lt; 0.0)) {</span>
-            //root must be bracketed
+            // root must be bracketed
 <span class="fc" id="L180">            locked = false;</span>
 <span class="fc" id="L181">            throw new RootEstimationException();</span>
         }
@@ -198,7 +198,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
 <span class="fc" id="L198">            tol1 = 2.0 * EPS * Math.abs(b) + 0.5 * tol;</span>
 <span class="fc" id="L199">            xm = 0.5 * (c - b);</span>
 <span class="fc bfc" id="L200" title="All 4 branches covered.">            if (Math.abs(xm) &lt;= tol1 || fb == 0.0) {</span>
-                //root found
+                // root found
 <span class="fc" id="L202">                root = b;</span>
 <span class="fc" id="L203">                rootAvailable = true;</span>
 <span class="fc" id="L204">                locked = false;</span>
@@ -219,9 +219,9 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
 <span class="fc" id="L219">                    q = -q;</span>
                 }
 <span class="fc" id="L221">                p = Math.abs(p);</span>
-<span class="fc" id="L222">                double min1 = 3.0 * xm * q - Math.abs(tol1 * q);</span>
-<span class="fc" id="L223">                double min2 = Math.abs(e * q);</span>
-<span class="fc bfc" id="L224" title="All 4 branches covered.">                if (2.0 * p &lt; (min1 &lt; min2 ? min1 : min2)) {</span>
+<span class="fc" id="L222">                final double min1 = 3.0 * xm * q - Math.abs(tol1 * q);</span>
+<span class="fc" id="L223">                final double min2 = Math.abs(e * q);</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                if (2.0 * p &lt; (Math.min(min1, min2))) {</span>
 <span class="fc" id="L225">                    e = d;</span>
 <span class="fc" id="L226">                    d = p / q;</span>
                 } else {
@@ -241,11 +241,11 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
             }
             try {
 <span class="fc" id="L243">                fb = listener.evaluate(b);</span>
-<span class="nc" id="L244">            } catch (EvaluationException ex) {</span>
+<span class="nc" id="L244">            } catch (final EvaluationException ex) {</span>
 <span class="nc" id="L245">                throw new RootEstimationException(ex);</span>
 <span class="fc" id="L246">            }</span>
         }
-        //maximum number of iterations exceeded
+        // maximum number of iterations exceeded
 <span class="nc" id="L249">        locked = false;</span>
 <span class="nc" id="L250">        throw new RootEstimationException();</span>
     }

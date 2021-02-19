@@ -15,7 +15,11 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.*;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
  * This class for a single dimensional function's local minimum.
@@ -24,230 +28,242 @@ import com.irurueta.numerical.*;
  */
 @SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
-    
+
     /**
      * Golden ratio.
      */
     public static final double R = 0.61803399;
-    
+
     /**
      * Golden ratio.
      */
     public static final double C = 1.0 - R;
-    
+
     /**
      * Constant defining the default accuracy of the estimated minimum.
      */
     public static final double DEFAULT_TOLERANCE = 3e-8;
-    
+
     /**
      * Minimum allowed tolerance.
-     */    
+     */
     public static final double MIN_TOLERANCE = 0.0;
-    
+
     /**
      * Tolerance value. The algorithm will iterate until the result converges
      * below this value of accuracy or until the maximum number of iterations is
      * achieved (and in such case, convergence will be assumed to have failed).
      */
     private double tolerance;
-    
+
     /**
      * Empty constructor.
-     */    
+     */
     public GoldenSingleOptimizer() {
-<span class="fc" id="L59">        super();</span>
-<span class="fc" id="L60">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L61">    }</span>
-    
+<span class="fc" id="L63">        super();</span>
+<span class="fc" id="L64">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L65">    }</span>
+
     /**
      * Constructor. Creates an instance with provided bracket of values and a
      * listener to get single dimension function evaluations.
-     * @param listener Listener to evaluate a function.
-     * @param minEvalPoint Minimum bracket evaluation point.
+     *
+     * @param listener        Listener to evaluate a function.
+     * @param minEvalPoint    Minimum bracket evaluation point.
      * @param middleEvalPoint Middle bracket evaluation point.
-     * @param maxEvalPoint Maximum bracket evaluation point.
-     * @param tolerance Tolerance or accuracy to be obtained in estimated 
-     * minimum.
+     * @param maxEvalPoint    Maximum bracket evaluation point.
+     * @param tolerance       Tolerance or accuracy to be obtained in estimated
+     *                        minimum.
      * @throws InvalidBracketRangeException Raised if the following condition is
-     * not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
+     *                                      not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public GoldenSingleOptimizer(
-            SingleDimensionFunctionEvaluatorListener listener,
-            double minEvalPoint, double middleEvalPoint, double maxEvalPoint,
-            double tolerance) throws InvalidBracketRangeException {
-<span class="fc" id="L80">        super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L81">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L82">    }</span>
-    
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint,
+            final double tolerance) throws InvalidBracketRangeException {
+<span class="fc" id="L85">        super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L86">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L87">    }</span>
+
     /**
      * Returns tolerance value, which is the accuracy to be obtained when a
      * minimum is estimated.
      * The algorithm will iterate until the result converges below this value of
-     * accuracy or until the maximum number of iterations is achieved (and in 
+     * accuracy or until the maximum number of iterations is achieved (and in
      * such case, convergence will be assumed to have failed).
+     *
      * @return Tolerance value.
      */
     public double getTolerance() {
-<span class="fc" id="L93">        return tolerance;</span>
+<span class="fc" id="L99">        return tolerance;</span>
     }
-    
+
     /**
      * Sets algorithm's tolerance.
      * The algorithm will iterate until the result converges below this value of
-     * accuracy or until the maximum number of iterations is achieved (an in 
+     * accuracy or until the maximum number of iterations is achieved (an in
      * such case, convergence will be assumed to have failed).
-     * @param tolerance Tolerance or accuracy to be obtained in estimated 
-     * minimum.
-     * @throws LockedException Raised if this instance is locked. This instance
-     * will be locked while doing some operations. Attempting to change any 
-     * parameter while being locked will raise this exception.
+     *
+     * @param tolerance Tolerance or accuracy to be obtained in estimated
+     *                  minimum.
+     * @throws LockedException          Raised if this instance is locked. This instance
+     *                                  will be locked while doing some operations. Attempting to change any
+     *                                  parameter while being locked will raise this exception.
      * @throws IllegalArgumentException Raised if tolerance is negative.
-     */    
-    public void setTolerance(double tolerance) throws LockedException {
-<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L110">            throw new LockedException();</span>
+     */
+    public void setTolerance(final double tolerance) throws LockedException {
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L117">            throw new LockedException();</span>
         }
-<span class="fc" id="L112">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L113">    }</span>
-    
+<span class="fc" id="L119">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L120">    }</span>
+
     /**
      * This function estimates a function minimum within provided or computed
      * bracket of values.
      * Given a function f, and given a bracketing triplet of abscissas ax, bx,
      * cx (such that bx is between ax and cx, and f(bx) is less than both f(ax)
      * and f(cx), this routine isolates the minimum to a fractional prevision of
-     * about tolerance using Brent's method. The abscissa of the minimum is 
+     * about tolerance using Brent's method. The abscissa of the minimum is
      * returned as xmin, and the function value of the minimum is returned as
      * fmin, the returned function value.
-     * @throws LockedException Raised if this instance is locked, because
-     * estimation is being computed.
-     * @throws NotReadyException Raised if this instance is not ready because
-     * either a listener or a bracket has not yet been provided or computed.
+     *
+     * @throws LockedException       Raised if this instance is locked, because
+     *                               estimation is being computed.
+     * @throws NotReadyException     Raised if this instance is not ready because
+     *                               either a listener or a bracket has not yet been provided or computed.
      * @throws OptimizationException Raised if the algorithm failed because of
-     * lack of convergence or because function couldn't be evaluated.
-     */    
+     *                               lack of convergence or because function couldn't be evaluated.
+     */
     @Override
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
-<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L135">            throw new LockedException();</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L143">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L138">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L146">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L141">        locked = true;</span>
-        
-<span class="fc" id="L143">        double[] v1 = new double[1];</span>
-<span class="fc" id="L144">        double[] v2 = new double[2];</span>
-<span class="fc" id="L145">        double[] v3 = new double[3];</span>
 
-        
+<span class="fc" id="L149">        locked = true;</span>
+
+<span class="fc" id="L151">        final double[] v1 = new double[1];</span>
+<span class="fc" id="L152">        final double[] v2 = new double[2];</span>
+<span class="fc" id="L153">        final double[] v3 = new double[3];</span>
+
+
         try {
             //At any given time we will keep track of four points x0, x1, x2, x3
             double x1;
             double x2;
-<span class="fc" id="L152">            double x0 = ax;</span>
-<span class="fc" id="L153">            double x3 = cx;</span>
-            
+<span class="fc" id="L160">            double x0 = ax;</span>
+<span class="fc" id="L161">            double x3 = cx;</span>
+
             //Make x0 to x1 the smaller segment, and fill in the new point to be
             //tried
-<span class="fc bfc" id="L157" title="All 2 branches covered.">            if (Math.abs(cx - bx) &gt; Math.abs(bx - ax)) {</span>
-<span class="fc" id="L158">                x1 = bx;</span>
-<span class="fc" id="L159">                x2 = bx + C * (cx - bx);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            if (Math.abs(cx - bx) &gt; Math.abs(bx - ax)) {</span>
+<span class="fc" id="L166">                x1 = bx;</span>
+<span class="fc" id="L167">                x2 = bx + C * (cx - bx);</span>
             } else {
-<span class="fc" id="L161">                x2 = bx;</span>
-<span class="fc" id="L162">                x1 = bx - C * (bx - ax);</span>
+<span class="fc" id="L169">                x2 = bx;</span>
+<span class="fc" id="L170">                x1 = bx - C * (bx - ax);</span>
             }
-            
+
             //The initial function evaluations. Note that we never need to
             //evaluate the function at the original endpoints
-<span class="fc" id="L167">            double f1 = listener.evaluate(x1);</span>
-<span class="fc" id="L168">            double f2 = listener.evaluate(x2);</span>
-            
-<span class="fc" id="L170">            while (Math.abs(x3 - x0) &gt; tolerance * (Math.abs(x1) + </span>
-<span class="fc bfc" id="L171" title="All 2 branches covered.">                    Math.abs(x2))) {</span>
-<span class="fc bfc" id="L172" title="All 2 branches covered.">                if (f2 &lt; f1) {</span>
+<span class="fc" id="L175">            double f1 = listener.evaluate(x1);</span>
+<span class="fc" id="L176">            double f2 = listener.evaluate(x2);</span>
+
+<span class="fc" id="L178">            int iter = 0;</span>
+<span class="fc" id="L179">            while (Math.abs(x3 - x0) &gt; tolerance * (Math.abs(x1) +</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">                    Math.abs(x2))) {</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                if (f2 &lt; f1) {</span>
                     //One possible outcome, its housekeeping and a new function
                     //evaluation
-<span class="fc" id="L175">                    v1[0] = x0;</span>
-<span class="fc" id="L176">                    v2[0] = x1;</span>
-<span class="fc" id="L177">                    v3[0] = x2;</span>
-<span class="fc" id="L178">                    shft3(v1, v2, v3, R * x2 + C * x3);</span>
-<span class="fc" id="L179">                    x0 = v1[0];</span>
-<span class="fc" id="L180">                    x1 = v2[0];</span>
-<span class="fc" id="L181">                    x2 = v3[0];</span>
-                    
-<span class="fc" id="L183">                    v1[0] = f1;</span>
-<span class="fc" id="L184">                    v2[0] = f2;</span>
-<span class="fc" id="L185">                    shft2(v1, v2, listener.evaluate(x2));</span>
-<span class="fc" id="L186">                    f1 = v1[0];</span>
-<span class="fc" id="L187">                    f2 = v2[0];</span>
+<span class="fc" id="L184">                    v1[0] = x0;</span>
+<span class="fc" id="L185">                    v2[0] = x1;</span>
+<span class="fc" id="L186">                    v3[0] = x2;</span>
+<span class="fc" id="L187">                    shft3(v1, v2, v3, R * x2 + C * x3);</span>
+<span class="fc" id="L188">                    x0 = v1[0];</span>
+<span class="fc" id="L189">                    x1 = v2[0];</span>
+<span class="fc" id="L190">                    x2 = v3[0];</span>
+
+<span class="fc" id="L192">                    v1[0] = f1;</span>
+<span class="fc" id="L193">                    v2[0] = f2;</span>
+<span class="fc" id="L194">                    shft2(v1, v2, listener.evaluate(x2));</span>
+<span class="fc" id="L195">                    f1 = v1[0];</span>
+<span class="fc" id="L196">                    f2 = v2[0];</span>
                 } else {
                     //The other outcome, and its new function evaluation
-<span class="fc" id="L190">                    v1[0] = x3;</span>
-<span class="fc" id="L191">                    v2[0] = x2;</span>
-<span class="fc" id="L192">                    v3[0] = x1;</span>
-<span class="fc" id="L193">                    shft3(v1, v2, v3, R * x1 + C * x0);</span>
-<span class="fc" id="L194">                    x3 = v1[0];</span>
-<span class="fc" id="L195">                    x2 = v2[0];</span>
-<span class="fc" id="L196">                    x1 = v3[0];</span>
-                    
-<span class="fc" id="L198">                    v1[0] = f2;</span>
-<span class="fc" id="L199">                    v2[0] = f1;</span>
-<span class="fc" id="L200">                    shft2(v1, v2, listener.evaluate(x1));</span>
-<span class="fc" id="L201">                    f2 = v1[0];</span>
-<span class="fc" id="L202">                    f1 = v2[0];</span>
+<span class="fc" id="L199">                    v1[0] = x3;</span>
+<span class="fc" id="L200">                    v2[0] = x2;</span>
+<span class="fc" id="L201">                    v3[0] = x1;</span>
+<span class="fc" id="L202">                    shft3(v1, v2, v3, R * x1 + C * x0);</span>
+<span class="fc" id="L203">                    x3 = v1[0];</span>
+<span class="fc" id="L204">                    x2 = v2[0];</span>
+<span class="fc" id="L205">                    x1 = v3[0];</span>
+
+<span class="fc" id="L207">                    v1[0] = f2;</span>
+<span class="fc" id="L208">                    v2[0] = f1;</span>
+<span class="fc" id="L209">                    shft2(v1, v2, listener.evaluate(x1));</span>
+<span class="fc" id="L210">                    f2 = v1[0];</span>
+<span class="fc" id="L211">                    f1 = v2[0];</span>
                 }
                 //Back to see if we are done.
+
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">                if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L216">                    iterationCompletedListener.onIterationCompleted(this, iter, null);</span>
+<span class="fc" id="L217">                    iter++;</span>
+                }
             }
-            
+
             //We are done. Output the best of the current values
-<span class="fc bfc" id="L208" title="All 2 branches covered.">            if (f1 &lt; f2) {</span>
-<span class="fc" id="L209">                xmin = x1;</span>
-<span class="fc" id="L210">                fmin = f1;</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            if (f1 &lt; f2) {</span>
+<span class="fc" id="L223">                xmin = x1;</span>
+<span class="fc" id="L224">                fmin = f1;</span>
             } else {
-<span class="fc" id="L212">                xmin = x2;</span>
-<span class="fc" id="L213">                fmin = f2;</span>
+<span class="fc" id="L226">                xmin = x2;</span>
+<span class="fc" id="L227">                fmin = f2;</span>
             }
-<span class="nc" id="L215">        } catch (EvaluationException e) {</span>
-<span class="nc" id="L216">            throw new OptimizationException(e);</span>
+<span class="nc" id="L229">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L230">            throw new OptimizationException(e);</span>
         } finally {
-<span class="fc" id="L218">            locked = false;</span>
+<span class="fc" id="L232">            locked = false;</span>
         }
-        
-<span class="fc" id="L221">        resultAvailable = true;</span>
-<span class="fc" id="L222">    }</span>
-    
+
+<span class="fc" id="L235">        resultAvailable = true;</span>
+<span class="fc" id="L236">    }</span>
+
     /**
      * Returns boolean indicating whether this instance is ready to start the
      * estimation of a minimum or not.
-     * The instance is ready when both the listener and the bracket are 
+     * The instance is ready when both the listener and the bracket are
      * available.
+     *
      * @return True if this instance is ready, false otherwise.
-     */    
+     */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L233" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+<span class="pc bpc" id="L248" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
     }
-    
+
     /**
      * Internal method to set algorithm tolerance. This method does not check
      * whether this instance is locked or not.
      * The algorithm will iterate until the result converges below this value of
      * accuracy or until the maximum number of iterations is achieved (and in
      * such case, convergence will be assumed to have failed).
-     * @param tolerance Tolerance or accuracy to be obtained in estimated 
-     * minimum.
+     *
+     * @param tolerance Tolerance or accuracy to be obtained in estimated
+     *                  minimum.
      * @throws IllegalArgumentException Raised if tolerance is negative.
-     */    
-    private void internalSetTolerance(double tolerance) {
-<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L248">            throw new IllegalArgumentException();</span>
+     */
+    private void internalSetTolerance(final double tolerance) {
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L264">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L250">        this.tolerance = tolerance;</span>
-<span class="fc" id="L251">    }    </span>
+<span class="fc" id="L266">        this.tolerance = tolerance;</span>
+<span class="fc" id="L267">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

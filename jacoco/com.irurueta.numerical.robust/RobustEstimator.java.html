@@ -20,170 +20,182 @@ import com.irurueta.numerical.NotReadyException;
 
 /**
  * Robust estimator to estimate some object in a robust manner
+ *
  * @param &lt;T&gt; Object to be estimated (i.e. lines, cameras, etc)
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public abstract class RobustEstimator&lt;T&gt; {
-    
+
     /**
-     * Default amount of progress variation before notifying a change in 
+     * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
-     * Maximum allowed value for progress delta
+     * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
-     * or its progress significantly changes
+     * or its progress significantly changes.
      */
     protected RobustEstimatorListener&lt;T&gt; mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
-     * computed
+     * computed.
      */
     protected volatile boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
-     * estimation
+     * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
-     * Constructor
+     * Constructor.
      */
-<span class="fc" id="L65">    public RobustEstimator() {</span>
-<span class="fc" id="L66">        mListener = null;</span>
-<span class="fc" id="L67">        mLocked = false;</span>
-<span class="fc" id="L68">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L69">    }</span>
-    
+<span class="fc" id="L66">    public RobustEstimator() {</span>
+<span class="fc" id="L67">        mListener = null;</span>
+<span class="fc" id="L68">        mLocked = false;</span>
+<span class="fc" id="L69">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L70">    }</span>
+
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     *                 starts, ends or its progress significantly changes.
      */
-<span class="fc" id="L76">    public RobustEstimator(RobustEstimatorListener&lt;T&gt; listener) {</span>
-<span class="fc" id="L77">        mListener = listener;</span>
-<span class="fc" id="L78">        mLocked = false;</span>
-<span class="fc" id="L79">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L80">    }</span>
-    
+<span class="fc" id="L78">    public RobustEstimator(final RobustEstimatorListener&lt;T&gt; listener) {</span>
+<span class="fc" id="L79">        mListener = listener;</span>
+<span class="fc" id="L80">        mLocked = false;</span>
+<span class="fc" id="L81">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L82">    }</span>
+
     /**
-     * Returns reference to listener to be notified of events such as when 
-     * estimation starts, ends or its progress significantly changes
-     * @return listener to be notified of events
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
      */
     public RobustEstimatorListener&lt;T&gt; getListener() {
-<span class="fc" id="L88">        return mListener;</span>
-    }
-    
-    /**
-     * Sets listener to be notified of events such as when estimation starts,
-     * ends or its progress significantly changes
-     * @param listener listener to be notified of events
-     * @throws LockedException if robust estimator is locked
-     */
-    public void setListener(RobustEstimatorListener&lt;T&gt; listener) 
-            throws LockedException {
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L100">            throw new LockedException();</span>
-        }
-<span class="fc" id="L102">        mListener = listener;</span>
-<span class="fc" id="L103">    }</span>
-    
-    /**
-     * Indicates whether listener has been provided and is available for 
-     * retrieval
-     * @return true if available, false otherwise
-     */
-    public boolean isListenerAvailable() {
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        return mListener != null;</span>
-    }
-    
-    /**
-     * Indicates if this instance is locked because estimation is being computed
-     * @return true if locked, false otherwise
-     */
-    public boolean isLocked() {
-<span class="fc" id="L119">        return mLocked;</span>
+<span class="fc" id="L91">        return mListener;</span>
     }
 
     /**
-     * Returns amount of progress variation before notifying a progress change 
-     * during estimation
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(final RobustEstimatorListener&lt;T&gt; listener)
+            throws LockedException {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L104">            throw new LockedException();</span>
+        }
+<span class="fc" id="L106">        mListener = listener;</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L125">        return mLocked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
      * @return amount of progress variation before notifying a progress change
-     * during estimation
+     * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L129">        return mProgressDelta;</span>
+<span class="fc" id="L136">        return mProgressDelta;</span>
     }
-    
+
     /**
-     * Sets amount of progress variation before notifying a progress change 
-     * during estimation
-     * @param progressDelta amount of progress variation before notifying a 
-     * progress change during estimatoin
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
     @SuppressWarnings(&quot;Duplicates&quot;)
-    public void setProgressDelta(float progressDelta) throws LockedException {
-<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L145">            throw new LockedException();</span>
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L153">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L147" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L155" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L157">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L151">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L152">    }</span>
-    
+<span class="fc" id="L159">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L160">    }</span>
+
     /**
-     * Robustly estimates an instance of T
-     * @return estimated object
-     * @throws LockedException if robust estimator is locked
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * Robustly estimates an instance of T.
+     *
+     * @return estimated object.
+     * @throws LockedException          if robust estimator is locked.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract T estimate() throws LockedException, NotReadyException, 
+    public abstract T estimate() throws LockedException, NotReadyException,
             RobustEstimatorException;
-    
+
     /**
      * Returns data about inliers once estimation has been done.
+     *
      * @return data about inliers or null if estimation has not been done.
      */
     public abstract InliersData getInliersData();
-    
+
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
      */
     public abstract RobustEstimatorMethod getMethod();
-    
+
     /**
-     * Indicates if estimator is ready to start the estimation process
-     * @return true if ready, false otherwise
+     * Indicates if estimator is ready to start the estimation process.
+     *
+     * @return true if ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L184">            return mListener.isReady();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L196">            return mListener.isReady();</span>
         } else {
-<span class="fc" id="L186">            return false;</span>
+<span class="fc" id="L198">            return false;</span>
         }
     }
 }

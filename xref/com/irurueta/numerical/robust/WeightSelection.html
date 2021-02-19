@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * @param selected array indicating which correspondences have been </em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * selected.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSelected(<strong class="jxr_keyword">boolean</strong>[] selected) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSelected(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong>[] selected) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">this</strong>.selected = selected;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * Sets number of correspondences that have been selected.</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     * @param numSelected number of correspondences that have been selected.</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setNumSelected(<strong class="jxr_keyword">int</strong> numSelected) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setNumSelected(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> numSelected) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">this</strong>.numSelected = numSelected;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
@@ -97,28 +97,28 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * @return instance containing the selection that was made.</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * @throws SortingException if weights couldn't be sorted.</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/irurueta/numerical/robust/WeightSelection.html">WeightSelection</a> selectWeights(<strong class="jxr_keyword">double</strong>[] weights, 
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">boolean</strong> sortWeights, <strong class="jxr_keyword">int</strong> maxPoints) <strong class="jxr_keyword">throws</strong> SortingException {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/irurueta/numerical/robust/WeightSelection.html">WeightSelection</a> selectWeights(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] weights,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> sortWeights, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxPoints) <strong class="jxr_keyword">throws</strong> SortingException {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">int</strong> length = weights.length;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> length = weights.length;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <em class="jxr_comment">//instantiate selected array with all its values as unselected</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <em class="jxr_comment">// instantiate selected array with all its values as unselected</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>          <strong class="jxr_keyword">boolean</strong>[] selected = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[length];
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">int</strong> numSelected;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>         <strong class="jxr_keyword">if</strong> (sortWeights) {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>             <em class="jxr_comment">//sort weights</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             <em class="jxr_comment">// sort weights</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>             <em class="jxr_comment">//copy weights because this array will be sorted</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">double</strong>[] weightsCopy = Arrays.copyOf(weights, length);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             Sorter sorter = Sorter.create();
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>             <em class="jxr_comment">//array that will contain original indices in ascending order of</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             <em class="jxr_comment">//weights after sorting</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>             <strong class="jxr_keyword">int</strong>[] indices = sorter.sortWithIndices(weightsCopy);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             <em class="jxr_comment">// copy weights because this array will be sorted</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] weightsCopy = Arrays.copyOf(weights, length);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">final</strong> Sorter&lt;Double&gt; sorter = Sorter.create();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             <em class="jxr_comment">// array that will contain original indices in ascending order of</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>             <em class="jxr_comment">// weights after sorting</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] indices = sorter.sortWithIndices(weightsCopy);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <em class="jxr_comment">//traverse indices array from greatest position which corresponds</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>             <em class="jxr_comment">//to the greatest weight value after sorting in decreasing order</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <em class="jxr_comment">//up to maxPoints positions</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <em class="jxr_comment">// traverse indices array from greatest position which corresponds</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>             <em class="jxr_comment">// to the greatest weight value after sorting in decreasing order</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <em class="jxr_comment">// up to maxPoints positions</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>             <strong class="jxr_keyword">int</strong> counter = 0;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = length - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>                 selected[indices[i]] = <strong class="jxr_keyword">true</strong>;
@@ -127,13 +127,13 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>             }
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>             numSelected = counter;
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>             <em class="jxr_comment">//weights aren't sorted</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>             <em class="jxr_comment">// weights aren't sorted</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>             <strong class="jxr_keyword">if</strong> (length &lt; maxPoints) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>                 <em class="jxr_comment">//we select all points</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>                 <em class="jxr_comment">// we select all points</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>                 Arrays.fill(selected, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>                 numSelected = length;                
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>                 <em class="jxr_comment">//weights aren't sorted so we pick the first maxPoints</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>                 <em class="jxr_comment">// weights aren't sorted so we pick the first maxPoints</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; maxPoints; i++) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>                     selected[i] = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>                 }
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>             }
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>         }
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <a href="../../../../com/irurueta/numerical/robust/WeightSelection.html">WeightSelection</a> selection = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/robust/WeightSelection.html">WeightSelection</a>();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/numerical/robust/WeightSelection.html">WeightSelection</a> selection = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/numerical/robust/WeightSelection.html">WeightSelection</a>();
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>         selection.setSelected(selected);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         selection.setNumSelected(numSelected);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">return</strong> selection;

@@ -19,103 +19,106 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 
 /**
- * Class to estimate the Jacobian of a multi variate and multidimensional 
+ * Class to estimate the Jacobian of a multi variate and multidimensional
  * function.
  * This class evaluates a function at very close locations of a given input
  * point in order to determine the Jacobian at such point.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class JacobianEstimator {
-    
+
     /**
      * Constant considered as machine precision.
      */
     public static final double EPS = 1e-8;
-    
+
     /**
      * Listener to evaluate a multivariate function.
      */
-    MultiVariateFunctionEvaluatorListener listener;
-    
+    private final MultiVariateFunctionEvaluatorListener listener;
+
     /**
      * Internal array to hold input parameter's values.
      */
     private double[] xh;
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to evaluate a multivariate function.
      */
-<span class="fc" id="L49">    public JacobianEstimator(MultiVariateFunctionEvaluatorListener listener) {</span>
-<span class="fc" id="L50">        this.listener = listener;</span>
-<span class="fc" id="L51">    }</span>
-    
+<span class="fc" id="L50">    public JacobianEstimator(final MultiVariateFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L51">        this.listener = listener;</span>
+<span class="fc" id="L52">    }</span>
+
     /**
      * Returns the Jacobian of a multivariate function at provided point.
+     *
      * @param point input point.
      * @return jacobian.
      * @throws EvaluationException raised if function cannot be evaluated.
      */
-    public Matrix jacobian(double[] point) throws EvaluationException {
+    public Matrix jacobian(final double[] point) throws EvaluationException {
         try {
-<span class="fc" id="L61">            Matrix result = new Matrix(listener.getNumberOfVariables(),</span>
+<span class="fc" id="L63">            final Matrix result = new Matrix(listener.getNumberOfVariables(),</span>
                     point.length);
-<span class="fc" id="L63">            jacobian(point, result);</span>
-<span class="fc" id="L64">            return result;</span>
-<span class="nc" id="L65">        } catch (WrongSizeException e) {</span>
-<span class="nc" id="L66">            throw new EvaluationException(e);</span>
+<span class="fc" id="L65">            jacobian(point, result);</span>
+<span class="fc" id="L66">            return result;</span>
+<span class="nc" id="L67">        } catch (final WrongSizeException e) {</span>
+<span class="nc" id="L68">            throw new EvaluationException(e);</span>
         }
     }
-    
+
     /**
-     * Sets estimated jacobian in provided result matrix of a multivariate 
+     * Sets estimated jacobian in provided result matrix of a multivariate
      * function at provided point.
      * This method is preferred respect to jacobian(double[]) because result
      * matrix can be reused and hence is more memory efficient.
-     * @param point input point.
+     *
+     * @param point  input point.
      * @param result output matrix containing estimated jacobian. This parameter
-     * must be a matrix having the same number of columns as the length of the
-     * point and the same number of rows as the number of variables returned by
-     * function evaluations.
-     * @throws EvaluationException raised if function cannot be evaluated.
+     *               must be a matrix having the same number of columns as the length of the
+     *               point and the same number of rows as the number of variables returned by
+     *               function evaluations.
+     * @throws EvaluationException      raised if function cannot be evaluated.
      * @throws IllegalArgumentException if size of result is not valid.
      */
     @SuppressWarnings(&quot;Duplicates&quot;)
-    public void jacobian(double[] point, Matrix result) 
+    public void jacobian(final double[] point, final Matrix result)
             throws EvaluationException {
-<span class="fc" id="L86">        int numdims = point.length;</span>
-<span class="fc" id="L87">        int numvars = listener.getNumberOfVariables();</span>
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (result.getColumns() != numdims) {</span>
-<span class="nc" id="L89">            throw new IllegalArgumentException();</span>
-        }
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (result.getRows() != numvars) {</span>
+<span class="fc" id="L89">        final int numdims = point.length;</span>
+<span class="fc" id="L90">        final int numvars = listener.getNumberOfVariables();</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (result.getColumns() != numdims) {</span>
 <span class="nc" id="L92">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L95">        double[] fold = new double[numvars];</span>
-<span class="fc" id="L96">        double[] fh = new double[numvars];</span>
-<span class="pc bpc" id="L97" title="1 of 4 branches missed.">        if (xh == null || xh.length != numdims) {</span>
-<span class="fc" id="L98">            xh = new double[numdims];            </span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (result.getRows() != numvars) {</span>
+<span class="nc" id="L95">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L100">        System.arraycopy(point, 0, xh, 0, numdims);</span>
+
+<span class="fc" id="L98">        final double[] fold = new double[numvars];</span>
+<span class="fc" id="L99">        final double[] fh = new double[numvars];</span>
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        if (xh == null || xh.length != numdims) {</span>
+<span class="fc" id="L101">            xh = new double[numdims];</span>
+        }
+<span class="fc" id="L103">        System.arraycopy(point, 0, xh, 0, numdims);</span>
 
         double temp;
         double h;
-<span class="fc" id="L104">        listener.evaluate(point, fold);</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (int j = 0; j &lt; numdims; j++) {</span>
-<span class="fc" id="L106">            temp = point[j];</span>
-<span class="fc" id="L107">            h = EPS * Math.abs(temp);</span>
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">            if(h == 0.0) {</span>
-<span class="nc" id="L109">                h = EPS;</span>
+<span class="fc" id="L107">        listener.evaluate(point, fold);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (int j = 0; j &lt; numdims; j++) {</span>
+<span class="fc" id="L109">            temp = point[j];</span>
+<span class="fc" id="L110">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+<span class="nc" id="L112">                h = EPS;</span>
             }
-<span class="fc" id="L111">            xh[j] = temp + h;</span>
-<span class="fc" id="L112">            h = xh[j] - temp;</span>
-<span class="fc" id="L113">            listener.evaluate(xh, fh);</span>
-<span class="fc" id="L114">            xh[j] = temp;</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">            for (int i = 0; i &lt; numvars; i++) {</span>
-<span class="fc" id="L116">                result.setElementAt(i, j, (fh[i] - fold[i]) / h);</span>
+<span class="fc" id="L114">            xh[j] = temp + h;</span>
+<span class="fc" id="L115">            h = xh[j] - temp;</span>
+<span class="fc" id="L116">            listener.evaluate(xh, fh);</span>
+<span class="fc" id="L117">            xh[j] = temp;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            for (int i = 0; i &lt; numvars; i++) {</span>
+<span class="fc" id="L119">                result.setElementAt(i, j, (fh[i] - fold[i]) / h);</span>
             }
         }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L122">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

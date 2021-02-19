@@ -20,50 +20,53 @@ package com.irurueta.numerical;
  * point.
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
- * This implementation is faster although less accurate than 
+ * This implementation is faster although less accurate than
  * SymmetricDerivativeEstimator.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class DerivativeEstimator {
-    
+
     /**
      * Constant defining machine precision for this algorithm.
      */
     public static final double EPS = 1e-8;
-    
+
     /**
      * Listener to evaluate a single dimension function.
      */
     protected SingleDimensionFunctionEvaluatorListener listener;
-    
+
     /**
      * Constructor
+     *
      * @param listener listener to evaluate a single dimension function
      */
     public DerivativeEstimator(
-<span class="fc" id="L44">            SingleDimensionFunctionEvaluatorListener listener) {</span>
-<span class="fc" id="L45">        this.listener = listener;</span>
-<span class="fc" id="L46">    }</span>
-    
+<span class="fc" id="L45">            final SingleDimensionFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L46">        this.listener = listener;</span>
+<span class="fc" id="L47">    }</span>
+
     /**
      * Computes the function derivative at provided point x.
+     *
      * @param x Point where derivative is estimated
      * @return Derivative of function at provided point
-     * @throws EvaluationException Raised if function cannot be properly 
-     * evaluated
+     * @throws EvaluationException Raised if function cannot be properly
+     *                             evaluated
      */
-    public double derivative(double x) throws EvaluationException {
-<span class="fc" id="L56">        double fold = listener.evaluate(x);</span>
-        
-<span class="fc" id="L58">        double h = EPS * Math.abs(x);</span>
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if(h == 0.0) {</span>
-<span class="nc" id="L60">            h = EPS; //Trick to reduce finite-precision error</span>
+    public double derivative(final double x) throws EvaluationException {
+<span class="fc" id="L58">        final double fold = listener.evaluate(x);</span>
+
+<span class="fc" id="L60">        double h = EPS * Math.abs(x);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
+            // Trick to reduce finite-precision error
+<span class="nc" id="L63">            h = EPS;</span>
         }
-<span class="fc" id="L62">        double xh = x + h;</span>
-<span class="fc" id="L63">        h = xh - x;</span>
-<span class="fc" id="L64">        double fh = listener.evaluate(xh);</span>
-        
-<span class="fc" id="L66">        return (fh - fold) / h;</span>
+<span class="fc" id="L65">        final double xh = x + h;</span>
+<span class="fc" id="L66">        h = xh - x;</span>
+
+<span class="fc" id="L68">        final double fh = listener.evaluate(xh);</span>
+<span class="fc" id="L69">        return (fh - fold) / h;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
