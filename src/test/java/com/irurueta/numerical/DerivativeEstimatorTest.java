@@ -16,79 +16,64 @@
 package com.irurueta.numerical;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class DerivativeEstimatorTest 
-    implements SingleDimensionFunctionEvaluatorListener {
-    
+public class DerivativeEstimatorTest
+        implements SingleDimensionFunctionEvaluatorListener {
+
     public static final double MIN_EVAL_POINT = -1e3;
     public static final double MAX_EVAL_POINT = 1e3;
-    
+
     public static final double MIN_OFFSET = -1e3;
     public static final double MAX_OFFSET = 1e3;
-    
+
     public static final double MIN_WIDTH = 1.0;
     public static final double MAX_WIDTH = 2.0;
-    
+
     public static final double ABSOLUTE_ERROR = 1e-2;
-    
+
     private double minimum;
     private double width;
     private double offset;
-    
-    public DerivativeEstimatorTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() {
-        DerivativeEstimator estimator = new DerivativeEstimator(this);
+        final DerivativeEstimator estimator = new DerivativeEstimator(this);
         assertNotNull(estimator);
     }
-    
+
     @Test
     public void testDerivative() throws EvaluationException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        double x = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final double x = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        DerivativeEstimator estimator = new DerivativeEstimator(this);
-        
-        //estimate derivative
-        double estDerivative = estimator.derivative(x);
-        
-        //real derivative
-        double realDerivative = derivative(x);
-        
-        //compare both results
+        final DerivativeEstimator estimator = new DerivativeEstimator(this);
+
+        // estimate derivative
+        final double estDerivative = estimator.derivative(x);
+
+        // real derivative
+        final double realDerivative = derivative(x);
+
+        // compare both results
         assertEquals(estDerivative, realDerivative, ABSOLUTE_ERROR);
     }
 
     @Override
-    public double evaluate(double point) throws EvaluationException {
+    public double evaluate(final double point) throws EvaluationException {
         return (point - minimum) * (point - minimum) / width + offset;
     }
 
-    public double derivative(double x) {
+    public double derivative(final double x) {
         return 2.0 * (x - minimum) / width;
     }
 }

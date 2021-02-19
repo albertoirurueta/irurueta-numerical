@@ -32,142 +32,150 @@ import java.util.Arrays;
  * 3rd Ed, page 791
  */
 @SuppressWarnings("WeakerAccess")
-public class SimpleSingleDimensionLinearFitter 
+public class SimpleSingleDimensionLinearFitter
         extends SingleDimensionLinearFitter {
-                        
+
     /**
      * Determines which parameters can be modified during estimation (if true)
      * and which ones are locked (if false)
      */
     private boolean[] ia;
-    
-    
+
+
     /**
      * Constructor.
      */
     public SimpleSingleDimensionLinearFitter() {
         super();
     }
-    
+
     /**
      * Constructor.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
      * @param sig standard deviations of each pair of points (x, y).
      * @throws IllegalArgumentException if provided arrays don't have the same
-     * length.
+     *                                  length.
      */
-    public SimpleSingleDimensionLinearFitter(double[] x, double[] y, 
-            double[] sig) {
+    public SimpleSingleDimensionLinearFitter(
+            final double[] x, final double[] y, final double[] sig) {
         super(x, y, sig);
     }
-    
+
     /**
      * Constructor.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
      */
-    public SimpleSingleDimensionLinearFitter(double[] x, double[] y, double sig) {
+    public SimpleSingleDimensionLinearFitter(
+            final double[] x, final double[] y, final double sig) {
         super(x, y, sig);
     }
-    
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
     public SimpleSingleDimensionLinearFitter(
-            LinearFitterSingleDimensionFunctionEvaluator evaluator)
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
         super();
         setFunctionEvaluator(evaluator);
     }
-    
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws FittingException if evaluation fails.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length .
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length .
      */
     public SimpleSingleDimensionLinearFitter(
-            LinearFitterSingleDimensionFunctionEvaluator evaluator, 
-            double[] x, double[] y, double[] sig)
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
+            final double[] x, final double[] y, final double[] sig)
             throws FittingException {
         super(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
-    
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws FittingException if evaluation fails.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
      */
     public SimpleSingleDimensionLinearFitter(
-            LinearFitterSingleDimensionFunctionEvaluator evaluator, 
-            double[] x, double[] y, double sig)
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
+            final double[] x, final double[] y, final double sig)
             throws FittingException {
         super(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
-        
+
     /**
      * Sets function evaluator to evaluate function at a given point and obtain
      * the evaluation of function basis at such point.
+     *
      * @param evaluator function evaluator.
      * @throws FittingException if evaluation fails.
      */
     @Override
     public final void setFunctionEvaluator(
-            LinearFitterSingleDimensionFunctionEvaluator evaluator) 
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
         super.setFunctionEvaluator(evaluator);
         if (ma > 0) {
             ia = new boolean[ma];
-            Arrays.fill(ia, true);            
+            Arrays.fill(ia, true);
         }
     }
-    
+
     /**
      * Fits a function to provided data so that parameters associated to that
      * function can be estimated along with their covariance matrix and chi
      * square value.
-     * @throws FittingException if fitting fails.
+     *
+     * @throws FittingException  if fitting fails.
      * @throws NotReadyException if enough input data has not yet been provided.
-     */    
+     */
     @Override
     @SuppressWarnings("Duplicates")
     public void fit() throws FittingException, NotReadyException {
-        if(!isReady()) throw new NotReadyException();
-        
+        if (!isReady()) throw new NotReadyException();
+
         try {
-            resultAvailable = false;        
-        
+            resultAvailable = false;
+
             int i;
             int j;
             int k;
@@ -178,21 +186,23 @@ public class SimpleSingleDimensionLinearFitter
             double wt;
             double sum;
             double sig2i;
-            for(j = 0; j < ma; j++) {
-                if(ia[j]) mfit++;
+            for (j = 0; j < ma; j++) {
+                if (ia[j]) {
+                    mfit++;
+                }
             }
-            if(mfit == 0) {
+            if (mfit == 0) {
                 throw new FittingException(
                         "lfit: no parameters to be fitted");
             }
-            Matrix temp = new Matrix(mfit, mfit);
-            Matrix beta = new Matrix(mfit, 1);
+            final Matrix temp = new Matrix(mfit, mfit);
+            final Matrix beta = new Matrix(mfit, 1);
             for (i = 0; i < ndat; i++) {
                 evaluator.evaluate(x[i], afunc);
                 ym = y[i];
                 if (mfit < ma) {
                     for (j = 0; j < ma; j++) {
-                        if(!ia[j]) ym -= a[j] * afunc[j];
+                        if (!ia[j]) ym -= a[j] * afunc[j];
                     }
                 }
                 sig2i = 1.0 / Math.pow(sig[i], 2.0);
@@ -207,16 +217,16 @@ public class SimpleSingleDimensionLinearFitter
                             }
                         }
                         index = beta.getIndex(j++, 0);
-                        beta.getBuffer()[index] += ym * wt;                        
+                        beta.getBuffer()[index] += ym * wt;
                     }
                 }
             }
             for (j = 1; j < mfit; j++) {
                 for (k = 0; k < j; k++) {
                     temp.setElementAt(k, j, temp.getElementAt(j, k));
-                }                
+                }
             }
-            GaussJordanElimination.process(temp, beta);        
+            GaussJordanElimination.process(temp, beta);
             for (j = 0, l = 0; l < ma; l++) {
                 if (ia[l]) {
                     a[l] = beta.getElementAt(j++, 0);
@@ -229,22 +239,22 @@ public class SimpleSingleDimensionLinearFitter
                 for (j = 0; j < ma; j++) {
                     sum += a[j] * afunc[j];
                 }
-                chisq += Math.pow((y[i]-sum)/sig[i], 2.0);
-            }	
+                chisq += Math.pow((y[i] - sum) / sig[i], 2.0);
+            }
             for (j = 0; j < mfit; j++) {
                 for (k = 0; k < mfit; k++) {
-                    covar.setElementAt(j,k, temp.getElementAt(j,k));
+                    covar.setElementAt(j, k, temp.getElementAt(j, k));
                 }
             }
-            for (i = mfit ; i < ma;i++) {
-		        for (j = 0; j < i + 1; j++) {
+            for (i = mfit; i < ma; i++) {
+                for (j = 0; j < i + 1; j++) {
                     covar.setElementAt(i, j, 0.0);
                     covar.setElementAt(j, i, 0.0);
                 }
             }
-            k= mfit - 1;
+            k = mfit - 1;
             for (j = ma - 1; j >= 0; j--) {
-		        if (ia[j]) {
+                if (ia[j]) {
                     for (i = 0; i < ma; i++) {
                         swap(covar.getBuffer(), covar.getBuffer(),
                                 covar.getIndex(i, k), covar.getIndex(i, j));
@@ -254,44 +264,47 @@ public class SimpleSingleDimensionLinearFitter
                                 covar.getIndex(k, i), covar.getIndex(j, i));
                     }
                     k--;
-		        }
-            }            
-            
+                }
+            }
+
             resultAvailable = true;
 
-        } catch (AlgebraException | EvaluationException e) {
+        } catch (final AlgebraException | EvaluationException e) {
             throw new FittingException(e);
         }
     }
-    
+
     /**
-     * Prevents parameter at position i of linear combination of basis functions 
+     * Prevents parameter at position i of linear combination of basis functions
      * to be modified during function fitting.
-     * @param i position of parameter to be retained.
+     *
+     * @param i   position of parameter to be retained.
      * @param val value to be set for parameter at position i.
      */
-    public void hold(int i, double val) {
+    public void hold(final int i, final double val) {
         ia[i] = false;
         a[i] = val;
     }
-    
+
     /**
      * Releases parameter at position i of linear combination of basis functions
      * so it can be modified again if needed.
+     *
      * @param i position of parameter to be released.
      */
-    public void free(int i) {
+    public void free(final int i) {
         ia[i] = true;
     }
-    
+
     /**
      * Swaps values of arrays at provided positions.
+     *
      * @param array1 1st array.
      * @param array2 2nd array.
-     * @param pos1 1st position.
-     * @param pos2 2nd position.
+     * @param pos1   1st position.
+     * @param pos2   2nd position.
      */
-    private void swap(double[] array1, double[] array2, int pos1, int pos2) {
+    private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
         double value1 = array1[pos1];
         double value2 = array2[pos2];
         array1[pos1] = value2;

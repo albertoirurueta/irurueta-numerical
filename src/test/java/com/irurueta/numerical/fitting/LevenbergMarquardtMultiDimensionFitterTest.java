@@ -32,21 +32,20 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class LevenbergMarquardtMultiDimensionFitterTest {
 
     private static final Logger LOGGER = Logger.getLogger(
             LevenbergMarquardtMultiDimensionFitterTest.class.getName());
-    
+
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
-    
+
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
-    
+
     private static final double MIN_SIGMA_VALUE = 1e-4;
     private static final double MAX_SIGMA_VALUE = 1e-3;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-1;
     private static final double LARGE_ABSOLUTE_ERROR = 1.0;
     private static final double SMALL_ABSOLUTE_ERROR = 1e-5;
@@ -66,7 +65,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     private static final double MAX_LINE2_B = 10.0;
 
     private static final int SINE_UNI_PARAMS = 3;
-    private static final int SINE_MULTI_PARAMS = 5; //amplitude, freqx, freqy, phasex, phasey
+    // amplitude, freqx, freqy, phasex, phasey
+    private static final int SINE_MULTI_PARAMS = 5;
     private static final double MIN_SINE_AMPLITUDE = 0.5;
     private static final double MAX_SINE_AMPLITUDE = 10.0;
     private static final double MIN_SINE_FREQ = 0.5;
@@ -75,7 +75,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     private static final double MAX_SINE_PHASE = Math.PI;
 
     private static final int GAUSS_UNI_PARAMS = 3;
-    private static final int GAUSS_MULTI_PARAMS = 5; //B, Ex, Ey, Gx, Gy
+    // B, Ex, Ey, Gx, Gy
+    private static final int GAUSS_MULTI_PARAMS = 5;
     private static final int MIN_GAUSSIANS = 1;
     private static final int MAX_GAUSSIANS = 3;
 
@@ -83,30 +84,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
     public static final int TIMES = 10;
     private static final int N_SAMPLES = 1000000;
-    
-    public LevenbergMarquardtMultiDimensionFitterTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() throws FittingException, WrongSizeException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        
+
         LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default value
+
+        // check default value
         assertFalse(fitter.isResultAvailable());
         assertFalse(fitter.isReady());
         assertNull(fitter.getX());
@@ -115,24 +102,24 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(), 
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(), 
+        assertEquals(fitter.getItmax(),
                 LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(), 
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
-        
-        //test constructor with input data
-        Matrix x = new Matrix(nPoints, 2);
-        double[] y = new double[nPoints];
-        double[] sig = new double[nPoints];
-        
+
+        // test constructor with input data
+        final Matrix x = new Matrix(nPoints, 2);
+        final double[] y = new double[nPoints];
+        final double[] sig = new double[nPoints];
+
         fitter = new LevenbergMarquardtMultiDimensionFitter(x, y, sig);
-        
-        //check default values
+
+        // check default values
         assertFalse(fitter.isResultAvailable());
         assertFalse(fitter.isReady());
         assertSame(fitter.getX(), x);
@@ -141,40 +128,43 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(), 
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(), 
+        assertEquals(fitter.getItmax(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(), 
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
 
-        //Force IllegalArgumentException
-        Matrix shortX = new Matrix(nPoints - 1, 2);
-        double[] shortY = new double[nPoints - 1];
-        double[] shortSig = new double[nPoints - 1];
-        
+        // Force IllegalArgumentException
+        final Matrix shortX = new Matrix(nPoints - 1, 2);
+        final double[] shortY = new double[nPoints - 1];
+        final double[] shortSig = new double[nPoints - 1];
+
         fitter = null;
         try {
             fitter = new LevenbergMarquardtMultiDimensionFitter(shortX, y, sig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter = new LevenbergMarquardtMultiDimensionFitter(x, shortY, sig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter = new LevenbergMarquardtMultiDimensionFitter(x, y, shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(fitter);
-        
-        //test constructor with input data (constant sigma)
+
+        // test constructor with input data (constant sigma)
         fitter = new LevenbergMarquardtMultiDimensionFitter(x, y, 1.0);
-        
-        //check default values
+
+        // check default values
         assertFalse(fitter.isResultAvailable());
         assertFalse(fitter.isReady());
         assertSame(fitter.getX(), x);
@@ -186,52 +176,54 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(), 
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(), 
+        assertEquals(fitter.getItmax(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(), 
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
 
-        //Force IllegalArgumentException        
+        // Force IllegalArgumentException
         fitter = null;
         try {
             fitter = new LevenbergMarquardtMultiDimensionFitter(shortX, y, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter = new LevenbergMarquardtMultiDimensionFitter(x, shortY, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(fitter);
-        
-        //test constructor with evaluator
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+        // test constructor with evaluator
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 2;
-            }
+                    @Override
+                    public int getNumberOfDimensions() {
+                        return 2;
+                    }
 
-            @Override
-            public double[] createInitialParametersArray() {
-                return new double[nPoints];
-            }
+                    @Override
+                    public double[] createInitialParametersArray() {
+                        return new double[nPoints];
+                    }
 
-            @Override
-            public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) {
-                return 0.0;
-            }
-        };
-        
+                    @Override
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        return 0.0;
+                    }
+                };
+
         fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator);
-        
-        //check default values
+
+        // check default values
         assertFalse(fitter.isResultAvailable());
         assertFalse(fitter.isReady());
         assertNull(fitter.getX());
@@ -243,23 +235,23 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getCovar().getRows(), nPoints);
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(), 
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(), 
+        assertEquals(fitter.getItmax(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(), 
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
         assertEquals(fitter.getAlpha().getColumns(), nPoints);
         assertTrue(fitter.isCovarianceAdjusted());
-        
-        //test constructor with evaluator and input data
-        fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, 
+
+        // test constructor with evaluator and input data
+        fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                 sig);
-        
-        //check default values
+
+        // check default values
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
         assertSame(fitter.getX(), x);
@@ -271,11 +263,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getCovar().getRows(), nPoints);
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(), 
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(), 
+        assertEquals(fitter.getItmax(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(), 
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
@@ -283,30 +275,33 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getAlpha().getColumns(), nPoints);
         assertTrue(fitter.isCovarianceAdjusted());
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         fitter = null;
         try {
-            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, 
+            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator,
                     shortX, y, sig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, 
+            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x,
                     shortY, sig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                     shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(fitter);
-        
-        //test constructor with evaluator and input data (constant sigma)
-        fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, 
+
+        // test constructor with evaluator and input data (constant sigma)
+        fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                 1.0);
-        
-        //check default values
+
+        // check default values
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
         assertSame(fitter.getX(), x);
@@ -321,11 +316,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getCovar().getRows(), nPoints);
         assertEquals(fitter.getCovar().getColumns(), nPoints);
         assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(), 
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(), 
+        assertEquals(fitter.getItmax(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(), 
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
@@ -333,198 +328,206 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertEquals(fitter.getAlpha().getColumns(), nPoints);
         assertTrue(fitter.isCovarianceAdjusted());
 
-        //Force IllegalArgumentException        
+        // Force IllegalArgumentException
         fitter = null;
         try {
-            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, 
+            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator,
                     shortX, y, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, 
+            fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x,
                     shortY, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(fitter);        
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(fitter);
     }
-    
+
     @Test
     public void testGetSetNdone() {
-        LevenbergMarquardtMultiDimensionFitter fitter = 
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default value
-        assertEquals(fitter.getNdone(), 
+
+        // check default value
+        assertEquals(fitter.getNdone(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        
-        //new value
+
+        // new value
         fitter.setNdone(5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(fitter.getNdone(), 5);
-        
-        //force IllegalArgumentException
+
+        // force IllegalArgumentException
         try {
             fitter.setNdone(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetItmax() {
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default value
+
+        // check default value
         assertEquals(fitter.getItmax(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        
-        //new value
+
+        // new value
         fitter.setItmax(10);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(fitter.getItmax(), 10);
-        
-        //force IllegalArgumentException
+
+        // force IllegalArgumentException
         try {
             fitter.setItmax(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetTol() {
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default value
-        assertEquals(fitter.getTol(), 
+
+        // check default value
+        assertEquals(fitter.getTol(),
                 LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
-        
-        //new value
+
+        // new value
         fitter.setTol(1e-1);
-        
+
         //check correctness
         assertEquals(fitter.getTol(), 1e-1, 0.0);
-        
-        //force IllegalArgumentException
+
+        // force IllegalArgumentException
         try {
             fitter.setTol(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetFunctionEvaluator() throws FittingException {
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default value
+
+        // check default value
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
         assertNull(fitter.getAlpha());
-        
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 2;
-            }
+                    @Override
+                    public int getNumberOfDimensions() {
+                        return 2;
+                    }
 
-            @Override
-            public double[] createInitialParametersArray() {
-                return new double[GAUSS_UNI_PARAMS];
-            }
+                    @Override
+                    public double[] createInitialParametersArray() {
+                        return new double[GAUSS_UNI_PARAMS];
+                    }
 
-            @Override
-            public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) {
-                return 0.0;
-            }
-        };
-        
-        //new value
+                    @Override
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        return 0.0;
+                    }
+                };
+
+        // new value
         fitter.setFunctionEvaluator(evaluator);
-        
-        //check correctness
+
+        // check correctness
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, GAUSS_UNI_PARAMS);
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getCovar().getRows(), GAUSS_UNI_PARAMS);
-        assertEquals(fitter.getCovar().getColumns(), GAUSS_UNI_PARAMS);        
+        assertEquals(fitter.getCovar().getColumns(), GAUSS_UNI_PARAMS);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), GAUSS_UNI_PARAMS);
         assertEquals(fitter.getAlpha().getColumns(), GAUSS_UNI_PARAMS);
     }
-    
+
     @Test
     public void testGetSetInputData() throws WrongSizeException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        
-        LevenbergMarquardtMultiDimensionFitter fitter =
+
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default values
+
+        // check default values
         assertNull(fitter.getX());
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
-        
-        Matrix x = new Matrix(nPoints, 2);
-        double[] y = new double[nPoints];
-        double[] sig = new double[nPoints];
-        
-        //set input data
+
+        final Matrix x = new Matrix(nPoints, 2);
+        final double[] y = new double[nPoints];
+        final double[] sig = new double[nPoints];
+
+        // set input data
         fitter.setInputData(x, y, sig);
-        
-        //check correctness
+
+        // check correctness
         assertSame(fitter.getX(), x);
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
-        
-        //Force IllegalArgumentException
-        Matrix shortX = new Matrix(nPoints - 1, 2);
-        double[] shortY = new double[nPoints - 1];
-        double[] shortSig = new double[nPoints - 1];
-        
+
+        // Force IllegalArgumentException
+        final Matrix shortX = new Matrix(nPoints - 1, 2);
+        final double[] shortY = new double[nPoints - 1];
+        final double[] shortSig = new double[nPoints - 1];
+
         try {
             fitter.setInputData(shortX, y, sig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter.setInputData(x, shortY, sig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter.setInputData(x, y, shortSig);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
-    public void testGetSetInputDataWithConstantSigma() 
+    public void testGetSetInputDataWithConstantSigma()
             throws WrongSizeException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        
-        LevenbergMarquardtMultiDimensionFitter fitter =
+
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default values
+
+        // check default values
         assertNull(fitter.getX());
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
-        
-        Matrix x = new Matrix(nPoints, 2);
-        double[] y = new double[nPoints];
-        
-        //set input data
+
+        final Matrix x = new Matrix(nPoints, 2);
+        final double[] y = new double[nPoints];
+
+        // set input data
         fitter.setInputData(x, y, 1.0);
-        
-        //check correctness
+
+        // check correctness
         assertSame(fitter.getX(), x);
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
@@ -532,96 +535,98 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getSig()[i], 1.0, 0.0);
         }
 
-        
-        //Force IllegalArgumentException
-        Matrix shortX = new Matrix(nPoints - 1, 2);
-        double[] shortY = new double[nPoints - 1];
-        
+
+        // Force IllegalArgumentException
+        final Matrix shortX = new Matrix(nPoints - 1, 2);
+        final double[] shortY = new double[nPoints - 1];
+
         try {
             fitter.setInputData(shortX, y, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             fitter.setInputData(x, shortY, 1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testIsReady() throws WrongSizeException, FittingException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        
-        LevenbergMarquardtMultiDimensionFitter fitter =
+
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
-        
-        //check default value
+
+        // check default value
         assertFalse(fitter.isReady());
-        
-        //set new values
-        Matrix x = new Matrix(nPoints, 2);
-        double[] y = new double[nPoints];
-        double[] sig = new double[nPoints];
-        
+
+        // set new values
+        final Matrix x = new Matrix(nPoints, 2);
+        final double[] y = new double[nPoints];
+        final double[] sig = new double[nPoints];
+
         fitter.setInputData(x, y, sig);
-        
+
         assertFalse(fitter.isReady());
-        
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 2;
-            }
+                    @Override
+                    public int getNumberOfDimensions() {
+                        return 2;
+                    }
 
-            @Override
-            public double[] createInitialParametersArray() {
-                return new double[GAUSS_UNI_PARAMS];
-            }
+                    @Override
+                    public double[] createInitialParametersArray() {
+                        return new double[GAUSS_UNI_PARAMS];
+                    }
 
-            @Override
-            public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) {
-                return 0.0;
-            }
-        };
-        
+                    @Override
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        return 0.0;
+                    }
+                };
+
         fitter.setFunctionEvaluator(evaluator);
-        
-        assertTrue(fitter.isReady());        
+
+        assertTrue(fitter.isReady());
     }
 
     @Test
     public void testIsSetCovarianceAdjusted() {
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter();
 
-        //check default value
+        // check default value
         assertTrue(fitter.isCovarianceAdjusted());
 
-        //set new value
+        // set new value
         fitter.setCovarianceAdjusted(false);
 
-        //check
+        // check
         assertFalse(fitter.isCovarianceAdjusted());
     }
 
     @Test
     public void testFitUnidimensionalConstant() throws WrongSizeException,
             FittingException, NotReadyException, MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double constant = randomizer.nextDouble(MIN_CONSTANT, MAX_CONSTANT);
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double constant = randomizer.nextDouble(MIN_CONSTANT, MAX_CONSTANT);
 
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
         final double[] params = new double[CONSTANT_PARAMS];
         params[0] = constant;
 
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 1);
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 1);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
@@ -633,7 +638,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             y[i] += error;
         }
 
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
                     @Override
                     public int getNumberOfDimensions() {
@@ -642,7 +647,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                     @Override
                     public double[] createInitialParametersArray() {
-                        double[] initParams = new double[CONSTANT_PARAMS];
+                        final double[] initParams = new double[CONSTANT_PARAMS];
                         double error;
                         for (int i = 0; i < CONSTANT_PARAMS; i++) {
                             error = errorRandomizer.nextDouble();
@@ -652,34 +657,34 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                     }
 
                     @Override
-                    public double evaluate(int i, double[] point, double[] params,
-                                           double[] derivatives) {
-                        double constant = params[0];
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        final double constant = params[0];
 
-                        //derivative of evaluated function respect constant parameter
+                        // derivative of evaluated function respect constant parameter
                         derivatives[0] = 1.0;
 
-                        //evaluated function
+                        // evaluated function
                         return constant;
                     }
                 };
 
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                         1.0);
         fitter.setCovarianceAdjusted(false);
 
-        //check default values
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
-        //fit
+        // fit
         fitter.fit();
 
-        //check correctness
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, CONSTANT_PARAMS);
@@ -689,16 +694,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - CONSTANT_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - CONSTANT_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -709,30 +714,30 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     @Test
     public void testFitUnidimensionalLine1() throws WrongSizeException,
             FittingException, NotReadyException, MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double a = randomizer.nextDouble(MIN_LINE1_A, MAX_LINE1_A);
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double a = randomizer.nextDouble(MIN_LINE1_A, MAX_LINE1_A);
 
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
         final double[] params = new double[LINE1_PARAMS];
         params[0] = a;
 
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 1);
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 1);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
         for (int i = 0; i < npoints; i++) {
-            double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             x.setElementAt(i, 0, xi);
             y[i] = a * xi;
             error = errorRandomizer.nextDouble();
             y[i] += error;
         }
 
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
                     @Override
                     public int getNumberOfDimensions() {
@@ -741,7 +746,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                     @Override
                     public double[] createInitialParametersArray() {
-                        double[] initParams = new double[LINE1_PARAMS];
+                        final double[] initParams = new double[LINE1_PARAMS];
                         double error;
                         for (int i = 0; i < LINE1_PARAMS; i++) {
                             error = errorRandomizer.nextDouble();
@@ -751,34 +756,34 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                     }
 
                     @Override
-                    public double evaluate(int i, double[] point, double[] params,
-                                           double[] derivatives) {
-                        double a = params[0];
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        final double a = params[0];
 
-                        //derivative of evaluated function respect constant parameter
+                        // derivative of evaluated function respect constant parameter
                         derivatives[0] = a;
 
-                        //evaluated function
+                        // evaluated function
                         return a * point[0];
                     }
                 };
 
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                         1.0);
         fitter.setCovarianceAdjusted(false);
 
-        //check default values
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
-        //fit
+        // fit
         fitter.fit();
 
-        //check correctness
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, LINE1_PARAMS);
@@ -788,16 +793,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - LINE1_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - LINE1_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -808,32 +813,32 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     @Test
     public void testFitUnidimensionalLine2() throws WrongSizeException,
             FittingException, NotReadyException, MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double a = randomizer.nextDouble(MIN_LINE2_A, MAX_LINE2_A);
-        double b = randomizer.nextDouble(MIN_LINE2_B, MAX_LINE2_B);
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double a = randomizer.nextDouble(MIN_LINE2_A, MAX_LINE2_A);
+        final double b = randomizer.nextDouble(MIN_LINE2_B, MAX_LINE2_B);
 
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
         final double[] params = new double[LINE2_PARAMS];
         params[0] = a;
         params[1] = b;
 
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 1);
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 1);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
         for (int i = 0; i < npoints; i++) {
-            double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             x.setElementAt(i, 0, xi);
             y[i] = a * xi + b;
             error = errorRandomizer.nextDouble();
             y[i] += error;
         }
 
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
                     @Override
                     public int getNumberOfDimensions() {
@@ -842,7 +847,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                     @Override
                     public double[] createInitialParametersArray() {
-                        double[] initParams = new double[LINE2_PARAMS];
+                        final double[] initParams = new double[LINE2_PARAMS];
                         double error;
                         for (int i = 0; i < LINE2_PARAMS; i++) {
                             error = errorRandomizer.nextDouble();
@@ -852,36 +857,36 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                     }
 
                     @Override
-                    public double evaluate(int i, double[] point, double[] params,
-                                           double[] derivatives) {
-                        double a = params[0];
-                        double b = params[1];
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        final double a = params[0];
+                        final double b = params[1];
 
-                        //derivatives of function f(x) respect parameters a and b
+                        // derivatives of function f(x) respect parameters a and b
                         derivatives[0] = point[0];
                         derivatives[1] = 1.0;
 
-                        //evaluated function f(x) = a * x + b
+                        // evaluated function f(x) = a * x + b
                         return a * point[0] + b;
                     }
                 };
 
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                         1.0);
         fitter.setCovarianceAdjusted(false);
 
-        //check default values
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
-        //fit
+        // fit
         fitter.fit();
 
-        //check correctness
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, LINE2_PARAMS);
@@ -891,16 +896,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - LINE2_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - LINE2_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -911,88 +916,88 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     @Test
     public void testFitUnidimensionalSine() throws FittingException,
             NotReadyException, WrongSizeException, MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE, 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                 MAX_SINE_AMPLITUDE);
-        double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-        double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
-        
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-        
+        final double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+        final double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+
         final double[] params = new double[SINE_UNI_PARAMS];
         params[0] = amplitude;
         params[1] = freq;
         params[2] = phase;
-        
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 1);
+
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 1);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
         for (int i = 0; i < npoints; i++) {
-            x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE));
             y[i] = amplitude * Math.sin(freq * x.getElementAt(i, 0) + phase);
             error = errorRandomizer.nextDouble();
             y[i] += error;
         }
-        
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 1;
-            }
+                    @Override
+                    public int getNumberOfDimensions() {
+                        return 1;
+                    }
 
-            @Override
-            public double[] createInitialParametersArray() {
-                double[] initParams =  new double[SINE_UNI_PARAMS];
-                double error;
-                for (int i = 0; i < SINE_UNI_PARAMS; i++) {
-                    error = errorRandomizer.nextDouble();
-                    initParams[i] = params[i] + error;
-                }
-                return initParams;
-            }
+                    @Override
+                    public double[] createInitialParametersArray() {
+                        final double[] initParams = new double[SINE_UNI_PARAMS];
+                        double error;
+                        for (int i = 0; i < SINE_UNI_PARAMS; i++) {
+                            error = errorRandomizer.nextDouble();
+                            initParams[i] = params[i] + error;
+                        }
+                        return initParams;
+                    }
 
-            @Override
-            public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) {
-                double amplitude = params[0];
-                double freq = params[1];
-                double phase = params[2];
-                double y = amplitude * Math.sin(freq * point[0] + phase);
-                
-                //derivative respect amplitude
-                derivatives[0] = Math.sin(freq * point[0] + phase);
-                //derivative respect frequency
-                derivatives[1] = amplitude * Math.cos(freq * point[0] + phase) * point[0];
-                //derivative respect phase
-                derivatives[2] = amplitude * Math.cos(freq * point[0] + phase);
-                
-                return y;
-            }
-        };
-        
-        LevenbergMarquardtMultiDimensionFitter fitter =
-                new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, 
-                1.0);
+                    @Override
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        final double amplitude = params[0];
+                        final double freq = params[1];
+                        final double phase = params[2];
+                        final double y = amplitude * Math.sin(freq * point[0] + phase);
+
+                        // derivative respect amplitude
+                        derivatives[0] = Math.sin(freq * point[0] + phase);
+                        // derivative respect frequency
+                        derivatives[1] = amplitude * Math.cos(freq * point[0] + phase) * point[0];
+                        // derivative respect phase
+                        derivatives[2] = amplitude * Math.cos(freq * point[0] + phase);
+
+                        return y;
+                    }
+                };
+
+        final LevenbergMarquardtMultiDimensionFitter fitter =
+                new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                        1.0);
         fitter.setCovarianceAdjusted(false);
-        
-        //check default values
+
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
-        
-        //fit
+
+        // fit
         fitter.fit();
-        
-        //check correctness
+
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
@@ -1002,16 +1007,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1024,13 +1029,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             NotReadyException, WrongSizeException, MaxIterationsExceededException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            int numgaussians = randomizer.nextInt(MIN_GAUSSIANS, MAX_GAUSSIANS);
+            final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final int numgaussians = randomizer.nextInt(MIN_GAUSSIANS, MAX_GAUSSIANS);
             final int numParams = numgaussians * GAUSS_UNI_PARAMS;
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[numParams];
             for (int i = 0; i < numParams; i++) {
@@ -1038,26 +1043,26 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         MAX_RANDOM_VALUE);
             }
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
             double error;
             for (int i = 0; i < npoints; i++) {
-                double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 x.setElementAt(i, 0, xi);
                 y[i] = 0.0;
                 for (int k = 0; k < numgaussians; k++) {
-                    double b = params[k * GAUSS_UNI_PARAMS];
-                    double e = params[k * GAUSS_UNI_PARAMS + 1];
-                    double g = params[k * GAUSS_UNI_PARAMS + 2];
+                    final double b = params[k * GAUSS_UNI_PARAMS];
+                    final double e = params[k * GAUSS_UNI_PARAMS + 1];
+                    final double g = params[k * GAUSS_UNI_PARAMS + 2];
                     y[i] += b * Math.exp(-Math.pow((xi - e) / g, 2.0));
                 }
                 error = errorRandomizer.nextDouble();
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         @Override
@@ -1067,7 +1072,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[numParams];
+                            final double[] initParams = new double[numParams];
                             double error;
                             for (int i = 0; i < numParams; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -1077,10 +1082,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int pos, double[] point, double[] params,
-                                               double[] derivatives) {
-                            int i, na = params.length;
-                            double fac, ex, arg;
+                        public double evaluate(final int pos, final double[] point, final double[] params,
+                                               final double[] derivatives) {
+                            int i;
+                            final int na = params.length;
+                            double fac;
+                            double ex;
+                            double arg;
                             double y = 0.0;
                             for (i = 0; i < na - 1; i += 3) {
                                 arg = (point[0] - params[i + 1]) / params[i + 2];
@@ -1096,22 +1104,22 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             1.0);
             fitter.setCovarianceAdjusted(false);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             fitter.fit();
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, numParams);
@@ -1131,16 +1139,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertNotNull(fitter.getCovar());
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - numParams;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - numParams;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1157,108 +1165,108 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalSineWithHoldAndFree()
             throws FittingException, NotReadyException, WrongSizeException,
             MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE, 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                 MAX_SINE_AMPLITUDE);
-        double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-        double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
-        
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-        
+        final double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+        final double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+
         final double[] params = new double[SINE_UNI_PARAMS];
         params[0] = amplitude;
         params[1] = freq;
         params[2] = phase;
-        
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 1);
+
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 1);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
         for (int i = 0; i < npoints; i++) {
-            x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE));
             y[i] = amplitude * Math.sin(freq * x.getElementAt(i, 0) + phase);
             error = errorRandomizer.nextDouble();
             y[i] += error;
         }
-        
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 1;
-            }
+                    @Override
+                    public int getNumberOfDimensions() {
+                        return 1;
+                    }
 
-            @Override
-            public double[] createInitialParametersArray() {
-                double[] initParams =  new double[SINE_UNI_PARAMS];
-                double error;
-                for(int i = 0; i < SINE_UNI_PARAMS; i++){
-                    error = errorRandomizer.nextDouble();
-                    initParams[i] = params[i] + error;
-                }
-                return initParams;
-            }
+                    @Override
+                    public double[] createInitialParametersArray() {
+                        final double[] initParams = new double[SINE_UNI_PARAMS];
+                        double error;
+                        for (int i = 0; i < SINE_UNI_PARAMS; i++) {
+                            error = errorRandomizer.nextDouble();
+                            initParams[i] = params[i] + error;
+                        }
+                        return initParams;
+                    }
 
-            @Override
-            public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) {
-                double amplitude = params[0];
-                double freq = params[1];
-                double phase = params[2];
-                double y = amplitude * Math.sin(freq * point[0] + phase);
-                
-                //derivative respect amplitude
-                derivatives[0] = Math.sin(freq * point[0] + phase);
-                //derivative respect frequency
-                derivatives[1] = amplitude * Math.cos(freq * point[0] + phase) * point[0];
-                //derivative respect phase
-                derivatives[2] = amplitude * Math.cos(freq * point[0] + phase);
-                
-                return y;
-            }
-        };
-        
-        LevenbergMarquardtMultiDimensionFitter fitter =
-                new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, 
-                1.0);
+                    @Override
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) {
+                        final double amplitude = params[0];
+                        final double freq = params[1];
+                        final double phase = params[2];
+                        final double y = amplitude * Math.sin(freq * point[0] + phase);
+
+                        // derivative respect amplitude
+                        derivatives[0] = Math.sin(freq * point[0] + phase);
+                        // derivative respect frequency
+                        derivatives[1] = amplitude * Math.cos(freq * point[0] + phase) * point[0];
+                        // derivative respect phase
+                        derivatives[2] = amplitude * Math.cos(freq * point[0] + phase);
+
+                        return y;
+                    }
+                };
+
+        final LevenbergMarquardtMultiDimensionFitter fitter =
+                new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                        1.0);
         fitter.setCovarianceAdjusted(false);
-        
-        //check default values
+
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
-        
-        //hold first parameter
+
+        // hold first parameter
         fitter.hold(0, params[0]);
-        
-        //fit
+
+        // fit
         fitter.fit();
-        
-        //check correctness
+
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
-        //first parameter is hold and matches exactly
+        // first parameter is hold and matches exactly
         assertEquals(fitter.getA()[0], params[0], 0.0);
         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
         assertNotNull(fitter.getCovar());
-        assertTrue(fitter.getChisq() > 0);   
-        
-        //release first parameter
+        assertTrue(fitter.getChisq() > 0);
+
+        // release first parameter
         fitter.free(0);
-        
-        //fit and check correctness
+
+        // fit and check correctness
         fitter.fit();
-        
+
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
@@ -1268,16 +1276,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1289,28 +1297,28 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalSineWithGradientEstimator()
             throws FittingException, NotReadyException, WrongSizeException,
             MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                 MAX_SINE_AMPLITUDE);
-        double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-        double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+        final double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+        final double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
 
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
         final double[] params = new double[SINE_UNI_PARAMS];
         params[0] = amplitude;
         params[1] = freq;
         params[2] = phase;
 
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 1);
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 1);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
         for (int i = 0; i < npoints; i++) {
-            double xi = randomizer.nextDouble(MIN_RANDOM_VALUE,
+            final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
             x.setElementAt(i, 0, xi);
             y[i] = amplitude * Math.sin(freq * xi + phase);
@@ -1318,17 +1326,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             y[i] += error;
         }
 
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                     private double[] point;
 
-                    private GradientEstimator gradientEstimator =
+                    private final GradientEstimator gradientEstimator =
                             new GradientEstimator(
                                     new MultiDimensionFunctionEvaluatorListener() {
 
                                         @Override
-                                        public double evaluate(double[] params) {
+                                        public double evaluate(final double[] params) {
                                             return evaluateParams(point, params);
                                         }
                                     });
@@ -1340,7 +1348,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                     @Override
                     public double[] createInitialParametersArray() {
-                        double[] initParams =  new double[SINE_UNI_PARAMS];
+                        final double[] initParams = new double[SINE_UNI_PARAMS];
                         double error;
                         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
                             error = errorRandomizer.nextDouble();
@@ -1350,8 +1358,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                     }
 
                     @Override
-                    public double evaluate(int i, double[] point, double[] params,
-                                           double[] derivatives) throws EvaluationException {
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) throws EvaluationException {
                         this.point = point;
                         double y = evaluateParams(point, params);
                         gradientEstimator.gradient(params, derivatives);
@@ -1359,29 +1367,29 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         return y;
                     }
 
-                    double evaluateParams(double[] point, double[] params) {
-                        double amplitude = params[0];
-                        double freq = params[1];
-                        double phase = params[2];
+                    double evaluateParams(final double[] point, final double[] params) {
+                        final double amplitude = params[0];
+                        final double freq = params[1];
+                        final double phase = params[2];
                         return amplitude * Math.sin(freq * point[0] + phase);
                     }
                 };
 
-        LevenbergMarquardtMultiDimensionFitter fitter =
+        final LevenbergMarquardtMultiDimensionFitter fitter =
                 new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                         1.0);
 
-        //check default values
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
-        //fit
+        // fit
         fitter.fit();
 
-        //check correctness
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
@@ -1391,16 +1399,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1414,13 +1422,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             MaxIterationsExceededException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            int numgaussians = randomizer.nextInt(MIN_GAUSSIANS, MAX_GAUSSIANS);
+            final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final int numgaussians = randomizer.nextInt(MIN_GAUSSIANS, MAX_GAUSSIANS);
             final int numParams = numgaussians * GAUSS_UNI_PARAMS;
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[numParams];
             for (int i = 0; i < numParams; i++) {
@@ -1428,8 +1436,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         MAX_RANDOM_VALUE);
             }
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
             double error;
@@ -1437,26 +1445,26 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 y[i] = 0.0;
                 for (int k = 0; k < numgaussians; k++) {
-                    double b = params[k * GAUSS_UNI_PARAMS];
-                    double e = params[k * GAUSS_UNI_PARAMS + 1];
-                    double g = params[k * GAUSS_UNI_PARAMS + 2];
+                    final double b = params[k * GAUSS_UNI_PARAMS];
+                    final double e = params[k * GAUSS_UNI_PARAMS + 1];
+                    final double g = params[k * GAUSS_UNI_PARAMS + 2];
                     y[i] += b * Math.exp(-Math.pow((x.getElementAt(i, 0) - e) / g, 2.0));
                 }
                 error = errorRandomizer.nextDouble();
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         private double[] point;
 
-                        private GradientEstimator gradientEstimator =
+                        private final GradientEstimator gradientEstimator =
                                 new GradientEstimator(
                                         new MultiDimensionFunctionEvaluatorListener() {
 
                                             @Override
-                                            public double evaluate(double[] params) {
+                                            public double evaluate(final double[] params) {
                                                 return evaluateParams(point, params);
                                             }
                                         });
@@ -1468,7 +1476,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[numParams];
+                            final double[] initParams = new double[numParams];
                             double error;
                             for (int i = 0; i < numParams; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -1478,18 +1486,20 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws EvaluationException {
+                        public double evaluate(final int i, final double[] point, final double[] params,
+                                               final double[] derivatives) throws EvaluationException {
                             this.point = point;
-                            double y = evaluateParams(point, params);
+                            final double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
 
                             return y;
                         }
 
-                        double evaluateParams(double[] point, double[] params) {
-                            int i, na = params.length;
-                            double ex, arg;
+                        double evaluateParams(final double[] point, final double[] params) {
+                            int i;
+                            final int na = params.length;
+                            double ex;
+                            double arg;
                             double y = 0.0;
                             for (i = 0; i < na - 1; i += 3) {
                                 arg = (point[0] - params[i + 1]) / params[i + 2];
@@ -1501,25 +1511,25 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             1.0);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, numParams);
@@ -1529,16 +1539,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertNotNull(fitter.getCovar());
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - numParams;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - numParams;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1557,17 +1567,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             NotReadyException, WrongSizeException, MaxIterationsExceededException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
+            final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                     MAX_SINE_AMPLITUDE);
-            double freqx = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-            double freqy = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-            double phasex = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
-            double phasey = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+            final double freqx = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+            final double freqy = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+            final double phasex = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+            final double phasey = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[SINE_MULTI_PARAMS];
             params[0] = amplitude;
@@ -1576,8 +1586,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             params[3] = phasex;
             params[4] = phasey;
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 2);
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 2);
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
             double error;
@@ -1593,17 +1603,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         private double[] point;
 
-                        private GradientEstimator gradientEstimator =
+                        private final GradientEstimator gradientEstimator =
                                 new GradientEstimator(
                                         new MultiDimensionFunctionEvaluatorListener() {
 
                                             @Override
-                                            public double evaluate(double[] params) {
+                                            public double evaluate(final double[] params) {
                                                 return evaluateParams(point, params);
                                             }
                                         });
@@ -1615,7 +1625,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[SINE_MULTI_PARAMS];
+                            final double[] initParams = new double[SINE_MULTI_PARAMS];
                             double error;
                             for (int i = 0; i < SINE_MULTI_PARAMS; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -1625,43 +1635,44 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws EvaluationException {
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) throws EvaluationException {
                             this.point = point;
-                            double y = evaluateParams(point, params);
+                            final double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
 
                             return y;
                         }
 
-                        double evaluateParams(double[] point, double[] params) {
-                            double amplitude = params[0];
-                            double freqx = params[1];
-                            double freqy = params[2];
-                            double phasex = params[3];
-                            double phasey = params[4];
+                        double evaluateParams(final double[] point, final double[] params) {
+                            final double amplitude = params[0];
+                            final double freqx = params[1];
+                            final double freqy = params[2];
+                            final double phasex = params[3];
+                            final double phasey = params[4];
 
                             return amplitude * Math.sin(freqx * point[0] + phasex) *
                                     Math.sin(freqy * point[1] + phasey);
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             1.0);
             fitter.setCovarianceAdjusted(false);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             fitter.fit();
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, SINE_MULTI_PARAMS);
@@ -1681,16 +1692,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertNotNull(fitter.getCovar());
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - SINE_MULTI_PARAMS;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - SINE_MULTI_PARAMS;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1709,14 +1720,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             NotReadyException, WrongSizeException, MaxIterationsExceededException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = randomizer.nextInt(MIN_POINTS * 100, MAX_POINTS * 100);
+            final int npoints = randomizer.nextInt(MIN_POINTS * 100, MAX_POINTS * 100);
             final int numgaussians = randomizer.nextInt(MIN_GAUSSIANS,
                     MAX_GAUSSIANS);
             final int numParams = numgaussians * GAUSS_MULTI_PARAMS;
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[numParams];
             for (int i = 0; i < numParams; i++) {
@@ -1724,8 +1735,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         MAX_RANDOM_VALUE);
             }
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 2);
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 2);
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
             double error;
@@ -1734,11 +1745,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 x.setElementAt(i, 1, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 y[i] = 0.0;
                 for (int k = 0; k < numgaussians; k++) {
-                    double b = params[k * GAUSS_MULTI_PARAMS];
-                    double ex = params[k * GAUSS_MULTI_PARAMS + 1];
-                    double ey = params[k * GAUSS_MULTI_PARAMS + 2];
-                    double gx = params[k * GAUSS_MULTI_PARAMS + 3];
-                    double gy = params[k * GAUSS_MULTI_PARAMS + 4];
+                    final double b = params[k * GAUSS_MULTI_PARAMS];
+                    final double ex = params[k * GAUSS_MULTI_PARAMS + 1];
+                    final double ey = params[k * GAUSS_MULTI_PARAMS + 2];
+                    final double gx = params[k * GAUSS_MULTI_PARAMS + 3];
+                    final double gy = params[k * GAUSS_MULTI_PARAMS + 4];
                     y[i] += b * Math.exp(-(Math.pow(x.getElementAt(i, 0) -
                             ex, 2.0) + Math.pow(x.getElementAt(i, 1) - ey, 2.0)) /
                             Math.pow(gx * gy, 2.0));
@@ -1747,17 +1758,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         private double[] point;
 
-                        private GradientEstimator gradientEstimator =
+                        private final GradientEstimator gradientEstimator =
                                 new GradientEstimator(
                                         new MultiDimensionFunctionEvaluatorListener() {
 
                                             @Override
-                                            public double evaluate(double[] params) {
+                                            public double evaluate(final double[] params) {
                                                 return evaluateParams(point, params);
                                             }
                                         });
@@ -1769,7 +1780,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[numParams];
+                            final double[] initParams = new double[numParams];
                             double error;
                             for (int i = 0; i < numParams; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -1779,23 +1790,24 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws EvaluationException {
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) throws EvaluationException {
                             this.point = point;
-                            double y = evaluateParams(point, params);
+                            final double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
 
                             return y;
                         }
 
-                        double evaluateParams(double[] point, double[] params) {
+                        double evaluateParams(final double[] point, final double[] params) {
                             double y = 0.0;
                             for (int k = 0; k < numgaussians; k++) {
-                                double b = params[k * GAUSS_MULTI_PARAMS];
-                                double ex = params[k * GAUSS_MULTI_PARAMS + 1];
-                                double ey = params[k * GAUSS_MULTI_PARAMS + 2];
-                                double gx = params[k * GAUSS_MULTI_PARAMS + 3];
-                                double gy = params[k * GAUSS_MULTI_PARAMS + 4];
+                                final double b = params[k * GAUSS_MULTI_PARAMS];
+                                final double ex = params[k * GAUSS_MULTI_PARAMS + 1];
+                                final double ey = params[k * GAUSS_MULTI_PARAMS + 2];
+                                final double gx = params[k * GAUSS_MULTI_PARAMS + 3];
+                                final double gy = params[k * GAUSS_MULTI_PARAMS + 4];
                                 y += b * Math.exp(-(Math.pow(point[0] - ex, 2.0) +
                                         Math.pow(point[1] - ey, 2.0)) / Math.pow(gx * gy, 2.0));
                             }
@@ -1804,22 +1816,22 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             1.0);
             fitter.setCovarianceAdjusted(false);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             fitter.fit();
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, numParams);
@@ -1838,16 +1850,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertNotNull(fitter.getCovar());
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - numParams;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - numParams;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1865,103 +1877,103 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitMultidimensionalSineRepeatInOneDimension()
             throws FittingException, NotReadyException, WrongSizeException,
             MaxIterationsExceededException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE, 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final int npoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                 MAX_SINE_AMPLITUDE);
-        double freqx = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-        double phasex = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
-        
-        double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-        
+        final double freqx = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+        final double phasex = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+
+        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+
         final double[] params = new double[SINE_UNI_PARAMS];
         params[0] = amplitude;
         params[1] = freqx;
         params[2] = phasex;
-        
-        double[] y = new double[npoints];
-        Matrix x = new Matrix(npoints, 2);
+
+        final double[] y = new double[npoints];
+        final Matrix x = new Matrix(npoints, 2);
         final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, sigma);
         double error;
         for (int i = 0; i < npoints; i++) {
-            x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            x.setElementAt(i, 0, randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE));
-            x.setElementAt(i, 1, randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            x.setElementAt(i, 1, randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE));
-            
+
             y[i] = amplitude * Math.sin(freqx * x.getElementAt(i, 0) + phasex);
             error = errorRandomizer.nextDouble();
             y[i] += error;
         }
-        
-        LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+        final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                 new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
-                    
-            private double[] point;
-            
-            private GradientEstimator gradientEstimator = 
-                    new GradientEstimator(
-                            new MultiDimensionFunctionEvaluatorListener() {
 
-                @Override
-                public double evaluate(double[] params) {
-                    return evaluateParams(point, params);
-                }
-            });
+                    private double[] point;
 
-            @Override
-            public int getNumberOfDimensions() {
-                return 2;
-            }
+                    private final GradientEstimator gradientEstimator =
+                            new GradientEstimator(
+                                    new MultiDimensionFunctionEvaluatorListener() {
 
-            @Override
-            public double[] createInitialParametersArray() {
-                double[] initParams =  new double[SINE_UNI_PARAMS];
-                double error;
-                for (int i = 0; i < SINE_UNI_PARAMS; i++) {
-                    error = errorRandomizer.nextDouble();
-                    initParams[i] = params[i] + error;
-                }
-                return initParams;
-            }
+                                        @Override
+                                        public double evaluate(final double[] params) {
+                                            return evaluateParams(point, params);
+                                        }
+                                    });
 
-            @Override
-            public double evaluate(int i, double[] point, double[] params, 
-                    double[] derivatives) throws EvaluationException {
-                this.point = point;
-                double y = evaluateParams(point, params);
-                gradientEstimator.gradient(params, derivatives);
-                
-                return y;
-            }
+                    @Override
+                    public int getNumberOfDimensions() {
+                        return 2;
+                    }
 
-            double evaluateParams(double[] point, double[] params) {
-                double amplitude = params[0];
-                double freqx = params[1];
-                double phasex = params[2];
+                    @Override
+                    public double[] createInitialParametersArray() {
+                        final double[] initParams = new double[SINE_UNI_PARAMS];
+                        double error;
+                        for (int i = 0; i < SINE_UNI_PARAMS; i++) {
+                            error = errorRandomizer.nextDouble();
+                            initParams[i] = params[i] + error;
+                        }
+                        return initParams;
+                    }
 
-                return amplitude * Math.sin(freqx * point[0] + phasex);
-            }
-        };
-        
-        LevenbergMarquardtMultiDimensionFitter fitter =
-                new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, 
-                1.0);
+                    @Override
+                    public double evaluate(final int i, final double[] point, final double[] params,
+                                           final double[] derivatives) throws EvaluationException {
+                        this.point = point;
+                        final double y = evaluateParams(point, params);
+                        gradientEstimator.gradient(params, derivatives);
+
+                        return y;
+                    }
+
+                    double evaluateParams(final double[] point, final double[] params) {
+                        final double amplitude = params[0];
+                        final double freqx = params[1];
+                        final double phasex = params[2];
+
+                        return amplitude * Math.sin(freqx * point[0] + phasex);
+                    }
+                };
+
+        final LevenbergMarquardtMultiDimensionFitter fitter =
+                new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                        1.0);
         fitter.setCovarianceAdjusted(false);
-        
-        //check default values
+
+        // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getChisq(), 0.0, 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
-        
-        //fit
+
+        // fit
         fitter.fit();
-        
-        //check correctness
+
+        // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
@@ -1971,16 +1983,16 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertTrue(fitter.getChisq() > 0);
 
-        double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
-        double chiSqr = fitter.getChisq();
+        final double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
+        final double chiSqr = fitter.getChisq();
 
-        //probability that chi square can be smaller
-        //(the smaller is p the better)
-        double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+        // probability that chi square can be smaller
+        // (the smaller is p the better)
+        final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
         assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-        //measure of quality (1.0 indicates maximum quality)
-        double q = 1.0 - p;
+        // measure of quality (1.0 indicates maximum quality)
+        final double q = 1.0 - p;
         assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
         LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
@@ -1992,43 +2004,43 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalConstantCovariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
-            double constant = randomizer.nextDouble(MIN_CONSTANT, MAX_CONSTANT);
+            final int npoints = N_SAMPLES;
+            final double constant = randomizer.nextDouble(MIN_CONSTANT, MAX_CONSTANT);
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[CONSTANT_PARAMS];
             params[0] = constant;
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
-            NormalDist dist = new NormalDist();
+            final NormalDist dist = new NormalDist();
             double error;
             for (int i = 0; i < npoints; i++) {
                 x.setElementAt(i, 0,
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 NormalDist.propagate(new NormalDist.DerivativeEvaluator() {
                     @Override
-                    public double evaluate(double param) {
-                        //y[i] = constant
+                    public double evaluate(final double param) {
+                        // y[i] = constant
                         return param;
                     }
 
                     @Override
-                    public double evaluateDerivative(double param) {
-                        //derivative respect param
+                    public double evaluateDerivative(final double param) {
+                        // derivative respect param
                         return 1.0;
                     }
                 }, params[0], sigma, dist);
 
-                //expression below is equal to y[i] = constant;
+                // expression below is equal to y[i] = constant;
                 y[i] = dist.getMean();
                 assertEquals(y[i], constant, SMALL_ABSOLUTE_ERROR);
 
@@ -2040,7 +2052,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
                         @Override
                         public int getNumberOfDimensions() {
@@ -2049,7 +2061,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[CONSTANT_PARAMS];
+                            final double[] initParams = new double[CONSTANT_PARAMS];
                             double error;
                             for (int i = 0; i < CONSTANT_PARAMS; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -2059,38 +2071,39 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) {
-                            double constant = params[0];
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) {
+                            final double constant = params[0];
 
-                            //derivative of evaluated function respect constant parameter
+                            // derivative of evaluated function respect constant parameter
                             derivatives[0] = 1.0;
 
-                            //evaluated function
+                            // evaluated function
                             return constant;
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, CONSTANT_PARAMS);
@@ -2102,47 +2115,47 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), CONSTANT_PARAMS);
             assertTrue(fitter.getChisq() > 0.0);
 
-            double chiSqrDegreesOfFreedom = npoints - CONSTANT_PARAMS;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - CONSTANT_PARAMS;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] point = new double[evaluator.getNumberOfDimensions()];
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] point = new double[evaluator.getNumberOfDimensions()];
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -2151,7 +2164,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -2160,11 +2173,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
 
-            double standardDeviation3 = Math.sqrt(
+            final double standardDeviation3 = Math.sqrt(
                     cov.getElementAt(0, 0));
 
             assertEquals(standardDeviation3, sigma, SMALL_ABSOLUTE_ERROR);
@@ -2186,43 +2199,43 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalLine1Covariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
-            double a = randomizer.nextDouble(MIN_LINE1_A, MAX_LINE1_A);
+            final int npoints = N_SAMPLES;
+            final double a = randomizer.nextDouble(MIN_LINE1_A, MAX_LINE1_A);
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[LINE1_PARAMS];
             params[0] = a;
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
-            NormalDist dist = new NormalDist();
+            final NormalDist dist = new NormalDist();
             double error;
             for (int i = 0; i < npoints; i++) {
                 final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 x.setElementAt(i, 0, xi);
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 NormalDist.propagate(new NormalDist.DerivativeEvaluator() {
                     @Override
-                    public double evaluate(double param) {
-                        //y[i] = a * x[i]
+                    public double evaluate(final double param) {
+                        // y[i] = a * x[i]
                         return param * xi;
                     }
 
                     @Override
-                    public double evaluateDerivative(double param) {
-                        //derivative respect param
+                    public double evaluateDerivative(final double param) {
+                        // derivative respect param
                         return xi;
                     }
                 }, params[0], sigma, dist);
 
-                //expression below is equal to y[i] = a * x[i];
+                // expression below is equal to y[i] = a * x[i];
                 y[i] = dist.getMean();
                 assertEquals(y[i], a * xi, SMALL_ABSOLUTE_ERROR);
 
@@ -2234,7 +2247,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
                         @Override
                         public int getNumberOfDimensions() {
@@ -2243,7 +2256,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[LINE1_PARAMS];
+                            final double[] initParams = new double[LINE1_PARAMS];
                             double error;
                             for (int i = 0; i < LINE1_PARAMS; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -2253,38 +2266,39 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) {
-                            double a = params[0];
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) {
+                            final double a = params[0];
 
-                            //derivative of evaluated function f(x) respect parameter a
+                            // derivative of evaluated function f(x) respect parameter a
                             derivatives[0] = point[0];
 
-                            //evaluated function
+                            // evaluated function
                             return a * point[0];
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, LINE1_PARAMS);
@@ -2296,47 +2310,47 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), LINE1_PARAMS);
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - LINE1_PARAMS;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - LINE1_PARAMS;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] point = new double[evaluator.getNumberOfDimensions()];
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] point = new double[evaluator.getNumberOfDimensions()];
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -2345,7 +2359,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -2354,11 +2368,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
 
-            double standardDeviation3 = Math.sqrt(
+            final double standardDeviation3 = Math.sqrt(
                     cov.getElementAt(0, 0));
 
             assertEquals(standardDeviation3, sigma, SMALL_ABSOLUTE_ERROR);
@@ -2380,41 +2394,42 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalLine2Covariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
-            double a = randomizer.nextDouble(MIN_LINE2_A, MAX_LINE2_A);
-            double b = randomizer.nextDouble(MIN_LINE2_B, MAX_LINE2_B);
+            final int npoints = N_SAMPLES;
+            final double a = randomizer.nextDouble(MIN_LINE2_A, MAX_LINE2_A);
+            final double b = randomizer.nextDouble(MIN_LINE2_B, MAX_LINE2_B);
 
-            double sigmaA = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaB = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double varianceA = sigmaA * sigmaA;
-            double varianceB = sigmaB * sigmaB;
+            final double sigmaA = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaB = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double varianceA = sigmaA * sigmaA;
+            final double varianceB = sigmaB * sigmaB;
 
             final double[] params = new double[LINE2_PARAMS];
             params[0] = a;
             params[1] = b;
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, 1.0);
-            MultivariateNormalDist dist = new MultivariateNormalDist();
-            Matrix covariance = Matrix.diagonal(new double[]{varianceA, varianceB});
+            final MultivariateNormalDist dist = new MultivariateNormalDist();
+            final Matrix covariance = Matrix.diagonal(new double[]{varianceA, varianceB});
             double error;
             for (int i = 0; i < npoints; i++) {
                 final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 x.setElementAt(i, 0, xi);
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 MultivariateNormalDist.propagate(new MultivariateNormalDist.JacobianEvaluator() {
                     @Override
-                    public void evaluate(double[] params, double[] y, Matrix jacobian) {
-                        //y[i] = a * x[i] + b
+                    public void evaluate(
+                            final double[] params, final double[] y, final Matrix jacobian) {
+                        // y[i] = a * x[i] + b
                         y[0] = params[0] * xi + params[1];
 
-                        //derivatives respect parameters
+                        // derivatives respect parameters
                         jacobian.setElementAt(0, 0, xi);
                         jacobian.setElementAt(0, 1, 1.0);
                     }
@@ -2425,7 +2440,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                     }
                 }, params, covariance, dist);
 
-                //expression below is equal to y[i] = a * x[i] + b
+                // expression below is equal to y[i] = a * x[i] + b
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], a * xi + b, SMALL_ABSOLUTE_ERROR);
 
@@ -2441,7 +2456,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
                         @Override
                         public int getNumberOfDimensions() {
@@ -2450,7 +2465,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[LINE2_PARAMS];
+                            final double[] initParams = new double[LINE2_PARAMS];
                             double error;
                             for (int i = 0; i < LINE2_PARAMS; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -2460,41 +2475,42 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) {
-                            double a = params[0];
-                            double b = params[1];
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) {
+                            final double a = params[0];
+                            final double b = params[1];
 
-                            //derivatives of function f(x) respect parameters a and b
+                            // derivatives of function f(x) respect parameters a and b
                             derivatives[0] = point[0];
                             derivatives[1] = 1.0;
 
-                            //evaluated function f(x) = a * x + b
+                            // evaluated function f(x) = a * x + b
                             return a * point[0] + b;
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, LINE2_PARAMS);
@@ -2506,47 +2522,47 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), LINE2_PARAMS);
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - LINE2_PARAMS;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - LINE2_PARAMS;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] point = new double[evaluator.getNumberOfDimensions()];
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] point = new double[evaluator.getNumberOfDimensions()];
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -2555,7 +2571,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -2564,13 +2580,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
 
-            double standardDeviationA = Math.sqrt(
+            final double standardDeviationA = Math.sqrt(
                     cov.getElementAt(0, 0));
-            double standardDeviationB = Math.sqrt(
+            final double standardDeviationB = Math.sqrt(
                     cov.getElementAt(1, 1));
 
             LOGGER.log(Level.INFO, "real parameter A: " + params[0] +
@@ -2598,48 +2614,49 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalSineCovariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
-            double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
+            final int npoints = N_SAMPLES;
+            final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                     MAX_SINE_AMPLITUDE);
-            double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-            double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+            final double freq = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+            final double phase = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
 
-            double sigmaAmplitude = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaFreq = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaPhase = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaAmplitude = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaFreq = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaPhase = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
-            double varianceAmplitude = sigmaAmplitude * sigmaAmplitude;
-            double varianceFreq = sigmaFreq * sigmaFreq;
-            double variancePhase = sigmaPhase * sigmaPhase;
+            final double varianceAmplitude = sigmaAmplitude * sigmaAmplitude;
+            final double varianceFreq = sigmaFreq * sigmaFreq;
+            final double variancePhase = sigmaPhase * sigmaPhase;
 
             final double[] params = new double[SINE_UNI_PARAMS];
             params[0] = amplitude;
             params[1] = freq;
             params[2] = phase;
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, 1.0);
-            MultivariateNormalDist dist = new MultivariateNormalDist();
-            Matrix covariance = Matrix.diagonal(new double[]{
+            final MultivariateNormalDist dist = new MultivariateNormalDist();
+            final Matrix covariance = Matrix.diagonal(new double[]{
                     varianceAmplitude, varianceFreq, variancePhase});
             double error;
             for (int i = 0; i < npoints; i++) {
                 final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 x.setElementAt(i, 0, xi);
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 MultivariateNormalDist.propagate(new MultivariateNormalDist.JacobianEvaluator() {
                     @Override
-                    public void evaluate(double[] params, double[] y, Matrix jacobian) {
-                        //y[i] = amplitude * Math.sin(freq * xi + phase)
+                    public void evaluate(
+                            final double[] params, final double[] y, final Matrix jacobian) {
+                        // y[i] = amplitude * Math.sin(freq * xi + phase)
                         y[0] = params[0] * Math.sin(params[1] * xi + params[2]);
 
-                        //derivatives respect parameters
+                        // derivatives respect parameters
                         jacobian.setElementAt(0, 0,
                                 Math.sin(params[1] * xi + params[2]));
                         jacobian.setElementAt(0, 1,
@@ -2654,7 +2671,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                     }
                 }, params, covariance, dist);
 
-                //expression below is equal to y[i] = amplitude * Math.sin(freq * x[i] + phase)
+                // expression below is equal to y[i] = amplitude * Math.sin(freq * x[i] + phase)
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], amplitude * Math.sin(freq * xi + phase),
                         SMALL_ABSOLUTE_ERROR);
@@ -2671,7 +2688,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         @Override
@@ -2681,7 +2698,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[SINE_UNI_PARAMS];
+                            final double[] initParams = new double[SINE_UNI_PARAMS];
                             double error;
                             for (int i = 0; i < SINE_UNI_PARAMS; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -2691,45 +2708,46 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) {
-                            double amplitude = params[0];
-                            double freq = params[1];
-                            double phase = params[2];
-                            double y = amplitude * Math.sin(freq * point[0] + phase);
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) {
+                            final double amplitude = params[0];
+                            final double freq = params[1];
+                            final double phase = params[2];
+                            final double y = amplitude * Math.sin(freq * point[0] + phase);
 
-                            //derivative respect amplitude
+                            // derivative respect amplitude
                             derivatives[0] = Math.sin(freq * point[0] + phase);
-                            //derivative respect frequency
+                            // derivative respect frequency
                             derivatives[1] = amplitude * Math.cos(freq * point[0] + phase) * point[0];
-                            //derivative respect phase
+                            // derivative respect phase
                             derivatives[2] = amplitude * Math.cos(freq * point[0] + phase);
 
                             return y;
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
@@ -2746,47 +2764,47 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), SINE_UNI_PARAMS);
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] point = new double[evaluator.getNumberOfDimensions()];
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] point = new double[evaluator.getNumberOfDimensions()];
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -2795,7 +2813,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -2804,15 +2822,15 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
 
-            double standardDeviationAmplitude = Math.sqrt(
+            final double standardDeviationAmplitude = Math.sqrt(
                     cov.getElementAt(0, 0));
-            double standardDeviationFreq = Math.sqrt(
+            final double standardDeviationFreq = Math.sqrt(
                     cov.getElementAt(1, 1));
-            double standardDeviationPhase = Math.sqrt(
+            final double standardDeviationPhase = Math.sqrt(
                     cov.getElementAt(2, 2));
 
             LOGGER.log(Level.INFO, "real parameter Amplitude: " + params[0] +
@@ -2843,48 +2861,52 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitUnidimensionalGaussianCovariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
+            final int npoints = N_SAMPLES;
             final int numgaussians = randomizer.nextInt(MIN_GAUSSIANS, MAX_GAUSSIANS);
             final int numParams = numgaussians * GAUSS_UNI_PARAMS;
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[numParams];
-            double[] varianceParams = new double[numParams];
+            final double[] varianceParams = new double[numParams];
             for (int i = 0; i < numParams; i++) {
                 params[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
                         MAX_RANDOM_VALUE);
             }
             Arrays.fill(varianceParams, sigma * sigma);
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 1);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 1);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, sigma);
-            MultivariateNormalDist dist = new MultivariateNormalDist();
-            Matrix covariance = Matrix.diagonal(varianceParams);
+            final MultivariateNormalDist dist = new MultivariateNormalDist();
+            final Matrix covariance = Matrix.diagonal(varianceParams);
             double error;
             for (int i = 0; i < npoints; i++) {
                 final double xi = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 x.setElementAt(i, 0, xi);
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 MultivariateNormalDist.propagate(new MultivariateNormalDist.JacobianEvaluator() {
                     @Override
-                    public void evaluate(double[] params, double[] y, Matrix jacobian) {
+                    public void evaluate(
+                            final double[] params, final double[] y, final Matrix jacobian) {
                         y[0] = 0.0;
                         for (int k = 0; k < numgaussians; k++) {
-                            double b = params[k * GAUSS_UNI_PARAMS];
-                            double e = params[k * GAUSS_UNI_PARAMS + 1];
-                            double g = params[k * GAUSS_UNI_PARAMS + 2];
+                            final double b = params[k * GAUSS_UNI_PARAMS];
+                            final double e = params[k * GAUSS_UNI_PARAMS + 1];
+                            final double g = params[k * GAUSS_UNI_PARAMS + 2];
                             y[0] += b * Math.exp(-Math.pow((xi - e) / g, 2.0));
                         }
 
-                        int i, na = params.length;
-                        double fac, ex, arg;
+                        int i;
+                        final int na = params.length;
+                        double fac;
+                        double ex;
+                        double arg;
                         for (i = 0; i < na - 1; i += 3) {
                             arg = (xi - params[i + 1]) / params[i + 2];
                             ex = Math.exp(-Math.pow(arg, 2.0));
@@ -2906,9 +2928,9 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 double yi = 0.0;
                 for (int k = 0; k < numgaussians; k++) {
-                    double b = params[k * GAUSS_UNI_PARAMS];
-                    double e = params[k * GAUSS_UNI_PARAMS + 1];
-                    double g = params[k * GAUSS_UNI_PARAMS + 2];
+                    final double b = params[k * GAUSS_UNI_PARAMS];
+                    final double e = params[k * GAUSS_UNI_PARAMS + 1];
+                    final double g = params[k * GAUSS_UNI_PARAMS + 2];
                     yi += b * Math.exp(-Math.pow((xi - e) / g, 2.0));
                 }
 
@@ -2927,7 +2949,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         @Override
@@ -2937,7 +2959,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[numParams];
+                            final double[] initParams = new double[numParams];
                             double error;
                             for (int i = 0; i < numParams; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -2947,10 +2969,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int pos, double[] point, double[] params,
-                                               double[] derivatives) {
-                            int i, na = params.length;
-                            double fac, ex, arg;
+                        public double evaluate(
+                                final int pos, final double[] point, final double[] params,
+                                final double[] derivatives) {
+                            int i;
+                            final int na = params.length;
+                            double fac;
+                            double ex;
+                            double arg;
                             double y = 0.0;
                             for (i = 0; i < na - 1; i += 3) {
                                 arg = (point[0] - params[i + 1]) / params[i + 2];
@@ -2966,27 +2992,27 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, numParams);
@@ -3003,47 +3029,47 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), numParams);
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - numParams;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - numParams;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] point = new double[evaluator.getNumberOfDimensions()];
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] point = new double[evaluator.getNumberOfDimensions()];
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -3052,7 +3078,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -3061,12 +3087,12 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
 
             for (int i = 0; i < numParams; i++) {
-                double standardDeviation = Math.sqrt(cov.getElementAt(i, i));
+                final double standardDeviation = Math.sqrt(cov.getElementAt(i, i));
 
                 LOGGER.log(Level.INFO, "real parameter: " + params[i] +
                         ", estimated parameter: " + fitter.getA()[i]);
@@ -3087,27 +3113,27 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitMultidimensionalSineCovariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
-            double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
+            final int npoints = N_SAMPLES;
+            final double amplitude = randomizer.nextDouble(MIN_SINE_AMPLITUDE,
                     MAX_SINE_AMPLITUDE);
-            double freqx = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-            double freqy = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
-            double phasex = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
-            double phasey = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+            final double freqx = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+            final double freqy = randomizer.nextDouble(MIN_SINE_FREQ, MAX_SINE_FREQ);
+            final double phasex = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
+            final double phasey = randomizer.nextDouble(MIN_SINE_PHASE, MAX_SINE_PHASE);
 
-            double sigmaAmplitude = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaFreqx = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaFreqy = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaPhasex = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
-            double sigmaPhasey = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaAmplitude = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaFreqx = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaFreqy = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaPhasex = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigmaPhasey = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
-            double varianceAmplitude = sigmaAmplitude * sigmaAmplitude;
-            double varianceFreqx = sigmaFreqx * sigmaFreqx;
-            double varianceFreqy = sigmaFreqy * sigmaFreqy;
-            double variancePhasex = sigmaPhasex * sigmaPhasex;
-            double variancePhasey = sigmaPhasey * sigmaPhasey;
+            final double varianceAmplitude = sigmaAmplitude * sigmaAmplitude;
+            final double varianceFreqx = sigmaFreqx * sigmaFreqx;
+            final double varianceFreqy = sigmaFreqy * sigmaFreqy;
+            final double variancePhasex = sigmaPhasex * sigmaPhasex;
+            final double variancePhasey = sigmaPhasey * sigmaPhasey;
 
             final double[] params = new double[SINE_MULTI_PARAMS];
             params[0] = amplitude;
@@ -3116,14 +3142,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             params[3] = phasex;
             params[4] = phasey;
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 2);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 2);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, 1.0);
             final double[] point = new double[2];
-            MultivariateNormalDist dist = new MultivariateNormalDist();
-            Matrix covariance = Matrix.diagonal(new double[]{
+            final MultivariateNormalDist dist = new MultivariateNormalDist();
+            final Matrix covariance = Matrix.diagonal(new double[]{
                     varianceAmplitude, varianceFreqx, varianceFreqy, variancePhasex, variancePhasey});
             double error;
             for (int i = 0; i < npoints; i++) {
@@ -3136,28 +3162,30 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 point[0] = xi0;
                 point[1] = xi1;
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 MultivariateNormalDist.propagate(new MultivariateNormalDist.JacobianEvaluator() {
 
-                    double[] derivatives = new double[params.length];
+                    final double[] derivatives = new double[params.length];
 
-                    private GradientEstimator gradientEstimator =
+                    private final GradientEstimator gradientEstimator =
                             new GradientEstimator(
                                     new MultiDimensionFunctionEvaluatorListener() {
 
                                         @Override
-                                        public double evaluate(double[] params) {
+                                        public double evaluate(final double[] params) {
                                             return evaluateParams(point, params);
                                         }
                                     });
 
                     @Override
-                    public void evaluate(double[] params, double[] y, Matrix jacobian)  {
+                    public void evaluate(
+                            final double[] params, final double[] y, final Matrix jacobian) {
                         try {
                             gradientEstimator.gradient(params, derivatives);
                             y[0] = evaluateParams(point, params);
                             jacobian.fromArray(derivatives);
-                        } catch (Exception ignore) { }
+                        } catch (final Exception ignore) {
+                        }
                     }
 
                     @Override
@@ -3165,12 +3193,12 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         return 1;
                     }
 
-                    double evaluateParams(double[] point, double[] params) {
-                        double amplitude = params[0];
-                        double freqx = params[1];
-                        double freqy = params[2];
-                        double phasex = params[3];
-                        double phasey = params[4];
+                    double evaluateParams(final double[] point, final double[] params) {
+                        final double amplitude = params[0];
+                        final double freqx = params[1];
+                        final double freqy = params[2];
+                        final double phasex = params[3];
+                        final double phasey = params[4];
 
                         return amplitude * Math.sin(freqx * point[0] + phasex) *
                                 Math.sin(freqy * point[1] + phasey);
@@ -3178,8 +3206,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 }, params, covariance, dist);
 
-                //expression below is equal to:
-                //y[i] = amplitude * Math.sin(freqx * x.getElementAt(i, 0) + phasex) *
+                // expression below is equal to:
+                // y[i] = amplitude * Math.sin(freqx * x.getElementAt(i, 0) + phasex) *
                 //      Math.sin(freqy * x.getElementAt(i, 1) + phasey);
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], amplitude * Math.sin(freqx * xi0 + phasex) *
@@ -3197,17 +3225,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         private double[] point;
 
-                        private GradientEstimator gradientEstimator =
+                        private final GradientEstimator gradientEstimator =
                                 new GradientEstimator(
                                         new MultiDimensionFunctionEvaluatorListener() {
 
                                             @Override
-                                            public double evaluate(double[] params) {
+                                            public double evaluate(final double[] params) {
                                                 return evaluateParams(point, params);
                                             }
                                         });
@@ -3219,7 +3247,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[SINE_MULTI_PARAMS];
+                            final double[] initParams = new double[SINE_MULTI_PARAMS];
                             double error;
                             for (int i = 0; i < SINE_MULTI_PARAMS; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -3229,48 +3257,49 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws EvaluationException {
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) throws EvaluationException {
                             this.point = point;
-                            double y = evaluateParams(point, params);
+                            final double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
 
                             return y;
                         }
 
-                        double evaluateParams(double[] point, double[] params) {
-                            double amplitude = params[0];
-                            double freqx = params[1];
-                            double freqy = params[2];
-                            double phasex = params[3];
-                            double phasey = params[4];
+                        double evaluateParams(final double[] point, final double[] params) {
+                            final double amplitude = params[0];
+                            final double freqx = params[1];
+                            final double freqy = params[2];
+                            final double phasex = params[3];
+                            final double phasey = params[4];
 
                             return amplitude * Math.sin(freqx * point[0] + phasex) *
                                     Math.sin(freqy * point[1] + phasey);
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, SINE_MULTI_PARAMS);
@@ -3288,46 +3317,46 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), SINE_MULTI_PARAMS);
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - SINE_MULTI_PARAMS;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - SINE_MULTI_PARAMS;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -3336,7 +3365,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -3345,19 +3374,19 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
-            double standardDeviationAmplitude = Math.sqrt(
+            final double standardDeviationAmplitude = Math.sqrt(
                     cov.getElementAt(0, 0));
-            double standardDeviationFreqx = Math.sqrt(
+            final double standardDeviationFreqx = Math.sqrt(
                     cov.getElementAt(1, 1));
-            double standardDeviationFreqy = Math.sqrt(
+            final double standardDeviationFreqy = Math.sqrt(
                     cov.getElementAt(2, 2));
-            double standardDeviationPhasex = Math.sqrt(
+            final double standardDeviationPhasex = Math.sqrt(
                     cov.getElementAt(3, 3));
-            double standardDeviationPhasey = Math.sqrt(
-                    cov.getElementAt(4,4));
+            final double standardDeviationPhasey = Math.sqrt(
+                    cov.getElementAt(4, 4));
 
             LOGGER.log(Level.INFO, "real parameter Amplitude: " + params[0] +
                     ", estimated parameter Amplitude: " + fitter.getA()[0]);
@@ -3397,31 +3426,31 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
     public void testFitMultidimensionalGaussianCovariance() throws Throwable {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-            int npoints = N_SAMPLES;
+            final int npoints = N_SAMPLES;
             final int numgaussians = randomizer.nextInt(MIN_GAUSSIANS,
                     MAX_GAUSSIANS);
             final int numParams = numgaussians * GAUSS_MULTI_PARAMS;
 
-            double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+            final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
             final double[] params = new double[numParams];
-            double[] varianceParams = new double[numParams];
+            final double[] varianceParams = new double[numParams];
             for (int i = 0; i < numParams; i++) {
                 params[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
                         MAX_RANDOM_VALUE);
             }
             Arrays.fill(varianceParams, sigma * sigma);
 
-            double[] y = new double[npoints];
-            Matrix x = new Matrix(npoints, 2);
-            double[] sigmas = new double[npoints];
+            final double[] y = new double[npoints];
+            final Matrix x = new Matrix(npoints, 2);
+            final double[] sigmas = new double[npoints];
             final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, 1.0);
             final double[] point = new double[2];
-            MultivariateNormalDist dist = new MultivariateNormalDist();
-            Matrix covariance = Matrix.diagonal(varianceParams);
+            final MultivariateNormalDist dist = new MultivariateNormalDist();
+            final Matrix covariance = Matrix.diagonal(varianceParams);
             double error;
             for (int i = 0; i < npoints; i++) {
                 final double xi0 = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -3433,28 +3462,30 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 point[0] = xi0;
                 point[1] = xi1;
 
-                //propagate standard deviation of a (sigma) for x[i] value:
+                // propagate standard deviation of a (sigma) for x[i] value:
                 MultivariateNormalDist.propagate(new MultivariateNormalDist.JacobianEvaluator() {
 
-                    double[] derivatives = new double[params.length];
+                    final double[] derivatives = new double[params.length];
 
-                    private GradientEstimator gradientEstimator =
+                    private final GradientEstimator gradientEstimator =
                             new GradientEstimator(
                                     new MultiDimensionFunctionEvaluatorListener() {
 
                                         @Override
-                                        public double evaluate(double[] params) {
+                                        public double evaluate(final double[] params) {
                                             return evaluateParams(point, params);
                                         }
                                     });
 
                     @Override
-                    public void evaluate(double[] params, double[] y, Matrix jacobian)  {
+                    public void evaluate(
+                            final double[] params, final double[] y, final Matrix jacobian) {
                         try {
                             gradientEstimator.gradient(params, derivatives);
                             y[0] = evaluateParams(point, params);
                             jacobian.fromArray(derivatives);
-                        } catch (Exception ignore) { }
+                        } catch (final Exception ignore) {
+                        }
                     }
 
                     @Override
@@ -3462,14 +3493,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         return 1;
                     }
 
-                    double evaluateParams(double[] point, double[] params) {
+                    double evaluateParams(final double[] point, final double[] params) {
                         double y = 0.0;
                         for (int k = 0; k < numgaussians; k++) {
-                            double b = params[k * GAUSS_MULTI_PARAMS];
-                            double ex = params[k * GAUSS_MULTI_PARAMS + 1];
-                            double ey = params[k * GAUSS_MULTI_PARAMS + 2];
-                            double gx = params[k * GAUSS_MULTI_PARAMS + 3];
-                            double gy = params[k * GAUSS_MULTI_PARAMS + 4];
+                            final double b = params[k * GAUSS_MULTI_PARAMS];
+                            final double ex = params[k * GAUSS_MULTI_PARAMS + 1];
+                            final double ey = params[k * GAUSS_MULTI_PARAMS + 2];
+                            final double gx = params[k * GAUSS_MULTI_PARAMS + 3];
+                            final double gy = params[k * GAUSS_MULTI_PARAMS + 4];
                             y += b * Math.exp(-(Math.pow(point[0] -
                                     ex, 2.0) + Math.pow(point[1] - ey, 2.0)) /
                                     Math.pow(gx * gy, 2.0));
@@ -3482,11 +3513,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 double yi = 0.0;
                 for (int k = 0; k < numgaussians; k++) {
-                    double b = params[k * GAUSS_MULTI_PARAMS];
-                    double ex = params[k * GAUSS_MULTI_PARAMS + 1];
-                    double ey = params[k * GAUSS_MULTI_PARAMS + 2];
-                    double gx = params[k * GAUSS_MULTI_PARAMS + 3];
-                    double gy = params[k * GAUSS_MULTI_PARAMS + 4];
+                    final double b = params[k * GAUSS_MULTI_PARAMS];
+                    final double ex = params[k * GAUSS_MULTI_PARAMS + 1];
+                    final double ey = params[k * GAUSS_MULTI_PARAMS + 2];
+                    final double gx = params[k * GAUSS_MULTI_PARAMS + 3];
+                    final double gy = params[k * GAUSS_MULTI_PARAMS + 4];
                     yi += b * Math.exp(-(Math.pow(x.getElementAt(i, 0) -
                             ex, 2.0) + Math.pow(x.getElementAt(i, 1) - ey, 2.0)) /
                             Math.pow(gx * gy, 2.0));
@@ -3507,17 +3538,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] += error;
             }
 
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
                         private double[] point;
 
-                        private GradientEstimator gradientEstimator =
+                        private final GradientEstimator gradientEstimator =
                                 new GradientEstimator(
                                         new MultiDimensionFunctionEvaluatorListener() {
 
                                             @Override
-                                            public double evaluate(double[] params) {
+                                            public double evaluate(final double[] params) {
                                                 return evaluateParams(point, params);
                                             }
                                         });
@@ -3529,7 +3560,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                         @Override
                         public double[] createInitialParametersArray() {
-                            double[] initParams = new double[numParams];
+                            final double[] initParams = new double[numParams];
                             double error;
                             for (int i = 0; i < numParams; i++) {
                                 error = errorRandomizer.nextDouble();
@@ -3539,23 +3570,24 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
 
                         @Override
-                        public double evaluate(int i, double[] point, double[] params,
-                                               double[] derivatives) throws EvaluationException {
+                        public double evaluate(
+                                final int i, final double[] point, final double[] params,
+                                final double[] derivatives) throws EvaluationException {
                             this.point = point;
-                            double y = evaluateParams(point, params);
+                            final double y = evaluateParams(point, params);
                             gradientEstimator.gradient(params, derivatives);
 
                             return y;
                         }
 
-                        double evaluateParams(double[] point, double[] params) {
+                        double evaluateParams(final double[] point, final double[] params) {
                             double y = 0.0;
                             for (int k = 0; k < numgaussians; k++) {
-                                double b = params[k * GAUSS_MULTI_PARAMS];
-                                double ex = params[k * GAUSS_MULTI_PARAMS + 1];
-                                double ey = params[k * GAUSS_MULTI_PARAMS + 2];
-                                double gx = params[k * GAUSS_MULTI_PARAMS + 3];
-                                double gy = params[k * GAUSS_MULTI_PARAMS + 4];
+                                final double b = params[k * GAUSS_MULTI_PARAMS];
+                                final double ex = params[k * GAUSS_MULTI_PARAMS + 1];
+                                final double ey = params[k * GAUSS_MULTI_PARAMS + 2];
+                                final double gx = params[k * GAUSS_MULTI_PARAMS + 3];
+                                final double gy = params[k * GAUSS_MULTI_PARAMS + 4];
                                 y += b * Math.exp(-(Math.pow(point[0] - ex, 2.0) +
                                         Math.pow(point[1] - ey, 2.0)) / Math.pow(gx * gy, 2.0));
                             }
@@ -3564,27 +3596,27 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                         }
                     };
 
-            LevenbergMarquardtMultiDimensionFitter fitter =
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
                             sigmas);
             fitter.setCovarianceAdjusted(true);
 
-            //check default values
+            // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
             assertEquals(fitter.getChisq(), 0.0, 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
-            //fit
+            // fit
             try {
                 fitter.fit();
-            } catch (FittingException e) {
+            } catch (final FittingException e) {
                 continue;
             }
 
 
-            //check correctness
+            // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
             assertEquals(fitter.getA().length, numParams);
@@ -3602,46 +3634,46 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             assertEquals(fitter.getCovar().getColumns(), numParams);
             assertTrue(fitter.getChisq() > 0);
 
-            double chiSqrDegreesOfFreedom = npoints - numParams;
-            double chiSqr = fitter.getChisq();
+            final double chiSqrDegreesOfFreedom = npoints - numParams;
+            final double chiSqr = fitter.getChisq();
 
-            //probability that chi square can be smaller
-            //(the smaller is p the better)
-            double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
+            // probability that chi square can be smaller
+            // (the smaller is p the better)
+            final double p = ChiSqDist.cdf(chiSqr, chiSqrDegreesOfFreedom);
             assertEquals(fitter.getP(), p, SMALL_ABSOLUTE_ERROR);
 
-            //measure of quality (1.0 indicates maximum quality)
-            double q = 1.0 - p;
+            // measure of quality (1.0 indicates maximum quality)
+            final double q = 1.0 - p;
             assertEquals(fitter.getQ(), q, SMALL_ABSOLUTE_ERROR);
 
             LOGGER.log(Level.INFO, "chi sqr: " + chiSqr +
                     ", probability smaller chi sqr: " + p * 100.0 +
                     "%, quality: " + q * 100.0 + "%");
 
-            double mse = fitter.getMse();
+            final double mse = fitter.getMse();
 
-            //Covariance of parameters is
-            //Vp = (J’ * W * J)^-1
+            // Covariance of parameters is
+            // Vp = (J’ * W * J)^-1
 
-            //where J is the jacobian of measures, each row contains derivatives
-            //for one sample, each column is the derivative for one parameter
-            //W is the inverse of the measurement error covariance. Assuming
-            //independent samples, W is diagonal with diagonal terms 1/sigma^2
-            //where sigma is the standard deviation of each sample
-            //More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
+            // where J is the jacobian of measures, each row contains derivatives
+            // for one sample, each column is the derivative for one parameter
+            // W is the inverse of the measurement error covariance. Assuming
+            // independent samples, W is diagonal with diagonal terms 1/sigma^2
+            // where sigma is the standard deviation of each sample
+            // More info: http://people.duke.edu/~hpgavin/ce281/lm.pdf
 
-            Matrix invCov = new Matrix(params.length, params.length);
-            Matrix tmp1 = new Matrix(params.length, 1);
-            Matrix tmp2 = new Matrix(1, params.length);
-            Matrix tmpInvCov = new Matrix(params.length, params.length);
-            double[] estimatedParams = fitter.getA();
-            double[] derivatives = new double[params.length];
+            final Matrix invCov = new Matrix(params.length, params.length);
+            final Matrix tmp1 = new Matrix(params.length, 1);
+            final Matrix tmp2 = new Matrix(1, params.length);
+            final Matrix tmpInvCov = new Matrix(params.length, params.length);
+            final double[] estimatedParams = fitter.getA();
+            final double[] derivatives = new double[params.length];
             double mse2 = 0.0;
             for (int i = 0; i < npoints; i++) {
                 x.getSubmatrixAsArray(i, 0, i,
                         evaluator.getNumberOfDimensions() - 1,
                         point);
-                double yi = evaluator.evaluate(i, point, estimatedParams,
+                final double yi = evaluator.evaluate(i, point, estimatedParams,
                         derivatives);
 
                 tmp1.fromArray(derivatives);
@@ -3650,7 +3682,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.multiply(tmp2, tmpInvCov);
 
-                double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
+                final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sigmas[i] * sigmas[i]);
                 tmpInvCov.multiplyByScalar(w);
                 invCov.add(tmpInvCov);
 
@@ -3659,11 +3691,11 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
             assertEquals(mse, mse2, SMALL_ABSOLUTE_ERROR);
 
-            Matrix cov = Utils.inverse(invCov);
+            final Matrix cov = Utils.inverse(invCov);
             assertTrue(cov.equals(fitter.getCovar(), SMALL_ABSOLUTE_ERROR));
 
             for (int i = 0; i < numParams; i++) {
-                double standardDeviation = Math.sqrt(cov.getElementAt(i, i));
+                final double standardDeviation = Math.sqrt(cov.getElementAt(i, i));
 
                 LOGGER.log(Level.INFO, "real parameter: " + params[i] +
                         ", estimated parameter: " + fitter.getA()[i]);

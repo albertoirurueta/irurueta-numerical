@@ -19,36 +19,39 @@ package com.irurueta.numerical;
  * Base class for all the exceptions in this package.
  */
 public class NumericalException extends Exception {
-    
+
     /**
      * Constructor.
-     */    
+     */
     public NumericalException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */    
-    public NumericalException(String message) {
+     */
+    public NumericalException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */    
-    public NumericalException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public NumericalException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */    
-    public NumericalException(Throwable cause) {
+     */
+    public NumericalException(final Throwable cause) {
         super(cause);
     }
 }

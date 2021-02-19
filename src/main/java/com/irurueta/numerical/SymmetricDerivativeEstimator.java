@@ -20,47 +20,51 @@ package com.irurueta.numerical;
  * point.
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
- * This implementation is more accurate although slower than 
+ * This implementation is more accurate although slower than
  * DerivativeEstimator.
  */
 @SuppressWarnings("WeakerAccess")
 public class SymmetricDerivativeEstimator extends DerivativeEstimator {
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to evaluate a single dimension function.
-     */    
+     */
     public SymmetricDerivativeEstimator(
-            SingleDimensionFunctionEvaluatorListener listener) {
+            final SingleDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
-    
+
     /**
      * Computes the function derivative at provided point x.
+     *
      * @param x Point where derivative is estimated.
      * @return Derivative of function at provided point.
-     * @throws EvaluationException Raised if function cannot be properly 
-     * evaluated.
-     */    
+     * @throws EvaluationException Raised if function cannot be properly
+     *                             evaluated.
+     */
     @Override
     @SuppressWarnings("Duplicates")
-    public double derivative(double x) throws EvaluationException {
+    public double derivative(final double x) throws EvaluationException {
         double h = EPS * Math.abs(x);
         if (h == 0.0) {
-            h = EPS; //Trick to reduce finite-precision error
+            // Trick to reduce finite-precision error
+            h = EPS;
         }
-            
-        double xh1 = x + h;
-        double xh2 = x - h;
-        //because of machine precision h could be different in both cases
-        double h1 = xh1 - x;
-        double h2 = x - xh2;
-            
-        double hh = h1 + h2; //this is more or less equal to 2.0 * h
-            
-        double fh1 = listener.evaluate(xh1);
-        double fh2 = listener.evaluate(xh2);
-            
+
+        final double xh1 = x + h;
+        final double xh2 = x - h;
+        // because of machine precision h could be different in both cases
+        final double h1 = xh1 - x;
+        final double h2 = x - xh2;
+
+        // this is more or less equal to 2.0 * h
+        final double hh = h1 + h2;
+
+        final double fh1 = listener.evaluate(xh1);
+        final double fh2 = listener.evaluate(xh2);
+
         return (fh1 - fh2) / hh;
     }
 }

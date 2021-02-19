@@ -21,15 +21,16 @@ package com.irurueta.numerical;
  * functions and retrieve their minima/maxima, etc.
  */
 public interface MultiDimensionFunctionEvaluatorListener {
-    
+
     /**
-     * Evaluates a multi dimension function such as f([x1, x2, ..., xn]) at 
+     * Evaluates a multi dimension function such as f([x1, x2, ..., xn]) at
      * provided multidimensional point and returns the result as a scalar value.
-     * @param point Multidimensional point where function will be evaluated. 
-     * This must be an array of length equal to the dimensionality of the 
-     * function.
+     *
+     * @param point Multidimensional point where function will be evaluated.
+     *              This must be an array of length equal to the dimensionality of the
+     *              function.
      * @return Value returned by the function.
      * @throws EvaluationException Raised if something failed during the evaluation.
-     */    
-    double evaluate(double[] point) throws EvaluationException;
+     */
+    double evaluate(final double[] point) throws EvaluationException;
 }

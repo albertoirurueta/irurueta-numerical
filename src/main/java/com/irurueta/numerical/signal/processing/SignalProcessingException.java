@@ -22,36 +22,39 @@ import com.irurueta.numerical.NumericalException;
  */
 @SuppressWarnings("WeakerAccess")
 public class SignalProcessingException extends NumericalException {
-    
+
     /**
      * Constructor.
      */
     public SignalProcessingException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message message indicating the cause of the exception.
      */
-    public SignalProcessingException(String message) {
+    public SignalProcessingException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message message describing the cause of the exception.
-     * @param cause instance containing the cause of the exception.
+     * @param cause   instance containing the cause of the exception.
      */
-    public SignalProcessingException(String message, Throwable cause) {
+    public SignalProcessingException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause instance containing the cause of the exception.
      */
-    public SignalProcessingException(Throwable cause) {
+    public SignalProcessingException(final Throwable cause) {
         super(cause);
     }
 }

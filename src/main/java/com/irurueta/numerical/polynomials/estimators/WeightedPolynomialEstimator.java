@@ -36,201 +36,218 @@ import java.util.List;
  */
 @SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class WeightedPolynomialEstimator extends PolynomialEstimator {
-    
+
     /**
      * Default number of evaluations to be weighted and taken into account.
      */
     public static final int DEFAULT_MAX_EVALUATIONS = 50;
-    
+
     /**
      * Indicates if weights are sorted by default so that largest weighted
      * evaluations are used first.
      */
     public static final boolean DEFAULT_SORT_WEIGHTS = true;
-    
+
     /**
      * Maximum number of evaluations to be weighted and taken into account.
      */
     private int mMaxEvaluations = DEFAULT_MAX_EVALUATIONS;
-    
+
     /**
      * Indicates if weights are sorted by default so that largest weighted
      * evaluations are used first.
      */
     private boolean mSortWeights = DEFAULT_SORT_WEIGHTS;
-    
+
     /**
      * Array containing weights for all evaluations.
      */
     private double[] mWeights;
-    
+
     /**
      * Constructor.
      */
     public WeightedPolynomialEstimator() {
         super();
     }
-    
+
     /**
      * Constructor.
+     *
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public WeightedPolynomialEstimator(int degree) {
+    public WeightedPolynomialEstimator(final int degree) {
         super(degree);
     }
-    
+
     /**
      * Constructor.
+     *
      * @param evaluations collection of polynomial evaluations.
-     * @param weights array containing a weight amount for each evaluation. The
-     * larger the value of a weight, the most significant the correspondence 
-     * will be.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
      * @throws IllegalArgumentException if evaluations or weights are null or
-     * don't have the same size.
+     *                                  don't have the same size.
      */
-    public WeightedPolynomialEstimator(List<PolynomialEvaluation> evaluations, 
-            double[] weights) {
+    public WeightedPolynomialEstimator(
+            final List<PolynomialEvaluation> evaluations,
+            final double[] weights) {
         super();
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events.
      */
-    public WeightedPolynomialEstimator(PolynomialEstimatorListener listener) {
+    public WeightedPolynomialEstimator(
+            final PolynomialEstimatorListener listener) {
         super(listener);
     }
-    
+
     /**
      * Constructor.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
-     * @param weights array containing a weight amount for each evaluation. The
-     * larger the value of a weight, the most significant the correspondence 
-     * will be.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
      * @throws IllegalArgumentException if evaluations or weights are null or
-     * don't have the same size, or if provided degree is less than 1.
+     *                                  don't have the same size, or if provided degree is less than 1.
      */
-    public WeightedPolynomialEstimator(int degree, 
-            List<PolynomialEvaluation> evaluations, double[] weights) {
+    public WeightedPolynomialEstimator(
+            final int degree, final List<PolynomialEvaluation> evaluations,
+            final double[] weights) {
         super(degree);
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
-    
+
     /**
      * Constructor.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree   degree of polynomial to be estimated.
      * @param listener listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public WeightedPolynomialEstimator(int degree, 
-            PolynomialEstimatorListener listener) {
+    public WeightedPolynomialEstimator(
+            final int degree, final PolynomialEstimatorListener listener) {
         super(degree, listener);
     }
-    
+
     /**
      * Constructor.
+     *
      * @param evaluations collection of polynomial evaluations.
-     * @param weights array containing a weight amount for each evaluation. The
-     * larger the value of a weight, the most significant the correspondence 
-     * will be.
-     * @param listener listener to be notified of events.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
+     * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if evaluations or weights are null or
-     * don't have the same size.
+     *                                  don't have the same size.
      */
-    public WeightedPolynomialEstimator(List<PolynomialEvaluation> evaluations, 
-            double[] weights, PolynomialEstimatorListener listener) {
+    public WeightedPolynomialEstimator(
+            final List<PolynomialEvaluation> evaluations,
+            final double[] weights, final PolynomialEstimatorListener listener) {
         super(listener);
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
-    
+
     /**
      * Constructor.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
-     * @param weights array containing a weight amount for each evaluation. The
-     * larger the value of a weight, the most significant the correspondence 
-     * will be.
-     * @param listener listener to be notified of events.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
+     * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if evaluations or weights are null or
-     * don't have the same size, or if provided degree is less than 1.
+     *                                  don't have the same size, or if provided degree is less than 1.
      */
-    public WeightedPolynomialEstimator(int degree, 
-            List<PolynomialEvaluation> evaluations, double[] weights, 
-            PolynomialEstimatorListener listener) {
+    public WeightedPolynomialEstimator(
+            final int degree, final List<PolynomialEvaluation> evaluations, final double[] weights,
+            final PolynomialEstimatorListener listener) {
         super(degree, listener);
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
-    
+
     /**
      * Sets collection of polynomial evaluations and their corresponding point
      * of evaluation used to determine a polynomial of required degree.
      * This method override always throws an IllegalArgumentException because it
      * is expected to provide both evaluations and their weights.
+     *
      * @param evaluations collection of polynomial evaluations.
      * @throws IllegalArgumentException always thrown.
      */
     @Override
-    public void setEvaluations(List<PolynomialEvaluation> evaluations) {
+    public void setEvaluations(final List<PolynomialEvaluation> evaluations) {
         throw new IllegalArgumentException(
                 "evaluations and weights must be provided at once");
-    }    
-    
+    }
+
     /**
      * Sets collection of polynomial evaluations along with their corresponding
      * weights.
+     *
      * @param evaluations collection of polynomial evaluations.
-     * @param weights array containing a weight amount for each polynomial 
-     * evaluation. The larger the value of a weight, the most significant the
-     * evaluation will be.
-     * @throws LockedException if estimator is locked.
+     * @param weights     array containing a weight amount for each polynomial
+     *                    evaluation. The larger the value of a weight, the most significant the
+     *                    evaluation will be.
+     * @throws LockedException          if estimator is locked.
      * @throws IllegalArgumentException if evaluations or weights are null or
-     * don't have the same size.
+     *                                  don't have the same size.
      */
-    public void setEvaluationsAndWeights(List<PolynomialEvaluation> evaluations,
-            double[] weights) throws LockedException {
+    public void setEvaluationsAndWeights(
+            final List<PolynomialEvaluation> evaluations,
+            final double[] weights) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         internalSetEvaluationsAndWeights(evaluations, weights);
     }
-    
+
     /**
      * Sets degree of polynomial to be estimated and collection of polynomial
      * evaluations and their corresponding point of evaluation used to determine
      * a polynomial of specified degree.
-     * @param degree degree of polynomial to be estimated.
+     *
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
-     * @param weights array containing a weight amount for each polynomial 
-     * evaluation. The larger the value of a weight, the most significant the
-     * evaluation will be.
+     * @param weights     array containing a weight amount for each polynomial
+     *                    evaluation. The larger the value of a weight, the most significant the
+     *                    evaluation will be.
      * @throws IllegalArgumentException if provided degree is less than 1 or
-     * if evaluations or weights are null or don't have the same size.
-     * @throws LockedException if this instance is locked.
+     *                                  if evaluations or weights are null or don't have the same size.
+     * @throws LockedException          if this instance is locked.
      */
-    public void setDegreeEvaluationsAndWeights(int degree, 
-            List<PolynomialEvaluation> evaluations, double[] weights) 
-            throws LockedException {
+    public void setDegreeEvaluationsAndWeights(
+            final int degree, final List<PolynomialEvaluation> evaluations,
+            final double[] weights) throws LockedException {
         setDegree(degree);
         setEvaluationsAndWeights(evaluations, weights);
     }
-    
-    
+
+
     /**
      * Returns array containing a weight amount for each polynomial evaluation.
      * The larger the value of a weight, the most significant the correspondence
      * will be.
+     *
      * @return array containing weights for each correspondence.
      */
     public double[] getWeights() {
         return mWeights;
     }
-    
+
     /**
      * Returns boolean indicating whether weights have been provided and are
      * available for retrieval.
+     *
      * @return true if weights are available, false otherwise.
      */
     public boolean areWeightsAvailable() {
@@ -238,25 +255,27 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
     }
 
     /**
-     * Returns maximum number of evaluations to be weighted and taken into 
+     * Returns maximum number of evaluations to be weighted and taken into
      * account.
+     *
      * @return maximum number of evaluations to be weighted.
      */
     public int getMaxEvaluations() {
         return mMaxEvaluations;
     }
-    
+
     /**
      * Sets maximum number of evaluations to be weighted and taken into account.
      * This method must be called after setting degree, because the minimum
-     * number of required evaluations will be checked based on degree of 
+     * number of required evaluations will be checked based on degree of
      * polynomial to be estimated.
+     *
      * @param maxEvaluations maximum number of evaluations to be weighted.
      * @throws IllegalArgumentException if provided value is less than the
-     * minimum number of required evaluations.
-     * @throws LockedException if this instance is locked.
+     *                                  minimum number of required evaluations.
+     * @throws LockedException          if this instance is locked.
      */
-    public void setMaxEvaluations(int maxEvaluations) 
+    public void setMaxEvaluations(final int maxEvaluations)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -266,34 +285,37 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
         }
         mMaxEvaluations = maxEvaluations;
     }
-    
+
     /**
      * Indicates if weights are sorted by so that largest weighted evaluations
      * are used first.
+     *
      * @return true if weights are sorted, false otherwise.
      */
     public boolean isSortWeightsEnabled() {
         return mSortWeights;
     }
-    
+
     /**
-     * Specifies whether weights are sorted by so that largest weighted 
+     * Specifies whether weights are sorted by so that largest weighted
      * evaluations are used first.
+     *
      * @param sortWeights true if weights are sorted, false otherwise.
      * @throws LockedException if this instance is locked.
      */
-    public void setSortWeightsEnabled(boolean sortWeights)
+    public void setSortWeightsEnabled(final boolean sortWeights)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        
+
         mSortWeights = sortWeights;
     }
 
     /**
      * Indicates if this estimator is ready to start the estimation.
      * Estimator will be ready once enough evaluations and weights are provided.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     @Override
@@ -301,16 +323,17 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
         return super.isReady() && areWeightsAvailable() &&
                 mEvaluations.size() == mWeights.length;
     }
-    
+
     /**
      * Estimates a polynomial based on provided evaluations.
+     *
      * @return estimated polynomial.
-     * @throws LockedException if estimator is locked.
-     * @throws NotReadyException if estimator is not ready.
+     * @throws LockedException               if estimator is locked.
+     * @throws NotReadyException             if estimator is not ready.
      * @throws PolynomialEstimationException if polynomial estimation fails.
-     */    
+     */
     @Override
-    public Polynomial estimate() throws LockedException, NotReadyException, 
+    public Polynomial estimate() throws LockedException, NotReadyException,
             PolynomialEstimationException {
         if (isLocked()) {
             throw new LockedException();
@@ -318,48 +341,48 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         try {
             mLocked = true;
             if (mListener != null) {
                 mListener.onEstimateStart(this);
             }
-            
-            WeightSelection selection = WeightSelection.selectWeights(mWeights, 
+
+            final WeightSelection selection = WeightSelection.selectWeights(mWeights,
                     mSortWeights, mMaxEvaluations);
-            boolean[] selected = selection.getSelected();
-            int nEvaluations = selection.getNumSelected();
-            
-            
-            Matrix a = new Matrix(nEvaluations, mDegree + 1);
-            Matrix b = new Matrix(nEvaluations, 1);
-            
+            final boolean[] selected = selection.getSelected();
+            final int nEvaluations = selection.getNumSelected();
+
+
+            final Matrix a = new Matrix(nEvaluations, mDegree + 1);
+            final Matrix b = new Matrix(nEvaluations, 1);
+
             int index = 0;
             int counter = 0;
             double weight;
-            for (PolynomialEvaluation evaluation : mEvaluations) {
+            for (final PolynomialEvaluation evaluation : mEvaluations) {
                 if (selected[index]) {
                     weight = mWeights[index];
-                    
+
                     switch (evaluation.getType()) {
                         case DIRECT_EVALUATION:
                             fillDirectEvaluation(
-                                    (DirectPolynomialEvaluation)evaluation, a, 
+                                    (DirectPolynomialEvaluation) evaluation, a,
                                     b, counter);
                             break;
                         case DERIVATIVE_EVALUATION:
                             fillDerivativeEvaluation(
-                                    (DerivativePolynomialEvaluation)evaluation, 
+                                    (DerivativePolynomialEvaluation) evaluation,
                                     a, b, counter);
                             break;
                         case INTEGRAL_EVALUATION:
                             fillIntegralEvaluation(
-                                    (IntegralPolynomialEvaluation)evaluation, a,
+                                    (IntegralPolynomialEvaluation) evaluation, a,
                                     b, counter);
                             break;
                         case INTEGRAL_INTERVAL:
                             fillIntegralIntervalEvaluation(
-                                    (IntegralIntervalPolynomialEvaluation)evaluation, 
+                                    (IntegralIntervalPolynomialEvaluation) evaluation,
                                     a, b, counter);
                             break;
                         default:
@@ -369,20 +392,20 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
                     normalize(a, b, counter, weight);
                     counter++;
                 }
-                       
+
                 index++;
             }
-            
-            Matrix params = Utils.solve(a, b);
-            
-            Polynomial result = new Polynomial(params.toArray());
-            
+
+            final Matrix params = Utils.solve(a, b);
+
+            final Polynomial result = new Polynomial(params.toArray());
+
             if (mListener != null) {
                 mListener.onEstimateEnd(this);
             }
-            
-            return result;            
-        } catch (AlgebraException | SortingException e) {
+
+            return result;
+        } catch (final AlgebraException | SortingException e) {
             throw new PolynomialEstimationException(e);
         } finally {
             mLocked = false;
@@ -391,51 +414,54 @@ public class WeightedPolynomialEstimator extends PolynomialEstimator {
 
     /**
      * Returns type of polynomial estimator.
+     *
      * @return type of polynomial estimator.
-     */    
+     */
     @Override
     public PolynomialEstimatorType getType() {
         return PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR;
     }
-    
+
     /**
-     * Normalizes rows of system matrix and values matrix to increase accuracy 
+     * Normalizes rows of system matrix and values matrix to increase accuracy
      * of linear system of equations to be solved.
-     * @param a system matrix.
-     * @param b values matrix.
-     * @param row row to normalize.
+     *
+     * @param a      system matrix.
+     * @param b      values matrix.
+     * @param row    row to normalize.
      * @param weight weight.
      */
-    private void normalize(Matrix a, Matrix b, int row, double weight) {
+    private void normalize(final Matrix a, final Matrix b, final int row, final double weight) {
         double sqrNorm = 0.0;
         for (int i = 0; i < a.getColumns(); i++) {
             sqrNorm += Math.pow(a.getElementAt(row, i), 2.0);
         }
         sqrNorm += Math.pow(b.getElementAtIndex(row), 2.0);
-        
-        double norm = Math.sqrt(sqrNorm);
-        double factor = weight / norm;
-        
+
+        final double norm = Math.sqrt(sqrNorm);
+        final double factor = weight / norm;
+
         for (int i = 0; i < a.getColumns(); i++) {
             a.setElementAt(row, i, a.getElementAt(row, i) * factor);
         }
         b.setElementAtIndex(row, b.getElementAtIndex(row) * factor);
-    }    
-    
+    }
+
     /**
      * Internal method to set evaluations and weights.
+     *
      * @param evaluations evaluations.
-     * @param weights weights.
+     * @param weights     weights.
      * @throws IllegalArgumentException if evaluations or weights are null or
-     * don't have the same size.
+     *                                  don't have the same size.
      */
     private void internalSetEvaluationsAndWeights(
-            List<PolynomialEvaluation> evaluations, double[] weights) {
+            final List<PolynomialEvaluation> evaluations, final double[] weights) {
         if (weights == null || evaluations == null ||
                 weights.length != evaluations.size()) {
             throw new IllegalArgumentException();
         }
         mEvaluations = evaluations;
         mWeights = weights;
-    }    
+    }
 }

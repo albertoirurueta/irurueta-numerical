@@ -21,36 +21,39 @@ import com.irurueta.numerical.NumericalException;
  * Base exception for polynomials.
  */
 public class PolynomialsException extends NumericalException {
-    
+
     /**
      * Constructor.
      */
     public PolynomialsException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message message indicating the cause of the exception.
      */
-    public PolynomialsException(String message) {
+    public PolynomialsException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message message describing the cause of the exception.
-     * @param cause instance containing the cause of the exception.
+     * @param cause   instance containing the cause of the exception.
      */
-    public PolynomialsException(String message, Throwable cause) {
+    public PolynomialsException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause instance containing the cause of the exception.
      */
-    public PolynomialsException(Throwable cause) {
+    public PolynomialsException(final Throwable cause) {
         super(cause);
     }
 }

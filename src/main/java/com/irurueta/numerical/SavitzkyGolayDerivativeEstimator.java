@@ -22,7 +22,7 @@ import com.irurueta.algebra.*;
  * point.
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtained.
- * This implementation is more robust against small discontinuities than 
+ * This implementation is more robust against small discontinuities than
  * SymmetricDerivativeEstimator, but it is also slower to compute.
  * This method interpolates the sampled function values into a polynomial of
  * 2nd degree (parabolic), whose derivative is known.
@@ -37,47 +37,50 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
      * Number of required point to evaluate to compute derivative.
      */
     public static final int N_POINTS = 3;
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to evaluate a single dimension function.
-     */    
+     */
     public SavitzkyGolayDerivativeEstimator(
-            SingleDimensionFunctionEvaluatorListener listener) {
+            final SingleDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
-    
+
     /**
      * Computes the function derivative at provided point x.
+     *
      * @param x Point where derivative is estimated.
      * @return Derivative of function at provided point.
-     * @throws EvaluationException Raised if function cannot be properly 
-     * evaluated.
-     */    
+     * @throws EvaluationException Raised if function cannot be properly
+     *                             evaluated.
+     */
     @Override
     @SuppressWarnings("Duplicates")
-    public double derivative(double x) throws EvaluationException {
-        //fit a polynomial of degree 2 by evaluating function at x-h, x and x+h
+    public double derivative(final double x) throws EvaluationException {
+        // fit a polynomial of degree 2 by evaluating function at x-h, x and x+h
         double h = EPS * Math.abs(x);
         if (h == 0.0) {
-            h = EPS; //Trick to reduce finite-precision error
+            // Trick to reduce finite-precision error
+            h = EPS;
         }
-        
-        double xh1 = x + h;
-        double xh2 = x - h;
-        
-        double f = listener.evaluate(x);
-        double fh1 = listener.evaluate(xh1);
-        double fh2 = listener.evaluate(xh2);
 
-        //express the problem as:
-        //a * x^2 + b * x + c = f(x)
-        //b * xh1^2 + b * xh1 + c = f(xh1)
-        //c * xh2^2 + b * xh2 + c = f(xh2)
-        
-        Matrix a;
-        double aParam;
-        double bParam;
+        final double xh1 = x + h;
+        final double xh2 = x - h;
+
+        final double f = listener.evaluate(x);
+        final double fh1 = listener.evaluate(xh1);
+        final double fh2 = listener.evaluate(xh2);
+
+        // express the problem as:
+        // a * x^2 + b * x + c = f(x)
+        // b * xh1^2 + b * xh1 + c = f(xh1)
+        // c * xh2^2 + b * xh2 + c = f(xh2)
+
+        final Matrix a;
+        final double aParam;
+        final double bParam;
         try {
             a = new Matrix(N_POINTS, N_POINTS);
 
@@ -93,40 +96,40 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
             a.setElementAt(1, 2, 1.0);
             a.setElementAt(2, 2, 1.0);
 
-            double[] b = new double[N_POINTS];
+            final double[] b = new double[N_POINTS];
 
 
-            //normalize to increase accuracy
-            double normA = Utils.normF(a);
+            // normalize to increase accuracy
+            final double normA = Utils.normF(a);
             a.multiplyByScalar(1.0 / normA);
 
             b[0] = f;
             b[1] = fh1;
             b[2] = fh2;
 
-            //normalize to increase accuracy
+            // normalize to increase accuracy
             ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);
 
-            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
 
             decomposer.decompose();
 
-            //now solve the system of equations in Least Mean Squared Error
-            //because SVD allows the system of equations to be solved using the
-            //pseudo-inverse
-            double[] params = decomposer.solve(b);
+            // now solve the system of equations in Least Mean Squared Error
+            // because SVD allows the system of equations to be solved using the
+            // pseudo-inverse
+            final double[] params = decomposer.solve(b);
             aParam = params[0];
             bParam = params[1];
 
-        } catch (AlgebraException e) {
+        } catch (final AlgebraException e) {
             return Double.NaN;
         }
-        
-        //and c = params[2], but we don't need it
-        
-        //because we have fitted the function into a polynomial that has
-        //expression: a * x^2 + b * x + c, then its derivative is:
-        //2.0 * a * x + b, therefore:
+
+        // and c = params[2], but we don't need it
+
+        // because we have fitted the function into a polynomial that has
+        // expression: a * x^2 + b * x + c, then its derivative is:
+        // 2.0 * a * x + b, therefore:
         return 2.0 * aParam * x + bParam;
     }
 }

@@ -20,33 +20,37 @@ package com.irurueta.numerical.polynomials.estimators;
  * when progress changes.
  */
 public interface PolynomialRobustEstimatorListener {
-    
+
     /**
      * Called when an estimator starts the polynomial estimation process.
+     *
      * @param estimator reference to a polynomial robust estimator.
      */
-    void onEstimateStart(PolynomialRobustEstimator estimator);
-    
+    void onEstimateStart(final PolynomialRobustEstimator estimator);
+
     /**
      * Called when an estimator ends the polynomial estimation process.
+     *
      * @param estimator reference to a polynomial robust estimator.
      */
-    void onEstimateEnd(PolynomialRobustEstimator estimator);
-    
+    void onEstimateEnd(final PolynomialRobustEstimator estimator);
+
     /**
      * Called when estimator iterates to refine a possible solution.
+     *
      * @param estimator reference to a polynomial robust estimator.
      * @param iteration current iteration.
      */
-    void onEstimateNextIteration(PolynomialRobustEstimator estimator, 
-            int iteration);
-    
+    void onEstimateNextIteration(final PolynomialRobustEstimator estimator,
+                                 final int iteration);
+
     /**
      * Called when estimation progress changes significantly.
+     *
      * @param estimator reference to a polynomial robust estimator.
-     * @param progress progress of estimation expressed as a value between 0.0
-     * and 1.0.
+     * @param progress  progress of estimation expressed as a value between 0.0
+     *                  and 1.0.
      */
-    void onEstimateProgressChange(PolynomialRobustEstimator estimator,
-            float progress);
+    void onEstimateProgressChange(final PolynomialRobustEstimator estimator,
+                                  final float progress);
 }

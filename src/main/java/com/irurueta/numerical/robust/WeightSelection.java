@@ -58,7 +58,7 @@ public class WeightSelection {
      * @param selected array indicating which correspondences have been 
      * selected.
      */
-    public void setSelected(boolean[] selected) {
+    public void setSelected(final boolean[] selected) {
         this.selected = selected;
     }
 
@@ -74,7 +74,7 @@ public class WeightSelection {
      * Sets number of correspondences that have been selected.
      * @param numSelected number of correspondences that have been selected.
      */
-    public void setNumSelected(int numSelected) {
+    public void setNumSelected(final int numSelected) {
         this.numSelected = numSelected;
     }
 
@@ -89,28 +89,28 @@ public class WeightSelection {
      * @return instance containing the selection that was made.
      * @throws SortingException if weights couldn't be sorted.
      */
-    public static WeightSelection selectWeights(double[] weights, 
-            boolean sortWeights, int maxPoints) throws SortingException {
+    public static WeightSelection selectWeights(final double[] weights,
+            final boolean sortWeights, final int maxPoints) throws SortingException {
 
-        int length = weights.length;
+        final int length = weights.length;
 
-        //instantiate selected array with all its values as unselected
+        // instantiate selected array with all its values as unselected
         boolean[] selected = new boolean[length];
         int numSelected;
 
         if (sortWeights) {
-            //sort weights
+            // sort weights
 
-            //copy weights because this array will be sorted
-            double[] weightsCopy = Arrays.copyOf(weights, length);
-            Sorter sorter = Sorter.create();
-            //array that will contain original indices in ascending order of
-            //weights after sorting
-            int[] indices = sorter.sortWithIndices(weightsCopy);
+            // copy weights because this array will be sorted
+            final double[] weightsCopy = Arrays.copyOf(weights, length);
+            final Sorter<Double> sorter = Sorter.create();
+            // array that will contain original indices in ascending order of
+            // weights after sorting
+            final int[] indices = sorter.sortWithIndices(weightsCopy);
 
-            //traverse indices array from greatest position which corresponds
-            //to the greatest weight value after sorting in decreasing order
-            //up to maxPoints positions
+            // traverse indices array from greatest position which corresponds
+            // to the greatest weight value after sorting in decreasing order
+            // up to maxPoints positions
             int counter = 0;
             for (int i = length - 1; i >= 0; i--) {
                 selected[indices[i]] = true;
@@ -119,13 +119,13 @@ public class WeightSelection {
             }
             numSelected = counter;
         } else {
-            //weights aren't sorted
+            // weights aren't sorted
             if (length < maxPoints) {
-                //we select all points
+                // we select all points
                 Arrays.fill(selected, true);
                 numSelected = length;                
             } else {
-                //weights aren't sorted so we pick the first maxPoints
+                // weights aren't sorted so we pick the first maxPoints
                 for (int i = 0; i < maxPoints; i++) {
                     selected[i] = true;
                 }
@@ -133,7 +133,7 @@ public class WeightSelection {
             }
         }
 
-        WeightSelection selection = new WeightSelection();
+        final WeightSelection selection = new WeightSelection();
         selection.setSelected(selected);
         selection.setNumSelected(numSelected);
         return selection;

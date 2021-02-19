@@ -15,26 +15,12 @@
  */
 package com.irurueta.numerical.robust;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class InvalidSubsetSizeExceptionTest {
-    
-    public InvalidSubsetSizeExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         InvalidSubsetSizeException ex = new InvalidSubsetSizeException();
@@ -49,5 +35,5 @@ public class InvalidSubsetSizeExceptionTest {
         ex = new InvalidSubsetSizeException("message",
                 new Exception());
         assertNotNull(ex);
-    }                      
+    }
 }

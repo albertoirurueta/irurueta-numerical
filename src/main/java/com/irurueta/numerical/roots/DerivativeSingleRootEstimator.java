@@ -36,36 +36,7 @@ public abstract class DerivativeSingleRootEstimator
      * implementation.
      */
     protected SingleDimensionFunctionEvaluatorListener derivativeListener;
-    
-    /**
-     * Constructor
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
-     * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint.
-     */
-    public DerivativeSingleRootEstimator(double minEvalPoint, 
-            double maxEvalPoint) throws InvalidBracketRangeException {
-        super(minEvalPoint, maxEvalPoint);
-        derivativeListener = null;
-    }
-    
-    /**
-     * Constructor.
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE.
-     */    
-    public DerivativeSingleRootEstimator(double minEvalPoint)
-            throws InvalidBracketRangeException {
-        super(minEvalPoint);
-        derivativeListener = null;
-    }
-    
+
     /**
      * Empty constructor.
      */    
@@ -86,41 +57,13 @@ public abstract class DerivativeSingleRootEstimator
      * maxEvalPoint.
      */    
     public DerivativeSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint, double maxEvalPoint)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         derivativeListener = null;
     }
-    
-    /**
-     * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE.
-     */    
-    public DerivativeSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            double minEvalPoint) throws InvalidBracketRangeException {
-        super(listener, minEvalPoint);
-        derivativeListener = null;
-    }
-    
-    /**
-     * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
-     */    
-    public DerivativeSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener) {
-        super(listener);
-        derivativeListener = null;
-    }
-    
+
     /**
      * Constructor
      * @param listener Listener to evaluate a single dimension function f(x)
@@ -134,47 +77,14 @@ public abstract class DerivativeSingleRootEstimator
      * maxEvalPoint.
      */        
     public DerivativeSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            SingleDimensionFunctionEvaluatorListener derivativeListener,
-            double minEvalPoint, double maxEvalPoint)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final SingleDimensionFunctionEvaluatorListener derivativeListener,
+            final double minEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         this.derivativeListener = derivativeListener;
     }
-    
-    /**
-     * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
-     * @param derivativeListener Listener to evaluate the function's derivative.
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched. The largest value inside the bracket will be
-     * Double.MAX_VALUE.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     * the maximum value a double can contain, which is Double.MAX_VALUE.
-     */        
-    public DerivativeSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            SingleDimensionFunctionEvaluatorListener derivativeListener,
-            double minEvalPoint)
-            throws InvalidBracketRangeException {
-        super(listener, minEvalPoint);
-        this.derivativeListener = derivativeListener;
-    }
-    
-    /**
-     * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
-     * @param derivativeListener Listener to evaluate the function's derivative.
-     */    
-    public DerivativeSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            SingleDimensionFunctionEvaluatorListener derivativeListener) {
-        super(listener);
-        this.derivativeListener = derivativeListener;
-    }
-    
+
     /**
      * Returns derivative listener to evaluate a function's derivative. 
      * If the function's derivative is not known (e.g. a closed expression is 
@@ -200,7 +110,7 @@ public abstract class DerivativeSingleRootEstimator
      * @throws LockedException Raised if this instance is locked.
      */
     public void setDerivativeListener(
-            SingleDimensionFunctionEvaluatorListener derivativeListener)
+            final SingleDimensionFunctionEvaluatorListener derivativeListener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();

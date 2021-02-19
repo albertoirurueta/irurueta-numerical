@@ -17,15 +17,14 @@ package com.irurueta.numerical;
 
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class MaximumLikelihoodEstimatorTest {
-    
+
     private static final int NUMBER_OF_SAMPLES = 1000000;
 
     private static final double MIN_MEAN = 1.0;
@@ -38,271 +37,283 @@ public class MaximumLikelihoodEstimatorTest {
     private static final double MAX_GAUSSIAN_SIGMA = 2.0;
 
     private static final double RELATIVE_ERROR = 0.2;
-    
-    public MaximumLikelihoodEstimatorTest() { }
 
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
     @Test
     public void testCreate() throws LockedException, NotAvailableException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA, 
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
                 MAX_GAUSSIAN_SIGMA);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
+
         MaximumLikelihoodEstimator estimator;
-        
-        //instantiate with no parameters
+
+        // instantiate with no parameters
         estimator = MaximumLikelihoodEstimator.create();
         assertNotNull(estimator);
-        
-        assertEquals(estimator.getMethod(), 
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        assertEquals(estimator.getGaussianSigma(), 
-                MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.areMinMaxValuesAvailable());
-        assertFalse(estimator.isLocked());
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.isInputDataAvailable());
-        assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
-        
-        
-        
-        //Instantiate with gaussian sigma
-        estimator = MaximumLikelihoodEstimator.create(gaussianSigma);
-        assertNotNull(estimator);
-        
-        assertEquals(estimator.getMethod(), 
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.areMinMaxValuesAvailable());
-        assertFalse(estimator.isLocked());
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.isInputDataAvailable());
-        assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
-        
-        //Force IllegalArgumentException
-        try {
-            MaximumLikelihoodEstimator.create(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
-        
-        
-        //Instantiate with gaussian sigma and Histogram method
-        estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
-                MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.areMinMaxValuesAvailable());
-        assertFalse(estimator.isLocked());
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.isInputDataAvailable());
-        assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
-        
-        //Force IllegalArgumentException
-        try {
-            MaximumLikelihoodEstimator.create(0.0, 
-                    MaximumLikelihoodEstimatorMethod.
-                    HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
-        
-        //Instantiate with gaussian sigma and Accurate method
-        estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
-                MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.areMinMaxValuesAvailable());
-        assertFalse(estimator.isLocked());
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        assertFalse(estimator.isInputDataAvailable());
-        assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
-        
-        //Force IllegalArgumentException
-        try {
-            MaximumLikelihoodEstimator.create(0.0, 
-                    MaximumLikelihoodEstimatorMethod.
-                    ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
-        
-        
-        //Instantiate with input data
-        estimator = MaximumLikelihoodEstimator.create(inputData);        
-        assertEquals(estimator.getMethod(), 
+
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimator.DEFAULT_METHOD);
         assertEquals(estimator.getGaussianSigma(),
                 MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getInputData(), inputData);
-        assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());
-        
-        
-        
-        //Instantiate with input data and gaussian sigma
-        estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma);
-        assertEquals(estimator.getMethod(), 
+        try {
+            estimator.getInputData();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.isInputDataAvailable());
+        assertFalse(estimator.isReady());
+        try {
+            estimator.estimate();
+            fail("NotReadyException expected but not thrown");
+        } catch (final NotReadyException ignore) {
+        }
+
+
+        // Instantiate with gaussian sigma
+        estimator = MaximumLikelihoodEstimator.create(gaussianSigma);
+        assertNotNull(estimator);
+
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimator.DEFAULT_METHOD);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getInputData(), inputData);
-        assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
-        estimator = null;
         try {
-            estimator = MaximumLikelihoodEstimator.create(inputData, 0.0);
+            estimator.getInputData();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.isInputDataAvailable());
+        assertFalse(estimator.isReady());
+        try {
+            estimator.estimate();
+            fail("NotReadyException expected but not thrown");
+        } catch (final NotReadyException ignore) {
+        }
+
+        // Force IllegalArgumentException
+        try {
+            MaximumLikelihoodEstimator.create(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);
-        
-        
-        //Instantiate with input data, gaussian sigma and HISTOGRAM method
-        estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma,
+        } catch (final IllegalArgumentException ignore) {
+        }
+
+
+        // Instantiate with gaussian sigma and Histogram method
+        estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
                 HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.areMinMaxValuesAvailable());
+        assertFalse(estimator.isLocked());
+        try {
+            estimator.getInputData();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.isInputDataAvailable());
+        assertFalse(estimator.isReady());
+        try {
+            estimator.estimate();
+            fail("NotReadyException expected but not thrown");
+        } catch (final NotReadyException ignore) {
+        }
+
+        // Force IllegalArgumentException
+        try {
+            MaximumLikelihoodEstimator.create(0.0,
+                    MaximumLikelihoodEstimatorMethod.
+                            HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+
+
+        // Instantiate with gaussian sigma and Accurate method
+        estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
+                MaximumLikelihoodEstimatorMethod.
+                        ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
+                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
+        try {
+            estimator.getMinValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        try {
+            estimator.getMaxValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.areMinMaxValuesAvailable());
+        assertFalse(estimator.isLocked());
+        try {
+            estimator.getInputData();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.isInputDataAvailable());
+        assertFalse(estimator.isReady());
+        try {
+            estimator.estimate();
+            fail("NotReadyException expected but not thrown");
+        } catch (final NotReadyException ignore) {
+        }
+
+        // Force IllegalArgumentException
+        try {
+            MaximumLikelihoodEstimator.create(0.0,
+                    MaximumLikelihoodEstimatorMethod.
+                            ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+
+
+        // Instantiate with input data
+        estimator = MaximumLikelihoodEstimator.create(inputData);
+        assertEquals(estimator.getMethod(),
+                MaximumLikelihoodEstimator.DEFAULT_METHOD);
+        assertEquals(estimator.getGaussianSigma(),
+                MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
+        try {
+            estimator.getMinValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        try {
+            estimator.getMaxValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
+        assertTrue(estimator.isReady());
+
+
+        // Instantiate with input data and gaussian sigma
+        estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma);
+        assertEquals(estimator.getMethod(),
+                MaximumLikelihoodEstimator.DEFAULT_METHOD);
+        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
+        try {
+            estimator.getMinValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        try {
+            estimator.getMaxValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.areMinMaxValuesAvailable());
+        assertFalse(estimator.isLocked());
+        assertEquals(estimator.getInputData(), inputData);
+        assertTrue(estimator.isInputDataAvailable());
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
+        estimator = null;
+        try {
+            estimator = MaximumLikelihoodEstimator.create(inputData, 0.0);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+
+        // Instantiate with input data, gaussian sigma and HISTOGRAM method
+        estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma,
+                MaximumLikelihoodEstimatorMethod.
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
+                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
+        try {
+            estimator.getMinValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        try {
+            estimator.getMaxValue();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+        assertFalse(estimator.areMinMaxValuesAvailable());
+        assertFalse(estimator.isLocked());
+        assertEquals(estimator.getInputData(), inputData);
+        assertTrue(estimator.isInputDataAvailable());
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = MaximumLikelihoodEstimator.create(inputData, 0.0,
                     MaximumLikelihoodEstimatorMethod.
-                    HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                            HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        
-        
-        //Instantiate with input data, gaussian sigma and ACCURATE method
+
+
+        // Instantiate with input data, gaussian sigma and ACCURATE method
         estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma);
         assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
                 ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
@@ -310,35 +321,37 @@ public class MaximumLikelihoodEstimatorTest {
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = MaximumLikelihoodEstimator.create(inputData, 0.0,
                     MaximumLikelihoodEstimatorMethod.
-                    ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                            ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        
-        
-        //instantiate with min value, max value and input data
+
+
+        // instantiate with min value, max value and input data
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData);
-        assertEquals(estimator.getMethod(), 
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        assertEquals(estimator.getGaussianSigma(), 
+        assertEquals(estimator.getGaussianSigma(),
                 MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
@@ -346,23 +359,23 @@ public class MaximumLikelihoodEstimatorTest {
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = MaximumLikelihoodEstimator.create(maxValue, minValue,
                     inputData);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);        
-        
-        
-        
-        //instantiate with min value, max value, input data and gaussian sigma
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+
+        // instantiate with min value, max value, input data and gaussian sigma
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData, gaussianSigma);
-        assertEquals(estimator.getMethod(), 
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimator.DEFAULT_METHOD);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
@@ -371,32 +384,33 @@ public class MaximumLikelihoodEstimatorTest {
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = MaximumLikelihoodEstimator.create(maxValue, minValue,
                     inputData, gaussianSigma);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                     inputData, 0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);   
-        
-        
-        
-        //instantiate with min value, max value, input data, gaussian sigma and
-        //HISTOGRAM method
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+
+        // instantiate with min value, max value, input data, gaussian sigma and
+        // HISTOGRAM method
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData, gaussianSigma, MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), 
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
@@ -404,34 +418,35 @@ public class MaximumLikelihoodEstimatorTest {
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = MaximumLikelihoodEstimator.create(maxValue, minValue,
                     inputData, gaussianSigma, MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                            HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                     inputData, 0.0, MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                            HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);       
-        
-        
-        
-        //instantiate with min value, max value, input data, gaussian sigma and
-        //ACCURATe method
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+
+        // instantiate with min value, max value, input data, gaussian sigma and
+        // ACCURATE method
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData, gaussianSigma, MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), 
+                        ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
@@ -439,243 +454,267 @@ public class MaximumLikelihoodEstimatorTest {
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
-        assertTrue(estimator.isReady());        
-        
-        //Force IllegalArgumentException
+        assertTrue(estimator.isReady());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = MaximumLikelihoodEstimator.create(maxValue, minValue,
                     inputData, gaussianSigma, MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                            ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                     inputData, 0.0, MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                            ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);         
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
     }
-    
+
     @Test
     public void testGetMethod() {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA, 
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
                 MAX_GAUSSIAN_SIGMA);
-                
+
         MaximumLikelihoodEstimator estimator;
-        
+
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma);
-        assertEquals(estimator.getMethod(), 
+        assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        
+
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
                 HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        
+
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
+                        ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
                 ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);        
     }
-    
+
     @Test
     public void testGetSetGaussianSigma() throws LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA, 
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
                 MAX_GAUSSIAN_SIGMA);
-        
-        MaximumLikelihoodEstimator estimator = 
+
+        final MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create();
-        
+
         assertEquals(estimator.getGaussianSigma(), MaximumLikelihoodEstimator.
                 DEFAULT_GAUSSIAN_SIGMA, 0.0);
-        
-        //set new gaussian sigma
+
+        // set new gaussian sigma
         estimator.setGaussianSigma(gaussianSigma);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        
-        //Foce IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setGaussianSigma(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
-    public void testGetSetMinMaxValuesAndAvailability() throws LockedException, 
+    public void testGetSetMinMaxValuesAndAvailability() throws LockedException,
             NotAvailableException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        MaximumLikelihoodEstimator estimator = 
+
+        final MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create();
-        
+
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
-        
-        //set min max values
+
+        // set min max values
         estimator.setMinMaxValues(minValue, maxValue);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
         assertTrue(estimator.areMinMaxValuesAvailable());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setMinMaxValues(maxValue, minValue);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testIsLocked() {
-        
-        MaximumLikelihoodEstimator estimator = 
+
+        final MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create();
-        
+
         assertFalse(estimator.isLocked());
     }
-    
+
     @Test
     public void testGetSetInputDataAndAvailability()
             throws LockedException, NotAvailableException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        MaximumLikelihoodEstimator estimator = 
+
+        final MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create();
-        
+
         try {
             estimator.getInputData();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.isInputDataAvailable());
-        
-        //set input data
+
+        // set input data
         estimator.setInputData(inputData);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
     }
-    
+
     @Test
     public void testIsReady() throws LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        MaximumLikelihoodEstimator estimator = 
+
+        final MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create();
-        
+
         assertFalse(estimator.isReady());
-        
-        //set input data
+
+        // set input data
         estimator.setInputData(inputData);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(estimator.isReady());
     }
-    
+
     @Test
     public void testEstimate() throws LockedException, NotReadyException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        MaximumLikelihoodEstimator estimator = 
+
+        MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create(inputData);
-        
+
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
-        
-        double estimatedMean = estimator.estimate();
+
+        final double estimatedMean = estimator.estimate();
         assertFalse(estimator.isLocked());
-        
+
         assertEquals(mean, estimatedMean, RELATIVE_ERROR * estimatedMean);
-        
-        
-        //Force NotReadyException
+
+
+        // Force NotReadyException
         estimator = MaximumLikelihoodEstimator.create();
         assertFalse(estimator.isReady());
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
+        } catch (final NotReadyException ignore) {
+        }
     }
 }

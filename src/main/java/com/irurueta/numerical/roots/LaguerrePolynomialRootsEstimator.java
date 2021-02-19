@@ -30,65 +30,66 @@ import java.util.Arrays;
 @SuppressWarnings("WeakerAccess")
 public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
-    //In this implementation we have increased MR and MT to increase accuracy
-    //by iterating a larger but finite number of times
-    
+    // In this implementation we have increased MR and MT to increase accuracy
+    // by iterating a larger but finite number of times
+
     /**
      * Constant that affects the number of iterations.
      */
     public static final int MR = 80;
-    
+
     /**
      * Constant that affects the number of iterations.
      */
     public static final int MT = 100;
-    
+
     /**
      * Maximum number of iterations.
      */
     public static final int MAXIT = MT * MR;
-    
+
     /**
      * Constant considered as machine precision for Laguerre method.
      */
     public static final double LAGUER_EPS = 1e-10;
-    
+
     /**
      * Constant considered as machine precision.
      */
     public static final double EPS = 1e-14;
-    
+
     /**
      * Constant indicating whether roots will be refined.
      */
     public static final boolean DEFAULT_POLISH_ROOTS = true;
-    
+
     /**
      * Minimum allowed length in polynomial parameters.
      */
     public static final int MIN_VALID_POLY_PARAMS_LENGTH = 2;
-    
+
     /**
      * Array containing values for Laguerre method.
      */
-    private static final double[] frac = 
-        {0.0,0.5,0.25,0.75,0.13,0.38,0.62,0.88,1.0};
-    
-    
+    private static final double[] frac =
+            {0.0, 0.5, 0.25, 0.75, 0.13, 0.38, 0.62, 0.88, 1.0};
+
+
     /**
      * Indicates if roots should be refined.
      */
     private boolean polishRoots;
-    
+
     /**
      * Constructor.
+     *
      * @param polishRoots Boolean to determine whether roots should be refined.
      */
-    public LaguerrePolynomialRootsEstimator(boolean polishRoots) {
+    public LaguerrePolynomialRootsEstimator(final boolean polishRoots) {
         super();
         this.polishRoots = polishRoots;
     }
-    
+
     /**
      * Empty constructor.
      */
@@ -96,28 +97,30 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
         super();
         this.polishRoots = DEFAULT_POLISH_ROOTS;
     }
-    
+
     /**
      * Constructor.
-     * @param polyParams Array containing polynomial parameters.
+     *
+     * @param polyParams  Array containing polynomial parameters.
      * @param polishRoots Boolean indicating whether roots will be refined.
      * @throws IllegalArgumentException Raised if length of provided parameters
-     * is not valid. It has to be greater or equal than 2.
+     *                                  is not valid. It has to be greater or equal than 2.
      */
-    public LaguerrePolynomialRootsEstimator(Complex[] polyParams, 
-            boolean polishRoots) {
+    public LaguerrePolynomialRootsEstimator(final Complex[] polyParams,
+                                            final boolean polishRoots) {
         super();
         this.polishRoots = polishRoots;
         internalSetPolynomialParameters(polyParams);
     }
-    
+
     /**
      * Constructor.
+     *
      * @param polyParams Array containing polynomial parameters.
      * @throws IllegalArgumentException Raised if length of provided parameters
-     * is not valid. It has to be greater or equal than 2.
+     *                                  is not valid. It has to be greater or equal than 2.
      */
-    public LaguerrePolynomialRootsEstimator(Complex[] polyParams) {
+    public LaguerrePolynomialRootsEstimator(final Complex[] polyParams) {
         super();
         this.polishRoots = DEFAULT_POLISH_ROOTS;
         internalSetPolynomialParameters(polyParams);
@@ -125,47 +128,48 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
     /**
      * Estimates the roots of provided polynomial.
-     * @throws LockedException Raised if this instance is locked estimating a
-     * root.
-     * @throws NotReadyException Raised if this instance is not ready because
-     * polynomial parameters have not been provided.
+     *
+     * @throws LockedException         Raised if this instance is locked estimating a
+     *                                 root.
+     * @throws NotReadyException       Raised if this instance is not ready because
+     *                                 polynomial parameters have not been provided.
      * @throws RootEstimationException Raised if roots cannot be estimated for
-     * some reason (lack of convergence, etc).
-     */    
+     *                                 some reason (lack of convergence, etc).
+     */
     @Override
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-        
+
         if (isLocked()) {
             throw new LockedException();
         }
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         //polynomial must be at least degree 1
         if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new RootEstimationException();
         }
-        
+
         locked = true;
-        
-        Complex[] a = polyParams;
+
+        final Complex[] a = polyParams;
         roots = new Complex[a.length - 1];
-        
+
         int i;
-        int[] its = new int[1];
+        final int[] its = new int[1];
         Complex x = new Complex();
         Complex b;
         Complex c;
-        int m = a.length - 1;
-        
-        Complex[] ad = Arrays.copyOf(a, a.length);
+        final int m = a.length - 1;
+
+        final Complex[] ad = Arrays.copyOf(a, a.length);
         for (int j = m - 1; j >= 0; j--) {
             x.setRealAndImaginary(0.0, 0.0);
-            Complex[] adV = Arrays.copyOf(ad, j + 2);
+            final Complex[] adV = Arrays.copyOf(ad, j + 2);
             internalLaguer(adV, x, its);
-            if(Math.abs(x.getImaginary()) <= 2.0 * EPS * Math.abs(x.getReal()))
+            if (Math.abs(x.getImaginary()) <= 2.0 * EPS * Math.abs(x.getReal()))
                 x.clone().setRealAndImaginary(x.getReal(), 0.0);
             roots[j] = x.clone();
             b = ad[j + 1].clone();
@@ -191,26 +195,28 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             }
             roots[i + 1] = x.clone();
         }
-        
+
         locked = false;
     }
-    
+
     /**
      * Returns boolean indicating whether roots are refined after an initial
      * estimation.
+     *
      * @return True if roots are refined, false otherwise.
      */
     public boolean areRootsPolished() {
         return polishRoots;
     }
-    
+
     /**
      * Sets boolean indicating whether roots will be refined after an initial
      * estimation.
+     *
      * @param enable True if roots will be refined, false otherwise.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setPolishRootsEnabled(boolean enable) throws LockedException {
+    public void setPolishRootsEnabled(final boolean enable) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -224,13 +230,14 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * then the array of parameters is [an, a(n - 1), ... a1, a0]
      * Polynomial parameters can be either real or complex values
      * This method does not check if this class is locked.
+     *
      * @param polyParams Polynomial parameters.
      * @throws IllegalArgumentException Raised if the length of the array is not
-     * valid.
+     *                                  valid.
      */
     @Override
     protected final void internalSetPolynomialParameters(
-            Complex[] polyParams) {
+            final Complex[] polyParams) {
         if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
         }
@@ -240,46 +247,47 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
     /**
      * Internal method to compute a root after decomposing and decreasing the
      * degree of the polynomial.
-     * @param a Remaining polynomial parameters (on 1st iteration, the whole
-     * polynomial is provided, on subsequent iterations, the polynomial is
-     * deflated and the degree is reduced).
-     * @param x Estimated root.
+     *
+     * @param a   Remaining polynomial parameters (on 1st iteration, the whole
+     *            polynomial is provided, on subsequent iterations, the polynomial is
+     *            deflated and the degree is reduced).
+     * @param x   Estimated root.
      * @param its number of iterations needed to achieve the estimation.
-     * @throws RootEstimationException Raised if root couldn't be estimated 
-     * because of lack of convergence.
+     * @throws RootEstimationException Raised if root couldn't be estimated
+     *                                 because of lack of convergence.
      */
-    private void internalLaguer(Complex[] a, Complex x, int[] its) 
+    private void internalLaguer(final Complex[] a, final Complex x, final int[] its)
             throws RootEstimationException {
-        
+
         Complex x1;
         Complex b;
         Complex g;
         Complex g2;
-        Complex dx = new Complex();
-        Complex d = new Complex();
-        Complex f = new Complex();
-        Complex h = new Complex();
-        Complex sq = new Complex();
+        final Complex dx = new Complex();
+        final Complex d = new Complex();
+        final Complex f = new Complex();
+        final Complex h = new Complex();
+        final Complex sq = new Complex();
         Complex gp = new Complex();
-        Complex gm = new Complex();
-        int m = a.length - 1;
+        final Complex gm = new Complex();
+        final int m = a.length - 1;
         for (int iter = 1; iter <= MAXIT; iter++) {
             its[0] = iter;
             b = a[m].clone();
             double err = b.getModulus();
             d.setRealAndImaginary(0.0, 0.0);
             f.setRealAndImaginary(0.0, 0.0);
-            double abx = x.getModulus();
+            final double abx = x.getModulus();
             for (int j = m - 1; j >= 0; j--) {
                 f.multiply(x);
                 f.add(d);
-                
+
                 d.multiply(x);
                 d.add(b);
-                
+
                 b.multiply(x);
                 b.add(a[j]);
-                
+
                 err = b.getModulus() + abx * err;
             }
             err *= LAGUER_EPS;
@@ -291,17 +299,17 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             f.divide(b, h);
             h.multiplyByScalar(-2.0);
             h.add(g2);
-            
+
             h.multiplyByScalar(m, sq);
             sq.subtract(g2);
             sq.multiplyByScalar(m - 1);
             sq.sqrt();
-            
+
             g.add(sq, gp);
             g.subtract(sq, gm);
-            
-            double abp = gp.getModulus();
-            double abm = gm.getModulus();
+
+            final double abp = gp.getModulus();
+            final double abm = gm.getModulus();
             if (abp < abm) {
                 gp = gm;
             }
@@ -318,11 +326,11 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             if (iter % MT != 0) {
                 x.copyFrom(x1);
             } else {
-                int pos = Math.min(iter/MT, frac.length - 1);
+                int pos = Math.min(iter / MT, frac.length - 1);
                 x.subtract(dx.multiplyByScalarAndReturnNew(frac[pos]));
             }
         }
-        //too many iterations in Laguerre
+        // too many iterations in Laguerre
         locked = false;
         throw new RootEstimationException();
     }

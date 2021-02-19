@@ -18,7 +18,7 @@ package com.irurueta.numerical.fitting;
 import com.irurueta.numerical.EvaluationException;
 
 /**
- * Interface to evaluate linear single dimensional functions 
+ * Interface to evaluate linear single dimensional functions
  * f(x) = a * f0(x) + b * f1(x) + ...
  * Where the linear function is composed of a linear combination of a basis of
  * functions f0, f1, ... fM
@@ -27,20 +27,22 @@ import com.irurueta.numerical.EvaluationException;
  * ..., fM(x)
  */
 public interface LinearFitterSingleDimensionFunctionEvaluator {
-    
+
     /**
      * Creates array where basis function results will be stored
+     *
      * @return array where basis function results will be stored
      */
     double[] createResultArray();
-    
+
     /**
      * Evaluates a linear single dimension function at provided point and
      * returns the evaluations of the basis functions at such point
-     * @param point point where function will be evaluated
-     * @param result array where result of evaluation of basis functions is 
-     * stored
+     *
+     * @param point  point where function will be evaluated
+     * @param result array where result of evaluation of basis functions is
+     *               stored
      * @throws EvaluationException raised if something failed during the evaluation
      */
-    void evaluate(double point, double[] result) throws EvaluationException;
+    void evaluate(final double point, final double[] result) throws EvaluationException;
 }

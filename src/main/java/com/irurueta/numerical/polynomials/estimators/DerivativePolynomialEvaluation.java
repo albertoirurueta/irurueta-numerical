@@ -21,22 +21,22 @@ package com.irurueta.numerical.polynomials.estimators;
  */
 @SuppressWarnings("WeakerAccess")
 public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
-    
+
     /**
      * Minimum allowed derivative order.
      */
     public static final int MIN_DERIVATIVE_ORDER = 1;
-    
+
     /**
      * Point where derivative of a given order has been evaluated.
      */
     private double mX;
-    
+
     /**
      * Order of derivative.
      */
     private int mDerivativeOrder;
-    
+
     /**
      * Constructor.
      */
@@ -44,69 +44,76 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
         super();
         setDerivativeOrder(MIN_DERIVATIVE_ORDER);
     }
-    
+
     /**
      * Constructor.
-     * @param x point where derivative of polynomial has been evaluated.
-     * @param evaluation evaluation of nth-derivative of polynomial at point x.
+     *
+     * @param x               point where derivative of polynomial has been evaluated.
+     * @param evaluation      evaluation of nth-derivative of polynomial at point x.
      * @param derivativeOrder order of derivative.
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
-    public DerivativePolynomialEvaluation(double x, double evaluation, 
-            int derivativeOrder) {
+    public DerivativePolynomialEvaluation(
+            final double x, final double evaluation, final int derivativeOrder) {
         super(evaluation);
         mX = x;
         setDerivativeOrder(derivativeOrder);
     }
-    
+
     /**
-     * @param x point where derivative of polynomial has been evaluated.
+     * @param x          point where derivative of polynomial has been evaluated.
      * @param evaluation evaluation of nth-derivative of polynomial at point x.
      */
-    public DerivativePolynomialEvaluation(double x, double evaluation) {
+    public DerivativePolynomialEvaluation(
+            final double x, final double evaluation) {
         this(x, evaluation, MIN_DERIVATIVE_ORDER);
     }
-    
+
     /**
      * Gets point where polynomial derivative has been evaluated.
+     *
      * @return point where polynomial derivative has been evaluated.
      */
     public double getX() {
         return mX;
     }
-    
+
     /**
      * Sets point where polynomial derivative has been evaluated.
+     *
      * @param x point where polynomial derivative has been evaluated.
      */
-    public void setX(double x) {
+    public void setX(final double x) {
         mX = x;
     }
-    
+
     /**
      * Gets order of derivative.
+     *
      * @return order of derivative.
      */
     public int getDerivativeOrder() {
         return mDerivativeOrder;
     }
-    
+
     /**
      * Sets order of derivative.
+     *
      * @param derivativeOrder order of derivative.
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
-    public final void setDerivativeOrder(int derivativeOrder) {
-        if(derivativeOrder < MIN_DERIVATIVE_ORDER) {
+    public final void setDerivativeOrder(final int derivativeOrder) {
+        if (derivativeOrder < MIN_DERIVATIVE_ORDER) {
             throw new IllegalArgumentException(
                     "derivative order must be at least 1");
         }
-        
+
         mDerivativeOrder = derivativeOrder;
     }
 
     /**
      * Gets type of polynomial evaluation.
+     *
      * @return type of polynomial evaluation.
      */
     @Override

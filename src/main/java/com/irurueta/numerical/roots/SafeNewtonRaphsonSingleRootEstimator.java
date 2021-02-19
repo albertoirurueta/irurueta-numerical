@@ -18,7 +18,7 @@ package com.irurueta.numerical.roots;
 import com.irurueta.numerical.*;
 
 /**
- * Computes a root for a single dimension function inside a given bracket of 
+ * Computes a root for a single dimension function inside a given bracket of
  * values, in other words, root will only be searched within provided minimum
  * and maximum evaluation points.
  * This class searches for REAL roots only!
@@ -26,171 +26,177 @@ import com.irurueta.numerical.*;
  * 456.
  */
 @SuppressWarnings("WeakerAccess")
-public class SafeNewtonRaphsonSingleRootEstimator 
-    extends DerivativeSingleRootEstimator {
-    
+public class SafeNewtonRaphsonSingleRootEstimator
+        extends DerivativeSingleRootEstimator {
+
     /**
      * Maximum number of iterations.
-     */    
+     */
     public static final int MAXIT = 100;
-    
+
     /**
      * Constant defining default accuracy of the estimated root.
-     */    
+     */
     public static final double DEFAULT_TOLERANCE = 1e-6;
-    
+
     /**
      * Constant defining minimum allowed tolerance.
-     */      
+     */
     public static final double MIN_TOLERANCE = 0.0;
-    
+
     /**
      * Tolerance value. The algorithm will iterate until the result converges
      * below this value of accuracy or until the maximum number of iterations is
      * achieved (and in such case, convergence will be assumed to have failed).
-     */      
+     */
     private double tolerance;
-        
+
     /**
      * Empty constructor.
-     */    
+     */
     public SafeNewtonRaphsonSingleRootEstimator() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
-    
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root.
+     *                     root will be searched.
+     * @param tolerance    Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
-     */        
+     *                                      maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
+     */
     public SafeNewtonRaphsonSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener, 
-            double minEvalPoint, double maxEvalPoint, double tolerance)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-        
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener           Listener to evaluate a single dimension function f(x)
+     *                           to find its roots.
      * @param derivativeListener Listener to evaluate the function's derivative
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
-     * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root.
+     * @param minEvalPoint       Smallest value inside the bracket of values where the
+     *                           root will be searched.
+     * @param maxEvalPoint       Largest value inside the bracket of values where the
+     *                           root will be searched.
+     * @param tolerance          Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
-     */        
+     *                                      maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
+     */
     public SafeNewtonRaphsonSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            SingleDimensionFunctionEvaluatorListener derivativeListener,
-            double minEvalPoint, double maxEvalPoint, double tolerance)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final SingleDimensionFunctionEvaluatorListener derivativeListener,
+            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
         super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-        
+
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * the tolerance value.
+     *
      * @return Tolerance value.
-     */       
+     */
     public double getTolerance() {
         return tolerance;
     }
-    
+
     /**
      * Internal method to set tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * provided tolerance value.
      * This method does not check whether this instance is locked or not.
+     *
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */        
-    private void internalSetTolerance(double tolerance) {
+     *                                  negative.
+     */
+    private void internalSetTolerance(final double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
         this.tolerance = tolerance;
     }
-    
+
     /**
      * Sets tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * provided tolerance value.
+     *
      * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
+     * @throws LockedException          Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
-     */      
-    public void setTolerance(double tolerance) throws LockedException {
+     *                                  negative.
+     */
+    public void setTolerance(final double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         internalSetTolerance(tolerance);
     }
-    
+
     /**
-     * Estimates a local root for a given single dimension function being 
+     * Estimates a local root for a given single dimension function being
      * evaluated by provided listener.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if either a listener has not
-     * yet been provided or a bracket has not been provided or computed.
+     *
+     * @throws LockedException         Exception raised if this instance is already
+     *                                 locked.
+     * @throws NotReadyException       Exception raised if either a listener has not
+     *                                 yet been provided or a bracket has not been provided or computed.
      * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */       
+     *                                 some other reason (usually inability to evaluate the function,
+     *                                 numerical instability or convergence problems, or no roots are found).
+     */
     @Override
     @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
-        RootEstimationException {
-        
+            RootEstimationException {
+
         if (isLocked()) {
             throw new LockedException();
         }
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         locked = true;
         rootAvailable = false;
-        
-        double x1 = minEvalPoint;
-        double x2 = maxEvalPoint;
-        double xacc = tolerance;
-        
+
+        final double x1 = minEvalPoint;
+        final double x2 = maxEvalPoint;
+        final double xacc = tolerance;
+
         double xh;
         double xl;
-        double fl;
-        double fh;
+        final double fl;
+        final double fh;
         try {
             fl = listener.evaluate(x1);
             fh = listener.evaluate(x2);
-        } catch (EvaluationException e) {
+        } catch (final EvaluationException e) {
             throw new RootEstimationException(e);
         }
-        
+
         if ((fl > 0.0 && fh > 0.0) || (fl < 0.0 && fh < 0.0)) {
-            //root must be bracketed
+            // root must be bracketed
             locked = false;
             throw new RootEstimationException();
         }
@@ -221,15 +227,15 @@ public class SafeNewtonRaphsonSingleRootEstimator
         try {
             f = listener.evaluate(rts);
             df = derivativeListener.evaluate(rts);
-        } catch (EvaluationException e) {
+        } catch (final EvaluationException e) {
             throw new RootEstimationException(e);
         }
-        
+
         for (int j = 0; j < MAXIT; j++) {
             if ((((rts - xh) * df - f) * ((rts - xl) * df - f) > 0.0)
-                || (Math.abs(2.0 * f) > Math.abs(dxold * df))) {
+                    || (Math.abs(2.0 * f) > Math.abs(dxold * df))) {
                 dxold = dx;
-                dx = 0.5*(xh - xl);
+                dx = 0.5 * (xh - xl);
                 rts = xl + dx;
                 if (xl == rts) {
                     root = rts;
@@ -240,7 +246,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
             } else {
                 dxold = dx;
                 dx = f / df;
-                double temp=rts;
+                final double temp = rts;
                 rts -= dx;
                 if (temp == rts) {
                     root = rts;
@@ -255,21 +261,21 @@ public class SafeNewtonRaphsonSingleRootEstimator
                 locked = false;
                 return;
             }
-            
+
             try {
                 f = listener.evaluate(rts);
                 df = derivativeListener.evaluate(rts);
-            } catch (EvaluationException e) {
+            } catch (final EvaluationException e) {
                 throw new RootEstimationException(e);
             }
-            
+
             if (f < 0.0) {
                 xl = rts;
             } else {
                 xh = rts;
             }
         }
-        //maximum number of iterations exceeded
+        // maximum number of iterations exceeded
         locked = false;
         throw new RootEstimationException();
     }

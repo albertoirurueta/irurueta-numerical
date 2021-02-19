@@ -17,8 +17,9 @@ package com.irurueta.numerical.robust;
 
 /**
  * Listener to get data samples and residuals for PROMedS method.
+ *
  * @param <T> type of object to be estimated.
  */
-public interface PROMedSRobustEstimatorListener<T> 
-    extends PROSACRobustEstimatorListener<T> {   
+public interface PROMedSRobustEstimatorListener<T>
+        extends PROSACRobustEstimatorListener<T> {
 }

@@ -26,76 +26,62 @@ public class DirectPolynomialEvaluationTest {
     
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
-    
-    public DirectPolynomialEvaluationTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
-        //test empty constructor
+        // test empty constructor
         DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
         
-        //check initial values
+        // check initial values
         assertEquals(eval.getX(), 0.0, 0.0);
         assertEquals(eval.getEvaluation(), 0.0, 0.0);
         assertEquals(eval.getType(), 
                 PolynomialEvaluationType.DIRECT_EVALUATION);
         
-        //test constructor with values
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        // test constructor with values
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
         
         eval = new DirectPolynomialEvaluation(x, evaluation);
         
-        //check correctness
+        // check correctness
         assertEquals(eval.getX(), x, 0.0);
         assertEquals(eval.getEvaluation(), evaluation, 0.0);        
     }
     
     @Test
     public void testGetSetX() {
-        DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
+        final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
         
-        //check initial value
+        // check initial value
         assertEquals(eval.getX(), 0.0, 0.0);
         
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setX(x);
         
-        //check correctness
+        // check correctness
         assertEquals(eval.getX(), x, 0.0);
     }
     
     @Test
     public void testGetSetEvaluation() {
-        DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
+        final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
         
-        //check initial value
+        // check initial value
         assertEquals(eval.getEvaluation(), 0.0, 0.0);
         
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
         eval.setEvaluation(evaluation);
         
-        //check correctness
+        // check correctness
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
     }
 }

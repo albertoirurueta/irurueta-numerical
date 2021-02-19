@@ -21,36 +21,39 @@ import com.irurueta.numerical.NumericalException;
  * Raised if estimation on a RobustEstimator fails.
  */
 public class RobustEstimatorException extends NumericalException {
-    
+
     /**
      * Constructor.
-     */            
+     */
     public RobustEstimatorException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */        
-    public RobustEstimatorException(String message) {
+     */
+    public RobustEstimatorException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */        
-    public RobustEstimatorException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public RobustEstimatorException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */        
-    public RobustEstimatorException(Throwable cause) {
+     */
+    public RobustEstimatorException(final Throwable cause) {
         super(cause);
-    }    
+    }
 }

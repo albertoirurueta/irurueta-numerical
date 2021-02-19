@@ -27,7 +27,7 @@ import com.irurueta.numerical.NotReadyException;
  * Where f0, f1, ... is the function basis which ideally should be formed by
  * orthogonal function.
  * This is an improvement on SimpleLinearFitter for cases where basis functions
- * cannot be clearly distinguished from provided data, to avoid matrix 
+ * cannot be clearly distinguished from provided data, to avoid matrix
  * singularities and obtain better results.
  * This class is based on the implementation available at Numerical Recipes
  * 3rd Ed, page 795.
@@ -39,12 +39,12 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * Default tolerance.
      */
     public static final double DEFAULT_TOL = 1e-12;
-    
+
     /**
      * Tolerance to define convergence threshold for SVD.
      */
     private double tol;
-    
+
     /**
      * Constructor.
      */
@@ -52,173 +52,186 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
         super();
         tol = DEFAULT_TOL;
     }
-    
+
     /**
      * Constructor.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
      * @param sig standard deviations of each pair of points (x, y).
      * @throws IllegalArgumentException if provided arrays don't have the same
-     * length.
+     *                                  length.
      */
-    public SvdSingleDimensionLinearFitter(double[] x, double[] y, double[] sig) {
+    public SvdSingleDimensionLinearFitter(
+            final double[] x, final double[] y, final double[] sig) {
         super(x, y, sig);
         tol = DEFAULT_TOL;
     }
-    
+
     /**
      * Constructor.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
-     */    
-    public SvdSingleDimensionLinearFitter(double[] x, double[] y, double sig) {
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(
+            final double[] x, final double[] y, final double sig) {
         super(x, y, sig);
         tol = DEFAULT_TOL;
     }
-    
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
-    public SvdSingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator)
+    public SvdSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
         super(evaluator);
         tol = DEFAULT_TOL;
     }
-    
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws FittingException if evaluation fails.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
-     */    
-    public SvdSingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            double[] x, double[] y, double[] sig) throws FittingException {
-        super(evaluator, x, y, sig); 
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
+            final double[] x, final double[] y, final double[] sig) throws FittingException {
+        super(evaluator, x, y, sig);
         tol = DEFAULT_TOL;
     }
-    
+
     /**
      * Constructor.
-     * @param evaluator evaluator to evaluate function at provided point and 
-     * obtain the evaluation of function basis at such point.
-     * @param x input points x where a linear single dimensional function f(x) =
-     * a * f0(x) + b * f1(x) + ...
-     * @param y result of evaluation of linear single dimensional function f(x)
-     * at provided x points.
-     * @param sig standard deviation of all pair of points assuming that 
-     * standard deviations are constant.
-     * @throws FittingException if evaluation fails.
-     * @throws IllegalArgumentException if provided arrays don't have the same 
-     * length.
-     */    
-    public SvdSingleDimensionLinearFitter(LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            double[] x, double[] y, double sig) throws FittingException {
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
+            final double[] x, final double[] y, final double sig) throws FittingException {
         super(evaluator, x, y, sig);
         tol = DEFAULT_TOL;
     }
 
     /**
      * Returns tolerance to define convergence threshold for SVD.
+     *
      * @return tolerance to define convergence threshold for SVD.
      */
     public double getTol() {
         return tol;
     }
-    
+
     /**
      * Sets tolerance to define convergence threshold for SVD.
+     *
      * @param tol tolerance to define convergence threshold for SVD.
      */
-    public void setTol(double tol) {
+    public void setTol(final double tol) {
         this.tol = tol;
-    }    
-    
+    }
+
     /**
      * Fits a function to provided data so that parameters associated to that
      * function can be estimated along with their covariance matrix and chi
      * square value.
-     * @throws FittingException if fitting fails.
+     *
+     * @throws FittingException  if fitting fails.
      * @throws NotReadyException if enough input data has not yet been provided.
-     */    
+     */
     @Override
     public void fit() throws FittingException, NotReadyException {
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         try {
             resultAvailable = false;
-            
+
             int i;
             int j;
             int k;
             double tmp;
-            double thresh;
+            final double thresh;
             double sum;
-            Matrix aa = new Matrix(ndat, ma);
-            double[] b = new double[ndat];
+            final Matrix aa = new Matrix(ndat, ma);
+            final double[] b = new double[ndat];
             for (i = 0; i < ndat; i++) {
                 evaluator.evaluate(x[i], afunc);
-		        tmp = 1.0 / sig[i];
-		        for (j = 0; j < ma; j++) {
-                    aa.setElementAt(i, j, afunc[j]*tmp);
+                tmp = 1.0 / sig[i];
+                for (j = 0; j < ma; j++) {
+                    aa.setElementAt(i, j, afunc[j] * tmp);
                 }
-		        b[i] = y[i] * tmp;
+                b[i] = y[i] * tmp;
             }
-            
-            SingularValueDecomposer svd = 
+
+            final SingularValueDecomposer svd =
                     new SingularValueDecomposer(aa);
             svd.decompose();
             thresh = (tol > 0.0 ? tol * svd.getSingularValues()[0] : -1.0);
             svd.solve(b, thresh, a);
             chisq = 0.0;
             for (i = 0; i < ndat; i++) {
-		        sum = 0.0;
-		        for (j = 0; j < ma; j++) {
-                    sum += aa.getElementAt(i, j)*a[j];
+                sum = 0.0;
+                for (j = 0; j < ma; j++) {
+                    sum += aa.getElementAt(i, j) * a[j];
                 }
-		        chisq += Math.pow(sum-b[i], 2.0);
+                chisq += Math.pow(sum - b[i], 2.0);
             }
             for (i = 0; i < ma; i++) {
                 for (j = 0; j < i + 1; j++) {
                     sum = 0.0;
-                    double[] w = svd.getSingularValues();
-                    double tsh = svd.getNegligibleSingularValueThreshold();
-                    Matrix v = svd.getV();
-                    for (k=0;k<ma;k++) {
+                    final double[] w = svd.getSingularValues();
+                    final double tsh = svd.getNegligibleSingularValueThreshold();
+                    final Matrix v = svd.getV();
+                    for (k = 0; k < ma; k++) {
                         if (w[k] > tsh) {
-                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / 
+                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) /
                                     Math.pow(w[k], 2.0);
                         }
                     }
                     covar.setElementAt(j, i, sum);
                     covar.setElementAt(i, j, sum);
-		        }
+                }
             }
-            
+
             resultAvailable = true;
 
-        } catch (AlgebraException | EvaluationException e) {
+        } catch (final AlgebraException | EvaluationException e) {
             throw new FittingException(e);
-        }        
-    }    
+        }
+    }
 }

@@ -15,118 +15,111 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.*;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class FalsePositionSingleRootEstimatorTest {
-    
+
     public static final double MIN_EVAL_POINT = 0.0;
     public static final double MAX_EVAL_POINT = 1.0;
-    
+
     public static final double MIN_TOLERANCE = 3e-8;
     public static final double MAX_TOLERANCE = 1e-5;
-    
+
     private double constant;
     private double root1;
     private double root2;
     private double root3;
-    
-    private SingleDimensionFunctionEvaluatorListener constantPolynomial;
-    private SingleDimensionFunctionEvaluatorListener firstDegreePolynomial;
-    private SingleDimensionFunctionEvaluatorListener secondDegreePolynomial;
-    private SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots;
-    private SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial;
-    private SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithTripleRoot;
-    
+
+    private final SingleDimensionFunctionEvaluatorListener constantPolynomial;
+    private final SingleDimensionFunctionEvaluatorListener firstDegreePolynomial;
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomial;
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots;
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial;
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithTripleRoot;
+
     public FalsePositionSingleRootEstimatorTest() {
-        
+
         constantPolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) {
+            public double evaluate(final double point) {
                 return constant;
             }
         };
-        
+
         firstDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) {
+            public double evaluate(final double point) {
                 return (point - root1);
             }
         };
-        
+
         secondDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) {
+            public double evaluate(final double point) {
                 return (point - root1) * (point - root2);
             }
         };
-        
+
         secondDegreePolynomialWithTwoComplexConjugateRoots = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) {
+            public double evaluate(final double point) {
                 return (point * point + Math.abs(root1));
             }
         };
-        
+
         thirdDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) {
+            public double evaluate(final double point) {
                 return (point - root1) * (point - root2) * (point - root3);
             }
         };
-        
+
         thirdDegreePolynomialWithTripleRoot = new SingleDimensionFunctionEvaluatorListener() {
 
             @Override
-            public double evaluate(double point) {
+            public double evaluate(final double point) {
                 return (point - root1) * (point - root1) * (point - root1);
             }
         };
     }
 
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
     @Test
-    public void testConstructor() throws NotAvailableException, 
+    public void testConstructor() throws NotAvailableException,
             InvalidBracketRangeException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, 
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
                 MAX_EVAL_POINT);
-        double maxEvalPoint = randomizer.nextDouble(minEvalPoint, 
+        final double maxEvalPoint = randomizer.nextDouble(minEvalPoint,
                 MAX_EVAL_POINT);
-        double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
-        
+        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+
         FalsePositionSingleRootEstimator estimator;
-        
-        //Testing 1st constructor
+
+        // Testing 1st constructor
         estimator = new FalsePositionSingleRootEstimator();
         assertNotNull(estimator);
-        
+
         try {
             estimator.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertEquals(estimator.getMaxEvaluationPoint(),
                 FalsePositionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(),
@@ -134,7 +127,8 @@ public class FalsePositionSingleRootEstimatorTest {
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertEquals(estimator.getTolerance(),
                 FalsePositionSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
         assertTrue(estimator.isBracketAvailable());
@@ -142,167 +136,176 @@ public class FalsePositionSingleRootEstimatorTest {
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isRootAvailable());
-        
-        //Testing 2nd constructor
+
+        // Testing 2nd constructor
         estimator = new FalsePositionSingleRootEstimator(constantPolynomial,
                 minEvalPoint, maxEvalPoint, tolerance);
         assertNotNull(estimator);
-        
+
         assertEquals(estimator.getListener(), constantPolynomial);
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isRootAvailable());
-        
-        //Force InvalidBracketRangeException
+
+        // Force InvalidBracketRangeException
         estimator = null;
         try {
             estimator = new FalsePositionSingleRootEstimator(constantPolynomial,
                     maxEvalPoint, minEvalPoint, tolerance);
             fail("InvalidBracketRangeException expected but not thrown");
-        } catch (InvalidBracketRangeException ignore) { }
-        
-        //Force IllegalArgumentException
+        } catch (final InvalidBracketRangeException ignore) {
+        }
+
+        // Force IllegalArgumentException
         try {
             estimator = new FalsePositionSingleRootEstimator(constantPolynomial,
                     minEvalPoint, maxEvalPoint, -tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
     }
-    
+
     @Test
-    public void testGetSetListenerAvailabilityAndIsReady() 
+    public void testGetSetListenerAvailabilityAndIsReady()
             throws LockedException, NotAvailableException {
-        
-        FalsePositionSingleRootEstimator estimator =
+
+        final FalsePositionSingleRootEstimator estimator =
                 new FalsePositionSingleRootEstimator();
-        
-        //check default values
+
+        // check default values
         try {
             estimator.getListener();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
-        
-        //set listener
+
+        // set listener
         estimator.setListener(constantPolynomial);
-        //check correctness
+        // check correctness
         assertEquals(estimator.getListener(), constantPolynomial);
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isReady());
     }
-    
+
     @Test
-    public void testSetBracketGetEvaluationPointsAndAvailability() 
-            throws NotAvailableException, LockedException, 
+    public void testSetBracketGetEvaluationPointsAndAvailability()
+            throws NotAvailableException, LockedException,
             InvalidBracketRangeException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, 
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
                 MAX_EVAL_POINT);
-        double maxEvalPoint = randomizer.nextDouble(minEvalPoint, 
+        final double maxEvalPoint = randomizer.nextDouble(minEvalPoint,
                 MAX_EVAL_POINT);
-        
-        FalsePositionSingleRootEstimator estimator = 
+
+        final FalsePositionSingleRootEstimator estimator =
                 new FalsePositionSingleRootEstimator();
-        
-        //check default values
+
+        // check default values
         assertTrue(estimator.isBracketAvailable());
         assertEquals(estimator.getMinEvaluationPoint(),
                 FalsePositionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
         assertEquals(estimator.getMaxEvaluationPoint(),
                 FalsePositionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
-        
-        
-        //set new values
+
+
+        // set new values
         estimator.setBracket(minEvalPoint, maxEvalPoint);
-        //check correctness
+        // check correctness
         assertTrue(estimator.isBracketAvailable());
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
-        
-        //Force InvalidBracketRangeException
+
+        // Force InvalidBracketRangeException
         try {
             estimator.setBracket(maxEvalPoint, minEvalPoint);
             fail("InvalidBracketRangeException expected but not thrown");
-        } catch (InvalidBracketRangeException ignore) { }
+        } catch (InvalidBracketRangeException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetTolerance() throws LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
-        
-        FalsePositionSingleRootEstimator estimator = 
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+
+        final FalsePositionSingleRootEstimator estimator =
                 new FalsePositionSingleRootEstimator();
-        
-        //check default values
+
+        // check default values
         assertEquals(estimator.getTolerance(),
                 FalsePositionSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
-        
-        //set new value
+
+        // set new value
         estimator.setTolerance(tolerance);
-        //check correctness
+        // check correctness
         assertEquals(estimator.getTolerance(), tolerance, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setTolerance(-tolerance);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
-    public void testEstimate() throws LockedException, NotReadyException, 
+    public void testEstimate() throws LockedException, NotReadyException,
             InvalidBracketRangeException, RootEstimationException,
             NotAvailableException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
         root1 = randomizer.nextDouble(MIN_EVAL_POINT, 0.2 * MAX_EVAL_POINT);
         root2 = randomizer.nextDouble(0.4 * MAX_EVAL_POINT, 0.6 * MAX_EVAL_POINT);
         root3 = randomizer.nextDouble(0.8 * MAX_EVAL_POINT, MAX_EVAL_POINT);
-        
-        //instantiate estimator with brackets for accuracy (otherwise estimation
-        //might fail
-        FalsePositionSingleRootEstimator estimator = 
+
+        // instantiate estimator with brackets for accuracy (otherwise estimation
+        // might fail
+        final FalsePositionSingleRootEstimator estimator =
                 new FalsePositionSingleRootEstimator();
-        
-        //test constant polynomial (has no root)
+
+        // test constant polynomial (has no root)
         estimator.setListener(constantPolynomial);
         assertFalse(estimator.isLocked());
         try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
             fail("RootEstimationException expected but not thrown");
-        } catch (RootEstimationException ignore) { }
+        } catch (final RootEstimationException ignore) {
+        }
         assertFalse(estimator.isLocked());
         try {
             estimator.estimate();
             fail("RootEstimationException expected but not thrown");
-        } catch (RootEstimationException ignore) { }
+        } catch (final RootEstimationException ignore) {
+        }
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
-        
-        
-        //reset bracket
+        } catch (final NotAvailableException ignore) {
+        }
+
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-        //test 1st degree polynomial
+
+
+        // test 1st degree polynomial
         estimator.setListener(firstDegreePolynomial);
         assertFalse(estimator.isLocked());
         estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -310,16 +313,15 @@ public class FalsePositionSingleRootEstimatorTest {
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1, 
+        assertEquals(estimator.getRoot(), root1,
                 2.0 * estimator.getTolerance());
-        
-        
-        
-        //reset bracket
+
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-        //test 2nd degree polynomial
+
+
+        // test 2nd degree polynomial
         estimator.setListener(secondDegreePolynomial);
         assertFalse(estimator.isLocked());
         estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (root1 + root2));
@@ -327,7 +329,7 @@ public class FalsePositionSingleRootEstimatorTest {
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1, 
+        assertEquals(estimator.getRoot(), root1,
                 2.0 * estimator.getTolerance());
 
         assertFalse(estimator.isLocked());
@@ -336,42 +338,40 @@ public class FalsePositionSingleRootEstimatorTest {
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root2, 
+        assertEquals(estimator.getRoot(), root2,
                 2.0 * estimator.getTolerance());
 
-        
-        
-        
-        //reset bracket
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-        //test 2nd degree polynomial with two complex conjugate roots
+
+
+        // test 2nd degree polynomial with two complex conjugate roots
         estimator.setListener(
                 secondDegreePolynomialWithTwoComplexConjugateRoots);
         assertFalse(estimator.isLocked());
         try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
             fail("RootEstimationException expected but not thrown");
-        } catch (RootEstimationException ignore) { }
+        } catch (final RootEstimationException ignore) {
+        }
         assertFalse(estimator.isLocked());
         try {
             estimator.estimate();
             fail("RootEstimationException expected but not thrown");
-        } catch (RootEstimationException ignore) { }
+        } catch (final RootEstimationException ignore) {
+        }
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
 
-        
-        
-        
-        //reset bracket
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-        //test 3rd degree polynomial
-        //we need to properly set bracketing for each root and then refine the
-        //result using estimate method
+
+
+        // test 3rd degree polynomial
+        // we need to properly set bracketing for each root and then refine the
+        // result using estimate method
         estimator.setListener(thirdDegreePolynomial);
         assertFalse(estimator.isLocked());
         estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (root1 + root2));
@@ -379,7 +379,7 @@ public class FalsePositionSingleRootEstimatorTest {
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1, 
+        assertEquals(estimator.getRoot(), root1,
                 2.0 * estimator.getTolerance());
 
         assertFalse(estimator.isLocked());
@@ -396,22 +396,19 @@ public class FalsePositionSingleRootEstimatorTest {
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root3, 
+        assertEquals(estimator.getRoot(), root3,
                 2.0 * estimator.getTolerance());
 
-        
-        
-    
-        //reset bracket
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-     
-        //reset bracket
+
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-        //test 3rd degree polynomial with triple root
+
+
+        // test 3rd degree polynomial with triple root
         estimator.setListener(thirdDegreePolynomialWithTripleRoot);
         assertFalse(estimator.isLocked());
         estimator.computeBracket(0.9 * root1, 1.1 * root1);
@@ -419,27 +416,26 @@ public class FalsePositionSingleRootEstimatorTest {
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1, 
+        assertEquals(estimator.getRoot(), root1,
                 2.0 * estimator.getTolerance());
-        
 
-        
-        //reset bracket
+
+        // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        
-        
-        //test 3rd degree polynomial with 1 real root and 2 conjugate complex 
-        //roots
+
+
+        // test 3rd degree polynomial with 1 real root and 2 conjugate complex
+        // roots
         estimator.setListener(thirdDegreePolynomialWithTripleRoot);
         assertFalse(estimator.isLocked());
-        estimator.computeBracket(0.9 * root1, 
+        estimator.computeBracket(0.9 * root1,
                 1.1 * root1);
         assertFalse(estimator.isLocked());
         estimator.estimate();
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1, 
+        assertEquals(estimator.getRoot(), root1,
                 2.0 * estimator.getTolerance());
-                
+
     }
 }

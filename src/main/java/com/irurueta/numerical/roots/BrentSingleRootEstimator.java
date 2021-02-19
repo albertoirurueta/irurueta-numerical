@@ -75,8 +75,8 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public BrentSingleRootEstimator(
-            SingleDimensionFunctionEvaluatorListener listener,
-            double minEvalPoint, double maxEvalPoint, double tolerance)
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
@@ -103,7 +103,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */
-    private void internalSetTolerance(double tolerance) {
+    private void internalSetTolerance(final double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
             throw new IllegalArgumentException();
         }
@@ -120,7 +120,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance value is
      * negative.
      */
-    public void setTolerance(double tolerance) throws LockedException {
+    public void setTolerance(final double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -151,9 +151,9 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         
         locked = true;
         
-        double x1 = minEvalPoint;
-        double x2 = maxEvalPoint;
-        double tol = tolerance;
+        final double x1 = minEvalPoint;
+        final double x2 = maxEvalPoint;
+        final double tol = tolerance;
         double a = x1;
         double b = x2;
         double c = x2;
@@ -171,12 +171,12 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         try {
             fa = listener.evaluate(a);
             fb = listener.evaluate(b);
-        } catch (EvaluationException ex) {
+        } catch (final EvaluationException ex) {
             throw new RootEstimationException(ex);
         }
         
         if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
-            //root must be bracketed
+            // root must be bracketed
             locked = false;
             throw new RootEstimationException();
         }
@@ -198,7 +198,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
             tol1 = 2.0 * EPS * Math.abs(b) + 0.5 * tol;
             xm = 0.5 * (c - b);
             if (Math.abs(xm) <= tol1 || fb == 0.0) {
-                //root found
+                // root found
                 root = b;
                 rootAvailable = true;
                 locked = false;
@@ -219,9 +219,9 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
                     q = -q;
                 }
                 p = Math.abs(p);
-                double min1 = 3.0 * xm * q - Math.abs(tol1 * q);
-                double min2 = Math.abs(e * q);
-                if (2.0 * p < (min1 < min2 ? min1 : min2)) {
+                final double min1 = 3.0 * xm * q - Math.abs(tol1 * q);
+                final double min2 = Math.abs(e * q);
+                if (2.0 * p < (Math.min(min1, min2))) {
                     e = d;
                     d = p / q;
                 } else {
@@ -241,11 +241,11 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
             }
             try {
                 fb = listener.evaluate(b);
-            } catch (EvaluationException ex) {
+            } catch (final EvaluationException ex) {
                 throw new RootEstimationException(ex);
             }
         }
-        //maximum number of iterations exceeded
+        // maximum number of iterations exceeded
         locked = false;
         throw new RootEstimationException();
     }

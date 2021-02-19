@@ -23,22 +23,22 @@ public enum RobustEstimatorMethod {
      * Random Sample Consensus.
      */
     RANSAC,
-    
+
     /**
      * Least Median of Squares.
      */
-    LMedS,    
-    
+    LMedS,
+
     /**
      * Median Sample Consensus.
      */
     MSAC,
-    
+
     /**
      * Progressive Sample Consensus.
      */
     PROSAC,
-    
+
     /**
      * Progressive Median of Squares.
      */

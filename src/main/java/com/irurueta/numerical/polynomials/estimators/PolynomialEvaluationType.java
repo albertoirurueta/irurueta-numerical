@@ -24,18 +24,18 @@ public enum PolynomialEvaluationType {
      * A direct evaluation of a polynomial.
      */
     DIRECT_EVALUATION,
-    
+
     /**
      * Evaluation of the nth-derivative of a polynomial.
      */
     DERIVATIVE_EVALUATION,
-    
+
     /**
-     * Evaluation of the nth-integral of a polynomial (assuming a given 
+     * Evaluation of the nth-integral of a polynomial (assuming a given
      * constant value)
      */
     INTEGRAL_EVALUATION,
-    
+
     /**
      * Interval nth-integration of a polynomial.
      */

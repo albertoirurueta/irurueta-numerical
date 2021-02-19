@@ -18,16 +18,16 @@ package com.irurueta.numerical;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class JacobianEstimatorTest 
+public class JacobianEstimatorTest
         implements MultiVariateFunctionEvaluatorListener {
-    
+
     private static final int MIN_DIMS = 2;
     private static final int MAX_DIMS = 3;
 
@@ -46,92 +46,78 @@ public class JacobianEstimatorTest
     private static final double ABSOLUTE_ERROR = 1e-1;
 
     private static final int TIMES = 100;
-    
+
     private int ndims;
     private int nvars;
     private Matrix minimums;
     private Matrix widths;
     private double[] offsets;
-    
-    public JacobianEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() throws WrongSizeException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
         nvars = randomizer.nextInt(MIN_VARS, MAX_VARS);
-        
-        minimums = Matrix.createWithUniformRandomValues(nvars, ndims, 
+
+        minimums = Matrix.createWithUniformRandomValues(nvars, ndims,
                 MIN_EVAL_POINT, MAX_EVAL_POINT, new Random());
-        double[] point = new double[ndims];
-        randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);  
+        final double[] point = new double[ndims];
+        randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
         offsets = new double[nvars];
-        randomizer.fill(offsets, MIN_OFFSET, MAX_OFFSET);        
-        
-        widths = Matrix.createWithUniformRandomValues(nvars, ndims, 
+        randomizer.fill(offsets, MIN_OFFSET, MAX_OFFSET);
+
+        widths = Matrix.createWithUniformRandomValues(nvars, ndims,
                 MIN_WIDTH, MAX_WIDTH, new Random());
-        
-        JacobianEstimator estimator = new JacobianEstimator(this);
-        assertNotNull(estimator);        
+
+        final JacobianEstimator estimator = new JacobianEstimator(this);
+        assertNotNull(estimator);
     }
-    
+
     @Test
     public void testJacobian() throws EvaluationException, WrongSizeException {
-        
+
         for (int t = 0; t < TIMES; t++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
             ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
             nvars = randomizer.nextInt(MIN_VARS, MAX_VARS);
-        
-            minimums = Matrix.createWithUniformRandomValues(nvars, ndims, 
+
+            minimums = Matrix.createWithUniformRandomValues(nvars, ndims,
                     MIN_EVAL_POINT, MAX_EVAL_POINT, new Random());
-            double[] point = new double[ndims];
-            randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);        
+            final double[] point = new double[ndims];
+            randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
             offsets = new double[nvars];
-            randomizer.fill(offsets, MIN_OFFSET, MAX_OFFSET);        
-        
-            widths = Matrix.createWithUniformRandomValues(nvars, ndims, 
+            randomizer.fill(offsets, MIN_OFFSET, MAX_OFFSET);
+
+            widths = Matrix.createWithUniformRandomValues(nvars, ndims,
                     MIN_WIDTH, MAX_WIDTH, new Random());
-            
-            JacobianEstimator estimator = new JacobianEstimator(this);
-            
-            Matrix jacobian1 = estimator.jacobian(point);
-            Matrix jacobian2 = new Matrix(nvars, ndims);
+
+            final JacobianEstimator estimator = new JacobianEstimator(this);
+
+            final Matrix jacobian1 = estimator.jacobian(point);
+            final Matrix jacobian2 = new Matrix(nvars, ndims);
             estimator.jacobian(point, jacobian2);
-            
-            //check correctness
-            Matrix jacobian3 = jacobian(point);
+
+            // check correctness
+            final Matrix jacobian3 = jacobian(point);
             assertNotNull(jacobian3);
             for (int j = 0; j < nvars; j++) {
                 for (int i = 0; i < ndims; i++) {
-                    assertEquals(jacobian1.getElementAt(j, i), 
+                    assertEquals(jacobian1.getElementAt(j, i),
                             jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);
-                    assertEquals(jacobian2.getElementAt(j, i), 
-                            jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);                    
+                    assertEquals(jacobian2.getElementAt(j, i),
+                            jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);
                 }
             }
         }
     }
 
     @Override
-    public void evaluate(double[] point, double[] result) throws EvaluationException {
-        int dims = Math.min(Math.min(point.length, minimums.getColumns()),
+    public void evaluate(final double[] point, final double[] result) throws EvaluationException {
+        final int dims = Math.min(Math.min(point.length, minimums.getColumns()),
                 widths.getColumns());
-        int vars = result.length;
+        final int vars = result.length;
 
         for (int j = 0; j < vars; j++) {
 
@@ -153,13 +139,13 @@ public class JacobianEstimatorTest
         return nvars;
     }
 
-    private Matrix jacobian(double[] params) {
-        int dims = Math.min(Math.min(params.length, minimums.getColumns()),
+    private Matrix jacobian(final double[] params) {
+        final int dims = Math.min(Math.min(params.length, minimums.getColumns()),
                 widths.getColumns());
-        int vars = nvars;
+        final int vars = nvars;
 
         try {
-            Matrix jacobian = new Matrix(vars, dims);
+            final Matrix jacobian = new Matrix(vars, dims);
 
             for (int k = 0; k < vars; k++) {
 
@@ -181,7 +167,7 @@ public class JacobianEstimatorTest
             }
 
             return jacobian;
-        } catch (WrongSizeException e) {
+        } catch (final WrongSizeException e) {
             return null;
         }
     }

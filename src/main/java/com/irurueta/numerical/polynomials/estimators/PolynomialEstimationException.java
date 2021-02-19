@@ -22,36 +22,39 @@ import com.irurueta.numerical.polynomials.PolynomialsException;
  */
 @SuppressWarnings("WeakerAccess")
 public class PolynomialEstimationException extends PolynomialsException {
-    
+
     /**
      * Constructor.
      */
     public PolynomialEstimationException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message message indicating the cause of the exception.
      */
-    public PolynomialEstimationException(String message) {
+    public PolynomialEstimationException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message message describing the cause of the exception.
-     * @param cause instance containing the cause of the exception.
+     * @param cause   instance containing the cause of the exception.
      */
-    public PolynomialEstimationException(String message, Throwable cause) {
+    public PolynomialEstimationException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause instance containing the cause of the exception.
      */
-    public PolynomialEstimationException(Throwable cause) {
+    public PolynomialEstimationException(final Throwable cause) {
         super(cause);
     }
 }

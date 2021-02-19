@@ -23,7 +23,7 @@ public enum PolynomialEstimatorType {
      * Polynomial estimator using LMSE (Least Mean Square Error) solutions.
      */
     LMSE_POLYNOMIAL_ESTIMATOR,
-    
+
     /**
      * Polynomial estimator using weighted evaluations.
      */

@@ -60,7 +60,7 @@ public abstract class MultiOptimizer extends Optimizer {
      * Constructor.
      * @param listener Listener to evaluate a multidimensional function.
      */
-    public MultiOptimizer(MultiDimensionFunctionEvaluatorListener listener) {
+    public MultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener) {
         super();
         this.listener = listener;
         xmin = null;
@@ -86,7 +86,7 @@ public abstract class MultiOptimizer extends Optimizer {
      * @param listener Listener to evaluate a multidimensional function.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setListener(MultiDimensionFunctionEvaluatorListener listener)
+    public void setListener(final MultiDimensionFunctionEvaluatorListener listener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();

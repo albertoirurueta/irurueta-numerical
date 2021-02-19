@@ -17,64 +17,51 @@ package com.irurueta.numerical;
 
 import com.irurueta.algebra.Complex;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class ComplexPolynomialEvaluatorTest {
-    
+
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
     private static final int MIN_LENGTH = 1;
     private static final int MAX_LENGTH = 5;
-    
-    public ComplexPolynomialEvaluatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-        
-        Complex[] polyParams = new Complex[length];
-        
-        ComplexPolynomialEvaluator evaluator = 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+
+        final Complex[] polyParams = new Complex[length];
+
+        final ComplexPolynomialEvaluator evaluator =
                 new ComplexPolynomialEvaluator(polyParams);
-        
-        //check correctness
-        assertSame(evaluator.getPolyParams(), polyParams);        
+
+        // check correctness
+        assertSame(evaluator.getPolyParams(), polyParams);
     }
-    
+
     @Test
     public void testEvaluate() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-        
-        Complex[] polyParams = new Complex[length];
-        for(int i = 0; i < polyParams.length; i++){
-            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+
+        final Complex[] polyParams = new Complex[length];
+        for (int i = 0; i < polyParams.length; i++) {
+            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE));
         }
-        
-        Complex x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                    MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE));
-        
-        ComplexPolynomialEvaluator evaluator = 
+
+        final Complex x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE));
+
+        final ComplexPolynomialEvaluator evaluator =
                 new ComplexPolynomialEvaluator(polyParams);
 
         assertEquals(evaluator.evaluate(x),

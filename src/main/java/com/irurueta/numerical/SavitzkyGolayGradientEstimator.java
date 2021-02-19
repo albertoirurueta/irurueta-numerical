@@ -23,81 +23,84 @@ import com.irurueta.algebra.*;
  * point in order to determine the gradient at such point
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
- * This implementation is more robust against small discontinuities than 
+ * This implementation is more robust against small discontinuities than
  * SymmetricGradientEstimator, but it is also slower to compute.
  * This method interpolates the sampled function values into a polynomial of
  * 2nd degree (parabolic) on each direction, whose derivative is known.
  * Because a linear system of equations has to be solved to determine such
- * polynomials, this method might be less accurate when large values are 
+ * polynomials, this method might be less accurate when large values are
  * involved due to limited machine precision.
  */
 @SuppressWarnings("WeakerAccess")
 public class SavitzkyGolayGradientEstimator extends GradientEstimator {
     /**
      * Number of required point to evaluate to compute derivative.
-     */    
+     */
     public static final int N_POINTS = 3;
-    
+
     /**
      * Constructor.
+     *
      * @param listener Listener to evaluate a multidimensional functin.
-     */    
+     */
     public SavitzkyGolayGradientEstimator(
-            MultiDimensionFunctionEvaluatorListener listener) {
+            final MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
-    
+
     /**
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
      * array can be reused and hence is more memory efficient.
-     * @param point Input point.
+     *
+     * @param point  Input point.
      * @param result Output parameter containing estimated array. This parameter
-     * must be an array of length equal to point.
-     * @throws EvaluationException Raised if function cannot be evaluated.
+     *               must be an array of length equal to point.
+     * @throws EvaluationException      Raised if function cannot be evaluated.
      * @throws IllegalArgumentException Raised if length of result and point are
-     * not equal.
-     */    
+     *                                  not equal.
+     */
     @Override
     @SuppressWarnings("Duplicates")
-    public void gradient(double[] point, double[] result) 
+    public void gradient(final double[] point, final double[] result)
             throws EvaluationException {
-        int n = point.length;
+        final int n = point.length;
         if (result.length != n) {
             throw new IllegalArgumentException();
         }
-        
-        double[] xh1 = new double[n];
-        double[] xh2 = new double[n];
-        
-        double f = listener.evaluate(point);
+
+        final double[] xh1 = new double[n];
+        final double[] xh2 = new double[n];
+
+        final double f = listener.evaluate(point);
         System.arraycopy(point, 0, xh1, 0, n);
         System.arraycopy(point, 0, xh2, 0, n);
-        
-        Matrix a;
+
+        final Matrix a;
         try {
             a = new Matrix(N_POINTS, N_POINTS);
-        } catch (WrongSizeException e) {
+        } catch (final WrongSizeException e) {
             throw new EvaluationException(e);
         }
 
-        double[] b = new double[N_POINTS];
-        
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
-        
+        final double[] b = new double[N_POINTS];
+
+        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+
         for (int j = 0; j < n; j++) {
-            double temp = point[j];
+            final double temp = point[j];
             double h = EPS * Math.abs(temp);
             if (h == 0.0) {
-                h = EPS; //Trick to reduce finite-precision error
+                // Trick to reduce finite-precision error
+                h = EPS;
             }
-            
-            double p1 = xh1[j] = temp + h;
-            double p2 = xh2[j] = temp - h;
-            
-            double fh1 = listener.evaluate(xh1);
-            double fh2 = listener.evaluate(xh2);
+
+            final double p1 = xh1[j] = temp + h;
+            final double p2 = xh2[j] = temp - h;
+
+            final double fh1 = listener.evaluate(xh1);
+            final double fh2 = listener.evaluate(xh2);
 
             xh1[j] = temp;
             xh2[j] = temp;
@@ -114,39 +117,39 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             a.setElementAt(1, 2, 1.0);
             a.setElementAt(2, 2, 1.0);
 
-            //normalize to increase accuracy
-            double normA = Utils.normF(a);
+            // normalize to increase accuracy
+            final double normA = Utils.normF(a);
             a.multiplyByScalar(1.0 / normA);
 
             b[0] = f;
             b[1] = fh1;
             b[2] = fh2;
 
-            //normalize to increase accuracy
+            // normalize to increase accuracy
             ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);
 
-            double aParam;
-            double bParam;
+            final double aParam;
+            final double bParam;
             try {
                 decomposer.setInputMatrix(a);
                 decomposer.decompose();
 
-                //now solve the system of equations in Least Mean Squared Error
-                //because SVD allows the system of equations to be solved using 
-                //the pseudo-inverse                
-                double[] params = decomposer.solve(b);
+                // now solve the system of equations in Least Mean Squared Error
+                // because SVD allows the system of equations to be solved using
+                // the pseudo-inverse
+                final double[] params = decomposer.solve(b);
                 aParam = params[0];
                 bParam = params[1];
-                //and c = params[2], but we don't need it
-                
-                //because we have fitted the function in dimension j into a
-                //polynomial that has expression: a * x^2 + b * x + c, then its
-                //partial derivative on dimension j is:
-                //2.0 * a * x + b , therefore:
+                // and c = params[2], but we don't need it
+
+                // because we have fitted the function in dimension j into a
+                // polynomial that has expression: a * x^2 + b * x + c, then its
+                // partial derivative on dimension j is:
+                // 2.0 * a * x + b , therefore:
                 result[j] = 2.0 * aParam * temp + bParam;
-            } catch (AlgebraException e) {
+            } catch (final AlgebraException e) {
                 result[j] = Double.NaN;
-            }                        
+            }
         }
     }
 }

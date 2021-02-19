@@ -21,52 +21,54 @@ package com.irurueta.numerical;
  * point in order to determine the gradient at such point
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
- * This implementation is more accurate although slower than 
+ * This implementation is more accurate although slower than
  * GradientEstimator.
  */
 @SuppressWarnings("WeakerAccess")
 public class SymmetricGradientEstimator extends GradientEstimator {
-    
+
     /**
      * Internal array containing one point to sample close to the original one.
      */
     private double[] xh1;
-    
+
     /**
      * Internal array containing one point to sample close to the original one.
-     */    
+     */
     private double[] xh2;
-    
+
     /**
      * Constructor.
+     *
      * @param listener Listener to evaluate a multidimensional function.
-     */   
+     */
     public SymmetricGradientEstimator(
-            MultiDimensionFunctionEvaluatorListener listener) {
+            final MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
-    
+
     /**
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
      * array can be reused and hence is more memory efficient.
-     * @param point Input point.
+     *
+     * @param point  Input point.
      * @param result Output parameter containing estimated array. This parameter
-     * must be an array of length equal to point.
-     * @throws EvaluationException Raised if function cannot be evaluated.
+     *               must be an array of length equal to point.
+     * @throws EvaluationException      Raised if function cannot be evaluated.
      * @throws IllegalArgumentException Raised if length of result and point are
-     * not equal.
-     */    
+     *                                  not equal.
+     */
     @Override
     @SuppressWarnings("Duplicates")
-    public void gradient(double[] point, double[] result) 
+    public void gradient(final double[] point, final double[] result)
             throws EvaluationException {
-        int n = point.length;
+        final int n = point.length;
         if (result.length != n) {
             throw new IllegalArgumentException();
         }
-        
+
         if (xh1 == null || xh1.length != n) {
             xh1 = new double[n];
             System.arraycopy(point, 0, xh1, 0, n);
@@ -88,16 +90,18 @@ public class SymmetricGradientEstimator extends GradientEstimator {
             temp = point[j];
             h = EPS * Math.abs(temp);
             if (h == 0.0) {
-                h = EPS; //Trich to reduce finite-precision error
+                //Trick to reduce finite-precision error
+                h = EPS;
             }
             xh1[j] = temp + h;
             xh2[j] = temp - h;
-            //because of machine precision h could be different in both cases
+            // because of machine precision h could be different in both cases
 
             h1 = xh1[j] - temp;
             h2 = temp - xh2[j];
 
-            hh = h1 + h2; //this is more or less equal to 2.0 * h
+            // this is more or less equal to 2.0 * h
+            hh = h1 + h2;
 
             fh1 = listener.evaluate(xh1);
             fh2 = listener.evaluate(xh2);

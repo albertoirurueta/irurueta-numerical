@@ -22,33 +22,36 @@ public class InvalidBracketRangeException extends NumericalException {
 
     /**
      * Constructor.
-     */    
+     */
     public InvalidBracketRangeException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */    
-    public InvalidBracketRangeException(String message) {
+     */
+    public InvalidBracketRangeException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */    
-    public InvalidBracketRangeException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public InvalidBracketRangeException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */    
-    public InvalidBracketRangeException(Throwable cause) {
+     */
+    public InvalidBracketRangeException(final Throwable cause) {
         super(cause);
-    }    
+    }
 }

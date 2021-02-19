@@ -22,36 +22,39 @@ import com.irurueta.numerical.NumericalException;
  * because of lack of convergence
  */
 public class RootEstimationException extends NumericalException {
-    
+
     /**
      * Constructor.
-     */            
+     */
     public RootEstimationException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */        
-    public RootEstimationException(String message) {
+     */
+    public RootEstimationException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */        
-    public RootEstimationException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public RootEstimationException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */        
-    public RootEstimationException(Throwable cause) {
+     */
+    public RootEstimationException(final Throwable cause) {
         super(cause);
-    }    
+    }
 }

@@ -26,16 +26,16 @@ import java.io.IOException;
  */
 class AccelerationFileLoader {
     
-    static Data load(File f) throws IOException {
-        int bufferSize = computeBufferSizes(f);        
-        DataInputStream stream = new DataInputStream(new FileInputStream(f));
+    static Data load(final File f) throws IOException {
+        final int bufferSize = computeBufferSizes(f);
+        final DataInputStream stream = new DataInputStream(new FileInputStream(f));
         
-        float[] accelerationX = new float[bufferSize];
-        float[] accelerationY = new float[bufferSize];
-        float[] accelerationZ = new float[bufferSize];
+        final float[] accelerationX = new float[bufferSize];
+        final float[] accelerationY = new float[bufferSize];
+        final float[] accelerationZ = new float[bufferSize];
         
-        long[] timestamp = new long[bufferSize];
-        long[] count = new long[bufferSize];
+        final long[] timestamp = new long[bufferSize];
+        final long[] count = new long[bufferSize];
         
         for(int i = 0; i < bufferSize; i++){
             count[i] = stream.readLong();
@@ -48,7 +48,7 @@ class AccelerationFileLoader {
         
         stream.close();
         
-        Data data = new Data();
+        final Data data = new Data();
         data.accelerationX = accelerationX;
         data.accelerationY = accelerationY;
         data.accelerationZ = accelerationZ;
@@ -59,11 +59,11 @@ class AccelerationFileLoader {
         return data;
     }
     
-    private static int computeBufferSizes(File f) {
-        long fileLength = f.length();
+    private static int computeBufferSizes(final File f) {
+        final long fileLength = f.length();
         
-        int floatSize = Float.SIZE / Byte.SIZE;
-        int longSize = Long.SIZE / Byte.SIZE;
+        final int floatSize = Float.SIZE / Byte.SIZE;
+        final int longSize = Long.SIZE / Byte.SIZE;
         
         return (int)fileLength / (3*floatSize + 2*longSize);
     }

@@ -20,127 +20,135 @@ import com.irurueta.numerical.NotReadyException;
 
 /**
  * Robust estimator to estimate some object in a robust manner
+ *
  * @param <T> Object to be estimated (i.e. lines, cameras, etc)
  */
 @SuppressWarnings("WeakerAccess")
 public abstract class RobustEstimator<T> {
-    
+
     /**
-     * Default amount of progress variation before notifying a change in 
+     * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
-     * Maximum allowed value for progress delta
+     * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
-     * or its progress significantly changes
+     * or its progress significantly changes.
      */
     protected RobustEstimatorListener<T> mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
-     * computed
+     * computed.
      */
     protected volatile boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
-     * estimation
+     * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
-     * Constructor
+     * Constructor.
      */
     public RobustEstimator() {
         mListener = null;
         mLocked = false;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
     }
-    
+
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     *                 starts, ends or its progress significantly changes.
      */
-    public RobustEstimator(RobustEstimatorListener<T> listener) {
+    public RobustEstimator(final RobustEstimatorListener<T> listener) {
         mListener = listener;
         mLocked = false;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
     }
-    
+
     /**
-     * Returns reference to listener to be notified of events such as when 
-     * estimation starts, ends or its progress significantly changes
-     * @return listener to be notified of events
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
      */
     public RobustEstimatorListener<T> getListener() {
         return mListener;
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts,
-     * ends or its progress significantly changes
-     * @param listener listener to be notified of events
-     * @throws LockedException if robust estimator is locked
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(RobustEstimatorListener<T> listener) 
+    public void setListener(final RobustEstimatorListener<T> listener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mListener = listener;
     }
-    
+
     /**
-     * Indicates whether listener has been provided and is available for 
-     * retrieval
-     * @return true if available, false otherwise
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
         return mListener != null;
     }
-    
+
     /**
-     * Indicates if this instance is locked because estimation is being computed
-     * @return true if locked, false otherwise
+     * Indicates if this instance is locked because estimation is being computed.
+     *
+     * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
         return mLocked;
     }
 
     /**
-     * Returns amount of progress variation before notifying a progress change 
-     * during estimation
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
      * @return amount of progress variation before notifying a progress change
-     * during estimation
+     * during estimation.
      */
     public float getProgressDelta() {
         return mProgressDelta;
     }
-    
+
     /**
-     * Sets amount of progress variation before notifying a progress change 
-     * during estimation
-     * @param progressDelta amount of progress variation before notifying a 
-     * progress change during estimatoin
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
     @SuppressWarnings("Duplicates")
-    public void setProgressDelta(float progressDelta) throws LockedException {
+    public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -150,34 +158,38 @@ public abstract class RobustEstimator<T> {
         }
         mProgressDelta = progressDelta;
     }
-    
+
     /**
-     * Robustly estimates an instance of T
-     * @return estimated object
-     * @throws LockedException if robust estimator is locked
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * Robustly estimates an instance of T.
+     *
+     * @return estimated object.
+     * @throws LockedException          if robust estimator is locked.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract T estimate() throws LockedException, NotReadyException, 
+    public abstract T estimate() throws LockedException, NotReadyException,
             RobustEstimatorException;
-    
+
     /**
      * Returns data about inliers once estimation has been done.
+     *
      * @return data about inliers or null if estimation has not been done.
      */
     public abstract InliersData getInliersData();
-    
+
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
      */
     public abstract RobustEstimatorMethod getMethod();
-    
+
     /**
-     * Indicates if estimator is ready to start the estimation process
-     * @return true if ready, false otherwise
+     * Indicates if estimator is ready to start the estimation process.
+     *
+     * @return true if ready, false otherwise.
      */
     public boolean isReady() {
         if (mListener != null) {

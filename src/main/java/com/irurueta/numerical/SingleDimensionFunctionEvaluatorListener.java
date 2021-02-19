@@ -21,13 +21,14 @@ package com.irurueta.numerical;
  * functions and retrieve their minima/maxima, etc.
  */
 public interface SingleDimensionFunctionEvaluatorListener {
-    
+
     /**
      * Evaluates a single dimension function such as f(x) at provided point and
      * returns the result.
+     *
      * @param point Point where function will be evaluated.
      * @return Value returned by the function.
      * @throws EvaluationException Raised if something failed during the evaluation.
      */
-    double evaluate(double point) throws EvaluationException;
+    double evaluate(final double point) throws EvaluationException;
 }

@@ -20,49 +20,52 @@ package com.irurueta.numerical;
  * point.
  * The algorithm used in this implementation is valid for continuous functions
  * only, otherwise inaccurate results might be obtain.
- * This implementation is faster although less accurate than 
+ * This implementation is faster although less accurate than
  * SymmetricDerivativeEstimator.
  */
 @SuppressWarnings("WeakerAccess")
 public class DerivativeEstimator {
-    
+
     /**
      * Constant defining machine precision for this algorithm.
      */
     public static final double EPS = 1e-8;
-    
+
     /**
      * Listener to evaluate a single dimension function.
      */
     protected SingleDimensionFunctionEvaluatorListener listener;
-    
+
     /**
      * Constructor
+     *
      * @param listener listener to evaluate a single dimension function
      */
     public DerivativeEstimator(
-            SingleDimensionFunctionEvaluatorListener listener) {
+            final SingleDimensionFunctionEvaluatorListener listener) {
         this.listener = listener;
     }
-    
+
     /**
      * Computes the function derivative at provided point x.
+     *
      * @param x Point where derivative is estimated
      * @return Derivative of function at provided point
-     * @throws EvaluationException Raised if function cannot be properly 
-     * evaluated
+     * @throws EvaluationException Raised if function cannot be properly
+     *                             evaluated
      */
-    public double derivative(double x) throws EvaluationException {
-        double fold = listener.evaluate(x);
-        
+    public double derivative(final double x) throws EvaluationException {
+        final double fold = listener.evaluate(x);
+
         double h = EPS * Math.abs(x);
-        if(h == 0.0) {
-            h = EPS; //Trick to reduce finite-precision error
+        if (h == 0.0) {
+            // Trick to reduce finite-precision error
+            h = EPS;
         }
-        double xh = x + h;
+        final double xh = x + h;
         h = xh - x;
-        double fh = listener.evaluate(xh);
-        
+
+        final double fh = listener.evaluate(xh);
         return (fh - fold) / h;
     }
 }

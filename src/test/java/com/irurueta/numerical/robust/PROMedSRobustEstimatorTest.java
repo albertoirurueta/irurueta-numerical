@@ -19,72 +19,57 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.robust.PROMedSRobustEstimator.PROMedSInliersData;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class PROMedSRobustEstimatorTest {
 
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
-    
+
     private static final double THRESHOLD = 1e-6;
-    
-    //error added to samples and related to quality scores
+
+    // error added to samples and related to quality scores
     private static final double MIN_ERROR = 1e-5;
     private static final double MAX_ERROR = 1.0;
-    
-    //error added to quality scores so they are not totally related to sample
-    //error
+
+    // error added to quality scores so they are not totally related to sample
+    // error
     private static final double MIN_SCORE_ERROR = -0.30;
     private static final double MAX_SCORE_ERROR = 0.30;
-    
+
     private static final int MIN_MAX_ITERATIONS = 500;
     private static final int MAX_MAX_ITERATIONS = 5000;
-    
+
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-6;
-    
+
     private static final int PERCENTAGE_OUTLIER = 20;
-    
+
     private static final int NUM_PARAMS = 2;
-    
+
     private static final int TIMES = 100;
-    
-    public PROMedSRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() {
-        //test empty constructor
+        // test empty constructor
         PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getConfidence(), 
+        assertEquals(estimator.getConfidence(),
                 PROMedSRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PROMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.isStopThresholdEnabled(),
                 PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
@@ -92,7 +77,7 @@ public class PROMedSRobustEstimatorTest {
                 PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
         assertEquals(estimator.isUseInlierThresholds(),
                 PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
-        assertEquals(estimator.getNIters(), 
+        assertEquals(estimator.getNIters(),
                 PROMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertNull(estimator.getBestResult());
         assertEquals(estimator.getMaxOutliersProportion(),
@@ -103,32 +88,32 @@ public class PROMedSRobustEstimatorTest {
                 PROSACRobustEstimator.DEFAULT_BETA, 0.0);
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        
-        //test constructor with listener
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
-        TestPROMedSCRobustEstimatorListener listener =
-                new TestPROMedSCRobustEstimatorListener(numSamples, 
-                PERCENTAGE_OUTLIER, THRESHOLD);
+
+        // test constructor with listener
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final TestPROMedSCRobustEstimatorListener listener =
+                new TestPROMedSCRobustEstimatorListener(numSamples,
+                        PERCENTAGE_OUTLIER, THRESHOLD);
         estimator = new PROMedSRobustEstimator<>(listener);
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
         assertTrue(estimator.isReady());
-        assertEquals(estimator.getConfidence(), 
+        assertEquals(estimator.getConfidence(),
                 PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.isStopThresholdEnabled(),
-                PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);        
+                PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
         assertEquals(estimator.getInlierFactor(),
                 PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
         assertEquals(estimator.isUseInlierThresholds(),
-                PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);        
-        assertEquals(estimator.getNIters(), 
+                PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
+        assertEquals(estimator.getNIters(),
                 PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertNull(estimator.getBestResult());
         assertEquals(estimator.getMaxOutliersProportion(),
@@ -136,277 +121,290 @@ public class PROMedSRobustEstimatorTest {
         assertEquals(estimator.getEta0(),
                 PROSACRobustEstimator.DEFAULT_ETA0, 0.0);
         assertEquals(estimator.getBeta(),
-                PROSACRobustEstimator.DEFAULT_BETA, 0.0);   
+                PROSACRobustEstimator.DEFAULT_BETA, 0.0);
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
     }
-    
+
     @Test
-    public void testGetSetListenerAvailabilityAndIsReady() 
+    public void testGetSetListenerAvailabilityAndIsReady()
             throws LockedException {
-        PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
+        final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
-        
-        //set listener
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);        
-        TestPROMedSCRobustEstimatorListener listener = 
-                new TestPROMedSCRobustEstimatorListener(numSamples, 
-                PERCENTAGE_OUTLIER, THRESHOLD);
+
+        // set listener
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final TestPROMedSCRobustEstimatorListener listener =
+                new TestPROMedSCRobustEstimatorListener(numSamples,
+                        PERCENTAGE_OUTLIER, THRESHOLD);
 
         estimator.setListener(listener);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
-        assertTrue(estimator.isReady());        
+        assertTrue(estimator.isReady());
     }
-    
+
     @Test
-    public void testGetSetProgressDelta() throws IllegalArgumentException, 
-            LockedException{
-        PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getProgressDelta(), 
+    public void testGetSetProgressDelta() throws IllegalArgumentException,
+            LockedException {
+        final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
+        assertEquals(estimator.getProgressDelta(),
                 RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        float progressDelta = randomizer.nextFloat(0.0f, 1.0f);
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final float progressDelta = randomizer.nextFloat(0.0f, 1.0f);
         estimator.setProgressDelta(progressDelta);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getProgressDelta(), progressDelta, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }  
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
-    public void testGetSetConfidence() throws IllegalArgumentException, 
+    public void testGetSetConfidence() throws IllegalArgumentException,
             LockedException {
-        PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getConfidence(), 
+        final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
+        assertEquals(estimator.getConfidence(),
                 PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double confidence = randomizer.nextDouble(0.0, 1.0);
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double confidence = randomizer.nextDouble(0.0, 1.0);
         estimator.setConfidence(confidence);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getConfidence(), confidence, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }  
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
-    public void testGetSetMaxIterations() throws IllegalArgumentException, 
+    public void testGetSetMaxIterations() throws IllegalArgumentException,
             LockedException {
-        PROMedSRobustEstimator<double[]> estimator =
+        final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int maxIterations = randomizer.nextInt(MIN_MAX_ITERATIONS, 
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int maxIterations = randomizer.nextInt(MIN_MAX_ITERATIONS,
                 MAX_MAX_ITERATIONS);
         estimator.setMaxIterations(maxIterations);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getMaxIterations(), maxIterations);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }    
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testIsSetStopThresholdEnabled() throws LockedException {
-        PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
+        final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
         assertEquals(estimator.isStopThresholdEnabled(),
                 PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
-        
-        //set new value
+
+        // set new value
         estimator.setStopThresholdEnabled(
                 !PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.isStopThresholdEnabled(),
                 !PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
     }
-        
+
     @Test
     public void testGetSetInlierFactor() throws IllegalArgumentException,
             LockedException {
-        PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
+        final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
         assertEquals(estimator.getInlierFactor(),
                 PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
-        
-        //set new value 
+
+        // set new value
         estimator.setInlierFactor(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getInlierFactor(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setInlierFactor(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testIsSetUseInlierThresholds() throws LockedException {
-        PROMedSRobustEstimator<double[]> estimator =
+        final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
         assertEquals(estimator.isUseInlierThresholds(),
                 PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
-        
-        //set new value
+
+        // set new value
         estimator.setUseInlierThresholds(
                 !PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.isUseInlierThresholds(),
                 !PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
     }
-    
+
     @Test
-    public void testGetSetMaxOutliersProportion() 
+    public void testGetSetMaxOutliersProportion()
             throws IllegalArgumentException, LockedException {
-        PROMedSRobustEstimator<double[]> estimator =
+        final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
         assertEquals(estimator.getMaxOutliersProportion(),
                 PROMedSRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
-        
-        //set new value
+
+        // set new value
         estimator.setMaxOutliersProportion(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getMaxOutliersProportion(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setMaxOutliersProportion(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setMaxOutliersProportion(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
-    public void testGetSetEta0() throws IllegalArgumentException, 
+    public void testGetSetEta0() throws IllegalArgumentException,
             LockedException {
-        PROMedSRobustEstimator<double[]> estimator =
+        final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getEta0(), PROMedSRobustEstimator.DEFAULT_ETA0, 
+        assertEquals(estimator.getEta0(), PROMedSRobustEstimator.DEFAULT_ETA0,
                 0.0);
-        
-        //set new value
+
+        // set new value
         estimator.setEta0(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getEta0(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setEta0(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setEta0(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetBeta() throws IllegalArgumentException,
             LockedException {
-        PROMedSRobustEstimator<double[]> estimator =
+        final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        
-        assertEquals(estimator.getBeta(), PROMedSRobustEstimator.DEFAULT_BETA, 
+
+        assertEquals(estimator.getBeta(), PROMedSRobustEstimator.DEFAULT_BETA,
                 0.0);
-        
-        //set new value
+
+        // set new value
         estimator.setBeta(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getBeta(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setBeta(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setBeta(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testEstimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
         for (int i = 0; i < TIMES; i++) {
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            TestPROMedSCRobustEstimatorListener listener =
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final TestPROMedSCRobustEstimatorListener listener =
                     new TestPROMedSCRobustEstimatorListener(numSamples,
-                    PERCENTAGE_OUTLIER, THRESHOLD);
-            PROMedSRobustEstimator<double[]> estimator =
+                            PERCENTAGE_OUTLIER, THRESHOLD);
+            final PROMedSRobustEstimator<double[]> estimator =
                     new PROMedSRobustEstimator<>();
 
-            //Force NotReadyException
+            // Force NotReadyException
             try {
                 estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException ignore) { }
+            } catch (final NotReadyException ignore) {
+            }
 
-            //set listener
+            // set listener
             estimator.setListener(listener);
             listener.reset();
             assertEquals(listener.getStartCounter(), 0);
             assertEquals(listener.getEndCounter(), 0);
             assertFalse(estimator.isLocked());
 
-            //estimate
-            double[] params = estimator.estimate();
+            // estimate
+            final double[] params = estimator.estimate();
 
-            //check status after estimation
+            // check status after estimation
             assertFalse(estimator.isLocked());
             assertEquals(listener.getStartCounter(), 1);
             assertEquals(listener.getEndCounter(), 1);
 
-            //check correctness of estimation
+            // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
             assertEquals(params.length, NUM_PARAMS);
 
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
-            
-            PROMedSInliersData inliersData = estimator.getBestInliersData();
+
+            final PROMedSInliersData inliersData = estimator.getBestInliersData();
             assertNotNull(inliersData);
             assertSame(inliersData, estimator.getInliersData());
             assertTrue(inliersData.getNumInliers() > 0);
@@ -416,67 +414,68 @@ public class PROMedSRobustEstimatorTest {
     }
 
     private double[] computeParams() {
-        //we will estimate parameters a and b for equation y = a*x + b
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double[] params = new double[NUM_PARAMS];
-        //a parameter
+        // we will estimate parameters a and b for equation y = a*x + b
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] params = new double[NUM_PARAMS];
+        // a parameter
         params[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        //b parameter
+        // b parameter
         params[1] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         return params;
-    }  
-    
-    private void computeSamplesAndQualityScores(double[] params, int numSamples, 
-            int percentageOutliers, double[] ys, double[] xs, 
-            double[] qualityScores) {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    }
+
+    private void computeSamplesAndQualityScores(final double[] params, final int numSamples,
+                                                final int percentageOutliers, final double[] ys, final double[] xs,
+                                                final double[] qualityScores) {
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         for (int i = 0; i < numSamples; i++) {
-            //compute x values
+            // compute x values
             xs[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            //compute exact y values
+            // compute exact y values
             ys[i] = params[0] * xs[i] + params[1];
-            double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
-                    MAX_SCORE_ERROR);          
-            //inliers score can also have error
+            final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
+                    MAX_SCORE_ERROR);
+            // inliers score can also have error
             qualityScores[i] = 1.0 + scoreError;
             if (randomizer.nextInt(0, 100) < percentageOutliers) {
-                //is outlier, so we add a certain amount of error
-                double error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
-                ys[i] += error; //add sample error
-                //quality score is (1 / (1 + error)) + scoreError
-                qualityScores[i] = 1.0 / (1.0 + error) + scoreError; 
+                // is outlier, so we add a certain amount of error
+                final double error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
+                // add sample error
+                ys[i] += error;
+                // quality score is (1 / (1 + error)) + scoreError
+                qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
             }
-        }        
-    } 
-    
+        }
+    }
+
     public class TestPROMedSCRobustEstimatorListener implements
             PROMedSRobustEstimatorListener<double[]> {
-        
-        private double[] params;
-        private double[] xs;
-        private double[] ys;
-        private double[] qualityScores;
-        private int numSamples;
-        private double threshold;
-        
+
+        private final double[] params;
+        private final double[] xs;
+        private final double[] ys;
+        private final double[] qualityScores;
+        private final int numSamples;
+        private final double threshold;
+
         private int startCounter;
         private int endCounter;
         private float previousProgress;
-        
-        TestPROMedSCRobustEstimatorListener(int numSamples,
-                int percentageOutliers, double threshold) {
+
+        TestPROMedSCRobustEstimatorListener(final int numSamples,
+                                            final int percentageOutliers, final double threshold) {
             this.numSamples = numSamples;
             params = computeParams();
             xs = new double[numSamples];
             ys = new double[numSamples];
             qualityScores = new double[numSamples];
-            computeSamplesAndQualityScores(params, numSamples, 
+            computeSamplesAndQualityScores(params, numSamples,
                     percentageOutliers, ys, xs, qualityScores);
             this.threshold = threshold;
             reset();
         }
-        
+
         public double[] getParams() {
             return params;
         }
@@ -498,51 +497,52 @@ public class PROMedSRobustEstimatorTest {
 
         @Override
         public int getSubsetSize() {
-            //only two matches x and y are required to determine a and b as 
-            //follows:
-            //y1 = a* x1 + b --> b = y1 - a * x1
-            //y2 = a * x2 + b --> y2 = a * x2 + y1 - a * x1 -->
-            //y2 - y1 = (x2 - x1)*a --> a = (y2 - y1) / (x2 - x1)
-            
-            //Hence:
-            //a = (y2 - y1) / (x2 - x1)
-            //b = y1 - (y2 - y1) / (x2 - x1) * x1
+            // only two matches x and y are required to determine a and b as
+            // follows:
+            // y1 = a* x1 + b --> b = y1 - a * x1
+            // y2 = a * x2 + b --> y2 = a * x2 + y1 - a * x1 -->
+            // y2 - y1 = (x2 - x1)*a --> a = (y2 - y1) / (x2 - x1)
+
+            // Hence:
+            // a = (y2 - y1) / (x2 - x1)
+            // b = y1 - (y2 - y1) / (x2 - x1) * x1
             return NUM_PARAMS;
         }
 
         @Override
-        public void estimatePreliminarSolutions(int[] samplesIndices, 
-                List<double[]> solutions) {
-            
-            if(samplesIndices.length != NUM_PARAMS) 
+        public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                final List<double[]> solutions) {
+
+            if (samplesIndices.length != NUM_PARAMS) {
                 throw new IllegalArgumentException();
-            int index1 = samplesIndices[0];
-            int index2 = samplesIndices[1];
-            
-            double y1 = ys[index1];
-            double y2 = ys[index2];
-            double x1 = xs[index1];
-            double x2 = xs[index2];
-            
-            double a = (y2 - y1) / (x2 - x1);
-            double b = y1 - a * x1;
-            
-            double[] solution = new double[NUM_PARAMS];
+            }
+            final int index1 = samplesIndices[0];
+            final int index2 = samplesIndices[1];
+
+            final double y1 = ys[index1];
+            final double y2 = ys[index2];
+            final double x1 = xs[index1];
+            final double x2 = xs[index2];
+
+            final double a = (y2 - y1) / (x2 - x1);
+            final double b = y1 - a * x1;
+
+            final double[] solution = new double[NUM_PARAMS];
             solution[0] = a;
             solution[1] = b;
-            
+
             solutions.add(solution);
         }
 
         @Override
-        public double computeResidual(double[] currentEstimation, int i) {
-            double a = currentEstimation[0];
-            double b = currentEstimation[1];
+        public double computeResidual(final double[] currentEstimation, final int i) {
+            final double a = currentEstimation[0];
+            final double b = currentEstimation[1];
 
-            double estimatedY = a * xs[i] + b;
-            double y = ys[i];
-            
-            return  Math.abs(estimatedY - y);
+            final double estimatedY = a * xs[i] + b;
+            final double y = ys[i];
+
+            return Math.abs(estimatedY - y);
         }
 
         @Override
@@ -551,21 +551,21 @@ public class PROMedSRobustEstimatorTest {
         }
 
         @Override
-        public void onEstimateStart(RobustEstimator<double[]> estimator) {
-            testIsLocked((PROMedSRobustEstimator<double[]>)estimator);
+        public void onEstimateStart(final RobustEstimator<double[]> estimator) {
+            testIsLocked((PROMedSRobustEstimator<double[]>) estimator);
             startCounter++;
         }
 
         @Override
-        public void onEstimateEnd(RobustEstimator<double[]> estimator) {
-            testIsLocked((PROMedSRobustEstimator<double[]>)estimator);
+        public void onEstimateEnd(final RobustEstimator<double[]> estimator) {
+            testIsLocked((PROMedSRobustEstimator<double[]>) estimator);
             endCounter++;
         }
 
         @Override
-        public void onEstimateNextIteration(RobustEstimator<double[]> estimator, int iteration) {
-            PROMedSRobustEstimator<double[]> ransacEstimator = 
-                    (PROMedSRobustEstimator<double[]>)estimator;
+        public void onEstimateNextIteration(final RobustEstimator<double[]> estimator, final int iteration) {
+            final PROMedSRobustEstimator<double[]> ransacEstimator =
+                    (PROMedSRobustEstimator<double[]>) estimator;
             testIsLocked(ransacEstimator);
             assertTrue(iteration > 0);
             assertTrue(ransacEstimator.getNIters() >= 0);
@@ -574,8 +574,8 @@ public class PROMedSRobustEstimatorTest {
 
         @Override
         public void onEstimateProgressChange(
-                RobustEstimator<double[]> estimator, float progress) {
-            testIsLocked((PROMedSRobustEstimator<double[]>)estimator);
+                final RobustEstimator<double[]> estimator, final float progress) {
+            testIsLocked((PROMedSRobustEstimator<double[]>) estimator);
             assertTrue(progress >= 0.0f);
             assertTrue(progress <= 1.0f);
             assertTrue(progress >= previousProgress);
@@ -590,46 +590,54 @@ public class PROMedSRobustEstimatorTest {
             return endCounter;
         }
 
-        private void testIsLocked(PROMedSRobustEstimator<double[]> estimator) {
+        private void testIsLocked(final PROMedSRobustEstimator<double[]> estimator) {
             assertTrue(estimator.isLocked());
-            //test that estimator cannot be modified while locked
+            // test that estimator cannot be modified while locked
             try {
                 estimator.setConfidence(0.5);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setListener(this);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setMaxIterations(1);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setProgressDelta(0.5f);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setMaxOutliersProportion(0.5);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setEta0(0.5);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setBeta(0.5);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
             try {
                 estimator.setStopThresholdEnabled(false);
                 fail("LockedException expected but not thrown");
-            } catch (LockedException ignore) { }
+            } catch (final LockedException ignore) {
+            }
         }
-        
+
         public final void reset() {
             startCounter = endCounter = 0;
-            previousProgress = 0.0f;            
-        }        
+            previousProgress = 0.0f;
+        }
     }
 }

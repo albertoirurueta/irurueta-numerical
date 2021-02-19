@@ -16,47 +16,52 @@
 package com.irurueta.numerical.robust;
 
 /**
- *
- * Listener to be notified of events on a robust estimator such as when 
+ * Listener to be notified of events on a robust estimator such as when
  * estimation starts, ends or when progress changes.
+ *
  * @param <T> type of instance being estimated.
  */
 public interface RobustEstimatorListener<T> {
-    
+
     /**
      * Called to determine when a robust estimator is ready to start estimation.
      * This is true when all required data to start estimation is available
+     *
      * @return true if robust estimator is ready to start estimation, false
      * otherwise.
      */
     boolean isReady();
-   
+
     /**
      * Called when estimation starts.
+     *
      * @param estimator reference to robust estimator.
      */
-    void onEstimateStart(RobustEstimator<T> estimator);
-    
+    void onEstimateStart(final RobustEstimator<T> estimator);
+
     /**
      * Called when estimation ends.
+     *
      * @param estimator reference to robust estimator.
      */
-    void onEstimateEnd(RobustEstimator<T> estimator);
-    
+    void onEstimateEnd(final RobustEstimator<T> estimator);
+
     /**
      * Called when estimator iterates to refine a possible solution.
+     *
      * @param estimator reference to robust estimator.
      * @param iteration current iteration.
      */
-    void onEstimateNextIteration(RobustEstimator<T> estimator,
-            int iteration);
-    
+    void onEstimateNextIteration(final RobustEstimator<T> estimator,
+                                 final int iteration);
+
     /**
      * Called when estimation progress changes significantly.
+     *
      * @param estimator reference to robust estimator.
-     * @param progress progress of estimation expressed as a value between 0.0
-     * and 1.0.
+     * @param progress  progress of estimation expressed as a value between 0.0
+     *                  and 1.0.
      */
-    void onEstimateProgressChange(RobustEstimator<T> estimator,
-            float progress);
+    void onEstimateProgressChange(final RobustEstimator<T> estimator,
+                                  final float progress);
 }

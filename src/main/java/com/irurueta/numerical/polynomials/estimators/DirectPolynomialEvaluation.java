@@ -23,43 +23,47 @@ public class DirectPolynomialEvaluation extends PolynomialEvaluation {
     /**
      * Point where polynomial has been evaluated.
      */
-    private double mX;    
-    
+    private double mX;
+
     /**
      * Constructor.
      */
     public DirectPolynomialEvaluation() {
         super();
     }
-    
+
     /**
      * Constructor.
-     * @param x point where polynomial has been evaluated.
+     *
+     * @param x          point where polynomial has been evaluated.
      * @param evaluation evaluation of polynomial at point x.
      */
-    public DirectPolynomialEvaluation(double x, double evaluation) {
+    public DirectPolynomialEvaluation(final double x, final double evaluation) {
         super(evaluation);
         mX = x;
     }
-    
+
     /**
      * Gets point where polynomial has been evaluated.
+     *
      * @return point where polynomial has been evaluated.
      */
     public double getX() {
         return mX;
     }
-    
+
     /**
      * Sets point where polynomial has been evaluated.
+     *
      * @param x point where polynomial has been evaluated.
      */
-    public void setX(double x) {
+    public void setX(final double x) {
         mX = x;
-    }    
-    
+    }
+
     /**
      * Gets type of polynomial evaluation.
+     *
      * @return type of polynomial evaluation.
      */
     @Override

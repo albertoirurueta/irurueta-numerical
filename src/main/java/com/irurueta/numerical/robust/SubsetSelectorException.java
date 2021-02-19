@@ -21,36 +21,39 @@ import com.irurueta.numerical.NumericalException;
  * Raised if subset selection of samples fails.
  */
 public class SubsetSelectorException extends NumericalException {
-    
+
     /**
      * Constructor.
-     */        
+     */
     public SubsetSelectorException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */    
-    public SubsetSelectorException(String message) {
+     */
+    public SubsetSelectorException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */    
-    public SubsetSelectorException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public SubsetSelectorException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */    
-    public SubsetSelectorException(Throwable cause) {
+     */
+    public SubsetSelectorException(final Throwable cause) {
         super(cause);
     }
 }

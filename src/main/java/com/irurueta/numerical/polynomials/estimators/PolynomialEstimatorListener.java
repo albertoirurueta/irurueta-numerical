@@ -20,16 +20,18 @@ package com.irurueta.numerical.polynomials.estimators;
  * changes.
  */
 public interface PolynomialEstimatorListener {
-    
+
     /**
      * Called when an estimator starts the polynomial estimation process.
+     *
      * @param estimator reference to a polynomial estimator.
      */
-    void onEstimateStart(PolynomialEstimator estimator);
-    
+    void onEstimateStart(final PolynomialEstimator estimator);
+
     /**
      * Called when an estimator ends the polynomial estimation process.
+     *
      * @param estimator reference to a polynomial estimator.
      */
-    void onEstimateEnd(PolynomialEstimator estimator);
+    void onEstimateEnd(final PolynomialEstimator estimator);
 }

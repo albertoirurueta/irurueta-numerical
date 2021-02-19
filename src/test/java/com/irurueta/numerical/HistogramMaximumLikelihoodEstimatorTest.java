@@ -23,49 +23,34 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class HistogramMaximumLikelihoodEstimatorTest {
-    
+
     private static final int MIN_BINS = 10;
     private static final int MAX_BINS = 100;
-    
+
     private static final int NUMBER_OF_SAMPLES = 100000;
-    
+
     private static final double MIN_MEAN = 1.0;
     private static final double MAX_MEAN = 10.0;
-    
+
     private static final double MIN_STD = 1.0;
     private static final double MAX_STD = 5.0;
-    
+
     private static final double MIN_GAUSSIAN_SIGMA = 0.5;
     private static final double MAX_GAUSSIAN_SIGMA = 2.0;
-    
-    public HistogramMaximumLikelihoodEstimatorTest() { }
 
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
     @Test
     public void testConstructor() throws LockedException, NotAvailableException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberOfBins = randomizer.nextInt(MIN_BINS, MAX_BINS);
-        double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberOfBins = randomizer.nextInt(MIN_BINS, MAX_BINS);
+        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
                 MAX_GAUSSIAN_SIGMA);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random());
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
@@ -78,146 +63,161 @@ public class HistogramMaximumLikelihoodEstimatorTest {
                 maxValue = inputData[i];
             }
         }
-        
+
         HistogramMaximumLikelihoodEstimator estimator;
-        
-        //test 1st constructor
+
+        // test 1st constructor
         estimator = new HistogramMaximumLikelihoodEstimator();
         assertNotNull(estimator);
-        
+
         assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getNumberOfBins(),
                 HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
         assertEquals(estimator.getGaussianSigma(),
-                HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 
+                HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
                 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
         try {
             estimator.getInputData();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.isInputDataAvailable());
         assertFalse(estimator.isReady());
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
-        
-        
-        //Test 2nd constructor
+        } catch (final NotReadyException ignore) {
+        }
+
+
+        // Test 2nd constructor
         estimator = new HistogramMaximumLikelihoodEstimator(gaussianSigma,
                 numberOfBins);
         assertNotNull(estimator);
-        
+
         assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
         try {
             estimator.getInputData();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.isInputDataAvailable());
         assertFalse(estimator.isReady());
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
+        } catch (final NotReadyException ignore) {
+        }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            estimator = new HistogramMaximumLikelihoodEstimator(gaussianSigma, 
+            estimator = new HistogramMaximumLikelihoodEstimator(gaussianSigma,
                     1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            estimator = new HistogramMaximumLikelihoodEstimator(0.0, 
+            estimator = new HistogramMaximumLikelihoodEstimator(0.0,
                     numberOfBins);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(0.0, 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        
-        //Test 3rd constructor
+
+
+        // Test 3rd constructor
         estimator = new HistogramMaximumLikelihoodEstimator(inputData,
                 gaussianSigma, numberOfBins);
         assertNotNull(estimator);
-        
+
         assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
         assertTrue(estimator.isReady());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(inputData,
                     gaussianSigma, 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(inputData, 0.0,
                     numberOfBins);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            estimator = new HistogramMaximumLikelihoodEstimator(inputData, 0.0, 
+            estimator = new HistogramMaximumLikelihoodEstimator(inputData, 0.0,
                     1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        
-        
-        //Test 4th constructor
+
+
+        // Test 4th constructor
         estimator = new HistogramMaximumLikelihoodEstimator(minValue, maxValue,
                 inputData, gaussianSigma, numberOfBins);
         assertNotNull(estimator);
-        
+
         assertEquals(estimator.getMethod(),
                 MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
@@ -227,270 +227,296 @@ public class HistogramMaximumLikelihoodEstimatorTest {
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
         assertTrue(estimator.isReady());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(maxValue,
                     minValue, inputData, gaussianSigma, numberOfBins);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(minValue,
                     maxValue, inputData, gaussianSigma, 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(maxValue,
                     minValue, inputData, gaussianSigma, 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(minValue,
                     maxValue, inputData, 0.0, numberOfBins);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(maxValue,
                     minValue, inputData, 0.0, numberOfBins);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(minValue,
                     maxValue, inputData, 0.0, 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = new HistogramMaximumLikelihoodEstimator(maxValue,
                     minValue, inputData, 0.0, 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
-        assertNull(estimator);        
+        } catch (final IllegalArgumentException ignore) {
+        }
+
+        assertNull(estimator);
     }
-    
+
     @Test
     public void testGetMethod() {
-        HistogramMaximumLikelihoodEstimator estimator =
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
                 HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
     }
-    
+
     @Test
     public void testGetSetNumberOfBins() throws LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberOfBins = randomizer.nextInt(MIN_BINS, MAX_BINS);
-        
-        HistogramMaximumLikelihoodEstimator estimator =
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberOfBins = randomizer.nextInt(MIN_BINS, MAX_BINS);
+
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         assertEquals(estimator.getNumberOfBins(),
                 HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
-        
-        //set new number of bins
+
+        // set new number of bins
         estimator.setNumberOfBins(numberOfBins);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setNumberOfBins(1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetGaussianSigma() throws LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
                 MAX_GAUSSIAN_SIGMA);
-        
-        HistogramMaximumLikelihoodEstimator estimator =
+
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         assertEquals(estimator.getGaussianSigma(),
-                HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 
+                HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
                 0.0);
-        
-        //set new gaussian sigma
+
+        // set new gaussian sigma
         estimator.setGaussianSigma(gaussianSigma);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setGaussianSigma(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetMinMaxValuesAndAvailability() throws LockedException,
             NotAvailableException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        HistogramMaximumLikelihoodEstimator estimator = 
+
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         try {
             estimator.getMaxValue();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.areMinMaxValuesAvailable());
-        
-        //set min max values
+
+        // set min max values
         estimator.setMinMaxValues(minValue, maxValue);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
         assertTrue(estimator.areMinMaxValuesAvailable());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setMinMaxValues(maxValue, minValue);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testIsLocked() {
-        HistogramMaximumLikelihoodEstimator estimator =
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         assertFalse(estimator.isLocked());
     }
-    
-    @Test
-    public void testGetSetInputDataAndAvailability() throws LockedException, 
-            NotAvailableException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+    @Test
+    public void testGetSetInputDataAndAvailability() throws LockedException,
+            NotAvailableException {
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random());
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        HistogramMaximumLikelihoodEstimator estimator =
+
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         try {
             estimator.getInputData();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) { }
+        } catch (final NotAvailableException ignore) {
+        }
         assertFalse(estimator.isInputDataAvailable());
-        
-        //set input data
+
+        // set input data
         estimator.setInputData(inputData);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getInputData(), inputData);
         assertTrue(estimator.isInputDataAvailable());
     }
-    
+
     @Test
     public void testIsReady() throws LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random());
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
-        HistogramMaximumLikelihoodEstimator estimator =
+
+        final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
-        
+
         assertFalse(estimator.isReady());
-        
-        //set input data
+
+        // set input data
         estimator.setInputData(inputData);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(estimator.isReady());
     }
-    
+
     @Test
     public void testEstimate() throws LockedException, NotReadyException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        
-        double[] inputData = new double[NUMBER_OF_SAMPLES];
-        
-        //initialize input data with gaussian data
-        GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+
+        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+
+        // initialize input data with gaussian data
+        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
                 new Random(), mean, standardDeviation);
         double minValue = Double.MAX_VALUE;
         double maxValue = -Double.MAX_VALUE;
         for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
-            if(inputData[i] < minValue) minValue = inputData[i];
-            if(inputData[i] > maxValue) maxValue = inputData[i];
+            if (inputData[i] < minValue) {
+                minValue = inputData[i];
+            }
+            if (inputData[i] > maxValue) {
+                maxValue = inputData[i];
+            }
         }
-        
+
         HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
         estimator.setInputData(inputData);
-        
+
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
-        
-        double estimatedMean = estimator.estimate();
+
+        final double estimatedMean = estimator.estimate();
         assertFalse(estimator.isLocked());
-        
+
         double binSize = (maxValue - minValue) * estimator.getNumberOfBins();
         assertEquals(mean, estimatedMean, 2.0 * binSize);
-        
-        //Force NotReadyException
+
+        // Force NotReadyException
         estimator = new HistogramMaximumLikelihoodEstimator();
         assertFalse(estimator.isReady());
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
-        } catch (NotReadyException ignore) { }
+        } catch (final NotReadyException ignore) {
+        }
     }
 }

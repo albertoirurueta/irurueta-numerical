@@ -15,26 +15,12 @@
  */
 package com.irurueta.numerical.signal.processing;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class SignalProcessingExceptionTest {
-    
-    public SignalProcessingExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         SignalProcessingException ex = new SignalProcessingException();

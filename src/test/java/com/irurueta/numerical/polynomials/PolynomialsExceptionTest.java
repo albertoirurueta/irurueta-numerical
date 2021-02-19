@@ -15,26 +15,12 @@
  */
 package com.irurueta.numerical.polynomials;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class PolynomialsExceptionTest {
-    
-    public PolynomialsExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         PolynomialsException ex = new PolynomialsException();
