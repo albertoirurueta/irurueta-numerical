@@ -35,7 +35,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * certain error, so depending on the function topology, LineMultiOptimizer
  * subclasses might obtain greater accuracy than subclasses of this class.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     /**
      * n-dimensional point containing a minimum in a given line.
@@ -74,7 +73,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     /**
      * Empty constructor.
      */
-    public DerivativeLineMultiOptimizer() {
+    protected DerivativeLineMultiOptimizer() {
         super();
         p = xi = null;
         n = 0;
@@ -100,7 +99,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    public DerivativeLineMultiOptimizer(
+    protected DerivativeLineMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
             final GradientFunctionEvaluatorListener gradientListener,
             final double[] point, final double[] direction) {
