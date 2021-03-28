@@ -169,13 +169,14 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             x.setRealAndImaginary(0.0, 0.0);
             final Complex[] adV = Arrays.copyOf(ad, j + 2);
             internalLaguer(adV, x, its);
-            if (Math.abs(x.getImaginary()) <= 2.0 * EPS * Math.abs(x.getReal()))
-                x.clone().setRealAndImaginary(x.getReal(), 0.0);
-            roots[j] = x.clone();
-            b = ad[j + 1].clone();
+            if (Math.abs(x.getImaginary()) <= 2.0 * EPS * Math.abs(x.getReal())) {
+                x = new Complex(x.getReal(), 0.0);
+            }
+            roots[j] = new Complex(x);
+            b = new Complex(ad[j + 1]);
             for (int jj = j; jj >= 0; jj--) {
-                c = ad[jj].clone();
-                ad[jj] = b.clone();
+                c = new Complex(ad[jj]);
+                ad[jj] = new Complex(b);
                 b.multiply(x);
                 b.add(c);
             }
@@ -186,14 +187,14 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             }
         }
         for (int j = 1; j < m; j++) {
-            x = roots[j].clone();
+            x = new Complex(roots[j]);
             for (i = j - 1; i >= 0; i--) {
                 if (roots[i].getReal() <= x.getReal()) {
                     break;
                 }
-                roots[i + 1] = roots[i].clone();
+                roots[i + 1] = new Complex(roots[i]);
             }
-            roots[i + 1] = x.clone();
+            roots[i + 1] = new Complex(x);
         }
 
         locked = false;
@@ -273,7 +274,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
         final int m = a.length - 1;
         for (int iter = 1; iter <= MAXIT; iter++) {
             its[0] = iter;
-            b = a[m].clone();
+            b = new Complex(a[m]);
             double err = b.getModulus();
             d.setRealAndImaginary(0.0, 0.0);
             f.setRealAndImaginary(0.0, 0.0);
