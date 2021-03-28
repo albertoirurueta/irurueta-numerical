@@ -25,7 +25,6 @@ import com.irurueta.algebra.Matrix;
  * Where f0, f1, ... is the function basis which ideally should be formed by
  * orthogonal functions.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter {
 
     /**
@@ -47,7 +46,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
     /**
      * Constructor.
      */
-    public SingleDimensionLinearFitter() {
+    protected SingleDimensionLinearFitter() {
         super();
     }
 
@@ -62,7 +61,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
+    protected SingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
         super(x, y, sig);
     }
 
@@ -78,7 +77,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
+    protected SingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
         super(x, y, sig);
     }
 
@@ -89,7 +88,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
-    public SingleDimensionLinearFitter(
+    protected SingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
         internalSetFunctionEvaluator(evaluator);
@@ -110,7 +109,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(
+    protected SingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator,
             final double[] x, final double[] y, final double[] sig)
             throws FittingException {
@@ -133,7 +132,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(
+    protected SingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator,
             final double[] x, final double[] y, final double sig)
             throws FittingException {
@@ -171,6 +170,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @param evaluator function evaluator.
      * @throws FittingException if evaluation fails.
      */
+    @SuppressWarnings("DuplicatedCode")
     private void internalSetFunctionEvaluator(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {

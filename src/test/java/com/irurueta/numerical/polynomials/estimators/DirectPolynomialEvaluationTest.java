@@ -16,14 +16,14 @@
 package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
 public class DirectPolynomialEvaluationTest {
-    
+
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
 
@@ -31,56 +31,56 @@ public class DirectPolynomialEvaluationTest {
     public void testConstructor() {
         // test empty constructor
         DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
-        
+
         // check initial values
         assertEquals(eval.getX(), 0.0, 0.0);
         assertEquals(eval.getEvaluation(), 0.0, 0.0);
-        assertEquals(eval.getType(), 
+        assertEquals(eval.getType(),
                 PolynomialEvaluationType.DIRECT_EVALUATION);
-        
+
         // test constructor with values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
+
         final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        
+
         eval = new DirectPolynomialEvaluation(x, evaluation);
-        
+
         // check correctness
         assertEquals(eval.getX(), x, 0.0);
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);        
+        assertEquals(eval.getEvaluation(), evaluation, 0.0);
     }
-    
+
     @Test
     public void testGetSetX() {
         final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
-        
+
         // check initial value
         assertEquals(eval.getX(), 0.0, 0.0);
-        
+
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setX(x);
-        
+
         // check correctness
         assertEquals(eval.getX(), x, 0.0);
     }
-    
+
     @Test
     public void testGetSetEvaluation() {
         final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
-        
+
         // check initial value
         assertEquals(eval.getEvaluation(), 0.0, 0.0);
-        
+
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
         eval.setEvaluation(evaluation);
-        
+
         // check correctness
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
     }

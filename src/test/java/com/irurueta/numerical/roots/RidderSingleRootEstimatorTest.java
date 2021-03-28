@@ -106,11 +106,11 @@ public class RidderSingleRootEstimatorTest {
         thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
                 new SingleDimensionFunctionEvaluatorListener() {
 
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1) * (point * point + Math.abs(root2));
-            }
-        };
+                    @Override
+                    public double evaluate(final double point) {
+                        return (point - root1) * (point * point + Math.abs(root2));
+                    }
+                };
     }
 
     @Test

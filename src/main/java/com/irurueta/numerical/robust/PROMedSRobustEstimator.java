@@ -50,7 +50,7 @@ import java.util.List;
  *
  * @param <T> type of object to be estimated.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("Duplicates")
 public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Constant defining default confidence of the estimated result, which is
@@ -685,7 +685,8 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             // iteration
             final List<T> iterResults = new ArrayList<>();
             bestResult = null;
-            float previousProgress = 0.0f, progress;
+            float previousProgress = 0.0f;
+            float progress;
             // subset indices obtained from a subset selector
             final int[] subsetIndices = new int[subsetSize];
             final double[] residualsTemp = new double[totalSamples];
@@ -719,16 +720,16 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             int sampleSize = subsetSize;
             // average number of samples {M_i}_{i=1}^{Tn}
             // that contains samples from U_n only
-            double Tn = nIters;
+            double tn = nIters;
             // integer version of Tn
-            int TnPrime = 1;
+            int tnPrime = 1;
             // number of samples to draw to reach the
             // maximality constraint
             int kNStar = nIters;
 
             // initialize Tn
             for (int i = 0; i < subsetSize; i++) {
-                Tn *= (double) (sampleSize - i) / (double) (totalSamples - i);
+                tn *= (double) (sampleSize - i) / (double) (totalSamples - i);
             }
 
             if (subsetSelector == null) {
@@ -769,16 +770,16 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 // The growth function is defined as
                 // g(t) = min{n : TnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > TnPrime
-                if ((currentIter > TnPrime) && (sampleSize < sampleSizeStar)) {
-                    final double TnPlus1 = (Tn * (double) (sampleSize + 1)) /
+                if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
+                    final double TnPlus1 = (tn * (double) (sampleSize + 1)) /
                             (double) (sampleSize + 1 - subsetSize);
                     sampleSize++;
-                    TnPrime += (int) Math.ceil(TnPlus1 - Tn);
-                    Tn = TnPlus1;
+                    tnPrime += (int) Math.ceil(TnPlus1 - tn);
+                    tn = TnPlus1;
                 }
 
                 // Draw semi-random sample
-                if (currentIter > TnPrime) {
+                if (currentIter > tnPrime) {
                     // during the finishing stage (sampleSize == sampleSizeStar &&
                     // currentIter > TnPrime), draw a standard RANSAC sample
                     // The sample contains subsetSize points seleted from U_n at

@@ -22,7 +22,6 @@ import com.irurueta.numerical.NotReadyException;
  * Abstract class to find function minima. Implementations will take into account whether the function is single or multidimension, and will
  * use different algorithms to find minima.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class Optimizer {
 
     /**
@@ -38,7 +37,7 @@ public abstract class Optimizer {
     /**
      * Empty constructor.
      */
-    public Optimizer() {
+    protected Optimizer() {
         locked = false;
     }
 

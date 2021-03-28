@@ -30,7 +30,7 @@ public abstract class PolynomialEvaluation implements Serializable {
     /**
      * Constructor.
      */
-    public PolynomialEvaluation() {
+    protected PolynomialEvaluation() {
     }
 
     /**
@@ -38,7 +38,7 @@ public abstract class PolynomialEvaluation implements Serializable {
      *
      * @param evaluation evaluation of polynomial at a point x.
      */
-    public PolynomialEvaluation(final double evaluation) {
+    protected PolynomialEvaluation(final double evaluation) {
         mEvaluation = evaluation;
     }
 

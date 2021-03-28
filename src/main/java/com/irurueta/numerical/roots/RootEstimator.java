@@ -25,7 +25,6 @@ import com.irurueta.numerical.NotReadyException;
  * Usually root estimators will only find a single root around an initial
  * coarsely estimated solution.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class RootEstimator {
 
     /**
@@ -39,7 +38,7 @@ public abstract class RootEstimator {
     /**
      * Constructor.
      */
-    public RootEstimator() {
+    protected RootEstimator() {
         locked = false;
     }
 

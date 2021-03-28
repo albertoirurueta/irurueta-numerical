@@ -31,7 +31,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * convergence because search directions during the estimation don't need to be
  * perpendicular.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class LineMultiOptimizer extends MultiOptimizer {
     /**
      * n-dimensional point containing a minimum in a given line.
@@ -63,7 +62,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
     /**
      * Empty constructor.
      */
-    public LineMultiOptimizer() {
+    protected LineMultiOptimizer() {
         super();
         p = xi = null;
         n = 0;
@@ -76,7 +75,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      *
      * @param listener Listener to evaluate a multidimension function.
      */
-    public LineMultiOptimizer(
+    protected LineMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
         p = xi = null;
@@ -101,8 +100,8 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    public LineMultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener,
-                              final double[] point, final double[] direction) {
+    protected LineMultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener,
+                                 final double[] point, final double[] direction) {
         super(listener);
         internalSetStartPointAndDirection(point, direction);
         n = 0;

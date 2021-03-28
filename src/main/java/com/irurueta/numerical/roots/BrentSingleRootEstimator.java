@@ -20,39 +20,39 @@ import com.irurueta.numerical.*;
 /**
  * This class estimates the root of a single dimension continuous function using
  * Brent's method.
- * The implementation of this class is based on Numerical Recipes 3rd ed. 
+ * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 9.3. Page 454.
  */
 @SuppressWarnings("WeakerAccess")
 public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
-    
+
     /**
      * Constant defining maximum number of iterations.
      */
     public static final int ITMAX = 100;
-    
+
     /**
      * Constant defining a small value which is considered as machine precision.
      */
     public static final double EPS = 1e-10;
-    
+
     /**
      * Constant defining default accuracy of the estimated root.
      */
     public static final double DEFAULT_TOLERANCE = 1e-6;
-    
+
     /**
      * Constant defining minimum allowed tolerance.
      */
     public static final double MIN_TOLERANCE = 0.0;
-    
+
     /**
      * Tolerance value. The algorithm will iterate until the result converges
      * below this value of accuracy or until the maximum number of iterations is
      * achieved (and in such case, convergence will be assumed to have failed).
-     */    
+     */
     private double tolerance;
-       
+
     /**
      * Empty constructor.
      */
@@ -60,19 +60,20 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
-    
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
-     * @param tolerance Tolerance to be achieved in the estimated root.
+     *                     root will be searched.
+     * @param tolerance    Tolerance to be achieved in the estimated root.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
+     *                                      maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public BrentSingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener,
@@ -81,27 +82,29 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
-     
+
     /**
      * Returns tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * the tolerance value.
+     *
      * @return Tolerance value.
      */
     public double getTolerance() {
         return tolerance;
     }
-    
+
     /**
      * Internal method to set tolerance value.
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * provided tolerance value.
      * This method does not check whether this instance is locked or not.
+     *
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
+     *                                  negative.
      */
     private void internalSetTolerance(final double tolerance) {
         if (tolerance < MIN_TOLERANCE) {
@@ -115,10 +118,11 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * Tolerance is the accuracy to be achieved when estimating a root.
      * If a root is found by this class, it is ensured to have an accuracy below
      * provided tolerance value.
+     *
      * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
+     * @throws LockedException          Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if provided tolerance value is
-     * negative.
+     *                                  negative.
      */
     public void setTolerance(final double tolerance) throws LockedException {
         if (isLocked()) {
@@ -126,18 +130,19 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         }
         internalSetTolerance(tolerance);
     }
-    
+
     /**
-     * Estimates a local root for a given single dimension function being 
+     * Estimates a local root for a given single dimension function being
      * evaluated by provided listener.
-     * @throws LockedException Exception raised if this instance is already 
-     * locked.
-     * @throws NotReadyException Exception raised if either a listener has not
-     * yet been provided or a bracket has not been provided or computed.
+     *
+     * @throws LockedException         Exception raised if this instance is already
+     *                                 locked.
+     * @throws NotReadyException       Exception raised if either a listener has not
+     *                                 yet been provided or a bracket has not been provided or computed.
      * @throws RootEstimationException Raised if the root estimation failed for
-     * some other reason (usually inability to evaluate the function, 
-     * numerical instability or convergence problems, or no roots are found).
-     */    
+     *                                 some other reason (usually inability to evaluate the function,
+     *                                 numerical instability or convergence problems, or no roots are found).
+     */
     @Override
     @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
@@ -148,9 +153,9 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         locked = true;
-        
+
         final double x1 = minEvalPoint;
         final double x2 = maxEvalPoint;
         final double tol = tolerance;
@@ -174,7 +179,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         } catch (final EvaluationException ex) {
             throw new RootEstimationException(ex);
         }
-        
+
         if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
             // root must be bracketed
             locked = false;
@@ -249,16 +254,17 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
         locked = false;
         throw new RootEstimationException();
     }
-    
+
     /**
-     * Returns boolean indicating whether this instance is ready to start 
+     * Returns boolean indicating whether this instance is ready to start
      * estimating a root.
      * This class will be ready once a listener is provided and a bracket is
      * either provided or computed.
+     *
      * @return True if this instance is ready, false otherwise.
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return isListenerAvailable() && isBracketAvailable();
     }
 }

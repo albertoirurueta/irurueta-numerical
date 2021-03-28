@@ -26,7 +26,7 @@ import com.irurueta.numerical.NotReadyException;
  * A first degree polynomial is defined by its parameters as p(x) = a * x + b,
  * hence the polynomial can be simply be defined by an array of length 2 [b, a].
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("DuplicatedCode")
 public class FirstDegreePolynomialRootsEstimator
         extends PolynomialRootsEstimator {
 
@@ -139,11 +139,9 @@ public class FirstDegreePolynomialRootsEstimator
      * only supports REAL polynomial parameters.
      *
      * @return throws NotAvailableException.
-     * @throws NotAvailableException alwasy throws this exception.
-     * @deprecated
+     * @throws NotAvailableException always throws this exception.
      */
     @Override
-    @Deprecated
     public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
@@ -152,11 +150,8 @@ public class FirstDegreePolynomialRootsEstimator
     /**
      * This method will always raise an IllegalArgumentException because this
      * class only supports REAL polynomial parameters.
-     *
-     * @deprecated
      */
     @Override
-    @Deprecated
     protected void internalSetPolynomialParameters(final Complex[] polyParams) {
         // complex values are not supported
         throw new IllegalArgumentException();

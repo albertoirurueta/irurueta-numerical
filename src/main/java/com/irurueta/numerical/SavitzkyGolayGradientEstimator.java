@@ -15,7 +15,12 @@
  */
 package com.irurueta.numerical;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
 
 /**
  * Class to estimate the gradient of a multidimensional function.

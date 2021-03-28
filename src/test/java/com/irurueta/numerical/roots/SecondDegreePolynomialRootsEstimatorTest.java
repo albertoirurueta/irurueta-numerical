@@ -21,7 +21,7 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
@@ -59,7 +59,6 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         } catch (final NotReadyException ignore) {
         }
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -97,7 +96,6 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         assertArrayEquals(estimator.getRealPolynomialParameters(), polyParams,
                 TOLERANCE);
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -143,7 +141,6 @@ public class SecondDegreePolynomialRootsEstimatorTest {
 
         // check default values
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -161,7 +158,6 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         assertArrayEquals(estimator.getRealPolynomialParameters(), polyParams,
                 TOLERANCE);
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -172,7 +168,6 @@ public class SecondDegreePolynomialRootsEstimatorTest {
         assertArrayEquals(estimator.getRealPolynomialParameters(), polyParams2,
                 TOLERANCE);
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {

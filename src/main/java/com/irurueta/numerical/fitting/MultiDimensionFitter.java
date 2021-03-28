@@ -23,7 +23,6 @@ import java.util.Arrays;
  * Base class to fit a multi dimension function y = f(x1, x2, ...) by using
  * provided data (x, y)
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class MultiDimensionFitter extends Fitter {
     /**
      * Input points x where a multi dimensional function f(x1, x2, ...) is
@@ -67,7 +66,7 @@ public abstract class MultiDimensionFitter extends Fitter {
     /**
      * Constructor
      */
-    public MultiDimensionFitter() {
+    protected MultiDimensionFitter() {
     }
 
     /**
@@ -81,7 +80,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionFitter(final Matrix x, final double[] y, final double[] sig) {
+    protected MultiDimensionFitter(final Matrix x, final double[] y, final double[] sig) {
         setInputData(x, y, sig);
     }
 
@@ -97,7 +96,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionFitter(final Matrix x, final double[] y, final double sig) {
+    protected MultiDimensionFitter(final Matrix x, final double[] y, final double sig) {
         setInputData(x, y, sig);
     }
 

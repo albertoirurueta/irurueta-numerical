@@ -27,7 +27,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * Subclasses of this class will implement specific methods to find function
  * minima.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class SingleOptimizer extends Optimizer {
 
     /**
@@ -54,7 +53,7 @@ public abstract class SingleOptimizer extends Optimizer {
     /**
      * Empty constructor.
      */
-    public SingleOptimizer() {
+    protected SingleOptimizer() {
         super();
         xmin = fmin = 0.0;
         resultAvailable = false;
@@ -66,7 +65,7 @@ public abstract class SingleOptimizer extends Optimizer {
      * @param listener Listener to evaluate a single dimension function where
      *                 minima is meant to be found.
      */
-    public SingleOptimizer(final SingleDimensionFunctionEvaluatorListener listener) {
+    protected SingleOptimizer(final SingleDimensionFunctionEvaluatorListener listener) {
         super();
         this.listener = listener;
         xmin = fmin = 0.0;

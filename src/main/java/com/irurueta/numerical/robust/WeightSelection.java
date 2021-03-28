@@ -41,11 +41,13 @@ public class WeightSelection {
     /**
      * Constructor.
      */
-    private WeightSelection() { }
+    private WeightSelection() {
+    }
 
     /**
      * Returns array indicating which correspondences have been selected
      * (i.e. have a true value), and which ones hasn't (have a false value).
+     *
      * @return array indicating which correspondences have been selected.
      */
     public boolean[] getSelected() {
@@ -55,8 +57,9 @@ public class WeightSelection {
     /**
      * Sets array indicating which correspondences have been selected (i.e.
      * have a true value), and which ones hasn't (have a false value).
-     * @param selected array indicating which correspondences have been 
-     * selected.
+     *
+     * @param selected array indicating which correspondences have been
+     *                 selected.
      */
     public void setSelected(final boolean[] selected) {
         this.selected = selected;
@@ -64,6 +67,7 @@ public class WeightSelection {
 
     /**
      * Returns number of correspondences that have been selected.
+     *
      * @return number of correspondences that have been selected.
      */
     public int getNumSelected() {
@@ -72,6 +76,7 @@ public class WeightSelection {
 
     /**
      * Sets number of correspondences that have been selected.
+     *
      * @param numSelected number of correspondences that have been selected.
      */
     public void setNumSelected(final int numSelected) {
@@ -81,16 +86,17 @@ public class WeightSelection {
     /**
      * Selects correspondences based on provided weights and creates a
      * weight selection instance.
-     * @param weights weights. The larger its value the more important a 
-     * correspondence is.
-     * @param sortWeights indicates whether weights must be sorted so that 
-     * largest weights are taken into account first.
-     * @param maxPoints maximum number of correspondences to pick
+     *
+     * @param weights     weights. The larger its value the more important a
+     *                    correspondence is.
+     * @param sortWeights indicates whether weights must be sorted so that
+     *                    largest weights are taken into account first.
+     * @param maxPoints   maximum number of correspondences to pick
      * @return instance containing the selection that was made.
      * @throws SortingException if weights couldn't be sorted.
      */
     public static WeightSelection selectWeights(final double[] weights,
-            final boolean sortWeights, final int maxPoints) throws SortingException {
+                                                final boolean sortWeights, final int maxPoints) throws SortingException {
 
         final int length = weights.length;
 
@@ -115,7 +121,7 @@ public class WeightSelection {
             for (int i = length - 1; i >= 0; i--) {
                 selected[indices[i]] = true;
                 counter++;
-                if(counter >= maxPoints) break;
+                if (counter >= maxPoints) break;
             }
             numSelected = counter;
         } else {
@@ -123,7 +129,7 @@ public class WeightSelection {
             if (length < maxPoints) {
                 // we select all points
                 Arrays.fill(selected, true);
-                numSelected = length;                
+                numSelected = length;
             } else {
                 // weights aren't sorted so we pick the first maxPoints
                 for (int i = 0; i < maxPoints; i++) {
@@ -137,5 +143,5 @@ public class WeightSelection {
         selection.setSelected(selected);
         selection.setNumSelected(numSelected);
         return selection;
-    }       
+    }
 }

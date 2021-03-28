@@ -24,7 +24,7 @@ import com.irurueta.algebra.Complex;
  */
 @SuppressWarnings("WeakerAccess")
 public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
-    
+
     /**
      * Polynomial coefficients.
      * A polynomial of degree n is defined as:
@@ -32,35 +32,38 @@ public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
      * Hence, the array of polynomial coefficients is [a0, a1, ... a(n-1), an]
      */
     private final Complex[] mPolyParams;
-    
+
     /**
      * Constructor.
+     *
      * @param polyParams polynomial coefficients
-     * @throws IllegalArgumentException if provided array is null or has length 
-     * 0.
+     * @throws IllegalArgumentException if provided array is null or has length
+     *                                  0.
      */
     public ComplexPolynomialEvaluator(final Complex[] polyParams) {
         if (polyParams == null || polyParams.length == 0) {
             throw new IllegalArgumentException();
         }
-        
+
         mPolyParams = polyParams;
     }
-    
+
     /**
      * Gets polynomial parameters.
+     *
      * @return polynomial parameters.
      */
     public Complex[] getPolyParams() {
         return mPolyParams;
     }
-    
+
     /**
      * Evaluates polynomial at provided point x.
+     *
      * @param x point where polynomial is evaluated.
      * @return result of evaluation.
      */
     public Complex evaluate(final Complex x) {
         return evaluate(mPolyParams, x);
-    }    
+    }
 }

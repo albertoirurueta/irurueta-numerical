@@ -29,7 +29,7 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("Duplicates")
 public abstract class PolynomialRobustEstimator {
 
     /**
@@ -142,7 +142,7 @@ public abstract class PolynomialRobustEstimator {
     /**
      * Constructor.
      */
-    public PolynomialRobustEstimator() {
+    protected PolynomialRobustEstimator() {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -156,7 +156,7 @@ public abstract class PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialRobustEstimator(final int degree) {
+    protected PolynomialRobustEstimator(final int degree) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -171,7 +171,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    public PolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations) {
+    protected PolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations) {
         this();
         internalSetEvaluations(evaluations);
     }
@@ -182,7 +182,7 @@ public abstract class PolynomialRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PolynomialRobustEstimator(
+    protected PolynomialRobustEstimator(
             final PolynomialRobustEstimatorListener listener) {
         this();
         mListener = listener;
@@ -197,8 +197,8 @@ public abstract class PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    public PolynomialRobustEstimator(final int degree,
-                                     final List<PolynomialEvaluation> evaluations) {
+    protected PolynomialRobustEstimator(final int degree,
+                                        final List<PolynomialEvaluation> evaluations) {
         this(degree);
         internalSetEvaluations(evaluations);
     }
@@ -211,8 +211,8 @@ public abstract class PolynomialRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialRobustEstimator(final int degree,
-                                     final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final int degree,
+                                        final PolynomialRobustEstimatorListener listener) {
         this(degree);
         mListener = listener;
     }
@@ -226,8 +226,8 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    public PolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations,
-                                     final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations,
+                                        final PolynomialRobustEstimatorListener listener) {
         this(evaluations);
         mListener = listener;
     }
@@ -242,9 +242,9 @@ public abstract class PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    public PolynomialRobustEstimator(final int degree,
-                                     final List<PolynomialEvaluation> evaluations,
-                                     final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final int degree,
+                                        final List<PolynomialEvaluation> evaluations,
+                                        final PolynomialRobustEstimatorListener listener) {
         this(degree, evaluations);
         mListener = listener;
     }

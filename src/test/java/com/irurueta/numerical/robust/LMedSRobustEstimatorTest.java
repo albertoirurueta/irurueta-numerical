@@ -19,7 +19,7 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.robust.LMedSRobustEstimator.LMedSInliersData;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Random;

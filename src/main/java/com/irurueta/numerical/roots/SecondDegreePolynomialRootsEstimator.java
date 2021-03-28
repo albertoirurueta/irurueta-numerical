@@ -29,7 +29,7 @@ import com.irurueta.numerical.NotReadyException;
  * This class is based on:
  * http://en.wikipedia.org/wiki/Quadratic_function
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("Duplicates")
 public class SecondDegreePolynomialRootsEstimator
         extends PolynomialRootsEstimator {
 
@@ -122,10 +122,8 @@ public class SecondDegreePolynomialRootsEstimator
      *
      * @return always throws NotAvailableException
      * @throws NotAvailableException always thrown
-     * @deprecated
      */
     @Override
-    @Deprecated
     public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
     }
@@ -329,11 +327,8 @@ public class SecondDegreePolynomialRootsEstimator
     /**
      * This method will always raise an IllegalArgumentException because this
      * class only supports REAL polynomial parameters
-     *
-     * @deprecated
      */
     @Override
-    @Deprecated
     protected void internalSetPolynomialParameters(final Complex[] polyParams) {
         // complex values are not supported
         throw new IllegalArgumentException();

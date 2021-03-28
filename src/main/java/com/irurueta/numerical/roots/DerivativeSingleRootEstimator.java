@@ -25,38 +25,38 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * also its derivative information.
  * This class is meant to be extended by final implementations.
  */
-@SuppressWarnings("WeakerAccess")
-public abstract class DerivativeSingleRootEstimator 
-    extends BracketedSingleRootEstimator {
-    
+public abstract class DerivativeSingleRootEstimator
+        extends BracketedSingleRootEstimator {
+
     /**
-     * Listener to evaluate a function's derivative. If the function's 
+     * Listener to evaluate a function's derivative. If the function's
      * derivative is not known (e.g. a closed expression is not available), then
-     * a DerivativeEstimator can be used inside the derivative listener 
+     * a DerivativeEstimator can be used inside the derivative listener
      * implementation.
      */
     protected SingleDimensionFunctionEvaluatorListener derivativeListener;
 
     /**
      * Empty constructor.
-     */    
-    public DerivativeSingleRootEstimator() {
+     */
+    protected DerivativeSingleRootEstimator() {
         super();
         derivativeListener = null;
     }
-    
+
     /**
      * Constructor.
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
      * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
+     *                     root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint.
-     */    
-    public DerivativeSingleRootEstimator(
+     *                                      maxEvalPoint.
+     */
+    protected DerivativeSingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener,
             final double minEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
@@ -66,17 +66,18 @@ public abstract class DerivativeSingleRootEstimator
 
     /**
      * Constructor
-     * @param listener Listener to evaluate a single dimension function f(x)
-     * to find its roots.
+     *
+     * @param listener           Listener to evaluate a single dimension function f(x)
+     *                           to find its roots.
      * @param derivativeListener Listener to evaluate the function's derivative
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     * root will be searched.
-     * @param maxEvalPoint Largest value inside the bracket of values where the
-     * root will be searched.
+     * @param minEvalPoint       Smallest value inside the bracket of values where the
+     *                           root will be searched.
+     * @param maxEvalPoint       Largest value inside the bracket of values where the
+     *                           root will be searched.
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     * maxEvalPoint.
-     */        
-    public DerivativeSingleRootEstimator(
+     *                                      maxEvalPoint.
+     */
+    protected DerivativeSingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener,
             final SingleDimensionFunctionEvaluatorListener derivativeListener,
             final double minEvalPoint, final double maxEvalPoint)
@@ -86,10 +87,11 @@ public abstract class DerivativeSingleRootEstimator
     }
 
     /**
-     * Returns derivative listener to evaluate a function's derivative. 
-     * If the function's derivative is not known (e.g. a closed expression is 
-     * not available), then a DerivativeEstimator can be used inside the 
+     * Returns derivative listener to evaluate a function's derivative.
+     * If the function's derivative is not known (e.g. a closed expression is
+     * not available), then a DerivativeEstimator can be used inside the
      * derivative listener implementation.
+     *
      * @return Derivative listener.
      * @throws NotAvailableException if listener is not available for retrieval.
      */
@@ -100,12 +102,13 @@ public abstract class DerivativeSingleRootEstimator
         }
         return derivativeListener;
     }
-    
+
     /**
      * Sets derivative listener to evaluate a function's derivative.
-     * If the function's derivative is not known (e.g. a closed expression is 
-     * not available), then a DerivativeEstimator can be used inside the 
+     * If the function's derivative is not known (e.g. a closed expression is
+     * not available), then a DerivativeEstimator can be used inside the
      * derivative listener implementation.
+     *
      * @param derivativeListener Derivative listener to be set.
      * @throws LockedException Raised if this instance is locked.
      */
@@ -117,21 +120,23 @@ public abstract class DerivativeSingleRootEstimator
         }
         this.derivativeListener = derivativeListener;
     }
-    
+
     /**
-     * Returns boolean indicating whether the derivative listener has been 
+     * Returns boolean indicating whether the derivative listener has been
      * provided and is available for retrieval.
+     *
      * @return true if derivative listener is available, false otherwise
      */
     public boolean isDerivativeListenerAvailable() {
         return derivativeListener != null;
     }
-    
+
     /**
      * Returns boolean indicating whether enough parameters have been provided
      * in order to start the estimation of the roots of a function.
      * An instance of this class is assumed to be ready when a listener, a
      * derivative listener and a bracket have been provided or computed.
+     *
      * @return True if this instance is ready to start the root estimation,
      * false otherwise.
      */

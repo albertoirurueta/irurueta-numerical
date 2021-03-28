@@ -58,7 +58,6 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         } catch (final NotReadyException ignore) {
         }
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -81,7 +80,6 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         assertFalse(estimator.areRootsAvailable());
         assertEquals(estimator.getRealPolynomialParameters(), polyParams);
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -125,7 +123,6 @@ public class FirstDegreePolynomialRootsEstimatorTest {
 
         // check default values
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -142,7 +139,6 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         // check correctness
         assertEquals(estimator.getRealPolynomialParameters(), polyParams);
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
@@ -152,7 +148,6 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         // check correctness
         assertEquals(estimator.getRealPolynomialParameters(), polyParams2);
         try {
-            //noinspection deprecation
             estimator.getPolynomialParameters();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {

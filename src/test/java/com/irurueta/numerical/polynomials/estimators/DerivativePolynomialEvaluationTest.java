@@ -16,7 +16,7 @@
 package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 

@@ -43,7 +43,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * minima and search of an accurate minimum estimation is desired to be
  * restricted to a certain range of values.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class BracketedSingleOptimizer extends SingleOptimizer {
 
     /**
@@ -132,9 +131,9 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws InvalidBracketRangeException Raised if the following condition is
      *                                      not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
      */
-    public BracketedSingleOptimizer(final double minEvalPoint,
-                                    final double middleEvalPoint,
-                                    final double maxEvalPoint)
+    protected BracketedSingleOptimizer(final double minEvalPoint,
+                                       final double middleEvalPoint,
+                                       final double maxEvalPoint)
             throws InvalidBracketRangeException {
         internalSetBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
     }
@@ -142,7 +141,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     /**
      * Empty Constructor. Creates an instance using default bracket values.
      */
-    public BracketedSingleOptimizer() {
+    protected BracketedSingleOptimizer() {
         ax = DEFAULT_MIN_EVAL_POINT;
         bx = DEFAULT_MIDDLE_EVAL_POINT;
         cx = DEFAULT_MAX_EVAL_POINT;
@@ -160,7 +159,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws InvalidBracketRangeException Raised if the following condition is
      *                                      not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
      */
-    public BracketedSingleOptimizer(
+    protected BracketedSingleOptimizer(
             final SingleDimensionFunctionEvaluatorListener listener,
             final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {

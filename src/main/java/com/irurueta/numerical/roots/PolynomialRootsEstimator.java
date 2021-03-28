@@ -22,7 +22,6 @@ import com.irurueta.numerical.NotAvailableException;
 /**
  * Abstract class to estimate the roots of a polynomial.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class PolynomialRootsEstimator extends RootEstimator {
 
     /**
@@ -41,7 +40,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
     /**
      * Empty constructor.
      */
-    public PolynomialRootsEstimator() {
+    protected PolynomialRootsEstimator() {
         super();
         polyParams = roots = null;
     }

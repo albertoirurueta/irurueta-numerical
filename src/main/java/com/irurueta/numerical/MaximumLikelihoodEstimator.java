@@ -31,7 +31,6 @@ package com.irurueta.numerical;
  * AccurateMaximumLikelihoodEstimator), as it will provide much more accurate
  * results at a slightly higher computational cost.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class MaximumLikelihoodEstimator {
 
     /**
@@ -94,7 +93,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero.
      */
-    public MaximumLikelihoodEstimator(final double gaussianSigma) {
+    protected MaximumLikelihoodEstimator(final double gaussianSigma) {
         inputData = null;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -105,7 +104,7 @@ public abstract class MaximumLikelihoodEstimator {
     /**
      * Empty constructor.
      */
-    public MaximumLikelihoodEstimator() {
+    protected MaximumLikelihoodEstimator() {
         inputData = null;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -122,7 +121,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero.
      */
-    public MaximumLikelihoodEstimator(final double[] inputData, final double gaussianSigma) {
+    protected MaximumLikelihoodEstimator(final double[] inputData, final double gaussianSigma) {
         this.inputData = inputData;
         minValue = maxValue = 0.0;
         areMinMaxAvailable = false;
@@ -143,8 +142,8 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero, or if minValue &lt; maxValue.
      */
-    public MaximumLikelihoodEstimator(final double minValue, final double maxValue,
-                                      final double[] inputData, final double gaussianSigma) {
+    protected MaximumLikelihoodEstimator(final double minValue, final double maxValue,
+                                         final double[] inputData, final double gaussianSigma) {
         this.inputData = inputData;
         locked = false;
         internalSetMinMaxValues(minValue, maxValue);

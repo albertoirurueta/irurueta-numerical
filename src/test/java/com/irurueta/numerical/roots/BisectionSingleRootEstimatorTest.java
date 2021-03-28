@@ -47,7 +47,6 @@ public class BisectionSingleRootEstimatorTest {
     private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial;
     private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithDoubleRoot;
     private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithTripleRoot;
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots;
 
     public BisectionSingleRootEstimatorTest() {
 
@@ -106,15 +105,6 @@ public class BisectionSingleRootEstimatorTest {
                 return (point - root1) * (point - root1) * (point - root1);
             }
         };
-
-        thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root1) * (point * point + Math.abs(root2));
-                    }
-                };
     }
 
     @Test

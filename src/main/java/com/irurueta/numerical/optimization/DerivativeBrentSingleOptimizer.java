@@ -23,59 +23,58 @@ import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
- * Class to compute local minimum on single dimension functions using a 
+ * Class to compute local minimum on single dimension functions using a
  * modification of Brent's algorithm that takes into account the function's
  * derivative.
  * This class will search for a local minimum within a bracket of values.
- * A bracket is a set of points: "a" a minimum evaluation point, 
+ * A bracket is a set of points: "a" a minimum evaluation point,
  * "b" a middle evaluation point and "c" a maximum evaluation where a &lt;= b
  * &lt;= c, and where f(b) &lt;= f(a) and f(b) &lt;= f(c).
- * This class is based on the implementation of Numerical Recipes 3rd ed. 
+ * This class is based on the implementation of Numerical Recipes 3rd ed.
  * Section 10.4. Page 500.
  */
-@SuppressWarnings("WeakerAccess")
 public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
-    
+
     /**
      * Maximum number of iterations to perform. If convergence is not found
-     * within this number of iterations, the minimum search will be considered 
+     * within this number of iterations, the minimum search will be considered
      * as failed.
      */
     public static final int ITMAX = 100;
-    
+
     /**
      * Constant defining machine precision.
      */
     public static final double ZEPS = 1e-8;
-    
+
     /**
      * Default tolerance. Estimated result will be found with an accuracy below
      * or equal to provided tolerance value.
      */
     public static final double DEFAULT_TOLERANCE = 3e-8;
-    
+
     /**
      * Minimum allowed tolerance value.
      */
     public static final double MIN_TOLERANCE = 0.0;
-    
+
     /**
-     * Listener to evaluate the functions derivative. If the function's 
+     * Listener to evaluate the functions derivative. If the function's
      * derivative is not know (e.g. does not have a closed expression), then
      * a DerivativeEstimator might be used inside the listener implementation.
      */
     private SingleDimensionFunctionEvaluatorListener derivativeListener;
-        
+
     /**
      * Tolerance. Estimated result will be found with an accuracy below or equal
      * to provided tolerance value.
      */
     private double tolerance;
-    
+
     /**
      * Empty constructor.
      */
-    public DerivativeBrentSingleOptimizer() {
+    protected DerivativeBrentSingleOptimizer() {
         super();
         tolerance = DEFAULT_TOLERANCE;
     }
@@ -83,18 +82,19 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
     /**
      * Constructor. Creates an instance with provided bracket of values and a
      * listener to get single dimension function evaluations.
-     * @param listener Listener to evaluate a function.
+     *
+     * @param listener           Listener to evaluate a function.
      * @param derivativeListener Listener to get function derivative.
-     * @param minEvalPoint Minimum bracket evaluation point.
-     * @param middleEvalPoint Middle bracket evaluation point.
-     * @param maxEvalPoint Maximum bracket evaluation point.
-     * @param tolerance tolerance to find result with. Estimated result will be
-     * found with an accuracy below or equal to provided tolerance value.
+     * @param minEvalPoint       Minimum bracket evaluation point.
+     * @param middleEvalPoint    Middle bracket evaluation point.
+     * @param maxEvalPoint       Maximum bracket evaluation point.
+     * @param tolerance          tolerance to find result with. Estimated result will be
+     *                           found with an accuracy below or equal to provided tolerance value.
      * @throws InvalidBracketRangeException Raised if the following condition is
-     * not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
-     * @throws IllegalArgumentException Raised if tolerance is negative.
+     *                                      not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
-    public DerivativeBrentSingleOptimizer(
+    protected DerivativeBrentSingleOptimizer(
             final SingleDimensionFunctionEvaluatorListener listener,
             final SingleDimensionFunctionEvaluatorListener derivativeListener,
             final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint,
@@ -103,23 +103,25 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         this.derivativeListener = derivativeListener;
         internalSetTolerance(tolerance);
     }
-        
+
     /**
      * Returns derivative listener to get function derivative.
+     *
      * @return Derivative listener.
-     * @throws NotAvailableException Raised if derivative listener is not 
-     * available for retrieval.
+     * @throws NotAvailableException Raised if derivative listener is not
+     *                               available for retrieval.
      */
-    public SingleDimensionFunctionEvaluatorListener getDerivativeListener() 
+    public SingleDimensionFunctionEvaluatorListener getDerivativeListener()
             throws NotAvailableException {
         if (!isDerivativeListenerAvailable()) {
             throw new NotAvailableException();
         }
         return derivativeListener;
     }
-    
+
     /**
      * Sets derivative listener that gets function derivative.
+     *
      * @param derivativeListener Sets derivative listener.
      * @throws LockedException Raised if this instance is locked.
      */
@@ -131,30 +133,33 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         }
         this.derivativeListener = derivativeListener;
     }
-    
+
     /**
      * Returns boolean indicating whether derivative listener has been provided
      * and is available for retrieval.
+     *
      * @return Boolean indicating whether derivative listener is available.
      */
     public boolean isDerivativeListenerAvailable() {
         return derivativeListener != null;
     }
-    
+
     /**
-     * Returns tolerance value. Estimated result will be found with an accuracy 
+     * Returns tolerance value. Estimated result will be found with an accuracy
      * below or equal to provided tolerance value.
+     *
      * @return Tolerance value.
      */
     public double getTolerance() {
         return tolerance;
     }
-    
+
     /**
      * Sets tolerance value. Estimated result will be found with an accuracy
      * below or equal to provided tolerance value.
+     *
      * @param tolerance Tolerance value.
-     * @throws LockedException Raised if this instance is locked.
+     * @throws LockedException          Raised if this instance is locked.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public void setTolerance(final double tolerance) throws LockedException {
@@ -163,26 +168,27 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         }
         internalSetTolerance(tolerance);
     }
-    
+
     /**
      * This function estimates a function minimum within provided or computed
      * bracket of values.
-     * Given a function f that computes a function and also its derivative 
+     * Given a function f that computes a function and also its derivative
      * function df, and given a bracketing triplet of abscissas ax, bx, cx (such
-     * that bx is between ax and cx, and f(bx) is less than both f(ax) and 
-     * f(cx), this routine isolates the minimum to a fractional precision of 
-     * about tolerance using a modification of Brent's method that uses 
-     * derivatives. The abscissa of the minimum is returned as xmin and the 
+     * that bx is between ax and cx, and f(bx) is less than both f(ax) and
+     * f(cx), this routine isolates the minimum to a fractional precision of
+     * about tolerance using a modification of Brent's method that uses
+     * derivatives. The abscissa of the minimum is returned as xmin and the
      * minimum function value is returned as fmin.
-     * @throws LockedException Raised if this instance is locked, because
-     * estimation is being computed.
-     * @throws NotReadyException Raised if this instance is not ready because
-     * either a listener or a bracket has not yet been provided or computed.
+     *
+     * @throws LockedException       Raised if this instance is locked, because
+     *                               estimation is being computed.
+     * @throws NotReadyException     Raised if this instance is not ready because
+     *                               either a listener or a bracket has not yet been provided or computed.
      * @throws OptimizationException Raised if the algorithm failed because of
-     * lack of convergence or because function couldn't be evaluated.
-     */    
+     *                               lack of convergence or because function couldn't be evaluated.
+     */
     @Override
-    @SuppressWarnings("Duplicates")
+    @SuppressWarnings({"Duplicates", "DuplicateExpressions"})
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
         if (isLocked()) {
@@ -191,13 +197,13 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         locked = true;
-        
+
         final double[] v1 = new double[1];
         final double[] v2 = new double[2];
         final double[] v3 = new double[3];
-        
+
         try {
             //Will be used as flags for whether proposed steps are accpetable or
             //not
@@ -227,7 +233,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
             double w;
             double x;
             double xm;
-            
+
             // Comments following will point out only differences from the Brent
             // single optimizer. Read that routine first.
             a = Math.min(ax, cx);
@@ -235,7 +241,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
             x = w = v = bx;
             fw = fv = fx = listener.evaluate(x);
             dw = dv = dx = derivativeListener.evaluate(x);
-            
+
             // All out housekeeping chores are doubled by the necessity of moving
             // around derivative values as well as function values
             for (int iter = 0; iter < ITMAX; iter++) {
@@ -245,12 +251,12 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                 if (Math.abs(x - xm) <= (tol2 - 0.5 * (b - a))) {
                     fmin = fx;
                     xmin = x;
-                    
+
                     resultAvailable = true;
                     locked = false;
                     return;
                 }
-                
+
                 if (Math.abs(e) > tol1) {
                     // Initialize these d's to an out-of-bracket value
                     d1 = 2.0 * (b - a);
@@ -277,16 +283,16 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                         // Take only an acceptable d, and if both are acceptable,
                         // then take the smallest one.
                         if (ok1 && ok2) {
-                            d = Math.abs(d1) < Math.abs(d2) ? d1: d2;
+                            d = Math.abs(d1) < Math.abs(d2) ? d1 : d2;
                         } else if (ok1) {
                             d = d1;
                         } else {
                             d = d2;
                         }
-                        
+
                         if (Math.abs(d) <= Math.abs(0.5 * olde)) {
                             u = x + d;
-                            if(u - a < tol2 || b - u < tol2)
+                            if (u - a < tol2 || b - u < tol2)
                                 d = sign(tol1, xm - x);
                         } else {
                             // Bisect, not golden section.
@@ -302,7 +308,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     e = dx >= 0.0 ? a - x : b - x;
                     d = 0.5 * e;
                 }
-                
+
                 if (Math.abs(d) >= tol1) {
                     u = x + d;
                     fu = listener.evaluate(u);
@@ -314,13 +320,13 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                         // uphill, then we are done
                         fmin = fx;
                         xmin = x;
-                        
+
                         resultAvailable = true;
                         locked = false;
                         return;
                     }
                 }
-                
+
                 // Now all the housekeeping, sigh
                 du = derivativeListener.evaluate(u);
                 if (fu <= fx) {
@@ -336,8 +342,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     v = v1[0];
                     fv = v2[0];
                     dv = v3[0];
-                    
-                    
+
+
                     v1[0] = w;
                     v2[0] = fw;
                     v3[0] = dw;
@@ -345,7 +351,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     w = v1[0];
                     fw = v2[0];
                     dw = v3[0];
-                    
+
                     v1[0] = x;
                     v2[0] = fx;
                     v3[0] = dx;
@@ -367,7 +373,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                         v = v1[0];
                         fv = v2[0];
                         dv = v3[0];
-                        
+
                         v1[0] = w;
                         v2[0] = fw;
                         v3[0] = dw;
@@ -390,22 +396,23 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     iterationCompletedListener.onIterationCompleted(this, iter, ITMAX);
                 }
             }
-            
+
         } catch (final EvaluationException e) {
             throw new OptimizationException(e);
         } finally {
             locked = false;
         }
-        
+
         // Too many iterations in Derivative Brent
         throw new OptimizationException();
     }
-    
+
     /**
      * Returns boolean indicating whether this instance is ready to start the
      * estimation of a local minimum.
      * This instance will be ready once a listener, derivative listener and
      * bracket are available.
+     *
      * @return True if ready, false otherwise.
      */
     @Override
@@ -413,10 +420,11 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         return isListenerAvailable() && isDerivativeListenerAvailable() &&
                 isBracketAvailable();
     }
-    
+
     /**
-     * Internal method to set tolerance. Estimated result will be found with an 
+     * Internal method to set tolerance. Estimated result will be found with an
      * accuracy below or equal to provided tolerance value.
+     *
      * @param tolerance Tolerance value.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */

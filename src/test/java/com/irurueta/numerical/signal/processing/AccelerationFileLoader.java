@@ -25,29 +25,29 @@ import java.io.IOException;
  * a Nexus 6 device for testing purposes.
  */
 class AccelerationFileLoader {
-    
+
     static Data load(final File f) throws IOException {
         final int bufferSize = computeBufferSizes(f);
         final DataInputStream stream = new DataInputStream(new FileInputStream(f));
-        
+
         final float[] accelerationX = new float[bufferSize];
         final float[] accelerationY = new float[bufferSize];
         final float[] accelerationZ = new float[bufferSize];
-        
+
         final long[] timestamp = new long[bufferSize];
         final long[] count = new long[bufferSize];
-        
-        for(int i = 0; i < bufferSize; i++){
+
+        for (int i = 0; i < bufferSize; i++) {
             count[i] = stream.readLong();
             timestamp[i] = stream.readLong();
-            
+
             accelerationX[i] = stream.readFloat();
             accelerationY[i] = stream.readFloat();
             accelerationZ[i] = stream.readFloat();
         }
-        
+
         stream.close();
-        
+
         final Data data = new Data();
         data.accelerationX = accelerationX;
         data.accelerationY = accelerationY;
@@ -55,19 +55,19 @@ class AccelerationFileLoader {
         data.timestamp = timestamp;
         data.count = count;
         data.numSamples = bufferSize;
-        
+
         return data;
     }
-    
+
     private static int computeBufferSizes(final File f) {
         final long fileLength = f.length();
-        
+
         final int floatSize = Float.SIZE / Byte.SIZE;
         final int longSize = Long.SIZE / Byte.SIZE;
-        
-        return (int)fileLength / (3*floatSize + 2*longSize);
+
+        return (int) fileLength / (3 * floatSize + 2 * longSize);
     }
-    
+
     public static class Data {
         float[] accelerationX;
         float[] accelerationY;

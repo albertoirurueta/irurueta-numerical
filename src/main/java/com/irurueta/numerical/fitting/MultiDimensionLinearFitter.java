@@ -25,7 +25,6 @@ import com.irurueta.algebra.Matrix;
  * Where f0, f1, ... is the function basis which ideally should be formed by
  * orthogonal functions.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
 
     /**
@@ -62,7 +61,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(final Matrix x, final double[] y, final double[] sig) {
+    protected MultiDimensionLinearFitter(final Matrix x, final double[] y, final double[] sig) {
         super(x, y, sig);
     }
 
@@ -78,7 +77,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(final Matrix x, final double[] y, final double sig) {
+    protected MultiDimensionLinearFitter(final Matrix x, final double[] y, final double sig) {
         super(x, y, sig);
     }
 
@@ -89,7 +88,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      *                  obtain the evaluation of function basis at such point
      * @throws FittingException if evaluation fails
      */
-    public MultiDimensionLinearFitter(final LinearFitterMultiDimensionFunctionEvaluator evaluator)
+    protected MultiDimensionLinearFitter(final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
         super();
         internalSetFunctionEvaluator(evaluator);
@@ -109,7 +108,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(
+    protected MultiDimensionLinearFitter(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator,
             final Matrix x, final double[] y, final double[] sig) throws FittingException {
         super(x, y, sig);
@@ -131,7 +130,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(
+    protected MultiDimensionLinearFitter(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator,
             final Matrix x, final double[] y, final double sig) throws FittingException {
         super(x, y, sig);
@@ -168,6 +167,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
      */
+    @SuppressWarnings("DuplicatedCode")
     private void internalSetFunctionEvaluator(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {

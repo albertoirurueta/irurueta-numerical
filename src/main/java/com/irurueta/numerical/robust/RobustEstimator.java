@@ -23,7 +23,6 @@ import com.irurueta.numerical.NotReadyException;
  *
  * @param <T> Object to be estimated (i.e. lines, cameras, etc)
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class RobustEstimator<T> {
 
     /**
@@ -63,7 +62,7 @@ public abstract class RobustEstimator<T> {
     /**
      * Constructor.
      */
-    public RobustEstimator() {
+    protected RobustEstimator() {
         mListener = null;
         mLocked = false;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
@@ -75,7 +74,7 @@ public abstract class RobustEstimator<T> {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public RobustEstimator(final RobustEstimatorListener<T> listener) {
+    protected RobustEstimator(final RobustEstimatorListener<T> listener) {
         mListener = listener;
         mLocked = false;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;

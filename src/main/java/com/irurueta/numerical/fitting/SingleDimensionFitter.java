@@ -23,7 +23,6 @@ import java.util.Arrays;
  * Base class to fit a single dimension function y = f(x) by using provided
  * data (x, y)
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class SingleDimensionFitter extends Fitter {
     /**
      * Input points x where function f(x) is evaluated.
@@ -64,7 +63,7 @@ public abstract class SingleDimensionFitter extends Fitter {
     /**
      * Constructor.
      */
-    public SingleDimensionFitter() {
+    protected SingleDimensionFitter() {
     }
 
     /**
@@ -77,7 +76,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionFitter(final double[] x, final double[] y, final double[] sig) {
+    protected SingleDimensionFitter(final double[] x, final double[] y, final double[] sig) {
         setInputData(x, y, sig);
     }
 
@@ -92,7 +91,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionFitter(final double[] x, final double[] y, final double sig) {
+    protected SingleDimensionFitter(final double[] x, final double[] y, final double sig) {
         setInputData(x, y, sig);
     }
 

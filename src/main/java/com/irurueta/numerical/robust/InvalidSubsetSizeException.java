@@ -22,33 +22,36 @@ package com.irurueta.numerical.robust;
 public class InvalidSubsetSizeException extends SubsetSelectorException {
     /**
      * Constructor.
-     */            
+     */
     public InvalidSubsetSizeException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */        
+     */
     public InvalidSubsetSizeException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */        
+     * @param cause   Instance containing the cause of the exception.
+     */
     public InvalidSubsetSizeException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */        
+     */
     public InvalidSubsetSizeException(final Throwable cause) {
         super(cause);
-    }        
+    }
 }

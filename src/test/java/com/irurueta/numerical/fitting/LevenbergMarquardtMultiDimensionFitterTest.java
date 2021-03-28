@@ -22,8 +22,13 @@ import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotReadyException;
-import com.irurueta.statistics.*;
-import org.junit.*;
+import com.irurueta.statistics.ChiSqDist;
+import com.irurueta.statistics.GaussianRandomizer;
+import com.irurueta.statistics.MaxIterationsExceededException;
+import com.irurueta.statistics.MultivariateNormalDist;
+import com.irurueta.statistics.NormalDist;
+import com.irurueta.statistics.UniformRandomizer;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Random;

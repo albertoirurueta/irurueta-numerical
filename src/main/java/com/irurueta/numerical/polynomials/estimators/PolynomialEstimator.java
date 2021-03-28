@@ -27,7 +27,7 @@ import java.util.List;
  * This class defines the interface for an estimator of a polynomial of a given
  * degree using points where polynomials are evaluated.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("Duplicates")
 public abstract class PolynomialEstimator {
 
     /**
@@ -66,7 +66,7 @@ public abstract class PolynomialEstimator {
     /**
      * Constructor.
      */
-    public PolynomialEstimator() {
+    protected PolynomialEstimator() {
         mDegree = MIN_DEGREE;
     }
 
@@ -76,7 +76,7 @@ public abstract class PolynomialEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree) {
+    protected PolynomialEstimator(final int degree) {
         internalSetDegree(degree);
     }
 
@@ -85,7 +85,7 @@ public abstract class PolynomialEstimator {
      *
      * @param evaluations collection of polynomial evaluations.
      */
-    public PolynomialEstimator(final List<PolynomialEvaluation> evaluations) {
+    protected PolynomialEstimator(final List<PolynomialEvaluation> evaluations) {
         this();
         mEvaluations = evaluations;
     }
@@ -95,7 +95,7 @@ public abstract class PolynomialEstimator {
      *
      * @param listener listener to be notified of events.
      */
-    public PolynomialEstimator(final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final PolynomialEstimatorListener listener) {
         this();
         mListener = listener;
     }
@@ -107,8 +107,8 @@ public abstract class PolynomialEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree,
-                               final List<PolynomialEvaluation> evaluations) {
+    protected PolynomialEstimator(final int degree,
+                                  final List<PolynomialEvaluation> evaluations) {
         this(degree);
         mEvaluations = evaluations;
     }
@@ -120,8 +120,8 @@ public abstract class PolynomialEstimator {
      * @param listener listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree,
-                               final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final int degree,
+                                  final PolynomialEstimatorListener listener) {
         this(degree);
         mListener = listener;
     }
@@ -132,8 +132,8 @@ public abstract class PolynomialEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @param listener    listener to be notified of events.
      */
-    public PolynomialEstimator(final List<PolynomialEvaluation> evaluations,
-                               final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final List<PolynomialEvaluation> evaluations,
+                                  final PolynomialEstimatorListener listener) {
         this(evaluations);
         mListener = listener;
     }
@@ -146,9 +146,9 @@ public abstract class PolynomialEstimator {
      * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree,
-                               final List<PolynomialEvaluation> evaluations,
-                               final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final int degree,
+                                  final List<PolynomialEvaluation> evaluations,
+                                  final PolynomialEstimatorListener listener) {
         this(degree, evaluations);
         mListener = listener;
     }

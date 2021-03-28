@@ -30,10 +30,9 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.9 page 521.
  */
-@SuppressWarnings("WeakerAccess")
 public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     /**
-     * Matimum number of iterations.
+     * Maximum number of iterations.
      */
     public static final int ITMAX = 200;
 
@@ -557,9 +556,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             }
 
             if (alam < alamin) {
-                for (i = 0; i < n; i++) {
-                    x[i] = xold[i];
-                }
+                System.arraycopy(xold, 0, x, 0, n);
                 check[0] = true;
                 return;
             } else if (f[0] <= fold + ALF * alam * slope) {

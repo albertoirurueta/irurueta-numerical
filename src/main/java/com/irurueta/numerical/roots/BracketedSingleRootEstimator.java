@@ -15,14 +15,18 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.*;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of
  * values, in other words, root will only be searched within provided minimum
  * and maximum evaluation points.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
 
     /**
@@ -68,41 +72,9 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
     protected boolean bracketAvailable;
 
     /**
-     * Constructor.
-     *
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     *                     root will be searched.
-     * @param maxEvalPoint Largest value inside the bracket of values where the
-     *                     root will be searched.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
-     *                                      maxEvalPoint.
-     */
-    public BracketedSingleRootEstimator(
-            final double minEvalPoint,
-            final double maxEvalPoint) throws InvalidBracketRangeException {
-        super();
-        internalSetBracket(minEvalPoint, maxEvalPoint);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     *                     root will be searched. The largest value inside the bracket will be
-     *                     Double.MAX_VALUE.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     *                                      the maximum value a double can contain, which is Double.MAX_VALUE.
-     */
-    public BracketedSingleRootEstimator(final double minEvalPoint)
-            throws InvalidBracketRangeException {
-        super();
-        internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);
-    }
-
-    /**
      * Empty constructor.
      */
-    public BracketedSingleRootEstimator() {
+    protected BracketedSingleRootEstimator() {
         super();
         minEvalPoint = DEFAULT_MIN_EVAL_POINT;
         maxEvalPoint = DEFAULT_MAX_EVAL_POINT;
@@ -121,44 +93,12 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
      *                                      maxEvalPoint.
      */
-    public BracketedSingleRootEstimator(
+    protected BracketedSingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener,
             final double minEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
         super(listener);
         internalSetBracket(minEvalPoint, maxEvalPoint);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param listener     Listener to evaluate a single dimension function f(x)
-     *                     to find its roots.
-     * @param minEvalPoint Smallest value inside the bracket of values where the
-     *                     root will be searched. The largest value inside the bracket will be
-     *                     Double.MAX_VALUE.
-     * @throws InvalidBracketRangeException Raised if minEvalPoint equals the
-     *                                      the maximum value a double can contain, which is Double.MAX_VALUE.
-     */
-    public BracketedSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint) throws InvalidBracketRangeException {
-        super(listener);
-        internalSetBracket(minEvalPoint, DEFAULT_MAX_EVAL_POINT);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param listener Listener to evaluate a single dimension function f(x)
-     *                 to find its roots.
-     */
-    public BracketedSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener) {
-        super(listener);
-        minEvalPoint = DEFAULT_MIN_EVAL_POINT;
-        maxEvalPoint = DEFAULT_MAX_EVAL_POINT;
-        bracketAvailable = true;
     }
 
     /**

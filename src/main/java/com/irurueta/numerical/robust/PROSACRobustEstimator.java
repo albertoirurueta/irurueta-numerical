@@ -46,7 +46,7 @@ import java.util.List;
  *
  * @param <T> type of object to be estimated.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("Duplicates")
 public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
 
     /**

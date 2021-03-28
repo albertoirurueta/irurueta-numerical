@@ -33,7 +33,7 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.8 page 515.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "DuplicatedCode"})
 public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
     /**
      * Constant defining default tolerance or accuracy to be achieved on the

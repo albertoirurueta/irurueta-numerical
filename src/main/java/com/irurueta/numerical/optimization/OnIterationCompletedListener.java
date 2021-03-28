@@ -20,12 +20,12 @@ package com.irurueta.numerical.optimization;
  */
 public interface OnIterationCompletedListener {
 
-  /**
-   * Called when an iteration is completed.
-   *
-   * @param optimizer optimizer that raised the event.
-   * @param iteration number of iterations that have been executed.
-   * @param maxIterations maximum number of iterations to be executed, or null if unknown.
-   */
-  void onIterationCompleted(final Optimizer optimizer, int iteration, Integer maxIterations);
+    /**
+     * Called when an iteration is completed.
+     *
+     * @param optimizer     optimizer that raised the event.
+     * @param iteration     number of iterations that have been executed.
+     * @param maxIterations maximum number of iterations to be executed, or null if unknown.
+     */
+    void onIterationCompleted(final Optimizer optimizer, int iteration, Integer maxIterations);
 }

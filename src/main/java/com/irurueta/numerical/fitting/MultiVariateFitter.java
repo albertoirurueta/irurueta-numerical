@@ -23,7 +23,6 @@ import java.util.Arrays;
  * Base class to fit a multi variate function [y1, y2, ...] = f([x1, x2, ...])
  * by using provided data (x, y).
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class MultiVariateFitter extends Fitter {
     /**
      * Input points x where a multi dimensional function f(x1, x2, ...) is
@@ -69,7 +68,7 @@ public abstract class MultiVariateFitter extends Fitter {
     /**
      * Constructor.
      */
-    public MultiVariateFitter() {
+    protected MultiVariateFitter() {
     }
 
     /**
@@ -83,7 +82,7 @@ public abstract class MultiVariateFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays don't
      *                                  have the same length.
      */
-    public MultiVariateFitter(final Matrix x, final Matrix y, final double[] sig) {
+    protected MultiVariateFitter(final Matrix x, final Matrix y, final double[] sig) {
         setInputData(x, y, sig);
     }
 
@@ -99,7 +98,7 @@ public abstract class MultiVariateFitter extends Fitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays don't
      *                                  have the same length.
      */
-    public MultiVariateFitter(final Matrix x, final Matrix y, final double sig) {
+    protected MultiVariateFitter(final Matrix x, final Matrix y, final double sig) {
         setInputData(x, y, sig);
     }
 

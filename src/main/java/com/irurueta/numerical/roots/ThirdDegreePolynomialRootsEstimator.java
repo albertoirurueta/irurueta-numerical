@@ -29,7 +29,7 @@ import com.irurueta.numerical.NotReadyException;
  * This class is based on:
  * http://en.wikipedia.org/wiki/Cubic_function
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("DuplicatedCode")
 public class ThirdDegreePolynomialRootsEstimator
         extends PolynomialRootsEstimator {
 
@@ -154,9 +154,7 @@ public class ThirdDegreePolynomialRootsEstimator
      *
      * @return this method always throws an exception.
      * @throws com.irurueta.numerical.NotAvailableException always thrown
-     * @deprecated
      */
-    @Deprecated
     @Override
     public Complex[] getPolynomialParameters() throws NotAvailableException {
         throw new NotAvailableException();
@@ -393,10 +391,8 @@ public class ThirdDegreePolynomialRootsEstimator
      * class only supports REAL polynomial parameters.
      *
      * @throws IllegalArgumentException always thrown.
-     * @deprecated
      */
     @Override
-    @Deprecated
     protected void internalSetPolynomialParameters(final Complex[] polyParams) {
         // complex values are not supported
         throw new IllegalArgumentException();

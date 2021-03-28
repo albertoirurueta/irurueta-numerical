@@ -32,7 +32,7 @@ import java.util.Arrays;
  * This class is based on the implementation available at Numerical Recipes 3rd
  * Ed, page 801.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("DuplicatedCode")
 public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
 
     /**
@@ -492,9 +492,7 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
 
             // initialization
             mrqcof(a, alpha, beta);
-            for (j = 0; j < ma; j++) {
-                atry[j] = a[j];
-            }
+            System.arraycopy(a, 0, atry, 0, ma);
 
             ochisq = chisq;
             for (iter = 0; iter < itmax; iter++) {
@@ -563,9 +561,7 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
                         }
                         beta[j] = da[j];
                     }
-                    for (l = 0; l < ma; l++) {
-                        a[l] = atry[l];
-                    }
+                    System.arraycopy(atry, 0, a, 0, ma);
                 } else {
                     // failure, increase alamda
                     alamda *= 10.0;

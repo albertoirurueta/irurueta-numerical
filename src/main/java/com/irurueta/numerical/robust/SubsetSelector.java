@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 /**
  * Base class to pick subsets of samples.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class SubsetSelector {
 
     /**
@@ -45,7 +44,7 @@ public abstract class SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero
      *                                  or negative.
      */
-    public SubsetSelector(final int numSamples) {
+    protected SubsetSelector(final int numSamples) {
         setNumSamples(numSamples);
     }
 

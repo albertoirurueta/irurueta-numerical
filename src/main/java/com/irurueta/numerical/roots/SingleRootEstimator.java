@@ -28,7 +28,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * Usually root estimators will only find a single root around an initial
  * coarsely estimated solution.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class SingleRootEstimator extends RootEstimator {
 
     /**
@@ -51,7 +50,7 @@ public abstract class SingleRootEstimator extends RootEstimator {
     /**
      * Empty constructor.
      */
-    public SingleRootEstimator() {
+    protected SingleRootEstimator() {
         super();
         listener = null;
         rootAvailable = false;
@@ -64,7 +63,7 @@ public abstract class SingleRootEstimator extends RootEstimator {
      * @param listener Listener that evaluates a single dimension function in
      *                 order to find its root.
      */
-    public SingleRootEstimator(
+    protected SingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener) {
         super();
         this.listener = listener;
