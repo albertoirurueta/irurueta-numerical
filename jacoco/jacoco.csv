@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials,PolynomialsException,0,16,0,0,0,8,0,4,0,4
-com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials,Polynomial,42,1633,15,152,11,367,15,132,0,62
+com.irurueta:irurueta-numerical,com.irurueta.numerical.polynomials,Polynomial,42,1633,14,153,11,367,14,133,0,62
 com.irurueta:irurueta-numerical,com.irurueta.numerical.fitting,MultiDimensionFitter,0,94,0,6,0,29,0,14,0,11
 com.irurueta:irurueta-numerical,com.irurueta.numerical.fitting,SvdSingleDimensionLinearFitter,11,276,3,17,3,56,3,16,0,9
 com.irurueta:irurueta-numerical,com.irurueta.numerical.fitting,LevenbergMarquardtMultiVariateFitter,35,1064,9,91,8,197,9,71,0,30
@@ -40,7 +40,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical,AccurateMaximumLikelihood
 com.irurueta:irurueta-numerical,com.irurueta.numerical,DirectionalEvaluator,8,66,1,3,3,15,2,7,1,6
 com.irurueta:irurueta-numerical,com.irurueta.numerical,SymmetricGradientEstimator,6,132,4,10,2,25,4,5,0,2
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,FastRandomSubsetSelector,8,201,5,33,2,59,5,21,0,7
-com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROSACRobustEstimator,46,804,19,89,13,200,19,64,0,29
+com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROSACRobustEstimator,47,803,20,88,14,199,20,63,0,29
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,SubsetSelectorType,0,14,0,0,0,2,0,1,0,1
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,PROMedSRobustEstimator.PROMedSInliersData,0,152,0,2,0,38,0,12,0,11
 com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,RobustEstimatorException,0,16,0,0,0,8,0,4,0,4
@@ -64,7 +64,7 @@ com.irurueta:irurueta-numerical,com.irurueta.numerical.robust,RANSACRobustEstima
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,ThirdDegreePolynomialRootsEstimator,56,685,20,60,14,123,20,41,0,21
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,RootEstimator,3,9,0,0,2,4,2,2,2,2
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,FalsePositionSingleRootEstimator,26,200,5,19,8,56,5,14,0,7
-com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SafeNewtonRaphsonSingleRootEstimator,83,243,11,25,27,66,10,15,0,7
+com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SafeNewtonRaphsonSingleRootEstimator,93,233,12,24,31,62,11,14,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecondDegreePolynomialRootsEstimator,34,348,11,43,10,77,11,35,0,19
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,SecantSingleRootEstimator,18,175,4,16,5,49,4,13,0,7
 com.irurueta:irurueta-numerical,com.irurueta.numerical.roots,NewtonRaphsonSingleRootEstimator,25,132,4,10,7,39,4,10,0,7

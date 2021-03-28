@@ -252,11 +252,11 @@ public class SafeNewtonRaphsonSingleRootEstimator
 <span class="fc" id="L252">                dx = f / df;</span>
 <span class="fc" id="L253">                final double temp = rts;</span>
 <span class="fc" id="L254">                rts -= dx;</span>
-<span class="fc bfc" id="L255" title="All 2 branches covered.">                if (temp == rts) {</span>
-<span class="fc" id="L256">                    root = rts;</span>
-<span class="fc" id="L257">                    rootAvailable = true;</span>
-<span class="fc" id="L258">                    locked = false;</span>
-<span class="fc" id="L259">                    return;</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">                if (temp == rts) {</span>
+<span class="nc" id="L256">                    root = rts;</span>
+<span class="nc" id="L257">                    rootAvailable = true;</span>
+<span class="nc" id="L258">                    locked = false;</span>
+<span class="nc" id="L259">                    return;</span>
                 }
             }
 <span class="fc bfc" id="L262" title="All 2 branches covered.">            if (Math.abs(dx) &lt; xacc) {</span>
