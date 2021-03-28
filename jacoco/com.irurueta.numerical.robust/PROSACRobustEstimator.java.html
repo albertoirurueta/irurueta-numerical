@@ -46,7 +46,7 @@ import java.util.List;
  *
  * @param &lt;T&gt; type of object to be estimated.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;Duplicates&quot;)
 public class PROSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 
     /**
@@ -778,12 +778,12 @@ public class PROSACRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                                                             (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
 
 <span class="fc" id="L780">                                if (inliersSampleSizeTest &lt;</span>
-<span class="pc bpc" id="L781" title="1 of 2 branches missed.">                                        imin(subsetSize, sampleSizeTest, mBeta)) {</span>
+<span class="fc bfc" id="L781" title="All 2 branches covered.">                                        imin(subsetSize, sampleSizeTest, mBeta)) {</span>
                                     // equation not satisfied, no need to test for
                                     // smaller sampleSizeTest values anyway
 
                                     // jump out of the for(sampleSizeTest) loop
-<span class="nc" id="L786">                                    break;</span>
+<span class="fc" id="L786">                                    break;</span>
                                 }
 <span class="fc" id="L788">                                sampleSizeBest = sampleSizeTest;</span>
 <span class="fc" id="L789">                                inliersSampleSizeBest = inliersSampleSizeTest;</span>

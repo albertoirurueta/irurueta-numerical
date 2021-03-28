@@ -26,7 +26,7 @@ import com.irurueta.numerical.NotReadyException;
  * A first degree polynomial is defined by its parameters as p(x) = a * x + b,
  * hence the polynomial can be simply be defined by an array of length 2 [b, a].
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class FirstDegreePolynomialRootsEstimator
         extends PolynomialRootsEstimator {
 
@@ -139,27 +139,22 @@ public class FirstDegreePolynomialRootsEstimator
      * only supports REAL polynomial parameters.
      *
      * @return throws NotAvailableException.
-     * @throws NotAvailableException alwasy throws this exception.
-     * @deprecated
+     * @throws NotAvailableException always throws this exception.
      */
     @Override
-    @Deprecated
     public Complex[] getPolynomialParameters() throws NotAvailableException {
-<span class="fc" id="L148">        throw new NotAvailableException();</span>
+<span class="fc" id="L146">        throw new NotAvailableException();</span>
     }
 
 
     /**
      * This method will always raise an IllegalArgumentException because this
      * class only supports REAL polynomial parameters.
-     *
-     * @deprecated
      */
     @Override
-    @Deprecated
     protected void internalSetPolynomialParameters(final Complex[] polyParams) {
         // complex values are not supported
-<span class="fc" id="L162">        throw new IllegalArgumentException();</span>
+<span class="fc" id="L157">        throw new IllegalArgumentException();</span>
     }
 
     /**
@@ -173,26 +168,26 @@ public class FirstDegreePolynomialRootsEstimator
     @Override
     public void estimate() throws LockedException, NotReadyException {
 
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L177">            throw new LockedException();</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L172">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L180">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L175">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L183">        locked = true;</span>
+<span class="fc" id="L178">        locked = true;</span>
 
-<span class="fc" id="L185">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
+<span class="fc" id="L180">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
 
-<span class="fc" id="L187">        final double b = realPolyParams[0];</span>
-<span class="fc" id="L188">        final double a = realPolyParams[1];</span>
+<span class="fc" id="L182">        final double b = realPolyParams[0];</span>
+<span class="fc" id="L183">        final double a = realPolyParams[1];</span>
 
-<span class="fc" id="L190">        final double x = solveLinear(a, b);</span>
+<span class="fc" id="L185">        final double x = solveLinear(a, b);</span>
 
-<span class="fc" id="L192">        roots[0] = new Complex(x, 0.0);</span>
+<span class="fc" id="L187">        roots[0] = new Complex(x, 0.0);</span>
 
-<span class="fc" id="L194">        locked = false;</span>
-<span class="fc" id="L195">    }</span>
+<span class="fc" id="L189">        locked = false;</span>
+<span class="fc" id="L190">    }</span>
 
     /**
      * Returns boolean indicating whether provided array of polynomial
@@ -205,17 +200,17 @@ public class FirstDegreePolynomialRootsEstimator
      * @return True if is a first degree polynomial, false otherwise
      */
     public static boolean isFirstDegree(final double[] polyParams) {
-<span class="fc" id="L208">        final int length = polyParams.length;</span>
-<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp;</span>
-<span class="fc bfc" id="L210" title="All 2 branches covered.">                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
-<span class="fc bfc" id="L211" title="All 2 branches covered.">            for (int i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
-<span class="pc bpc" id="L212" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
-<span class="nc" id="L213">                    return false;</span>
+<span class="fc" id="L203">        final int length = polyParams.length;</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp;</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">            for (int i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
+<span class="nc" id="L208">                    return false;</span>
                 }
             }
-<span class="fc" id="L216">            return true;</span>
+<span class="fc" id="L211">            return true;</span>
         }
-<span class="fc" id="L218">        return false;</span>
+<span class="fc" id="L213">        return false;</span>
     }
 
     /**
@@ -230,10 +225,10 @@ public class FirstDegreePolynomialRootsEstimator
      *                           an array of polynomial parameters has not yet been provided.
      */
     public boolean isFirstDegree() throws NotReadyException {
-<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L234">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L229">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L236">        return isFirstDegree(realPolyParams);</span>
+<span class="fc" id="L231">        return isFirstDegree(realPolyParams);</span>
     }
 
     /**
@@ -245,7 +240,7 @@ public class FirstDegreePolynomialRootsEstimator
      * @return True if estimated root is real, false otherwise.
      */
     public boolean isRealSolution() {
-<span class="fc" id="L248">        return true;</span>
+<span class="fc" id="L243">        return true;</span>
     }
 
     /**
@@ -257,7 +252,7 @@ public class FirstDegreePolynomialRootsEstimator
      */
     private double solveLinear(final double a, final double b) {
         //a * x + b = 0
-<span class="fc" id="L260">        return -b / a;</span>
+<span class="fc" id="L255">        return -b / a;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

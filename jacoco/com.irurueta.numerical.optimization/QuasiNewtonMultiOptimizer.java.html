@@ -30,10 +30,9 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.9 page 521.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     /**
-     * Matimum number of iterations.
+     * Maximum number of iterations.
      */
     public static final int ITMAX = 200;
 
@@ -99,12 +98,12 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * Empty constructor.
      */
     public QuasiNewtonMultiOptimizer() {
-<span class="fc" id="L102">        super();</span>
-<span class="fc" id="L103">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L104">        p = null;</span>
-<span class="fc" id="L105">        iter = 0;</span>
-<span class="fc" id="L106">        gradientListener = null;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L101">        super();</span>
+<span class="fc" id="L102">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L103">        p = null;</span>
+<span class="fc" id="L104">        iter = 0;</span>
+<span class="fc" id="L105">        gradientListener = null;</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Constructor.
@@ -120,12 +119,12 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             final MultiDimensionFunctionEvaluatorListener listener,
             final GradientFunctionEvaluatorListener gradientListener,
             final double tolerance) {
-<span class="fc" id="L123">        super(listener);</span>
-<span class="fc" id="L124">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L125">        p = null;</span>
-<span class="fc" id="L126">        iter = 0;</span>
-<span class="fc" id="L127">        this.gradientListener = gradientListener;</span>
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L122">        super(listener);</span>
+<span class="fc" id="L123">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L124">        p = null;</span>
+<span class="fc" id="L125">        iter = 0;</span>
+<span class="fc" id="L126">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L127">    }</span>
 
     /**
      * Constructor.
@@ -146,12 +145,12 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             final MultiDimensionFunctionEvaluatorListener listener,
             final GradientFunctionEvaluatorListener gradientListener,
             final double[] startPoint, final double tolerance) {
-<span class="fc" id="L149">        super(listener);</span>
-<span class="fc" id="L150">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L151">        p = startPoint;</span>
-<span class="fc" id="L152">        iter = 0;</span>
-<span class="fc" id="L153">        this.gradientListener = gradientListener;</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L148">        super(listener);</span>
+<span class="fc" id="L149">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L150">        p = startPoint;</span>
+<span class="fc" id="L151">        iter = 0;</span>
+<span class="fc" id="L152">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L153">    }</span>
 
     /**
      * This function estimates a function minimum.
@@ -178,17 +177,17 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
 
-<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L182">            throw new LockedException();</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L181">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L185">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L184">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L188">        locked = true;</span>
+<span class="fc" id="L187">        locked = true;</span>
 
-<span class="fc" id="L190">        boolean validResult = false;</span>
-<span class="fc" id="L191">        final int n = p.length;</span>
+<span class="fc" id="L189">        boolean validResult = false;</span>
+<span class="fc" id="L190">        final int n = p.length;</span>
 
         try {
             double den;
@@ -197,138 +196,138 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             double fae;
             double fp;
             final double stpmax;
-<span class="fc" id="L200">            double sum = 0.0;</span>
+<span class="fc" id="L199">            double sum = 0.0;</span>
             double sumdg;
             double sumxi;
             double temp;
             double test;
-<span class="fc" id="L205">            final double[] dg = new double[n];</span>
-<span class="fc" id="L206">            final double[] g = new double[n];</span>
-<span class="fc" id="L207">            final double[] hdg = new double[n];</span>
-<span class="fc" id="L208">            final double[] pnew = new double[n];</span>
-<span class="fc" id="L209">            final double[] xi = new double[n];</span>
-<span class="fc" id="L210">            final double[] fretArray = new double[1];</span>
-<span class="fc" id="L211">            final boolean[] check = new boolean[1];</span>
+<span class="fc" id="L204">            final double[] dg = new double[n];</span>
+<span class="fc" id="L205">            final double[] g = new double[n];</span>
+<span class="fc" id="L206">            final double[] hdg = new double[n];</span>
+<span class="fc" id="L207">            final double[] pnew = new double[n];</span>
+<span class="fc" id="L208">            final double[] xi = new double[n];</span>
+<span class="fc" id="L209">            final double[] fretArray = new double[1];</span>
+<span class="fc" id="L210">            final boolean[] check = new boolean[1];</span>
 
-<span class="fc" id="L213">            final Matrix hessin = new Matrix(n, n);</span>
-<span class="fc" id="L214">            fp = listener.evaluate(p);</span>
-<span class="fc" id="L215">            gradientListener.evaluateGradient(p, g);</span>
+<span class="fc" id="L212">            final Matrix hessin = new Matrix(n, n);</span>
+<span class="fc" id="L213">            fp = listener.evaluate(p);</span>
+<span class="fc" id="L214">            gradientListener.evaluateGradient(p, g);</span>
 
-<span class="fc bfc" id="L217" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc bfc" id="L218" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L219">                    hessin.setElementAt(i, j, 0.0);</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">                for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L218">                    hessin.setElementAt(i, j, 0.0);</span>
                 }
-<span class="fc" id="L221">                hessin.setElementAt(i, i, 1.0);</span>
-<span class="fc" id="L222">                xi[i] = -g[i];</span>
-<span class="fc" id="L223">                sum += p[i] * p[i];</span>
+<span class="fc" id="L220">                hessin.setElementAt(i, i, 1.0);</span>
+<span class="fc" id="L221">                xi[i] = -g[i];</span>
+<span class="fc" id="L222">                sum += p[i] * p[i];</span>
             }
-<span class="fc" id="L225">            stpmax = STPMX * Math.max(Math.sqrt(sum), n);</span>
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">            for (int its = 0; its &lt; ITMAX; its++) {</span>
-<span class="fc" id="L227">                iter = its;</span>
-<span class="fc" id="L228">                lnsrch(p, fp, g, xi, pnew, fretArray, stpmax, check);</span>
-<span class="fc" id="L229">                fret = fretArray[0];</span>
-<span class="fc" id="L230">                fp = fret;</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L232">                    xi[i] = pnew[i] - p[i];</span>
-<span class="fc" id="L233">                    p[i] = pnew[i];</span>
+<span class="fc" id="L224">            stpmax = STPMX * Math.max(Math.sqrt(sum), n);</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            for (int its = 0; its &lt; ITMAX; its++) {</span>
+<span class="fc" id="L226">                iter = its;</span>
+<span class="fc" id="L227">                lnsrch(p, fp, g, xi, pnew, fretArray, stpmax, check);</span>
+<span class="fc" id="L228">                fret = fretArray[0];</span>
+<span class="fc" id="L229">                fp = fret;</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L231">                    xi[i] = pnew[i] - p[i];</span>
+<span class="fc" id="L232">                    p[i] = pnew[i];</span>
                 }
-<span class="fc" id="L235">                test = 0.0;</span>
-<span class="fc bfc" id="L236" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L237">                    temp = Math.abs(xi[i]) / Math.max(Math.abs(p[i]), 1.0);</span>
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">                    if (temp &gt; test) {</span>
-<span class="fc" id="L239">                        test = temp;</span>
+<span class="fc" id="L234">                test = 0.0;</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L236">                    temp = Math.abs(xi[i]) / Math.max(Math.abs(p[i]), 1.0);</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                    if (temp &gt; test) {</span>
+<span class="fc" id="L238">                        test = temp;</span>
                     }
                 }
-<span class="fc bfc" id="L242" title="All 2 branches covered.">                if (test &lt; TOLX) {</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                if (test &lt; TOLX) {</span>
                     // minimum found
-<span class="fc" id="L244">                    validResult = true;</span>
-<span class="fc" id="L245">                    break;</span>
+<span class="nc" id="L243">                    validResult = true;</span>
+<span class="nc" id="L244">                    break;</span>
                 }
 
-<span class="fc" id="L248">                System.arraycopy(g, 0, dg, 0, n);</span>
+<span class="fc" id="L247">                System.arraycopy(g, 0, dg, 0, n);</span>
 
-<span class="fc" id="L250">                gradientListener.evaluateGradient(p, g);</span>
+<span class="fc" id="L249">                gradientListener.evaluateGradient(p, g);</span>
 
-<span class="fc" id="L252">                test = 0.0;</span>
-<span class="fc" id="L253">                den = Math.max(Math.abs(fret), 1.0);</span>
+<span class="fc" id="L251">                test = 0.0;</span>
+<span class="fc" id="L252">                den = Math.max(Math.abs(fret), 1.0);</span>
 
-<span class="fc bfc" id="L255" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L256">                    temp = Math.abs(g[i]) * Math.max(Math.abs(p[i]), 1.0) / den;</span>
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">                    if (temp &gt; test) {</span>
-<span class="fc" id="L258">                        test = temp;</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L255">                    temp = Math.abs(g[i]) * Math.max(Math.abs(p[i]), 1.0) / den;</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">                    if (temp &gt; test) {</span>
+<span class="fc" id="L257">                        test = temp;</span>
                     }
                 }
-<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                if (test &lt; tolerance) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                if (test &lt; tolerance) {</span>
                     // minimum found
-<span class="nc" id="L263">                    validResult = true;</span>
-<span class="nc" id="L264">                    break;</span>
+<span class="fc" id="L262">                    validResult = true;</span>
+<span class="fc" id="L263">                    break;</span>
                 }
 
-<span class="fc bfc" id="L267" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L268">                    dg[i] = g[i] - dg[i];</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L267">                    dg[i] = g[i] - dg[i];</span>
                 }
 
-<span class="fc bfc" id="L271" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L272">                    hdg[i] = 0.0;</span>
-<span class="fc bfc" id="L273" title="All 2 branches covered.">                    for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L274">                        hdg[i] += hessin.getElementAt(i, j) * dg[j];</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L271">                    hdg[i] = 0.0;</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">                    for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L273">                        hdg[i] += hessin.getElementAt(i, j) * dg[j];</span>
                     }
                 }
-<span class="fc" id="L277">                fac = fae = sumdg = sumxi = 0.0;</span>
-<span class="fc bfc" id="L278" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L279">                    fac += dg[i] * xi[i];</span>
-<span class="fc" id="L280">                    fae += dg[i] * hdg[i];</span>
-<span class="fc" id="L281">                    sumdg += sqr(dg[i]);</span>
-<span class="fc" id="L282">                    sumxi += sqr(xi[i]);</span>
+<span class="fc" id="L276">                fac = fae = sumdg = sumxi = 0.0;</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L278">                    fac += dg[i] * xi[i];</span>
+<span class="fc" id="L279">                    fae += dg[i] * hdg[i];</span>
+<span class="fc" id="L280">                    sumdg += sqr(dg[i]);</span>
+<span class="fc" id="L281">                    sumxi += sqr(xi[i]);</span>
                 }
 
-<span class="pc bpc" id="L285" title="1 of 2 branches missed.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
-<span class="fc" id="L286">                    fac = 1.0 / fac;</span>
-<span class="fc" id="L287">                    fad = 1.0 / fae;</span>
-<span class="fc bfc" id="L288" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L289">                        dg[i] = fac * xi[i] - fad * hdg[i];</span>
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
+<span class="fc" id="L285">                    fac = 1.0 / fac;</span>
+<span class="fc" id="L286">                    fad = 1.0 / fae;</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L288">                        dg[i] = fac * xi[i] - fad * hdg[i];</span>
                     }
 
-<span class="fc bfc" id="L292" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc bfc" id="L293" title="All 2 branches covered.">                        for (int j = i; j &lt; n; j++) {</span>
-<span class="fc" id="L294">                            hessin.setElementAt(i, j,</span>
-<span class="fc" id="L295">                                    hessin.getElementAt(i, j) +</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                        for (int j = i; j &lt; n; j++) {</span>
+<span class="fc" id="L293">                            hessin.setElementAt(i, j,</span>
+<span class="fc" id="L294">                                    hessin.getElementAt(i, j) +</span>
                                             fac * xi[i] * xi[j] -
                                             fad * hdg[i] * hdg[j] +
                                             fae * dg[i] * dg[j]);
-<span class="fc" id="L299">                            hessin.setElementAt(j, i,</span>
-<span class="fc" id="L300">                                    hessin.getElementAt(i, j));</span>
+<span class="fc" id="L298">                            hessin.setElementAt(j, i,</span>
+<span class="fc" id="L299">                                    hessin.getElementAt(i, j));</span>
                         }
                     }
                 }
-<span class="fc bfc" id="L304" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L305">                    xi[i] = 0.0;</span>
-<span class="fc bfc" id="L306" title="All 2 branches covered.">                    for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L307">                        xi[i] -= hessin.getElementAt(i, j) * g[j];</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L304">                    xi[i] = 0.0;</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">                    for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L306">                        xi[i] -= hessin.getElementAt(i, j) * g[j];</span>
                     }
                 }
 
-<span class="pc bpc" id="L311" title="1 of 2 branches missed.">                if (iterationCompletedListener != null) {</span>
-<span class="fc" id="L312">                    iterationCompletedListener.onIterationCompleted(this, its, ITMAX);</span>
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">                if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L311">                    iterationCompletedListener.onIterationCompleted(this, its, ITMAX);</span>
                 }
             }
 
-<span class="pc bpc" id="L316" title="1 of 2 branches missed.">            if (!validResult) {</span>
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">            if (!validResult) {</span>
                 // too many iterations
-<span class="nc" id="L318">                locked = false;</span>
-<span class="nc" id="L319">                throw new OptimizationException();</span>
+<span class="nc" id="L317">                locked = false;</span>
+<span class="nc" id="L318">                throw new OptimizationException();</span>
             }
-<span class="nc" id="L321">        } catch (final AlgebraException | EvaluationException e) {</span>
-<span class="nc" id="L322">            throw new OptimizationException(e);</span>
+<span class="nc" id="L320">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L321">            throw new OptimizationException(e);</span>
         } finally {
-<span class="fc" id="L324">            locked = false;</span>
+<span class="fc" id="L323">            locked = false;</span>
         }
 
         // set result
-<span class="fc" id="L328">        xmin = p;</span>
-<span class="fc" id="L329">        resultAvailable = true;</span>
-<span class="fc" id="L330">        fmin = fret;</span>
-<span class="fc" id="L331">    }</span>
+<span class="fc" id="L327">        xmin = p;</span>
+<span class="fc" id="L328">        resultAvailable = true;</span>
+<span class="fc" id="L329">        fmin = fret;</span>
+<span class="fc" id="L330">    }</span>
 
     /**
      * Returns boolean indicating whether this instance is ready to start the
@@ -340,8 +339,8 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L343" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</span>
-<span class="fc bfc" id="L344" title="All 2 branches covered.">                isStartPointAvailable();</span>
+<span class="fc bfc" id="L342" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp;</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">                isStartPointAvailable();</span>
     }
 
     /**
@@ -350,7 +349,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @return Tolerance or accuracy to be expected on estimated local minimum.
      */
     public double getTolerance() {
-<span class="fc" id="L353">        return tolerance;</span>
+<span class="fc" id="L352">        return tolerance;</span>
     }
 
     /**
@@ -364,11 +363,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      *                                  negative.
      */
     private void internalSetTolerance(final double tolerance) {
-<span class="fc bfc" id="L367" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L368">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L367">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L370">        this.tolerance = tolerance;</span>
-<span class="fc" id="L371">    }</span>
+<span class="fc" id="L369">        this.tolerance = tolerance;</span>
+<span class="fc" id="L370">    }</span>
 
     /**
      * Sets tolerance or accuracy to be expected on estimated local minimum.
@@ -380,11 +379,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      *                                  negative.
      */
     public void setTolerance(final double tolerance) throws LockedException {
-<span class="pc bpc" id="L383" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L384">            throw new LockedException();</span>
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L383">            throw new LockedException();</span>
         }
-<span class="fc" id="L386">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L387">    }</span>
+<span class="fc" id="L385">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L386">    }</span>
 
     /**
      * Returns boolean indicating whether start point has already been provided
@@ -393,7 +392,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean isStartPointAvailable() {
-<span class="fc bfc" id="L396" title="All 2 branches covered.">        return p != null;</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        return p != null;</span>
     }
 
     /**
@@ -404,11 +403,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @throws LockedException Raised if this instance is locked.
      */
     public void setStartPoint(final double[] startPoint) throws LockedException {
-<span class="pc bpc" id="L407" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L408">            throw new LockedException();</span>
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L407">            throw new LockedException();</span>
         }
-<span class="fc" id="L410">        p = startPoint;</span>
-<span class="fc" id="L411">    }</span>
+<span class="fc" id="L409">        p = startPoint;</span>
+<span class="fc" id="L410">    }</span>
 
     /**
      * Returns start point where algorithm will be started. Start point should
@@ -419,10 +418,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      *                               provided and is not available.
      */
     public double[] getStartPoint() throws NotAvailableException {
-<span class="fc bfc" id="L422" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
-<span class="fc" id="L423">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L421" title="All 2 branches covered.">        if (!isStartPointAvailable()) {</span>
+<span class="fc" id="L422">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L425">        return p;</span>
+<span class="fc" id="L424">        return p;</span>
     }
 
     /**
@@ -435,10 +434,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      */
     public GradientFunctionEvaluatorListener getGradientListener()
             throws NotAvailableException {
-<span class="fc bfc" id="L438" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
-<span class="fc" id="L439">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L437" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
+<span class="fc" id="L438">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L441">        return gradientListener;</span>
+<span class="fc" id="L440">        return gradientListener;</span>
     }
 
     /**
@@ -451,11 +450,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
     public void setGradientListener(
             final GradientFunctionEvaluatorListener gradientListener)
             throws LockedException {
-<span class="pc bpc" id="L454" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L455">            throw new LockedException();</span>
+<span class="pc bpc" id="L453" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L454">            throw new LockedException();</span>
         }
-<span class="fc" id="L457">        this.gradientListener = gradientListener;</span>
-<span class="fc" id="L458">    }</span>
+<span class="fc" id="L456">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L457">    }</span>
 
     /**
      * Returns boolean indicating whether a gradient listener has already been
@@ -464,7 +463,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean isGradientListenerAvailable() {
-<span class="fc bfc" id="L467" title="All 2 branches covered.">        return gradientListener != null;</span>
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        return gradientListener != null;</span>
     }
 
     /**
@@ -473,7 +472,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @return number of iterations that were needed.
      */
     public int getIterations() {
-<span class="fc" id="L476">        return iter;</span>
+<span class="fc" id="L475">        return iter;</span>
     }
 
     /**
@@ -483,7 +482,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @return Squared value.
      */
     private double sqr(final double x) {
-<span class="fc" id="L486">        return x * x;</span>
+<span class="fc" id="L485">        return x * x;</span>
     }
 
     /**
@@ -505,96 +504,94 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             throws OptimizationException {
         double a;
         double alam;
-<span class="fc" id="L508">        double alam2 = 0.0;</span>
+<span class="fc" id="L507">        double alam2 = 0.0;</span>
         final double alamin;
         double b;
         double disc;
-<span class="fc" id="L512">        double f2 = 0.0;</span>
+<span class="fc" id="L511">        double f2 = 0.0;</span>
         double rhs1;
         double rhs2;
-<span class="fc" id="L515">        double slope = 0.0;</span>
-<span class="fc" id="L516">        double sum = 0.0;</span>
+<span class="fc" id="L514">        double slope = 0.0;</span>
+<span class="fc" id="L515">        double sum = 0.0;</span>
         double temp;
         double test;
         double tmplam;
         int i;
-<span class="fc" id="L521">        final int n = xold.length;</span>
-<span class="fc" id="L522">        check[0] = false;</span>
+<span class="fc" id="L520">        final int n = xold.length;</span>
+<span class="fc" id="L521">        check[0] = false;</span>
 
-<span class="fc bfc" id="L524" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L525">            sum += p[i] * p[i];</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L524">            sum += p[i] * p[i];</span>
         }
-<span class="fc" id="L527">        sum = Math.sqrt(sum);</span>
+<span class="fc" id="L526">        sum = Math.sqrt(sum);</span>
 
-<span class="fc bfc" id="L529" title="All 2 branches covered.">        if (sum &gt; stpmax) {</span>
-<span class="fc bfc" id="L530" title="All 2 branches covered.">            for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L531">                p[i] *= stpmax / sum;</span>
+<span class="fc bfc" id="L528" title="All 2 branches covered.">        if (sum &gt; stpmax) {</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">            for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L530">                p[i] *= stpmax / sum;</span>
             }
         }
-<span class="fc bfc" id="L534" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L535">            slope += g[i] * p[i];</span>
+<span class="fc bfc" id="L533" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L534">            slope += g[i] * p[i];</span>
         }
-<span class="pc bpc" id="L537" title="1 of 2 branches missed.">        if (slope &gt;= 0.0) {</span>
-<span class="nc" id="L538">            throw new OptimizationException();</span>
+<span class="pc bpc" id="L536" title="1 of 2 branches missed.">        if (slope &gt;= 0.0) {</span>
+<span class="nc" id="L537">            throw new OptimizationException();</span>
         }
-<span class="fc" id="L540">        test = 0.0;</span>
-<span class="fc bfc" id="L541" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L542">            temp = Math.abs(p[i]) / Math.max(Math.abs(xold[i]), 1.0);</span>
-<span class="fc bfc" id="L543" title="All 2 branches covered.">            if (temp &gt; test) {</span>
-<span class="fc" id="L544">                test = temp;</span>
+<span class="fc" id="L539">        test = 0.0;</span>
+<span class="fc bfc" id="L540" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L541">            temp = Math.abs(p[i]) / Math.max(Math.abs(xold[i]), 1.0);</span>
+<span class="fc bfc" id="L542" title="All 2 branches covered.">            if (temp &gt; test) {</span>
+<span class="fc" id="L543">                test = temp;</span>
             }
         }
-<span class="fc" id="L547">        alamin = TOLX2 / test;</span>
-<span class="fc" id="L548">        alam = 1.0;</span>
+<span class="fc" id="L546">        alamin = TOLX2 / test;</span>
+<span class="fc" id="L547">        alam = 1.0;</span>
         for (; ; ) {
-<span class="fc bfc" id="L550" title="All 2 branches covered.">            for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L551">                x[i] = xold[i] + alam * p[i];</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">            for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L550">                x[i] = xold[i] + alam * p[i];</span>
             }
             try {
-<span class="fc" id="L554">                f[0] = listener.evaluate(x);</span>
-<span class="nc" id="L555">            } catch (final EvaluationException e) {</span>
-<span class="nc" id="L556">                throw new OptimizationException(e);</span>
-<span class="fc" id="L557">            }</span>
+<span class="fc" id="L553">                f[0] = listener.evaluate(x);</span>
+<span class="nc" id="L554">            } catch (final EvaluationException e) {</span>
+<span class="nc" id="L555">                throw new OptimizationException(e);</span>
+<span class="fc" id="L556">            }</span>
 
-<span class="pc bpc" id="L559" title="1 of 2 branches missed.">            if (alam &lt; alamin) {</span>
-<span class="nc bnc" id="L560" title="All 2 branches missed.">                for (i = 0; i &lt; n; i++) {</span>
-<span class="nc" id="L561">                    x[i] = xold[i];</span>
-                }
-<span class="nc" id="L563">                check[0] = true;</span>
-<span class="nc" id="L564">                return;</span>
-<span class="fc bfc" id="L565" title="All 2 branches covered.">            } else if (f[0] &lt;= fold + ALF * alam * slope) {</span>
-<span class="fc" id="L566">                return;</span>
+<span class="pc bpc" id="L558" title="1 of 2 branches missed.">            if (alam &lt; alamin) {</span>
+<span class="nc" id="L559">                System.arraycopy(xold, 0, x, 0, n);</span>
+<span class="nc" id="L560">                check[0] = true;</span>
+<span class="nc" id="L561">                return;</span>
+<span class="fc bfc" id="L562" title="All 2 branches covered.">            } else if (f[0] &lt;= fold + ALF * alam * slope) {</span>
+<span class="fc" id="L563">                return;</span>
             } else {
-<span class="fc bfc" id="L568" title="All 2 branches covered.">                if (alam == 1.0) {</span>
-<span class="fc" id="L569">                    tmplam = -slope / (2.0 * (f[0] - fold - slope));</span>
+<span class="fc bfc" id="L565" title="All 2 branches covered.">                if (alam == 1.0) {</span>
+<span class="fc" id="L566">                    tmplam = -slope / (2.0 * (f[0] - fold - slope));</span>
                 } else {
-<span class="fc" id="L571">                    rhs1 = f[0] - fold - alam * slope;</span>
-<span class="fc" id="L572">                    rhs2 = f2 - fold - alam2 * slope;</span>
-<span class="fc" id="L573">                    a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) /</span>
+<span class="fc" id="L568">                    rhs1 = f[0] - fold - alam * slope;</span>
+<span class="fc" id="L569">                    rhs2 = f2 - fold - alam2 * slope;</span>
+<span class="fc" id="L570">                    a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) /</span>
                             (alam - alam2);
-<span class="fc" id="L575">                    b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 /</span>
+<span class="fc" id="L572">                    b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 /</span>
                             (alam2 * alam2)) / (alam - alam2);
-<span class="pc bpc" id="L577" title="1 of 2 branches missed.">                    if (a == 0.0) {</span>
-<span class="nc" id="L578">                        tmplam = -slope / (2.0 * b);</span>
+<span class="pc bpc" id="L574" title="1 of 2 branches missed.">                    if (a == 0.0) {</span>
+<span class="nc" id="L575">                        tmplam = -slope / (2.0 * b);</span>
                     } else {
-<span class="fc" id="L580">                        disc = b * b - 3.0 * a * slope;</span>
-<span class="pc bpc" id="L581" title="1 of 2 branches missed.">                        if (disc &lt; 0.0) {</span>
-<span class="nc" id="L582">                            tmplam = 0.5 * alam;</span>
-<span class="fc bfc" id="L583" title="All 2 branches covered.">                        } else if (b &lt;= 0.0) {</span>
-<span class="fc" id="L584">                            tmplam = (-b + Math.sqrt(disc)) /</span>
+<span class="fc" id="L577">                        disc = b * b - 3.0 * a * slope;</span>
+<span class="pc bpc" id="L578" title="1 of 2 branches missed.">                        if (disc &lt; 0.0) {</span>
+<span class="nc" id="L579">                            tmplam = 0.5 * alam;</span>
+<span class="fc bfc" id="L580" title="All 2 branches covered.">                        } else if (b &lt;= 0.0) {</span>
+<span class="fc" id="L581">                            tmplam = (-b + Math.sqrt(disc)) /</span>
                                     (3.0 * a);
                         } else {
-<span class="fc" id="L587">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
+<span class="fc" id="L584">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
                         }
                     }
-<span class="fc bfc" id="L590" title="All 2 branches covered.">                    if (tmplam &gt; 0.5 * alam) {</span>
-<span class="fc" id="L591">                        tmplam = 0.5 * alam;</span>
+<span class="fc bfc" id="L587" title="All 2 branches covered.">                    if (tmplam &gt; 0.5 * alam) {</span>
+<span class="fc" id="L588">                        tmplam = 0.5 * alam;</span>
                     }
                 }
             }
-<span class="fc" id="L595">            alam2 = alam;</span>
-<span class="fc" id="L596">            f2 = f[0];</span>
-<span class="fc" id="L597">            alam = Math.max(tmplam, 0.1 * alam);</span>
+<span class="fc" id="L592">            alam2 = alam;</span>
+<span class="fc" id="L593">            f2 = f[0];</span>
+<span class="fc" id="L594">            alam = Math.max(tmplam, 0.1 * alam);</span>
         }
     }
 }

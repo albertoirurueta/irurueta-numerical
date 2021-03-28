@@ -29,7 +29,7 @@ import com.irurueta.numerical.NotReadyException;
  * This class is based on:
  * http://en.wikipedia.org/wiki/Cubic_function
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class ThirdDegreePolynomialRootsEstimator
         extends PolynomialRootsEstimator {
 
@@ -154,12 +154,10 @@ public class ThirdDegreePolynomialRootsEstimator
      *
      * @return this method always throws an exception.
      * @throws com.irurueta.numerical.NotAvailableException always thrown
-     * @deprecated
      */
-    @Deprecated
     @Override
     public Complex[] getPolynomialParameters() throws NotAvailableException {
-<span class="fc" id="L162">        throw new NotAvailableException();</span>
+<span class="fc" id="L160">        throw new NotAvailableException();</span>
     }
 
     /**
@@ -175,75 +173,75 @@ public class ThirdDegreePolynomialRootsEstimator
     @Override
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L179">            throw new LockedException();</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L177">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L182">            throw new NotReadyException();</span>
-        }
-
-<span class="fc" id="L185">        locked = true;</span>
-
-<span class="fc" id="L187">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
-
-<span class="fc" id="L189">        final double d = realPolyParams[0];</span>
-<span class="fc" id="L190">        final double c = realPolyParams[1];</span>
-<span class="fc" id="L191">        final double b = realPolyParams[2];</span>
-<span class="fc" id="L192">        final double a = realPolyParams[3];</span>
-
-<span class="fc" id="L194">        final Complex x1 = new Complex();</span>
-<span class="fc" id="L195">        final Complex x2 = new Complex();</span>
-<span class="fc" id="L196">        final Complex x3 = new Complex();</span>
-<span class="fc" id="L197">        solveCubic(a, b, c, d, x1, x2, x3);</span>
-
-<span class="pc bpc" id="L199" title="2 of 4 branches missed.">        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||</span>
-<span class="pc bpc" id="L200" title="2 of 4 branches missed.">                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary()) ||</span>
-<span class="pc bpc" id="L201" title="2 of 4 branches missed.">                Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())) {</span>
-
-<span class="nc" id="L203">            locked = false;</span>
-<span class="nc" id="L204">            throw new RootEstimationException();</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L180">            throw new NotReadyException();</span>
         }
 
-<span class="pc bpc" id="L207" title="1 of 4 branches missed.">        if (x1.getReal() &lt; x2.getReal() &amp;&amp; x1.getReal() &lt; x3.getReal()) {</span>
+<span class="fc" id="L183">        locked = true;</span>
+
+<span class="fc" id="L185">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
+
+<span class="fc" id="L187">        final double d = realPolyParams[0];</span>
+<span class="fc" id="L188">        final double c = realPolyParams[1];</span>
+<span class="fc" id="L189">        final double b = realPolyParams[2];</span>
+<span class="fc" id="L190">        final double a = realPolyParams[3];</span>
+
+<span class="fc" id="L192">        final Complex x1 = new Complex();</span>
+<span class="fc" id="L193">        final Complex x2 = new Complex();</span>
+<span class="fc" id="L194">        final Complex x3 = new Complex();</span>
+<span class="fc" id="L195">        solveCubic(a, b, c, d, x1, x2, x3);</span>
+
+<span class="pc bpc" id="L197" title="2 of 4 branches missed.">        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||</span>
+<span class="pc bpc" id="L198" title="2 of 4 branches missed.">                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary()) ||</span>
+<span class="pc bpc" id="L199" title="2 of 4 branches missed.">                Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())) {</span>
+
+<span class="nc" id="L201">            locked = false;</span>
+<span class="nc" id="L202">            throw new RootEstimationException();</span>
+        }
+
+<span class="pc bpc" id="L205" title="1 of 4 branches missed.">        if (x1.getReal() &lt; x2.getReal() &amp;&amp; x1.getReal() &lt; x3.getReal()) {</span>
             // x1 goes first
-<span class="fc" id="L209">            roots[0] = x1;</span>
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">            if (x2.getReal() &lt; x3.getReal()) {</span>
+<span class="fc" id="L207">            roots[0] = x1;</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">            if (x2.getReal() &lt; x3.getReal()) {</span>
                 // x2 goes second and x3 goes third
-<span class="nc" id="L212">                roots[1] = x2;</span>
-<span class="nc" id="L213">                roots[2] = x3;</span>
+<span class="nc" id="L210">                roots[1] = x2;</span>
+<span class="nc" id="L211">                roots[2] = x3;</span>
             } else {
                 // x3 goes second and x2 goes third
-<span class="fc" id="L216">                roots[1] = x3;</span>
-<span class="fc" id="L217">                roots[2] = x2;</span>
+<span class="fc" id="L214">                roots[1] = x3;</span>
+<span class="fc" id="L215">                roots[2] = x2;</span>
             }
-<span class="pc bpc" id="L219" title="1 of 4 branches missed.">        } else if (x2.getReal() &lt; x1.getReal() &amp;&amp; x2.getReal() &lt; x3.getReal()) {</span>
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        } else if (x2.getReal() &lt; x1.getReal() &amp;&amp; x2.getReal() &lt; x3.getReal()) {</span>
             // x2 goes first
-<span class="fc" id="L221">            roots[0] = x2;</span>
-<span class="pc bpc" id="L222" title="1 of 2 branches missed.">            if (x1.getReal() &lt; x3.getReal()) {</span>
+<span class="fc" id="L219">            roots[0] = x2;</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">            if (x1.getReal() &lt; x3.getReal()) {</span>
                 // x1 goes second and x3 goes third
-<span class="nc" id="L224">                roots[1] = x1;</span>
-<span class="nc" id="L225">                roots[2] = x3;</span>
+<span class="nc" id="L222">                roots[1] = x1;</span>
+<span class="nc" id="L223">                roots[2] = x3;</span>
             } else {
                 // x3 goes second and x1 goes third
-<span class="fc" id="L228">                roots[1] = x3;</span>
-<span class="fc" id="L229">                roots[2] = x1;</span>
+<span class="fc" id="L226">                roots[1] = x3;</span>
+<span class="fc" id="L227">                roots[2] = x1;</span>
             }
         } else {
             // x3 goes first
-<span class="fc" id="L233">            roots[0] = x3;</span>
-<span class="pc bpc" id="L234" title="1 of 2 branches missed.">            if (x1.getReal() &lt; x2.getReal()) {</span>
+<span class="fc" id="L231">            roots[0] = x3;</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">            if (x1.getReal() &lt; x2.getReal()) {</span>
                 // x1 goes second and x2 goes third
-<span class="nc" id="L236">                roots[1] = x1;</span>
-<span class="nc" id="L237">                roots[2] = x2;</span>
+<span class="nc" id="L234">                roots[1] = x1;</span>
+<span class="nc" id="L235">                roots[2] = x2;</span>
             } else {
                 // x2 goes second and x1 goes second
-<span class="fc" id="L240">                roots[1] = x2;</span>
-<span class="fc" id="L241">                roots[2] = x1;</span>
+<span class="fc" id="L238">                roots[1] = x2;</span>
+<span class="fc" id="L239">                roots[2] = x1;</span>
             }
         }
 
-<span class="fc" id="L245">        locked = false;</span>
-<span class="fc" id="L246">    }</span>
+<span class="fc" id="L243">        locked = false;</span>
+<span class="fc" id="L244">    }</span>
 
     /**
      * Returns boolean indicating whether provided array of polynomial
@@ -256,17 +254,17 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return True if is a third degree polynomial, false otherwise
      */
     public static boolean isThirdDegree(final double[] polyParams) {
-<span class="fc" id="L259">        final int length = polyParams.length;</span>
-<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp;</span>
-<span class="fc bfc" id="L261" title="All 2 branches covered.">                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
-<span class="fc bfc" id="L262" title="All 2 branches covered.">            for (int i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
-<span class="nc" id="L264">                    return false;</span>
+<span class="fc" id="L257">        final int length = polyParams.length;</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp;</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (int i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
+<span class="nc" id="L262">                    return false;</span>
                 }
             }
-<span class="fc" id="L267">            return true;</span>
+<span class="fc" id="L265">            return true;</span>
         }
-<span class="fc" id="L269">        return false;</span>
+<span class="fc" id="L267">        return false;</span>
     }
 
     /**
@@ -281,10 +279,10 @@ public class ThirdDegreePolynomialRootsEstimator
      *                           an array of polynomial parameters has not yet been provided.
      */
     public boolean isThirdDegree() throws NotReadyException {
-<span class="fc bfc" id="L284" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L285">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L283">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L287">        return isThirdDegree(realPolyParams);</span>
+<span class="fc" id="L285">        return isThirdDegree(realPolyParams);</span>
     }
 
     /**
@@ -298,10 +296,10 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return True if roots are distinct and real, false otherwise
      */
     public static boolean hasThreeDistinctRealRoots(final double[] polyParams) {
-<span class="pc bpc" id="L301" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L302" title="All 2 branches covered.">            return getDiscriminant(polyParams) &gt; EPS;</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">            return getDiscriminant(polyParams) &gt; EPS;</span>
         }
-<span class="nc" id="L304">        return false;</span>
+<span class="nc" id="L302">        return false;</span>
     }
 
     /**
@@ -316,10 +314,10 @@ public class ThirdDegreePolynomialRootsEstimator
      *                           been provided
      */
     public boolean hasThreeDistinctRealRoots() throws NotReadyException {
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L320">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L318">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L322">        return hasThreeDistinctRealRoots(realPolyParams);</span>
+<span class="fc" id="L320">        return hasThreeDistinctRealRoots(realPolyParams);</span>
     }
 
     /**
@@ -332,10 +330,10 @@ public class ThirdDegreePolynomialRootsEstimator
      * otherwise
      */
     public static boolean hasMultipleRealRoot(final double[] polyParams) {
-<span class="pc bpc" id="L335" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L336" title="All 2 branches covered.">            return Math.abs(getDiscriminant(polyParams)) &lt;= EPS;</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">            return Math.abs(getDiscriminant(polyParams)) &lt;= EPS;</span>
         }
-<span class="nc" id="L338">        return false;</span>
+<span class="nc" id="L336">        return false;</span>
     }
 
     /**
@@ -349,10 +347,10 @@ public class ThirdDegreePolynomialRootsEstimator
      *                           been provided
      */
     public boolean hasMultipleRealRoot() throws NotReadyException {
-<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L353">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L351">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L355">        return hasMultipleRealRoot(realPolyParams);</span>
+<span class="fc" id="L353">        return hasMultipleRealRoot(realPolyParams);</span>
     }
 
     /**
@@ -365,10 +363,10 @@ public class ThirdDegreePolynomialRootsEstimator
      */
     public static boolean hasOneRealRootAndTwoComplexConjugateRoots(
             final double[] polyParams) {
-<span class="pc bpc" id="L368" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
-<span class="fc bfc" id="L369" title="All 2 branches covered.">            return getDiscriminant(polyParams) &lt; -EPS;</span>
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">            return getDiscriminant(polyParams) &lt; -EPS;</span>
         }
-<span class="nc" id="L371">        return false;</span>
+<span class="nc" id="L369">        return false;</span>
     }
 
     /**
@@ -382,10 +380,10 @@ public class ThirdDegreePolynomialRootsEstimator
      */
     public boolean hasOneRealRootAndTwoComplexConjugateRoots()
             throws NotReadyException {
-<span class="fc bfc" id="L385" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L386">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L384">            throw new NotReadyException();</span>
         }
-<span class="fc" id="L388">        return hasOneRealRootAndTwoComplexConjugateRoots(realPolyParams);</span>
+<span class="fc" id="L386">        return hasOneRealRootAndTwoComplexConjugateRoots(realPolyParams);</span>
     }
 
     /**
@@ -393,13 +391,11 @@ public class ThirdDegreePolynomialRootsEstimator
      * class only supports REAL polynomial parameters.
      *
      * @throws IllegalArgumentException always thrown.
-     * @deprecated
      */
     @Override
-    @Deprecated
     protected void internalSetPolynomialParameters(final Complex[] polyParams) {
         // complex values are not supported
-<span class="fc" id="L402">        throw new IllegalArgumentException();</span>
+<span class="fc" id="L398">        throw new IllegalArgumentException();</span>
     }
 
     /**
@@ -411,12 +407,12 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return Value of discriminant
      */
     private static double getDiscriminant(final double[] polyParams) {
-<span class="fc" id="L414">        final double d = polyParams[0];</span>
-<span class="fc" id="L415">        final double c = polyParams[1];</span>
-<span class="fc" id="L416">        final double b = polyParams[2];</span>
-<span class="fc" id="L417">        final double a = polyParams[3];</span>
+<span class="fc" id="L410">        final double d = polyParams[0];</span>
+<span class="fc" id="L411">        final double c = polyParams[1];</span>
+<span class="fc" id="L412">        final double b = polyParams[2];</span>
+<span class="fc" id="L413">        final double a = polyParams[3];</span>
 
-<span class="fc" id="L419">        return 18.0 * a * b * c * d</span>
+<span class="fc" id="L415">        return 18.0 * a * b * c * d</span>
                 - 4.0 * b * b * b * d
                 + b * b * c * c
                 - 4.0 * a * c * c * c
@@ -430,10 +426,10 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return Cube root
      */
     private double cubeRoot(final double x) {
-<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (x &lt; 0.0) {</span>
-<span class="fc" id="L434">            return -Math.pow(-x, THIRD);</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">        if (x &lt; 0.0) {</span>
+<span class="fc" id="L430">            return -Math.pow(-x, THIRD);</span>
         } else {
-<span class="fc" id="L436">            return Math.pow(x, THIRD);</span>
+<span class="fc" id="L432">            return Math.pow(x, THIRD);</span>
         }
     }
 
@@ -452,56 +448,56 @@ public class ThirdDegreePolynomialRootsEstimator
                             final Complex x1, final Complex x2, final Complex x3) {
 
         // find the discriminant
-<span class="fc" id="L455">        final double f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;</span>
-<span class="fc" id="L456">        final double g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c /</span>
-<span class="fc" id="L457">                Math.pow(a, 2.0) + 27.0 * d / a) / 27.0;</span>
-<span class="fc" id="L458">        final double h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;</span>
-<span class="fc" id="L459">        final double absF = Math.abs(f);</span>
-<span class="fc" id="L460">        final double absG = Math.abs(g);</span>
-<span class="fc" id="L461">        final double absH = Math.abs(h);</span>
+<span class="fc" id="L451">        final double f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;</span>
+<span class="fc" id="L452">        final double g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c /</span>
+<span class="fc" id="L453">                Math.pow(a, 2.0) + 27.0 * d / a) / 27.0;</span>
+<span class="fc" id="L454">        final double h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;</span>
+<span class="fc" id="L455">        final double absF = Math.abs(f);</span>
+<span class="fc" id="L456">        final double absG = Math.abs(g);</span>
+<span class="fc" id="L457">        final double absH = Math.abs(h);</span>
         // evaluate discriminant
-<span class="pc bpc" id="L463" title="2 of 6 branches missed.">        if (absF &lt;= EPS &amp;&amp; absG &lt;= EPS &amp;&amp; absH &lt;= EPS) {</span>
+<span class="pc bpc" id="L459" title="2 of 6 branches missed.">        if (absF &lt;= EPS &amp;&amp; absG &lt;= EPS &amp;&amp; absH &lt;= EPS) {</span>
             // 3 equal roots
             final double x;
             // when f, g, and h all equal 0 the roots can be found by the following line
-<span class="fc" id="L467">            x = -cubeRoot(d / a);</span>
-<span class="fc" id="L468">            x1.setRealAndImaginary(x, 0.0);</span>
-<span class="fc" id="L469">            x2.setRealAndImaginary(x, 0.0);</span>
-<span class="fc" id="L470">            x3.setRealAndImaginary(x, 0.0);</span>
-<span class="fc bfc" id="L471" title="All 2 branches covered.">        } else if (h &lt;= 0.0) {</span>
+<span class="fc" id="L463">            x = -cubeRoot(d / a);</span>
+<span class="fc" id="L464">            x1.setRealAndImaginary(x, 0.0);</span>
+<span class="fc" id="L465">            x2.setRealAndImaginary(x, 0.0);</span>
+<span class="fc" id="L466">            x3.setRealAndImaginary(x, 0.0);</span>
+<span class="fc bfc" id="L467" title="All 2 branches covered.">        } else if (h &lt;= 0.0) {</span>
             // 3 real roots
 
             // complicated maths making use of the method
-<span class="fc" id="L475">            final double i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);</span>
-<span class="fc" id="L476">            final double j = cubeRoot(i);</span>
-<span class="fc" id="L477">            final double k = Math.acos(-(g / (2.0 * i)));</span>
-<span class="fc" id="L478">            final double m = Math.cos(k / 3.0);</span>
-<span class="fc" id="L479">            final double n = ROOT_THREE * Math.sin(k / 3.0);</span>
-<span class="fc" id="L480">            final double p = -(b / (3.0 * a));</span>
+<span class="fc" id="L471">            final double i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);</span>
+<span class="fc" id="L472">            final double j = cubeRoot(i);</span>
+<span class="fc" id="L473">            final double k = Math.acos(-(g / (2.0 * i)));</span>
+<span class="fc" id="L474">            final double m = Math.cos(k / 3.0);</span>
+<span class="fc" id="L475">            final double n = ROOT_THREE * Math.sin(k / 3.0);</span>
+<span class="fc" id="L476">            final double p = -(b / (3.0 * a));</span>
 
             // print solutions
-<span class="fc" id="L483">            x1.setRealAndImaginary(2.0 * j * m + p, 0.0);</span>
-<span class="fc" id="L484">            x2.setRealAndImaginary(-j * (m + n) + p, 0.0);</span>
-<span class="fc" id="L485">            x3.setRealAndImaginary(-j * (m - n) + p, 0.0);</span>
-<span class="pc bpc" id="L486" title="1 of 2 branches missed.">        } else if (h &gt; 0) {</span>
+<span class="fc" id="L479">            x1.setRealAndImaginary(2.0 * j * m + p, 0.0);</span>
+<span class="fc" id="L480">            x2.setRealAndImaginary(-j * (m + n) + p, 0.0);</span>
+<span class="fc" id="L481">            x3.setRealAndImaginary(-j * (m - n) + p, 0.0);</span>
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">        } else if (h &gt; 0) {</span>
             // 1 real root and 2 complex roots
 
             // complicated maths making use of the method
-<span class="fc" id="L490">            final double r = -(g / 2) + Math.pow(h, 0.5);</span>
-<span class="fc" id="L491">            final double s = cubeRoot(r);</span>
-<span class="fc" id="L492">            final double t = -(g / 2) - Math.pow(h, 0.5);</span>
-<span class="fc" id="L493">            final double u = cubeRoot(t);</span>
-<span class="fc" id="L494">            final double p = -(b / (3 * a));</span>
+<span class="fc" id="L486">            final double r = -(g / 2) + Math.pow(h, 0.5);</span>
+<span class="fc" id="L487">            final double s = cubeRoot(r);</span>
+<span class="fc" id="L488">            final double t = -(g / 2) - Math.pow(h, 0.5);</span>
+<span class="fc" id="L489">            final double u = cubeRoot(t);</span>
+<span class="fc" id="L490">            final double p = -(b / (3 * a));</span>
 
             // print solutions
-<span class="fc" id="L497">            x1.setRealAndImaginary((s + u) + p, 0.0);</span>
-<span class="fc" id="L498">            final double real = -(s + u) / 2 + p;</span>
-<span class="fc" id="L499">            x2.setReal(real);</span>
-<span class="fc" id="L500">            x3.setReal(real);</span>
-<span class="fc" id="L501">            final double imag = (s - u) * ROOT_THREE / 2;</span>
-<span class="fc" id="L502">            x2.setImaginary(imag);</span>
-<span class="fc" id="L503">            x3.setImaginary(imag);</span>
+<span class="fc" id="L493">            x1.setRealAndImaginary((s + u) + p, 0.0);</span>
+<span class="fc" id="L494">            final double real = -(s + u) / 2 + p;</span>
+<span class="fc" id="L495">            x2.setReal(real);</span>
+<span class="fc" id="L496">            x3.setReal(real);</span>
+<span class="fc" id="L497">            final double imag = (s - u) * ROOT_THREE / 2;</span>
+<span class="fc" id="L498">            x2.setImaginary(imag);</span>
+<span class="fc" id="L499">            x3.setImaginary(imag);</span>
         }
-<span class="fc" id="L505">    }</span>
+<span class="fc" id="L501">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

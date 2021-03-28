@@ -27,7 +27,7 @@ import java.util.List;
  * This class defines the interface for an estimator of a polynomial of a given
  * degree using points where polynomials are evaluated.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;Duplicates&quot;)
 public abstract class PolynomialEstimator {
 
     /**
@@ -66,7 +66,7 @@ public abstract class PolynomialEstimator {
     /**
      * Constructor.
      */
-<span class="fc" id="L69">    public PolynomialEstimator() {</span>
+<span class="fc" id="L69">    protected PolynomialEstimator() {</span>
 <span class="fc" id="L70">        mDegree = MIN_DEGREE;</span>
 <span class="fc" id="L71">    }</span>
 
@@ -76,7 +76,7 @@ public abstract class PolynomialEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-<span class="fc" id="L79">    public PolynomialEstimator(final int degree) {</span>
+<span class="fc" id="L79">    protected PolynomialEstimator(final int degree) {</span>
 <span class="fc" id="L80">        internalSetDegree(degree);</span>
 <span class="fc" id="L81">    }</span>
 
@@ -85,7 +85,7 @@ public abstract class PolynomialEstimator {
      *
      * @param evaluations collection of polynomial evaluations.
      */
-    public PolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+    protected PolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
 <span class="fc" id="L89">        this();</span>
 <span class="fc" id="L90">        mEvaluations = evaluations;</span>
 <span class="fc" id="L91">    }</span>
@@ -95,7 +95,7 @@ public abstract class PolynomialEstimator {
      *
      * @param listener listener to be notified of events.
      */
-    public PolynomialEstimator(final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final PolynomialEstimatorListener listener) {
 <span class="fc" id="L99">        this();</span>
 <span class="fc" id="L100">        mListener = listener;</span>
 <span class="fc" id="L101">    }</span>
@@ -107,8 +107,8 @@ public abstract class PolynomialEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree,
-                               final List&lt;PolynomialEvaluation&gt; evaluations) {
+    protected PolynomialEstimator(final int degree,
+                                  final List&lt;PolynomialEvaluation&gt; evaluations) {
 <span class="fc" id="L112">        this(degree);</span>
 <span class="fc" id="L113">        mEvaluations = evaluations;</span>
 <span class="fc" id="L114">    }</span>
@@ -120,8 +120,8 @@ public abstract class PolynomialEstimator {
      * @param listener listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree,
-                               final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final int degree,
+                                  final PolynomialEstimatorListener listener) {
 <span class="fc" id="L125">        this(degree);</span>
 <span class="fc" id="L126">        mListener = listener;</span>
 <span class="fc" id="L127">    }</span>
@@ -132,8 +132,8 @@ public abstract class PolynomialEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @param listener    listener to be notified of events.
      */
-    public PolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations,
-                               final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations,
+                                  final PolynomialEstimatorListener listener) {
 <span class="fc" id="L137">        this(evaluations);</span>
 <span class="fc" id="L138">        mListener = listener;</span>
 <span class="fc" id="L139">    }</span>
@@ -146,9 +146,9 @@ public abstract class PolynomialEstimator {
      * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialEstimator(final int degree,
-                               final List&lt;PolynomialEvaluation&gt; evaluations,
-                               final PolynomialEstimatorListener listener) {
+    protected PolynomialEstimator(final int degree,
+                                  final List&lt;PolynomialEvaluation&gt; evaluations,
+                                  final PolynomialEstimatorListener listener) {
 <span class="fc" id="L152">        this(degree, evaluations);</span>
 <span class="fc" id="L153">        mListener = listener;</span>
 <span class="fc" id="L154">    }</span>

@@ -25,7 +25,6 @@ import com.irurueta.algebra.Matrix;
  * Where f0, f1, ... is the function basis which ideally should be formed by
  * orthogonal functions.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
 
     /**
@@ -48,8 +47,8 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * Constructor
      */
     MultiDimensionLinearFitter() {
-<span class="fc" id="L51">        super();</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L50">        super();</span>
+<span class="fc" id="L51">    }</span>
 
     /**
      * Constructor
@@ -62,9 +61,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(final Matrix x, final double[] y, final double[] sig) {
-<span class="fc" id="L66">        super(x, y, sig);</span>
-<span class="fc" id="L67">    }</span>
+    protected MultiDimensionLinearFitter(final Matrix x, final double[] y, final double[] sig) {
+<span class="fc" id="L65">        super(x, y, sig);</span>
+<span class="fc" id="L66">    }</span>
 
     /**
      * Constructor
@@ -78,9 +77,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(final Matrix x, final double[] y, final double sig) {
-<span class="fc" id="L82">        super(x, y, sig);</span>
-<span class="fc" id="L83">    }</span>
+    protected MultiDimensionLinearFitter(final Matrix x, final double[] y, final double sig) {
+<span class="fc" id="L81">        super(x, y, sig);</span>
+<span class="fc" id="L82">    }</span>
 
     /**
      * Constructor
@@ -89,11 +88,11 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      *                  obtain the evaluation of function basis at such point
      * @throws FittingException if evaluation fails
      */
-    public MultiDimensionLinearFitter(final LinearFitterMultiDimensionFunctionEvaluator evaluator)
+    protected MultiDimensionLinearFitter(final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L94">        super();</span>
-<span class="fc" id="L95">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L93">        super();</span>
+<span class="fc" id="L94">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L95">    }</span>
 
     /**
      * Constructor
@@ -109,12 +108,12 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(
+    protected MultiDimensionLinearFitter(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator,
             final Matrix x, final double[] y, final double[] sig) throws FittingException {
-<span class="fc" id="L115">        super(x, y, sig);</span>
-<span class="fc" id="L116">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L114">        super(x, y, sig);</span>
+<span class="fc" id="L115">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L116">    }</span>
 
     /**
      * Constructor
@@ -131,12 +130,12 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws IllegalArgumentException if provided matrix rows and arrays
      *                                  don't have the same length
      */
-    public MultiDimensionLinearFitter(
+    protected MultiDimensionLinearFitter(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator,
             final Matrix x, final double[] y, final double sig) throws FittingException {
-<span class="fc" id="L137">        super(x, y, sig);</span>
-<span class="fc" id="L138">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L136">        super(x, y, sig);</span>
+<span class="fc" id="L137">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L138">    }</span>
 
     /**
      * Returns function evaluator to evaluate function at a given point and
@@ -145,7 +144,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @return function evaluator
      */
     public LinearFitterMultiDimensionFunctionEvaluator getFunctionEvaluator() {
-<span class="fc" id="L148">        return evaluator;</span>
+<span class="fc" id="L147">        return evaluator;</span>
     }
 
     /**
@@ -158,8 +157,8 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
     public void setFunctionEvaluator(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L161">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L162">    }</span>
+<span class="fc" id="L160">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L161">    }</span>
 
     /**
      * Internal method to set function evaluator to evaluate function at a given
@@ -168,6 +167,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     private void internalSetFunctionEvaluator(
             final LinearFitterMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {

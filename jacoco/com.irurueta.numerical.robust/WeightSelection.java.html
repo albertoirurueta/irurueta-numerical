@@ -41,102 +41,108 @@ public class WeightSelection {
     /**
      * Constructor.
      */
-    private WeightSelection() { }
+    private WeightSelection() {
+    }
 
     /**
      * Returns array indicating which correspondences have been selected
      * (i.e. have a true value), and which ones hasn't (have a false value).
+     *
      * @return array indicating which correspondences have been selected.
      */
     public boolean[] getSelected() {
-<span class="fc" id="L52">        return selected;</span>
+<span class="fc" id="L54">        return selected;</span>
     }
 
     /**
      * Sets array indicating which correspondences have been selected (i.e.
      * have a true value), and which ones hasn't (have a false value).
-     * @param selected array indicating which correspondences have been 
-     * selected.
+     *
+     * @param selected array indicating which correspondences have been
+     *                 selected.
      */
     public void setSelected(final boolean[] selected) {
-<span class="fc" id="L62">        this.selected = selected;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L65">        this.selected = selected;</span>
+<span class="fc" id="L66">    }</span>
 
     /**
      * Returns number of correspondences that have been selected.
+     *
      * @return number of correspondences that have been selected.
      */
     public int getNumSelected() {
-<span class="fc" id="L70">        return numSelected;</span>
+<span class="fc" id="L74">        return numSelected;</span>
     }
 
     /**
      * Sets number of correspondences that have been selected.
+     *
      * @param numSelected number of correspondences that have been selected.
      */
     public void setNumSelected(final int numSelected) {
-<span class="fc" id="L78">        this.numSelected = numSelected;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L83">        this.numSelected = numSelected;</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Selects correspondences based on provided weights and creates a
      * weight selection instance.
-     * @param weights weights. The larger its value the more important a 
-     * correspondence is.
-     * @param sortWeights indicates whether weights must be sorted so that 
-     * largest weights are taken into account first.
-     * @param maxPoints maximum number of correspondences to pick
+     *
+     * @param weights     weights. The larger its value the more important a
+     *                    correspondence is.
+     * @param sortWeights indicates whether weights must be sorted so that
+     *                    largest weights are taken into account first.
+     * @param maxPoints   maximum number of correspondences to pick
      * @return instance containing the selection that was made.
      * @throws SortingException if weights couldn't be sorted.
      */
     public static WeightSelection selectWeights(final double[] weights,
-            final boolean sortWeights, final int maxPoints) throws SortingException {
+                                                final boolean sortWeights, final int maxPoints) throws SortingException {
 
-<span class="fc" id="L95">        final int length = weights.length;</span>
+<span class="fc" id="L101">        final int length = weights.length;</span>
 
         // instantiate selected array with all its values as unselected
-<span class="fc" id="L98">        boolean[] selected = new boolean[length];</span>
+<span class="fc" id="L104">        boolean[] selected = new boolean[length];</span>
         int numSelected;
 
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (sortWeights) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (sortWeights) {</span>
             // sort weights
 
             // copy weights because this array will be sorted
-<span class="fc" id="L105">            final double[] weightsCopy = Arrays.copyOf(weights, length);</span>
-<span class="fc" id="L106">            final Sorter&lt;Double&gt; sorter = Sorter.create();</span>
+<span class="fc" id="L111">            final double[] weightsCopy = Arrays.copyOf(weights, length);</span>
+<span class="fc" id="L112">            final Sorter&lt;Double&gt; sorter = Sorter.create();</span>
             // array that will contain original indices in ascending order of
             // weights after sorting
-<span class="fc" id="L109">            final int[] indices = sorter.sortWithIndices(weightsCopy);</span>
+<span class="fc" id="L115">            final int[] indices = sorter.sortWithIndices(weightsCopy);</span>
 
             // traverse indices array from greatest position which corresponds
             // to the greatest weight value after sorting in decreasing order
             // up to maxPoints positions
-<span class="fc" id="L114">            int counter = 0;</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">            for (int i = length - 1; i &gt;= 0; i--) {</span>
-<span class="fc" id="L116">                selected[indices[i]] = true;</span>
-<span class="fc" id="L117">                counter++;</span>
-<span class="fc bfc" id="L118" title="All 2 branches covered.">                if(counter &gt;= maxPoints) break;</span>
+<span class="fc" id="L120">            int counter = 0;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            for (int i = length - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L122">                selected[indices[i]] = true;</span>
+<span class="fc" id="L123">                counter++;</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                if (counter &gt;= maxPoints) break;</span>
             }
-<span class="fc" id="L120">            numSelected = counter;</span>
-<span class="fc" id="L121">        } else {</span>
+<span class="fc" id="L126">            numSelected = counter;</span>
+<span class="fc" id="L127">        } else {</span>
             // weights aren't sorted
-<span class="fc bfc" id="L123" title="All 2 branches covered.">            if (length &lt; maxPoints) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            if (length &lt; maxPoints) {</span>
                 // we select all points
-<span class="fc" id="L125">                Arrays.fill(selected, true);</span>
-<span class="fc" id="L126">                numSelected = length;                </span>
+<span class="fc" id="L131">                Arrays.fill(selected, true);</span>
+<span class="fc" id="L132">                numSelected = length;</span>
             } else {
                 // weights aren't sorted so we pick the first maxPoints
-<span class="fc bfc" id="L129" title="All 2 branches covered.">                for (int i = 0; i &lt; maxPoints; i++) {</span>
-<span class="fc" id="L130">                    selected[i] = true;</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                for (int i = 0; i &lt; maxPoints; i++) {</span>
+<span class="fc" id="L136">                    selected[i] = true;</span>
                 }
-<span class="fc" id="L132">                numSelected = maxPoints;</span>
+<span class="fc" id="L138">                numSelected = maxPoints;</span>
             }
         }
 
-<span class="fc" id="L136">        final WeightSelection selection = new WeightSelection();</span>
-<span class="fc" id="L137">        selection.setSelected(selected);</span>
-<span class="fc" id="L138">        selection.setNumSelected(numSelected);</span>
-<span class="fc" id="L139">        return selection;</span>
-    }       
+<span class="fc" id="L142">        final WeightSelection selection = new WeightSelection();</span>
+<span class="fc" id="L143">        selection.setSelected(selected);</span>
+<span class="fc" id="L144">        selection.setNumSelected(numSelected);</span>
+<span class="fc" id="L145">        return selection;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -29,7 +29,7 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;Duplicates&quot;)
 public abstract class PolynomialRobustEstimator {
 
     /**
@@ -142,7 +142,7 @@ public abstract class PolynomialRobustEstimator {
     /**
      * Constructor.
      */
-<span class="fc" id="L145">    public PolynomialRobustEstimator() {</span>
+<span class="fc" id="L145">    protected PolynomialRobustEstimator() {</span>
 <span class="fc" id="L146">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
 <span class="fc" id="L147">        mConfidence = DEFAULT_CONFIDENCE;</span>
 <span class="fc" id="L148">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
@@ -156,7 +156,7 @@ public abstract class PolynomialRobustEstimator {
      * @param degree degree of polynomial to be estimated.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-<span class="fc" id="L159">    public PolynomialRobustEstimator(final int degree) {</span>
+<span class="fc" id="L159">    protected PolynomialRobustEstimator(final int degree) {</span>
 <span class="fc" id="L160">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
 <span class="fc" id="L161">        mConfidence = DEFAULT_CONFIDENCE;</span>
 <span class="fc" id="L162">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
@@ -171,7 +171,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    public PolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+    protected PolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
 <span class="fc" id="L175">        this();</span>
 <span class="fc" id="L176">        internalSetEvaluations(evaluations);</span>
 <span class="fc" id="L177">    }</span>
@@ -182,7 +182,7 @@ public abstract class PolynomialRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PolynomialRobustEstimator(
+    protected PolynomialRobustEstimator(
             final PolynomialRobustEstimatorListener listener) {
 <span class="fc" id="L187">        this();</span>
 <span class="fc" id="L188">        mListener = listener;</span>
@@ -197,8 +197,8 @@ public abstract class PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    public PolynomialRobustEstimator(final int degree,
-                                     final List&lt;PolynomialEvaluation&gt; evaluations) {
+    protected PolynomialRobustEstimator(final int degree,
+                                        final List&lt;PolynomialEvaluation&gt; evaluations) {
 <span class="fc" id="L202">        this(degree);</span>
 <span class="fc" id="L203">        internalSetEvaluations(evaluations);</span>
 <span class="fc" id="L204">    }</span>
@@ -211,8 +211,8 @@ public abstract class PolynomialRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PolynomialRobustEstimator(final int degree,
-                                     final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final int degree,
+                                        final PolynomialRobustEstimatorListener listener) {
 <span class="fc" id="L216">        this(degree);</span>
 <span class="fc" id="L217">        mListener = listener;</span>
 <span class="fc" id="L218">    }</span>
@@ -226,8 +226,8 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    public PolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations,
-                                     final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations,
+                                        final PolynomialRobustEstimatorListener listener) {
 <span class="fc" id="L231">        this(evaluations);</span>
 <span class="fc" id="L232">        mListener = listener;</span>
 <span class="fc" id="L233">    }</span>
@@ -242,9 +242,9 @@ public abstract class PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    public PolynomialRobustEstimator(final int degree,
-                                     final List&lt;PolynomialEvaluation&gt; evaluations,
-                                     final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final int degree,
+                                        final List&lt;PolynomialEvaluation&gt; evaluations,
+                                        final PolynomialRobustEstimatorListener listener) {
 <span class="fc" id="L248">        this(degree, evaluations);</span>
 <span class="fc" id="L249">        mListener = listener;</span>
 <span class="fc" id="L250">    }</span>

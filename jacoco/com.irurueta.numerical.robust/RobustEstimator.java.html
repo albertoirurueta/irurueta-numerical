@@ -23,7 +23,6 @@ import com.irurueta.numerical.NotReadyException;
  *
  * @param &lt;T&gt; Object to be estimated (i.e. lines, cameras, etc)
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public abstract class RobustEstimator&lt;T&gt; {
 
     /**
@@ -63,11 +62,11 @@ public abstract class RobustEstimator&lt;T&gt; {
     /**
      * Constructor.
      */
-<span class="fc" id="L66">    public RobustEstimator() {</span>
-<span class="fc" id="L67">        mListener = null;</span>
-<span class="fc" id="L68">        mLocked = false;</span>
-<span class="fc" id="L69">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L65">    protected RobustEstimator() {</span>
+<span class="fc" id="L66">        mListener = null;</span>
+<span class="fc" id="L67">        mLocked = false;</span>
+<span class="fc" id="L68">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L69">    }</span>
 
     /**
      * Constructor.
@@ -75,11 +74,11 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-<span class="fc" id="L78">    public RobustEstimator(final RobustEstimatorListener&lt;T&gt; listener) {</span>
-<span class="fc" id="L79">        mListener = listener;</span>
-<span class="fc" id="L80">        mLocked = false;</span>
-<span class="fc" id="L81">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L77">    protected RobustEstimator(final RobustEstimatorListener&lt;T&gt; listener) {</span>
+<span class="fc" id="L78">        mListener = listener;</span>
+<span class="fc" id="L79">        mLocked = false;</span>
+<span class="fc" id="L80">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L81">    }</span>
 
     /**
      * Returns reference to listener to be notified of events such as when
@@ -88,7 +87,7 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @return listener to be notified of events.
      */
     public RobustEstimatorListener&lt;T&gt; getListener() {
-<span class="fc" id="L91">        return mListener;</span>
+<span class="fc" id="L90">        return mListener;</span>
     }
 
     /**
@@ -100,11 +99,11 @@ public abstract class RobustEstimator&lt;T&gt; {
      */
     public void setListener(final RobustEstimatorListener&lt;T&gt; listener)
             throws LockedException {
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L104">            throw new LockedException();</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L103">            throw new LockedException();</span>
         }
-<span class="fc" id="L106">        mListener = listener;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L105">        mListener = listener;</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Indicates whether listener has been provided and is available for
@@ -113,7 +112,7 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        return mListener != null;</span>
     }
 
     /**
@@ -122,7 +121,7 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L125">        return mLocked;</span>
+<span class="fc" id="L124">        return mLocked;</span>
     }
 
     /**
@@ -133,7 +132,7 @@ public abstract class RobustEstimator&lt;T&gt; {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L136">        return mProgressDelta;</span>
+<span class="fc" id="L135">        return mProgressDelta;</span>
     }
 
     /**
@@ -149,15 +148,15 @@ public abstract class RobustEstimator&lt;T&gt; {
      */
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void setProgressDelta(final float progressDelta) throws LockedException {
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L153">            throw new LockedException();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L152">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L155" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L154" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L157">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L156">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L159">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L160">    }</span>
+<span class="fc" id="L158">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L159">    }</span>
 
     /**
      * Robustly estimates an instance of T.
@@ -192,10 +191,10 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @return true if ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L196">            return mListener.isReady();</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L195">            return mListener.isReady();</span>
         } else {
-<span class="fc" id="L198">            return false;</span>
+<span class="fc" id="L197">            return false;</span>
         }
     }
 }

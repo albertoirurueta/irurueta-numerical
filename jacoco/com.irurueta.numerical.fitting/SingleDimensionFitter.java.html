@@ -23,7 +23,6 @@ import java.util.Arrays;
  * Base class to fit a single dimension function y = f(x) by using provided
  * data (x, y)
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public abstract class SingleDimensionFitter extends Fitter {
     /**
      * Input points x where function f(x) is evaluated.
@@ -64,8 +63,8 @@ public abstract class SingleDimensionFitter extends Fitter {
     /**
      * Constructor.
      */
-<span class="fc" id="L67">    public SingleDimensionFitter() {</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L66">    protected SingleDimensionFitter() {</span>
+<span class="fc" id="L67">    }</span>
 
     /**
      * Constructor.
@@ -77,9 +76,9 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-<span class="fc" id="L80">    public SingleDimensionFitter(final double[] x, final double[] y, final double[] sig) {</span>
-<span class="fc" id="L81">        setInputData(x, y, sig);</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L79">    protected SingleDimensionFitter(final double[] x, final double[] y, final double[] sig) {</span>
+<span class="fc" id="L80">        setInputData(x, y, sig);</span>
+<span class="fc" id="L81">    }</span>
 
     /**
      * Constructor.
@@ -92,9 +91,9 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-<span class="fc" id="L95">    public SingleDimensionFitter(final double[] x, final double[] y, final double sig) {</span>
-<span class="fc" id="L96">        setInputData(x, y, sig);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L94">    protected SingleDimensionFitter(final double[] x, final double[] y, final double sig) {</span>
+<span class="fc" id="L95">        setInputData(x, y, sig);</span>
+<span class="fc" id="L96">    }</span>
 
     /**
      * Returns input points x where function f(x) is evaluated.
@@ -102,7 +101,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @return input points x.
      */
     public double[] getX() {
-<span class="fc" id="L105">        return x;</span>
+<span class="fc" id="L104">        return x;</span>
     }
 
     /**
@@ -112,7 +111,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @return sampled functoin evaluations.
      */
     public double[] getY() {
-<span class="fc" id="L115">        return y;</span>
+<span class="fc" id="L114">        return y;</span>
     }
 
     /**
@@ -121,7 +120,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @return standard deviations of each pair of points (x,y).
      */
     public double[] getSig() {
-<span class="fc" id="L124">        return sig;</span>
+<span class="fc" id="L123">        return sig;</span>
     }
 
     /**
@@ -136,16 +135,16 @@ public abstract class SingleDimensionFitter extends Fitter {
      *                                  size.
      */
     public final void setInputData(final double[] x, final double[] y, final double[] sig) {
-<span class="fc bfc" id="L139" title="All 4 branches covered.">        if (x.length != y.length || sig.length != x.length) {</span>
-<span class="fc" id="L140">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L138" title="All 4 branches covered.">        if (x.length != y.length || sig.length != x.length) {</span>
+<span class="fc" id="L139">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L143">        this.x = x;</span>
-<span class="fc" id="L144">        this.y = y;</span>
-<span class="fc" id="L145">        this.sig = sig;</span>
+<span class="fc" id="L142">        this.x = x;</span>
+<span class="fc" id="L143">        this.y = y;</span>
+<span class="fc" id="L144">        this.sig = sig;</span>
 
-<span class="fc" id="L147">        ndat = x.length;</span>
-<span class="fc" id="L148">    }</span>
+<span class="fc" id="L146">        ndat = x.length;</span>
+<span class="fc" id="L147">    }</span>
 
     /**
      * Sets required input data to start function fitting and assuming constant
@@ -161,18 +160,18 @@ public abstract class SingleDimensionFitter extends Fitter {
      *                                  size.
      */
     public final void setInputData(final double[] x, final double[] y, final double sig) {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (x.length != y.length) {</span>
-<span class="fc" id="L165">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (x.length != y.length) {</span>
+<span class="fc" id="L164">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L168">        this.x = x;</span>
-<span class="fc" id="L169">        this.y = y;</span>
+<span class="fc" id="L167">        this.x = x;</span>
+<span class="fc" id="L168">        this.y = y;</span>
 
-<span class="fc" id="L171">        this.sig = new double[x.length];</span>
-<span class="fc" id="L172">        Arrays.fill(this.sig, sig);</span>
+<span class="fc" id="L170">        this.sig = new double[x.length];</span>
+<span class="fc" id="L171">        Arrays.fill(this.sig, sig);</span>
 
-<span class="fc" id="L174">        ndat = x.length;</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L173">        ndat = x.length;</span>
+<span class="fc" id="L174">    }</span>
 
     /**
      * Returns estimated parameters of linear single dimensional function.
@@ -180,7 +179,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @return estimated parameters.
      */
     public double[] getA() {
-<span class="fc" id="L183">        return a;</span>
+<span class="fc" id="L182">        return a;</span>
     }
 
     /**
@@ -190,7 +189,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @return covariance of estimated parameters.
      */
     public Matrix getCovar() {
-<span class="fc" id="L193">        return covar;</span>
+<span class="fc" id="L192">        return covar;</span>
     }
 
     /**
@@ -199,7 +198,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * @return estimated chi square value of input data.
      */
     public double getChisq() {
-<span class="fc" id="L202">        return chisq;</span>
+<span class="fc" id="L201">        return chisq;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

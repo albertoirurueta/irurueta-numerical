@@ -15,7 +15,11 @@
  */
 package com.irurueta.numerical.roots;
 
-import com.irurueta.numerical.*;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
  * Computes a root for a single dimension function inside a given bracket of
@@ -55,9 +59,9 @@ public class FalsePositionSingleRootEstimator
      * Empty constructor.
      */
     public FalsePositionSingleRootEstimator() {
-<span class="fc" id="L58">        super();</span>
-<span class="fc" id="L59">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L62">        super();</span>
+<span class="fc" id="L63">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L64">    }</span>
 
     /**
      * Constructor.
@@ -80,9 +84,9 @@ public class FalsePositionSingleRootEstimator
             final SingleDimensionFunctionEvaluatorListener listener,
             final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
-<span class="fc" id="L83">        super(listener, minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L84">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L87">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L88">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * Returns tolerance to find a root. Whenever the variation of the estimated
@@ -93,7 +97,7 @@ public class FalsePositionSingleRootEstimator
      * @return Tolerance to find a root.
      */
     public double getTolerance() {
-<span class="fc" id="L96">        return tolerance;</span>
+<span class="fc" id="L100">        return tolerance;</span>
     }
 
     /**
@@ -108,11 +112,11 @@ public class FalsePositionSingleRootEstimator
      * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     public void setTolerance(final double tolerance) throws LockedException {
-<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L112">            throw new LockedException();</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L116">            throw new LockedException();</span>
         }
-<span class="fc" id="L114">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L118">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L119">    }</span>
 
     /**
      * Estimates a single root of the provided single dimension function
@@ -130,74 +134,74 @@ public class FalsePositionSingleRootEstimator
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L134">            throw new LockedException();</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L138">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L137">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L141">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L140">        locked = true;</span>
-<span class="fc" id="L141">        rootAvailable = false;</span>
+<span class="fc" id="L144">        locked = true;</span>
+<span class="fc" id="L145">        rootAvailable = false;</span>
 
         try {
-<span class="fc" id="L144">            final double[] v1 = new double[1];</span>
-<span class="fc" id="L145">            final double[] v2 = new double[1];</span>
+<span class="fc" id="L148">            final double[] v1 = new double[1];</span>
+<span class="fc" id="L149">            final double[] v2 = new double[1];</span>
 
-<span class="fc" id="L147">            final double x1 = minEvalPoint;</span>
-<span class="fc" id="L148">            final double x2 = maxEvalPoint;</span>
-<span class="fc" id="L149">            final double xacc = tolerance;</span>
+<span class="fc" id="L151">            final double x1 = minEvalPoint;</span>
+<span class="fc" id="L152">            final double x2 = maxEvalPoint;</span>
+<span class="fc" id="L153">            final double xacc = tolerance;</span>
             double xl;
             double xh;
             double del;
-<span class="fc" id="L153">            double fl = listener.evaluate(x1);</span>
-<span class="fc" id="L154">            double fh = listener.evaluate(x2);</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">            if (fl * fh &gt; 0.0) {</span>
+<span class="fc" id="L157">            double fl = listener.evaluate(x1);</span>
+<span class="fc" id="L158">            double fh = listener.evaluate(x2);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (fl * fh &gt; 0.0) {</span>
                 // root must be bracketed
-<span class="fc" id="L157">                locked = false;</span>
-<span class="fc" id="L158">                throw new RootEstimationException();</span>
+<span class="fc" id="L161">                locked = false;</span>
+<span class="fc" id="L162">                throw new RootEstimationException();</span>
             }
-<span class="fc bfc" id="L160" title="All 2 branches covered.">            if (fl &lt; 0.0) {</span>
-<span class="fc" id="L161">                xl = x1;</span>
-<span class="fc" id="L162">                xh = x2;</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">            if (fl &lt; 0.0) {</span>
+<span class="fc" id="L165">                xl = x1;</span>
+<span class="fc" id="L166">                xh = x2;</span>
             } else {
-<span class="fc" id="L164">                xl = x2;</span>
-<span class="fc" id="L165">                xh = x1;</span>
+<span class="fc" id="L168">                xl = x2;</span>
+<span class="fc" id="L169">                xh = x1;</span>
 
-<span class="fc" id="L167">                v1[0] = fl;</span>
-<span class="fc" id="L168">                v2[0] = fh;</span>
-<span class="fc" id="L169">                swap(v1, v2);</span>
-<span class="fc" id="L170">                fl = v1[0];</span>
-<span class="fc" id="L171">                fh = v2[0];</span>
+<span class="fc" id="L171">                v1[0] = fl;</span>
+<span class="fc" id="L172">                v2[0] = fh;</span>
+<span class="fc" id="L173">                swap(v1, v2);</span>
+<span class="fc" id="L174">                fl = v1[0];</span>
+<span class="fc" id="L175">                fh = v2[0];</span>
             }
-<span class="fc" id="L173">            double dx = xh - xl;</span>
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">            for (int j = 0; j &lt; MAXIT; j++) {</span>
-<span class="fc" id="L175">                final double rtf = xl + dx * fl / (fl - fh);</span>
-<span class="fc" id="L176">                final double f = listener.evaluate(rtf);</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">                if (f &lt; 0.0) {</span>
-<span class="fc" id="L178">                    del = xl - rtf;</span>
-<span class="fc" id="L179">                    xl = rtf;</span>
-<span class="fc" id="L180">                    fl = f;</span>
+<span class="fc" id="L177">            double dx = xh - xl;</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">            for (int j = 0; j &lt; MAXIT; j++) {</span>
+<span class="fc" id="L179">                final double rtf = xl + dx * fl / (fl - fh);</span>
+<span class="fc" id="L180">                final double f = listener.evaluate(rtf);</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                if (f &lt; 0.0) {</span>
+<span class="fc" id="L182">                    del = xl - rtf;</span>
+<span class="fc" id="L183">                    xl = rtf;</span>
+<span class="fc" id="L184">                    fl = f;</span>
                 } else {
-<span class="fc" id="L182">                    del = xh - rtf;</span>
-<span class="fc" id="L183">                    xh = rtf;</span>
-<span class="fc" id="L184">                    fh = f;</span>
+<span class="fc" id="L186">                    del = xh - rtf;</span>
+<span class="fc" id="L187">                    xh = rtf;</span>
+<span class="fc" id="L188">                    fh = f;</span>
                 }
-<span class="fc" id="L186">                dx = xh - xl;</span>
-<span class="fc bfc" id="L187" title="All 4 branches covered.">                if (Math.abs(del) &lt; xacc || f == 0.0) {</span>
+<span class="fc" id="L190">                dx = xh - xl;</span>
+<span class="fc bfc" id="L191" title="All 4 branches covered.">                if (Math.abs(del) &lt; xacc || f == 0.0) {</span>
                     // result obtained
-<span class="fc" id="L189">                    root = rtf;</span>
-<span class="fc" id="L190">                    rootAvailable = true;</span>
-<span class="fc" id="L191">                    locked = false;</span>
-<span class="fc" id="L192">                    return;</span>
+<span class="fc" id="L193">                    root = rtf;</span>
+<span class="fc" id="L194">                    rootAvailable = true;</span>
+<span class="fc" id="L195">                    locked = false;</span>
+<span class="fc" id="L196">                    return;</span>
                 }
             }
-<span class="nc" id="L195">        } catch (final EvaluationException e) {</span>
-<span class="nc" id="L196">            throw new RootEstimationException(e);</span>
-<span class="nc" id="L197">        }</span>
+<span class="nc" id="L199">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L200">            throw new RootEstimationException(e);</span>
+<span class="nc" id="L201">        }</span>
         // too many iterations and error exceeds desired tolerance
-<span class="nc" id="L199">        locked = false;</span>
-<span class="nc" id="L200">        throw new RootEstimationException();</span>
+<span class="nc" id="L203">        locked = false;</span>
+<span class="nc" id="L204">        throw new RootEstimationException();</span>
     }
 
     /**
@@ -210,7 +214,7 @@ public class FalsePositionSingleRootEstimator
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L213" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
     }
 
     /**
@@ -225,10 +229,10 @@ public class FalsePositionSingleRootEstimator
      * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     private void internalSetTolerance(final double tolerance) {
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L229">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L233">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L231">        this.tolerance = tolerance;</span>
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L235">        this.tolerance = tolerance;</span>
+<span class="fc" id="L236">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

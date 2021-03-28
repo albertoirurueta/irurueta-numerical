@@ -25,7 +25,6 @@ import com.irurueta.algebra.Matrix;
  * Where f0, f1, ... is the function basis which ideally should be formed by
  * orthogonal functions.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter {
 
     /**
@@ -47,9 +46,9 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
     /**
      * Constructor.
      */
-    public SingleDimensionLinearFitter() {
-<span class="fc" id="L51">        super();</span>
-<span class="fc" id="L52">    }</span>
+    protected SingleDimensionLinearFitter() {
+<span class="fc" id="L50">        super();</span>
+<span class="fc" id="L51">    }</span>
 
     /**
      * Constructor.
@@ -62,9 +61,9 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
-<span class="fc" id="L66">        super(x, y, sig);</span>
-<span class="fc" id="L67">    }</span>
+    protected SingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
+<span class="fc" id="L65">        super(x, y, sig);</span>
+<span class="fc" id="L66">    }</span>
 
     /**
      * Constructor.
@@ -78,9 +77,9 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
-<span class="fc" id="L82">        super(x, y, sig);</span>
-<span class="fc" id="L83">    }</span>
+    protected SingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
+<span class="fc" id="L81">        super(x, y, sig);</span>
+<span class="fc" id="L82">    }</span>
 
     /**
      * Constructor.
@@ -89,11 +88,11 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
-    public SingleDimensionLinearFitter(
+    protected SingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
-<span class="fc" id="L94">            throws FittingException {</span>
-<span class="fc" id="L95">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L93">            throws FittingException {</span>
+<span class="fc" id="L94">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L95">    }</span>
 
     /**
      * Constructor.
@@ -110,13 +109,13 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(
+    protected SingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator,
             final double[] x, final double[] y, final double[] sig)
             throws FittingException {
-<span class="fc" id="L117">        super(x, y, sig);</span>
-<span class="fc" id="L118">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L116">        super(x, y, sig);</span>
+<span class="fc" id="L117">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L118">    }</span>
 
     /**
      * Constructor.
@@ -133,13 +132,13 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SingleDimensionLinearFitter(
+    protected SingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator,
             final double[] x, final double[] y, final double sig)
             throws FittingException {
-<span class="fc" id="L140">        super(x, y, sig);</span>
-<span class="fc" id="L141">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L139">        super(x, y, sig);</span>
+<span class="fc" id="L140">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L141">    }</span>
 
     /**
      * Returns function evaluator to evaluate function at a given point and
@@ -148,7 +147,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @return function evaluator.
      */
     public LinearFitterSingleDimensionFunctionEvaluator getFunctionEvaluator() {
-<span class="fc" id="L151">        return evaluator;</span>
+<span class="fc" id="L150">        return evaluator;</span>
     }
 
     /**
@@ -161,8 +160,8 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
     public void setFunctionEvaluator(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L164">        internalSetFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L165">    }</span>
+<span class="fc" id="L163">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L164">    }</span>
 
     /**
      * Internal method to set function evaluator to evaluate function at a given
@@ -171,6 +170,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @param evaluator function evaluator.
      * @throws FittingException if evaluation fails.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     private void internalSetFunctionEvaluator(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {

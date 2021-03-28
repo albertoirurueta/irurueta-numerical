@@ -22,7 +22,6 @@ import com.irurueta.numerical.NotAvailableException;
 /**
  * Abstract class to estimate the roots of a polynomial.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public abstract class PolynomialRootsEstimator extends RootEstimator {
 
     /**
@@ -41,10 +40,10 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
     /**
      * Empty constructor.
      */
-    public PolynomialRootsEstimator() {
-<span class="fc" id="L45">        super();</span>
-<span class="fc" id="L46">        polyParams = roots = null;</span>
-<span class="fc" id="L47">    }</span>
+    protected PolynomialRootsEstimator() {
+<span class="fc" id="L44">        super();</span>
+<span class="fc" id="L45">        polyParams = roots = null;</span>
+<span class="fc" id="L46">    }</span>
 
     /**
      * Returns array containing polynomial parameters.
@@ -54,10 +53,10 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      *                               been provided and are not available for retrieval.
      */
     public Complex[] getPolynomialParameters() throws NotAvailableException {
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (!arePolynomialParametersAvailable()) {</span>
-<span class="fc" id="L58">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (!arePolynomialParametersAvailable()) {</span>
+<span class="fc" id="L57">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L60">        return polyParams;</span>
+<span class="fc" id="L59">        return polyParams;</span>
     }
 
     /**
@@ -73,11 +72,11 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      */
     public void setPolynomialParameters(final Complex[] polyParams)
             throws LockedException {
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L77">            throw new LockedException();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L76">            throw new LockedException();</span>
         }
-<span class="fc" id="L79">        internalSetPolynomialParameters(polyParams);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L78">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L79">    }</span>
 
     /**
      * Returns boolean indicating whether polynomial parameters have been
@@ -86,7 +85,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      * @return True if available, false otherwise.
      */
     public boolean arePolynomialParametersAvailable() {
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        return polyParams != null;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        return polyParams != null;</span>
     }
 
     /**
@@ -99,7 +98,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      */
     @Override
     public boolean isReady() {
-<span class="fc" id="L102">        return arePolynomialParametersAvailable();</span>
+<span class="fc" id="L101">        return arePolynomialParametersAvailable();</span>
     }
 
     /**
@@ -112,10 +111,10 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      *                               and are not available for retrieval
      */
     public Complex[] getRoots() throws NotAvailableException {
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!areRootsAvailable()) {</span>
-<span class="fc" id="L116">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (!areRootsAvailable()) {</span>
+<span class="fc" id="L115">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L118">        return roots;</span>
+<span class="fc" id="L117">        return roots;</span>
     }
 
     /**
@@ -125,7 +124,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      * @return True if available, false otherwise.
      */
     public boolean areRootsAvailable() {
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        return roots != null;</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        return roots != null;</span>
     }
 
     /**
