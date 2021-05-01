@@ -27,7 +27,7 @@ import java.util.List;
  * estimate a data model.
  * RANSAC is based on the idea that given a proportion of outliers (that is
  * estimated while the algorithm is run), it is needed a certain number of
- * random subsamples to obtain required data with a certain level of confidence.
+ * random sub-samples to obtain required data with a certain level of confidence.
  * To determine whether a sample is an outlier or not, provided constant
  * threshold is used. If a threshold cannot be determined beforehand, then it
  * is better to use LMedS algorithm, at the expense of slightly less accurate
@@ -35,13 +35,13 @@ import java.util.List;
  *
  * @param <T> type of object to be estimated.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("DuplicatedCode")
 public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
 
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -353,7 +353,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
             nIters = Integer.MAX_VALUE;
             int newNIters;
             int currentIter = 0;
-            // reusable list that will contain preliminar solutions on each
+            // reusable list that will contain preliminary solutions on each
             // iteration
             final List<T> iterResults = new ArrayList<>();
             bestResult = null;
@@ -388,7 +388,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                 // generate a random subset of samples
                 subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);
 
-                // clear list of preliminar solutions before calling listener
+                // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
                 listener.estimatePreliminarSolutions(subsetIndices,

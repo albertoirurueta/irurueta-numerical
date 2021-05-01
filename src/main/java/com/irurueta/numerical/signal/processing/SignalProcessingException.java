@@ -20,7 +20,6 @@ import com.irurueta.numerical.NumericalException;
 /**
  * Raised when something fails during signal processing.
  */
-@SuppressWarnings("WeakerAccess")
 public class SignalProcessingException extends NumericalException {
 
     /**

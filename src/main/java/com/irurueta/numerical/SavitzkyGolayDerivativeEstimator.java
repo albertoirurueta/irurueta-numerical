@@ -34,7 +34,6 @@ import com.irurueta.algebra.Utils;
  * polynomial, this method might be less accurate when large values are involved
  * due to limited machine precision.
  */
-@SuppressWarnings("WeakerAccess")
 public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
 
     /**

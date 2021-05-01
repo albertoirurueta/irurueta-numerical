@@ -20,7 +20,6 @@ package com.irurueta.numerical;
  * This class is useful when the same real polynomial needs to be evaluated
  * multiple times.
  */
-@SuppressWarnings("WeakerAccess")
 public class RealPolynomialEvaluator extends PolynomialEvaluator {
 
     /**

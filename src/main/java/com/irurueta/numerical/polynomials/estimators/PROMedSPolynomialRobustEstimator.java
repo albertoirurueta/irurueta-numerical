@@ -30,7 +30,6 @@ import java.util.List;
 /**
  * Finds the best polynomial using PROMedS algorithm.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
     /**
@@ -246,7 +245,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
 
     /**
      * Returns quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sampled point
+     * The larger the score value the better the quality of the sampled point
      *
      * @return quality scores corresponding to each point
      */
@@ -274,7 +273,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     }
 
     /**
-     * Indicates if eatimator is ready to start the polynomial estimation.
+     * Indicates if estimator is ready to start the polynomial estimation.
      * This is true when input data (i.e. polynomial evaluations and quality
      * scores) are provided and enough data is available.
      *
@@ -330,6 +329,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
                                 return mPolynomialEstimator.getMinNumberOfEvaluations();
                             }
 
+                            @SuppressWarnings("DuplicatedCode")
                             @Override
                             public void estimatePreliminarSolutions(
                                     final int[] samplesIndices,

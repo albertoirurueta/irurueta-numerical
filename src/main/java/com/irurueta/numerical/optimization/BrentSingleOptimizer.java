@@ -34,7 +34,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.3. Page 496.
  */
-@SuppressWarnings("WeakerAccess")
 public class BrentSingleOptimizer extends BracketedSingleOptimizer {
 
     /**

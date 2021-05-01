@@ -21,7 +21,6 @@ package com.irurueta.numerical;
  * Using provided input point and direction, the multidimensional function's
  * input parameters are determined so they all lay on a line.
  */
-@SuppressWarnings("WeakerAccess")
 public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
 
     /**
@@ -32,7 +31,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
     /**
      * Array containing gradient at point p. This is used internally.
      */
-    double[] dft;
+    final double[] dft;
 
     /**
      * Constructor.

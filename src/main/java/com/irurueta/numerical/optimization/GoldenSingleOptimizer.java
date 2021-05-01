@@ -26,7 +26,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This class is based in the Golden search algorithm found in
  * Numerical Recipes 3rd ed. Section 10.2 page 492.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
 
     /**
@@ -136,6 +135,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
      * @throws OptimizationException Raised if the algorithm failed because of
      *                               lack of convergence or because function couldn't be evaluated.
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
@@ -154,14 +154,14 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
 
 
         try {
-            //At any given time we will keep track of four points x0, x1, x2, x3
+            // At any given time we will keep track of four points x0, x1, x2, x3
             double x1;
             double x2;
             double x0 = ax;
             double x3 = cx;
 
-            //Make x0 to x1 the smaller segment, and fill in the new point to be
-            //tried
+            // Make x0 to x1 the smaller segment, and fill in the new point to be
+            // tried
             if (Math.abs(cx - bx) > Math.abs(bx - ax)) {
                 x1 = bx;
                 x2 = bx + C * (cx - bx);
@@ -170,8 +170,8 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                 x1 = bx - C * (bx - ax);
             }
 
-            //The initial function evaluations. Note that we never need to
-            //evaluate the function at the original endpoints
+            // The initial function evaluations. Note that we never need to
+            // evaluate the function at the original endpoints
             double f1 = listener.evaluate(x1);
             double f2 = listener.evaluate(x2);
 
@@ -179,8 +179,8 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
             while (Math.abs(x3 - x0) > tolerance * (Math.abs(x1) +
                     Math.abs(x2))) {
                 if (f2 < f1) {
-                    //One possible outcome, its housekeeping and a new function
-                    //evaluation
+                    // One possible outcome, its housekeeping and a new function
+                    // evaluation
                     v1[0] = x0;
                     v2[0] = x1;
                     v3[0] = x2;
@@ -195,7 +195,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                     f1 = v1[0];
                     f2 = v2[0];
                 } else {
-                    //The other outcome, and its new function evaluation
+                    // The other outcome, and its new function evaluation
                     v1[0] = x3;
                     v2[0] = x2;
                     v3[0] = x1;
@@ -210,7 +210,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                     f2 = v1[0];
                     f1 = v2[0];
                 }
-                //Back to see if we are done.
+                // Back to see if we are done.
 
                 if (iterationCompletedListener != null) {
                     iterationCompletedListener.onIterationCompleted(this, iter, null);
@@ -218,7 +218,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                 }
             }
 
-            //We are done. Output the best of the current values
+            // We are done. Output the best of the current values
             if (f1 < f2) {
                 xmin = x1;
                 fmin = f1;

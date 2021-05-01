@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 /**
  * Raised if an invalid subset size is requested on a subset selector
  */
-@SuppressWarnings("WeakerAccess")
 public class InvalidSubsetSizeException extends SubsetSelectorException {
     /**
      * Constructor.

@@ -33,7 +33,7 @@ import java.util.List;
  * Firstly, it has the advantage that no threshold is required to be set
  * beforehand, the same as LMedS. Threshold to determine inliers is computed
  * dynamically, which helps for an easier setup that is problem independent and
- * depending on the accuracy of the inliers, results will be more acurate than
+ * depending on the accuracy of the inliers, results will be more accurate than
  * RANSAC or PROSAC, just the same as LMedS.
  * On the other hand, if a certain information about the quality of the samples
  * is available, as in PROSAC, the algorithm takes advantage of this additional
@@ -55,7 +55,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -681,7 +681,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             final int[] sortedIndices = computeSortedQualityIndices(
                     listener.getQualityScores());
 
-            // reusable list that will contain preliminar solutions on each
+            // reusable list that will contain preliminary solutions on each
             // iteration
             final List<T> iterResults = new ArrayList<>();
             bestResult = null;
@@ -782,7 +782,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 if (currentIter > tnPrime) {
                     // during the finishing stage (sampleSize == sampleSizeStar &&
                     // currentIter > TnPrime), draw a standard RANSAC sample
-                    // The sample contains subsetSize points seleted from U_n at
+                    // The sample contains subsetSize points selected from U_n at
                     // random
                     subsetSelector.computeRandomSubsets(subsetSize,
                             subsetIndices);
@@ -797,7 +797,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 transformIndices(subsetIndices, sortedIndices,
                         transformedSubsetIndices);
 
-                // clear list of preliminar solutions before calling listener
+                // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
                 listener.estimatePreliminarSolutions(transformedSubsetIndices,
@@ -1121,7 +1121,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         // to quality scores ordered in ascending order
         final int[] indices = sorter.sortWithIndices(qualityScoresCopy);
 
-        // reverse indices so we have indices of samples ordered in descening
+        // reverse indices so we have indices of samples ordered in descending
         // order of quality
         reverse(indices);
 

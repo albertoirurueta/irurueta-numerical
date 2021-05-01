@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 /**
  * Raised if there aren't enough samples to make a computation.
  */
-@SuppressWarnings("WeakerAccess")
 public class NotEnoughSamplesException extends SubsetSelectorException {
 
     /**

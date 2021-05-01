@@ -18,7 +18,6 @@ package com.irurueta.numerical.signal.processing;
 /**
  * Convolves a 1D signal with a 1D kernel.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class Convolver1D {
 
     /**
@@ -53,7 +52,7 @@ public class Convolver1D {
      * (position 0) or the kernel's center. For the former, the edge extension
      * is applied only at the end of the resulting signal; for the latter, edge
      * extension is applied symmetrically at the beginning and end of the
-     * resuling signal.
+     * resulting signal.
      */
     private int mKernelCenter = DEFAULT_KERNEL_CENTER;
 
@@ -619,7 +618,6 @@ public class Convolver1D {
      * @param result       array where result is stored.
      * @param listener     listener attending events generated during convolution.
      */
-    @SuppressWarnings("Duplicates")
     private static void internalConvolveZero(
             final double[] signal, final double[] kernel, final int kernelCenter,
             final double[] result, final Convolver1DListener listener) {
@@ -891,7 +889,7 @@ public class Convolver1D {
         void onStartConvolution();
 
         /**
-         * Callen when convolution finishes.
+         * Called when convolution finishes.
          */
         void onFinishConvolution();
 

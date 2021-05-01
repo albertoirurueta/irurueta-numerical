@@ -27,7 +27,6 @@ import java.util.Arrays;
  * then the array of parameters is [an, a(n-1), ... a1, a0]
  * This class supports polynomials having either real or complex parameters.
  */
-@SuppressWarnings("WeakerAccess")
 public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
     // In this implementation we have increased MR and MT to increase accuracy
@@ -147,7 +146,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             throw new NotReadyException();
         }
 
-        //polynomial must be at least degree 1
+        // polynomial must be at least degree 1
         if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new RootEstimationException();
         }

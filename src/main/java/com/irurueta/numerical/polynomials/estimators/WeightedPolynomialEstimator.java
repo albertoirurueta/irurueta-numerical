@@ -27,14 +27,14 @@ import com.irurueta.sorting.SortingException;
 import java.util.List;
 
 /**
- * This class implements a polynomial estimator using weigthed evaluations.
+ * This class implements a polynomial estimator using weighted evaluations.
  * Weights can be used so that evaluations assumed to have a better quality
  * (i.e. more precisely estimated) are considered to be more relevant.
  * It is discouraged to use a large number of evaluations, even if they are
  * correctly weighted, since as the number of evaluations increase so do the
  * rounding errors.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("DuplicatedCode")
 public class WeightedPolynomialEstimator extends PolynomialEstimator {
 
     /**

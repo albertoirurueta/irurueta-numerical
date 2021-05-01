@@ -80,7 +80,6 @@ public class LMedSPolynomialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-
         // test constructor with degree
         estimator = new LMedSPolynomialRobustEstimator(2);
 
@@ -113,7 +112,6 @@ public class LMedSPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -178,7 +176,6 @@ public class LMedSPolynomialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-
         // test constructor with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = new LMedSPolynomialRobustEstimator(2, evaluations);
@@ -218,7 +215,6 @@ public class LMedSPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with degree and listener
         estimator = new LMedSPolynomialRobustEstimator(2, this);
 
@@ -251,7 +247,6 @@ public class LMedSPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with evaluations and listener
         estimator = new LMedSPolynomialRobustEstimator(evaluations, this);
@@ -286,7 +281,6 @@ public class LMedSPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with degree, evaluations and listener
         estimator = new LMedSPolynomialRobustEstimator(2, evaluations, this);

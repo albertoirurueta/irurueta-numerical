@@ -30,7 +30,6 @@ import java.util.List;
 /**
  * Finds the best polynomial using RANSAC algorithm.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
     /**

@@ -26,7 +26,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class RANSACRobustEstimatorTest {
 
     private static final int MIN_POINTS = 500;

@@ -26,7 +26,6 @@ import java.util.Set;
  * to pick random samples as fast as possible.
  * This class ensures that samples are not repeated within a single subset.
  */
-@SuppressWarnings("WeakerAccess")
 public class FastRandomSubsetSelector extends SubsetSelector {
 
     /**

@@ -47,7 +47,7 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
 
     /**
      * Creates array where estimated parameters will be stored.
-     * This array MUST contain the initial guessed solution for the LEvenberg-
+     * This array MUST contain the initial guessed solution for the Levenberg-
      * Marquardt algorithm
      *
      * @return array where estimated parameters will be stored

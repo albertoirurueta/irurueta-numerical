@@ -33,7 +33,6 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.8 page 515.
  */
-@SuppressWarnings({"WeakerAccess", "DuplicatedCode"})
 public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
     /**
      * Constant defining default tolerance or accuracy to be achieved on the
@@ -112,9 +111,9 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
     /**
      * Constructor.
      *
-     * @param listener         Listener to evaluate a multidimension function.
+     * @param listener         Listener to evaluate a multi-dimension function.
      * @param gradientListener Listener to obtain gradient value for the
-     *                         multidimension function being evaluated.
+     *                         multi-dimension function being evaluated.
      * @param point            Start point where algorithm will be started. Start point
      *                         should be close to the local minimum to be found. Provided array must
      *                         have a length equal to the number of dimensions of the function being
@@ -188,6 +187,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      * @throws OptimizationException Raised if the algorithm failed because of
      *                               lack of convergence or because function couldn't be evaluated.
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
@@ -203,7 +203,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
 
         final int n = p.length;
 
-        //set vector of directions
+        // set vector of directions
         if (!isDirectionAvailable()) {
             xi = new double[n];
         } else {
@@ -233,7 +233,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
                 fret = linmin();
                 if (2.0 * Math.abs(fret - fp) <= tolerance * (Math.abs(fret) +
                         Math.abs(fp) + EPS)) {
-                    //minimum found
+                    // minimum found
                     validResult = true;
 
                     if (iterationCompletedListener != null) {
@@ -302,7 +302,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
             }
 
             if (!validResult) {
-                //too many iterations
+                // too many iterations
                 locked = false;
                 throw new OptimizationException();
             }

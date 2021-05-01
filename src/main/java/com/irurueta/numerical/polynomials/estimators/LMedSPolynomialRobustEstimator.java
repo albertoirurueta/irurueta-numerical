@@ -30,7 +30,6 @@ import java.util.List;
 /**
  * Finds the best polynomial using LMedS algorithm.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
     /**
@@ -163,7 +162,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      *
      * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
-     * @param listener    listenerto be notified of events such as when estimation
+     * @param listener    listener to be notified of events such as when estimation
      *                    starts, ends or its progress significantly changes.
      * @throws IllegalArgumentException if provided degree is less than 1 or if
      *                                  provided number of evaluations is less than the required minimum for

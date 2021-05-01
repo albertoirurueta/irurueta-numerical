@@ -32,7 +32,6 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.8 page 518.
  */
-@SuppressWarnings("WeakerAccess")
 public class DerivativeConjugateGradientMultiOptimizer
         extends DerivativeLineMultiOptimizer {
 
@@ -103,9 +102,9 @@ public class DerivativeConjugateGradientMultiOptimizer
     /**
      * Constructor.
      *
-     * @param listener         Listener to evaluate a multidimension function.
+     * @param listener         Listener to evaluate a multi-dimension function.
      * @param gradientListener Listener to obtain gradient value for the
-     *                         multidimension function being evaluated.
+     *                         multi-dimension function being evaluated.
      * @param point            Start point where algorithm will be started. Start point
      *                         should be close to the local minimum to be found. Provided array must
      *                         have a length equal to the number of dimensions of the function being

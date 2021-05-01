@@ -911,7 +911,7 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
     }
 
     @Test
-    public void testGetsignalValueRepeat() {
+    public void testGetSignalValueRepeat() {
         final double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0};
 
         assertEquals(Convolver1D.getSignalValueRepeat(signal, -12), 4.0, 0.0);

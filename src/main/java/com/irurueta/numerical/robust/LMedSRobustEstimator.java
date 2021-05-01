@@ -28,13 +28,13 @@ import java.util.List;
  * estimate a data model.
  * LMedS is based on the idea that a given proportion of outliers exists in the
  * total amount of samples provided. This algorithm tries to iteratively find
- * the beast subset of samples picking the onea with the least median of error.
+ * the beast subset of samples picking the ones with the least median of error.
  * To determine whether a sample is an outlier or not, and the estimated error
  * for each sample, provided listener must be used.
  * Contrary to RANSAC, this algorithm does not require a fixed threshold to be
  * set to determine whether samples are inliers or not. Instead, threshold is
  * computed dynamically. Because of that LMedS typically produces results with
- * larger error than RANSAC having a similar computational cost, becaus esamples
+ * larger error than RANSAC having a similar computational cost, because samples
  * usually contain a large error. Hence, if threshold is known in advance for a
  * given estimation, RANSAC should be preferred rather than LMedS.
  * On the contrary, if it can be ensured that samples are very accurate except
@@ -45,13 +45,13 @@ import java.util.List;
  *
  * @param <T> type of object to be estimated.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
+@SuppressWarnings("DuplicatedCode")
 public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
 
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -419,7 +419,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             // indices of subset picked in one iteration
             final int[] subsetIndices = new int[subsetSize];
             final double[] residualsTemp = new double[totalSamples];
-            boolean improved;    // indicates if result improved
+            // indicates if result improved
+            boolean improved;
             // indicates whether algorithm must continue iterating
             boolean continueIteration = true;
 
@@ -453,22 +454,22 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
                     computeInliers(iterResult, subsetSize, mInlierFactor,
                             residualsTemp, listener, sorter, inliersData);
 
-                    //save solution that produces the best residual
+                    // save solution that produces the best residual
                     if (inliersData.isMedianResidualImproved()) {
                         improved = true;
 
-                        //keep current solution
+                        // keep current solution
                         bestResult = iterResult;
 
-                        //keep best inliers data corresponding to best solution,
-                        //in case it can be useful along with the result
+                        // keep best inliers data corresponding to best solution,
+                        // in case it can be useful along with the result
                         mBestInliersData = inliersData;
 
-                        //recompute number of times the algorithm needs to be
-                        //executed depending on current number of inliers to
-                        //achieve with probability mConfidence that we have
-                        //inliers and probability 1 - mConfidence that we have
-                        //outliers
+                        // recompute number of times the algorithm needs to be
+                        // executed depending on current number of inliers to
+                        // achieve with probability mConfidence that we have
+                        // inliers and probability 1 - mConfidence that we have
+                        // outliers
                         bestNumInliers = inliersData.getNumInliers();
                         final double probInlier = ((double) bestNumInliers) /
                                 ((double) totalSamples);

@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class LevenbergMarquardtMultiVariateFitterTest {
 
     private static final Logger LOGGER = Logger.getLogger(
@@ -3498,7 +3497,7 @@ public class LevenbergMarquardtMultiVariateFitterTest {
 
                 // expression below is equal to:
                 // y[i] = amplitude * Math.sin(freqx * x.getElementAt(i, 0) + phasex) *
-                //      Math.sin(freqy * x.getElementAt(i, 1) + phasey);
+                //      Math.sin(freqy * x.getElementAt(i, 1) + phasey)
                 double value = dist.getMean()[0];
                 assertEquals(value, amplitude * Math.sin(freqx * xi0 + phasex) *
                         Math.sin(freqy * xi1 + phasey), SMALL_ABSOLUTE_ERROR);

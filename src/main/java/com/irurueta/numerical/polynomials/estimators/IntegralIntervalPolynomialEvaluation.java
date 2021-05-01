@@ -18,7 +18,6 @@ package com.irurueta.numerical.polynomials.estimators;
 /**
  * Contains an evaluation of an interval of the nth-integral of a polynomial.
  */
-@SuppressWarnings("WeakerAccess")
 public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
 
     /**

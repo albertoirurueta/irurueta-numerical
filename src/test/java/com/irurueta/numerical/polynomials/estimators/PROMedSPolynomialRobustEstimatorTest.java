@@ -30,7 +30,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class PROMedSPolynomialRobustEstimatorTest implements
         PolynomialRobustEstimatorListener {
 
@@ -118,7 +117,6 @@ public class PROMedSPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         evaluations.add(new DirectPolynomialEvaluation());
@@ -157,7 +155,6 @@ public class PROMedSPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with listener
         estimator = new PROMedSPolynomialRobustEstimator(this);
 
@@ -182,7 +179,6 @@ public class PROMedSPolynomialRobustEstimatorTest implements
         assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
-
 
         // test constructor with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
@@ -223,7 +219,6 @@ public class PROMedSPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with degree and listener
         estimator = new PROMedSPolynomialRobustEstimator(2, this);
 
@@ -256,7 +251,6 @@ public class PROMedSPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with evaluations and listener
         estimator = new PROMedSPolynomialRobustEstimator(evaluations, this);
@@ -291,7 +285,6 @@ public class PROMedSPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with degree, evaluations and listener
         estimator = new PROMedSPolynomialRobustEstimator(2, evaluations, this);

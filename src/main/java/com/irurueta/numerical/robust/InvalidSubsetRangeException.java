@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 /**
  * Raised if provided range of samples to pick subsets from is invalid.
  */
-@SuppressWarnings("WeakerAccess")
 public class InvalidSubsetRangeException extends SubsetSelectorException {
 
     /**

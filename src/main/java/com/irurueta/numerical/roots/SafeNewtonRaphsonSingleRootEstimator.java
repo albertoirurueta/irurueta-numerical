@@ -29,7 +29,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This implementation is based on Numerical Recipes 3rd ed. Section 9.4, page
  * 456.
  */
-@SuppressWarnings("WeakerAccess")
 public class SafeNewtonRaphsonSingleRootEstimator
         extends DerivativeSingleRootEstimator {
 

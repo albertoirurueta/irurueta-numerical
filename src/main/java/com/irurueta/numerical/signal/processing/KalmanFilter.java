@@ -57,7 +57,6 @@ import java.io.Serializable;
  * current system state neighborhood, in this case A, B, H (and, probably,
  * Q and R) should be updated on every step.
  */
-@SuppressWarnings("WeakerAccess")
 public class KalmanFilter implements Serializable {
 
     /**
@@ -139,7 +138,7 @@ public class KalmanFilter implements Serializable {
      */
     private Matrix errorCovPost;
 
-    // temporary matrices to be reused to avoid unnecessary reallocations
+    // temporary matrices to be reused to avoid unnecessary re-allocations
 
     /**
      * Temporary matrix 1.
@@ -271,7 +270,7 @@ public class KalmanFilter implements Serializable {
     }
 
     /**
-     * Estimates subsequent model state without control parameteres.
+     * Estimates subsequent model state without control parameters.
      *
      * @return estimated state.
      * @throws SignalProcessingException if something fails.
@@ -303,7 +302,7 @@ public class KalmanFilter implements Serializable {
      * }
      * </pre>
      *
-     * @param control control vector (u<sub>k</sub>), shoud be null if there is
+     * @param control control vector (u<sub>k</sub>), should be null if there is
      *                no external control (<code>controlParams</code>=0). If provided and
      *                filter uses control parameters, it must be a 1 column matrix having
      *                cp rows (where cp = number of control parameters), otherwise a
@@ -348,7 +347,7 @@ public class KalmanFilter implements Serializable {
      * x<sub>k</sub>=x'<sub>k</sub>+K<sub>k</sub>*(z<sub>k</sub>-H*x'<sub>k</sub>)
      * P<sub>k</sub>=(I-K<sub>k</sub>*H)*P'<sub>k</sub>
      * where
-     * z<sub>k</sub> - given measurement (<code>mesurement</code> parameter)
+     * z<sub>k</sub> - given measurement (<code>measurement</code> parameter)
      * K<sub>k</sub> - Kalman "gain" matrix.
      * }
      * </pre>
@@ -357,7 +356,7 @@ public class KalmanFilter implements Serializable {
      * it on output.
      *
      * @param measurement matrix containing the measurement vector. Matrix must
-     *                    have 1 column and mp rows (mp = measurement paramenters).
+     *                    have 1 column and mp rows (mp = measurement parameters).
      * @return adjusted model state.
      * @throws SignalProcessingException if something fails.
      */
@@ -487,7 +486,7 @@ public class KalmanFilter implements Serializable {
      *
      * @param statePre new predicted state.
      * @throws IllegalArgumentException if provided matrix does not have 1
-     *                                  columnd and dp rows
+     *                                  column and dp rows
      */
     public void setStatePre(final Matrix statePre) {
         if (statePre.getColumns() != 1 || statePre.getRows() != dp) {
@@ -515,7 +514,7 @@ public class KalmanFilter implements Serializable {
      *
      * @param statePost new corrected state
      * @throws IllegalArgumentException if provided matrix does not have 1
-     *                                  columnd and dp rows
+     *                                  column and dp rows
      */
     public void setStatePost(final Matrix statePost) {
         if (statePost.getColumns() != 1 || statePost.getRows() != dp) {
@@ -540,7 +539,7 @@ public class KalmanFilter implements Serializable {
     /**
      * Sets the state transition matrix (A).
      * It must be a square matrix having dp rows and columns, where dp is equal
-     * to the number of dynamic parmeters set for this instance.
+     * to the number of dynamic parameters set for this instance.
      * This matrix defines how the system transitions to a new state for a given
      * previous state. It is used for prediction purposes.
      * This setter method can be used for initial setup purposes.
@@ -654,8 +653,8 @@ public class KalmanFilter implements Serializable {
      * for this instance of a Kalman filter.
      * This setter method can be used for initial setup purposes, however
      * typically the process noise is difficult to determine. This matrix is
-     * generally constructed intuitively so that unmodelled dynamics and
-     * parameter unvertainties are modeled as process noise generally. If
+     * generally constructed intuitively so that un-modelled dynamics and
+     * parameter uncertainties are modeled as process noise generally. If
      * the process noise is unknown, just leave the default value or provide
      * a diagonal matrix with the desired level of variance Q, where a low Q
      * variance indicates confidence that any unknown noise terms and/or

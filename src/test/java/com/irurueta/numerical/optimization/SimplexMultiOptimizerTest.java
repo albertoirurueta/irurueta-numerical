@@ -29,7 +29,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class SimplexMultiOptimizerTest implements
         MultiDimensionFunctionEvaluatorListener,
         OnIterationCompletedListener {
@@ -84,9 +83,7 @@ public class SimplexMultiOptimizerTest implements
         final Matrix simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims,
                 MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-
         SimplexMultiOptimizer optimizer;
-
 
         // Test 1st constructor
         optimizer = new SimplexMultiOptimizer();
@@ -126,7 +123,6 @@ public class SimplexMultiOptimizerTest implements
         }
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
-
 
         // Test 2nd constructor
         optimizer = new SimplexMultiOptimizer(this, startPoint, delta,
@@ -168,7 +164,6 @@ public class SimplexMultiOptimizerTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(optimizer);
-
 
         // Test 3rd constructor
         optimizer = new SimplexMultiOptimizer(this, startPoint, deltas,
@@ -216,7 +211,6 @@ public class SimplexMultiOptimizerTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(optimizer);
-
 
         // Test 4th constructor
         optimizer = new SimplexMultiOptimizer(this, simplex, tolerance);

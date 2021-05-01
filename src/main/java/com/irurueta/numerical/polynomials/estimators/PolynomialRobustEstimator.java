@@ -57,9 +57,9 @@ public abstract class PolynomialRobustEstimator {
     public static final float MAX_PROGRESS_DELTA = 1.0f;
 
     /**
-     * Constant defining default confidence of the estimated result, whish is
+     * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -98,7 +98,7 @@ public abstract class PolynomialRobustEstimator {
     /**
      * Internal non robust estimator of polynomial estimator.
      */
-    protected LMSEPolynomialEstimator mPolynomialEstimator;
+    protected final LMSEPolynomialEstimator mPolynomialEstimator;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends or
@@ -235,7 +235,7 @@ public abstract class PolynomialRobustEstimator {
     /**
      * Constructor.
      *
-     * @param degree      degree of polynomial to be estimted.
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
      * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1 or if
@@ -266,7 +266,7 @@ public abstract class PolynomialRobustEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @throws LockedException          if estimator is locked.
      * @throws IllegalArgumentException if provided list of evaluations does
-     *                                  not containg enough evaluations to estimate the polynomial using current
+     *                                  not containing enough evaluations to estimate the polynomial using current
      *                                  settings.
      */
     public void setEvaluations(final List<PolynomialEvaluation> evaluations)
@@ -402,7 +402,7 @@ public abstract class PolynomialRobustEstimator {
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      *
-     * @param maxIterations maximum allowed number of iteratios to be set.
+     * @param maxIterations maximum allowed number of iterations to be set.
      * @throws IllegalArgumentException if provided value is less than 1.
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
@@ -479,7 +479,7 @@ public abstract class PolynomialRobustEstimator {
             return false;
         }
 
-        //also ensure that at least a direct or integral evaluation exists
+        // also ensure that at least a direct or integral evaluation exists
         int count = 0;
         for (final PolynomialEvaluation eval : mEvaluations) {
             if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
@@ -518,7 +518,7 @@ public abstract class PolynomialRobustEstimator {
      *                                  smaller than minimum required number of evaluations.
      */
     public void setQualityScores(final double[] qualityScores) throws LockedException {
-        //quality scores ignored
+        // quality scores ignored
     }
 
     /**
@@ -993,8 +993,8 @@ public abstract class PolynomialRobustEstimator {
     }
 
     /**
-     * Comutes distance of evaluation respect to provided polynomial in
-     * a geometric sence if evaluation is direct, otherwise returns algebraic
+     * Commutes distance of evaluation respect to provided polynomial in
+     * a geometric sense if evaluation is direct, otherwise returns algebraic
      * distance.
      *
      * @param eval       polynomial evaluation.

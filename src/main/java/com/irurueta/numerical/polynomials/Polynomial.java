@@ -33,11 +33,10 @@ import java.util.List;
  * Contains a polynomial and common operations done with polynomials.
  * This implementation only supports polynomials with real parameters.
  */
-@SuppressWarnings("WeakerAccess")
 public class Polynomial implements Serializable {
 
     /**
-     * Minmum derivative / integration order.
+     * Minimum derivative / integration order.
      */
     private static final int MIN_ORDER = 1;
 
@@ -691,7 +690,6 @@ public class Polynomial implements Serializable {
      * @param endX   end of integration interval.
      * @return result of integration.
      */
-    @SuppressWarnings("Duplicates")
     public double integrateInterval(final double startX, final double endX) {
 
         double resultStart = 0.0;
@@ -723,7 +721,6 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      *                                  constants does not have length equal to order.
      */
-    @SuppressWarnings("Duplicates")
     public void nthIntegration(final int order, final Polynomial result, final double[] constants) {
         if (order < MIN_ORDER) {
             throw new IllegalArgumentException("order must be at least 1");
@@ -837,7 +834,6 @@ public class Polynomial implements Serializable {
      * @throws IllegalArgumentException if provided order is less than 1 or if
      *                                  constants does not have length equal to order.
      */
-    @SuppressWarnings("Duplicates")
     public double nthOrderIntegrateInterval(
             final double startX, final double endX,
             final int order, final double[] constants) {
@@ -941,7 +937,7 @@ public class Polynomial implements Serializable {
      * Normalizes parameters of this polynomial so that the array of parameters
      * has unitary norm and stores result into provided instance.
      * Normalization keeps location of real roots, but other roots or
-     * propierties of polynomials might change.
+     * properties of polynomials might change.
      *
      * @param result instance where normalized polynomial will be stored.
      */
@@ -958,7 +954,7 @@ public class Polynomial implements Serializable {
      * Normalizes this polynomial so that the array of parameters has unitary
      * norm.
      * Normalization keeps location of real roots, but other roots or
-     * propierties of polynomials might change.
+     * properties of polynomials might change.
      */
     public void normalize() {
         normalize(this);
@@ -968,7 +964,7 @@ public class Polynomial implements Serializable {
      * Normalizes parameters of this polynomial so that the array of parameters
      * has unitary norm and returns result as a new polynomial instance.
      * Normalization keeps location of real roots, but other roots or
-     * propierties of polynomials might change.
+     * properties of polynomials might change.
      *
      * @return a new normalized polynomial instance.
      */
@@ -1081,7 +1077,7 @@ public class Polynomial implements Serializable {
     }
 
     /**
-     * Gets location of minima in this polynmomial.
+     * Gets location of minima in this polynomial.
      *
      * @return location of minima or null if polynomial has no minima.
      * @throws NumericalException if minima cannot be determined due to
@@ -1169,6 +1165,7 @@ public class Polynomial implements Serializable {
      *                                  to numerical instabilities.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
+    @SuppressWarnings("DuplicatedCode")
     public double[] getExtrema(final double threshold)
             throws NumericalException {
         if (threshold < 0.0) {
@@ -1177,7 +1174,7 @@ public class Polynomial implements Serializable {
 
         final Polynomial derivative = derivativeAndReturnNew();
 
-        // roots of derivative contains either minima or máxima.
+        // roots of derivative contains either minima or maxima.
         final Complex[] derivativeRoots = derivative.getRoots();
         final List<Complex> minimaOrMaxima = new ArrayList<>();
         if (derivativeRoots != null) {

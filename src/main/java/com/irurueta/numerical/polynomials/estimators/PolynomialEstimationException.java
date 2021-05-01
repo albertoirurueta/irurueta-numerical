@@ -20,7 +20,6 @@ import com.irurueta.numerical.polynomials.PolynomialsException;
 /**
  * Exception raised if polynomial estimation fails.
  */
-@SuppressWarnings("WeakerAccess")
 public class PolynomialEstimationException extends PolynomialsException {
 
     /**

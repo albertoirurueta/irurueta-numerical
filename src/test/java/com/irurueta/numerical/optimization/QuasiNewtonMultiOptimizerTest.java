@@ -332,7 +332,7 @@ public class QuasiNewtonMultiOptimizerTest implements
 
         final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
 
-        // initially gradient listener is not avaialble
+        // initially gradient listener is not available
         assertFalse(optimizer.isGradientListenerAvailable());
         try {
             optimizer.getGradientListener();

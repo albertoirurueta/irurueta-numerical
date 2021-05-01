@@ -45,7 +45,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This class is based on the implementation of Numerical Recipes 3rd ed.
  * Section 9.1.1 page 447.
  */
-@SuppressWarnings("WeakerAccess")
 public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**

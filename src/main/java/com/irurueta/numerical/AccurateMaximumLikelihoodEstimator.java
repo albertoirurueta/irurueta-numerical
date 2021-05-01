@@ -27,7 +27,6 @@ import com.irurueta.numerical.optimization.BrentSingleOptimizer;
  * is computed by aggregating small Gaussians (of size gaussianSigma) centered
  * at the location of each sample.
  */
-@SuppressWarnings("WeakerAccess")
 public class AccurateMaximumLikelihoodEstimator
         extends MaximumLikelihoodEstimator {
 

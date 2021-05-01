@@ -24,7 +24,6 @@ import java.util.Arrays;
  * Class containing the selection that was made on a weighted algorithm.
  * This is used internally by weighted estimators.
  */
-@SuppressWarnings("WeakerAccess")
 public class WeightSelection {
 
     /**
@@ -95,8 +94,8 @@ public class WeightSelection {
      * @return instance containing the selection that was made.
      * @throws SortingException if weights couldn't be sorted.
      */
-    public static WeightSelection selectWeights(final double[] weights,
-                                                final boolean sortWeights, final int maxPoints) throws SortingException {
+    public static WeightSelection selectWeights(
+            final double[] weights, final boolean sortWeights, final int maxPoints) throws SortingException {
 
         final int length = weights.length;
 

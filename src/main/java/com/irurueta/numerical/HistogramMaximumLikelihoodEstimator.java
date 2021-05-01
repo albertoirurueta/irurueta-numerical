@@ -28,7 +28,6 @@ import java.util.Arrays;
  * samples as a series of Gaussian functions with a small sigma and centered at
  * the exact value of the sample.
  */
-@SuppressWarnings("WeakerAccess")
 public class HistogramMaximumLikelihoodEstimator
         extends MaximumLikelihoodEstimator {
 

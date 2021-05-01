@@ -25,9 +25,8 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * Finds a single dimensional function's root within a bracket of values using
  * Newton-Raphson's method.
  * This class is based on the implementation found in Numerical Recipes 3rd ed.
- * Secion 9.4. page 456.
+ * Section 9.4. page 456.
  */
-@SuppressWarnings("WeakerAccess")
 public class NewtonRaphsonSingleRootEstimator
         extends DerivativeSingleRootEstimator {
 

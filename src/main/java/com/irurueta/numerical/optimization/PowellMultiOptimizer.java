@@ -32,7 +32,6 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.7 page 509.
  */
-@SuppressWarnings("WeakerAccess")
 public class PowellMultiOptimizer extends LineMultiOptimizer {
     /**
      * Constant defining default tolerance or accuracy to be achieved on the
@@ -298,7 +297,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
             for (iter = 0; ; ++iter) {
                 final double fp = fret;
                 int ibig = 0;
-                // Will be the biffest function decrease
+                // Will be the biggest function decrease
                 double del = 0.0;
                 // In each iteration, loop over all directions in the set.
                 for (int i = 0; i < n; i++) {
@@ -318,7 +317,8 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
                 // Here comes the termination criterion.
                 if (2.0 * (fp - fret) <= tolerance * (Math.abs(fp) +
                         Math.abs(fret)) + TINY) {
-                    break; // minimum has been found
+                    // minimum has been found
+                    break;
                 }
                 if (iter == ITMAX) {
                     // too many iterations

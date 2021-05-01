@@ -21,7 +21,6 @@ import com.irurueta.algebra.Complex;
  * Utility class to evaluate polynomials having either real or complex
  * coefficients.
  */
-@SuppressWarnings("WeakerAccess")
 public class PolynomialEvaluator {
 
     /**

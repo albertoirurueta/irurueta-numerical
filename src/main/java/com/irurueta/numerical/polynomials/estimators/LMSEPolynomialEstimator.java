@@ -29,7 +29,6 @@ import java.util.List;
  * polynomial of a given degree using points where polynomials (or its
  * derivatives or integrals) are evaluated.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LMSEPolynomialEstimator extends PolynomialEstimator {
 
     /**
@@ -175,6 +174,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @throws NotReadyException             if estimator is not ready.
      * @throws PolynomialEstimationException if polynomial estimation fails.
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException,
             PolynomialEstimationException {

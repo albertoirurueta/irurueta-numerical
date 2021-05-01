@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class PolynommialRobustEstimatorTest implements
+public class PolynomialRobustEstimatorTest implements
         PolynomialRobustEstimatorListener {
 
     @Test
@@ -50,7 +50,6 @@ public class PolynommialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-
 
         // test creator with degree
         estimator = PolynomialRobustEstimator.create(2);
@@ -119,7 +118,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with listener
         estimator = PolynomialRobustEstimator.create(this);
 
@@ -141,7 +139,6 @@ public class PolynommialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-
 
         // test creator with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
@@ -180,7 +177,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with degree and listener
         estimator = PolynomialRobustEstimator.create(2, this);
 
@@ -212,7 +208,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with evaluations and listener
         estimator = PolynomialRobustEstimator.create(evaluations, this);
 
@@ -243,7 +238,6 @@ public class PolynommialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test creator with degree, evaluations and listener
         estimator = PolynomialRobustEstimator.create(2, evaluations, this);
@@ -307,7 +301,6 @@ public class PolynommialRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
-
         // test creator with degree and method
         estimator = PolynomialRobustEstimator.create(2,
                 RobustEstimatorMethod.RANSAC);
@@ -340,7 +333,6 @@ public class PolynommialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test creator with evaluations and method
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -379,7 +371,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with listener and method
         estimator = PolynomialRobustEstimator.create(this,
                 RobustEstimatorMethod.RANSAC);
@@ -402,7 +393,6 @@ public class PolynommialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-
 
         // test creator with degree, evaluations and method
         evaluations.add(new DirectPolynomialEvaluation());
@@ -444,7 +434,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with degree, listener and method
         estimator = PolynomialRobustEstimator.create(2, this,
                 RobustEstimatorMethod.RANSAC);
@@ -478,7 +467,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with evaluations and listener
         estimator = PolynomialRobustEstimator.create(evaluations, this,
                 RobustEstimatorMethod.RANSAC);
@@ -511,7 +499,6 @@ public class PolynommialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test creator with degree, evaluations, listener and method
         estimator = PolynomialRobustEstimator.create(2, evaluations, this,
@@ -578,7 +565,6 @@ public class PolynommialRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
 
-
         // test creator with degree and method
         estimator = PolynomialRobustEstimator.create(2,
                 RobustEstimatorMethod.LMedS);
@@ -611,7 +597,6 @@ public class PolynommialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test creator with evaluations and method
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -650,7 +635,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with listener and method
         estimator = PolynomialRobustEstimator.create(this,
                 RobustEstimatorMethod.LMedS);
@@ -673,7 +657,6 @@ public class PolynommialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-
 
         // test creator with degree, evaluations and method
         evaluations.add(new DirectPolynomialEvaluation());
@@ -715,7 +698,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with degree, listener and method
         estimator = PolynomialRobustEstimator.create(2, this,
                 RobustEstimatorMethod.LMedS);
@@ -749,7 +731,6 @@ public class PolynommialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test creator with evaluations and listener
         estimator = PolynomialRobustEstimator.create(evaluations, this,
                 RobustEstimatorMethod.LMedS);
@@ -782,7 +763,6 @@ public class PolynommialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test creator with degree, evaluations, listener and method
         estimator = PolynomialRobustEstimator.create(2, evaluations, this,

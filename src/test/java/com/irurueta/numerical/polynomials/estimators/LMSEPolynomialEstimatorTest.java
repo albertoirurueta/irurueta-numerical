@@ -27,7 +27,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
@@ -57,7 +56,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(estimator.getType(),
                 PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
 
-
         // constructor with degree
         estimator = new LMSEPolynomialEstimator(2);
 
@@ -81,7 +79,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         }
         assertNull(estimator);
 
-
         // constructor with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         estimator = new LMSEPolynomialEstimator(evaluations);
@@ -97,7 +94,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(estimator.getType(),
                 PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
 
-
         // constructor with listener
         estimator = new LMSEPolynomialEstimator(this);
 
@@ -111,7 +107,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
         assertEquals(estimator.getType(),
                 PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
-
 
         // constructor with degree and evaluations
         estimator = new LMSEPolynomialEstimator(2, evaluations);
@@ -136,7 +131,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         }
         assertNull(estimator);
 
-
         // constructor with degree and listener
         estimator = new LMSEPolynomialEstimator(2, this);
 
@@ -160,7 +154,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         }
         assertNull(estimator);
 
-
         // constructor with evaluations and listener
         estimator = new LMSEPolynomialEstimator(evaluations, this);
 
@@ -174,7 +167,6 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
         assertEquals(estimator.getType(),
                 PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
-
 
         // constructor with degree, evaluations and listener
         estimator = new LMSEPolynomialEstimator(2, evaluations, this);

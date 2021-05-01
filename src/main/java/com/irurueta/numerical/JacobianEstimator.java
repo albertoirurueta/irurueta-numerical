@@ -24,7 +24,6 @@ import com.irurueta.algebra.WrongSizeException;
  * This class evaluates a function at very close locations of a given input
  * point in order to determine the Jacobian at such point.
  */
-@SuppressWarnings("WeakerAccess")
 public class JacobianEstimator {
 
     /**
@@ -83,7 +82,6 @@ public class JacobianEstimator {
      * @throws EvaluationException      raised if function cannot be evaluated.
      * @throws IllegalArgumentException if size of result is not valid.
      */
-    @SuppressWarnings("Duplicates")
     public void jacobian(final double[] point, final Matrix result)
             throws EvaluationException {
         final int numdims = point.length;

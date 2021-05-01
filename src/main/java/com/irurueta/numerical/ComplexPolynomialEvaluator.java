@@ -22,7 +22,6 @@ import com.irurueta.algebra.Complex;
  * This class is useful when the same complex polynomial needs to be evaluated
  * multiple times.
  */
-@SuppressWarnings("WeakerAccess")
 public class ComplexPolynomialEvaluator extends PolynomialEvaluator {
 
     /**

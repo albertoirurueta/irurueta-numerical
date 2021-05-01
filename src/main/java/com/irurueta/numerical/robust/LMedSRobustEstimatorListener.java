@@ -39,15 +39,15 @@ public interface LMedSRobustEstimatorListener<T>
     int getSubsetSize();
 
     /**
-     * Estimates a list of possible preliminar solutions to be used during an
+     * Estimates a list of possible preliminary solutions to be used during an
      * iteration of LMedS robust estimator.
      *
      * @param samplesIndices indices of random subset of samples that have been
      *                       picked.
-     * @param solutions      list where possible preliminar solutions to be used
+     * @param solutions      list where possible preliminary solutions to be used
      *                       during an iteration of LMedS robust estimator will be stored. Provided
      *                       list will always be empty, and it is up to the implementor to fill it
-     *                       with preliminar solutions based on provided sample indices.
+     *                       with preliminary solutions based on provided sample indices.
      */
     void estimatePreliminarSolutions(
             final int[] samplesIndices, final List<T> solutions);

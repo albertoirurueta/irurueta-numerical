@@ -30,7 +30,6 @@ import java.util.List;
 /**
  * Finds the best polynomial using PROSAC algorithm.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
     /**
@@ -227,7 +226,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the polynomial estimation.
+     * Indicates if estimator is ready to start the polynomial estimation.
      * This is true when input data (i.e. polynomial evaluations and quality
      * scores) are provided and enough data is available.
      *
@@ -284,6 +283,7 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
                                 return mPolynomialEstimator.getMinNumberOfEvaluations();
                             }
 
+                            @SuppressWarnings("DuplicatedCode")
                             @Override
                             public void estimatePreliminarSolutions(
                                     final int[] samplesIndices,

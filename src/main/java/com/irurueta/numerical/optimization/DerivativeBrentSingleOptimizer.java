@@ -187,8 +187,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws OptimizationException Raised if the algorithm failed because of
      *                               lack of convergence or because function couldn't be evaluated.
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
-    @SuppressWarnings({"Duplicates", "DuplicateExpressions"})
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
         if (isLocked()) {
@@ -205,8 +205,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         final double[] v3 = new double[3];
 
         try {
-            //Will be used as flags for whether proposed steps are accpetable or
-            //not
+            // Will be used as flags for whether proposed steps are accpetable or
+            // not
             boolean ok1;
             boolean ok2;
             double a;
@@ -257,6 +257,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     return;
                 }
 
+                double tmp = dx >= 0.0 ? a - x : b - x;
                 if (Math.abs(e) > tol1) {
                     // Initialize these d's to an out-of-bracket value
                     d1 = 2.0 * (b - a);
@@ -296,16 +297,16 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                                 d = sign(tol1, xm - x);
                         } else {
                             // Bisect, not golden section.
-                            e = dx >= 0.0 ? a - x : b - x;
+                            e = tmp;
                             d = 0.5 * (e);
                             // Decide which segment by the sign of the derivative
                         }
                     } else {
-                        e = dx >= 0.0 ? a - x : b - x;
+                        e = tmp;
                         d = 0.5 * e;
                     }
                 } else {
-                    e = dx >= 0.0 ? a - x : b - x;
+                    e = tmp;
                     d = 0.5 * e;
                 }
 

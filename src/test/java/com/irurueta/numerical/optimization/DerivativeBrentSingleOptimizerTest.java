@@ -609,7 +609,7 @@ public class DerivativeBrentSingleOptimizerTest implements OnIterationCompletedL
         }
         try {
             optimizer.getEvaluationAtResult();
-            fail("NotAvailabelException expected but not thrown");
+            fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
 

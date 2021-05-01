@@ -23,7 +23,6 @@ import com.irurueta.numerical.*;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 9.3. Page 454.
  */
-@SuppressWarnings("WeakerAccess")
 public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**

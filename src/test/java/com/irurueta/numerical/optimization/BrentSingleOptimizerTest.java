@@ -412,7 +412,7 @@ public class BrentSingleOptimizerTest implements
                 minEvalPoint, middleEvalPoint, maxEvalPoint,
                 BrentSingleOptimizer.DEFAULT_TOLERANCE);
 
-        // attempting to retrieve evaluation fails because altough bracket is
+        // attempting to retrieve evaluation fails because although bracket is
         // available, evaluations have not yet been computed
         try {
             optimizer.getEvaluationAtMin();

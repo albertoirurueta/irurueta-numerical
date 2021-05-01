@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class MeasurementNoiseCovarianceEstimatorTest {
 
     private static final String ACCELERATION_NO_MOTION =

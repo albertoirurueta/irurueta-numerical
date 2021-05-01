@@ -173,7 +173,6 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  size
      */
-    @SuppressWarnings("Duplicates")
     public final void setInputData(final Matrix x, final double[] y, final double sig) {
         if (x.getRows() != y.length) {
             throw new IllegalArgumentException();

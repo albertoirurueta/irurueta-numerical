@@ -35,10 +35,10 @@ import java.util.List;
  * (by having a higher quality score).
  * Whenever RANSAC is being used but quality of measures is known, PROSAC should
  * be used instead, since this algorithm offers a result with a comparable
- * precission to that obtained with RANSAC but having a much smaller
+ * precision to that obtained with RANSAC but having a much smaller
  * computational cost.
  * The large improvement in computational cost is achieved thanks to the fact
- * that by taking into account the quality measures, subsamples can be
+ * that by taking into account the quality measures, sub-samples can be
  * prioritized so that more likely to be inliers are picked first.
  * <p>
  * This implementation is based on:
@@ -52,7 +52,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -577,7 +577,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             final int[] sortedIndices = computeSortedQualityIndices(
                     listener.getQualityScores());
 
-            // reusable list that will contain preliminar solutions on each
+            // reusable list that will contain preliminary solutions on each
             // iteration
             final List<T> iterResults = new ArrayList<>();
             bestResult = null;
@@ -674,7 +674,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 if (currentIter > tnPrime) {
                     // during the finishing stage (sampleSize == sampleSizeStar &&
                     // currentIter > tnPrime), draw a standard RANSAC sample
-                    // The sample contains subsetSize points seleted from U_n at
+                    // The sample contains subsetSize points selected from U_n at
                     // random
                     subsetSelector.computeRandomSubsets(subsetSize,
                             subsetIndices);
@@ -928,7 +928,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         // to quality scores ordered in ascending order
         final int[] indices = sorter.sortWithIndices(qualityScoresCopy);
 
-        // reverse indices so we have indices of samples ordered in descening
+        // reverse indices so we have indices of samples ordered in descending
         // order of quality
         reverse(indices);
         return indices;

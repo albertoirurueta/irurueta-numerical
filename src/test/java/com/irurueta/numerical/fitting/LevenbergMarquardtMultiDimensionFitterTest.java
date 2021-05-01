@@ -3213,7 +3213,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 // expression below is equal to:
                 // y[i] = amplitude * Math.sin(freqx * x.getElementAt(i, 0) + phasex) *
-                //      Math.sin(freqy * x.getElementAt(i, 1) + phasey);
+                //      Math.sin(freqy * x.getElementAt(i, 1) + phasey)
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], amplitude * Math.sin(freqx * xi0 + phasex) *
                         Math.sin(freqy * xi1 + phasey), SMALL_ABSOLUTE_ERROR);

@@ -19,8 +19,8 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 
 /**
- * Abstract class to find function minima. Implementations will take into account whether the function is single or multidimension, and will
- * use different algorithms to find minima.
+ * Abstract class to find function minima. Implementations will take into account whether the function is single or
+ * multi-dimension, and will use different algorithms to find minima.
  */
 public abstract class Optimizer {
 

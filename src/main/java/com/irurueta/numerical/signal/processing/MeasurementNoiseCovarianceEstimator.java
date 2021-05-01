@@ -27,7 +27,6 @@ import com.irurueta.algebra.Matrix;
  * This class should only be used for samples obtained while system state is
  * held constant.
  */
-@SuppressWarnings("WeakerAccess")
 public class MeasurementNoiseCovarianceEstimator {
 
     /**

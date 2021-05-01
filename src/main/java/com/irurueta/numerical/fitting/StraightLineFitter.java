@@ -26,7 +26,6 @@ import com.irurueta.statistics.MaxIterationsExceededException;
  * This class is based on the implementation available at Numerical Recipes
  * 3rd Ed, page 784.
  */
-@SuppressWarnings("WeakerAccess")
 public class StraightLineFitter extends Fitter {
 
     /**
@@ -183,7 +182,6 @@ public class StraightLineFitter extends Fitter {
      *            assuming equal error for all input points.
      * @throws IllegalArgumentException if arrays don't have the same length.
      */
-    @SuppressWarnings("Duplicates")
     public final void setInputDataAndStandardDeviations(
             final double[] x, final double[] y, final double[] sig) {
         if (sig != null) {
@@ -307,7 +305,6 @@ public class StraightLineFitter extends Fitter {
      *
      * @throws FittingException if fitting fails.
      */
-    @SuppressWarnings("Duplicates")
     private void fitWithSig() throws FittingException {
         final Gamma gam = new Gamma();
         int i;
@@ -351,7 +348,6 @@ public class StraightLineFitter extends Fitter {
     /**
      * Fits data when standard deviations of input data is not provided.
      */
-    @SuppressWarnings("Duplicates")
     private void fitWithoutSig() {
         int i;
         final double ss;

@@ -19,7 +19,6 @@ package com.irurueta.numerical.polynomials.estimators;
  * Contains an evaluation of the derivative of a given order of a polynomial and
  * the point where such derivative has been evaluated.
  */
-@SuppressWarnings("WeakerAccess")
 public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
 
     /**

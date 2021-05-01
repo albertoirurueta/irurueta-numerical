@@ -146,7 +146,6 @@ public abstract class RobustEstimator<T> {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    @SuppressWarnings("Duplicates")
     public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();

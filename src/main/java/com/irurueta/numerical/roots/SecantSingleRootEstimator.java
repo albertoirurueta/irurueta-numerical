@@ -26,10 +26,9 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * values, in other words, root will only be searched within provided minimum
  * and maximum evaluation points.
  * This class searches for REAL roots only!
- * This implementation is based on Numerical Recipes 3rd ed. Secion 9.2, page
+ * This implementation is based on Numerical Recipes 3rd ed. Section 9.2, page
  * 449
  */
-@SuppressWarnings("WeakerAccess")
 public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**
@@ -127,7 +126,6 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      *                                 numerical instability or convergence problems, or no roots are found).
      */
     @Override
-    @SuppressWarnings("Duplicates")
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
         if (isLocked()) {

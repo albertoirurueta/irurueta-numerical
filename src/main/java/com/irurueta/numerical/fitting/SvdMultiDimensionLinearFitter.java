@@ -30,7 +30,6 @@ import com.irurueta.numerical.NotReadyException;
  * This class is based on the implementation available at Numerical Recipes
  * 3rd Ed, page 795.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
 
     /**
@@ -166,6 +165,7 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      * @throws FittingException  if fitting fails.
      * @throws NotReadyException if enough input data has not yet been provided.
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void fit() throws FittingException, NotReadyException {
         if (!isReady()) {

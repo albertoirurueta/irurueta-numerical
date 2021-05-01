@@ -24,7 +24,6 @@ package com.irurueta.numerical;
  * This implementation is more accurate although slower than
  * GradientEstimator.
  */
-@SuppressWarnings("WeakerAccess")
 public class SymmetricGradientEstimator extends GradientEstimator {
 
     /**
@@ -61,7 +60,6 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      *                                  not equal.
      */
     @Override
-    @SuppressWarnings("Duplicates")
     public void gradient(final double[] point, final double[] result)
             throws EvaluationException {
         final int n = point.length;
@@ -90,7 +88,7 @@ public class SymmetricGradientEstimator extends GradientEstimator {
             temp = point[j];
             h = EPS * Math.abs(temp);
             if (h == 0.0) {
-                //Trick to reduce finite-precision error
+                // Trick to reduce finite-precision error
                 h = EPS;
             }
             xh1[j] = temp + h;

@@ -24,7 +24,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class SimpleSingleDimensionLinearFitterTest {
     private static final int MIN_POLY_PARAMS = 1;
     private static final int MAX_POLY_PARAMS = 5;
@@ -280,7 +279,6 @@ public class SimpleSingleDimensionLinearFitterTest {
 
         final double[] x = new double[2];
         final double[] y = new double[2];
-
 
         // set input data
         fitter.setInputData(x, y, 1.0);

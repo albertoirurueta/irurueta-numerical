@@ -30,7 +30,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class MSACPolynomialRobustEstimatorTest implements
         PolynomialRobustEstimatorListener {
 
@@ -81,7 +80,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-
         // test constructor with degree
         estimator = new MSACPolynomialRobustEstimator(2);
 
@@ -114,7 +112,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -154,7 +151,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with listener
         estimator = new MSACPolynomialRobustEstimator(this);
 
@@ -179,7 +175,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
-
 
         // test constructor with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
@@ -220,7 +215,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with degree and listener
         estimator = new MSACPolynomialRobustEstimator(2, this);
 
@@ -253,7 +247,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with evaluations and listener
         estimator = new MSACPolynomialRobustEstimator(evaluations, this);
@@ -288,7 +281,6 @@ public class MSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with degree, evaluations and listener
         estimator = new MSACPolynomialRobustEstimator(2, evaluations, this);

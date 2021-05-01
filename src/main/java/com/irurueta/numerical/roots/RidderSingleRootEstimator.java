@@ -26,10 +26,9 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * values, in other words, root will only be searched within provided minimum
  * and maximum evaluation points.
  * This class searches for REAL roots only!
- * This implementation is based on Numerical Recipes 3rd ed. Secion 9.2.1, page
+ * This implementation is based on Numerical Recipes 3rd ed. Section 9.2.1, page
  * 452.
  */
-@SuppressWarnings("WeakerAccess")
 public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**

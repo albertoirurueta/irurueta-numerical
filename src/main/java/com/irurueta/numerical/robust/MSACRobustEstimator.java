@@ -40,13 +40,12 @@ import java.util.List;
  *
  * @param <T> type of object to be estimated.
  */
-@SuppressWarnings("WeakerAccess")
 public class MSACRobustEstimator<T> extends RobustEstimator<T> {
 
     /**
      * Constant defining default confidence of estimated result, which is 99%.
      * This means that with a probability of 99% estimation will be accurate
-     * because chosen subsamples will be inliers.
+     * because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -127,6 +126,11 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         mBestResultInliersData = mBestNumberInliersData = null;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param listener listener to handle events raised by this estimator.
+     */
     public MSACRobustEstimator(final MSACRobustEstimatorListener<T> listener) {
         super(listener);
         mConfidence = DEFAULT_CONFIDENCE;
@@ -160,7 +164,6 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    @SuppressWarnings("Duplicates")
     public void setConfidence(final double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -232,7 +235,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Returns data related to solution producing the largest number of inliers.
      *
-     * @return data related to solution producint the largest number of inliers.
+     * @return data related to solution producing the largest number of inliers.
      */
     public MSACInliersData getBestNumberInliersData() {
         return mBestNumberInliersData;
@@ -293,7 +296,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
             nIters = Integer.MAX_VALUE;
             int newNIters;
             int currentIter = 0;
-            // reusable list that will contain preliminar solutions on each
+            // reusable list that will contain preliminary solutions on each
             // iteration
             final List<T> iterResults = new ArrayList<>();
             bestResult = null; // best result found so far
@@ -591,7 +594,6 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          *                               computed in current iteration has improved respect to previous
          *                               iteration.
          */
-        @SuppressWarnings("Duplicates")
         protected void update(final double bestMedianResidual, final BitSet inliers,
                               final double[] residuals, final int numInliers,
                               final boolean medianResidualImproved) {

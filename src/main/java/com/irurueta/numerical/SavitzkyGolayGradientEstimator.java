@@ -36,7 +36,6 @@ import com.irurueta.algebra.WrongSizeException;
  * polynomials, this method might be less accurate when large values are
  * involved due to limited machine precision.
  */
-@SuppressWarnings("WeakerAccess")
 public class SavitzkyGolayGradientEstimator extends GradientEstimator {
     /**
      * Number of required point to evaluate to compute derivative.
@@ -46,7 +45,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
     /**
      * Constructor.
      *
-     * @param listener Listener to evaluate a multidimensional functin.
+     * @param listener Listener to evaluate a multidimensional function.
      */
     public SavitzkyGolayGradientEstimator(
             final MultiDimensionFunctionEvaluatorListener listener) {

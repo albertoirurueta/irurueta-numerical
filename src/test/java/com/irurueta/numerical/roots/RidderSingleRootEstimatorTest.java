@@ -142,7 +142,7 @@ public class RidderSingleRootEstimatorTest {
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) {
+        } catch (final NotAvailableException ignore) {
         }
         assertEquals(estimator.getTolerance(),
                 RidderSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
@@ -286,7 +286,7 @@ public class RidderSingleRootEstimatorTest {
                 2.0 / 3.0 * MAX_EVAL_POINT);
         root3 = randomizer.nextDouble(2.0 / 3.0 * MAX_EVAL_POINT, MAX_EVAL_POINT);
 
-        // instantiate estimator with brackets for acuracy (otherwise estimation
+        // instantiate estimator with brackets for accuracy (otherwise estimation
         // might fail)
         final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
 

@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings({"Duplicates", "DuplicateExpressions"})
 public class LevenbergMarquardtSingleDimensionFitterTest {
 
     private static final Logger LOGGER = Logger.getLogger(
@@ -918,14 +917,16 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
                         final double amplitude = params[0];
                         final double freq = params[1];
                         final double phase = params[2];
-                        final double y = amplitude * Math.sin(freq * point + phase);
+                        double tmp1 = Math.sin(freq * point + phase);
+                        final double y = amplitude * tmp1;
 
                         // derivative respect amplitude
-                        derivatives[0] = Math.sin(freq * point + phase);
+                        derivatives[0] = tmp1;
                         // derivative respect frequency
-                        derivatives[1] = amplitude * Math.cos(freq * point + phase) * point;
+                        double tmp2 = Math.cos(freq * point + phase);
+                        derivatives[1] = amplitude * tmp2 * point;
                         // derivative respect phase
-                        derivatives[2] = amplitude * Math.cos(freq * point + phase);
+                        derivatives[2] = amplitude * tmp2;
 
                         return y;
                     }
@@ -1155,14 +1156,16 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
                         final double amplitude = params[0];
                         final double freq = params[1];
                         final double phase = params[2];
-                        final double y = amplitude * Math.sin(freq * point + phase);
+                        double tmp1 = Math.sin(freq * point + phase);
+                        final double y = amplitude * tmp1;
 
                         // derivative respect amplitude
-                        derivatives[0] = Math.sin(freq * point + phase);
+                        derivatives[0] = tmp1;
                         // derivative respect frequency
-                        derivatives[1] = amplitude * Math.cos(freq * point + phase) * point;
+                        double tmp2 = Math.cos(freq * point + phase);
+                        derivatives[1] = amplitude * tmp2 * point;
                         // derivative respect phase
-                        derivatives[2] = amplitude * Math.cos(freq * point + phase);
+                        derivatives[2] = amplitude * tmp2;
 
                         return y;
                     }
@@ -2154,14 +2157,16 @@ public class LevenbergMarquardtSingleDimensionFitterTest {
                             final double amplitude = params[0];
                             final double freq = params[1];
                             final double phase = params[2];
-                            final double y = amplitude * Math.sin(freq * point + phase);
+                            double tmp1 = Math.sin(freq * point + phase);
+                            final double y = amplitude * tmp1;
 
                             // derivative respect amplitude
-                            derivatives[0] = Math.sin(freq * point + phase);
+                            derivatives[0] = tmp1;
                             // derivative respect frequency
-                            derivatives[1] = amplitude * Math.cos(freq * point + phase) * point;
+                            double tmp2 = Math.cos(freq * point + phase);
+                            derivatives[1] = amplitude * tmp2 * point;
                             // derivative respect phase
-                            derivatives[2] = amplitude * Math.cos(freq * point + phase);
+                            derivatives[2] = amplitude * tmp2;
 
                             return y;
                         }

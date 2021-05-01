@@ -31,7 +31,6 @@ import java.util.Arrays;
  * This class is based on the implementation available at Numerical Recipes
  * 3rd Ed, page 791
  */
-@SuppressWarnings("WeakerAccess")
 public class SimpleSingleDimensionLinearFitter
         extends SingleDimensionLinearFitter {
 

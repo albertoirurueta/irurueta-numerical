@@ -30,7 +30,6 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
 public class PROSACPolynomialRobustEstimatorTest implements
         PolynomialRobustEstimatorListener {
 
@@ -83,7 +82,6 @@ public class PROSACPolynomialRobustEstimatorTest implements
         assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
-
 
         // test constructor with degree
         estimator = new PROSACPolynomialRobustEstimator(2);
@@ -157,7 +155,6 @@ public class PROSACPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with listener
         estimator = new PROSACPolynomialRobustEstimator(this);
 
@@ -182,7 +179,6 @@ public class PROSACPolynomialRobustEstimatorTest implements
         assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
-
 
         // test constructor with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
@@ -223,7 +219,6 @@ public class PROSACPolynomialRobustEstimatorTest implements
         }
         assertNull(estimator);
 
-
         // test constructor with degree and listener
         estimator = new PROSACPolynomialRobustEstimator(2, this);
 
@@ -256,7 +251,6 @@ public class PROSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with evaluations and listener
         estimator = new PROSACPolynomialRobustEstimator(evaluations, this);
@@ -291,7 +285,6 @@ public class PROSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
-
 
         // test constructor with degree, evaluations and listener
         estimator = new PROSACPolynomialRobustEstimator(2, evaluations, this);

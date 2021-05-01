@@ -41,7 +41,7 @@ public class NewtonRaphsonSingleRootEstimatorTest {
     private double root3;
 
     private final SingleDimensionFunctionEvaluatorListener constantPolynomial;
-    private final SingleDimensionFunctionEvaluatorListener derivativeContantPolynomial;
+    private final SingleDimensionFunctionEvaluatorListener derivativeConstantPolynomial;
 
     private final SingleDimensionFunctionEvaluatorListener firstDegreePolynomial;
     private final SingleDimensionFunctionEvaluatorListener derivativeFirstDegreePolynomial;
@@ -75,7 +75,7 @@ public class NewtonRaphsonSingleRootEstimatorTest {
             }
         };
 
-        derivativeContantPolynomial =
+        derivativeConstantPolynomial =
                 new SingleDimensionFunctionEvaluatorListener() {
 
                     @Override
@@ -303,13 +303,13 @@ public class NewtonRaphsonSingleRootEstimatorTest {
 
         // test 3rd constructor
         estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                derivativeContantPolynomial, minEvalPoint, maxEvalPoint,
+                derivativeConstantPolynomial, minEvalPoint, maxEvalPoint,
                 tolerance);
         assertNotNull(estimator);
 
         assertEquals(estimator.getListener(), constantPolynomial);
         assertEquals(estimator.getDerivativeListener(),
-                derivativeContantPolynomial);
+                derivativeConstantPolynomial);
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
         try {
@@ -329,7 +329,7 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         estimator = null;
         try {
             estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                    derivativeContantPolynomial, maxEvalPoint, minEvalPoint,
+                    derivativeConstantPolynomial, maxEvalPoint, minEvalPoint,
                     tolerance);
             fail("InvalidBracketRangeException expected but not thrown");
         } catch (final InvalidBracketRangeException ignore) {
@@ -337,7 +337,7 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         // Force IllegalArgumentException
         try {
             estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                    derivativeContantPolynomial, minEvalPoint, maxEvalPoint,
+                    derivativeConstantPolynomial, minEvalPoint, maxEvalPoint,
                     -tolerance);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
@@ -377,10 +377,10 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         assertFalse(estimator.isReady());
 
         // set derivative listener
-        estimator.setDerivativeListener(derivativeContantPolynomial);
+        estimator.setDerivativeListener(derivativeConstantPolynomial);
         // check correctness
         assertEquals(estimator.getDerivativeListener(),
-                derivativeContantPolynomial);
+                derivativeConstantPolynomial);
         assertTrue(estimator.isDerivativeListenerAvailable());
         // because both delegate are available...
         assertTrue(estimator.isReady());
@@ -466,7 +466,7 @@ public class NewtonRaphsonSingleRootEstimatorTest {
 
         // test constant polynomial
         estimator.setListener(constantPolynomial);
-        estimator.setDerivativeListener(derivativeContantPolynomial);
+        estimator.setDerivativeListener(derivativeConstantPolynomial);
         assertFalse(estimator.isLocked());
         try {
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);

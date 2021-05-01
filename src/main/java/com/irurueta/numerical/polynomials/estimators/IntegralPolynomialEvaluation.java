@@ -19,7 +19,6 @@ package com.irurueta.numerical.polynomials.estimators;
  * Contains an evaluation of the nth-integral of a polynomial and the
  * point where such integral has been evaluated.
  */
-@SuppressWarnings("WeakerAccess")
 public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
 
     /**

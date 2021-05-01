@@ -18,9 +18,8 @@ package com.irurueta.numerical.robust;
 import java.util.BitSet;
 
 /**
- * Base clase defining inlier data for a robust estimator.
+ * Base class defining inlier data for a robust estimator.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class InliersData {
 
     /**

@@ -23,7 +23,6 @@ package com.irurueta.numerical;
  * This implementation is faster although less accurate than
  * SymmetricDerivativeEstimator.
  */
-@SuppressWarnings("WeakerAccess")
 public class DerivativeEstimator {
 
     /**
@@ -34,7 +33,7 @@ public class DerivativeEstimator {
     /**
      * Listener to evaluate a single dimension function.
      */
-    protected SingleDimensionFunctionEvaluatorListener listener;
+    protected final SingleDimensionFunctionEvaluatorListener listener;
 
     /**
      * Constructor

@@ -98,7 +98,6 @@ public class KalmanFilterTest {
         assertEquals(filter.getControlMatrix().getRows(), 6);
         assertEquals(filter.getControlMatrix().getColumns(), 6);
 
-
         // test with control parameters
         filter = new KalmanFilter(6, 9, 1);
 
@@ -137,7 +136,6 @@ public class KalmanFilterTest {
         assertEquals(filter.getControlMatrix().getRows(), 6);
         assertEquals(filter.getControlMatrix().getColumns(), 1);
 
-
         // test without control parameters
         filter = new KalmanFilter(6, 9);
 
@@ -174,7 +172,6 @@ public class KalmanFilterTest {
         assertEquals(filter.getGain().getColumns(), 9);
 
         assertNull(filter.getControlMatrix());
-
 
         // Force IllegalArgumentException
         filter = null;
@@ -237,7 +234,7 @@ public class KalmanFilterTest {
             //[ acceleration]
             Matrix correctedState;
 
-            // measurement (aceleration)
+            // measurement (acceleration)
             final Matrix measurement = new Matrix(1, 1);
             measurement.setElementAtIndex(0, acceleration);
 
@@ -458,7 +455,7 @@ public class KalmanFilterTest {
         measurement.setElementAtIndex(1, accelerationY);
         measurement.setElementAtIndex(2, accelerationZ);
 
-        // assuming delta time betweeen samples of 1 second
+        // assuming delta time between samples of 1 second
         final double deltaTime = 1.0;
         // transitions for position, speed and acceleration
         // [1,   deltaTime,    deltaTime^2/2,    0,  0,          0,              0,  0,          0]
@@ -1613,24 +1610,24 @@ public class KalmanFilterTest {
         assertSame(filter.getMeasurementNoiseCov(), measurementNoiseCov2);
 
         // Force IllegalArgumentException
-        Matrix wrongMeasurmentNoiseCov = new Matrix(8, 9);
+        Matrix wrongMeasurementNoiseCov = new Matrix(8, 9);
         try {
-            filter.setMeasurementNoiseCov(wrongMeasurmentNoiseCov);
+            filter.setMeasurementNoiseCov(wrongMeasurementNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
 
-        wrongMeasurmentNoiseCov = new Matrix(9, 8);
+        wrongMeasurementNoiseCov = new Matrix(9, 8);
         try {
-            filter.setMeasurementNoiseCov(wrongMeasurmentNoiseCov);
+            filter.setMeasurementNoiseCov(wrongMeasurementNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
 
-        wrongMeasurmentNoiseCov = Matrix.diagonal(new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
-        wrongMeasurmentNoiseCov.setElementAt(0, 1, 1.0);
+        wrongMeasurementNoiseCov = Matrix.diagonal(new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
+        wrongMeasurementNoiseCov.setElementAt(0, 1, 1.0);
         try {
-            filter.setMeasurementNoiseCov(wrongMeasurmentNoiseCov);
+            filter.setMeasurementNoiseCov(wrongMeasurementNoiseCov);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }

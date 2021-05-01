@@ -108,7 +108,7 @@ public abstract class SingleDimensionFitter extends Fitter {
      * Returns result of evaluation of linear single dimensional function f(x)
      * at provided x points. This is provided as input data along with x array.
      *
-     * @return sampled functoin evaluations.
+     * @return sampled function evaluations.
      */
     public double[] getY() {
         return y;

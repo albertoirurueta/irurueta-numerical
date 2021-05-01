@@ -42,7 +42,7 @@ public abstract class PolynomialEstimator {
             PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR;
 
     /**
-     * Degree of polynomial to be estimted.
+     * Degree of polynomial to be estimated.
      */
     protected int mDegree;
 
@@ -53,7 +53,7 @@ public abstract class PolynomialEstimator {
     protected List<PolynomialEvaluation> mEvaluations;
 
     /**
-     * True when estimator is estimating radial distorion.
+     * True when estimator is estimating radial distortion.
      */
     protected boolean mLocked;
 
@@ -141,7 +141,7 @@ public abstract class PolynomialEstimator {
     /**
      * Constructor.
      *
-     * @param degree      degree of polynomial to be estimted.
+     * @param degree      degree of polynomial to be estimated.
      * @param evaluations collection of polynomial evaluations.
      * @param listener    listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
@@ -233,7 +233,7 @@ public abstract class PolynomialEstimator {
             return false;
         }
 
-        //also ensure that at least a direct or integral evaluation exists
+        // also ensure that at least a direct or integral evaluation exists
         int count = 0;
         for (final PolynomialEvaluation eval : mEvaluations) {
             if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
@@ -471,7 +471,7 @@ public abstract class PolynomialEstimator {
      * Creates an instance of a polynomial estimator using provided evaluations
      * and type.
      *
-     * @param evaluations collection of polynomial esvaluations.
+     * @param evaluations collection of polynomial evaluations.
      * @param type        type of polynomial estimator.
      * @return an instance of a polynomial estimator.
      */
@@ -611,7 +611,7 @@ public abstract class PolynomialEstimator {
     }
 
     /**
-     * Fils row of system of equations for a direct polynomial evaluation.
+     * Fills row of system of equations for a direct polynomial evaluation.
      *
      * @param evaluation a direct polynomial evaluation.
      * @param a          system matrix.

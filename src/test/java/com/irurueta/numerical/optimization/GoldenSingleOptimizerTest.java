@@ -115,7 +115,6 @@ public class GoldenSingleOptimizerTest implements
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
-
         // test 2nd constructor
         optimizer = new GoldenSingleOptimizer(this, minEvalPoint,
                 middleEvalPoint, maxEvalPoint, tolerance);

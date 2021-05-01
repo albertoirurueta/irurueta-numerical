@@ -35,7 +35,6 @@ import java.util.Arrays;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.5 page 502.
  */
-@SuppressWarnings("WeakerAccess")
 public class SimplexMultiOptimizer extends MultiOptimizer {
     /**
      * Maximum number of iterations.

@@ -23,7 +23,6 @@ package com.irurueta.numerical;
  * This implementation is more accurate although slower than
  * DerivativeEstimator.
  */
-@SuppressWarnings("WeakerAccess")
 public class SymmetricDerivativeEstimator extends DerivativeEstimator {
 
     /**
@@ -45,7 +44,6 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      *                             evaluated.
      */
     @Override
-    @SuppressWarnings("Duplicates")
     public double derivative(final double x) throws EvaluationException {
         double h = EPS * Math.abs(x);
         if (h == 0.0) {
