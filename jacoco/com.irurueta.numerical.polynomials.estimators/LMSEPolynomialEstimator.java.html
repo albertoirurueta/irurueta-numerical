@@ -29,7 +29,6 @@ import java.util.List;
  * polynomial of a given degree using points where polynomials (or its
  * derivatives or integrals) are evaluated.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public class LMSEPolynomialEstimator extends PolynomialEstimator {
 
     /**
@@ -50,9 +49,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * Constructor.
      */
     public LMSEPolynomialEstimator() {
-<span class="fc" id="L53">        super();</span>
-<span class="fc" id="L54">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L52">        super();</span>
+<span class="fc" id="L53">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Constructor.
@@ -61,9 +60,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public LMSEPolynomialEstimator(final int degree) {
-<span class="fc" id="L64">        super(degree);</span>
-<span class="fc" id="L65">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L63">        super(degree);</span>
+<span class="fc" id="L64">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Constructor.
@@ -71,9 +70,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @param evaluations collection of polynomial evaluations.
      */
     public LMSEPolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L74">        super(evaluations);</span>
-<span class="fc" id="L75">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L73">        super(evaluations);</span>
+<span class="fc" id="L74">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L75">    }</span>
 
     /**
      * Constructor.
@@ -81,9 +80,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @param listener listener to be notified of events.
      */
     public LMSEPolynomialEstimator(final PolynomialEstimatorListener listener) {
-<span class="fc" id="L84">        super(listener);</span>
-<span class="fc" id="L85">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L83">        super(listener);</span>
+<span class="fc" id="L84">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L85">    }</span>
 
     /**
      * Constructor.
@@ -94,9 +93,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     public LMSEPolynomialEstimator(
             final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L97">        super(degree, evaluations);</span>
-<span class="fc" id="L98">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L96">        super(degree, evaluations);</span>
+<span class="fc" id="L97">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L98">    }</span>
 
     /**
      * Constructor.
@@ -107,9 +106,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     public LMSEPolynomialEstimator(
             final int degree, final PolynomialEstimatorListener listener) {
-<span class="fc" id="L110">        super(degree, listener);</span>
-<span class="fc" id="L111">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L109">        super(degree, listener);</span>
+<span class="fc" id="L110">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L111">    }</span>
 
     /**
      * Constructor.
@@ -120,9 +119,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
     public LMSEPolynomialEstimator(
             final List&lt;PolynomialEvaluation&gt; evaluations,
             final PolynomialEstimatorListener listener) {
-<span class="fc" id="L123">        super(evaluations, listener);</span>
-<span class="fc" id="L124">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L122">        super(evaluations, listener);</span>
+<span class="fc" id="L123">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L124">    }</span>
 
     /**
      * Constructor.
@@ -135,9 +134,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
     public LMSEPolynomialEstimator(
             final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
             final PolynomialEstimatorListener listener) {
-<span class="fc" id="L138">        super(degree, evaluations, listener);</span>
-<span class="fc" id="L139">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L137">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L138">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L139">    }</span>
 
     /**
      * Indicates if an LMSE (Least Mean Square Error) solution is allowed if
@@ -148,7 +147,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @return true if LMSE solution is allowed, false otherwise.
      */
     public boolean isLMSESolutionAllowed() {
-<span class="fc" id="L151">        return mAllowLMSESolution;</span>
+<span class="fc" id="L150">        return mAllowLMSESolution;</span>
     }
 
     /**
@@ -161,11 +160,11 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setLMSESolutionAllowed(final boolean allowed) throws LockedException {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L165">            throw new LockedException();</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L164">            throw new LockedException();</span>
         }
-<span class="fc" id="L167">        mAllowLMSESolution = allowed;</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L166">        mAllowLMSESolution = allowed;</span>
+<span class="fc" id="L167">    }</span>
 
     /**
      * Estimates a polynomial based on provided evaluations.
@@ -175,6 +174,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @throws NotReadyException             if estimator is not ready.
      * @throws PolynomialEstimationException if polynomial estimation fails.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException,
             PolynomialEstimationException {

@@ -19,7 +19,6 @@ package com.irurueta.numerical.polynomials.estimators;
  * Contains an evaluation of the derivative of a given order of a polynomial and
  * the point where such derivative has been evaluated.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
 
     /**
@@ -41,9 +40,9 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * Constructor.
      */
     public DerivativePolynomialEvaluation() {
-<span class="fc" id="L44">        super();</span>
-<span class="fc" id="L45">        setDerivativeOrder(MIN_DERIVATIVE_ORDER);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L43">        super();</span>
+<span class="fc" id="L44">        setDerivativeOrder(MIN_DERIVATIVE_ORDER);</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Constructor.
@@ -55,10 +54,10 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      */
     public DerivativePolynomialEvaluation(
             final double x, final double evaluation, final int derivativeOrder) {
-<span class="fc" id="L58">        super(evaluation);</span>
-<span class="fc" id="L59">        mX = x;</span>
-<span class="fc" id="L60">        setDerivativeOrder(derivativeOrder);</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L57">        super(evaluation);</span>
+<span class="fc" id="L58">        mX = x;</span>
+<span class="fc" id="L59">        setDerivativeOrder(derivativeOrder);</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * @param x          point where derivative of polynomial has been evaluated.
@@ -66,8 +65,8 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      */
     public DerivativePolynomialEvaluation(
             final double x, final double evaluation) {
-<span class="fc" id="L69">        this(x, evaluation, MIN_DERIVATIVE_ORDER);</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L68">        this(x, evaluation, MIN_DERIVATIVE_ORDER);</span>
+<span class="fc" id="L69">    }</span>
 
     /**
      * Gets point where polynomial derivative has been evaluated.
@@ -75,7 +74,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @return point where polynomial derivative has been evaluated.
      */
     public double getX() {
-<span class="fc" id="L78">        return mX;</span>
+<span class="fc" id="L77">        return mX;</span>
     }
 
     /**
@@ -84,8 +83,8 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @param x point where polynomial derivative has been evaluated.
      */
     public void setX(final double x) {
-<span class="fc" id="L87">        mX = x;</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L86">        mX = x;</span>
+<span class="fc" id="L87">    }</span>
 
     /**
      * Gets order of derivative.
@@ -93,7 +92,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @return order of derivative.
      */
     public int getDerivativeOrder() {
-<span class="fc" id="L96">        return mDerivativeOrder;</span>
+<span class="fc" id="L95">        return mDerivativeOrder;</span>
     }
 
     /**
@@ -103,13 +102,13 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
     public final void setDerivativeOrder(final int derivativeOrder) {
-<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (derivativeOrder &lt; MIN_DERIVATIVE_ORDER) {</span>
-<span class="fc" id="L107">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (derivativeOrder &lt; MIN_DERIVATIVE_ORDER) {</span>
+<span class="fc" id="L106">            throw new IllegalArgumentException(</span>
                     &quot;derivative order must be at least 1&quot;);
         }
 
-<span class="fc" id="L111">        mDerivativeOrder = derivativeOrder;</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L110">        mDerivativeOrder = derivativeOrder;</span>
+<span class="fc" id="L111">    }</span>
 
     /**
      * Gets type of polynomial evaluation.
@@ -118,7 +117,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      */
     @Override
     public PolynomialEvaluationType getType() {
-<span class="fc" id="L121">        return PolynomialEvaluationType.DERIVATIVE_EVALUATION;</span>
+<span class="fc" id="L120">        return PolynomialEvaluationType.DERIVATIVE_EVALUATION;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

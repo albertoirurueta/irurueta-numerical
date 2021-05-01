@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Firstly, it has the advantage that no threshold is required to be set</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * beforehand, the same as LMedS. Threshold to determine inliers is computed</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * dynamically, which helps for an easier setup that is problem independent and</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * depending on the accuracy of the inliers, results will be more acurate than</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * depending on the accuracy of the inliers, results will be more accurate than</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * RANSAC or PROSAC, just the same as LMedS.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * On the other hand, if a certain information about the quality of the samples</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * is available, as in PROSAC, the algorithm takes advantage of this additional</em>
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * Constant defining default confidence of the estimated result, which is</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     * 99%. This means that with a probability of 99% estimation will be</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * accurate because chosen subsamples will be inliers.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * accurate because chosen sub-samples will be inliers.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> DEFAULT_CONFIDENCE = 0.99;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
@@ -689,7 +689,7 @@
 <a class="jxr_linenumber" name="L681" href="#L681">681</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] sortedIndices = computeSortedQualityIndices(
 <a class="jxr_linenumber" name="L682" href="#L682">682</a>                     listener.getQualityScores());
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 
-<a class="jxr_linenumber" name="L684" href="#L684">684</a>             <em class="jxr_comment">// reusable list that will contain preliminar solutions on each</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>             <em class="jxr_comment">// reusable list that will contain preliminary solutions on each</em>
 <a class="jxr_linenumber" name="L685" href="#L685">685</a>             <em class="jxr_comment">// iteration</em>
 <a class="jxr_linenumber" name="L686" href="#L686">686</a>             <strong class="jxr_keyword">final</strong> List&lt;T&gt; iterResults = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L687" href="#L687">687</a>             bestResult = <strong class="jxr_keyword">null</strong>;
@@ -790,7 +790,7 @@
 <a class="jxr_linenumber" name="L782" href="#L782">782</a>                 <strong class="jxr_keyword">if</strong> (currentIter &gt; tnPrime) {
 <a class="jxr_linenumber" name="L783" href="#L783">783</a>                     <em class="jxr_comment">// during the finishing stage (sampleSize == sampleSizeStar &amp;&amp;</em>
 <a class="jxr_linenumber" name="L784" href="#L784">784</a>                     <em class="jxr_comment">// currentIter &gt; TnPrime), draw a standard RANSAC sample</em>
-<a class="jxr_linenumber" name="L785" href="#L785">785</a>                     <em class="jxr_comment">// The sample contains subsetSize points seleted from U_n at</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a>                     <em class="jxr_comment">// The sample contains subsetSize points selected from U_n at</em>
 <a class="jxr_linenumber" name="L786" href="#L786">786</a>                     <em class="jxr_comment">// random</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a>                     subsetSelector.computeRandomSubsets(subsetSize,
 <a class="jxr_linenumber" name="L788" href="#L788">788</a>                             subsetIndices);
@@ -805,7 +805,7 @@
 <a class="jxr_linenumber" name="L797" href="#L797">797</a>                 transformIndices(subsetIndices, sortedIndices,
 <a class="jxr_linenumber" name="L798" href="#L798">798</a>                         transformedSubsetIndices);
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 
-<a class="jxr_linenumber" name="L800" href="#L800">800</a>                 <em class="jxr_comment">// clear list of preliminar solutions before calling listener</em>
+<a class="jxr_linenumber" name="L800" href="#L800">800</a>                 <em class="jxr_comment">// clear list of preliminary solutions before calling listener</em>
 <a class="jxr_linenumber" name="L801" href="#L801">801</a>                 iterResults.clear();
 <a class="jxr_linenumber" name="L802" href="#L802">802</a>                 <em class="jxr_comment">// compute solution for current iteration</em>
 <a class="jxr_linenumber" name="L803" href="#L803">803</a>                 listener.estimatePreliminarSolutions(transformedSubsetIndices,
@@ -1129,7 +1129,7 @@
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a>         <em class="jxr_comment">// to quality scores ordered in ascending order</em>
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] indices = sorter.sortWithIndices(qualityScoresCopy);
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 
-<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a>         <em class="jxr_comment">// reverse indices so we have indices of samples ordered in descening</em>
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a>         <em class="jxr_comment">// reverse indices so we have indices of samples ordered in descending</em>
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a>         <em class="jxr_comment">// order of quality</em>
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a>         reverse(indices);
 <a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 

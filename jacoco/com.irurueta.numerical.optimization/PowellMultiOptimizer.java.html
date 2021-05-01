@@ -32,7 +32,6 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.7 page 509.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class PowellMultiOptimizer extends LineMultiOptimizer {
     /**
      * Constant defining default tolerance or accuracy to be achieved on the
@@ -81,12 +80,12 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * Empty constructor.
      */
     public PowellMultiOptimizer() {
-<span class="fc" id="L84">        super();</span>
-<span class="fc" id="L85">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L86">        iter = 0;</span>
-<span class="fc" id="L87">        fret = 0.0;</span>
-<span class="fc" id="L88">        ximat = null;</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L83">        super();</span>
+<span class="fc" id="L84">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L85">        iter = 0;</span>
+<span class="fc" id="L86">        fret = 0.0;</span>
+<span class="fc" id="L87">        ximat = null;</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * Constructor.
@@ -98,12 +97,12 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      */
     public PowellMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener, final double tolerance) {
-<span class="fc" id="L101">        super(listener);</span>
-<span class="fc" id="L102">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L103">        iter = 0;</span>
-<span class="fc" id="L104">        fret = 0.0;</span>
-<span class="fc" id="L105">        ximat = null;</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L100">        super(listener);</span>
+<span class="fc" id="L101">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L102">        iter = 0;</span>
+<span class="fc" id="L103">        fret = 0.0;</span>
+<span class="fc" id="L104">        ximat = null;</span>
+<span class="fc" id="L105">    }</span>
 
     /**
      * Constructor.
@@ -126,12 +125,12 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
     public PowellMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener, final double[] point,
             final Matrix directions, final double tolerance) {
-<span class="fc" id="L129">        super(listener);</span>
-<span class="fc" id="L130">        internalSetPointAndDirections(point, directions);</span>
-<span class="fc" id="L131">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L132">        iter = 0;</span>
-<span class="fc" id="L133">        fret = 0.0;</span>
-<span class="fc" id="L134">    }</span>
+<span class="fc" id="L128">        super(listener);</span>
+<span class="fc" id="L129">        internalSetPointAndDirections(point, directions);</span>
+<span class="fc" id="L130">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L131">        iter = 0;</span>
+<span class="fc" id="L132">        fret = 0.0;</span>
+<span class="fc" id="L133">    }</span>
 
     /**
      * Returns set of directions to start looking for a minimum.
@@ -145,10 +144,10 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      *                               computed.
      */
     public Matrix getDirections() throws NotAvailableException {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (!areDirectionsAvailable()) {</span>
-<span class="fc" id="L149">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (!areDirectionsAvailable()) {</span>
+<span class="fc" id="L148">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L151">        return ximat;</span>
+<span class="fc" id="L150">        return ximat;</span>
     }
 
     /**
@@ -158,7 +157,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @return True if available, false otherwise.
      */
     public boolean areDirectionsAvailable() {
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        return ximat != null;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        return ximat != null;</span>
     }
 
     /**
@@ -179,11 +178,11 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      */
     public void setPointAndDirections(final double[] point, final Matrix directions)
             throws LockedException {
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L183">            throw new LockedException();</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L182">            throw new LockedException();</span>
         }
-<span class="fc" id="L185">        internalSetPointAndDirections(point, directions);</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L184">        internalSetPointAndDirections(point, directions);</span>
+<span class="fc" id="L185">    }</span>
 
     /**
      * Sets start point where local minimum is searched nearby.
@@ -192,11 +191,11 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @throws LockedException Raised if this instance is locked.
      */
     public void setStartPoint(final double[] startPoint) throws LockedException {
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L196">            throw new LockedException();</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L195">            throw new LockedException();</span>
         }
-<span class="fc" id="L198">        p = startPoint;</span>
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L197">        p = startPoint;</span>
+<span class="fc" id="L198">    }</span>
 
     /**
      * Returns tolerance or accuracy to be expected on estimated local minimum.
@@ -204,7 +203,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @return Tolerance or accuracy to be expected on estimated local minimum.
      */
     public double getTolerance() {
-<span class="fc" id="L207">        return tolerance;</span>
+<span class="fc" id="L206">        return tolerance;</span>
     }
 
     /**
@@ -218,11 +217,11 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      *                                  negative.
      */
     private void internalSetTolerance(final double tolerance) {
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L222">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L221">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L224">        this.tolerance = tolerance;</span>
-<span class="fc" id="L225">    }</span>
+<span class="fc" id="L223">        this.tolerance = tolerance;</span>
+<span class="fc" id="L224">    }</span>
 
     /**
      * Sets tolerance or accuracy to be expected on estimated local minimum.
@@ -234,11 +233,11 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      *                                  negative.
      */
     public void setTolerance(final double tolerance) throws LockedException {
-<span class="pc bpc" id="L237" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L238">            throw new LockedException();</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L237">            throw new LockedException();</span>
         }
-<span class="fc" id="L240">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L241">    }</span>
+<span class="fc" id="L239">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L240">    }</span>
 
     /**
      * This function estimates a function minimum.
@@ -261,64 +260,65 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
 
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L265">            throw new LockedException();</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L264">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L267" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L268">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L267">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L271">        locked = true;</span>
+<span class="fc" id="L270">        locked = true;</span>
 
-<span class="fc" id="L273">        buildDirections();</span>
+<span class="fc" id="L272">        buildDirections();</span>
 
         // in case that set of directions have been directly provided, we check
         // for correctness
-<span class="fc" id="L277">        final int n = p.length;</span>
-<span class="pc bpc" id="L278" title="2 of 4 branches missed.">        if (ximat.getRows() != ximat.getColumns() || ximat.getRows() != n) {</span>
-<span class="nc" id="L279">            locked = false;</span>
-<span class="nc" id="L280">            throw new OptimizationException();</span>
+<span class="fc" id="L276">        final int n = p.length;</span>
+<span class="pc bpc" id="L277" title="2 of 4 branches missed.">        if (ximat.getRows() != ximat.getColumns() || ximat.getRows() != n) {</span>
+<span class="nc" id="L278">            locked = false;</span>
+<span class="nc" id="L279">            throw new OptimizationException();</span>
         }
 
         double fptt;
-<span class="fc" id="L284">        final double[] pt = new double[n];</span>
-<span class="fc" id="L285">        final double[] ptt = new double[n];</span>
+<span class="fc" id="L283">        final double[] pt = new double[n];</span>
+<span class="fc" id="L284">        final double[] ptt = new double[n];</span>
 
         // set vector of directions
-<span class="pc bpc" id="L288" title="3 of 4 branches missed.">        if (!isDirectionAvailable() || xi.length != n) {</span>
-<span class="fc" id="L289">            xi = new double[n];</span>
+<span class="pc bpc" id="L287" title="3 of 4 branches missed.">        if (!isDirectionAvailable() || xi.length != n) {</span>
+<span class="fc" id="L288">            xi = new double[n];</span>
         }
 
         try {
-<span class="fc" id="L293">            fret = listener.evaluate(p);</span>
+<span class="fc" id="L292">            fret = listener.evaluate(p);</span>
 
             // save the initial point
-<span class="fc" id="L296">            System.arraycopy(p, 0, pt, 0, n);</span>
+<span class="fc" id="L295">            System.arraycopy(p, 0, pt, 0, n);</span>
 
-<span class="fc" id="L298">            for (iter = 0; ; ++iter) {</span>
-<span class="fc" id="L299">                final double fp = fret;</span>
-<span class="fc" id="L300">                int ibig = 0;</span>
-                // Will be the biffest function decrease
-<span class="fc" id="L302">                double del = 0.0;</span>
+<span class="fc" id="L297">            for (iter = 0; ; ++iter) {</span>
+<span class="fc" id="L298">                final double fp = fret;</span>
+<span class="fc" id="L299">                int ibig = 0;</span>
+                // Will be the biggest function decrease
+<span class="fc" id="L301">                double del = 0.0;</span>
                 // In each iteration, loop over all directions in the set.
-<span class="fc bfc" id="L304" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
                     // Copy the direction contained in i-th column of ximat
-<span class="fc" id="L306">                    ximat.getSubmatrixAsArray(0, i, n - 1, i, xi);</span>
-<span class="fc" id="L307">                    fptt = fret;</span>
+<span class="fc" id="L305">                    ximat.getSubmatrixAsArray(0, i, n - 1, i, xi);</span>
+<span class="fc" id="L306">                    fptt = fret;</span>
 
                     // minimize along it, and record it if it is the largest
                     // decrease so far.
-<span class="fc" id="L311">                    fret = linmin();</span>
-<span class="fc bfc" id="L312" title="All 2 branches covered.">                    if (fptt - fret &gt; del) {</span>
-<span class="fc" id="L313">                        del = fptt - fret;</span>
-<span class="fc" id="L314">                        ibig = i + 1;</span>
+<span class="fc" id="L310">                    fret = linmin();</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">                    if (fptt - fret &gt; del) {</span>
+<span class="fc" id="L312">                        del = fptt - fret;</span>
+<span class="fc" id="L313">                        ibig = i + 1;</span>
                     }
                 }
 
                 // Here comes the termination criterion.
-<span class="fc" id="L319">                if (2.0 * (fp - fret) &lt;= tolerance * (Math.abs(fp) +</span>
-<span class="fc bfc" id="L320" title="All 2 branches covered.">                        Math.abs(fret)) + TINY) {</span>
-<span class="fc" id="L321">                    break; // minimum has been found</span>
+<span class="fc" id="L318">                if (2.0 * (fp - fret) &lt;= tolerance * (Math.abs(fp) +</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                        Math.abs(fret)) + TINY) {</span>
+                    // minimum has been found
+<span class="fc" id="L321">                    break;</span>
                 }
 <span class="pc bpc" id="L323" title="1 of 2 branches missed.">                if (iter == ITMAX) {</span>
                     // too many iterations

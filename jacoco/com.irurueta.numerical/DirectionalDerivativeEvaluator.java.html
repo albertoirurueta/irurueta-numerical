@@ -21,7 +21,6 @@ package com.irurueta.numerical;
  * Using provided input point and direction, the multidimensional function's
  * input parameters are determined so they all lay on a line.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
 
     /**
@@ -32,7 +31,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
     /**
      * Array containing gradient at point p. This is used internally.
      */
-    double[] dft;
+    final double[] dft;
 
     /**
      * Constructor.
@@ -51,11 +50,11 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
             final MultiDimensionFunctionEvaluatorListener listener,
             final GradientFunctionEvaluatorListener gradientListener, final double[] point,
             final double[] direction) {
-<span class="fc" id="L54">        super(listener, point, direction);</span>
+<span class="fc" id="L53">        super(listener, point, direction);</span>
 
-<span class="fc" id="L56">        this.gradientListener = gradientListener;</span>
-<span class="fc" id="L57">        dft = new double[point.length];</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L55">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L56">        dft = new double[point.length];</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Returns gradient listener that evaluates a multidimensional function
@@ -67,7 +66,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      * @return Gradient listener.
      */
     public GradientFunctionEvaluatorListener getGradientListener() {
-<span class="fc" id="L70">        return gradientListener;</span>
+<span class="fc" id="L69">        return gradientListener;</span>
     }
 
     /**
@@ -81,8 +80,8 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      */
     public void setGradientListener(
             final GradientFunctionEvaluatorListener gradientListener) {
-<span class="nc" id="L84">        this.gradientListener = gradientListener;</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L83">        this.gradientListener = gradientListener;</span>
+<span class="nc" id="L84">    }</span>
 
     /**
      * Computes derivative on current direction of a function at distance x from
@@ -94,21 +93,21 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      * @throws EvaluationException Thrown if function evaluation fails.
      */
     public double differentiateAt(final double x) throws EvaluationException {
-<span class="fc" id="L97">        final int length = point.length;</span>
+<span class="fc" id="L96">        final int length = point.length;</span>
 
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L100">            p[i] = point[i] + x * direction[i];</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L99">            p[i] = point[i] + x * direction[i];</span>
         }
 
         // Compute gradient at such point
-<span class="fc" id="L104">        gradientListener.evaluateGradient(p, dft);</span>
+<span class="fc" id="L103">        gradientListener.evaluateGradient(p, dft);</span>
 
         // Obtain 1D derivative on corresponding direction
-<span class="fc" id="L107">        double df1 = 0.0;</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L109">            df1 += dft[i] * direction[i];</span>
+<span class="fc" id="L106">        double df1 = 0.0;</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L108">            df1 += dft[i] * direction[i];</span>
         }
-<span class="fc" id="L111">        return df1;</span>
+<span class="fc" id="L110">        return df1;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -33,7 +33,7 @@ import java.util.List;
  * Firstly, it has the advantage that no threshold is required to be set
  * beforehand, the same as LMedS. Threshold to determine inliers is computed
  * dynamically, which helps for an easier setup that is problem independent and
- * depending on the accuracy of the inliers, results will be more acurate than
+ * depending on the accuracy of the inliers, results will be more accurate than
  * RANSAC or PROSAC, just the same as LMedS.
  * On the other hand, if a certain information about the quality of the samples
  * is available, as in PROSAC, the algorithm takes advantage of this additional
@@ -55,7 +55,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -681,7 +681,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 <span class="fc" id="L681">            final int[] sortedIndices = computeSortedQualityIndices(</span>
 <span class="fc" id="L682">                    listener.getQualityScores());</span>
 
-            // reusable list that will contain preliminar solutions on each
+            // reusable list that will contain preliminary solutions on each
             // iteration
 <span class="fc" id="L686">            final List&lt;T&gt; iterResults = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L687">            bestResult = null;</span>
@@ -782,7 +782,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 <span class="pc bpc" id="L782" title="1 of 2 branches missed.">                if (currentIter &gt; tnPrime) {</span>
                     // during the finishing stage (sampleSize == sampleSizeStar &amp;&amp;
                     // currentIter &gt; TnPrime), draw a standard RANSAC sample
-                    // The sample contains subsetSize points seleted from U_n at
+                    // The sample contains subsetSize points selected from U_n at
                     // random
 <span class="nc" id="L787">                    subsetSelector.computeRandomSubsets(subsetSize,</span>
                             subsetIndices);
@@ -797,7 +797,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 <span class="fc" id="L797">                transformIndices(subsetIndices, sortedIndices,</span>
                         transformedSubsetIndices);
 
-                // clear list of preliminar solutions before calling listener
+                // clear list of preliminary solutions before calling listener
 <span class="fc" id="L801">                iterResults.clear();</span>
                 // compute solution for current iteration
 <span class="fc" id="L803">                listener.estimatePreliminarSolutions(transformedSubsetIndices,</span>
@@ -1121,7 +1121,7 @@ public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
         // to quality scores ordered in ascending order
 <span class="fc" id="L1122">        final int[] indices = sorter.sortWithIndices(qualityScoresCopy);</span>
 
-        // reverse indices so we have indices of samples ordered in descening
+        // reverse indices so we have indices of samples ordered in descending
         // order of quality
 <span class="fc" id="L1126">        reverse(indices);</span>
 

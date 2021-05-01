@@ -44,7 +44,7 @@ public class DirectionalEvaluator {
      * Point currently being evaluated in the multidimensional function.
      * This is used internally.
      */
-    protected double[] p;
+    protected final double[] p;
 
     /**
      * Constructor.

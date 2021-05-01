@@ -45,7 +45,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This class is based on the implementation of Numerical Recipes 3rd ed.
  * Section 9.1.1 page 447.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**
@@ -74,9 +73,9 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      * Empty constructor.
      */
     public BisectionSingleRootEstimator() {
-<span class="fc" id="L77">        super();</span>
-<span class="fc" id="L78">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L76">        super();</span>
+<span class="fc" id="L77">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Constructor.
@@ -99,9 +98,9 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
             final SingleDimensionFunctionEvaluatorListener listener,
             final double minEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
-<span class="fc" id="L102">        super(listener, minEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L103">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L101">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L102">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L103">    }</span>
 
     /**
      * Returns tolerance to find a root. Whenever the variation of the estimated
@@ -112,7 +111,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      * @return Tolerance to find a root.
      */
     public double getTolerance() {
-<span class="fc" id="L115">        return tolerance;</span>
+<span class="fc" id="L114">        return tolerance;</span>
     }
 
     /**
@@ -127,11 +126,11 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     public void setTolerance(final double tolerance) throws LockedException {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L131">            throw new LockedException();</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L130">            throw new LockedException();</span>
         }
-<span class="fc" id="L133">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L134">    }</span>
+<span class="fc" id="L132">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L133">    }</span>
 
     /**
      * Internal method to set tolerance to find a root. This method does not
@@ -145,11 +144,11 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException Raised if provided tolerance is negative.
      */
     private void internalSetTolerance(final double tolerance) {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L148">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L151">        this.tolerance = tolerance;</span>
-<span class="fc" id="L152">    }</span>
+<span class="fc" id="L150">        this.tolerance = tolerance;</span>
+<span class="fc" id="L151">    }</span>
 
     /**
      * Estimates a single root of the provided single dimension function
@@ -166,60 +165,60 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
     @Override
     public void estimate() throws LockedException, NotReadyException,
             RootEstimationException {
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L170">            throw new LockedException();</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L169">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L173">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L172">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L176">        locked = true;</span>
-<span class="fc" id="L177">        rootAvailable = false;</span>
+<span class="fc" id="L175">        locked = true;</span>
+<span class="fc" id="L176">        rootAvailable = false;</span>
 
         try {
-<span class="fc" id="L180">            final double x1 = minEvalPoint;</span>
-<span class="fc" id="L181">            final double x2 = maxEvalPoint;</span>
-<span class="fc" id="L182">            final double xacc = tolerance;</span>
+<span class="fc" id="L179">            final double x1 = minEvalPoint;</span>
+<span class="fc" id="L180">            final double x2 = maxEvalPoint;</span>
+<span class="fc" id="L181">            final double xacc = tolerance;</span>
             double dx;
             double xmid;
             double rtb;
-<span class="fc" id="L186">            final double f = listener.evaluate(x1);</span>
-<span class="fc" id="L187">            double fmid = listener.evaluate(x2);</span>
+<span class="fc" id="L185">            final double f = listener.evaluate(x1);</span>
+<span class="fc" id="L186">            double fmid = listener.evaluate(x2);</span>
 
-<span class="fc bfc" id="L189" title="All 2 branches covered.">            if (f * fmid &gt;= 0.0) {</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            if (f * fmid &gt;= 0.0) {</span>
                 // check that bracket contains a sign change in function
-<span class="fc" id="L191">                locked = false;</span>
-<span class="fc" id="L192">                throw new RootEstimationException();</span>
+<span class="fc" id="L190">                locked = false;</span>
+<span class="fc" id="L191">                throw new RootEstimationException();</span>
             }
-<span class="fc bfc" id="L194" title="All 2 branches covered.">            if (f &lt; 0.0) {</span>
-<span class="fc" id="L195">                dx = x2 - x1;</span>
-<span class="fc" id="L196">                rtb = x1;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">            if (f &lt; 0.0) {</span>
+<span class="fc" id="L194">                dx = x2 - x1;</span>
+<span class="fc" id="L195">                rtb = x1;</span>
             } else {
-<span class="fc" id="L198">                dx = x1 - x2;</span>
-<span class="fc" id="L199">                rtb = x2;</span>
+<span class="fc" id="L197">                dx = x1 - x2;</span>
+<span class="fc" id="L198">                rtb = x2;</span>
             }
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            for (int j = 0; j &lt; JMAX; j++) {</span>
-<span class="fc" id="L202">                dx *= 0.5;</span>
-<span class="fc" id="L203">                xmid = rtb + dx;</span>
-<span class="fc" id="L204">                fmid = listener.evaluate(xmid);</span>
-<span class="fc bfc" id="L205" title="All 2 branches covered.">                if (fmid &lt;= 0.0) {</span>
-<span class="fc" id="L206">                    rtb = xmid;</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            for (int j = 0; j &lt; JMAX; j++) {</span>
+<span class="fc" id="L201">                dx *= 0.5;</span>
+<span class="fc" id="L202">                xmid = rtb + dx;</span>
+<span class="fc" id="L203">                fmid = listener.evaluate(xmid);</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">                if (fmid &lt;= 0.0) {</span>
+<span class="fc" id="L205">                    rtb = xmid;</span>
                 }
-<span class="pc bpc" id="L208" title="1 of 4 branches missed.">                if (Math.abs(dx) &lt; xacc || fmid == 0.0) {</span>
+<span class="pc bpc" id="L207" title="1 of 4 branches missed.">                if (Math.abs(dx) &lt; xacc || fmid == 0.0) {</span>
                     // result obtained
-<span class="fc" id="L210">                    root = rtb;</span>
-<span class="fc" id="L211">                    rootAvailable = true;</span>
-<span class="fc" id="L212">                    locked = false;</span>
-<span class="fc" id="L213">                    return;</span>
+<span class="fc" id="L209">                    root = rtb;</span>
+<span class="fc" id="L210">                    rootAvailable = true;</span>
+<span class="fc" id="L211">                    locked = false;</span>
+<span class="fc" id="L212">                    return;</span>
                 }
             }
-<span class="nc" id="L216">        } catch (final EvaluationException e) {</span>
-<span class="nc" id="L217">            throw new RootEstimationException(e);</span>
+<span class="nc" id="L215">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L216">            throw new RootEstimationException(e);</span>
         } finally {
-<span class="fc" id="L219">            locked = false;</span>
+<span class="fc" id="L218">            locked = false;</span>
         }
         // too many iterations and error exceeds desired tolerance
-<span class="nc" id="L222">        throw new RootEstimationException();</span>
+<span class="nc" id="L221">        throw new RootEstimationException();</span>
     }
 
     /**
@@ -232,7 +231,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L235" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+<span class="pc bpc" id="L234" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

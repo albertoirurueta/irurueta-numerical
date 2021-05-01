@@ -24,7 +24,6 @@ package com.irurueta.numerical;
  * This implementation is more accurate although slower than
  * GradientEstimator.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class SymmetricGradientEstimator extends GradientEstimator {
 
     /**
@@ -44,8 +43,8 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      */
     public SymmetricGradientEstimator(
             final MultiDimensionFunctionEvaluatorListener listener) {
-<span class="fc" id="L47">        super(listener);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L46">        super(listener);</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Sets estimated gradient in provided result array of a multidimensional
@@ -61,21 +60,20 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      *                                  not equal.
      */
     @Override
-    @SuppressWarnings(&quot;Duplicates&quot;)
     public void gradient(final double[] point, final double[] result)
             throws EvaluationException {
-<span class="fc" id="L67">        final int n = point.length;</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (result.length != n) {</span>
-<span class="nc" id="L69">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L65">        final int n = point.length;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (result.length != n) {</span>
+<span class="nc" id="L67">            throw new IllegalArgumentException();</span>
         }
 
-<span class="pc bpc" id="L72" title="1 of 4 branches missed.">        if (xh1 == null || xh1.length != n) {</span>
-<span class="fc" id="L73">            xh1 = new double[n];</span>
-<span class="fc" id="L74">            System.arraycopy(point, 0, xh1, 0, n);</span>
+<span class="pc bpc" id="L70" title="1 of 4 branches missed.">        if (xh1 == null || xh1.length != n) {</span>
+<span class="fc" id="L71">            xh1 = new double[n];</span>
+<span class="fc" id="L72">            System.arraycopy(point, 0, xh1, 0, n);</span>
         }
-<span class="pc bpc" id="L76" title="1 of 4 branches missed.">        if (xh2 == null || xh2.length != n) {</span>
-<span class="fc" id="L77">            xh2 = new double[n];</span>
-<span class="fc" id="L78">            System.arraycopy(point, 0, xh2, 0, n);</span>
+<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (xh2 == null || xh2.length != n) {</span>
+<span class="fc" id="L75">            xh2 = new double[n];</span>
+<span class="fc" id="L76">            System.arraycopy(point, 0, xh2, 0, n);</span>
         }
 
         double temp;
@@ -86,31 +84,31 @@ public class SymmetricGradientEstimator extends GradientEstimator {
         double fh1;
         double fh2;
 
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L90">            temp = point[j];</span>
-<span class="fc" id="L91">            h = EPS * Math.abs(temp);</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
-                //Trick to reduce finite-precision error
-<span class="nc" id="L94">                h = EPS;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L88">            temp = point[j];</span>
+<span class="fc" id="L89">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+                // Trick to reduce finite-precision error
+<span class="nc" id="L92">                h = EPS;</span>
             }
-<span class="fc" id="L96">            xh1[j] = temp + h;</span>
-<span class="fc" id="L97">            xh2[j] = temp - h;</span>
+<span class="fc" id="L94">            xh1[j] = temp + h;</span>
+<span class="fc" id="L95">            xh2[j] = temp - h;</span>
             // because of machine precision h could be different in both cases
 
-<span class="fc" id="L100">            h1 = xh1[j] - temp;</span>
-<span class="fc" id="L101">            h2 = temp - xh2[j];</span>
+<span class="fc" id="L98">            h1 = xh1[j] - temp;</span>
+<span class="fc" id="L99">            h2 = temp - xh2[j];</span>
 
             // this is more or less equal to 2.0 * h
-<span class="fc" id="L104">            hh = h1 + h2;</span>
+<span class="fc" id="L102">            hh = h1 + h2;</span>
 
-<span class="fc" id="L106">            fh1 = listener.evaluate(xh1);</span>
-<span class="fc" id="L107">            fh2 = listener.evaluate(xh2);</span>
+<span class="fc" id="L104">            fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L105">            fh2 = listener.evaluate(xh2);</span>
 
-<span class="fc" id="L109">            xh1[j] = temp;</span>
-<span class="fc" id="L110">            xh2[j] = temp;</span>
+<span class="fc" id="L107">            xh1[j] = temp;</span>
+<span class="fc" id="L108">            xh2[j] = temp;</span>
 
-<span class="fc" id="L112">            result[j] = (fh1 - fh2) / hh;</span>
+<span class="fc" id="L110">            result[j] = (fh1 - fh2) / hh;</span>
         }
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L112">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

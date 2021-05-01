@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>             estimator.getRoot();
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>             fail(<span class="jxr_string">"NotAvailableException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>         } <strong class="jxr_keyword">catch</strong> (NotAvailableException ignore) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> NotAvailableException ignore) {
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         }
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>         assertEquals(estimator.getTolerance(),
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>                 RidderSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
@@ -294,7 +294,7 @@
 <a class="jxr_linenumber" name="L286" href="#L286">286</a>                 2.0 / 3.0 * MAX_EVAL_POINT);
 <a class="jxr_linenumber" name="L287" href="#L287">287</a>         root3 = randomizer.nextDouble(2.0 / 3.0 * MAX_EVAL_POINT, MAX_EVAL_POINT);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>         <em class="jxr_comment">// instantiate estimator with brackets for acuracy (otherwise estimation</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>         <em class="jxr_comment">// instantiate estimator with brackets for accuracy (otherwise estimation</em>
 <a class="jxr_linenumber" name="L290" href="#L290">290</a>         <em class="jxr_comment">// might fail)</em>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a>         <strong class="jxr_keyword">final</strong> RidderSingleRootEstimator estimator = <strong class="jxr_keyword">new</strong> RidderSingleRootEstimator();
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 

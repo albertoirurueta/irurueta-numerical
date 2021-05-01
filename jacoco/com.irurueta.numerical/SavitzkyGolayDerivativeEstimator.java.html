@@ -34,7 +34,6 @@ import com.irurueta.algebra.Utils;
  * polynomial, this method might be less accurate when large values are involved
  * due to limited machine precision.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
 
     /**
@@ -49,8 +48,8 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
      */
     public SavitzkyGolayDerivativeEstimator(
             final SingleDimensionFunctionEvaluatorListener listener) {
-<span class="fc" id="L52">        super(listener);</span>
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L51">        super(listener);</span>
+<span class="fc" id="L52">    }</span>
 
     /**
      * Computes the function derivative at provided point x.
@@ -64,18 +63,18 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
     @SuppressWarnings(&quot;Duplicates&quot;)
     public double derivative(final double x) throws EvaluationException {
         // fit a polynomial of degree 2 by evaluating function at x-h, x and x+h
-<span class="fc" id="L67">        double h = EPS * Math.abs(x);</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
+<span class="fc" id="L66">        double h = EPS * Math.abs(x);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
             // Trick to reduce finite-precision error
-<span class="nc" id="L70">            h = EPS;</span>
+<span class="nc" id="L69">            h = EPS;</span>
         }
 
-<span class="fc" id="L73">        final double xh1 = x + h;</span>
-<span class="fc" id="L74">        final double xh2 = x - h;</span>
+<span class="fc" id="L72">        final double xh1 = x + h;</span>
+<span class="fc" id="L73">        final double xh2 = x - h;</span>
 
-<span class="fc" id="L76">        final double f = listener.evaluate(x);</span>
-<span class="fc" id="L77">        final double fh1 = listener.evaluate(xh1);</span>
-<span class="fc" id="L78">        final double fh2 = listener.evaluate(xh2);</span>
+<span class="fc" id="L75">        final double f = listener.evaluate(x);</span>
+<span class="fc" id="L76">        final double fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L77">        final double fh2 = listener.evaluate(xh2);</span>
 
         // express the problem as:
         // a * x^2 + b * x + c = f(x)
@@ -86,55 +85,55 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
         final double aParam;
         final double bParam;
         try {
-<span class="fc" id="L89">            a = new Matrix(N_POINTS, N_POINTS);</span>
+<span class="fc" id="L88">            a = new Matrix(N_POINTS, N_POINTS);</span>
 
-<span class="fc" id="L91">            a.setElementAt(0, 0, x * x);</span>
-<span class="fc" id="L92">            a.setElementAt(1, 0, xh1 * xh1);</span>
-<span class="fc" id="L93">            a.setElementAt(2, 0, xh2 * xh2);</span>
+<span class="fc" id="L90">            a.setElementAt(0, 0, x * x);</span>
+<span class="fc" id="L91">            a.setElementAt(1, 0, xh1 * xh1);</span>
+<span class="fc" id="L92">            a.setElementAt(2, 0, xh2 * xh2);</span>
 
-<span class="fc" id="L95">            a.setElementAt(0, 1, x);</span>
-<span class="fc" id="L96">            a.setElementAt(1, 1, xh1);</span>
-<span class="fc" id="L97">            a.setElementAt(2, 1, xh2);</span>
+<span class="fc" id="L94">            a.setElementAt(0, 1, x);</span>
+<span class="fc" id="L95">            a.setElementAt(1, 1, xh1);</span>
+<span class="fc" id="L96">            a.setElementAt(2, 1, xh2);</span>
 
-<span class="fc" id="L99">            a.setElementAt(0, 2, 1.0);</span>
-<span class="fc" id="L100">            a.setElementAt(1, 2, 1.0);</span>
-<span class="fc" id="L101">            a.setElementAt(2, 2, 1.0);</span>
+<span class="fc" id="L98">            a.setElementAt(0, 2, 1.0);</span>
+<span class="fc" id="L99">            a.setElementAt(1, 2, 1.0);</span>
+<span class="fc" id="L100">            a.setElementAt(2, 2, 1.0);</span>
 
-<span class="fc" id="L103">            final double[] b = new double[N_POINTS];</span>
+<span class="fc" id="L102">            final double[] b = new double[N_POINTS];</span>
 
-
-            // normalize to increase accuracy
-<span class="fc" id="L107">            final double normA = Utils.normF(a);</span>
-<span class="fc" id="L108">            a.multiplyByScalar(1.0 / normA);</span>
-
-<span class="fc" id="L110">            b[0] = f;</span>
-<span class="fc" id="L111">            b[1] = fh1;</span>
-<span class="fc" id="L112">            b[2] = fh2;</span>
 
             // normalize to increase accuracy
-<span class="fc" id="L115">            ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);</span>
+<span class="fc" id="L106">            final double normA = Utils.normF(a);</span>
+<span class="fc" id="L107">            a.multiplyByScalar(1.0 / normA);</span>
 
-<span class="fc" id="L117">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+<span class="fc" id="L109">            b[0] = f;</span>
+<span class="fc" id="L110">            b[1] = fh1;</span>
+<span class="fc" id="L111">            b[2] = fh2;</span>
 
-<span class="fc" id="L119">            decomposer.decompose();</span>
+            // normalize to increase accuracy
+<span class="fc" id="L114">            ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);</span>
+
+<span class="fc" id="L116">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+
+<span class="fc" id="L118">            decomposer.decompose();</span>
 
             // now solve the system of equations in Least Mean Squared Error
             // because SVD allows the system of equations to be solved using the
             // pseudo-inverse
-<span class="fc" id="L124">            final double[] params = decomposer.solve(b);</span>
-<span class="fc" id="L125">            aParam = params[0];</span>
-<span class="fc" id="L126">            bParam = params[1];</span>
+<span class="fc" id="L123">            final double[] params = decomposer.solve(b);</span>
+<span class="fc" id="L124">            aParam = params[0];</span>
+<span class="fc" id="L125">            bParam = params[1];</span>
 
-<span class="nc" id="L128">        } catch (final AlgebraException e) {</span>
-<span class="nc" id="L129">            return Double.NaN;</span>
-<span class="fc" id="L130">        }</span>
+<span class="nc" id="L127">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L128">            return Double.NaN;</span>
+<span class="fc" id="L129">        }</span>
 
         // and c = params[2], but we don't need it
 
         // because we have fitted the function into a polynomial that has
         // expression: a * x^2 + b * x + c, then its derivative is:
         // 2.0 * a * x + b, therefore:
-<span class="fc" id="L137">        return 2.0 * aParam * x + bParam;</span>
+<span class="fc" id="L136">        return 2.0 * aParam * x + bParam;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

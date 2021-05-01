@@ -173,20 +173,19 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  size
      */
-    @SuppressWarnings(&quot;Duplicates&quot;)
     public final void setInputData(final Matrix x, final double[] y, final double sig) {
-<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (x.getRows() != y.length) {</span>
-<span class="fc" id="L179">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (x.getRows() != y.length) {</span>
+<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L182">        this.x = x;</span>
-<span class="fc" id="L183">        this.y = y;</span>
+<span class="fc" id="L181">        this.x = x;</span>
+<span class="fc" id="L182">        this.y = y;</span>
 
-<span class="fc" id="L185">        this.sig = new double[y.length];</span>
-<span class="fc" id="L186">        Arrays.fill(this.sig, sig);</span>
+<span class="fc" id="L184">        this.sig = new double[y.length];</span>
+<span class="fc" id="L185">        Arrays.fill(this.sig, sig);</span>
 
-<span class="fc" id="L188">        ndat = y.length;</span>
-<span class="fc" id="L189">    }</span>
+<span class="fc" id="L187">        ndat = y.length;</span>
+<span class="fc" id="L188">    }</span>
 
     /**
      * Returns estimated parameters of linear single dimensional function
@@ -194,7 +193,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @return estimated parameters
      */
     public double[] getA() {
-<span class="fc" id="L197">        return a;</span>
+<span class="fc" id="L196">        return a;</span>
     }
 
     /**
@@ -204,7 +203,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @return covariance of estimated parameters
      */
     public Matrix getCovar() {
-<span class="fc" id="L207">        return covar;</span>
+<span class="fc" id="L206">        return covar;</span>
     }
 
     /**
@@ -213,7 +212,7 @@ public abstract class MultiDimensionFitter extends Fitter {
      * @return estimated chi square value of input data
      */
     public double getChisq() {
-<span class="fc" id="L216">        return chisq;</span>
+<span class="fc" id="L215">        return chisq;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -146,17 +146,16 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    @SuppressWarnings(&quot;Duplicates&quot;)
     public void setProgressDelta(final float progressDelta) throws LockedException {
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L152">            throw new LockedException();</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L151">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L154" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L153" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L156">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L155">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L158">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L157">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L158">    }</span>
 
     /**
      * Robustly estimates an instance of T.
@@ -191,10 +190,10 @@ public abstract class RobustEstimator&lt;T&gt; {
      * @return true if ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L195">            return mListener.isReady();</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L194">            return mListener.isReady();</span>
         } else {
-<span class="fc" id="L197">            return false;</span>
+<span class="fc" id="L196">            return false;</span>
         }
     }
 }

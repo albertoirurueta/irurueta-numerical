@@ -57,7 +57,6 @@ import java.io.Serializable;
  * current system state neighborhood, in this case A, B, H (and, probably,
  * Q and R) should be updated on every step.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class KalmanFilter implements Serializable {
 
     /**
@@ -139,7 +138,7 @@ public class KalmanFilter implements Serializable {
      */
     private Matrix errorCovPost;
 
-    // temporary matrices to be reused to avoid unnecessary reallocations
+    // temporary matrices to be reused to avoid unnecessary re-allocations
 
     /**
      * Temporary matrix 1.
@@ -195,65 +194,65 @@ public class KalmanFilter implements Serializable {
      * @throws SignalProcessingException if something else fails.
      */
     public KalmanFilter(final int dynamParams, final int measureParams, int controlParams)
-<span class="fc" id="L198">            throws SignalProcessingException {</span>
+<span class="fc" id="L197">            throws SignalProcessingException {</span>
 
-<span class="fc bfc" id="L200" title="All 4 branches covered.">        if (dynamParams &lt;= 0 || measureParams &lt;= 0) {</span>
-<span class="fc" id="L201">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L199" title="All 4 branches covered.">        if (dynamParams &lt;= 0 || measureParams &lt;= 0) {</span>
+<span class="fc" id="L200">            throw new IllegalArgumentException(</span>
                     &quot;Kalman filter: Illegal dimensions&quot;);
         }
 
-<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (controlParams &lt; 0) {</span>
-<span class="fc" id="L206">            controlParams = dynamParams;</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (controlParams &lt; 0) {</span>
+<span class="fc" id="L205">            controlParams = dynamParams;</span>
         }
 
         // init
-<span class="fc" id="L210">        dp = dynamParams;</span>
-<span class="fc" id="L211">        mp = measureParams;</span>
-<span class="fc" id="L212">        cp = controlParams;</span>
+<span class="fc" id="L209">        dp = dynamParams;</span>
+<span class="fc" id="L210">        mp = measureParams;</span>
+<span class="fc" id="L211">        cp = controlParams;</span>
 
         try {
-<span class="fc" id="L215">            statePre = new Matrix(dp, 1);</span>
+<span class="fc" id="L214">            statePre = new Matrix(dp, 1);</span>
 
             // following variables must be initialized properly in advance
-<span class="fc" id="L218">            statePost = new Matrix(dp, 1);</span>
-<span class="fc" id="L219">            transitionMatrix = Matrix.identity(dp, dp);</span>
+<span class="fc" id="L217">            statePost = new Matrix(dp, 1);</span>
+<span class="fc" id="L218">            transitionMatrix = Matrix.identity(dp, dp);</span>
 
-<span class="fc" id="L221">            processNoiseCov = Matrix.identity(dp, dp);</span>
-<span class="fc" id="L222">            processNoiseCov.multiplyByScalar(DEFAULT_PROCESS_NOISE_VARIANCE);</span>
+<span class="fc" id="L220">            processNoiseCov = Matrix.identity(dp, dp);</span>
+<span class="fc" id="L221">            processNoiseCov.multiplyByScalar(DEFAULT_PROCESS_NOISE_VARIANCE);</span>
 
-<span class="fc" id="L224">            measurementMatrix = Matrix.identity(mp, dp);</span>
-<span class="fc" id="L225">            measurementNoiseCov = Matrix.identity(mp, mp);</span>
-<span class="fc" id="L226">            measurementNoiseCov.multiplyByScalar(</span>
+<span class="fc" id="L223">            measurementMatrix = Matrix.identity(mp, dp);</span>
+<span class="fc" id="L224">            measurementNoiseCov = Matrix.identity(mp, mp);</span>
+<span class="fc" id="L225">            measurementNoiseCov.multiplyByScalar(</span>
                     DEFAULT_MEASUREMENT_NOISE_VARIANCE);
 
-<span class="fc" id="L229">            errorCovPre = new Matrix(dp, dp);</span>
-<span class="fc" id="L230">            errorCovPost = Matrix.identity(dp, dp);</span>
+<span class="fc" id="L228">            errorCovPre = new Matrix(dp, dp);</span>
+<span class="fc" id="L229">            errorCovPost = Matrix.identity(dp, dp);</span>
 
-<span class="fc" id="L232">            gain = new Matrix(dp, mp);</span>
+<span class="fc" id="L231">            gain = new Matrix(dp, mp);</span>
 
-<span class="fc bfc" id="L234" title="All 2 branches covered.">            if (cp &gt; 0) {</span>
-<span class="fc" id="L235">                controlMatrix = new Matrix(dp, cp);</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">            if (cp &gt; 0) {</span>
+<span class="fc" id="L234">                controlMatrix = new Matrix(dp, cp);</span>
             } else {
                 // no control parameters
-<span class="fc" id="L238">                controlMatrix = null;</span>
+<span class="fc" id="L237">                controlMatrix = null;</span>
             }
 
-<span class="fc" id="L241">            temp1 = new Matrix(dp, dp);</span>
-<span class="fc" id="L242">            temp2 = new Matrix(mp, dp);</span>
-<span class="fc" id="L243">            temp3 = new Matrix(mp, mp);</span>
-<span class="fc" id="L244">            temp4 = new Matrix(mp, dp);</span>
-<span class="fc" id="L245">            temp5 = new Matrix(mp, 1);</span>
+<span class="fc" id="L240">            temp1 = new Matrix(dp, dp);</span>
+<span class="fc" id="L241">            temp2 = new Matrix(mp, dp);</span>
+<span class="fc" id="L242">            temp3 = new Matrix(mp, mp);</span>
+<span class="fc" id="L243">            temp4 = new Matrix(mp, dp);</span>
+<span class="fc" id="L244">            temp5 = new Matrix(mp, 1);</span>
 
-<span class="fc bfc" id="L247" title="All 2 branches covered.">            if (cp &gt; 0) {</span>
-<span class="fc" id="L248">                temp6 = new Matrix(dp, 1);</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">            if (cp &gt; 0) {</span>
+<span class="fc" id="L247">                temp6 = new Matrix(dp, 1);</span>
             }
 
-<span class="fc" id="L251">            temp7 = new Matrix(dp, dp);</span>
-<span class="fc" id="L252">            temp8 = new Matrix(dp, mp);</span>
-<span class="nc" id="L253">        } catch (final AlgebraException ex) {</span>
-<span class="nc" id="L254">            throw new SignalProcessingException(ex);</span>
-<span class="fc" id="L255">        }</span>
-<span class="fc" id="L256">    }</span>
+<span class="fc" id="L250">            temp7 = new Matrix(dp, dp);</span>
+<span class="fc" id="L251">            temp8 = new Matrix(dp, mp);</span>
+<span class="nc" id="L252">        } catch (final AlgebraException ex) {</span>
+<span class="nc" id="L253">            throw new SignalProcessingException(ex);</span>
+<span class="fc" id="L254">        }</span>
+<span class="fc" id="L255">    }</span>
 
     /**
      * Constructor in case of no control parameters.
@@ -267,18 +266,18 @@ public class KalmanFilter implements Serializable {
      */
     public KalmanFilter(final int dynamParams, final int measureParams)
             throws SignalProcessingException {
-<span class="fc" id="L270">        this(dynamParams, measureParams, 0);</span>
-<span class="fc" id="L271">    }</span>
+<span class="fc" id="L269">        this(dynamParams, measureParams, 0);</span>
+<span class="fc" id="L270">    }</span>
 
     /**
-     * Estimates subsequent model state without control parameteres.
+     * Estimates subsequent model state without control parameters.
      *
      * @return estimated state.
      * @throws SignalProcessingException if something fails.
      * @see #predict(Matrix)
      */
     public Matrix predict() throws SignalProcessingException {
-<span class="fc" id="L281">        return predict(null);</span>
+<span class="fc" id="L280">        return predict(null);</span>
     }
 
     /**
@@ -303,7 +302,7 @@ public class KalmanFilter implements Serializable {
      * }
      * &lt;/pre&gt;
      *
-     * @param control control vector (u&lt;sub&gt;k&lt;/sub&gt;), shoud be null if there is
+     * @param control control vector (u&lt;sub&gt;k&lt;/sub&gt;), should be null if there is
      *                no external control (&lt;code&gt;controlParams&lt;/code&gt;=0). If provided and
      *                filter uses control parameters, it must be a 1 column matrix having
      *                cp rows (where cp = number of control parameters), otherwise a
@@ -316,25 +315,25 @@ public class KalmanFilter implements Serializable {
         try {
             // (1) Project the state ahead
             // update the state: x'(k) = A*x(k)
-<span class="fc" id="L319">            transitionMatrix.multiply(statePost, statePre);</span>
-<span class="pc bpc" id="L320" title="3 of 4 branches missed.">            if (control != null &amp;&amp; cp &gt; 0) {</span>
+<span class="fc" id="L318">            transitionMatrix.multiply(statePost, statePre);</span>
+<span class="pc bpc" id="L319" title="3 of 4 branches missed.">            if (control != null &amp;&amp; cp &gt; 0) {</span>
                 // x'(k) = x'(k) + B*u(k)
-<span class="nc" id="L322">                controlMatrix.multiply(control, temp6);</span>
-<span class="nc" id="L323">                statePre.add(temp6);</span>
+<span class="nc" id="L321">                controlMatrix.multiply(control, temp6);</span>
+<span class="nc" id="L322">                statePre.add(temp6);</span>
             }
 
             // (2) Project the error covariance ahead
             // update error covariance matrices: temp1 = A * P(k)
-<span class="fc" id="L328">            transitionMatrix.multiply(errorCovPost, temp1);</span>
+<span class="fc" id="L327">            transitionMatrix.multiply(errorCovPost, temp1);</span>
             // P'(k) = temp1 * At + Q
-<span class="fc" id="L330">            transitionMatrix.transpose(temp7);</span>
-<span class="fc" id="L331">            temp1.multiply(temp7);</span>
-<span class="fc" id="L332">            temp1.add(processNoiseCov);</span>
-<span class="fc" id="L333">            errorCovPre = temp1;</span>
+<span class="fc" id="L329">            transitionMatrix.transpose(temp7);</span>
+<span class="fc" id="L330">            temp1.multiply(temp7);</span>
+<span class="fc" id="L331">            temp1.add(processNoiseCov);</span>
+<span class="fc" id="L332">            errorCovPre = temp1;</span>
 
-<span class="fc" id="L335">            return statePre;</span>
-<span class="nc" id="L336">        } catch (final AlgebraException e) {</span>
-<span class="nc" id="L337">            throw new SignalProcessingException(e);</span>
+<span class="fc" id="L334">            return statePre;</span>
+<span class="nc" id="L335">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L336">            throw new SignalProcessingException(e);</span>
         }
     }
 
@@ -348,7 +347,7 @@ public class KalmanFilter implements Serializable {
      * x&lt;sub&gt;k&lt;/sub&gt;=x'&lt;sub&gt;k&lt;/sub&gt;+K&lt;sub&gt;k&lt;/sub&gt;*(z&lt;sub&gt;k&lt;/sub&gt;-H*x'&lt;sub&gt;k&lt;/sub&gt;)
      * P&lt;sub&gt;k&lt;/sub&gt;=(I-K&lt;sub&gt;k&lt;/sub&gt;*H)*P'&lt;sub&gt;k&lt;/sub&gt;
      * where
-     * z&lt;sub&gt;k&lt;/sub&gt; - given measurement (&lt;code&gt;mesurement&lt;/code&gt; parameter)
+     * z&lt;sub&gt;k&lt;/sub&gt; - given measurement (&lt;code&gt;measurement&lt;/code&gt; parameter)
      * K&lt;sub&gt;k&lt;/sub&gt; - Kalman &quot;gain&quot; matrix.
      * }
      * &lt;/pre&gt;
@@ -357,7 +356,7 @@ public class KalmanFilter implements Serializable {
      * it on output.
      *
      * @param measurement matrix containing the measurement vector. Matrix must
-     *                    have 1 column and mp rows (mp = measurement paramenters).
+     *                    have 1 column and mp rows (mp = measurement parameters).
      * @return adjusted model state.
      * @throws SignalProcessingException if something fails.
      */
@@ -365,41 +364,41 @@ public class KalmanFilter implements Serializable {
         try {
             // (1) compute the Kalman gain
             // temp2 = H*P'(k)
-<span class="fc" id="L368">            measurementMatrix.multiply(errorCovPre, temp2);</span>
+<span class="fc" id="L367">            measurementMatrix.multiply(errorCovPre, temp2);</span>
 
             // temp3 = temp2*Ht + R
-<span class="fc" id="L371">            measurementMatrix.transpose(temp8);</span>
-<span class="fc" id="L372">            temp2.multiply(temp8, temp3);</span>
-<span class="fc" id="L373">            temp3.add(measurementNoiseCov);</span>
+<span class="fc" id="L370">            measurementMatrix.transpose(temp8);</span>
+<span class="fc" id="L371">            temp2.multiply(temp8, temp3);</span>
+<span class="fc" id="L372">            temp3.add(measurementNoiseCov);</span>
 
             // temp4 = inv(temp3)*temp2 = Kt(k)
             // which is also equivalent to:
             // temp4 = temp3.svd().getU().times(temp2)
-<span class="fc" id="L378">            Utils.solve(temp3, temp2, temp4);</span>
+<span class="fc" id="L377">            Utils.solve(temp3, temp2, temp4);</span>
 
             // K(k)
-<span class="fc" id="L381">            temp4.transpose();</span>
-<span class="fc" id="L382">            gain = temp4;</span>
+<span class="fc" id="L380">            temp4.transpose();</span>
+<span class="fc" id="L381">            gain = temp4;</span>
 
             // (2) Update estimate with measurement z(k)
             //temp5 = z(k) - H*x'(k)
-<span class="fc" id="L386">            measurementMatrix.multiply(statePre, temp5);</span>
-<span class="fc" id="L387">            temp5.multiplyByScalar(-1.0);</span>
-<span class="fc" id="L388">            temp5.add(measurement);</span>
+<span class="fc" id="L385">            measurementMatrix.multiply(statePre, temp5);</span>
+<span class="fc" id="L386">            temp5.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L387">            temp5.add(measurement);</span>
 
             // x(k) = x'(k) + K(k)*temp5
-<span class="fc" id="L391">            gain.multiply(temp5, statePost);</span>
-<span class="fc" id="L392">            statePost.add(statePre);</span>
+<span class="fc" id="L390">            gain.multiply(temp5, statePost);</span>
+<span class="fc" id="L391">            statePost.add(statePre);</span>
 
             // (3) Update the error covariance
             // P(x) = P'(k) - K(k)*temp2
-<span class="fc" id="L396">            gain.multiply(temp2, errorCovPost);</span>
-<span class="fc" id="L397">            errorCovPost.multiplyByScalar(-1.0);</span>
-<span class="fc" id="L398">            errorCovPost.add(errorCovPre);</span>
+<span class="fc" id="L395">            gain.multiply(temp2, errorCovPost);</span>
+<span class="fc" id="L396">            errorCovPost.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L397">            errorCovPost.add(errorCovPre);</span>
 
-<span class="fc" id="L400">            return statePost;</span>
-<span class="nc" id="L401">        } catch (final AlgebraException e) {</span>
-<span class="nc" id="L402">            throw new SignalProcessingException(e);</span>
+<span class="fc" id="L399">            return statePost;</span>
+<span class="nc" id="L400">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L401">            throw new SignalProcessingException(e);</span>
         }
     }
 
@@ -409,7 +408,7 @@ public class KalmanFilter implements Serializable {
      * @return number of measurement vector dimensions (measure parameters)
      */
     public int getMeasureParameters() {
-<span class="fc" id="L412">        return mp;</span>
+<span class="fc" id="L411">        return mp;</span>
     }
 
     /**
@@ -426,29 +425,29 @@ public class KalmanFilter implements Serializable {
      */
     public void setMeasureParameters(final int measureParameters)
             throws SignalProcessingException {
-<span class="fc bfc" id="L429" title="All 2 branches covered.">        if (measureParameters &lt;= 0) {</span>
-<span class="fc" id="L430">            throw new IllegalArgumentException(&quot;&quot;);</span>
+<span class="fc bfc" id="L428" title="All 2 branches covered.">        if (measureParameters &lt;= 0) {</span>
+<span class="fc" id="L429">            throw new IllegalArgumentException(&quot;&quot;);</span>
         }
-<span class="fc" id="L432">        mp = measureParameters;</span>
+<span class="fc" id="L431">        mp = measureParameters;</span>
 
         try {
-<span class="fc" id="L435">            measurementMatrix = Matrix.identity(mp, dp);</span>
-<span class="fc" id="L436">            measurementNoiseCov = Matrix.identity(mp, mp);</span>
-<span class="fc" id="L437">            measurementNoiseCov.multiplyByScalar(</span>
+<span class="fc" id="L434">            measurementMatrix = Matrix.identity(mp, dp);</span>
+<span class="fc" id="L435">            measurementNoiseCov = Matrix.identity(mp, mp);</span>
+<span class="fc" id="L436">            measurementNoiseCov.multiplyByScalar(</span>
                     DEFAULT_MEASUREMENT_NOISE_VARIANCE);
 
-<span class="fc" id="L440">            gain = new Matrix(dp, mp);</span>
+<span class="fc" id="L439">            gain = new Matrix(dp, mp);</span>
 
-<span class="fc" id="L442">            temp2 = new Matrix(mp, dp);</span>
-<span class="fc" id="L443">            temp3 = new Matrix(mp, mp);</span>
-<span class="fc" id="L444">            temp4 = new Matrix(mp, dp);</span>
-<span class="fc" id="L445">            temp5 = new Matrix(mp, 1);</span>
+<span class="fc" id="L441">            temp2 = new Matrix(mp, dp);</span>
+<span class="fc" id="L442">            temp3 = new Matrix(mp, mp);</span>
+<span class="fc" id="L443">            temp4 = new Matrix(mp, dp);</span>
+<span class="fc" id="L444">            temp5 = new Matrix(mp, 1);</span>
 
-<span class="fc" id="L447">            temp8 = new Matrix(dp, mp);</span>
-<span class="nc" id="L448">        } catch (final WrongSizeException e) {</span>
-<span class="nc" id="L449">            throw new SignalProcessingException(e);</span>
-<span class="fc" id="L450">        }</span>
-<span class="fc" id="L451">    }</span>
+<span class="fc" id="L446">            temp8 = new Matrix(dp, mp);</span>
+<span class="nc" id="L447">        } catch (final WrongSizeException e) {</span>
+<span class="nc" id="L448">            throw new SignalProcessingException(e);</span>
+<span class="fc" id="L449">        }</span>
+<span class="fc" id="L450">    }</span>
 
     /**
      * Obtains the number of state vector dimensions (dynamic parameters).
@@ -456,7 +455,7 @@ public class KalmanFilter implements Serializable {
      * @return number of state vector dimensions (dynamic parameters)
      */
     public int getDynamicParameters() {
-<span class="fc" id="L459">        return dp;</span>
+<span class="fc" id="L458">        return dp;</span>
     }
 
     /**
@@ -465,7 +464,7 @@ public class KalmanFilter implements Serializable {
      * @return number of control vector dimensions (control parameters)
      */
     public int getControlParameters() {
-<span class="fc" id="L468">        return cp;</span>
+<span class="fc" id="L467">        return cp;</span>
     }
 
     /**
@@ -476,7 +475,7 @@ public class KalmanFilter implements Serializable {
      * @return predicted state
      */
     public Matrix getStatePre() {
-<span class="fc" id="L479">        return statePre;</span>
+<span class="fc" id="L478">        return statePre;</span>
     }
 
     /**
@@ -487,14 +486,14 @@ public class KalmanFilter implements Serializable {
      *
      * @param statePre new predicted state.
      * @throws IllegalArgumentException if provided matrix does not have 1
-     *                                  columnd and dp rows
+     *                                  column and dp rows
      */
     public void setStatePre(final Matrix statePre) {
-<span class="fc bfc" id="L493" title="All 4 branches covered.">        if (statePre.getColumns() != 1 || statePre.getRows() != dp) {</span>
-<span class="fc" id="L494">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L492" title="All 4 branches covered.">        if (statePre.getColumns() != 1 || statePre.getRows() != dp) {</span>
+<span class="fc" id="L493">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L496">        this.statePre = statePre;</span>
-<span class="fc" id="L497">    }</span>
+<span class="fc" id="L495">        this.statePre = statePre;</span>
+<span class="fc" id="L496">    }</span>
 
     /**
      * Obtains corrected state (x(k)): x(k)=x'(k)+K(k)*(z(k)-H*x'(k)).
@@ -504,7 +503,7 @@ public class KalmanFilter implements Serializable {
      * @return corrected state
      */
     public Matrix getStatePost() {
-<span class="fc" id="L507">        return statePost;</span>
+<span class="fc" id="L506">        return statePost;</span>
     }
 
     /**
@@ -515,14 +514,14 @@ public class KalmanFilter implements Serializable {
      *
      * @param statePost new corrected state
      * @throws IllegalArgumentException if provided matrix does not have 1
-     *                                  columnd and dp rows
+     *                                  column and dp rows
      */
     public void setStatePost(final Matrix statePost) {
-<span class="fc bfc" id="L521" title="All 4 branches covered.">        if (statePost.getColumns() != 1 || statePost.getRows() != dp) {</span>
-<span class="fc" id="L522">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L520" title="All 4 branches covered.">        if (statePost.getColumns() != 1 || statePost.getRows() != dp) {</span>
+<span class="fc" id="L521">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L524">        this.statePost = statePost;</span>
-<span class="fc" id="L525">    }</span>
+<span class="fc" id="L523">        this.statePost = statePost;</span>
+<span class="fc" id="L524">    }</span>
 
     /**
      * Obtains the state transition matrix (A).
@@ -534,13 +533,13 @@ public class KalmanFilter implements Serializable {
      * @return state transition matrix
      */
     public Matrix getTransitionMatrix() {
-<span class="fc" id="L537">        return transitionMatrix;</span>
+<span class="fc" id="L536">        return transitionMatrix;</span>
     }
 
     /**
      * Sets the state transition matrix (A).
      * It must be a square matrix having dp rows and columns, where dp is equal
-     * to the number of dynamic parmeters set for this instance.
+     * to the number of dynamic parameters set for this instance.
      * This matrix defines how the system transitions to a new state for a given
      * previous state. It is used for prediction purposes.
      * This setter method can be used for initial setup purposes.
@@ -550,12 +549,12 @@ public class KalmanFilter implements Serializable {
      *                                  and columns
      */
     public void setTransitionMatrix(final Matrix transitionMatrix) {
-<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (transitionMatrix.getRows() != dp ||</span>
-<span class="fc bfc" id="L554" title="All 2 branches covered.">                transitionMatrix.getColumns() != dp) {</span>
-<span class="fc" id="L555">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L552" title="All 2 branches covered.">        if (transitionMatrix.getRows() != dp ||</span>
+<span class="fc bfc" id="L553" title="All 2 branches covered.">                transitionMatrix.getColumns() != dp) {</span>
+<span class="fc" id="L554">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L557">        this.transitionMatrix = transitionMatrix;</span>
-<span class="fc" id="L558">    }</span>
+<span class="fc" id="L556">        this.transitionMatrix = transitionMatrix;</span>
+<span class="fc" id="L557">    }</span>
 
     /**
      * Obtains the control matrix (B) (it is not used if there is no control).
@@ -565,7 +564,7 @@ public class KalmanFilter implements Serializable {
      * @return control matrix
      */
     public Matrix getControlMatrix() {
-<span class="fc" id="L568">        return controlMatrix;</span>
+<span class="fc" id="L567">        return controlMatrix;</span>
     }
 
     /**
@@ -581,17 +580,17 @@ public class KalmanFilter implements Serializable {
      *                                  rows and cp columns
      */
     public void setControlMatrix(final Matrix controlMatrix) {
-<span class="pc bpc" id="L584" title="1 of 2 branches missed.">        if (cp &gt; 0) {</span>
-<span class="pc bpc" id="L585" title="1 of 4 branches missed.">            if (controlMatrix == null || (controlMatrix.getRows() != dp ||</span>
-<span class="fc bfc" id="L586" title="All 2 branches covered.">                    controlMatrix.getColumns() != cp)) {</span>
-<span class="fc" id="L587">                throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">        if (cp &gt; 0) {</span>
+<span class="pc bpc" id="L584" title="1 of 4 branches missed.">            if (controlMatrix == null || (controlMatrix.getRows() != dp ||</span>
+<span class="fc bfc" id="L585" title="All 2 branches covered.">                    controlMatrix.getColumns() != cp)) {</span>
+<span class="fc" id="L586">                throw new IllegalArgumentException();</span>
             }
         } else {
             // control matrix cannot be set
-<span class="nc" id="L591">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L590">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L593">        this.controlMatrix = controlMatrix;</span>
-<span class="fc" id="L594">    }</span>
+<span class="fc" id="L592">        this.controlMatrix = controlMatrix;</span>
+<span class="fc" id="L593">    }</span>
 
     /**
      * Obtains measurement matrix (H).
@@ -606,7 +605,7 @@ public class KalmanFilter implements Serializable {
      * @return measurement matrix
      */
     public Matrix getMeasurementMatrix() {
-<span class="fc" id="L609">        return measurementMatrix;</span>
+<span class="fc" id="L608">        return measurementMatrix;</span>
     }
 
     /**
@@ -625,12 +624,12 @@ public class KalmanFilter implements Serializable {
      *                                  and dp columns.
      */
     public void setMeasurementMatrix(final Matrix measurementMatrix) {
-<span class="fc bfc" id="L628" title="All 2 branches covered.">        if (measurementMatrix.getRows() != mp ||</span>
-<span class="fc bfc" id="L629" title="All 2 branches covered.">                measurementMatrix.getColumns() != dp) {</span>
-<span class="fc" id="L630">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L627" title="All 2 branches covered.">        if (measurementMatrix.getRows() != mp ||</span>
+<span class="fc bfc" id="L628" title="All 2 branches covered.">                measurementMatrix.getColumns() != dp) {</span>
+<span class="fc" id="L629">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L632">        this.measurementMatrix = measurementMatrix;</span>
-<span class="fc" id="L633">    }</span>
+<span class="fc" id="L631">        this.measurementMatrix = measurementMatrix;</span>
+<span class="fc" id="L632">    }</span>
 
     /**
      * Obtains the process noise covariance matrix (Q).
@@ -642,7 +641,7 @@ public class KalmanFilter implements Serializable {
      * @return the process noise covariance matrix
      */
     public Matrix getProcessNoiseCov() {
-<span class="fc" id="L645">        return processNoiseCov;</span>
+<span class="fc" id="L644">        return processNoiseCov;</span>
     }
 
     /**
@@ -654,8 +653,8 @@ public class KalmanFilter implements Serializable {
      * for this instance of a Kalman filter.
      * This setter method can be used for initial setup purposes, however
      * typically the process noise is difficult to determine. This matrix is
-     * generally constructed intuitively so that unmodelled dynamics and
-     * parameter unvertainties are modeled as process noise generally. If
+     * generally constructed intuitively so that un-modelled dynamics and
+     * parameter uncertainties are modeled as process noise generally. If
      * the process noise is unknown, just leave the default value or provide
      * a diagonal matrix with the desired level of variance Q, where a low Q
      * variance indicates confidence that any unknown noise terms and/or
@@ -667,14 +666,14 @@ public class KalmanFilter implements Serializable {
      *                                  rows and columns or it is not symmetric
      */
     public void setProcessNoiseCov(final Matrix processNoiseCov) {
-<span class="fc bfc" id="L670" title="All 2 branches covered.">        if (processNoiseCov.getRows() != dp ||</span>
-<span class="fc bfc" id="L671" title="All 2 branches covered.">                processNoiseCov.getColumns() != dp ||</span>
-<span class="fc bfc" id="L672" title="All 2 branches covered.">                !Utils.isSymmetric(processNoiseCov)) {</span>
-<span class="fc" id="L673">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L669" title="All 2 branches covered.">        if (processNoiseCov.getRows() != dp ||</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">                processNoiseCov.getColumns() != dp ||</span>
+<span class="fc bfc" id="L671" title="All 2 branches covered.">                !Utils.isSymmetric(processNoiseCov)) {</span>
+<span class="fc" id="L672">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L676">        this.processNoiseCov = processNoiseCov;</span>
-<span class="fc" id="L677">    }</span>
+<span class="fc" id="L675">        this.processNoiseCov = processNoiseCov;</span>
+<span class="fc" id="L676">    }</span>
 
     /**
      * Obtains the measurement noise covariance matrix (R).
@@ -691,7 +690,7 @@ public class KalmanFilter implements Serializable {
      * @return the measurement noise covariance matrix
      */
     public Matrix getMeasurementNoiseCov() {
-<span class="fc" id="L694">        return measurementNoiseCov;</span>
+<span class="fc" id="L693">        return measurementNoiseCov;</span>
     }
 
     /**
@@ -712,14 +711,14 @@ public class KalmanFilter implements Serializable {
      *                                  rows and columns or it is not symmetric
      */
     public void setMeasurementNoiseCov(final Matrix measurementNoiseCov) {
-<span class="fc bfc" id="L715" title="All 2 branches covered.">        if (measurementNoiseCov.getRows() != mp ||</span>
-<span class="fc bfc" id="L716" title="All 2 branches covered.">                measurementNoiseCov.getColumns() != mp ||</span>
-<span class="fc bfc" id="L717" title="All 2 branches covered.">                !Utils.isSymmetric(measurementNoiseCov)) {</span>
-<span class="fc" id="L718">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L714" title="All 2 branches covered.">        if (measurementNoiseCov.getRows() != mp ||</span>
+<span class="fc bfc" id="L715" title="All 2 branches covered.">                measurementNoiseCov.getColumns() != mp ||</span>
+<span class="fc bfc" id="L716" title="All 2 branches covered.">                !Utils.isSymmetric(measurementNoiseCov)) {</span>
+<span class="fc" id="L717">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L721">        this.measurementNoiseCov = measurementNoiseCov;</span>
-<span class="fc" id="L722">    }</span>
+<span class="fc" id="L720">        this.measurementNoiseCov = measurementNoiseCov;</span>
+<span class="fc" id="L721">    }</span>
 
     /**
      * Obtains the priori error estimate covariance matrix
@@ -730,7 +729,7 @@ public class KalmanFilter implements Serializable {
      * @return the priori error estimate covariance matrix
      */
     public Matrix getErrorCovPre() {
-<span class="fc" id="L733">        return errorCovPre;</span>
+<span class="fc" id="L732">        return errorCovPre;</span>
     }
 
     /**
@@ -749,12 +748,12 @@ public class KalmanFilter implements Serializable {
      *                                  and columns or it is not symmetric
      */
     public void setErrorCovPre(final Matrix errorCovPre) {
-<span class="fc bfc" id="L752" title="All 4 branches covered.">        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||</span>
-<span class="fc bfc" id="L753" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPre)) {</span>
-<span class="fc" id="L754">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L751" title="All 4 branches covered.">        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||</span>
+<span class="fc bfc" id="L752" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPre)) {</span>
+<span class="fc" id="L753">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L756">        this.errorCovPre = errorCovPre;</span>
-<span class="fc" id="L757">    }</span>
+<span class="fc" id="L755">        this.errorCovPre = errorCovPre;</span>
+<span class="fc" id="L756">    }</span>
 
     /**
      * Obtains the Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R).
@@ -767,7 +766,7 @@ public class KalmanFilter implements Serializable {
      * @return the Kalman gain matrix
      */
     public Matrix getGain() {
-<span class="fc" id="L770">        return gain;</span>
+<span class="fc" id="L769">        return gain;</span>
     }
 
     /**
@@ -787,11 +786,11 @@ public class KalmanFilter implements Serializable {
      *                                  and mp columns
      */
     public void setGain(final Matrix gain) {
-<span class="fc bfc" id="L790" title="All 4 branches covered.">        if (gain.getRows() != dp || gain.getColumns() != mp) {</span>
-<span class="fc" id="L791">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
+<span class="fc bfc" id="L789" title="All 4 branches covered.">        if (gain.getRows() != dp || gain.getColumns() != mp) {</span>
+<span class="fc" id="L790">            throw new IllegalArgumentException(&quot;Wrong matrix size&quot;);</span>
         }
-<span class="fc" id="L793">        this.gain = gain;</span>
-<span class="fc" id="L794">    }</span>
+<span class="fc" id="L792">        this.gain = gain;</span>
+<span class="fc" id="L793">    }</span>
 
     /**
      * Obtains the posteriori error estimate covariance matrix
@@ -802,7 +801,7 @@ public class KalmanFilter implements Serializable {
      * @return the priori error estimate covariance matrix
      */
     public Matrix getErrorCovPost() {
-<span class="fc" id="L805">        return errorCovPost;</span>
+<span class="fc" id="L804">        return errorCovPost;</span>
     }
 
     /**
@@ -821,11 +820,11 @@ public class KalmanFilter implements Serializable {
      *                                  and columns or it is not symmetric
      */
     public void setErrorCovPost(final Matrix errorCovPost) {
-<span class="fc bfc" id="L824" title="All 4 branches covered.">        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||</span>
-<span class="fc bfc" id="L825" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPost)) {</span>
-<span class="fc" id="L826">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L823" title="All 4 branches covered.">        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||</span>
+<span class="fc bfc" id="L824" title="All 2 branches covered.">                !Utils.isSymmetric(errorCovPost)) {</span>
+<span class="fc" id="L825">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L828">        this.errorCovPost = errorCovPost;</span>
-<span class="fc" id="L829">    }</span>
+<span class="fc" id="L827">        this.errorCovPost = errorCovPost;</span>
+<span class="fc" id="L828">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -23,7 +23,6 @@ package com.irurueta.numerical;
  * This implementation is more accurate although slower than
  * DerivativeEstimator.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class SymmetricDerivativeEstimator extends DerivativeEstimator {
 
     /**
@@ -33,8 +32,8 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      */
     public SymmetricDerivativeEstimator(
             final SingleDimensionFunctionEvaluatorListener listener) {
-<span class="fc" id="L36">        super(listener);</span>
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L35">        super(listener);</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * Computes the function derivative at provided point x.
@@ -45,27 +44,26 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      *                             evaluated.
      */
     @Override
-    @SuppressWarnings(&quot;Duplicates&quot;)
     public double derivative(final double x) throws EvaluationException {
-<span class="fc" id="L50">        double h = EPS * Math.abs(x);</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
+<span class="fc" id="L48">        double h = EPS * Math.abs(x);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
             // Trick to reduce finite-precision error
-<span class="nc" id="L53">            h = EPS;</span>
+<span class="nc" id="L51">            h = EPS;</span>
         }
 
-<span class="fc" id="L56">        final double xh1 = x + h;</span>
-<span class="fc" id="L57">        final double xh2 = x - h;</span>
+<span class="fc" id="L54">        final double xh1 = x + h;</span>
+<span class="fc" id="L55">        final double xh2 = x - h;</span>
         // because of machine precision h could be different in both cases
-<span class="fc" id="L59">        final double h1 = xh1 - x;</span>
-<span class="fc" id="L60">        final double h2 = x - xh2;</span>
+<span class="fc" id="L57">        final double h1 = xh1 - x;</span>
+<span class="fc" id="L58">        final double h2 = x - xh2;</span>
 
         // this is more or less equal to 2.0 * h
-<span class="fc" id="L63">        final double hh = h1 + h2;</span>
+<span class="fc" id="L61">        final double hh = h1 + h2;</span>
 
-<span class="fc" id="L65">        final double fh1 = listener.evaluate(xh1);</span>
-<span class="fc" id="L66">        final double fh2 = listener.evaluate(xh2);</span>
+<span class="fc" id="L63">        final double fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L64">        final double fh2 = listener.evaluate(xh2);</span>
 
-<span class="fc" id="L68">        return (fh1 - fh2) / hh;</span>
+<span class="fc" id="L66">        return (fh1 - fh2) / hh;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

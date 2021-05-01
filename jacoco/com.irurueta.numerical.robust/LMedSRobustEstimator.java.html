@@ -28,13 +28,13 @@ import java.util.List;
  * estimate a data model.
  * LMedS is based on the idea that a given proportion of outliers exists in the
  * total amount of samples provided. This algorithm tries to iteratively find
- * the beast subset of samples picking the onea with the least median of error.
+ * the beast subset of samples picking the ones with the least median of error.
  * To determine whether a sample is an outlier or not, and the estimated error
  * for each sample, provided listener must be used.
  * Contrary to RANSAC, this algorithm does not require a fixed threshold to be
  * set to determine whether samples are inliers or not. Instead, threshold is
  * computed dynamically. Because of that LMedS typically produces results with
- * larger error than RANSAC having a similar computational cost, becaus esamples
+ * larger error than RANSAC having a similar computational cost, because samples
  * usually contain a large error. Hence, if threshold is known in advance for a
  * given estimation, RANSAC should be preferred rather than LMedS.
  * On the contrary, if it can be ensured that samples are very accurate except
@@ -45,13 +45,13 @@ import java.util.List;
  *
  * @param &lt;T&gt; type of object to be estimated.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
 
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -419,135 +419,136 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
             // indices of subset picked in one iteration
 <span class="fc" id="L420">            final int[] subsetIndices = new int[subsetSize];</span>
 <span class="fc" id="L421">            final double[] residualsTemp = new double[totalSamples];</span>
-            boolean improved;    // indicates if result improved
+            // indicates if result improved
+            boolean improved;
             // indicates whether algorithm must continue iterating
-<span class="fc" id="L424">            boolean continueIteration = true;</span>
+<span class="fc" id="L425">            boolean continueIteration = true;</span>
 
-<span class="pc bpc" id="L426" title="1 of 2 branches missed.">            if (subsetSelector == null) {</span>
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">            if (subsetSelector == null) {</span>
                 // create new subset selector
-<span class="fc" id="L428">                subsetSelector = SubsetSelector.create(totalSamples);</span>
+<span class="fc" id="L429">                subsetSelector = SubsetSelector.create(totalSamples);</span>
             } else {
                 // set number of samples to current subset selector
-<span class="nc" id="L431">                subsetSelector.setNumSamples(totalSamples);</span>
+<span class="nc" id="L432">                subsetSelector.setNumSamples(totalSamples);</span>
             }
 
             // data related to inliers
-<span class="fc" id="L435">            LMedSInliersData inliersData = new LMedSInliersData(totalSamples);</span>
+<span class="fc" id="L436">            LMedSInliersData inliersData = new LMedSInliersData(totalSamples);</span>
             // sorter to compute medians
-<span class="fc" id="L437">            final Sorter&lt;Double&gt; sorter = Sorter.create();</span>
+<span class="fc" id="L438">            final Sorter&lt;Double&gt; sorter = Sorter.create();</span>
 
-<span class="fc bfc" id="L439" title="All 2 branches covered.">            while (continueIteration) {</span>
+<span class="fc bfc" id="L440" title="All 2 branches covered.">            while (continueIteration) {</span>
                 // generate a random subset of samples
-<span class="fc" id="L441">                subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);</span>
+<span class="fc" id="L442">                subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);</span>
 
                 // clear list of preliminary solutions before calling listener
-<span class="fc" id="L444">                iterResults.clear();</span>
+<span class="fc" id="L445">                iterResults.clear();</span>
                 // compute solution for current iteration
-<span class="fc" id="L446">                listener.estimatePreliminarSolutions(subsetIndices,</span>
+<span class="fc" id="L447">                listener.estimatePreliminarSolutions(subsetIndices,</span>
                         iterResults);
 
                 // iterate over all solutions that have been found
-<span class="fc" id="L450">                improved = false;</span>
-<span class="fc bfc" id="L451" title="All 2 branches covered.">                for (final T iterResult : iterResults) {</span>
+<span class="fc" id="L451">                improved = false;</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">                for (final T iterResult : iterResults) {</span>
                     // compute inliers
-<span class="fc" id="L453">                    computeInliers(iterResult, subsetSize, mInlierFactor,</span>
+<span class="fc" id="L454">                    computeInliers(iterResult, subsetSize, mInlierFactor,</span>
                             residualsTemp, listener, sorter, inliersData);
 
-                    //save solution that produces the best residual
-<span class="fc bfc" id="L457" title="All 2 branches covered.">                    if (inliersData.isMedianResidualImproved()) {</span>
-<span class="fc" id="L458">                        improved = true;</span>
+                    // save solution that produces the best residual
+<span class="fc bfc" id="L458" title="All 2 branches covered.">                    if (inliersData.isMedianResidualImproved()) {</span>
+<span class="fc" id="L459">                        improved = true;</span>
 
-                        //keep current solution
-<span class="fc" id="L461">                        bestResult = iterResult;</span>
+                        // keep current solution
+<span class="fc" id="L462">                        bestResult = iterResult;</span>
 
-                        //keep best inliers data corresponding to best solution,
-                        //in case it can be useful along with the result
-<span class="fc" id="L465">                        mBestInliersData = inliersData;</span>
+                        // keep best inliers data corresponding to best solution,
+                        // in case it can be useful along with the result
+<span class="fc" id="L466">                        mBestInliersData = inliersData;</span>
 
-                        //recompute number of times the algorithm needs to be
-                        //executed depending on current number of inliers to
-                        //achieve with probability mConfidence that we have
-                        //inliers and probability 1 - mConfidence that we have
-                        //outliers
-<span class="fc" id="L472">                        bestNumInliers = inliersData.getNumInliers();</span>
-<span class="fc" id="L473">                        final double probInlier = ((double) bestNumInliers) /</span>
+                        // recompute number of times the algorithm needs to be
+                        // executed depending on current number of inliers to
+                        // achieve with probability mConfidence that we have
+                        // inliers and probability 1 - mConfidence that we have
+                        // outliers
+<span class="fc" id="L473">                        bestNumInliers = inliersData.getNumInliers();</span>
+<span class="fc" id="L474">                        final double probInlier = ((double) bestNumInliers) /</span>
                                 ((double) totalSamples);
 
-<span class="fc" id="L476">                        final double probSubsetAllInliers =</span>
-<span class="fc" id="L477">                                Math.pow(probInlier, subsetSize);</span>
+<span class="fc" id="L477">                        final double probSubsetAllInliers =</span>
+<span class="fc" id="L478">                                Math.pow(probInlier, subsetSize);</span>
 
-<span class="pc bpc" id="L479" title="1 of 2 branches missed.">                        if (Math.abs(probSubsetAllInliers) &lt; Double.MIN_VALUE ||</span>
-<span class="pc bpc" id="L480" title="1 of 2 branches missed.">                                Double.isNaN(probSubsetAllInliers)) {</span>
-<span class="nc" id="L481">                            newNIters = Integer.MAX_VALUE;</span>
+<span class="pc bpc" id="L480" title="1 of 2 branches missed.">                        if (Math.abs(probSubsetAllInliers) &lt; Double.MIN_VALUE ||</span>
+<span class="pc bpc" id="L481" title="1 of 2 branches missed.">                                Double.isNaN(probSubsetAllInliers)) {</span>
+<span class="nc" id="L482">                            newNIters = Integer.MAX_VALUE;</span>
                         } else {
-<span class="fc" id="L483">                            final double logProbSomeOutliers =</span>
-<span class="fc" id="L484">                                    Math.log(1.0 - probSubsetAllInliers);</span>
-<span class="pc bpc" id="L485" title="1 of 2 branches missed.">                            if (Math.abs(logProbSomeOutliers) &lt;</span>
+<span class="fc" id="L484">                            final double logProbSomeOutliers =</span>
+<span class="fc" id="L485">                                    Math.log(1.0 - probSubsetAllInliers);</span>
+<span class="pc bpc" id="L486" title="1 of 2 branches missed.">                            if (Math.abs(logProbSomeOutliers) &lt;</span>
                                     Double.MIN_VALUE ||
-<span class="pc bpc" id="L487" title="1 of 2 branches missed.">                                    Double.isNaN(logProbSomeOutliers)) {</span>
-<span class="nc" id="L488">                                newNIters = Integer.MAX_VALUE;</span>
+<span class="pc bpc" id="L488" title="1 of 2 branches missed.">                                    Double.isNaN(logProbSomeOutliers)) {</span>
+<span class="nc" id="L489">                                newNIters = Integer.MAX_VALUE;</span>
                             } else {
-<span class="fc" id="L490">                                newNIters = (int) Math.ceil(Math.abs(</span>
-<span class="fc" id="L491">                                        Math.log(1.0 - mConfidence) /</span>
+<span class="fc" id="L491">                                newNIters = (int) Math.ceil(Math.abs(</span>
+<span class="fc" id="L492">                                        Math.log(1.0 - mConfidence) /</span>
                                                 logProbSomeOutliers));
                             }
                         }
 
-<span class="fc bfc" id="L496" title="All 2 branches covered.">                        if (newNIters &lt; nIters) {</span>
-<span class="fc" id="L497">                            nIters = newNIters;</span>
+<span class="fc bfc" id="L497" title="All 2 branches covered.">                        if (newNIters &lt; nIters) {</span>
+<span class="fc" id="L498">                            nIters = newNIters;</span>
                         }
 
-<span class="fc" id="L500">                        threshold = inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L501">                        threshold = inliersData.getEstimatedThreshold();</span>
 
                         // create new inliers data instance until a new best
                         // solution is found
-<span class="fc" id="L504">                        final double bestMedianResidual =</span>
-<span class="fc" id="L505">                                inliersData.getBestMedianResidual();</span>
-<span class="fc" id="L506">                        inliersData = new LMedSInliersData(totalSamples);</span>
+<span class="fc" id="L505">                        final double bestMedianResidual =</span>
+<span class="fc" id="L506">                                inliersData.getBestMedianResidual();</span>
+<span class="fc" id="L507">                        inliersData = new LMedSInliersData(totalSamples);</span>
                         // update best median residual on new instance so
                         // that only better solutions that are found later
                         // can update inliers data
-<span class="fc" id="L510">                        inliersData.update(bestMedianResidual,</span>
-<span class="fc" id="L511">                                inliersData.getStandardDeviation(),</span>
-<span class="fc" id="L512">                                inliersData.getInliers(),</span>
-<span class="fc" id="L513">                                inliersData.getResiduals(),</span>
-<span class="fc" id="L514">                                inliersData.getNumInliers(),</span>
-<span class="fc" id="L515">                                inliersData.getEstimatedThreshold(), false);</span>
+<span class="fc" id="L511">                        inliersData.update(bestMedianResidual,</span>
+<span class="fc" id="L512">                                inliersData.getStandardDeviation(),</span>
+<span class="fc" id="L513">                                inliersData.getInliers(),</span>
+<span class="fc" id="L514">                                inliersData.getResiduals(),</span>
+<span class="fc" id="L515">                                inliersData.getNumInliers(),</span>
+<span class="fc" id="L516">                                inliersData.getEstimatedThreshold(), false);</span>
                     }
-<span class="fc" id="L517">                }</span>
+<span class="fc" id="L518">                }</span>
 
-<span class="pc bpc" id="L519" title="1 of 2 branches missed.">                if (nIters &gt; 0) {</span>
-<span class="fc" id="L520">                    progress = Math.min((float) currentIter / (float) nIters,</span>
+<span class="pc bpc" id="L520" title="1 of 2 branches missed.">                if (nIters &gt; 0) {</span>
+<span class="fc" id="L521">                    progress = Math.min((float) currentIter / (float) nIters,</span>
                             1.0f);
                 } else {
-<span class="nc" id="L523">                    progress = 1.0f;</span>
+<span class="nc" id="L524">                    progress = 1.0f;</span>
                 }
-<span class="fc bfc" id="L525" title="All 2 branches covered.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
-<span class="fc" id="L526">                    previousProgress = progress;</span>
-<span class="fc" id="L527">                    listener.onEstimateProgressChange(this, progress);</span>
+<span class="fc bfc" id="L526" title="All 2 branches covered.">                if (progress - previousProgress &gt; mProgressDelta) {</span>
+<span class="fc" id="L527">                    previousProgress = progress;</span>
+<span class="fc" id="L528">                    listener.onEstimateProgressChange(this, progress);</span>
                 }
-<span class="fc" id="L529">                currentIter++;</span>
-<span class="pc bpc" id="L530" title="1 of 4 branches missed.">                continueIteration = (currentIter &lt; mMaxIterations) &amp;&amp;</span>
+<span class="fc" id="L530">                currentIter++;</span>
+<span class="pc bpc" id="L531" title="1 of 4 branches missed.">                continueIteration = (currentIter &lt; mMaxIterations) &amp;&amp;</span>
                         (threshold &gt; mStopThreshold);
-<span class="fc bfc" id="L532" title="All 2 branches covered.">                if (!improved) {</span>
-<span class="fc bfc" id="L533" title="All 2 branches covered.">                    continueIteration &amp;= (currentIter &lt; nIters);</span>
+<span class="fc bfc" id="L533" title="All 2 branches covered.">                if (!improved) {</span>
+<span class="fc bfc" id="L534" title="All 2 branches covered.">                    continueIteration &amp;= (currentIter &lt; nIters);</span>
                 }
 
-<span class="fc" id="L536">                listener.onEstimateNextIteration(this, currentIter);</span>
+<span class="fc" id="L537">                listener.onEstimateNextIteration(this, currentIter);</span>
             }
 
             // no solution could be found after completing all iterations
-<span class="pc bpc" id="L540" title="1 of 2 branches missed.">            if (bestResult == null) {</span>
-<span class="nc" id="L541">                throw new RobustEstimatorException();</span>
+<span class="pc bpc" id="L541" title="1 of 2 branches missed.">            if (bestResult == null) {</span>
+<span class="nc" id="L542">                throw new RobustEstimatorException();</span>
             }
 
-<span class="fc" id="L544">            listener.onEstimateEnd(this);</span>
+<span class="fc" id="L545">            listener.onEstimateEnd(this);</span>
 
-<span class="fc" id="L546">            return bestResult;</span>
-<span class="nc" id="L547">        } catch (final SubsetSelectorException e) {</span>
-<span class="nc" id="L548">            throw new RobustEstimatorException(e);</span>
+<span class="fc" id="L547">            return bestResult;</span>
+<span class="nc" id="L548">        } catch (final SubsetSelectorException e) {</span>
+<span class="nc" id="L549">            throw new RobustEstimatorException(e);</span>
         } finally {
-<span class="fc" id="L550">            mLocked = false;</span>
+<span class="fc" id="L551">            mLocked = false;</span>
         }
     }
 
@@ -558,7 +559,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      */
     @Override
     public InliersData getInliersData() {
-<span class="fc" id="L561">        return getBestInliersData();</span>
+<span class="fc" id="L562">        return getBestInliersData();</span>
     }
 
     /**
@@ -568,7 +569,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L571">        return RobustEstimatorMethod.LMedS;</span>
+<span class="fc" id="L572">        return RobustEstimatorMethod.LMedS;</span>
     }
 
     /**
@@ -590,46 +591,46 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
             final double[] residualsTemp, final LMedSRobustEstimatorListener&lt;T&gt; listener,
             final Sorter&lt;Double&gt; sorter, LMedSInliersData inliersData) {
 
-<span class="fc" id="L593">        final double[] residuals = inliersData.getResiduals();</span>
-<span class="fc" id="L594">        final BitSet inliers = inliersData.getInliers();</span>
-<span class="fc" id="L595">        double bestMedianResidual = inliersData.getBestMedianResidual();</span>
-<span class="fc" id="L596">        boolean medianResidualImproved = false;</span>
+<span class="fc" id="L594">        final double[] residuals = inliersData.getResiduals();</span>
+<span class="fc" id="L595">        final BitSet inliers = inliersData.getInliers();</span>
+<span class="fc" id="L596">        double bestMedianResidual = inliersData.getBestMedianResidual();</span>
+<span class="fc" id="L597">        boolean medianResidualImproved = false;</span>
 
-<span class="fc" id="L598">        final int totalSamples = residuals.length;</span>
+<span class="fc" id="L599">        final int totalSamples = residuals.length;</span>
 
-<span class="fc bfc" id="L600" title="All 2 branches covered.">        for (int i = 0; i &lt; totalSamples; i++) {</span>
-<span class="fc" id="L601">            residuals[i] = Math.abs(listener.computeResidual(iterResult, i));</span>
+<span class="fc bfc" id="L601" title="All 2 branches covered.">        for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc" id="L602">            residuals[i] = Math.abs(listener.computeResidual(iterResult, i));</span>
         }
-<span class="fc" id="L603">        System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);</span>
-<span class="fc" id="L604">        final double medianResidual = sorter.median(residualsTemp);</span>
-<span class="fc bfc" id="L605" title="All 2 branches covered.">        if (medianResidual &lt; bestMedianResidual) {</span>
-<span class="fc" id="L606">            bestMedianResidual = medianResidual;</span>
-<span class="fc" id="L607">            medianResidualImproved = true;</span>
+<span class="fc" id="L604">        System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);</span>
+<span class="fc" id="L605">        final double medianResidual = sorter.median(residualsTemp);</span>
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        if (medianResidual &lt; bestMedianResidual) {</span>
+<span class="fc" id="L607">            bestMedianResidual = medianResidual;</span>
+<span class="fc" id="L608">            medianResidualImproved = true;</span>
         }
 
-<span class="fc" id="L610">        final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 /</span>
-<span class="fc" id="L611">                (double) (totalSamples - subsetSize)) * Math.sqrt(</span>
+<span class="fc" id="L611">        final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 /</span>
+<span class="fc" id="L612">                (double) (totalSamples - subsetSize)) * Math.sqrt(</span>
                 medianResidual);
-<span class="fc" id="L613">        final double normEstimatedThreshold = inlierFactor * medianResidual;</span>
+<span class="fc" id="L614">        final double normEstimatedThreshold = inlierFactor * medianResidual;</span>
 
         // determine which points are inliers
-<span class="fc" id="L616">        int numInliers = 0;</span>
-<span class="fc bfc" id="L617" title="All 2 branches covered.">        for (int i = 0; i &lt; totalSamples; i++) {</span>
-<span class="fc bfc" id="L618" title="All 2 branches covered.">            if (residuals[i] &lt;= normEstimatedThreshold) {</span>
-<span class="fc" id="L619">                numInliers++;</span>
-<span class="fc" id="L620">                inliers.set(i);</span>
+<span class="fc" id="L617">        int numInliers = 0;</span>
+<span class="fc bfc" id="L618" title="All 2 branches covered.">        for (int i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc bfc" id="L619" title="All 2 branches covered.">            if (residuals[i] &lt;= normEstimatedThreshold) {</span>
+<span class="fc" id="L620">                numInliers++;</span>
+<span class="fc" id="L621">                inliers.set(i);</span>
             } else {
-<span class="fc" id="L622">                inliers.clear(i);</span>
+<span class="fc" id="L623">                inliers.clear(i);</span>
             }
         }
 
         // store values in inliers data, only if residuals improve
-<span class="fc bfc" id="L627" title="All 2 branches covered.">        if (medianResidualImproved) {</span>
-<span class="fc" id="L628">            inliersData.update(bestMedianResidual, standardDeviation, inliers,</span>
+<span class="fc bfc" id="L628" title="All 2 branches covered.">        if (medianResidualImproved) {</span>
+<span class="fc" id="L629">            inliersData.update(bestMedianResidual, standardDeviation, inliers,</span>
                     residuals, numInliers,
                     normEstimatedThreshold, true);
         }
-<span class="fc" id="L632">    }</span>
+<span class="fc" id="L633">    }</span>
 
     /**
      * Contains data related to inliers estimated in one iteration.
@@ -669,15 +670,15 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          *
          * @param totalSamples total number of samples.
          */
-<span class="fc" id="L672">        protected LMedSInliersData(final int totalSamples) {</span>
-<span class="fc" id="L673">            mBestMedianResidual = Double.MAX_VALUE;</span>
-<span class="fc" id="L674">            mStandardDeviation = Double.MAX_VALUE;</span>
-<span class="fc" id="L675">            mEstimatedThreshold = Double.MAX_VALUE;</span>
-<span class="fc" id="L676">            mInliers = new BitSet(totalSamples);</span>
-<span class="fc" id="L677">            mResiduals = new double[totalSamples];</span>
-<span class="fc" id="L678">            mNumInliers = 0;</span>
-<span class="fc" id="L679">            mMedianResidualImproved = false;</span>
-<span class="fc" id="L680">        }</span>
+<span class="fc" id="L673">        protected LMedSInliersData(final int totalSamples) {</span>
+<span class="fc" id="L674">            mBestMedianResidual = Double.MAX_VALUE;</span>
+<span class="fc" id="L675">            mStandardDeviation = Double.MAX_VALUE;</span>
+<span class="fc" id="L676">            mEstimatedThreshold = Double.MAX_VALUE;</span>
+<span class="fc" id="L677">            mInliers = new BitSet(totalSamples);</span>
+<span class="fc" id="L678">            mResiduals = new double[totalSamples];</span>
+<span class="fc" id="L679">            mNumInliers = 0;</span>
+<span class="fc" id="L680">            mMedianResidualImproved = false;</span>
+<span class="fc" id="L681">        }</span>
 
         /**
          * Returns best median of error found so far taking into account all
@@ -687,7 +688,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          * provided samples.
          */
         public double getBestMedianResidual() {
-<span class="fc" id="L690">            return mBestMedianResidual;</span>
+<span class="fc" id="L691">            return mBestMedianResidual;</span>
         }
 
         /**
@@ -698,7 +699,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          * respect to currently estimated result.
          */
         public double getStandardDeviation() {
-<span class="fc" id="L701">            return mStandardDeviation;</span>
+<span class="fc" id="L702">            return mStandardDeviation;</span>
         }
 
         /**
@@ -710,7 +711,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          */
         @Override
         public BitSet getInliers() {
-<span class="fc" id="L713">            return mInliers;</span>
+<span class="fc" id="L714">            return mInliers;</span>
         }
 
         /**
@@ -721,7 +722,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          * or not.
          */
         public double getEstimatedThreshold() {
-<span class="fc" id="L724">            return mEstimatedThreshold;</span>
+<span class="fc" id="L725">            return mEstimatedThreshold;</span>
         }
 
         /**
@@ -731,7 +732,7 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
          * @return true if median residual improved, false otherwise.
          */
         public boolean isMedianResidualImproved() {
-<span class="fc" id="L734">            return mMedianResidualImproved;</span>
+<span class="fc" id="L735">            return mMedianResidualImproved;</span>
         }
 
         /**
@@ -755,14 +756,14 @@ public class LMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
                               final BitSet inliers, final double[] residuals, final int numInliers,
                               final double estimatedThreshold,
                               final boolean medianResidualImproved) {
-<span class="fc" id="L758">            mBestMedianResidual = bestMedianResidual;</span>
-<span class="fc" id="L759">            mStandardDeviation = standardDeviation;</span>
-<span class="fc" id="L760">            mInliers = inliers;</span>
-<span class="fc" id="L761">            mResiduals = residuals;</span>
-<span class="fc" id="L762">            mNumInliers = numInliers;</span>
-<span class="fc" id="L763">            mEstimatedThreshold = estimatedThreshold;</span>
-<span class="fc" id="L764">            mMedianResidualImproved = medianResidualImproved;</span>
-<span class="fc" id="L765">        }</span>
+<span class="fc" id="L759">            mBestMedianResidual = bestMedianResidual;</span>
+<span class="fc" id="L760">            mStandardDeviation = standardDeviation;</span>
+<span class="fc" id="L761">            mInliers = inliers;</span>
+<span class="fc" id="L762">            mResiduals = residuals;</span>
+<span class="fc" id="L763">            mNumInliers = numInliers;</span>
+<span class="fc" id="L764">            mEstimatedThreshold = estimatedThreshold;</span>
+<span class="fc" id="L765">            mMedianResidualImproved = medianResidualImproved;</span>
+<span class="fc" id="L766">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

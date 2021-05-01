@@ -452,7 +452,7 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
      * square value.
      * If chi square value is close to 1, the fit is usually good.
      * If it is much larger, then error cannot be properly fitted.
-     * If it is close to zero, then the model overfits the error.
+     * If it is close to zero, then the model over-fits the error.
      * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
      * the quality of the fit.
      *

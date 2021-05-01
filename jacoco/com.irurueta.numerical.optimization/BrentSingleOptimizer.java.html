@@ -34,7 +34,6 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.3. Page 496.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class BrentSingleOptimizer extends BracketedSingleOptimizer {
 
     /**
@@ -74,9 +73,9 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * Empty constructor.
      */
     public BrentSingleOptimizer() {
-<span class="fc" id="L77">        super();</span>
-<span class="fc" id="L78">        tolerance = DEFAULT_TOLERANCE;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L76">        super();</span>
+<span class="fc" id="L77">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Constructor. Creates an instance with provided bracket of values.
@@ -93,9 +92,9 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
     public BrentSingleOptimizer(final double minEvalPoint, final double middleEvalPoint,
                                 final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
-<span class="fc" id="L96">        super(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L97">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L95">        super(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L96">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L97">    }</span>
 
     /**
      * Constructor. Creates an instance with provided bracket of values and a
@@ -115,9 +114,9 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
             final SingleDimensionFunctionEvaluatorListener listener,
             final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint,
             final double tolerance) throws InvalidBracketRangeException {
-<span class="fc" id="L118">        super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L119">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L117">        super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L118">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L119">    }</span>
 
     /**
      * Returns tolerance value, which is the accuracy to be obtained when a
@@ -129,7 +128,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * @return Tolerance value.
      */
     public double getTolerance() {
-<span class="fc" id="L132">        return tolerance;</span>
+<span class="fc" id="L131">        return tolerance;</span>
     }
 
     /**
@@ -147,11 +146,11 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     public void setTolerance(final double tolerance)
             throws LockedException {
-<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L151">            throw new LockedException();</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L150">            throw new LockedException();</span>
         }
-<span class="fc" id="L153">        internalSetTolerance(tolerance);</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L152">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L153">    }</span>
 
     /**
      * This function estimates a function minimum within provided or computed
@@ -174,22 +173,22 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L178">            throw new LockedException();</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L177">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L181">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L180">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L184">        locked = true;</span>
-<span class="fc" id="L185">        final double[] v1 = new double[1];</span>
-<span class="fc" id="L186">        final double[] v2 = new double[2];</span>
-<span class="fc" id="L187">        final double[] v3 = new double[3];</span>
+<span class="fc" id="L183">        locked = true;</span>
+<span class="fc" id="L184">        final double[] v1 = new double[1];</span>
+<span class="fc" id="L185">        final double[] v2 = new double[2];</span>
+<span class="fc" id="L186">        final double[] v3 = new double[3];</span>
 
         try {
             double a;
             double b;
-<span class="fc" id="L192">            double d = 0.0;</span>
+<span class="fc" id="L191">            double d = 0.0;</span>
             double etemp;
             double fu;
             double fv;
@@ -206,125 +205,125 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
             double x;
             double xm;
             //This will be the distance moved on the step before last.
-<span class="fc" id="L209">            double e = 0.0;</span>
+<span class="fc" id="L208">            double e = 0.0;</span>
 
             //a and b must be in ascending order, but input abscissas need not
             //be.
-<span class="fc" id="L213">            a = Math.min(ax, cx);</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            b = (bx &gt; cx ? ax : cx);</span>
+<span class="fc" id="L212">            a = Math.min(ax, cx);</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            b = (bx &gt; cx ? ax : cx);</span>
             //Initializations...
-<span class="fc" id="L216">            x = w = v = bx;</span>
-<span class="fc" id="L217">            fw = fv = fx = listener.evaluate(x);</span>
+<span class="fc" id="L215">            x = w = v = bx;</span>
+<span class="fc" id="L216">            fw = fv = fx = listener.evaluate(x);</span>
 
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">            for (int iter = 0; iter &lt; ITMAX; iter++) {</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">            for (int iter = 0; iter &lt; ITMAX; iter++) {</span>
                 //Main program loop
-<span class="fc" id="L221">                xm = 0.5 * (a + b);</span>
-<span class="fc" id="L222">                tol1 = tolerance * Math.abs(x) + ZEPS;</span>
-<span class="fc" id="L223">                tol2 = 2.0 * tol1;</span>
+<span class="fc" id="L220">                xm = 0.5 * (a + b);</span>
+<span class="fc" id="L221">                tol1 = tolerance * Math.abs(x) + ZEPS;</span>
+<span class="fc" id="L222">                tol2 = 2.0 * tol1;</span>
 
-<span class="fc bfc" id="L225" title="All 2 branches covered.">                if (Math.abs(x - xm) &lt;= (tol2 - 0.5 * (b - a))) {</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                if (Math.abs(x - xm) &lt;= (tol2 - 0.5 * (b - a))) {</span>
                     //Test for done here.
-<span class="fc" id="L227">                    fmin = fx;</span>
-<span class="fc" id="L228">                    xmin = x;</span>
+<span class="fc" id="L226">                    fmin = fx;</span>
+<span class="fc" id="L227">                    xmin = x;</span>
 
-<span class="fc" id="L230">                    resultAvailable = true;</span>
-<span class="fc" id="L231">                    locked = false;</span>
-<span class="fc" id="L232">                    return;</span>
+<span class="fc" id="L229">                    resultAvailable = true;</span>
+<span class="fc" id="L230">                    locked = false;</span>
+<span class="fc" id="L231">                    return;</span>
                 }
-<span class="fc bfc" id="L234" title="All 2 branches covered.">                if (Math.abs(e) &gt; tol1) {</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">                if (Math.abs(e) &gt; tol1) {</span>
                     //Construct a trial parabolic fit.
-<span class="fc" id="L236">                    r = (x - w) * (fx - fv);</span>
-<span class="fc" id="L237">                    q = (x - v) * (fx - fw);</span>
-<span class="fc" id="L238">                    p = (x - v) * q - (x - w) * r;</span>
-<span class="fc" id="L239">                    q = 2.0 * (q - r);</span>
+<span class="fc" id="L235">                    r = (x - w) * (fx - fv);</span>
+<span class="fc" id="L236">                    q = (x - v) * (fx - fw);</span>
+<span class="fc" id="L237">                    p = (x - v) * q - (x - w) * r;</span>
+<span class="fc" id="L238">                    q = 2.0 * (q - r);</span>
 
-<span class="fc bfc" id="L241" title="All 2 branches covered.">                    if (q &gt; 0.0) {</span>
-<span class="fc" id="L242">                        p = -p;</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                    if (q &gt; 0.0) {</span>
+<span class="fc" id="L241">                        p = -p;</span>
                     }
-<span class="fc" id="L244">                    q = Math.abs(q);</span>
-<span class="fc" id="L245">                    etemp = e;</span>
-<span class="fc" id="L246">                    e = d;</span>
+<span class="fc" id="L243">                    q = Math.abs(q);</span>
+<span class="fc" id="L244">                    etemp = e;</span>
+<span class="fc" id="L245">                    e = d;</span>
 
-<span class="fc bfc" id="L248" title="All 6 branches covered.">                    if (Math.abs(p) &gt;= Math.abs(0.5 * q * etemp) ||</span>
+<span class="fc bfc" id="L247" title="All 6 branches covered.">                    if (Math.abs(p) &gt;= Math.abs(0.5 * q * etemp) ||</span>
                             p &lt;= q * (a - x) || p &gt;= q * (b - x)) {
                         //noinspection all
-<span class="fc bfc" id="L251" title="All 2 branches covered.">                        e = x &gt;= xm ? a - x : b - x;</span>
-<span class="fc" id="L252">                        d = CGOLD * (e);</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">                        e = x &gt;= xm ? a - x : b - x;</span>
+<span class="fc" id="L251">                        d = CGOLD * (e);</span>
                         //The above conditions determine the acceptability of
                         //the parabolic fit. Here we take the golden section 
                         //step into the larger of the two segments.
                     } else {
                         //Take the parabolic step
-<span class="fc" id="L258">                        d = p / q;</span>
-<span class="fc" id="L259">                        u = x + d;</span>
+<span class="fc" id="L257">                        d = p / q;</span>
+<span class="fc" id="L258">                        u = x + d;</span>
 
-<span class="fc bfc" id="L261" title="All 4 branches covered.">                        if (u - a &lt; tol2 || b - u &lt; tol2) {</span>
-<span class="fc" id="L262">                            d = sign(tol1, xm - x);</span>
+<span class="fc bfc" id="L260" title="All 4 branches covered.">                        if (u - a &lt; tol2 || b - u &lt; tol2) {</span>
+<span class="fc" id="L261">                            d = sign(tol1, xm - x);</span>
                         }
                     }
                 } else {
                     //noinspection all
-<span class="fc bfc" id="L267" title="All 2 branches covered.">                    e = x &gt;= xm ? a - x : b - x;</span>
-<span class="fc" id="L268">                    d = CGOLD * (e);</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                    e = x &gt;= xm ? a - x : b - x;</span>
+<span class="fc" id="L267">                    d = CGOLD * (e);</span>
                 }
 
-<span class="fc bfc" id="L271" title="All 2 branches covered.">                u = Math.abs(d) &gt;= tol1 ? x + d : x + sign(tol1, d);</span>
-<span class="fc" id="L272">                fu = listener.evaluate(u);</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">                u = Math.abs(d) &gt;= tol1 ? x + d : x + sign(tol1, d);</span>
+<span class="fc" id="L271">                fu = listener.evaluate(u);</span>
 
                 //This is the one function evaluation per iteration
-<span class="fc bfc" id="L275" title="All 2 branches covered.">                if (fu &lt;= fx) {</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">                if (fu &lt;= fx) {</span>
                     //No decide what to do with function evaluation
-<span class="fc bfc" id="L277" title="All 2 branches covered.">                    if (u &gt;= x) {</span>
-<span class="fc" id="L278">                        a = x;</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">                    if (u &gt;= x) {</span>
+<span class="fc" id="L277">                        a = x;</span>
                     } else {
-<span class="fc" id="L280">                        b = x;</span>
+<span class="fc" id="L279">                        b = x;</span>
                     }
                     //Housekeeping follows
-<span class="fc" id="L283">                    v1[0] = v;</span>
-<span class="fc" id="L284">                    v2[0] = w;</span>
-<span class="fc" id="L285">                    v3[0] = x;</span>
-<span class="fc" id="L286">                    shft3(v1, v2, v3, u);</span>
-<span class="fc" id="L287">                    v = v1[0];</span>
-<span class="fc" id="L288">                    w = v2[0];</span>
-<span class="fc" id="L289">                    x = v3[0];</span>
+<span class="fc" id="L282">                    v1[0] = v;</span>
+<span class="fc" id="L283">                    v2[0] = w;</span>
+<span class="fc" id="L284">                    v3[0] = x;</span>
+<span class="fc" id="L285">                    shft3(v1, v2, v3, u);</span>
+<span class="fc" id="L286">                    v = v1[0];</span>
+<span class="fc" id="L287">                    w = v2[0];</span>
+<span class="fc" id="L288">                    x = v3[0];</span>
 
-<span class="fc" id="L291">                    v1[0] = fv;</span>
-<span class="fc" id="L292">                    v2[0] = fw;</span>
-<span class="fc" id="L293">                    v3[0] = fx;</span>
-<span class="fc" id="L294">                    shft3(v1, v2, v3, fu);</span>
-<span class="fc" id="L295">                    fv = v1[0];</span>
-<span class="fc" id="L296">                    fw = v2[0];</span>
-<span class="fc" id="L297">                    fx = v3[0];</span>
+<span class="fc" id="L290">                    v1[0] = fv;</span>
+<span class="fc" id="L291">                    v2[0] = fw;</span>
+<span class="fc" id="L292">                    v3[0] = fx;</span>
+<span class="fc" id="L293">                    shft3(v1, v2, v3, fu);</span>
+<span class="fc" id="L294">                    fv = v1[0];</span>
+<span class="fc" id="L295">                    fw = v2[0];</span>
+<span class="fc" id="L296">                    fx = v3[0];</span>
                 } else {
-<span class="fc bfc" id="L299" title="All 2 branches covered.">                    if (u &lt; x) {</span>
-<span class="fc" id="L300">                        a = u;</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">                    if (u &lt; x) {</span>
+<span class="fc" id="L299">                        a = u;</span>
                     } else {
-<span class="fc" id="L302">                        b = u;</span>
+<span class="fc" id="L301">                        b = u;</span>
                     }
-<span class="fc bfc" id="L304" title="All 4 branches covered.">                    if (fu &lt;= fw || w == x) {</span>
-<span class="fc" id="L305">                        v = w;</span>
-<span class="fc" id="L306">                        w = u;</span>
-<span class="fc" id="L307">                        fv = fw;</span>
-<span class="fc" id="L308">                        fw = fu;</span>
-<span class="fc bfc" id="L309" title="All 6 branches covered.">                    } else if (fu &lt;= fv || v == x || v == w) {</span>
-<span class="fc" id="L310">                        v = u;</span>
-<span class="fc" id="L311">                        fv = fu;</span>
+<span class="fc bfc" id="L303" title="All 4 branches covered.">                    if (fu &lt;= fw || w == x) {</span>
+<span class="fc" id="L304">                        v = w;</span>
+<span class="fc" id="L305">                        w = u;</span>
+<span class="fc" id="L306">                        fv = fw;</span>
+<span class="fc" id="L307">                        fw = fu;</span>
+<span class="fc bfc" id="L308" title="All 6 branches covered.">                    } else if (fu &lt;= fv || v == x || v == w) {</span>
+<span class="fc" id="L309">                        v = u;</span>
+<span class="fc" id="L310">                        fv = fu;</span>
                     }
                 }
 
                 //Done with housekeeping. Back for another iteration.
-<span class="fc bfc" id="L316" title="All 2 branches covered.">                if (iterationCompletedListener != null) {</span>
-<span class="fc" id="L317">                    iterationCompletedListener.onIterationCompleted(this, iter, ITMAX);</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">                if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L316">                    iterationCompletedListener.onIterationCompleted(this, iter, ITMAX);</span>
                 }
             }
-<span class="nc" id="L320">        } catch (final EvaluationException e) {</span>
-<span class="nc" id="L321">            throw new OptimizationException(e);</span>
+<span class="nc" id="L319">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L320">            throw new OptimizationException(e);</span>
         } finally {
-<span class="fc" id="L323">            locked = false;</span>
+<span class="fc" id="L322">            locked = false;</span>
         }
 
         //Too many iterations in Brent!
-<span class="nc" id="L327">        throw new OptimizationException();</span>
+<span class="nc" id="L326">        throw new OptimizationException();</span>
     }
 
     /**
@@ -337,7 +336,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L340" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+<span class="pc bpc" id="L339" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
     }
 
     /**
@@ -352,10 +351,10 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     private void internalSetTolerance(final double tolerance) {
-<span class="fc bfc" id="L355" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L356">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L355">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L358">        this.tolerance = tolerance;</span>
-<span class="fc" id="L359">    }</span>
+<span class="fc" id="L357">        this.tolerance = tolerance;</span>
+<span class="fc" id="L358">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -187,8 +187,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws OptimizationException Raised if the algorithm failed because of
      *                               lack of convergence or because function couldn't be evaluated.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
-    @SuppressWarnings({&quot;Duplicates&quot;, &quot;DuplicateExpressions&quot;})
     public void minimize() throws LockedException, NotReadyException,
             OptimizationException {
 <span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (isLocked()) {</span>
@@ -205,8 +205,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
 <span class="fc" id="L205">        final double[] v3 = new double[3];</span>
 
         try {
-            //Will be used as flags for whether proposed steps are accpetable or
-            //not
+            // Will be used as flags for whether proposed steps are accpetable or
+            // not
             boolean ok1;
             boolean ok2;
             double a;
@@ -257,154 +257,155 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
 <span class="fc" id="L257">                    return;</span>
                 }
 
-<span class="fc bfc" id="L260" title="All 2 branches covered.">                if (Math.abs(e) &gt; tol1) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                double tmp = dx &gt;= 0.0 ? a - x : b - x;</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">                if (Math.abs(e) &gt; tol1) {</span>
                     // Initialize these d's to an out-of-bracket value
-<span class="fc" id="L262">                    d1 = 2.0 * (b - a);</span>
-<span class="fc" id="L263">                    d2 = d1;</span>
+<span class="fc" id="L263">                    d1 = 2.0 * (b - a);</span>
+<span class="fc" id="L264">                    d2 = d1;</span>
                     // Secant method with one point
-<span class="fc bfc" id="L265" title="All 2 branches covered.">                    if (dw != dx) {</span>
-<span class="fc" id="L266">                        d1 = (w - x) * dx / (dx - dw);</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                    if (dw != dx) {</span>
+<span class="fc" id="L267">                        d1 = (w - x) * dx / (dx - dw);</span>
                     }
                     // And the other
-<span class="fc bfc" id="L269" title="All 2 branches covered.">                    if (dv != dx) {</span>
-<span class="fc" id="L270">                        d2 = (v - x) * dx / (dx - dv);</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">                    if (dv != dx) {</span>
+<span class="fc" id="L271">                        d2 = (v - x) * dx / (dx - dv);</span>
                     }
                     // Which of these two estimates of d shall we take? We will
                     // insist that they be within the bracket, and on the side
                     // pointed to by the derivative at x
-<span class="fc" id="L275">                    u1 = x + d1;</span>
-<span class="fc" id="L276">                    u2 = x + d2;</span>
-<span class="fc bfc" id="L277" title="All 4 branches covered.">                    ok1 = (a - u1) * (u1 - b) &gt; 0.0 &amp;&amp; dx * d1 &lt;= 0.0;</span>
-<span class="fc bfc" id="L278" title="All 4 branches covered.">                    ok2 = (a - u2) * (u2 - b) &gt; 0.0 &amp;&amp; dx * d2 &lt;= 0.0;</span>
+<span class="fc" id="L276">                    u1 = x + d1;</span>
+<span class="fc" id="L277">                    u2 = x + d2;</span>
+<span class="fc bfc" id="L278" title="All 4 branches covered.">                    ok1 = (a - u1) * (u1 - b) &gt; 0.0 &amp;&amp; dx * d1 &lt;= 0.0;</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">                    ok2 = (a - u2) * (u2 - b) &gt; 0.0 &amp;&amp; dx * d2 &lt;= 0.0;</span>
                     // Movement on the step before last
-<span class="fc" id="L280">                    olde = e;</span>
-<span class="fc" id="L281">                    e = d;</span>
-<span class="fc bfc" id="L282" title="All 4 branches covered.">                    if (ok1 || ok2) {</span>
+<span class="fc" id="L281">                    olde = e;</span>
+<span class="fc" id="L282">                    e = d;</span>
+<span class="fc bfc" id="L283" title="All 4 branches covered.">                    if (ok1 || ok2) {</span>
                         // Take only an acceptable d, and if both are acceptable,
                         // then take the smallest one.
-<span class="fc bfc" id="L285" title="All 4 branches covered.">                        if (ok1 &amp;&amp; ok2) {</span>
-<span class="fc bfc" id="L286" title="All 2 branches covered.">                            d = Math.abs(d1) &lt; Math.abs(d2) ? d1 : d2;</span>
-<span class="fc bfc" id="L287" title="All 2 branches covered.">                        } else if (ok1) {</span>
-<span class="fc" id="L288">                            d = d1;</span>
+<span class="fc bfc" id="L286" title="All 4 branches covered.">                        if (ok1 &amp;&amp; ok2) {</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">                            d = Math.abs(d1) &lt; Math.abs(d2) ? d1 : d2;</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">                        } else if (ok1) {</span>
+<span class="fc" id="L289">                            d = d1;</span>
                         } else {
-<span class="fc" id="L290">                            d = d2;</span>
+<span class="fc" id="L291">                            d = d2;</span>
                         }
 
-<span class="fc bfc" id="L293" title="All 2 branches covered.">                        if (Math.abs(d) &lt;= Math.abs(0.5 * olde)) {</span>
-<span class="fc" id="L294">                            u = x + d;</span>
-<span class="fc bfc" id="L295" title="All 4 branches covered.">                            if (u - a &lt; tol2 || b - u &lt; tol2)</span>
-<span class="fc" id="L296">                                d = sign(tol1, xm - x);</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">                        if (Math.abs(d) &lt;= Math.abs(0.5 * olde)) {</span>
+<span class="fc" id="L295">                            u = x + d;</span>
+<span class="fc bfc" id="L296" title="All 4 branches covered.">                            if (u - a &lt; tol2 || b - u &lt; tol2)</span>
+<span class="fc" id="L297">                                d = sign(tol1, xm - x);</span>
                         } else {
                             // Bisect, not golden section.
-<span class="fc bfc" id="L299" title="All 2 branches covered.">                            e = dx &gt;= 0.0 ? a - x : b - x;</span>
-<span class="fc" id="L300">                            d = 0.5 * (e);</span>
+<span class="fc" id="L300">                            e = tmp;</span>
+<span class="fc" id="L301">                            d = 0.5 * (e);</span>
                             // Decide which segment by the sign of the derivative
                         }
                     } else {
-<span class="fc bfc" id="L304" title="All 2 branches covered.">                        e = dx &gt;= 0.0 ? a - x : b - x;</span>
-<span class="fc" id="L305">                        d = 0.5 * e;</span>
+<span class="fc" id="L305">                        e = tmp;</span>
+<span class="fc" id="L306">                        d = 0.5 * e;</span>
                     }
                 } else {
-<span class="fc bfc" id="L308" title="All 2 branches covered.">                    e = dx &gt;= 0.0 ? a - x : b - x;</span>
-<span class="fc" id="L309">                    d = 0.5 * e;</span>
+<span class="fc" id="L309">                    e = tmp;</span>
+<span class="fc" id="L310">                    d = 0.5 * e;</span>
                 }
 
-<span class="fc bfc" id="L312" title="All 2 branches covered.">                if (Math.abs(d) &gt;= tol1) {</span>
-<span class="fc" id="L313">                    u = x + d;</span>
-<span class="fc" id="L314">                    fu = listener.evaluate(u);</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">                if (Math.abs(d) &gt;= tol1) {</span>
+<span class="fc" id="L314">                    u = x + d;</span>
+<span class="fc" id="L315">                    fu = listener.evaluate(u);</span>
                 } else {
-<span class="fc" id="L316">                    u = x + sign(tol1, d);</span>
-<span class="fc" id="L317">                    fu = listener.evaluate(u);</span>
-<span class="fc bfc" id="L318" title="All 2 branches covered.">                    if (fu &gt; fx) {</span>
+<span class="fc" id="L317">                    u = x + sign(tol1, d);</span>
+<span class="fc" id="L318">                    fu = listener.evaluate(u);</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                    if (fu &gt; fx) {</span>
                         // If the minimum step in the downhill direction takes us
                         // uphill, then we are done
-<span class="fc" id="L321">                        fmin = fx;</span>
-<span class="fc" id="L322">                        xmin = x;</span>
+<span class="fc" id="L322">                        fmin = fx;</span>
+<span class="fc" id="L323">                        xmin = x;</span>
 
-<span class="fc" id="L324">                        resultAvailable = true;</span>
-<span class="fc" id="L325">                        locked = false;</span>
-<span class="fc" id="L326">                        return;</span>
+<span class="fc" id="L325">                        resultAvailable = true;</span>
+<span class="fc" id="L326">                        locked = false;</span>
+<span class="fc" id="L327">                        return;</span>
                     }
                 }
 
                 // Now all the housekeeping, sigh
-<span class="fc" id="L331">                du = derivativeListener.evaluate(u);</span>
-<span class="fc bfc" id="L332" title="All 2 branches covered.">                if (fu &lt;= fx) {</span>
-<span class="fc bfc" id="L333" title="All 2 branches covered.">                    if (u &gt;= x) {</span>
-<span class="fc" id="L334">                        a = x;</span>
+<span class="fc" id="L332">                du = derivativeListener.evaluate(u);</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">                if (fu &lt;= fx) {</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">                    if (u &gt;= x) {</span>
+<span class="fc" id="L335">                        a = x;</span>
                     } else {
-<span class="fc" id="L336">                        b = x;</span>
+<span class="fc" id="L337">                        b = x;</span>
                     }
-<span class="fc" id="L338">                    v1[0] = v;</span>
-<span class="fc" id="L339">                    v2[0] = fv;</span>
-<span class="fc" id="L340">                    v3[0] = dv;</span>
-<span class="fc" id="L341">                    mov3(v1, v2, v3, w, fw, dw);</span>
-<span class="fc" id="L342">                    v = v1[0];</span>
-<span class="fc" id="L343">                    fv = v2[0];</span>
-<span class="fc" id="L344">                    dv = v3[0];</span>
+<span class="fc" id="L339">                    v1[0] = v;</span>
+<span class="fc" id="L340">                    v2[0] = fv;</span>
+<span class="fc" id="L341">                    v3[0] = dv;</span>
+<span class="fc" id="L342">                    mov3(v1, v2, v3, w, fw, dw);</span>
+<span class="fc" id="L343">                    v = v1[0];</span>
+<span class="fc" id="L344">                    fv = v2[0];</span>
+<span class="fc" id="L345">                    dv = v3[0];</span>
 
 
-<span class="fc" id="L347">                    v1[0] = w;</span>
-<span class="fc" id="L348">                    v2[0] = fw;</span>
-<span class="fc" id="L349">                    v3[0] = dw;</span>
-<span class="fc" id="L350">                    mov3(v1, v2, v3, x, fx, dx);</span>
-<span class="fc" id="L351">                    w = v1[0];</span>
-<span class="fc" id="L352">                    fw = v2[0];</span>
-<span class="fc" id="L353">                    dw = v3[0];</span>
+<span class="fc" id="L348">                    v1[0] = w;</span>
+<span class="fc" id="L349">                    v2[0] = fw;</span>
+<span class="fc" id="L350">                    v3[0] = dw;</span>
+<span class="fc" id="L351">                    mov3(v1, v2, v3, x, fx, dx);</span>
+<span class="fc" id="L352">                    w = v1[0];</span>
+<span class="fc" id="L353">                    fw = v2[0];</span>
+<span class="fc" id="L354">                    dw = v3[0];</span>
 
-<span class="fc" id="L355">                    v1[0] = x;</span>
-<span class="fc" id="L356">                    v2[0] = fx;</span>
-<span class="fc" id="L357">                    v3[0] = dx;</span>
-<span class="fc" id="L358">                    mov3(v1, v2, v3, u, fu, du);</span>
-<span class="fc" id="L359">                    x = v1[0];</span>
-<span class="fc" id="L360">                    fx = v2[0];</span>
-<span class="fc" id="L361">                    dx = v3[0];</span>
+<span class="fc" id="L356">                    v1[0] = x;</span>
+<span class="fc" id="L357">                    v2[0] = fx;</span>
+<span class="fc" id="L358">                    v3[0] = dx;</span>
+<span class="fc" id="L359">                    mov3(v1, v2, v3, u, fu, du);</span>
+<span class="fc" id="L360">                    x = v1[0];</span>
+<span class="fc" id="L361">                    fx = v2[0];</span>
+<span class="fc" id="L362">                    dx = v3[0];</span>
                 } else {
-<span class="fc bfc" id="L363" title="All 2 branches covered.">                    if (u &lt; x) {</span>
-<span class="fc" id="L364">                        a = u;</span>
+<span class="fc bfc" id="L364" title="All 2 branches covered.">                    if (u &lt; x) {</span>
+<span class="fc" id="L365">                        a = u;</span>
                     } else {
-<span class="fc" id="L366">                        b = u;</span>
+<span class="fc" id="L367">                        b = u;</span>
                     }
-<span class="fc bfc" id="L368" title="All 4 branches covered.">                    if (fu &lt;= fw || w == x) {</span>
-<span class="fc" id="L369">                        v1[0] = v;</span>
-<span class="fc" id="L370">                        v2[0] = fv;</span>
-<span class="fc" id="L371">                        v3[0] = dv;</span>
-<span class="fc" id="L372">                        mov3(v1, v2, v3, w, fw, dw);</span>
-<span class="fc" id="L373">                        v = v1[0];</span>
-<span class="fc" id="L374">                        fv = v2[0];</span>
-<span class="fc" id="L375">                        dv = v3[0];</span>
+<span class="fc bfc" id="L369" title="All 4 branches covered.">                    if (fu &lt;= fw || w == x) {</span>
+<span class="fc" id="L370">                        v1[0] = v;</span>
+<span class="fc" id="L371">                        v2[0] = fv;</span>
+<span class="fc" id="L372">                        v3[0] = dv;</span>
+<span class="fc" id="L373">                        mov3(v1, v2, v3, w, fw, dw);</span>
+<span class="fc" id="L374">                        v = v1[0];</span>
+<span class="fc" id="L375">                        fv = v2[0];</span>
+<span class="fc" id="L376">                        dv = v3[0];</span>
 
-<span class="fc" id="L377">                        v1[0] = w;</span>
-<span class="fc" id="L378">                        v2[0] = fw;</span>
-<span class="fc" id="L379">                        v3[0] = dw;</span>
-<span class="fc" id="L380">                        mov3(v1, v2, v3, u, fu, du);</span>
-<span class="fc" id="L381">                        w = v1[0];</span>
-<span class="fc" id="L382">                        fw = v2[0];</span>
-<span class="fc" id="L383">                        dw = v3[0];</span>
-<span class="pc bpc" id="L384" title="1 of 6 branches missed.">                    } else if (fu &lt; fv || v == x || v == w) {</span>
-<span class="fc" id="L385">                        v1[0] = v;</span>
-<span class="fc" id="L386">                        v2[0] = fv;</span>
-<span class="fc" id="L387">                        v3[0] = dv;</span>
-<span class="fc" id="L388">                        mov3(v1, v2, v3, u, fu, du);</span>
-<span class="fc" id="L389">                        v = v1[0];</span>
-<span class="fc" id="L390">                        fv = v2[0];</span>
-<span class="fc" id="L391">                        dv = v3[0];</span>
+<span class="fc" id="L378">                        v1[0] = w;</span>
+<span class="fc" id="L379">                        v2[0] = fw;</span>
+<span class="fc" id="L380">                        v3[0] = dw;</span>
+<span class="fc" id="L381">                        mov3(v1, v2, v3, u, fu, du);</span>
+<span class="fc" id="L382">                        w = v1[0];</span>
+<span class="fc" id="L383">                        fw = v2[0];</span>
+<span class="fc" id="L384">                        dw = v3[0];</span>
+<span class="pc bpc" id="L385" title="1 of 6 branches missed.">                    } else if (fu &lt; fv || v == x || v == w) {</span>
+<span class="fc" id="L386">                        v1[0] = v;</span>
+<span class="fc" id="L387">                        v2[0] = fv;</span>
+<span class="fc" id="L388">                        v3[0] = dv;</span>
+<span class="fc" id="L389">                        mov3(v1, v2, v3, u, fu, du);</span>
+<span class="fc" id="L390">                        v = v1[0];</span>
+<span class="fc" id="L391">                        fv = v2[0];</span>
+<span class="fc" id="L392">                        dv = v3[0];</span>
                     }
                 }
 
-<span class="fc bfc" id="L395" title="All 2 branches covered.">                if (iterationCompletedListener != null) {</span>
-<span class="fc" id="L396">                    iterationCompletedListener.onIterationCompleted(this, iter, ITMAX);</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">                if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L397">                    iterationCompletedListener.onIterationCompleted(this, iter, ITMAX);</span>
                 }
             }
 
-<span class="nc" id="L400">        } catch (final EvaluationException e) {</span>
-<span class="nc" id="L401">            throw new OptimizationException(e);</span>
+<span class="nc" id="L401">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L402">            throw new OptimizationException(e);</span>
         } finally {
-<span class="fc" id="L403">            locked = false;</span>
+<span class="fc" id="L404">            locked = false;</span>
         }
 
         // Too many iterations in Derivative Brent
-<span class="nc" id="L407">        throw new OptimizationException();</span>
+<span class="nc" id="L408">        throw new OptimizationException();</span>
     }
 
     /**
@@ -417,8 +418,8 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L420" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isDerivativeListenerAvailable() &amp;&amp;</span>
-<span class="pc bpc" id="L421" title="1 of 2 branches missed.">                isBracketAvailable();</span>
+<span class="fc bfc" id="L421" title="All 4 branches covered.">        return isListenerAvailable() &amp;&amp; isDerivativeListenerAvailable() &amp;&amp;</span>
+<span class="pc bpc" id="L422" title="1 of 2 branches missed.">                isBracketAvailable();</span>
     }
 
     /**
@@ -429,10 +430,10 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     private void internalSetTolerance(final double tolerance) {
-<span class="fc bfc" id="L432" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
-<span class="fc" id="L433">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L434">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L435">        this.tolerance = tolerance;</span>
-<span class="fc" id="L436">    }</span>
+<span class="fc" id="L436">        this.tolerance = tolerance;</span>
+<span class="fc" id="L437">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

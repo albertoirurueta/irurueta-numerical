@@ -231,7 +231,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return True if roots are distinct and real, false otherwise
      */
-    public boolean hasTwoDistinctRealRoots(double[] polyParams) {
+    public boolean hasTwoDistinctRealRoots(final double[] polyParams) {
 <span class="pc bpc" id="L235" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
 <span class="fc bfc" id="L236" title="All 2 branches covered.">            return getDiscriminant(polyParams) &gt; EPS;</span>
         }
@@ -299,7 +299,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @param polyParams Array containing polynomial parameters
      * @return True if roots are complex conjugate, false otherwise
      */
-    public static boolean hasTwoComplexConjugateRoots(double[] polyParams) {
+    public static boolean hasTwoComplexConjugateRoots(final double[] polyParams) {
 <span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
 <span class="fc bfc" id="L304" title="All 2 branches covered.">            return getDiscriminant(polyParams) &lt; -EPS;</span>
         }

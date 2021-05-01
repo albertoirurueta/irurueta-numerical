@@ -85,7 +85,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     /**
      * Constructor.
      *
-     * @param listener         Listener to evaluate a multidimension function.
+     * @param listener         Listener to evaluate a multi-dimension function.
      * @param gradientListener Listener to evaluate the function's gradient.
      * @param point            Start point where algorithm will be started. Start point
      *                         should be close to the local minimum to be found. Provided array must

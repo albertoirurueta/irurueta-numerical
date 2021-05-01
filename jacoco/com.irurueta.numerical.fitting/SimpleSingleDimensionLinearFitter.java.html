@@ -31,7 +31,6 @@ import java.util.Arrays;
  * This class is based on the implementation available at Numerical Recipes
  * 3rd Ed, page 791
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class SimpleSingleDimensionLinearFitter
         extends SingleDimensionLinearFitter {
 
@@ -46,8 +45,8 @@ public class SimpleSingleDimensionLinearFitter
      * Constructor.
      */
     public SimpleSingleDimensionLinearFitter() {
-<span class="fc" id="L49">        super();</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L48">        super();</span>
+<span class="fc" id="L49">    }</span>
 
     /**
      * Constructor.
@@ -62,8 +61,8 @@ public class SimpleSingleDimensionLinearFitter
      */
     public SimpleSingleDimensionLinearFitter(
             final double[] x, final double[] y, final double[] sig) {
-<span class="fc" id="L65">        super(x, y, sig);</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L64">        super(x, y, sig);</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Constructor.
@@ -79,8 +78,8 @@ public class SimpleSingleDimensionLinearFitter
      */
     public SimpleSingleDimensionLinearFitter(
             final double[] x, final double[] y, final double sig) {
-<span class="fc" id="L82">        super(x, y, sig);</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L81">        super(x, y, sig);</span>
+<span class="fc" id="L82">    }</span>
 
     /**
      * Constructor.
@@ -92,9 +91,9 @@ public class SimpleSingleDimensionLinearFitter
     public SimpleSingleDimensionLinearFitter(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L95">        super();</span>
-<span class="fc" id="L96">        setFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L94">        super();</span>
+<span class="fc" id="L95">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L96">    }</span>
 
     /**
      * Constructor.
@@ -115,9 +114,9 @@ public class SimpleSingleDimensionLinearFitter
             final LinearFitterSingleDimensionFunctionEvaluator evaluator,
             final double[] x, final double[] y, final double[] sig)
             throws FittingException {
-<span class="fc" id="L118">        super(x, y, sig);</span>
-<span class="fc" id="L119">        setFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L117">        super(x, y, sig);</span>
+<span class="fc" id="L118">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L119">    }</span>
 
     /**
      * Constructor.
@@ -138,9 +137,9 @@ public class SimpleSingleDimensionLinearFitter
             final LinearFitterSingleDimensionFunctionEvaluator evaluator,
             final double[] x, final double[] y, final double sig)
             throws FittingException {
-<span class="fc" id="L141">        super(x, y, sig);</span>
-<span class="fc" id="L142">        setFunctionEvaluator(evaluator);</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L140">        super(x, y, sig);</span>
+<span class="fc" id="L141">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L142">    }</span>
 
     /**
      * Sets function evaluator to evaluate function at a given point and obtain
@@ -153,12 +152,12 @@ public class SimpleSingleDimensionLinearFitter
     public final void setFunctionEvaluator(
             final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
-<span class="fc" id="L156">        super.setFunctionEvaluator(evaluator);</span>
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (ma &gt; 0) {</span>
-<span class="fc" id="L158">            ia = new boolean[ma];</span>
-<span class="fc" id="L159">            Arrays.fill(ia, true);</span>
+<span class="fc" id="L155">        super.setFunctionEvaluator(evaluator);</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (ma &gt; 0) {</span>
+<span class="fc" id="L157">            ia = new boolean[ma];</span>
+<span class="fc" id="L158">            Arrays.fill(ia, true);</span>
         }
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L160">    }</span>
 
     /**
      * Fits a function to provided data so that parameters associated to that
@@ -171,108 +170,108 @@ public class SimpleSingleDimensionLinearFitter
     @Override
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void fit() throws FittingException, NotReadyException {
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (!isReady()) throw new NotReadyException();</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        if (!isReady()) throw new NotReadyException();</span>
 
         try {
-<span class="fc" id="L177">            resultAvailable = false;</span>
+<span class="fc" id="L176">            resultAvailable = false;</span>
 
             int i;
             int j;
             int k;
             int l;
             int m;
-<span class="fc" id="L184">            int mfit = 0;</span>
+<span class="fc" id="L183">            int mfit = 0;</span>
             double ym;
             double wt;
             double sum;
             double sig2i;
-<span class="fc bfc" id="L189" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc bfc" id="L190" title="All 2 branches covered.">                if (ia[j]) {</span>
-<span class="fc" id="L191">                    mfit++;</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">                if (ia[j]) {</span>
+<span class="fc" id="L190">                    mfit++;</span>
                 }
             }
-<span class="fc bfc" id="L194" title="All 2 branches covered.">            if (mfit == 0) {</span>
-<span class="fc" id="L195">                throw new FittingException(</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">            if (mfit == 0) {</span>
+<span class="fc" id="L194">                throw new FittingException(</span>
                         &quot;lfit: no parameters to be fitted&quot;);
             }
-<span class="fc" id="L198">            final Matrix temp = new Matrix(mfit, mfit);</span>
-<span class="fc" id="L199">            final Matrix beta = new Matrix(mfit, 1);</span>
-<span class="fc bfc" id="L200" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L201">                evaluator.evaluate(x[i], afunc);</span>
-<span class="fc" id="L202">                ym = y[i];</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">                if (mfit &lt; ma) {</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">                    for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc bfc" id="L205" title="All 2 branches covered.">                        if (!ia[j]) ym -= a[j] * afunc[j];</span>
+<span class="fc" id="L197">            final Matrix temp = new Matrix(mfit, mfit);</span>
+<span class="fc" id="L198">            final Matrix beta = new Matrix(mfit, 1);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L200">                evaluator.evaluate(x[i], afunc);</span>
+<span class="fc" id="L201">                ym = y[i];</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                if (mfit &lt; ma) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">                    for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">                        if (!ia[j]) ym -= a[j] * afunc[j];</span>
                     }
                 }
-<span class="fc" id="L208">                sig2i = 1.0 / Math.pow(sig[i], 2.0);</span>
-<span class="fc bfc" id="L209" title="All 2 branches covered.">                for (j = 0, l = 0; l &lt; ma; l++) {</span>
-<span class="fc bfc" id="L210" title="All 2 branches covered.">                    if (ia[l]) {</span>
-<span class="fc" id="L211">                        wt = afunc[l] * sig2i;</span>
+<span class="fc" id="L207">                sig2i = 1.0 / Math.pow(sig[i], 2.0);</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">                for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                    if (ia[l]) {</span>
+<span class="fc" id="L210">                        wt = afunc[l] * sig2i;</span>
                         int index;
-<span class="fc bfc" id="L213" title="All 2 branches covered.">                        for (k = 0, m = 0; m &lt;= l; m++) {</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">                            if (ia[m]) {</span>
-<span class="fc" id="L215">                                index = temp.getIndex(j, k++);</span>
-<span class="fc" id="L216">                                temp.getBuffer()[index] += wt * afunc[m];</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">                        for (k = 0, m = 0; m &lt;= l; m++) {</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                            if (ia[m]) {</span>
+<span class="fc" id="L214">                                index = temp.getIndex(j, k++);</span>
+<span class="fc" id="L215">                                temp.getBuffer()[index] += wt * afunc[m];</span>
                             }
                         }
-<span class="fc" id="L219">                        index = beta.getIndex(j++, 0);</span>
-<span class="fc" id="L220">                        beta.getBuffer()[index] += ym * wt;</span>
+<span class="fc" id="L218">                        index = beta.getIndex(j++, 0);</span>
+<span class="fc" id="L219">                        beta.getBuffer()[index] += ym * wt;</span>
                     }
                 }
             }
-<span class="fc bfc" id="L224" title="All 2 branches covered.">            for (j = 1; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L225" title="All 2 branches covered.">                for (k = 0; k &lt; j; k++) {</span>
-<span class="fc" id="L226">                    temp.setElementAt(k, j, temp.getElementAt(j, k));</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            for (j = 1; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                for (k = 0; k &lt; j; k++) {</span>
+<span class="fc" id="L225">                    temp.setElementAt(k, j, temp.getElementAt(j, k));</span>
                 }
             }
-<span class="fc" id="L229">            GaussJordanElimination.process(temp, beta);</span>
-<span class="fc bfc" id="L230" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">                if (ia[l]) {</span>
-<span class="fc" id="L232">                    a[l] = beta.getElementAt(j++, 0);</span>
+<span class="fc" id="L228">            GaussJordanElimination.process(temp, beta);</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">                if (ia[l]) {</span>
+<span class="fc" id="L231">                    a[l] = beta.getElementAt(j++, 0);</span>
                 }
             }
-<span class="fc" id="L235">            chisq = 0.0;</span>
-<span class="fc bfc" id="L236" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
-<span class="fc" id="L237">                evaluator.evaluate(x[i], afunc);</span>
-<span class="fc" id="L238">                sum = 0.0;</span>
-<span class="fc bfc" id="L239" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
-<span class="fc" id="L240">                    sum += a[j] * afunc[j];</span>
+<span class="fc" id="L234">            chisq = 0.0;</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L236">                evaluator.evaluate(x[i], afunc);</span>
+<span class="fc" id="L237">                sum = 0.0;</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L239">                    sum += a[j] * afunc[j];</span>
                 }
-<span class="fc" id="L242">                chisq += Math.pow((y[i] - sum) / sig[i], 2.0);</span>
+<span class="fc" id="L241">                chisq += Math.pow((y[i] - sum) / sig[i], 2.0);</span>
             }
-<span class="fc bfc" id="L244" title="All 2 branches covered.">            for (j = 0; j &lt; mfit; j++) {</span>
-<span class="fc bfc" id="L245" title="All 2 branches covered.">                for (k = 0; k &lt; mfit; k++) {</span>
-<span class="fc" id="L246">                    covar.setElementAt(j, k, temp.getElementAt(j, k));</span>
-                }
-            }
-<span class="fc bfc" id="L249" title="All 2 branches covered.">            for (i = mfit; i &lt; ma; i++) {</span>
-<span class="fc bfc" id="L250" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
-<span class="fc" id="L251">                    covar.setElementAt(i, j, 0.0);</span>
-<span class="fc" id="L252">                    covar.setElementAt(j, i, 0.0);</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">            for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">                for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L245">                    covar.setElementAt(j, k, temp.getElementAt(j, k));</span>
                 }
             }
-<span class="fc" id="L255">            k = mfit - 1;</span>
-<span class="fc bfc" id="L256" title="All 2 branches covered.">            for (j = ma - 1; j &gt;= 0; j--) {</span>
-<span class="fc bfc" id="L257" title="All 2 branches covered.">                if (ia[j]) {</span>
-<span class="fc bfc" id="L258" title="All 2 branches covered.">                    for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc" id="L259">                        swap(covar.getBuffer(), covar.getBuffer(),</span>
-<span class="fc" id="L260">                                covar.getIndex(i, k), covar.getIndex(i, j));</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">            for (i = mfit; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L250">                    covar.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L251">                    covar.setElementAt(j, i, 0.0);</span>
+                }
+            }
+<span class="fc" id="L254">            k = mfit - 1;</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            for (j = ma - 1; j &gt;= 0; j--) {</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">                if (ia[j]) {</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">                    for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L258">                        swap(covar.getBuffer(), covar.getBuffer(),</span>
+<span class="fc" id="L259">                                covar.getIndex(i, k), covar.getIndex(i, j));</span>
                     }
-<span class="fc bfc" id="L262" title="All 2 branches covered.">                    for (i = 0; i &lt; ma; i++) {</span>
-<span class="fc" id="L263">                        swap(covar.getBuffer(), covar.getBuffer(),</span>
-<span class="fc" id="L264">                                covar.getIndex(k, i), covar.getIndex(j, i));</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">                    for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L262">                        swap(covar.getBuffer(), covar.getBuffer(),</span>
+<span class="fc" id="L263">                                covar.getIndex(k, i), covar.getIndex(j, i));</span>
                     }
-<span class="fc" id="L266">                    k--;</span>
+<span class="fc" id="L265">                    k--;</span>
                 }
             }
 
-<span class="fc" id="L270">            resultAvailable = true;</span>
+<span class="fc" id="L269">            resultAvailable = true;</span>
 
-<span class="nc" id="L272">        } catch (final AlgebraException | EvaluationException e) {</span>
-<span class="nc" id="L273">            throw new FittingException(e);</span>
-<span class="fc" id="L274">        }</span>
-<span class="fc" id="L275">    }</span>
+<span class="nc" id="L271">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L272">            throw new FittingException(e);</span>
+<span class="fc" id="L273">        }</span>
+<span class="fc" id="L274">    }</span>
 
     /**
      * Prevents parameter at position i of linear combination of basis functions
@@ -282,9 +281,9 @@ public class SimpleSingleDimensionLinearFitter
      * @param val value to be set for parameter at position i.
      */
     public void hold(final int i, final double val) {
-<span class="fc" id="L285">        ia[i] = false;</span>
-<span class="fc" id="L286">        a[i] = val;</span>
-<span class="fc" id="L287">    }</span>
+<span class="fc" id="L284">        ia[i] = false;</span>
+<span class="fc" id="L285">        a[i] = val;</span>
+<span class="fc" id="L286">    }</span>
 
     /**
      * Releases parameter at position i of linear combination of basis functions
@@ -293,8 +292,8 @@ public class SimpleSingleDimensionLinearFitter
      * @param i position of parameter to be released.
      */
     public void free(final int i) {
-<span class="fc" id="L296">        ia[i] = true;</span>
-<span class="fc" id="L297">    }</span>
+<span class="fc" id="L295">        ia[i] = true;</span>
+<span class="fc" id="L296">    }</span>
 
     /**
      * Swaps values of arrays at provided positions.
@@ -305,10 +304,10 @@ public class SimpleSingleDimensionLinearFitter
      * @param pos2   2nd position.
      */
     private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
-<span class="fc" id="L308">        double value1 = array1[pos1];</span>
-<span class="fc" id="L309">        double value2 = array2[pos2];</span>
-<span class="fc" id="L310">        array1[pos1] = value2;</span>
-<span class="fc" id="L311">        array2[pos2] = value1;</span>
-<span class="fc" id="L312">    }</span>
+<span class="fc" id="L307">        double value1 = array1[pos1];</span>
+<span class="fc" id="L308">        double value2 = array2[pos2];</span>
+<span class="fc" id="L309">        array1[pos1] = value2;</span>
+<span class="fc" id="L310">        array2[pos2] = value1;</span>
+<span class="fc" id="L311">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

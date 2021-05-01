@@ -65,9 +65,9 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> MAX_PROGRESS_DELTA = 1.0f;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * Constant defining default confidence of the estimated result, whish is</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * Constant defining default confidence of the estimated result, which is</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * 99%. This means that with a probability of 99% estimation will be</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     * accurate because chosen subsamples will be inliers.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     * accurate because chosen sub-samples will be inliers.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> DEFAULT_CONFIDENCE = 0.99;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
@@ -106,7 +106,7 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">     * Internal non robust estimator of polynomial estimator.</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimator.html">LMSEPolynomialEstimator</a> mPolynomialEstimator;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/irurueta/numerical/polynomials/estimators/LMSEPolynomialEstimator.html">LMSEPolynomialEstimator</a> mPolynomialEstimator;
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">     * Listener to be notified of events such as when estimation starts, ends or</em>
@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">     * @param degree      degree of polynomial to be estimted.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">     * @param degree      degree of polynomial to be estimated.</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">     * @param evaluations collection of polynomial evaluations.</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">     * @param listener    listener to be notified of events.</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided degree is less than 1 or if</em>
@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">     * @param evaluations collection of polynomial evaluations.</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">     * @throws LockedException          if estimator is locked.</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided list of evaluations does</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">     *                                  not containg enough evaluations to estimate the polynomial using current</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">     *                                  not containing enough evaluations to estimate the polynomial using current</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">     *                                  settings.</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEvaluations(<strong class="jxr_keyword">final</strong> List&lt;PolynomialEvaluation&gt; evaluations)
@@ -410,7 +410,7 @@
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">     * iterations is exceeded, result will not be available, however an</em>
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">     * approximate result will be available for retrieval.</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">     * @param maxIterations maximum allowed number of iteratios to be set.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">     * @param maxIterations maximum allowed number of iterations to be set.</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided value is less than 1.</em>
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">     * @throws LockedException          if this estimator is locked because an estimation</em>
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">     *                                  is being computed.</em>
@@ -487,7 +487,7 @@
 <a class="jxr_linenumber" name="L479" href="#L479">479</a>             <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L480" href="#L480">480</a>         }
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>         <em class="jxr_comment">//also ensure that at least a direct or integral evaluation exists</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>         <em class="jxr_comment">// also ensure that at least a direct or integral evaluation exists</em>
 <a class="jxr_linenumber" name="L483" href="#L483">483</a>         <strong class="jxr_keyword">int</strong> count = 0;
 <a class="jxr_linenumber" name="L484" href="#L484">484</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> PolynomialEvaluation eval : mEvaluations) {
 <a class="jxr_linenumber" name="L485" href="#L485">485</a>             <strong class="jxr_keyword">if</strong> (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
@@ -526,7 +526,7 @@
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">     *                                  smaller than minimum required number of evaluations.</em>
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L520" href="#L520">520</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setQualityScores(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] qualityScores) <strong class="jxr_keyword">throws</strong> LockedException {
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <em class="jxr_comment">//quality scores ignored</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <em class="jxr_comment">// quality scores ignored</em>
 <a class="jxr_linenumber" name="L522" href="#L522">522</a>     }
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 
 <a class="jxr_linenumber" name="L524" href="#L524">524</a>     <em class="jxr_javadoccomment">/**</em>
@@ -1001,8 +1001,8 @@
 <a class="jxr_linenumber" name="L993" href="#L993">993</a>     }
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 
 <a class="jxr_linenumber" name="L995" href="#L995">995</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">     * Comutes distance of evaluation respect to provided polynomial in</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">     * a geometric sence if evaluation is direct, otherwise returns algebraic</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">     * Commutes distance of evaluation respect to provided polynomial in</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">     * a geometric sense if evaluation is direct, otherwise returns algebraic</em>
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">     * distance.</em>
 <a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">     * @param eval       polynomial evaluation.</em>

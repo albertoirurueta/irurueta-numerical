@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>              PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     * Degree of polynomial to be estimted.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     * Degree of polynomial to be estimated.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">int</strong> mDegree;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">protected</strong> List&lt;PolynomialEvaluation&gt; mEvaluations;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * True when estimator is estimating radial distorion.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * True when estimator is estimating radial distortion.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> mLocked;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">     * @param degree      degree of polynomial to be estimted.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">     * @param degree      degree of polynomial to be estimated.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">     * @param evaluations collection of polynomial evaluations.</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">     * @param listener    listener to be notified of events.</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided degree is less than 1.</em>
@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a>             <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L234" href="#L234">234</a>         }
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>         <em class="jxr_comment">//also ensure that at least a direct or integral evaluation exists</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         <em class="jxr_comment">// also ensure that at least a direct or integral evaluation exists</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a>         <strong class="jxr_keyword">int</strong> count = 0;
 <a class="jxr_linenumber" name="L238" href="#L238">238</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> PolynomialEvaluation eval : mEvaluations) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a>             <strong class="jxr_keyword">if</strong> (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
@@ -479,7 +479,7 @@
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">     * Creates an instance of a polynomial estimator using provided evaluations</em>
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * and type.</em>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * @param evaluations collection of polynomial esvaluations.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * @param evaluations collection of polynomial evaluations.</em>
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * @param type        type of polynomial estimator.</em>
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     * @return an instance of a polynomial estimator.</em>
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">     */</em>
@@ -619,7 +619,7 @@
 <a class="jxr_linenumber" name="L611" href="#L611">611</a>     }
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 
 <a class="jxr_linenumber" name="L613" href="#L613">613</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">     * Fils row of system of equations for a direct polynomial evaluation.</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">     * Fills row of system of equations for a direct polynomial evaluation.</em>
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">     * @param evaluation a direct polynomial evaluation.</em>
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">     * @param a          system matrix.</em>

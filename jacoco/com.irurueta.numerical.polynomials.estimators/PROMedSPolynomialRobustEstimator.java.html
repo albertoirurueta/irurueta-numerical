@@ -30,7 +30,6 @@ import java.util.List;
 /**
  * Finds the best polynomial using PROMedS algorithm.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
     /**
@@ -84,9 +83,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * Constructor.
      */
     public PROMedSPolynomialRobustEstimator() {
-<span class="fc" id="L87">        super();</span>
-<span class="fc" id="L88">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L86">        super();</span>
+<span class="fc" id="L87">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * Constructor.
@@ -95,9 +94,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public PROMedSPolynomialRobustEstimator(final int degree) {
-<span class="fc" id="L98">        super(degree);</span>
-<span class="fc" id="L99">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L97">        super(degree);</span>
+<span class="fc" id="L98">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L99">    }</span>
 
     /**
      * Constructor.
@@ -108,9 +107,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(
             final List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L111">        super(evaluations);</span>
-<span class="fc" id="L112">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L110">        super(evaluations);</span>
+<span class="fc" id="L111">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L112">    }</span>
 
     /**
      * Constructor.
@@ -120,9 +119,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(
             final PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L123">        super(listener);</span>
-<span class="fc" id="L124">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L122">        super(listener);</span>
+<span class="fc" id="L123">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L124">    }</span>
 
     /**
      * Constructor.
@@ -135,9 +134,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(
             final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
-<span class="fc" id="L138">        super(degree, evaluations);</span>
-<span class="fc" id="L139">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L137">        super(degree, evaluations);</span>
+<span class="fc" id="L138">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L139">    }</span>
 
     /**
      * Constructor.
@@ -149,9 +148,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(
             final int degree, final PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L152">        super(degree, listener);</span>
-<span class="fc" id="L153">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L151">        super(degree, listener);</span>
+<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L153">    }</span>
 
     /**
      * Constructor.
@@ -165,9 +164,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     public PROMedSPolynomialRobustEstimator(
             final List&lt;PolynomialEvaluation&gt; evaluations,
             final PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L168">        super(evaluations, listener);</span>
-<span class="fc" id="L169">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L170">    }</span>
+<span class="fc" id="L167">        super(evaluations, listener);</span>
+<span class="fc" id="L168">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L169">    }</span>
 
     /**
      * Constructor.
@@ -183,9 +182,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     public PROMedSPolynomialRobustEstimator(
             final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
             final PolynomialRobustEstimatorListener listener) {
-<span class="fc" id="L186">        super(degree, evaluations, listener);</span>
-<span class="fc" id="L187">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L188">    }</span>
+<span class="fc" id="L185">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L186">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L187">    }</span>
 
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that
@@ -207,7 +206,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * accuracy has been reached
      */
     public double getStopThreshold() {
-<span class="fc" id="L210">        return mStopThreshold;</span>
+<span class="fc" id="L209">        return mStopThreshold;</span>
     }
 
     /**
@@ -234,25 +233,25 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public void setStopThreshold(final double stopThreshold)
             throws LockedException {
-<span class="pc bpc" id="L237" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L238">            throw new LockedException();</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L237">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L241">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L244">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L245">    }</span>
+<span class="fc" id="L243">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L244">    }</span>
 
     /**
      * Returns quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sampled point
+     * The larger the score value the better the quality of the sampled point
      *
      * @return quality scores corresponding to each point
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L255">        return mQualityScores;</span>
+<span class="fc" id="L254">        return mQualityScores;</span>
     }
 
     /**
@@ -267,14 +266,14 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     @Override
     public void setQualityScores(final double[] qualityScores) throws LockedException {
-<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L271">            throw new LockedException();</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L270">            throw new LockedException();</span>
         }
-<span class="fc" id="L273">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L274">    }</span>
+<span class="fc" id="L272">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L273">    }</span>
 
     /**
-     * Indicates if eatimator is ready to start the polynomial estimation.
+     * Indicates if estimator is ready to start the polynomial estimation.
      * This is true when input data (i.e. polynomial evaluations and quality
      * scores) are provided and enough data is available.
      *
@@ -282,8 +281,8 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L285" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
-<span class="pc bpc" id="L286" title="1 of 2 branches missed.">                mQualityScores.length == mEvaluations.size();</span>
+<span class="fc bfc" id="L284" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">                mQualityScores.length == mEvaluations.size();</span>
     }
 
     /**
@@ -300,36 +299,37 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
     @Override
     public Polynomial estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L304">            throw new LockedException();</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L303">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L306" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L307">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L306">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L310">        final PROMedSRobustEstimator&lt;Polynomial&gt; innerEstimator =</span>
+<span class="fc" id="L309">        final PROMedSRobustEstimator&lt;Polynomial&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L312">                        new PROMedSRobustEstimatorListener&lt;Polynomial&gt;() {</span>
+<span class="fc" id="L311">                        new PROMedSRobustEstimatorListener&lt;Polynomial&gt;() {</span>
 
                             // subset of evaluations picked on each iteration
-<span class="fc" id="L315">                            private final List&lt;PolynomialEvaluation&gt; mSubsetEvaluations =</span>
+<span class="fc" id="L314">                            private final List&lt;PolynomialEvaluation&gt; mSubsetEvaluations =</span>
                                     new ArrayList&lt;&gt;();
 
                             @Override
                             public double getThreshold() {
-<span class="fc" id="L320">                                return mStopThreshold;</span>
+<span class="fc" id="L319">                                return mStopThreshold;</span>
                             }
 
                             @Override
                             public int getTotalSamples() {
-<span class="fc" id="L325">                                return mEvaluations.size();</span>
+<span class="fc" id="L324">                                return mEvaluations.size();</span>
                             }
 
                             @Override
                             public int getSubsetSize() {
-<span class="fc" id="L330">                                return mPolynomialEstimator.getMinNumberOfEvaluations();</span>
+<span class="fc" id="L329">                                return mPolynomialEstimator.getMinNumberOfEvaluations();</span>
                             }
 
+                            @SuppressWarnings(&quot;DuplicatedCode&quot;)
                             @Override
                             public void estimatePreliminarSolutions(
                                     final int[] samplesIndices,

@@ -28,7 +28,6 @@ import java.util.Arrays;
  * samples as a series of Gaussian functions with a small sigma and centered at
  * the exact value of the sample.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class HistogramMaximumLikelihoodEstimator
         extends MaximumLikelihoodEstimator {
 
@@ -76,11 +75,11 @@ public class HistogramMaximumLikelihoodEstimator
      * Empty constructor.
      */
     public HistogramMaximumLikelihoodEstimator() {
-<span class="fc" id="L79">        super();</span>
-<span class="fc" id="L80">        numberOfBins = DEFAULT_NUMBER_OF_BINS;</span>
-<span class="fc" id="L81">        bins = null;</span>
-<span class="fc" id="L82">        gaussian = null;</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L78">        super();</span>
+<span class="fc" id="L79">        numberOfBins = DEFAULT_NUMBER_OF_BINS;</span>
+<span class="fc" id="L80">        bins = null;</span>
+<span class="fc" id="L81">        gaussian = null;</span>
+<span class="fc" id="L82">    }</span>
 
     /**
      * Constructor.
@@ -93,11 +92,11 @@ public class HistogramMaximumLikelihoodEstimator
      */
     public HistogramMaximumLikelihoodEstimator(
             final double gaussianSigma, final int numberOfBins) {
-<span class="fc" id="L96">        super(gaussianSigma);</span>
-<span class="fc" id="L97">        internalSetNumberOfBins(numberOfBins);</span>
-<span class="fc" id="L98">        bins = null;</span>
-<span class="fc" id="L99">        gaussian = null;</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L95">        super(gaussianSigma);</span>
+<span class="fc" id="L96">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L97">        bins = null;</span>
+<span class="fc" id="L98">        gaussian = null;</span>
+<span class="fc" id="L99">    }</span>
 
     /**
      * Constructor.
@@ -112,11 +111,11 @@ public class HistogramMaximumLikelihoodEstimator
      */
     public HistogramMaximumLikelihoodEstimator(
             final double[] inputData, final double gaussianSigma, final int numberOfBins) {
-<span class="fc" id="L115">        super(inputData, gaussianSigma);</span>
-<span class="fc" id="L116">        internalSetNumberOfBins(numberOfBins);</span>
-<span class="fc" id="L117">        bins = null;</span>
-<span class="fc" id="L118">        gaussian = null;</span>
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L114">        super(inputData, gaussianSigma);</span>
+<span class="fc" id="L115">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L116">        bins = null;</span>
+<span class="fc" id="L117">        gaussian = null;</span>
+<span class="fc" id="L118">    }</span>
 
     /**
      * Constructor.
@@ -136,11 +135,11 @@ public class HistogramMaximumLikelihoodEstimator
     public HistogramMaximumLikelihoodEstimator(
             final double minValue, final double maxValue, final double[] inputData,
             final double gaussianSigma, final int numberOfBins) {
-<span class="fc" id="L139">        super(minValue, maxValue, inputData, gaussianSigma);</span>
-<span class="fc" id="L140">        internalSetNumberOfBins(numberOfBins);</span>
-<span class="fc" id="L141">        bins = null;</span>
-<span class="fc" id="L142">        gaussian = null;</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L138">        super(minValue, maxValue, inputData, gaussianSigma);</span>
+<span class="fc" id="L139">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L140">        bins = null;</span>
+<span class="fc" id="L141">        gaussian = null;</span>
+<span class="fc" id="L142">    }</span>
 
 
     /**
@@ -152,7 +151,7 @@ public class HistogramMaximumLikelihoodEstimator
      */
     @Override
     public MaximumLikelihoodEstimatorMethod getMethod() {
-<span class="fc" id="L155">        return MaximumLikelihoodEstimatorMethod.</span>
+<span class="fc" id="L154">        return MaximumLikelihoodEstimatorMethod.</span>
                 HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR;
     }
 
@@ -165,7 +164,7 @@ public class HistogramMaximumLikelihoodEstimator
      * @return Number of bins to be used on the histogram.
      */
     public int getNumberOfBins() {
-<span class="fc" id="L168">        return numberOfBins;</span>
+<span class="fc" id="L167">        return numberOfBins;</span>
     }
 
     /**
@@ -182,11 +181,11 @@ public class HistogramMaximumLikelihoodEstimator
      *                                  the allowed minimum.
      */
     public void setNumberOfBins(final int numberOfBins) throws LockedException {
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L186">            throw new LockedException();</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L185">            throw new LockedException();</span>
         }
-<span class="fc" id="L188">        internalSetNumberOfBins(numberOfBins);</span>
-<span class="fc" id="L189">    }</span>
+<span class="fc" id="L187">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L188">    }</span>
 
     /**
      * Starts the estimation of the most likely value contained within provided
@@ -202,67 +201,67 @@ public class HistogramMaximumLikelihoodEstimator
      */
     @Override
     public double estimate() throws LockedException, NotReadyException {
-<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L206">            throw new LockedException();</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L205">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L209">            throw new NotReadyException();</span>
-        }
-
-<span class="fc" id="L212">        locked = true;</span>
-
-<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (!areMinMaxAvailable) {</span>
-<span class="fc" id="L215">            computeMinMaxValues();</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L208">            throw new NotReadyException();</span>
         }
 
-<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if ((maxValue - minValue) &lt; EPS) {</span>
+<span class="fc" id="L211">        locked = true;</span>
+
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (!areMinMaxAvailable) {</span>
+<span class="fc" id="L214">            computeMinMaxValues();</span>
+        }
+
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if ((maxValue - minValue) &lt; EPS) {</span>
             // min-max limits are almost equal, so we return it as the solution
-<span class="nc" id="L220">            locked = false;</span>
-<span class="nc" id="L221">            return (minValue + maxValue) * 0.5;</span>
+<span class="nc" id="L219">            locked = false;</span>
+<span class="nc" id="L220">            return (minValue + maxValue) * 0.5;</span>
         }
 
         // Create histogram (initialized to 0.0)
-<span class="pc bpc" id="L225" title="3 of 4 branches missed.">        if (bins == null || bins.length != numberOfBins) {</span>
-<span class="fc" id="L226">            bins = new double[numberOfBins];</span>
+<span class="pc bpc" id="L224" title="3 of 4 branches missed.">        if (bins == null || bins.length != numberOfBins) {</span>
+<span class="fc" id="L225">            bins = new double[numberOfBins];</span>
         }
-<span class="fc" id="L228">        Arrays.fill(bins, 0.0);</span>
+<span class="fc" id="L227">        Arrays.fill(bins, 0.0);</span>
 
 
         // Vector containing gaussians being added to histogram
         // Data is added to histogram as if it was convoluted with a gaussian
         // to add smoothness to results
-<span class="pc bpc" id="L234" title="3 of 4 branches missed.">        if (gaussian == null || gaussian.length != numberOfBins) {</span>
-<span class="fc" id="L235">            gaussian = new double[numberOfBins];</span>
+<span class="pc bpc" id="L233" title="3 of 4 branches missed.">        if (gaussian == null || gaussian.length != numberOfBins) {</span>
+<span class="fc" id="L234">            gaussian = new double[numberOfBins];</span>
         }
 
         // set of data values between bins
-<span class="fc" id="L239">        final double delta = (maxValue - minValue) / (double) (numberOfBins - 1);</span>
+<span class="fc" id="L238">        final double delta = (maxValue - minValue) / (double) (numberOfBins - 1);</span>
 
         // iterate over input data to add data to histogram
         double gaussianCenterPos;
-<span class="fc bfc" id="L243" title="All 2 branches covered.">        for (double data : inputData) {</span>
-<span class="fc" id="L244">            gaussianCenterPos = (data - minValue) / delta;</span>
-<span class="fc" id="L245">            computeGaussian(gaussian, gaussianCenterPos);</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        for (double data : inputData) {</span>
+<span class="fc" id="L243">            gaussianCenterPos = (data - minValue) / delta;</span>
+<span class="fc" id="L244">            computeGaussian(gaussian, gaussianCenterPos);</span>
 
             // add gaussian centered at input data value to histogram bins
-<span class="fc" id="L248">            ArrayUtils.sum(bins, gaussian, bins);</span>
+<span class="fc" id="L247">            ArrayUtils.sum(bins, gaussian, bins);</span>
         }
 
         // find location of maximum in histogram
-<span class="fc" id="L252">        double maxBin = 0.0;</span>
+<span class="fc" id="L251">        double maxBin = 0.0;</span>
         final double maxFuncValue;
-<span class="fc" id="L254">        int maxPos = 0;</span>
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        for (int i = 0; i &lt; numberOfBins; i++) {</span>
-<span class="fc bfc" id="L256" title="All 2 branches covered.">            if (bins[i] &gt; maxBin) {</span>
-<span class="fc" id="L257">                maxBin = bins[i];</span>
-<span class="fc" id="L258">                maxPos = i;</span>
+<span class="fc" id="L253">        int maxPos = 0;</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        for (int i = 0; i &lt; numberOfBins; i++) {</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            if (bins[i] &gt; maxBin) {</span>
+<span class="fc" id="L256">                maxBin = bins[i];</span>
+<span class="fc" id="L257">                maxPos = i;</span>
             }
         }
 
-<span class="fc" id="L262">        maxFuncValue = minValue + ((double) maxPos) * delta;</span>
+<span class="fc" id="L261">        maxFuncValue = minValue + ((double) maxPos) * delta;</span>
 
-<span class="fc" id="L264">        locked = false;</span>
-<span class="fc" id="L265">        return maxFuncValue;</span>
+<span class="fc" id="L263">        locked = false;</span>
+<span class="fc" id="L264">        return maxFuncValue;</span>
     }
 
     /**
@@ -274,16 +273,16 @@ public class HistogramMaximumLikelihoodEstimator
      * @param centerPos Value where Gaussian is centered
      */
     protected void computeGaussian(final double[] gaussian, final double centerPos) {
-<span class="fc" id="L277">        final int length = gaussian.length;</span>
+<span class="fc" id="L276">        final int length = gaussian.length;</span>
 
         double x;
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L281">            x = ((double) i) - centerPos;</span>
-<span class="fc" id="L282">            gaussian[i] = Math.exp(-x * x /</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L280">            x = ((double) i) - centerPos;</span>
+<span class="fc" id="L281">            gaussian[i] = Math.exp(-x * x /</span>
                     (2.0 * gaussianSigma * gaussianSigma)) /
-<span class="fc" id="L284">                    (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>
+<span class="fc" id="L283">                    (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>
         }
-<span class="fc" id="L286">    }</span>
+<span class="fc" id="L285">    }</span>
 
     /**
      * Internal method to set number of bins to be used on the histogram. The
@@ -296,11 +295,11 @@ public class HistogramMaximumLikelihoodEstimator
      *                                  the allowed minimum.
      */
     private void internalSetNumberOfBins(final int numberOfBins) {
-<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (numberOfBins &lt; MIN_NUMBER_OF_BINS) {</span>
-<span class="fc" id="L300">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (numberOfBins &lt; MIN_NUMBER_OF_BINS) {</span>
+<span class="fc" id="L299">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L303">        this.numberOfBins = numberOfBins;</span>
-<span class="fc" id="L304">    }</span>
+<span class="fc" id="L302">        this.numberOfBins = numberOfBins;</span>
+<span class="fc" id="L303">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
