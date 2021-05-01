@@ -495,7 +495,7 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
 <span class="fc" id="L495">            System.arraycopy(a, 0, atry, 0, ma);</span>
 
 <span class="fc" id="L497">            ochisq = chisq;</span>
-<span class="pc bpc" id="L498" title="1 of 2 branches missed.">            for (iter = 0; iter &lt; itmax; iter++) {</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">            for (iter = 0; iter &lt; itmax; iter++) {</span>
 
 <span class="fc bfc" id="L500" title="All 2 branches covered.">                if (done == ndone) {</span>
                     // last pass. Use zero alamda
@@ -570,10 +570,10 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
             }
 
             // too many iterations
-<span class="nc" id="L573">            throw new FittingException(&quot;too many iterations&quot;);</span>
+<span class="fc" id="L573">            throw new FittingException(&quot;too many iterations&quot;);</span>
 
-<span class="nc" id="L575">        } catch (final AlgebraException | EvaluationException e) {</span>
-<span class="nc" id="L576">            throw new FittingException(e);</span>
+<span class="fc" id="L575">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="fc" id="L576">            throw new FittingException(e);</span>
         }
     }
 

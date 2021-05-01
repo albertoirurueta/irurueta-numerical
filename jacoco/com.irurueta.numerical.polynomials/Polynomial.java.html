@@ -310,7 +310,7 @@ public class Polynomial implements Serializable {
      */
     public void multiplyByScalar(final double scalar, final Polynomial result) {
 <span class="fc" id="L312">        double[] resultPolyParams = result.mPolyParams;</span>
-<span class="fc bfc" id="L313" title="All 4 branches covered.">        if (resultPolyParams.length != mPolyParams.length || result == this) {</span>
+<span class="pc bpc" id="L313" title="1 of 4 branches missed.">        if (resultPolyParams.length != mPolyParams.length || result == this) {</span>
 <span class="fc" id="L314">            resultPolyParams = new double[mPolyParams.length];</span>
         }
 <span class="fc" id="L316">        ArrayUtils.multiplyByScalar(mPolyParams, scalar, resultPolyParams);</span>
