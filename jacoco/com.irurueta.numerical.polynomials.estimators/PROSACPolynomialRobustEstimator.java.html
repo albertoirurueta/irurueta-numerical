@@ -348,11 +348,11 @@ public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;Polynomial&gt; estimator,
                                     final float progress) {
-<span class="pc bpc" id="L351" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L352">                                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L352">                                    mListener.onEstimateProgressChange(</span>
                                             PROSACPolynomialRobustEstimator.this, progress);
                                 }
-<span class="fc" id="L355">                            }</span>
+<span class="nc" id="L355">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {

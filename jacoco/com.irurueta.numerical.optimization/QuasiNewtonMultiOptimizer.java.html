@@ -238,10 +238,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L238">                        test = temp;</span>
                     }
                 }
-<span class="fc bfc" id="L241" title="All 2 branches covered.">                if (test &lt; TOLX) {</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                if (test &lt; TOLX) {</span>
                     // minimum found
-<span class="fc" id="L243">                    validResult = true;</span>
-<span class="fc" id="L244">                    break;</span>
+<span class="nc" id="L243">                    validResult = true;</span>
+<span class="nc" id="L244">                    break;</span>
                 }
 
 <span class="fc" id="L247">                System.arraycopy(g, 0, dg, 0, n);</span>
@@ -257,10 +257,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L257">                        test = temp;</span>
                     }
                 }
-<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                if (test &lt; tolerance) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                if (test &lt; tolerance) {</span>
                     // minimum found
-<span class="nc" id="L262">                    validResult = true;</span>
-<span class="nc" id="L263">                    break;</span>
+<span class="fc" id="L262">                    validResult = true;</span>
+<span class="fc" id="L263">                    break;</span>
                 }
 
 <span class="fc bfc" id="L266" title="All 2 branches covered.">                for (int i = 0; i &lt; n; i++) {</span>
@@ -281,7 +281,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L281">                    sumxi += sqr(xi[i]);</span>
                 }
 
-<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
 <span class="fc" id="L285">                    fac = 1.0 / fac;</span>
 <span class="fc" id="L286">                    fad = 1.0 / fae;</span>
 <span class="fc bfc" id="L287" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
@@ -555,10 +555,10 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="nc" id="L555">                throw new OptimizationException(e);</span>
 <span class="fc" id="L556">            }</span>
 
-<span class="fc bfc" id="L558" title="All 2 branches covered.">            if (alam &lt; alamin) {</span>
-<span class="fc" id="L559">                System.arraycopy(xold, 0, x, 0, n);</span>
-<span class="fc" id="L560">                check[0] = true;</span>
-<span class="fc" id="L561">                return;</span>
+<span class="pc bpc" id="L558" title="1 of 2 branches missed.">            if (alam &lt; alamin) {</span>
+<span class="nc" id="L559">                System.arraycopy(xold, 0, x, 0, n);</span>
+<span class="nc" id="L560">                check[0] = true;</span>
+<span class="nc" id="L561">                return;</span>
 <span class="fc bfc" id="L562" title="All 2 branches covered.">            } else if (f[0] &lt;= fold + ALF * alam * slope) {</span>
 <span class="fc" id="L563">                return;</span>
             } else {
