@@ -15,9 +15,11 @@
  */
 package com.irurueta.numerical.polynomials.estimators;
 
+import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -128,5 +130,36 @@ public class DerivativePolynomialEvaluationTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final DerivativePolynomialEvaluation eval1 =
+                new DerivativePolynomialEvaluation();
+
+        // set new values
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+
+        eval1.setEvaluation(evaluation);
+        eval1.setX(x);
+        eval1.setDerivativeOrder(order);
+
+        // check correctness
+        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
+        assertEquals(eval1.getX(), x, 0.0);
+        assertEquals(eval1.getDerivativeOrder(), order);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(eval1);
+        final DerivativePolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+
+        // check correctness
+        assertEquals(eval2.getEvaluation(), evaluation, 0.0);
+        assertEquals(eval2.getX(), x, 0.0);
+        assertEquals(eval2.getDerivativeOrder(), order);
     }
 }

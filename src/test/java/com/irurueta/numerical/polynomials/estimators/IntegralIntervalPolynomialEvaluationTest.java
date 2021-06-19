@@ -15,9 +15,11 @@
  */
 package com.irurueta.numerical.polynomials.estimators;
 
+import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -128,5 +130,41 @@ public class IntegralIntervalPolynomialEvaluationTest {
 
         // check correctness
         assertEquals(eval.getIntegralOrder(), order);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+
+        final IntegralIntervalPolynomialEvaluation eval1 = new IntegralIntervalPolynomialEvaluation(startX, endX,
+                evaluation, order);
+
+        // check default values
+        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
+        assertEquals(eval1.getStartX(), startX, 0.0);
+        assertEquals(eval1.getEndX(), endX, 0.0);
+        assertEquals(eval1.getIntegralOrder(), order);
+        assertEquals(eval1.getType(),
+                PolynomialEvaluationType.INTEGRAL_INTERVAL);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(eval1);
+        final IntegralIntervalPolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+
+        // check correctness
+        assertEquals(eval2.getEvaluation(), evaluation, 0.0);
+        assertEquals(eval2.getStartX(), startX, 0.0);
+        assertEquals(eval2.getEndX(), endX, 0.0);
+        assertEquals(eval2.getIntegralOrder(), order);
+        assertEquals(eval2.getType(),
+                PolynomialEvaluationType.INTEGRAL_INTERVAL);
     }
 }

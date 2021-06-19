@@ -18,9 +18,11 @@ package com.irurueta.numerical.polynomials;
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Complex;
 import com.irurueta.numerical.NumericalException;
+import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.*;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -5692,5 +5694,21 @@ public class PolynomialTest {
             assertTrue(extrema[1] >= root2 && extrema[1] <= root3);
             assertTrue(extrema[2] >= root3 && extrema[2] <= root4);
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+        final double[] polyParams = new double[length];
+        randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Polynomial p1 = new Polynomial(polyParams);
+
+        final byte[] bytes = SerializationHelper.serialize(p1);
+        final Polynomial p2 = SerializationHelper.deserialize(bytes);
+
+        assertArrayEquals(p1.getPolyParams(), p2.getPolyParams(), 0.0);
+        assertEquals(p1.getDegree(), p2.getDegree());
     }
 }

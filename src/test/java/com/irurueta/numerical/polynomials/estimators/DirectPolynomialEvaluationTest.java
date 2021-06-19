@@ -15,9 +15,11 @@
  */
 package com.irurueta.numerical.polynomials.estimators;
 
+import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -83,5 +85,30 @@ public class DirectPolynomialEvaluationTest {
 
         // check correctness
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final DirectPolynomialEvaluation eval1 = new DirectPolynomialEvaluation();
+
+        // set new values
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        eval1.setX(x);
+        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        eval1.setEvaluation(evaluation);
+
+        // check correctness
+        assertEquals(eval1.getX(), x, 0.0);
+        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(eval1);
+        final DirectPolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+
+        // check correctness
+        assertEquals(eval2.getX(), x, 0.0);
+        assertEquals(eval2.getEvaluation(), evaluation, 0.0);
     }
 }

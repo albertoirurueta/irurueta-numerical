@@ -1,7 +1,7 @@
 # irurueta-numerical
 Numerical utilities
 
-[![Build Status](https://travis-ci.org/albertoirurueta/irurueta-numerical.svg?branch=master)](https://travis-ci.org/albertoirurueta/irurueta-numerical)
+[![Build Status](https://travis-ci.com/albertoirurueta/irurueta-numerical.svg?branch=master)](https://travis-ci.com/albertoirurueta/irurueta-numerical)
 
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-numerical&metric=bugs)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-numerical)

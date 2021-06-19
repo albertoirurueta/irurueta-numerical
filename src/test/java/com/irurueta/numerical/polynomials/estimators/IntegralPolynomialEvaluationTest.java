@@ -15,9 +15,11 @@
  */
 package com.irurueta.numerical.polynomials.estimators;
 
+import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -154,5 +156,40 @@ public class IntegralPolynomialEvaluationTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double[] constants = new double[1];
+        randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+
+        final IntegralPolynomialEvaluation eval1 = new IntegralPolynomialEvaluation(x, evaluation, constants,
+                order);
+
+        // check default values
+        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
+        assertEquals(eval1.getX(), x, 0.0);
+        assertSame(eval1.getConstants(), constants);
+        assertEquals(eval1.getIntegralOrder(), order);
+        assertEquals(eval1.getType(),
+                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(eval1);
+        final IntegralPolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+
+        // check correctness
+        assertEquals(eval2.getEvaluation(), evaluation, 0.0);
+        assertEquals(eval2.getX(), x, 0.0);
+        assertArrayEquals(eval2.getConstants(), constants, 0.0);
+        assertEquals(eval2.getIntegralOrder(), order);
+        assertEquals(eval2.getType(),
+                PolynomialEvaluationType.INTEGRAL_EVALUATION);
     }
 }
