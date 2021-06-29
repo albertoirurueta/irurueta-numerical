@@ -694,7 +694,7 @@ public abstract class PolynomialEstimator {
 <span class="fc bfc" id="L694" title="All 2 branches covered.">                for (int k = 1; k &lt;= i; k++) {</span>
 <span class="fc" id="L695">                    param *= k;</span>
                 }
-<span class="fc" id="L697">                accum += constants[i] / (double) param * powX;</span>
+<span class="fc" id="L697">                accum += constants[i] / param * powX;</span>
             }
 <span class="fc" id="L699">            powX *= x;</span>
         }
@@ -704,7 +704,7 @@ public abstract class PolynomialEstimator {
 <span class="fc bfc" id="L704" title="All 2 branches covered.">            for (int k = 1; k &lt; order; k++) {</span>
 <span class="fc" id="L705">                param *= j - k;</span>
             }
-<span class="fc" id="L707">            a.setElementAt(row, i, powX / (double) param);</span>
+<span class="fc" id="L707">            a.setElementAt(row, i, powX / param);</span>
 <span class="fc" id="L708">            powX *= x;</span>
         }
 
@@ -743,7 +743,7 @@ public abstract class PolynomialEstimator {
 <span class="fc bfc" id="L743" title="All 2 branches covered.">                for (int k = 1; k &lt;= i; k++) {</span>
 <span class="fc" id="L744">                    param *= k;</span>
                 }
-<span class="fc" id="L746">                accum += constants[i] / (double) param * (powEndX - powStartX);</span>
+<span class="fc" id="L746">                accum += constants[i] / param * (powEndX - powStartX);</span>
             }
 <span class="fc" id="L748">            powStartX *= startX;</span>
 <span class="fc" id="L749">            powEndX *= endX;</span>
@@ -754,7 +754,7 @@ public abstract class PolynomialEstimator {
 <span class="fc bfc" id="L754" title="All 2 branches covered.">            for (int k = 1; k &lt; order; k++) {</span>
 <span class="fc" id="L755">                param *= j - k;</span>
             }
-<span class="fc" id="L757">            a.setElementAt(row, i, (powEndX - powStartX) / (double) param);</span>
+<span class="fc" id="L757">            a.setElementAt(row, i, (powEndX - powStartX) / param);</span>
 <span class="fc" id="L758">            powStartX *= startX;</span>
 <span class="fc" id="L759">            powEndX *= endX;</span>
         }

@@ -702,7 +702,7 @@
 <a class="jxr_linenumber" name="L694" href="#L694">694</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 1; k &lt;= i; k++) {
 <a class="jxr_linenumber" name="L695" href="#L695">695</a>                     param *= k;
 <a class="jxr_linenumber" name="L696" href="#L696">696</a>                 }
-<a class="jxr_linenumber" name="L697" href="#L697">697</a>                 accum += constants[i] / (<strong class="jxr_keyword">double</strong>) param * powX;
+<a class="jxr_linenumber" name="L697" href="#L697">697</a>                 accum += constants[i] / param * powX;
 <a class="jxr_linenumber" name="L698" href="#L698">698</a>             }
 <a class="jxr_linenumber" name="L699" href="#L699">699</a>             powX *= x;
 <a class="jxr_linenumber" name="L700" href="#L700">700</a>         }
@@ -712,7 +712,7 @@
 <a class="jxr_linenumber" name="L704" href="#L704">704</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 1; k &lt; order; k++) {
 <a class="jxr_linenumber" name="L705" href="#L705">705</a>                 param *= j - k;
 <a class="jxr_linenumber" name="L706" href="#L706">706</a>             }
-<a class="jxr_linenumber" name="L707" href="#L707">707</a>             a.setElementAt(row, i, powX / (<strong class="jxr_keyword">double</strong>) param);
+<a class="jxr_linenumber" name="L707" href="#L707">707</a>             a.setElementAt(row, i, powX / param);
 <a class="jxr_linenumber" name="L708" href="#L708">708</a>             powX *= x;
 <a class="jxr_linenumber" name="L709" href="#L709">709</a>         }
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 
@@ -751,7 +751,7 @@
 <a class="jxr_linenumber" name="L743" href="#L743">743</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 1; k &lt;= i; k++) {
 <a class="jxr_linenumber" name="L744" href="#L744">744</a>                     param *= k;
 <a class="jxr_linenumber" name="L745" href="#L745">745</a>                 }
-<a class="jxr_linenumber" name="L746" href="#L746">746</a>                 accum += constants[i] / (<strong class="jxr_keyword">double</strong>) param * (powEndX - powStartX);
+<a class="jxr_linenumber" name="L746" href="#L746">746</a>                 accum += constants[i] / param * (powEndX - powStartX);
 <a class="jxr_linenumber" name="L747" href="#L747">747</a>             }
 <a class="jxr_linenumber" name="L748" href="#L748">748</a>             powStartX *= startX;
 <a class="jxr_linenumber" name="L749" href="#L749">749</a>             powEndX *= endX;
@@ -762,7 +762,7 @@
 <a class="jxr_linenumber" name="L754" href="#L754">754</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 1; k &lt; order; k++) {
 <a class="jxr_linenumber" name="L755" href="#L755">755</a>                 param *= j - k;
 <a class="jxr_linenumber" name="L756" href="#L756">756</a>             }
-<a class="jxr_linenumber" name="L757" href="#L757">757</a>             a.setElementAt(row, i, (powEndX - powStartX) / (<strong class="jxr_keyword">double</strong>) param);
+<a class="jxr_linenumber" name="L757" href="#L757">757</a>             a.setElementAt(row, i, (powEndX - powStartX) / param);
 <a class="jxr_linenumber" name="L758" href="#L758">758</a>             powStartX *= startX;
 <a class="jxr_linenumber" name="L759" href="#L759">759</a>             powEndX *= endX;
 <a class="jxr_linenumber" name="L760" href="#L760">760</a>         }

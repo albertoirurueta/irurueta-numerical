@@ -258,7 +258,7 @@ public class HistogramMaximumLikelihoodEstimator
             }
         }
 
-<span class="fc" id="L261">        maxFuncValue = minValue + ((double) maxPos) * delta;</span>
+<span class="fc" id="L261">        maxFuncValue = minValue + maxPos * delta;</span>
 
 <span class="fc" id="L263">        locked = false;</span>
 <span class="fc" id="L264">        return maxFuncValue;</span>
@@ -277,7 +277,7 @@ public class HistogramMaximumLikelihoodEstimator
 
         double x;
 <span class="fc bfc" id="L279" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L280">            x = ((double) i) - centerPos;</span>
+<span class="fc" id="L280">            x = i - centerPos;</span>
 <span class="fc" id="L281">            gaussian[i] = Math.exp(-x * x /</span>
                     (2.0 * gaussianSigma * gaussianSigma)) /
 <span class="fc" id="L283">                    (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>

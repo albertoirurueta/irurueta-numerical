@@ -238,64 +238,63 @@ public class AccurateMaximumLikelihoodEstimator
 
 <span class="fc" id="L239">            final int numberOfBins = internalEstimator.getNumberOfBins();</span>
 
-<span class="fc" id="L241">            final double delta = (localMaxValue - localMinValue) /</span>
-                    ((double) (numberOfBins - 1));
+<span class="fc" id="L241">            final double delta = (localMaxValue - localMinValue) / (numberOfBins - 1);</span>
 
             // pick two values around initial coarse solution
-<span class="fc" id="L245">            minEvalPoint = middleEvalPoint - delta;</span>
-<span class="fc" id="L246">            maxEvalPoint = middleEvalPoint + delta;</span>
+<span class="fc" id="L244">            minEvalPoint = middleEvalPoint - delta;</span>
+<span class="fc" id="L245">            maxEvalPoint = middleEvalPoint + delta;</span>
 
-<span class="pc bpc" id="L248" title="1 of 2 branches missed.">            if (!areMinMaxAvailable) {</span>
-<span class="fc" id="L249">                this.minValue = localMinValue;</span>
-<span class="fc" id="L250">                this.maxValue = localMaxValue;</span>
-<span class="fc" id="L251">                areMinMaxAvailable = true;</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">            if (!areMinMaxAvailable) {</span>
+<span class="fc" id="L248">                this.minValue = localMinValue;</span>
+<span class="fc" id="L249">                this.maxValue = localMaxValue;</span>
+<span class="fc" id="L250">                areMinMaxAvailable = true;</span>
             }
-<span class="fc" id="L253">        } else {</span>
-<span class="nc bnc" id="L254" title="All 2 branches missed.">            if (!areMinMaxAvailable) {</span>
-<span class="nc" id="L255">                computeMinMaxValues();</span>
+<span class="fc" id="L252">        } else {</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            if (!areMinMaxAvailable) {</span>
+<span class="nc" id="L254">                computeMinMaxValues();</span>
             }
 
             // use min/max values as a bracket to obtain optimal solution
-<span class="nc" id="L259">            minEvalPoint = minValue;</span>
-<span class="nc" id="L260">            maxEvalPoint = maxValue;</span>
-<span class="nc" id="L261">            middleEvalPoint = (minValue + maxValue) * 0.5;</span>
+<span class="nc" id="L258">            minEvalPoint = minValue;</span>
+<span class="nc" id="L259">            maxEvalPoint = maxValue;</span>
+<span class="nc" id="L260">            middleEvalPoint = (minValue + maxValue) * 0.5;</span>
         }
 
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        if ((maxValue - minValue) &lt; EPS) {</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        if ((maxValue - minValue) &lt; EPS) {</span>
             // min-max limits are almost equal, so we return it as the solution
-<span class="nc" id="L266">            locked = false;</span>
-<span class="nc" id="L267">            return middleEvalPoint;</span>
+<span class="nc" id="L265">            locked = false;</span>
+<span class="nc" id="L266">            return middleEvalPoint;</span>
         }
 
         double solution;
         try {
             // Use an optimizer to find maximum value on histogram (PDF)
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">            if (optimizer == null) {</span>
-<span class="fc" id="L274">                optimizer = new BrentSingleOptimizer(new EvaluatorListener(),</span>
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">            if (optimizer == null) {</span>
+<span class="fc" id="L273">                optimizer = new BrentSingleOptimizer(new EvaluatorListener(),</span>
                         BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
                         BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
                         BrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
 
-<span class="fc" id="L281">            optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
-<span class="fc" id="L282">            optimizer.minimize();</span>
-<span class="fc" id="L283">            solution = optimizer.getResult();</span>
-<span class="nc" id="L284">        } catch (final Exception ignore) {</span>
+<span class="fc" id="L280">            optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L281">            optimizer.minimize();</span>
+<span class="fc" id="L282">            solution = optimizer.getResult();</span>
+<span class="nc" id="L283">        } catch (final Exception ignore) {</span>
             // if optimization fails, pick coarse solution if available
-<span class="nc bnc" id="L286" title="All 2 branches missed.">            if (useHistogramInitialSolution) {</span>
-<span class="nc" id="L287">                solution = middleEvalPoint;</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">            if (useHistogramInitialSolution) {</span>
+<span class="nc" id="L286">                solution = middleEvalPoint;</span>
             } else {
                 // if coarse solution is not available, then compute it
-<span class="nc" id="L290">                internalEstimator.setInputData(inputData);</span>
-<span class="nc" id="L291">                internalEstimator.setGaussianSigma(gaussianSigma);</span>
-<span class="nc" id="L292">                internalEstimator.computeMinMaxValues();</span>
-<span class="nc" id="L293">                solution = internalEstimator.estimate();</span>
+<span class="nc" id="L289">                internalEstimator.setInputData(inputData);</span>
+<span class="nc" id="L290">                internalEstimator.setGaussianSigma(gaussianSigma);</span>
+<span class="nc" id="L291">                internalEstimator.computeMinMaxValues();</span>
+<span class="nc" id="L292">                solution = internalEstimator.estimate();</span>
             }
-<span class="fc" id="L295">        }</span>
+<span class="fc" id="L294">        }</span>
 
-<span class="fc" id="L297">        locked = false;</span>
-<span class="fc" id="L298">        return solution;</span>
+<span class="fc" id="L296">        locked = false;</span>
+<span class="fc" id="L297">        return solution;</span>
     }
 
     /**
@@ -303,7 +302,7 @@ public class AccurateMaximumLikelihoodEstimator
      * the aggregation of Gaussians for all the samples in input data array with
      * a high degree of precision.
      */
-<span class="fc" id="L306">    private class EvaluatorListener</span>
+<span class="fc" id="L305">    private class EvaluatorListener</span>
             implements SingleDimensionFunctionEvaluatorListener {
 
 
@@ -322,17 +321,17 @@ public class AccurateMaximumLikelihoodEstimator
          */
         @Override
         public double evaluate(final double point) throws EvaluationException {
-<span class="fc" id="L325">            double out = 0.0;</span>
+<span class="fc" id="L324">            double out = 0.0;</span>
             double x;
-<span class="fc bfc" id="L327" title="All 2 branches covered.">            for (final double data : inputData) {</span>
-<span class="fc" id="L328">                x = point - data;</span>
-<span class="fc" id="L329">                out += Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma)) /</span>
-<span class="fc" id="L330">                        (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>
+<span class="fc bfc" id="L326" title="All 2 branches covered.">            for (final double data : inputData) {</span>
+<span class="fc" id="L327">                x = point - data;</span>
+<span class="fc" id="L328">                out += Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma)) /</span>
+<span class="fc" id="L329">                        (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>
             }
 
             // negate value because optimizers always attempt to
             // minimize function
-<span class="fc" id="L335">            return -out;</span>
+<span class="fc" id="L334">            return -out;</span>
         }
 
     }

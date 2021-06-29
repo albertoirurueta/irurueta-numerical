@@ -281,7 +281,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L281">                    sumxi += sqr(xi[i]);</span>
                 }
 
-<span class="fc bfc" id="L284" title="All 2 branches covered.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                if (fac &gt; Math.sqrt(EPS * sumdg * sumxi)) {</span>
 <span class="fc" id="L285">                    fac = 1.0 / fac;</span>
 <span class="fc" id="L286">                    fad = 1.0 / fae;</span>
 <span class="fc bfc" id="L287" title="All 2 branches covered.">                    for (int i = 0; i &lt; n; i++) {</span>
@@ -577,11 +577,11 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 <span class="fc" id="L577">                        disc = b * b - 3.0 * a * slope;</span>
 <span class="pc bpc" id="L578" title="1 of 2 branches missed.">                        if (disc &lt; 0.0) {</span>
 <span class="nc" id="L579">                            tmplam = 0.5 * alam;</span>
-<span class="fc bfc" id="L580" title="All 2 branches covered.">                        } else if (b &lt;= 0.0) {</span>
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">                        } else if (b &lt;= 0.0) {</span>
 <span class="fc" id="L581">                            tmplam = (-b + Math.sqrt(disc)) /</span>
                                     (3.0 * a);
                         } else {
-<span class="fc" id="L584">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
+<span class="nc" id="L584">                            tmplam = -slope / (b + Math.sqrt(disc));</span>
                         }
                     }
 <span class="fc bfc" id="L587" title="All 2 branches covered.">                    if (tmplam &gt; 0.5 * alam) {</span>
