@@ -604,8 +604,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             // best number of inliers found so far
             // (store the model that goes with it)
             int inliersBest = 0;
-            final int inliersMin = (int) ((1.0 - mMaxOutliersProportion) *
-                    (double) totalSamples);
+            final int inliersMin = (int) ((1.0 - mMaxOutliersProportion) * totalSamples);
             // iteration number (t)
             int currentIter = 0;
             // (n) we draw samples from the set U_n
@@ -663,8 +662,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 // g(t) = min{n : tnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > tnPrime
                 if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
-                    double tnPlus1 = (tn * (double) (sampleSize + 1)) /
-                            (double) (sampleSize + 1 - subsetSize);
+                    double tnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
                     sampleSize++;
                     tnPrime += (int) Math.ceil(tnPlus1 - tn);
                     tn = tnPlus1;

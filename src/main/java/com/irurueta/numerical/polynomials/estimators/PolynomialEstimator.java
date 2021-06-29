@@ -694,7 +694,7 @@ public abstract class PolynomialEstimator {
                 for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
-                accum += constants[i] / (double) param * powX;
+                accum += constants[i] / param * powX;
             }
             powX *= x;
         }
@@ -704,7 +704,7 @@ public abstract class PolynomialEstimator {
             for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
-            a.setElementAt(row, i, powX / (double) param);
+            a.setElementAt(row, i, powX / param);
             powX *= x;
         }
 
@@ -743,7 +743,7 @@ public abstract class PolynomialEstimator {
                 for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
-                accum += constants[i] / (double) param * (powEndX - powStartX);
+                accum += constants[i] / param * (powEndX - powStartX);
             }
             powStartX *= startX;
             powEndX *= endX;
@@ -754,7 +754,7 @@ public abstract class PolynomialEstimator {
             for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
-            a.setElementAt(row, i, (powEndX - powStartX) / (double) param);
+            a.setElementAt(row, i, (powEndX - powStartX) / param);
             powStartX *= startX;
             powEndX *= endX;
         }

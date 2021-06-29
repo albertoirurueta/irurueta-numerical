@@ -711,8 +711,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             int inliersBest = -1;
             // threshold to stop algorithm
             double threshold = Double.MAX_VALUE;
-            final int inliersMin = (int) ((1.0 - mMaxOutliersProportion) *
-                    (double) totalSamples);
+            final int inliersMin = (int) ((1.0 - mMaxOutliersProportion) * totalSamples);
             // iteration number (t)
             int currentIter = 0;
             // (n) we draw samples from the set U_n
@@ -771,8 +770,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 // g(t) = min{n : TnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > TnPrime
                 if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
-                    final double TnPlus1 = (tn * (double) (sampleSize + 1)) /
-                            (double) (sampleSize + 1 - subsetSize);
+                    final double TnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
                     sampleSize++;
                     tnPrime += (int) Math.ceil(TnPlus1 - tn);
                     tn = TnPlus1;
@@ -1049,8 +1047,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 /
-                (double) (totalSamples - subsetSize)) * Math.sqrt(
-                medianResidual);
+                (totalSamples - subsetSize)) * Math.sqrt(medianResidual);
         final double normEstimatedThreshold = inlierFactor * medianResidual;
 
         // determine which points are inliers

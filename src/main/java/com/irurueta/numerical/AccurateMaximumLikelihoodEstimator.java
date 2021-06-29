@@ -238,8 +238,7 @@ public class AccurateMaximumLikelihoodEstimator
 
             final int numberOfBins = internalEstimator.getNumberOfBins();
 
-            final double delta = (localMaxValue - localMinValue) /
-                    ((double) (numberOfBins - 1));
+            final double delta = (localMaxValue - localMinValue) / (numberOfBins - 1);
 
             // pick two values around initial coarse solution
             minEvalPoint = middleEvalPoint - delta;

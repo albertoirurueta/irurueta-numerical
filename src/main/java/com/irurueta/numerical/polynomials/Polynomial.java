@@ -626,7 +626,7 @@ public class Polynomial implements Serializable {
 
         resultPolyParams[0] = constant;
         for (int i = 0, j = 1; i < mPolyParams.length; i++, j++) {
-            resultPolyParams[j] = mPolyParams[i] / (double) j;
+            resultPolyParams[j] = mPolyParams[i] / j;
         }
 
         result.mPolyParams = resultPolyParams;
@@ -698,7 +698,7 @@ public class Polynomial implements Serializable {
         double powEndX = endX;
         double polyParam;
         for (int i = 0, j = 1; i < mPolyParams.length; i++, j++) {
-            polyParam = mPolyParams[i] / (double) j;
+            polyParam = mPolyParams[i] / j;
             resultStart += polyParam * powStartX;
             powStartX *= startX;
 
@@ -741,7 +741,7 @@ public class Polynomial implements Serializable {
                 for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
-                resultPolyParams[i] = constants[i] / (double) param;
+                resultPolyParams[i] = constants[i] / param;
             } else {
                 resultPolyParams[i] = 0.0;
             }
@@ -751,7 +751,7 @@ public class Polynomial implements Serializable {
             for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
-            resultPolyParams[j] = mPolyParams[i] / (double) param;
+            resultPolyParams[j] = mPolyParams[i] / param;
         }
 
         result.mPolyParams = resultPolyParams;
@@ -855,7 +855,7 @@ public class Polynomial implements Serializable {
                 for (int k = 1; k <= i; k++) {
                     param *= k;
                 }
-                polyParam = constants[i] / (double) param;
+                polyParam = constants[i] / param;
                 resultStart += polyParam * powStartX;
                 resultEnd += polyParam * powEndX;
             }
@@ -868,7 +868,7 @@ public class Polynomial implements Serializable {
             for (int k = 1; k < order; k++) {
                 param *= j - k;
             }
-            polyParam = mPolyParams[i] / (double) param;
+            polyParam = mPolyParams[i] / param;
             resultStart += polyParam * powStartX;
             powStartX *= startX;
 

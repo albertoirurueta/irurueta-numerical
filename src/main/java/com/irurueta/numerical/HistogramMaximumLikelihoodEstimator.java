@@ -258,7 +258,7 @@ public class HistogramMaximumLikelihoodEstimator
             }
         }
 
-        maxFuncValue = minValue + ((double) maxPos) * delta;
+        maxFuncValue = minValue + maxPos * delta;
 
         locked = false;
         return maxFuncValue;
@@ -277,7 +277,7 @@ public class HistogramMaximumLikelihoodEstimator
 
         double x;
         for (int i = 0; i < length; i++) {
-            x = ((double) i) - centerPos;
+            x = i - centerPos;
             gaussian[i] = Math.exp(-x * x /
                     (2.0 * gaussianSigma * gaussianSigma)) /
                     (Math.sqrt(2.0 * Math.PI) * gaussianSigma);

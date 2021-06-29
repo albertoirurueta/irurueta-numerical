@@ -608,9 +608,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             medianResidualImproved = true;
         }
 
-        final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 /
-                (double) (totalSamples - subsetSize)) * Math.sqrt(
-                medianResidual);
+        final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 / (totalSamples - subsetSize))
+                * Math.sqrt(medianResidual);
         final double normEstimatedThreshold = inlierFactor * medianResidual;
 
         // determine which points are inliers
