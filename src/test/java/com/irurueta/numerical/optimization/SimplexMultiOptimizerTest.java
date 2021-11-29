@@ -463,7 +463,7 @@ public class SimplexMultiOptimizerTest implements
             assertTrue(optimizer.isListenerAvailable());
             assertTrue(optimizer.isSimplexAvailable());
             assertTrue(optimizer.areFunctionEvaluationsAvailable());
-            assertTrue(iterations > 0);
+            assertTrue(iterations >= 0);
 
             final double[] evaluationsAtSimplex = optimizer.getEvaluationsAtSimplex();
             final double evaluationAtResult = optimizer.getEvaluationAtResult();
