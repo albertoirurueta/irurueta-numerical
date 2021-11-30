@@ -437,7 +437,7 @@ public class QuasiNewtonMultiOptimizerTest implements
         assertFalse(optimizer.isLocked());
         assertTrue(optimizer.isResultAvailable());
         assertTrue(optimizer.getIterations() >= 0);
-        assertTrue(iterations > 0);
+        assertTrue(iterations >= 0);
 
         // pick result
         final double[] result = optimizer.getResult();
