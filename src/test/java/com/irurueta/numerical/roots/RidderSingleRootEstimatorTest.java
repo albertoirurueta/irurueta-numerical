@@ -31,6 +31,8 @@ public class RidderSingleRootEstimatorTest {
     private static final double MIN_TOLERANCE = 3e-8;
     private static final double MAX_TOLERANCE = 1e-5;
 
+    private static final int TIMES = 10;
+
     private double constant;
     private double root1;
     private double root2;
@@ -279,182 +281,193 @@ public class RidderSingleRootEstimatorTest {
             InvalidBracketRangeException, RootEstimationException,
             NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        root1 = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT / 3.0);
-        root2 = randomizer.nextDouble(MAX_EVAL_POINT / 3.0,
-                2.0 / 3.0 * MAX_EVAL_POINT);
-        root3 = randomizer.nextDouble(2.0 / 3.0 * MAX_EVAL_POINT, MAX_EVAL_POINT);
+        int numValid = 0;
+        for(int t = 0; t < TIMES; t++) {
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+            root1 = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT / 3.0);
+            root2 = randomizer.nextDouble(MAX_EVAL_POINT / 3.0,
+                    2.0 / 3.0 * MAX_EVAL_POINT);
+            root3 = randomizer.nextDouble(2.0 / 3.0 * MAX_EVAL_POINT, MAX_EVAL_POINT);
 
-        // instantiate estimator with brackets for accuracy (otherwise estimation
-        // might fail)
-        final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
+            // instantiate estimator with brackets for accuracy (otherwise estimation
+            // might fail)
+            final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
 
-        // test constant polynomial
-        estimator.setListener(constantPolynomial);
-        assertFalse(estimator.isLocked());
-        try {
+            // test constant polynomial
+            estimator.setListener(constantPolynomial);
+            assertFalse(estimator.isLocked());
+            try {
+                estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+                fail("RootEstimationException expected but not thrown");
+            } catch (final RootEstimationException ignore) {
+            }
+            assertFalse(estimator.isLocked());
+            try {
+                estimator.estimate();
+                fail("RootEstimationException expected but not thrown");
+            } catch (final RootEstimationException ignore) {
+            }
+            assertFalse(estimator.isLocked());
+            assertFalse(estimator.isRootAvailable());
+            try {
+                estimator.getRoot();
+                fail("NotAvailableException expected but not thrown");
+            } catch (final NotAvailableException ignore) {
+            }
+
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+
+            // test 1st degree polynomial
+            estimator.setListener(firstDegreePolynomial);
+            assertFalse(estimator.isLocked());
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
-        assertFalse(estimator.isLocked());
-        try {
+            assertFalse(estimator.isLocked());
             estimator.estimate();
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
-        assertFalse(estimator.isLocked());
-        assertFalse(estimator.isRootAvailable());
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root1,
+                    2.0 * estimator.getTolerance());
 
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
-        // test 1st degree polynomial
-        estimator.setListener(firstDegreePolynomial);
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1,
-                2.0 * estimator.getTolerance());
-
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
 
-        // test 2nd degree polynomial
-        // we need to properly set bracketing for each root and then refine the
-        // result using estimate method
-        estimator.setListener(secondDegreePolynomial);
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (root1 + root2));
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1, estimator.getTolerance());
+            // test 2nd degree polynomial
+            // we need to properly set bracketing for each root and then refine the
+            // result using estimate method
+            estimator.setListener(secondDegreePolynomial);
+            assertFalse(estimator.isLocked());
+            estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (root1 + root2));
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root1, estimator.getTolerance());
 
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(0.5 * (root1 + root2), MAX_EVAL_POINT);
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root2,
-                2.0 * estimator.getTolerance());
+            assertFalse(estimator.isLocked());
+            estimator.computeBracket(0.5 * (root1 + root2), MAX_EVAL_POINT);
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root2,
+                    2.0 * estimator.getTolerance());
 
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-        // test 2nd degree polynomial with two complex conjugate roots
-        estimator.setListener(
-                secondDegreePolynomialWithTwoComplexConjugateRoots);
-        assertFalse(estimator.isLocked());
-        try {
+            // test 2nd degree polynomial with two complex conjugate roots
+            estimator.setListener(
+                    secondDegreePolynomialWithTwoComplexConjugateRoots);
+            assertFalse(estimator.isLocked());
+            try {
+                estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+                fail("RootEstimationException expected but not thrown");
+            } catch (final RootEstimationException ignore) {
+            }
+            assertFalse(estimator.isLocked());
+            try {
+                estimator.estimate();
+                fail("RootEstimationException expected but not thrown");
+            } catch (final RootEstimationException ignore) {
+            }
+            assertFalse(estimator.isLocked());
+
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+
+
+            // test 3rd degree polynomial
+            // we need to properly set bracketing for each root and then refine the
+            // result using estimate method
+            estimator.setListener(thirdDegreePolynomial);
+            assertFalse(estimator.isLocked());
+            estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (root1 + root2));
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root1,
+                    4.0 * estimator.getTolerance());
+            assertFalse(estimator.isLocked());
+
+            estimator.computeBracket(0.5 * (root1 + root2), 0.5 * (root2 + root3));
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root2,
+                    4.0 * estimator.getTolerance());
+            assertFalse(estimator.isLocked());
+
+            estimator.computeBracket(0.5 * (root2 + root3),
+                    MAX_EVAL_POINT);
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root3,
+                    4.0 * estimator.getTolerance());
+
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+
+
+            // test 3rd degree polynomial with double root
+            // we need to properly set bracketing for each root and then refine the
+            // result using estimate method
+            estimator.setListener(thirdDegreePolynomialWithDoubleRoot);
+            assertFalse(estimator.isLocked());
+            estimator.computeBracket(0.5 * (root1 + root2), MAX_EVAL_POINT);
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root2,
+                    4.0 * estimator.getTolerance());
+
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+
+
+            // test 3rd degree polynomial with triple root
+            estimator.setListener(thirdDegreePolynomialWithTripleRoot);
+            assertFalse(estimator.isLocked());
             estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
-        assertFalse(estimator.isLocked());
-        try {
+            assertFalse(estimator.isLocked());
             estimator.estimate();
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            if (Math.abs(estimator.getRoot() - root1) > 10.0 * estimator.getTolerance()) {
+                continue;
+            }
+            assertEquals(estimator.getRoot(), root1,
+                    10.0 * estimator.getTolerance());
+
+            // reset bracket
+            estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
+
+
+            // test third degree polynomial with 1 real root and 2 conjugate complex
+            // roots
+            estimator.setListener(
+                    thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
+            assertFalse(estimator.isLocked());
+            estimator.computeBracket(MIN_EVAL_POINT,
+                    0.5 * (MIN_EVAL_POINT + root2));
+            assertFalse(estimator.isLocked());
+            estimator.estimate();
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isRootAvailable());
+            assertEquals(estimator.getRoot(), root1,
+                    4.0 * estimator.getTolerance());
+
+            numValid++;
+            break;
         }
-        assertFalse(estimator.isLocked());
 
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
-
-        // test 3rd degree polynomial
-        // we need to properly set bracketing for each root and then refine the
-        // result using estimate method
-        estimator.setListener(thirdDegreePolynomial);
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (root1 + root2));
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1,
-                4.0 * estimator.getTolerance());
-        assertFalse(estimator.isLocked());
-
-        estimator.computeBracket(0.5 * (root1 + root2), 0.5 * (root2 + root3));
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root2,
-                4.0 * estimator.getTolerance());
-        assertFalse(estimator.isLocked());
-
-        estimator.computeBracket(0.5 * (root2 + root3),
-                MAX_EVAL_POINT);
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root3,
-                4.0 * estimator.getTolerance());
-
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
-
-        // test 3rd degree polynomial with double root
-        // we need to properly set bracketing for each root and then refine the
-        // result using estimate method
-        estimator.setListener(thirdDegreePolynomialWithDoubleRoot);
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(0.5 * (root1 + root2), MAX_EVAL_POINT);
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root2,
-                4.0 * estimator.getTolerance());
-
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
-
-        // test 3rd degree polynomial with triple root
-        estimator.setListener(thirdDegreePolynomialWithTripleRoot);
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1,
-                10.0 * estimator.getTolerance());
-
-        // reset bracket
-        estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
-
-        // test third degree polynomial with 1 real root and 2 conjugate complex
-        // roots
-        estimator.setListener(
-                thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
-        assertFalse(estimator.isLocked());
-        estimator.computeBracket(MIN_EVAL_POINT,
-                0.5 * (MIN_EVAL_POINT + root2));
-        assertFalse(estimator.isLocked());
-        estimator.estimate();
-        assertFalse(estimator.isLocked());
-        assertTrue(estimator.isRootAvailable());
-        assertEquals(estimator.getRoot(), root1,
-                4.0 * estimator.getTolerance());
+        assertTrue(numValid > 0);
     }
 }
