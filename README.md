@@ -1,8 +1,8 @@
 # irurueta-numerical
 Numerical utilities
 
-[![Build Status](https://travis-ci.com/albertoirurueta/irurueta-numerical.svg?branch=master)](https://travis-ci.com/albertoirurueta/irurueta-numerical)
-
+[![Build Status](https://github.com/albertoirurueta/irurueta-numerical/actions/workflows/master.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-numerical/actions)
+[![Build Status](https://github.com/albertoirurueta/irurueta-numerical/actions/workflows/develop.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-numerical/actions)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-numerical&metric=bugs)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-numerical)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-numerical&metric=code_smells)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-numerical)
@@ -30,7 +30,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -40,7 +40,7 @@ Latest snapshot:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
