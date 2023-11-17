@@ -59,7 +59,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdMultiDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // test constructor with input data
         final Matrix x = new Matrix(nPoints, 2);
@@ -74,7 +74,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdMultiDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         final Matrix shortX = new Matrix(nPoints - 1, 2);
@@ -108,10 +108,10 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdMultiDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         fitter = null;
@@ -154,7 +154,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // test constructor with evaluator and input data
         fitter = new SvdMultiDimensionLinearFitter(evaluator, x, y, sig);
@@ -165,7 +165,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         fitter = null;
@@ -198,10 +198,10 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdMultiDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         fitter = null;
@@ -329,7 +329,7 @@ public class SvdMultiDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
 
         // Force IllegalArgumentException
@@ -420,13 +420,13 @@ public class SvdMultiDimensionLinearFitterTest {
                 new SvdMultiDimensionLinearFitter();
 
         // check default values
-        assertEquals(fitter.getTol(), SvdMultiDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdMultiDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // set new value
         fitter.setTol(1e-3);
 
         // check correctness
-        assertEquals(fitter.getTol(), 1e-3, 0.0);
+        assertEquals(1e-3, fitter.getTol(), 0.0);
     }
 
     @Test
@@ -498,7 +498,7 @@ public class SvdMultiDimensionLinearFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -508,7 +508,7 @@ public class SvdMultiDimensionLinearFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, NUM_QUADRATIC_PARAMS);
+            assertEquals(NUM_QUADRATIC_PARAMS, fitter.getA().length);
 
             boolean failed = false;
             for (int i = 0; i < NUM_QUADRATIC_PARAMS; i++) {

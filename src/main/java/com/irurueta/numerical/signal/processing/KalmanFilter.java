@@ -663,7 +663,7 @@ public class KalmanFilter implements Serializable {
      *
      * @param processNoiseCov process noise covariance matrix
      * @throws IllegalArgumentException if provided matrix does not have dp
-     *                                  rows and columns or it is not symmetric
+     *                                  rows and columns, or it is not symmetric
      */
     public void setProcessNoiseCov(final Matrix processNoiseCov) {
         if (processNoiseCov.getRows() != dp ||
@@ -681,7 +681,7 @@ public class KalmanFilter implements Serializable {
      * error in the measures taken from the system.
      * It is a square symmetric matrix having mp rows and columns, where mp is
      * the number of measurement parameters.
-     * Typically this matrix can be easily obtained by processing the
+     * Typically, this matrix can be easily obtained by processing the
      * measurements while the output of the system is held constant. In this
      * case, only noise remains in the data after its mean is removed.
      * The covariance can be calculated easily from the remaining portion of the
@@ -699,7 +699,7 @@ public class KalmanFilter implements Serializable {
      * error in the measures taken from the system.
      * Provided matrix must be a square symmetric matrix having mp rows and
      * columns, where mp is the number of measurement parameters.
-     * Typically this matrix can be easily obtained by processing the
+     * Typically, this matrix can be easily obtained by processing the
      * measurements while the output of the system is held constant. In this
      * case, only noise remains in the data after its mean is removed.
      * The covariance can be calculated easily from the remaining portion of the
@@ -708,7 +708,7 @@ public class KalmanFilter implements Serializable {
      *
      * @param measurementNoiseCov new measurement noise covariance matrix
      * @throws IllegalArgumentException if provided matrix does not have mp
-     *                                  rows and columns or it is not symmetric
+     *                                  rows and columns, or it is not symmetric
      */
     public void setMeasurementNoiseCov(final Matrix measurementNoiseCov) {
         if (measurementNoiseCov.getRows() != mp ||
@@ -745,7 +745,7 @@ public class KalmanFilter implements Serializable {
      *
      * @param errorCovPre new priori error estimate covariance matrix
      * @throws IllegalArgumentException if provided matrix does not have dp rows
-     *                                  and columns or it is not symmetric
+     *                                  and columns, or it is not symmetric
      */
     public void setErrorCovPre(final Matrix errorCovPre) {
         if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||
@@ -817,7 +817,7 @@ public class KalmanFilter implements Serializable {
      *
      * @param errorCovPost new posteriori error estimate covariance matrix
      * @throws IllegalArgumentException if provided matrix does not have dp rows
-     *                                  and columns or it is not symmetric
+     *                                  and columns, or it is not symmetric
      */
     public void setErrorCovPost(final Matrix errorCovPost) {
         if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||

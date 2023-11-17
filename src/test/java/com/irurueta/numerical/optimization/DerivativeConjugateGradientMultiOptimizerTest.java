@@ -129,8 +129,8 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
         optimizer = new DerivativeConjugateGradientMultiOptimizer();
         assertNotNull(optimizer);
         assertFalse(optimizer.isReady());
-        assertEquals(optimizer.getTolerance(),
-                DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
+        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(),
                 0.0);
         try {
             optimizer.getGradientListener();
@@ -138,9 +138,8 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
         } catch (final NotAvailableException ignore) {
         }
         assertFalse(optimizer.isGradientListenerAvailable());
-        assertEquals(optimizer.isPolakRibiereEnabled(),
-                DerivativeConjugateGradientMultiOptimizer.
-                        DEFAULT_USE_POLAK_RIBIERE);
+        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE,
+                optimizer.isPolakRibiereEnabled());
         assertFalse(optimizer.isStartPointAvailable());
         try {
             optimizer.getStartPoint();
@@ -273,8 +272,8 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
                 new DerivativeConjugateGradientMultiOptimizer();
 
         // get tolerance
-        assertEquals(optimizer.getTolerance(),
-                DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
+        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(),
                 0.0);
 
         // set new tolerance
@@ -320,9 +319,8 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
                 new DerivativeConjugateGradientMultiOptimizer();
 
         // get initial status
-        assertEquals(optimizer.isPolakRibiereEnabled(),
-                DerivativeConjugateGradientMultiOptimizer.
-                        DEFAULT_USE_POLAK_RIBIERE);
+        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE,
+                optimizer.isPolakRibiereEnabled());
 
         // disable
         optimizer.setUsePolakRibiere(false);

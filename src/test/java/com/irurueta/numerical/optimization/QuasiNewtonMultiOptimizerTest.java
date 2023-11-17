@@ -120,10 +120,10 @@ public class QuasiNewtonMultiOptimizerTest implements
         optimizer = new QuasiNewtonMultiOptimizer();
         assertNotNull(optimizer);
 
-        assertEquals(optimizer.getTolerance(),
-                QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isStartPointAvailable());
-        assertEquals(optimizer.getIterations(), 0);
+        assertEquals(0, optimizer.getIterations());
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
@@ -163,7 +163,7 @@ public class QuasiNewtonMultiOptimizerTest implements
         assertNotNull(optimizer);
         assertEquals(optimizer.getTolerance(), tolerance, 0.0);
         assertFalse(optimizer.isStartPointAvailable());
-        assertEquals(optimizer.getIterations(), 0);
+        assertEquals(0, optimizer.getIterations());
         try {
             optimizer.getStartPoint();
             fail("NotAvailableException expected but not thrown");
@@ -213,7 +213,7 @@ public class QuasiNewtonMultiOptimizerTest implements
         assertTrue(optimizer.isListenerAvailable());
         assertTrue(optimizer.isReady());
         assertFalse(optimizer.isResultAvailable());
-        assertEquals(optimizer.getIterations(), 0);
+        assertEquals(0, optimizer.getIterations());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
@@ -280,8 +280,8 @@ public class QuasiNewtonMultiOptimizerTest implements
         final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
 
         // get default tolerance
-        assertEquals(optimizer.getTolerance(),
-                QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);

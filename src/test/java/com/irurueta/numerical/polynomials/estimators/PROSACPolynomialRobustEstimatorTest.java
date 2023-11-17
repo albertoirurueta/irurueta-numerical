@@ -62,24 +62,24 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(
                         PolynomialEstimator.MIN_DEGREE));
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -87,23 +87,23 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(2);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(2));
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -124,32 +124,32 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(evaluations);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(
                         PolynomialEstimator.MIN_DEGREE));
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
+        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
         estimator = null;
         try {
-            estimator = new PROSACPolynomialRobustEstimator(wrongEvals);
+            estimator = new PROSACPolynomialRobustEstimator(wrongEvaluations);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -159,24 +159,24 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(this);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(
                         PolynomialEstimator.MIN_DEGREE));
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -185,23 +185,23 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(2, evaluations);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(2));
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -213,7 +213,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator = new PROSACPolynomialRobustEstimator(2, wrongEvals);
+            estimator = new PROSACPolynomialRobustEstimator(2, wrongEvaluations);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -223,23 +223,23 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(2, this);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(2));
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -256,31 +256,31 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(evaluations, this);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(
                         PolynomialEstimator.MIN_DEGREE));
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
         try {
-            estimator = new PROSACPolynomialRobustEstimator(wrongEvals, this);
+            estimator = new PROSACPolynomialRobustEstimator(wrongEvaluations, this);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -290,23 +290,23 @@ public class PROSACPolynomialRobustEstimatorTest implements
         estimator = new PROSACPolynomialRobustEstimator(2, evaluations, this);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(estimator.getMinNumberOfEvaluations(),
                 PolynomialEstimator.getMinNumberOfEvaluations(2));
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -319,7 +319,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator = new PROSACPolynomialRobustEstimator(2, wrongEvals,
+            estimator = new PROSACPolynomialRobustEstimator(2, wrongEvaluations,
                     this);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
@@ -333,14 +333,14 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(PROSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(1.0);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 1.0, 0.0);
+        assertEquals(1.0, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -401,14 +401,14 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -429,14 +429,14 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                PolynomialRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -457,14 +457,14 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -480,8 +480,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
+                estimator.isGeometricDistanceUsed());
 
         // set new value
         estimator.setGeometricDistanceUsed(
@@ -498,13 +498,13 @@ public class PROSACPolynomialRobustEstimatorTest implements
                 new PROSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getDegree(), PolynomialEstimator.MIN_DEGREE);
+        assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
 
         // set new value
         estimator.setDegree(2);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
 
         // Force IllegalArgumentException
         try {
@@ -549,7 +549,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
 
             // check default values
-            assertEquals(estimator.getDegree(), 1);
+            assertEquals(1, estimator.getDegree());
             assertFalse(estimator.isReady());
             assertFalse(estimator.isGeometricDistanceUsed());
 
@@ -604,10 +604,10 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
             reset();
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -617,8 +617,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
             // check correctness
             assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                     ABSOLUTE_ERROR);
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
         }
@@ -635,7 +635,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
 
             // check default values
-            assertEquals(estimator.getDegree(), 1);
+            assertEquals(1, estimator.getDegree());
             assertFalse(estimator.isReady());
             assertFalse(estimator.isGeometricDistanceUsed());
 
@@ -722,10 +722,10 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
             reset();
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -735,8 +735,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
             // check correctness
             assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                     ABSOLUTE_ERROR);
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
         }
@@ -753,7 +753,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
 
             // check default values
-            assertEquals(estimator.getDegree(), 1);
+            assertEquals(1, estimator.getDegree());
             assertFalse(estimator.isReady());
             assertFalse(estimator.isGeometricDistanceUsed());
 
@@ -813,10 +813,10 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
             reset();
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -826,8 +826,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
             // check correctness
             assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                     ABSOLUTE_ERROR);
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
         }
@@ -844,7 +844,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
 
             // check default values
-            assertEquals(estimator.getDegree(), 1);
+            assertEquals(1, estimator.getDegree());
             assertFalse(estimator.isReady());
             assertFalse(estimator.isGeometricDistanceUsed());
 
@@ -902,10 +902,10 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
             reset();
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -915,8 +915,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
             // check correctness
             assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                     ABSOLUTE_ERROR);
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
         }
@@ -933,7 +933,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setGeometricDistanceUsed(true);
 
             // check default values
-            assertEquals(estimator.getDegree(), 1);
+            assertEquals(1, estimator.getDegree());
             assertFalse(estimator.isReady());
             assertTrue(estimator.isGeometricDistanceUsed());
 
@@ -988,10 +988,10 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
             reset();
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -1001,8 +1001,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
             // check correctness
             assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                     ABSOLUTE_ERROR);
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
         }
@@ -1020,7 +1020,7 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setGeometricDistanceUsed(true);
 
             // check default values
-            assertEquals(estimator.getDegree(), 1);
+            assertEquals(1, estimator.getDegree());
             assertFalse(estimator.isReady());
             assertTrue(estimator.isGeometricDistanceUsed());
 
@@ -1107,10 +1107,10 @@ public class PROSACPolynomialRobustEstimatorTest implements
             estimator.setListener(this);
             reset();
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -1120,8 +1120,8 @@ public class PROSACPolynomialRobustEstimatorTest implements
             // check correctness
             assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                     ABSOLUTE_ERROR);
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
         }

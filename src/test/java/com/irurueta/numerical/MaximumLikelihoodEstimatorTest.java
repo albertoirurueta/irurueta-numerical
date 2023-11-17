@@ -70,10 +70,10 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create();
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        assertEquals(estimator.getGaussianSigma(),
-                MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(), 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
@@ -104,8 +104,8 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
@@ -144,8 +144,8 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
                         HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
@@ -186,8 +186,8 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
                         ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
@@ -226,10 +226,10 @@ public class MaximumLikelihoodEstimatorTest {
 
         // Instantiate with input data
         estimator = MaximumLikelihoodEstimator.create(inputData);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        assertEquals(estimator.getGaussianSigma(),
-                MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(), 0.0);
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
@@ -249,8 +249,8 @@ public class MaximumLikelihoodEstimatorTest {
 
         // Instantiate with input data and gaussian sigma
         estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
@@ -282,8 +282,8 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
                         HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
@@ -315,8 +315,8 @@ public class MaximumLikelihoodEstimatorTest {
 
         // Instantiate with input data, gaussian sigma and ACCURATE method
         estimator = MaximumLikelihoodEstimator.create(inputData, gaussianSigma);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
             estimator.getMinValue();
@@ -349,10 +349,10 @@ public class MaximumLikelihoodEstimatorTest {
         // instantiate with min value, max value and input data
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
-        assertEquals(estimator.getGaussianSigma(),
-                MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(), 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
         assertTrue(estimator.areMinMaxValuesAvailable());
@@ -375,8 +375,8 @@ public class MaximumLikelihoodEstimatorTest {
         // instantiate with min value, max value, input data and gaussian sigma
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData, gaussianSigma);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
@@ -408,9 +408,8 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData, gaussianSigma, MaximumLikelihoodEstimatorMethod.
                         HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimatorMethod.
-                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
@@ -444,9 +443,8 @@ public class MaximumLikelihoodEstimatorTest {
         estimator = MaximumLikelihoodEstimator.create(minValue, maxValue,
                 inputData, gaussianSigma, MaximumLikelihoodEstimatorMethod.
                         ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimatorMethod.
-                        ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
         assertEquals(estimator.getMaxValue(), maxValue, 0.0);
@@ -485,20 +483,20 @@ public class MaximumLikelihoodEstimatorTest {
         MaximumLikelihoodEstimator estimator;
 
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma);
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimator.DEFAULT_METHOD);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_METHOD,
+                estimator.getMethod());
 
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
                         HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
 
         estimator = MaximumLikelihoodEstimator.create(gaussianSigma,
                 MaximumLikelihoodEstimatorMethod.
                         ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
     }
 
     @Test
@@ -511,8 +509,8 @@ public class MaximumLikelihoodEstimatorTest {
         final MaximumLikelihoodEstimator estimator =
                 MaximumLikelihoodEstimator.create();
 
-        assertEquals(estimator.getGaussianSigma(), MaximumLikelihoodEstimator.
-                DEFAULT_GAUSSIAN_SIGMA, 0.0);
+        assertEquals(MaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(), 0.0);
 
         // set new gaussian sigma
         estimator.setGaussianSigma(gaussianSigma);

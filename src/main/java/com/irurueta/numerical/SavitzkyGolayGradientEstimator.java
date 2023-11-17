@@ -27,7 +27,7 @@ import com.irurueta.algebra.WrongSizeException;
  * This class evaluates a function at very close locations of a given input
  * point in order to determine the gradient at such point
  * The algorithm used in this implementation is valid for continuous functions
- * only, otherwise inaccurate results might be obtain.
+ * only, otherwise inaccurate results might be obtained.
  * This implementation is more robust against small discontinuities than
  * SymmetricGradientEstimator, but it is also slower to compute.
  * This method interpolates the sampled function values into a polynomial of

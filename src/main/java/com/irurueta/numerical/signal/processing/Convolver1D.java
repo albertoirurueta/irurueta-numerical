@@ -58,7 +58,7 @@ public class Convolver1D {
 
     /**
      * Edge extension method to use during convolution when parts of the kernel
-     * are required to lie outside of the signal's boundaries.
+     * are required to lie outside the signal's boundaries.
      */
     private ConvolverEdgeMethod mEdgeMethod = DEFAULT_EDGE_METHOD;
 
@@ -160,7 +160,7 @@ public class Convolver1D {
 
     /**
      * Gets edge extension method to use during convolution when parts of the
-     * kernel are required to lie outside of the signal's boundaries.
+     * kernel are required to lie outside the signal's boundaries.
      *
      * @return edge extension method.
      */
@@ -170,7 +170,7 @@ public class Convolver1D {
 
     /**
      * Sets edge extension method to use during convolution when parts of the
-     * kernel are required to lie outside of the signal's boundaries.
+     * kernel are required to lie outside the signal's boundaries.
      *
      * @param edgeMethod edge extension method.
      */
@@ -653,7 +653,7 @@ public class Convolver1D {
     }
 
     /**
-     * Internal method to determine signal value even when a position outside of
+     * Internal method to determine signal value even when a position outside
      * its boundaries is requested when zero edge extension is being used.
      *
      * @param signal signal to request a value for.

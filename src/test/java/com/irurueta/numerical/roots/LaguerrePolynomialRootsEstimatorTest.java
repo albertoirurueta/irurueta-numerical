@@ -54,8 +54,8 @@ public class LaguerrePolynomialRootsEstimatorTest {
 
         assertFalse(estimator.arePolynomialParametersAvailable());
         assertFalse(estimator.areRootsAvailable());
-        assertEquals(estimator.areRootsPolished(),
-                LaguerrePolynomialRootsEstimator.DEFAULT_POLISH_ROOTS);
+        assertEquals(LaguerrePolynomialRootsEstimator.DEFAULT_POLISH_ROOTS,
+                estimator.areRootsPolished());
         try {
             estimator.estimate();
             fail("NotReadyException expected but not thrown");
@@ -103,8 +103,8 @@ public class LaguerrePolynomialRootsEstimatorTest {
         estimator = new LaguerrePolynomialRootsEstimator(polyParams);
         assertTrue(estimator.arePolynomialParametersAvailable());
         assertFalse(estimator.areRootsAvailable());
-        assertEquals(estimator.areRootsPolished(),
-                LaguerrePolynomialRootsEstimator.DEFAULT_POLISH_ROOTS);
+        assertEquals(LaguerrePolynomialRootsEstimator.DEFAULT_POLISH_ROOTS,
+                estimator.areRootsPolished());
         assertSame(estimator.getPolynomialParameters(), polyParams);
         try {
             estimator.getRoots();
@@ -160,8 +160,8 @@ public class LaguerrePolynomialRootsEstimatorTest {
                 new LaguerrePolynomialRootsEstimator();
 
         // check default value
-        assertEquals(estimator.areRootsPolished(),
-                LaguerrePolynomialRootsEstimator.DEFAULT_POLISH_ROOTS);
+        assertEquals(LaguerrePolynomialRootsEstimator.DEFAULT_POLISH_ROOTS,
+                estimator.areRootsPolished());
 
         // set new value
         estimator.setPolishRootsEnabled(polishRoots);
@@ -261,7 +261,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 1);
+            assertEquals(1, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
 
             // set parameters for first degree polynomial with complex root
@@ -272,7 +272,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 1);
+            assertEquals(1, roots.length);
             assertTrue(roots[0].equals(root1, TOLERANCE));
 
             // set parameters for second degree polynomial with real roots
@@ -284,7 +284,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot2), TOLERANCE));
 
@@ -297,7 +297,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             // because root[0] and root[1] might be exchanged, we check for their
             // real parts and absolute value of their imaginary parts (which are
             // the same but with opposite sign because they are complex
@@ -318,7 +318,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot1), TOLERANCE));
 
@@ -332,7 +332,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot2), TOLERANCE));
             assertTrue(roots[2].equals(new Complex(realRoot3), TOLERANCE));
@@ -353,13 +353,13 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             // because roots1 might be exchanged, we check for their
             // real parts and absolute value of their imaginary parts (which are
             // the same but with opposite sign because they are complex
             // conjugates)
             assertEquals(roots[0].getReal(), realRoot1, TOLERANCE);
-            assertEquals(Math.abs(roots[0].getImaginary()), 0.0, TOLERANCE);
+            assertEquals(0.0, Math.abs(roots[0].getImaginary()), TOLERANCE);
             assertEquals(roots[1].getReal(), root2.getReal(), TOLERANCE);
             assertEquals(Math.abs(roots[1].getImaginary()),
                     Math.abs(root2.getImaginary()), TOLERANCE);
@@ -378,7 +378,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot2), TOLERANCE));
             assertTrue(roots[2].equals(new Complex(realRoot2), TOLERANCE));
@@ -394,7 +394,7 @@ public class LaguerrePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[2].equals(new Complex(realRoot1), TOLERANCE));

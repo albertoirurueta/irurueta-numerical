@@ -24,6 +24,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Random;
 
+import static com.irurueta.numerical.robust.RobustEstimator.DEFAULT_PROGRESS_DELTA;
 import static org.junit.Assert.*;
 
 public class LMedSRobustEstimatorTest {
@@ -55,23 +56,23 @@ public class LMedSRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                LMedSRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        assertEquals(estimator.getStopThreshold(),
-                LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getInlierFactor(),
-                LMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_INLIER_FACTOR,
+                estimator.getInlierFactor(), 0.0);
 
         // test constructor with listener
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -83,24 +84,24 @@ public class LMedSRobustEstimatorTest {
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertEquals(estimator.isReady(), listener.isReady());
         assertTrue(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                LMedSRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        assertEquals(estimator.getStopThreshold(),
-                LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getInlierFactor(),
-                LMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_INLIER_FACTOR,
+                estimator.getInlierFactor(), 0.0);
     }
 
     @Test
@@ -130,8 +131,8 @@ public class LMedSRobustEstimatorTest {
     public void testGetSetProgressDelta() throws IllegalArgumentException,
             LockedException {
         final LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -158,8 +159,8 @@ public class LMedSRobustEstimatorTest {
     public void testGetSetConfidence() throws IllegalArgumentException,
             LockedException {
         final LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
-        assertEquals(estimator.getConfidence(),
-                LMedSRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -186,8 +187,8 @@ public class LMedSRobustEstimatorTest {
     public void testGetSetMaxIterations() throws IllegalArgumentException,
             LockedException {
         final LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
-        assertEquals(estimator.getMaxIterations(),
-                LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -210,14 +211,14 @@ public class LMedSRobustEstimatorTest {
     public void testGetSetStopThreshold() throws IllegalArgumentException,
             LockedException {
         final LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
-        assertEquals(estimator.getStopThreshold(),
-                LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(2.0);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(), 2.0, 0.0);
+        assertEquals(2.0, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -231,14 +232,14 @@ public class LMedSRobustEstimatorTest {
     public void testGetSetInlierFactor() throws IllegalArgumentException,
             LockedException {
         final LMedSRobustEstimator<double[]> estimator = new LMedSRobustEstimator<>();
-        assertEquals(estimator.getInlierFactor(),
-                LMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
+        assertEquals(LMedSRobustEstimator.DEFAULT_INLIER_FACTOR,
+                estimator.getInlierFactor(), 0.0);
 
         // set new value
         estimator.setInlierFactor(2.0);
 
         // check correctness
-        assertEquals(estimator.getInlierFactor(), 2.0, 0.0);
+        assertEquals(2.0, estimator.getInlierFactor(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -269,8 +270,8 @@ public class LMedSRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -281,12 +282,12 @@ public class LMedSRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
 

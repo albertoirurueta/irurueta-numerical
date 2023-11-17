@@ -42,7 +42,7 @@ import java.util.List;
  * prioritized so that more likely to be inliers are picked first.
  * <p>
  * This implementation is based on:
- * http://devernay.free.fr/vision/src/prosac.c
+ * <a href="http://devernay.free.fr/vision/src/prosac.c">http://devernay.free.fr/vision/src/prosac.c</a>
  *
  * @param <T> type of object to be estimated.
  */
@@ -757,7 +757,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                             //   However, since In is binomial, and in the case of
                             //   evenly distributed inliers, a better test would be
                             //   to reduce sampleSizeStar only if there's a
-                            //   significant improvement in epsilon. Thus we use a
+                            //   significant improvement in epsilon. Thus, we use a
                             //   Chi-squared test (P=0.10), together with the normal
                             //   approximation to the binomial (mu =
                             //   epsilonSampleSizeStart * sampleSizeTest, sigma =

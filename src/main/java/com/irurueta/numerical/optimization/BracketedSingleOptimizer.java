@@ -405,7 +405,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
                         a[0] = bx;
                         b[0] = cx;
                         c[0] = u;
-                        shft3(a, b, c, u + GOLD * (u - cx));
+                        shift3(a, b, c, u + GOLD * (u - cx));
                         bx = a[0];
                         cx = b[0];
                         u = c[0];
@@ -413,7 +413,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
                         a[0] = fb;
                         b[0] = fc;
                         c[0] = fu;
-                        shft3(a, b, c, listener.evaluate(u));
+                        shift3(a, b, c, listener.evaluate(u));
                         fb = a[0];
                         fc = b[0];
                         fu = c[0];
@@ -427,11 +427,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
                     u = cx + GOLD * (cx - bx);
                     fu = listener.evaluate(u);
                 }
-                //Eliminate oldest point and continue
+                //Eliminate the oldest point and continue
                 a[0] = ax;
                 b[0] = bx;
                 c[0] = cx;
-                shft3(a, b, c, u);
+                shift3(a, b, c, u);
                 ax = a[0];
                 bx = b[0];
                 cx = c[0];
@@ -439,7 +439,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
                 a[0] = fa;
                 b[0] = fb;
                 c[0] = fc;
-                shft3(a, b, c, fu);
+                shift3(a, b, c, fu);
                 fa = a[0];
                 fb = b[0];
                 fc = c[0];
@@ -561,7 +561,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      *
      * @param a Value to be compared.
      * @param b Value to be compared.
-     * @return Returns a if a and b have the same sign or -a otherwise.
+     * @return Returns "a" if "a" and "b" have the same sign or "-a" otherwise.
      */
     protected double sign(final double a, final double b) {
         if (b >= 0.0) {
@@ -572,30 +572,30 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     }
 
     /**
-     * Pushes b value into a, and c value into b. a and b are in/out parameters.
+     * Pushes "b" value into "a", and "c" value into "b". "a" and "b" are in/out parameters.
      * Results will be available at a[0] and b[0] after executing this method.
      *
      * @param a a value to be lost.
-     * @param b a value to be shifted into a.
-     * @param c a value to be shifted into b.
+     * @param b a value to be shifted into "a".
+     * @param c a value to be shifted into "b".
      */
-    protected void shft2(final double[] a, final double[] b, final double c) {
+    protected void shift2(final double[] a, final double[] b, final double c) {
         a[0] = b[0];
         b[0] = c;
     }
 
     /**
-     * Pushes b value into a, and c value into b and d value into c. a, b and c
+     * Pushes "b" value into "a", and "c" value into "b" and "d" value into "c". "a", "b" and "c"
      * are in/out parameters.
      * Results will be available at a[0], b[0] and c[0] after executing this
      * method.
      *
      * @param a a value to be lost.
-     * @param b a value to be shifted into a.
-     * @param c a value to be shifted into b.
-     * @param d a value to be shifted into c.
+     * @param b a value to be shifted into "a".
+     * @param c a value to be shifted into "b".
+     * @param d a value to be shifted into "c".
      */
-    protected void shft3(final double[] a, final double[] b, final double[] c, final double d) {
+    protected void shift3(final double[] a, final double[] b, final double[] c, final double d) {
         a[0] = b[0];
         b[0] = c[0];
         c[0] = d;

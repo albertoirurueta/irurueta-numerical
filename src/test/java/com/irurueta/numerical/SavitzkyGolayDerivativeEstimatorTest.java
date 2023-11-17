@@ -89,7 +89,7 @@ public class SavitzkyGolayDerivativeEstimatorTest
     }
 
     @Override
-    public double evaluate(final double point) throws EvaluationException {
+    public double evaluate(final double point) {
         return (point - minimum) * (point - minimum) / width + offset;
     }
 

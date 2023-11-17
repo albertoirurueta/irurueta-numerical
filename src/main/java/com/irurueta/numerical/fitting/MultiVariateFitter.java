@@ -25,7 +25,7 @@ import java.util.Arrays;
  */
 public abstract class MultiVariateFitter extends Fitter {
     /**
-     * Input points x where a multi dimensional function f(x1, x2, ...) is
+     * Input points x where a multidimensional function f(x1, x2, ...) is
      * evaluated where each column of the matrix represents each dimension of
      * the point and each row is related to each sample corresponding to
      * provided y pairs of values.

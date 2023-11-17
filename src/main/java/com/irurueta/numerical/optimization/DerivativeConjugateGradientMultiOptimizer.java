@@ -69,7 +69,7 @@ public class DerivativeConjugateGradientMultiOptimizer
 
     /**
      * The fractional tolerance in the function value such that failure to
-     * decrease by more than this amount on one iteration signals doneness.
+     * decrease by more than this amount on one iteration signals done-ness.
      */
     private double tolerance;
 

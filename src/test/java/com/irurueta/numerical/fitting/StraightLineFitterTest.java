@@ -50,13 +50,13 @@ public class StraightLineFitterTest {
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getA(), 0.0, 0.0);
-        assertEquals(fitter.getB(), 0.0, 0.0);
-        assertEquals(fitter.getSigA(), 0.0, 0.0);
-        assertEquals(fitter.getSigB(), 0.0, 0.0);
-        assertEquals(fitter.getChi2(), 0.0, 0.0);
-        assertEquals(fitter.getQ(), 1.0, 0.0);
-        assertEquals(fitter.getSigdat(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getA(), 0.0);
+        assertEquals(0.0, fitter.getB(), 0.0);
+        assertEquals(0.0, fitter.getSigA(), 0.0);
+        assertEquals(0.0, fitter.getSigB(), 0.0);
+        assertEquals(0.0, fitter.getChi2(), 0.0);
+        assertEquals(1.0, fitter.getQ(), 0.0);
+        assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // test constructor with input data
         final double[] x = new double[2];
@@ -70,13 +70,13 @@ public class StraightLineFitterTest {
         assertSame(fitter.getY(), y);
         assertNull(fitter.getSig());
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getA(), 0.0, 0.0);
-        assertEquals(fitter.getB(), 0.0, 0.0);
-        assertEquals(fitter.getSigA(), 0.0, 0.0);
-        assertEquals(fitter.getSigB(), 0.0, 0.0);
-        assertEquals(fitter.getChi2(), 0.0, 0.0);
-        assertEquals(fitter.getQ(), 1.0, 0.0);
-        assertEquals(fitter.getSigdat(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getA(), 0.0);
+        assertEquals(0.0, fitter.getB(), 0.0);
+        assertEquals(0.0, fitter.getSigA(), 0.0);
+        assertEquals(0.0, fitter.getSigB(), 0.0);
+        assertEquals(0.0, fitter.getChi2(), 0.0);
+        assertEquals(1.0, fitter.getQ(), 0.0);
+        assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // Force IllegalArgumentException
         final double[] shortX = new double[1];
@@ -99,13 +99,13 @@ public class StraightLineFitterTest {
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getA(), 0.0, 0.0);
-        assertEquals(fitter.getB(), 0.0, 0.0);
-        assertEquals(fitter.getSigA(), 0.0, 0.0);
-        assertEquals(fitter.getSigB(), 0.0, 0.0);
-        assertEquals(fitter.getChi2(), 0.0, 0.0);
-        assertEquals(fitter.getQ(), 1.0, 0.0);
-        assertEquals(fitter.getSigdat(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getA(), 0.0);
+        assertEquals(0.0, fitter.getB(), 0.0);
+        assertEquals(0.0, fitter.getSigA(), 0.0);
+        assertEquals(0.0, fitter.getSigB(), 0.0);
+        assertEquals(0.0, fitter.getChi2(), 0.0);
+        assertEquals(1.0, fitter.getQ(), 0.0);
+        assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // Force IllegalArgumentException
         final double[] shortSig = new double[1];
@@ -225,13 +225,13 @@ public class StraightLineFitterTest {
         assertSame(fitter.getY(), y);
         assertNull(fitter.getSig());
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getA(), 0.0, 0.0);
-        assertEquals(fitter.getB(), 0.0, 0.0);
-        assertEquals(fitter.getSigA(), 0.0, 0.0);
-        assertEquals(fitter.getSigB(), 0.0, 0.0);
-        assertEquals(fitter.getChi2(), 0.0, 0.0);
-        assertEquals(fitter.getQ(), 1.0, 0.0);
-        assertEquals(fitter.getSigdat(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getA(), 0.0);
+        assertEquals(0.0, fitter.getB(), 0.0);
+        assertEquals(0.0, fitter.getSigA(), 0.0);
+        assertEquals(0.0, fitter.getSigB(), 0.0);
+        assertEquals(0.0, fitter.getChi2(), 0.0);
+        assertEquals(1.0, fitter.getQ(), 0.0);
+        assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // fit data
         fitter.fit();
@@ -289,13 +289,13 @@ public class StraightLineFitterTest {
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getA(), 0.0, 0.0);
-        assertEquals(fitter.getB(), 0.0, 0.0);
-        assertEquals(fitter.getSigA(), 0.0, 0.0);
-        assertEquals(fitter.getSigB(), 0.0, 0.0);
-        assertEquals(fitter.getChi2(), 0.0, 0.0);
-        assertEquals(fitter.getQ(), 1.0, 0.0);
-        assertEquals(fitter.getSigdat(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getA(), 0.0);
+        assertEquals(0.0, fitter.getB(), 0.0);
+        assertEquals(0.0, fitter.getSigA(), 0.0);
+        assertEquals(0.0, fitter.getSigB(), 0.0);
+        assertEquals(0.0, fitter.getChi2(), 0.0);
+        assertEquals(1.0, fitter.getQ(), 0.0);
+        assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // fit data
         fitter.fit();
@@ -304,7 +304,7 @@ public class StraightLineFitterTest {
         assertTrue(fitter.isResultAvailable());
         assertEquals(fitter.getA(), a, ABSOLUTE_ERROR);
         assertEquals(fitter.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(fitter.getSigdat(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getSigdat(), 0.0);
         assertTrue(fitter.getChi2() > 0);
         assertTrue(fitter.getQ() > 0);
         assertTrue(fitter.getSigA() > 0);

@@ -39,8 +39,8 @@ public class FastRandomSubsetSelectorTest {
         FastRandomSubsetSelector selector = new FastRandomSubsetSelector(
                 numSamples);
         assertNotNull(selector.getRandomizer());
-        assertEquals(selector.getType(),
-                SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
+        assertEquals(SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR,
+                selector.getType());
         assertEquals(selector.getNumSamples(), numSamples);
 
         // Force IllegalArgumentException
@@ -56,8 +56,8 @@ public class FastRandomSubsetSelectorTest {
         // randomizer is initialized with system timer
         selector = new FastRandomSubsetSelector(numSamples, false);
         assertNotNull(selector.getRandomizer());
-        assertEquals(selector.getType(),
-                SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
+        assertEquals(SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR,
+                selector.getType());
         assertEquals(selector.getNumSamples(), numSamples);
 
         // Force IllegalArgumentException
@@ -77,8 +77,8 @@ public class FastRandomSubsetSelectorTest {
 
         final FastRandomSubsetSelector selector = new FastRandomSubsetSelector(
                 numSamples);
-        assertEquals(selector.getType(),
-                SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
+        assertEquals(SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR,
+                selector.getType());
     }
 
     @Test

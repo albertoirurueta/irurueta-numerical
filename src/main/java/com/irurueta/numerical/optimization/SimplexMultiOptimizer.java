@@ -219,7 +219,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
 
     /**
      * Sets a simplex defined as a central point and a set of surrounding points
-     * at their corresponding distance deltas[i], where i corresponds to one
+     * at their corresponding distance deltas[i], where "i" corresponds to one
      * position of provided array of distances. The simplex will be made of the
      * computed surrounding points.
      *
@@ -242,7 +242,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
 
     /**
      * Internal method to set a simplex defined as a central point and a set of
-     * surrounding points at their corresponding distance deltas[i], where i
+     * surrounding points at their corresponding distance deltas[i], where "i"
      * corresponds to one position of provided array of distances. The simplex
      * will be made of the computed surrounding points.
      *

@@ -107,10 +107,10 @@ public class LevenbergMarquardtSingleDimensionFitter
      * Indicates whether covariance must be adjusted or not.
      * When covariance adjustment is enabled, then covariance is recomputed taking
      * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
+     * jacobians of the model function overestimated parameters using the following
      * expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -118,7 +118,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
+     * By default, covariance is adjusted after fitting finishes.
      */
     private boolean adjustCovariance = DEFAULT_ADJUST_COVARIANCE;
 
@@ -325,7 +325,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * The larger the curvatures are, the more likely that parameters can be correctly
      * fitted because a deep enough valley has been found to converge to an optimal
      * solution.
-     * Typically curvature is proportional to the inverse of the covariance matrix.
+     * Typically, curvature is proportional to the inverse of the covariance matrix.
      *
      * @return curvature matrix.
      */
@@ -388,10 +388,10 @@ public class LevenbergMarquardtSingleDimensionFitter
      * Indicates whether covariance must be adjusted or not.
      * When covariance adjustment is enabled, then covariance is recomputed taking
      * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
+     * jacobians of the model function overestimated parameters using the following
      * expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -399,10 +399,10 @@ public class LevenbergMarquardtSingleDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
+     * By default, covariance is adjusted after fitting finishes.
      * More info about confidence os estimated parameters can be found here:
-     * http://people.duke.edu/~hpgavin/ce281/lm.pdf
-     * https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf
+     * <a href="http://people.duke.edu/~hpgavin/ce281/lm.pdf">http://people.duke.edu/~hpgavin/ce281/lm.pdf</a>
+     * <a href="https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf">https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf</a>
      * Numerical Recipes 3rd Ed, page 812
      *
      * @return true if covariance must be adjusted, false otherwise.
@@ -415,10 +415,10 @@ public class LevenbergMarquardtSingleDimensionFitter
      * Specifies whether covariance must be adjusted or not.
      * When covariance adjustment is enabled, then covariance is recomputed taking
      * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
+     * jacobians of the model function overestimated parameters using the following
      * expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -426,7 +426,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
+     * By default, covariance is adjusted after fitting finishes.
      *
      * @param adjustCovariance true if covariance must be adjusted, false otherwise.
      */
@@ -578,7 +578,7 @@ public class LevenbergMarquardtSingleDimensionFitter
     }
 
     /**
-     * Releases parameter at position i of linear combination of basis functions
+     * Releases parameter at position i of linear combination of basis functions,
      * so it can be modified again if needed.
      *
      * @param i position of parameter to be released.
@@ -595,10 +595,10 @@ public class LevenbergMarquardtSingleDimensionFitter
      * the curvature matrix, which is just a solution of the covariance up to scale.
      * <p>
      * Covariance is adjusted taking into account input samples, input standard
-     * deviations of the samples and jacobians of the model function over estimated
+     * deviations of the samples and jacobians of the model function overestimated
      * parameters using the following expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -732,7 +732,7 @@ public class LevenbergMarquardtSingleDimensionFitter
     }
 
     /**
-     * Expand in storage the covariance matrix covar, so as to take into account
+     * Expand in storage the covariance matrix covar, to take into account
      * parameters that are being held fixed. (For the latter, return zero
      * covariances).
      *

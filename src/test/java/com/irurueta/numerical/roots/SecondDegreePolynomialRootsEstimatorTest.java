@@ -290,7 +290,7 @@ public class SecondDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot2), TOLERANCE));
 
@@ -310,7 +310,7 @@ public class SecondDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             // because root[0] and root[1] might be exchanged, we check for their
             // real parts and absolute value of their imaginary parts (which are
             // the same but with opposite sign because they are complex
@@ -337,7 +337,7 @@ public class SecondDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot1), TOLERANCE));
 

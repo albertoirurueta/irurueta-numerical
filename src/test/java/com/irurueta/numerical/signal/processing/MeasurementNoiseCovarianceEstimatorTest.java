@@ -41,11 +41,11 @@ public class MeasurementNoiseCovarianceEstimatorTest {
                 new MeasurementNoiseCovarianceEstimator(3);
 
         // check correctness
-        assertEquals(estimator.getMeasureParams(), 3);
-        assertEquals(estimator.getMeasurementNoiseCov().getRows(), 3);
-        assertEquals(estimator.getMeasurementNoiseCov().getColumns(), 3);
-        assertEquals(estimator.getSampleAverage().length, 3);
-        assertEquals(estimator.getSampleCount(), 0);
+        assertEquals(3, estimator.getMeasureParams());
+        assertEquals(3, estimator.getMeasurementNoiseCov().getRows());
+        assertEquals(3, estimator.getMeasurementNoiseCov().getColumns());
+        assertEquals(3, estimator.getSampleAverage().length);
+        assertEquals(0, estimator.getSampleCount());
 
         // Force IllegalArgumentException
         estimator = null;

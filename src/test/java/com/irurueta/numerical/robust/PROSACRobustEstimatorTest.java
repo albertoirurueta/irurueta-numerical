@@ -37,7 +37,7 @@ public class PROSACRobustEstimatorTest {
     private static final double MIN_ERROR = 1e-5;
     private static final double MAX_ERROR = 1.0;
 
-    // error added to quality scores so they are not totally related to sample
+    // error added to quality scores, so they are not totally related to sample
     // error
     private static final double MIN_SCORE_ERROR = -0.3;
     private static final double MAX_SCORE_ERROR = 0.3;
@@ -64,29 +64,29 @@ public class PROSACRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
-        assertEquals(estimator.getMaxOutliersProportion(),
-                PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
-        assertEquals(estimator.getEta0(),
-                PROSACRobustEstimator.DEFAULT_ETA0, 0.0);
-        assertEquals(estimator.getBeta(),
-                PROSACRobustEstimator.DEFAULT_BETA, 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION,
+                estimator.getMaxOutliersProportion(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_ETA0,
+                estimator.getEta0(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_BETA,
+                estimator.getBeta(), 0.0);
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
-                PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
-        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
-                PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS,
+                estimator.isComputeAndKeepInliersEnabled());
+        assertEquals(PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS,
+                estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with listener
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -98,29 +98,29 @@ public class PROSACRobustEstimatorTest {
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertTrue(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
-        assertEquals(estimator.getMaxOutliersProportion(),
-                PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
-        assertEquals(estimator.getEta0(),
-                PROSACRobustEstimator.DEFAULT_ETA0, 0.0);
-        assertEquals(estimator.getBeta(),
-                PROSACRobustEstimator.DEFAULT_BETA, 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION,
+                estimator.getMaxOutliersProportion(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_ETA0,
+                estimator.getEta0(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_BETA,
+                estimator.getBeta(), 0.0);
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
-                PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
-        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
-                PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS,
+                estimator.isComputeAndKeepInliersEnabled());
+        assertEquals(PROSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS,
+                estimator.isComputeAndKeepResidualsEnabled());
     }
 
     @Test
@@ -152,8 +152,8 @@ public class PROSACRobustEstimatorTest {
             LockedException {
         final PROSACRobustEstimator<double[]> estimator =
                 new PROSACRobustEstimator<>();
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -181,8 +181,8 @@ public class PROSACRobustEstimatorTest {
             LockedException {
         final PROSACRobustEstimator<double[]> estimator =
                 new PROSACRobustEstimator<>();
-        assertEquals(estimator.getConfidence(),
-                PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -210,8 +210,8 @@ public class PROSACRobustEstimatorTest {
             LockedException {
         final PROSACRobustEstimator<double[]> estimator =
                 new PROSACRobustEstimator<>();
-        assertEquals(estimator.getMaxIterations(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -235,14 +235,14 @@ public class PROSACRobustEstimatorTest {
             throws IllegalArgumentException, LockedException {
         final PROSACRobustEstimator<double[]> estimator =
                 new PROSACRobustEstimator<>();
-        assertEquals(estimator.getMaxOutliersProportion(),
-                PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION,
+                estimator.getMaxOutliersProportion(), 0.0);
 
         // set new value
         estimator.setMaxOutliersProportion(0.5);
 
         // check correctness
-        assertEquals(estimator.getMaxOutliersProportion(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getMaxOutliersProportion(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -262,14 +262,14 @@ public class PROSACRobustEstimatorTest {
             LockedException {
         final PROSACRobustEstimator<double[]> estimator =
                 new PROSACRobustEstimator<>();
-        assertEquals(estimator.getEta0(), PROSACRobustEstimator.DEFAULT_ETA0,
+        assertEquals(PROSACRobustEstimator.DEFAULT_ETA0, estimator.getEta0(),
                 0.0);
 
         // set new value
         estimator.setEta0(0.5);
 
         // check correctness
-        assertEquals(estimator.getEta0(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getEta0(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -290,14 +290,14 @@ public class PROSACRobustEstimatorTest {
         final PROSACRobustEstimator<double[]> estimator =
                 new PROSACRobustEstimator<>();
 
-        assertEquals(estimator.getBeta(), PROSACRobustEstimator.DEFAULT_BETA,
+        assertEquals(PROSACRobustEstimator.DEFAULT_BETA, estimator.getBeta(),
                 0.0);
 
         // set new value
         estimator.setBeta(0.5);
 
         // check correctness
-        assertEquals(estimator.getBeta(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getBeta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -368,8 +368,8 @@ public class PROSACRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -377,12 +377,12 @@ public class PROSACRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
 
@@ -416,8 +416,8 @@ public class PROSACRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -425,12 +425,12 @@ public class PROSACRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
 

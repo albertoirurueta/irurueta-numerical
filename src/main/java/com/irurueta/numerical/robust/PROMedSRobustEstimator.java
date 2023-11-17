@@ -35,7 +35,7 @@ import java.util.List;
  * dynamically, which helps for an easier setup that is problem independent and
  * depending on the accuracy of the inliers, results will be more accurate than
  * RANSAC or PROSAC, just the same as LMedS.
- * On the other hand, if a certain information about the quality of the samples
+ * On the other hand, if certain information about the quality of the samples
  * is available, as in PROSAC, the algorithm takes advantage of this additional
  * information to prioritize the samples with higher quality in order to find
  * a solution much faster than RANSAC or LMedS.
@@ -43,7 +43,7 @@ import java.util.List;
  * algorithm will try to get the solution that better fits in a pure median of
  * residuals model or in a threshold based one to determine inliers.
  * Hence, PROMedS can be as fast as PROSAC (which is typically about 100x faster
- * than RANSAC or LMedS), can obtain the same accuracy than LMedS (which can be
+ * than RANSAC or LMedS), can obtain the same accuracy as LMedS (which can be
  * much better than RANSAC or PROSAC in certain scenarios), and has an easier
  * setup, which is problem independent because no threshold is required to be
  * known beforehand although one can be provided as well.
@@ -87,7 +87,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * to PROSAC but the number of iterations is reduced (i.e. less
      * computational cost). If more accuracy is desired at the expense of some
      * additional computation cost, then disable this flag.
-     * By default stop threshold is enabled, so that computational cost is
+     * By default, stop threshold is enabled, so that computational cost is
      * similar to RANSAC and only accuracy gets better if inliers are more
      * accurate.
      */
@@ -153,7 +153,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * can be used to increase or lower the dynamically computed threshold so
      * that the algorithm becomes more or less accurate. The stricter the
      * threshold (lower factor), the more time the algorithm will need to
-     * converge, if it can converge. By default the factor is 1.0, which makes
+     * converge, if it can converge. By default, the factor is 1.0, which makes
      * the threshold to be computed as the median of residuals.
      */
     public static final double DEFAULT_INLIER_FACTOR = 1.0; //1.5 would also be reasonable
@@ -256,7 +256,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * used to increase or lower the dynamically computed threshold so that the
      * algorithm becomes more or less accurate. The stricter the threshold
      * (lower factor), the more time the algorithm will need to converge, if
-     * it can converge. By default the factor is 1.0, which makes the threshold
+     * it can converge. By default, the factor is 1.0, which makes the threshold
      * to be computed as the median of residuals.
      */
     private double mInlierFactor;
@@ -415,7 +415,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * This factor can be used to increase or lower the dynamically computed
      * threshold so that the algorithm becomes more or less accurate. The
      * stricter the threshold (lower factor), the more time the algorithm will
-     * need to converge, if it can converge. By default the factor is 1.0, which
+     * need to converge, if it can converge. By default, the factor is 1.0, which
      * makes the threshold to be computed as the median of residuals.
      *
      * @return factor to normalize threshold to determine inliers.
@@ -429,7 +429,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * This factor can be used to increase or lower the dynamically computed
      * threshold so that the algorithm becomes more or less accurate. The
      * stricter the threshold (lower factor), the more time the algorithm will
-     * need to converge, if it can converge. By default the factor is 1.0, which
+     * need to converge, if it can converge. By default, the factor is 1.0, which
      * makes the threshold to be computed as the median of residuals.
      *
      * @param inlierFactor inlier factor to be set.
@@ -878,7 +878,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                             //   However, since In is binomial, and in the case of
                             //   evenly distributed inliers, a better test would be
                             //   to reduce sampleSizeStar only if there's a
-                            //   significant improvement in epsilon. Thus we use a
+                            //   significant improvement in epsilon. Thus, we use a
                             //   Chi-squared test (P=0.10), together with the normal
                             //   approximation to the binomial (mu =
                             //   epsilonSampleSizeStart * sampleSizeTest, sigma =
@@ -979,7 +979,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**
@@ -1204,7 +1204,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      */
     private void keepInliersData(PROMedSInliersData inliersData,
                                  final int totalSamples) {
-        // keep best inliers data corresponding to best solution,
+        // keep the best inliers data corresponding to best solution,
         // in case it can be useful along with the result
         mBestInliersData = inliersData;
 
@@ -1212,7 +1212,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         // is found
         final double bestMedianResidual = inliersData.getBestMedianResidual();
         inliersData = new PROMedSInliersData(totalSamples);
-        // update best median residual on new instance so that
+        // update the best median residual on new instance so that
         // only better solutions that are found later can update
         // inliers data
         inliersData.update(bestMedianResidual,

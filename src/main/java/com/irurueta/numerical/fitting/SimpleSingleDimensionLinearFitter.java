@@ -286,7 +286,7 @@ public class SimpleSingleDimensionLinearFitter
     }
 
     /**
-     * Releases parameter at position i of linear combination of basis functions
+     * Releases parameter at position i of linear combination of basis functions,
      * so it can be modified again if needed.
      *
      * @param i position of parameter to be released.

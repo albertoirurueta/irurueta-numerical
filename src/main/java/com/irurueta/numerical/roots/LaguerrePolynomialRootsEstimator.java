@@ -133,7 +133,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @throws NotReadyException       Raised if this instance is not ready because
      *                                 polynomial parameters have not been provided.
      * @throws RootEstimationException Raised if roots cannot be estimated for
-     *                                 some reason (lack of convergence, etc).
+     *                                 some reason (lack of convergence, etc.).
      */
     @Override
     public void estimate() throws LockedException, NotReadyException,

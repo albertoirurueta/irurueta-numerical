@@ -371,7 +371,7 @@ public class ThirdDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot2), TOLERANCE));
             assertTrue(roots[2].equals(new Complex(realRoot3), TOLERANCE));
@@ -393,13 +393,13 @@ public class ThirdDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             // because roots1 might be exchanged, we check for their
             // real parts and absolute value of their imaginary parts (which are
             // the same but with opposite sign because they are complex
             // conjugates)
             assertEquals(roots[0].getReal(), realRoot1, TOLERANCE);
-            assertEquals(Math.abs(roots[0].getImaginary()), 0.0, TOLERANCE);
+            assertEquals(0.0, Math.abs(roots[0].getImaginary()), TOLERANCE);
             assertEquals(roots[1].getReal(), root2.getReal(), TOLERANCE);
             assertEquals(Math.abs(roots[1].getImaginary()),
                     Math.abs(root2.getImaginary()), TOLERANCE);
@@ -424,7 +424,7 @@ public class ThirdDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot2), TOLERANCE));
             assertTrue(roots[2].equals(new Complex(realRoot2), TOLERANCE));
@@ -446,7 +446,7 @@ public class ThirdDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[1].equals(new Complex(realRoot1), TOLERANCE));
             assertTrue(roots[2].equals(new Complex(realRoot1), TOLERANCE));

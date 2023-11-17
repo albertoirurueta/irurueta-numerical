@@ -360,6 +360,6 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 }

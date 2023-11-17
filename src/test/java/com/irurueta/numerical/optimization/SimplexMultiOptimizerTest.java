@@ -17,7 +17,6 @@ package com.irurueta.numerical.optimization;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
@@ -101,8 +100,8 @@ public class SimplexMultiOptimizerTest implements
         } catch (final NotAvailableException ignore) {
         }
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
-        assertEquals(optimizer.getTolerance(),
-                SimplexMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(SimplexMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
         try {
             optimizer.getListener();
@@ -335,8 +334,8 @@ public class SimplexMultiOptimizerTest implements
 
         final SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer();
 
-        assertEquals(optimizer.getTolerance(),
-                SimplexMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(SimplexMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
 
         // set tolerance
         optimizer.setTolerance(tolerance);
@@ -485,7 +484,7 @@ public class SimplexMultiOptimizerTest implements
     }
 
     @Override
-    public double evaluate(final double[] point) throws EvaluationException {
+    public double evaluate(final double[] point) {
         final int dims = Math.min(Math.min(point.length, minimum.length),
                 width.length);
 

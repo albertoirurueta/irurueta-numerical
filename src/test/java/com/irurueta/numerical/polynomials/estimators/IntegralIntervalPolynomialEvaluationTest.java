@@ -38,12 +38,12 @@ public class IntegralIntervalPolynomialEvaluationTest {
                 new IntegralIntervalPolynomialEvaluation();
 
         // check default values
-        assertEquals(eval.getEvaluation(), 0.0, 0.0);
-        assertEquals(eval.getStartX(), 0.0, 0.0);
-        assertEquals(eval.getEndX(), 0.0, 0.0);
-        assertEquals(eval.getIntegralOrder(), 1);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_INTERVAL);
+        assertEquals(0.0, eval.getEvaluation(), 0.0);
+        assertEquals(0.0, eval.getStartX(), 0.0);
+        assertEquals(0.0, eval.getEndX(), 0.0);
+        assertEquals(1, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_INTERVAL,
+                eval.getType());
 
         // test constructor with values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -64,8 +64,8 @@ public class IntegralIntervalPolynomialEvaluationTest {
         assertEquals(eval.getStartX(), startX, 0.0);
         assertEquals(eval.getEndX(), endX, 0.0);
         assertEquals(eval.getIntegralOrder(), order);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_INTERVAL);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_INTERVAL,
+                eval.getType());
 
 
         eval = new IntegralIntervalPolynomialEvaluation(startX, endX,
@@ -75,9 +75,9 @@ public class IntegralIntervalPolynomialEvaluationTest {
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
         assertEquals(eval.getStartX(), startX, 0.0);
         assertEquals(eval.getEndX(), endX, 0.0);
-        assertEquals(eval.getIntegralOrder(), 1);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_INTERVAL);
+        assertEquals(1, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_INTERVAL,
+                eval.getType());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class IntegralIntervalPolynomialEvaluationTest {
                 new IntegralIntervalPolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getStartX(), 0.0, 0.0);
+        assertEquals(0.0, eval.getStartX(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -104,7 +104,7 @@ public class IntegralIntervalPolynomialEvaluationTest {
                 new IntegralIntervalPolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getEndX(), 0.0, 0.0);
+        assertEquals(0.0, eval.getEndX(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -121,7 +121,7 @@ public class IntegralIntervalPolynomialEvaluationTest {
                 new IntegralIntervalPolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getIntegralOrder(), 1);
+        assertEquals(1, eval.getIntegralOrder());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -152,8 +152,8 @@ public class IntegralIntervalPolynomialEvaluationTest {
         assertEquals(eval1.getStartX(), startX, 0.0);
         assertEquals(eval1.getEndX(), endX, 0.0);
         assertEquals(eval1.getIntegralOrder(), order);
-        assertEquals(eval1.getType(),
-                PolynomialEvaluationType.INTEGRAL_INTERVAL);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_INTERVAL,
+                eval1.getType());
 
         // serialize and deserialize
         final byte[] bytes = SerializationHelper.serialize(eval1);
@@ -164,7 +164,7 @@ public class IntegralIntervalPolynomialEvaluationTest {
         assertEquals(eval2.getStartX(), startX, 0.0);
         assertEquals(eval2.getEndX(), endX, 0.0);
         assertEquals(eval2.getIntegralOrder(), order);
-        assertEquals(eval2.getType(),
-                PolynomialEvaluationType.INTEGRAL_INTERVAL);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_INTERVAL,
+                eval2.getType());
     }
 }

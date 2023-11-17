@@ -21,7 +21,7 @@ package com.irurueta.numerical;
 public interface MultiVariateFunctionEvaluatorListener {
     /**
      * Evaluates a multi variate function such as f1(x1, x2, ...),
-     * f2(x1, x2, ...) at providd multidimensional point and returns the result
+     * f2(x1, x2, ...) at provided multidimensional point and returns the result
      * as a vectorial value
      *
      * @param point  multidimensional point where function will be evaluated

@@ -53,9 +53,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
     /**
      * Constructor
      *
-     * @param x   input points x where a linear multi dimensional function
+     * @param x   input points x where a linear multidimensional function
      *            f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y   result of evaluation of linear multi dimensional function
+     * @param y   result of evaluation of linear multidimensional function
      *            f(x1, x2, ...) at provided x points
      * @param sig standard deviations of each pair of points (x, y)
      * @throws IllegalArgumentException if provided matrix rows and arrays
@@ -68,9 +68,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
     /**
      * Constructor
      *
-     * @param x   input points x where a linear multi dimensional function
+     * @param x   input points x where a linear multidimensional function
      *            f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y   result of evaluation of linear multi dimensional function
+     * @param y   result of evaluation of linear multidimensional function
      *            f(x1, x2, ...) at provided x points
      * @param sig standard deviation of all pair of points assuming that
      *            standard deviations are constant
@@ -99,9 +99,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      *
      * @param evaluator evaluator to evaluate function at provided point and
      *                  obtain the evaluation of function basis at such point
-     * @param x         input points x where a linear multi dimensional function
+     * @param x         input points x where a linear multidimensional function
      *                  f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y         result of evaluation of linear multi dimensional function
+     * @param y         result of evaluation of linear multidimensional function
      *                  f(x1, x2, ...) at provided x points
      * @param sig       standard deviations of each pair of points (x, y)
      * @throws FittingException         if evaluation fails
@@ -120,9 +120,9 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      *
      * @param evaluator evaluator to evaluate function at provided point and
      *                  obtain the evaluation of function basis at such point
-     * @param x         input points x where a linear multi dimensional function
+     * @param x         input points x where a linear multidimensional function
      *                  f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
-     * @param y         result of evaluation of linear multi dimensional function
+     * @param y         result of evaluation of linear multidimensional function
      *                  f(x1, x2, ...) at provided x points
      * @param sig       standard deviation of all pair of points assuming that
      *                  standard deviations are constant

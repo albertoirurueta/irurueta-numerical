@@ -27,7 +27,7 @@ import com.irurueta.numerical.NotReadyException;
  * b * x + c, hence the polynomial can be simply be defined by an array of
  * length 3 [c, b, a]
  * This class is based on:
- * http://en.wikipedia.org/wiki/Quadratic_function
+ * <a href="http://en.wikipedia.org/wiki/Quadratic_function">http://en.wikipedia.org/wiki/Quadratic_function</a>
  */
 @SuppressWarnings("Duplicates")
 public class SecondDegreePolynomialRootsEstimator

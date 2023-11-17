@@ -118,8 +118,8 @@ public class PowellMultiOptimizerTest implements OnIterationCompletedListener {
         }
         assertFalse(optimizer.isDirectionAvailable());
         assertFalse(optimizer.isReady());
-        assertEquals(optimizer.getTolerance(),
-                PowellMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(PowellMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isStartPointAvailable());
         try {
             optimizer.getStartPoint();

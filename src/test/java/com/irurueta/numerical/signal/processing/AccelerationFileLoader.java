@@ -17,8 +17,8 @@ package com.irurueta.numerical.signal.processing;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Utility class to load .dat files containing accelerometer samples obtained on
@@ -28,7 +28,7 @@ class AccelerationFileLoader {
 
     static Data load(final File f) throws IOException {
         final int bufferSize = computeBufferSizes(f);
-        final DataInputStream stream = new DataInputStream(new FileInputStream(f));
+        final DataInputStream stream = new DataInputStream(Files.newInputStream(f.toPath()));
 
         final float[] accelerationX = new float[bufferSize];
         final float[] accelerationY = new float[bufferSize];

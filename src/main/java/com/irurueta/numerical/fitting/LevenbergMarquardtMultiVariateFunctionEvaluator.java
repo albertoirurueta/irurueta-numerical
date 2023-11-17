@@ -19,7 +19,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.numerical.EvaluationException;
 
 /**
- * Interface to evaluate non-linear multi variate and multi dimensional
+ * Interface to evaluate non-linear multi variate and multidimensional
  * functions.
  * Evaluation of functions requires both function value at provided point x and
  * function jacobian respect to its parameters (i.e. derivatives respect to its

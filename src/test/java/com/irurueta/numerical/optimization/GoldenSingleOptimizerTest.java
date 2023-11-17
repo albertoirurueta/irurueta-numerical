@@ -15,7 +15,6 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.InvalidBracketRangeException;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotAvailableException;
@@ -69,16 +68,16 @@ public class GoldenSingleOptimizerTest implements
         // test 1st constructor
         GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(),
-                GoldenSingleOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(optimizer.getMinEvaluationPoint(),
-                GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(),
-                GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(),
-                GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                optimizer.getMaxEvaluationPoint(), 0.0);
         try {
             optimizer.getEvaluationAtMin();
             fail("NotAvailableException expected but not thrown");
@@ -229,8 +228,8 @@ public class GoldenSingleOptimizerTest implements
 
         final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
 
-        assertEquals(optimizer.getTolerance(),
-                GoldenSingleOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
@@ -262,12 +261,12 @@ public class GoldenSingleOptimizerTest implements
 
         assertTrue(optimizer.isBracketAvailable());
 
-        assertEquals(optimizer.getMinEvaluationPoint(),
-                GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(),
-                GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(),
-                GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                optimizer.getMaxEvaluationPoint(), 0.0);
 
         // set new bracket
         optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
@@ -538,7 +537,7 @@ public class GoldenSingleOptimizerTest implements
     }
 
     @Override
-    public double evaluate(final double point) throws EvaluationException {
+    public double evaluate(final double point) {
         return (point - minimum) * (point - minimum) / width + offset;
     }
 

@@ -106,13 +106,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNull(fitter.getSig());
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
+        assertEquals(LevenbergMarquardtSingleDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
+        assertEquals(LevenbergMarquardtSingleDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
+        assertEquals(LevenbergMarquardtSingleDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -132,13 +132,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertSame(fitter.getSig(), sig);
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -176,17 +176,17 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertNull(fitter.getA());
         assertNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
         assertNull(fitter.getFunctionEvaluator());
         assertNull(fitter.getAlpha());
         assertTrue(fitter.isCovarianceAdjusted());
@@ -239,13 +239,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getCovar().getRows(), nPoints);
         assertEquals(fitter.getCovar().getColumns(), nPoints);
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -267,13 +267,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getCovar().getRows(), nPoints);
         assertEquals(fitter.getCovar().getColumns(), nPoints);
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -313,20 +313,20 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertNotNull(fitter.getA());
         assertEquals(fitter.getA().length, nPoints);
         assertNotNull(fitter.getCovar());
         assertEquals(fitter.getCovar().getRows(), nPoints);
         assertEquals(fitter.getCovar().getColumns(), nPoints);
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getAlpha());
         assertEquals(fitter.getAlpha().getRows(), nPoints);
@@ -356,14 +356,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 new LevenbergMarquardtMultiDimensionFitter();
 
         // check default value
-        assertEquals(fitter.getNdone(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_NDONE,
+                fitter.getNdone());
 
         // new value
         fitter.setNdone(5);
 
         // check correctness
-        assertEquals(fitter.getNdone(), 5);
+        assertEquals(5, fitter.getNdone());
 
         // force IllegalArgumentException
         try {
@@ -379,14 +379,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 new LevenbergMarquardtMultiDimensionFitter();
 
         // check default value
-        assertEquals(fitter.getItmax(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_ITMAX,
+                fitter.getItmax());
 
         // new value
         fitter.setItmax(10);
 
         // check correctness
-        assertEquals(fitter.getItmax(), 10);
+        assertEquals(10, fitter.getItmax());
 
         // force IllegalArgumentException
         try {
@@ -402,14 +402,14 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 new LevenbergMarquardtMultiDimensionFitter();
 
         // check default value
-        assertEquals(fitter.getTol(),
-                LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL, 0.0);
+        assertEquals(LevenbergMarquardtMultiDimensionFitter.DEFAULT_TOL,
+                fitter.getTol(), 0.0);
 
         // new value
         fitter.setTol(1e-1);
 
         //check correctness
-        assertEquals(fitter.getTol(), 1e-1, 0.0);
+        assertEquals(1e-1, fitter.getTol(), 0.0);
 
         // force IllegalArgumentException
         try {
@@ -456,13 +456,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertSame(fitter.getFunctionEvaluator(), evaluator);
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, GAUSS_UNI_PARAMS);
+        assertEquals(GAUSS_UNI_PARAMS, fitter.getA().length);
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getCovar().getRows(), GAUSS_UNI_PARAMS);
-        assertEquals(fitter.getCovar().getColumns(), GAUSS_UNI_PARAMS);
+        assertEquals(GAUSS_UNI_PARAMS, fitter.getCovar().getRows());
+        assertEquals(GAUSS_UNI_PARAMS, fitter.getCovar().getColumns());
         assertNotNull(fitter.getAlpha());
-        assertEquals(fitter.getAlpha().getRows(), GAUSS_UNI_PARAMS);
-        assertEquals(fitter.getAlpha().getColumns(), GAUSS_UNI_PARAMS);
+        assertEquals(GAUSS_UNI_PARAMS, fitter.getAlpha().getRows());
+        assertEquals(GAUSS_UNI_PARAMS, fitter.getAlpha().getColumns());
     }
 
     @Test
@@ -537,7 +537,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
 
 
@@ -682,7 +682,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -692,7 +692,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, CONSTANT_PARAMS);
+        assertEquals(CONSTANT_PARAMS, fitter.getA().length);
         for (int i = 0; i < CONSTANT_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -781,7 +781,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -791,7 +791,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, LINE1_PARAMS);
+        assertEquals(LINE1_PARAMS, fitter.getA().length);
         for (int i = 0; i < LINE1_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -884,7 +884,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -894,7 +894,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, LINE2_PARAMS);
+        assertEquals(LINE2_PARAMS, fitter.getA().length);
         for (int i = 0; i < LINE2_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -995,7 +995,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -1005,7 +1005,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
+        assertEquals(SINE_UNI_PARAMS, fitter.getA().length);
         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -1117,7 +1117,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -1244,7 +1244,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -1257,7 +1257,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
+        assertEquals(SINE_UNI_PARAMS, fitter.getA().length);
         // first parameter is hold and matches exactly
         assertEquals(fitter.getA()[0], params[0], 0.0);
         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
@@ -1274,7 +1274,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
+        assertEquals(SINE_UNI_PARAMS, fitter.getA().length);
         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -1387,7 +1387,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -1397,7 +1397,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
+        assertEquals(SINE_UNI_PARAMS, fitter.getA().length);
         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -1523,7 +1523,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -1670,7 +1670,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -1680,7 +1680,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, SINE_MULTI_PARAMS);
+            assertEquals(SINE_MULTI_PARAMS, fitter.getA().length);
             boolean failed = false;
             for (int i = 0; i < SINE_MULTI_PARAMS; i++) {
                 if (Math.abs(fitter.getA()[i] - params[i]) > ABSOLUTE_ERROR) {
@@ -1829,7 +1829,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -1971,7 +1971,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -1981,7 +1981,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
+        assertEquals(SINE_UNI_PARAMS, fitter.getA().length);
         for (int i = 0; i < SINE_UNI_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }
@@ -2097,7 +2097,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -2111,13 +2111,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, CONSTANT_PARAMS);
+            assertEquals(CONSTANT_PARAMS, fitter.getA().length);
             for (int i = 0; i < CONSTANT_PARAMS; i++) {
                 assertEquals(fitter.getA()[i], params[i], SMALL_ABSOLUTE_ERROR);
             }
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getCovar().getRows(), CONSTANT_PARAMS);
-            assertEquals(fitter.getCovar().getColumns(), CONSTANT_PARAMS);
+            assertEquals(CONSTANT_PARAMS, fitter.getCovar().getRows());
+            assertEquals(CONSTANT_PARAMS, fitter.getCovar().getColumns());
             assertTrue(fitter.getChisq() > 0.0);
 
             final double chiSqrDegreesOfFreedom = npoints - CONSTANT_PARAMS;
@@ -2292,7 +2292,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -2306,13 +2306,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, LINE1_PARAMS);
+            assertEquals(LINE1_PARAMS, fitter.getA().length);
             for (int i = 0; i < LINE1_PARAMS; i++) {
                 assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
             }
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getCovar().getRows(), LINE1_PARAMS);
-            assertEquals(fitter.getCovar().getColumns(), LINE1_PARAMS);
+            assertEquals(LINE1_PARAMS, fitter.getCovar().getRows());
+            assertEquals(LINE1_PARAMS, fitter.getCovar().getColumns());
             assertTrue(fitter.getChisq() > 0);
 
             final double chiSqrDegreesOfFreedom = npoints - LINE1_PARAMS;
@@ -2449,8 +2449,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], a * xi + b, SMALL_ABSOLUTE_ERROR);
 
-                assertEquals(dist.getCovariance().getRows(), 1);
-                assertEquals(dist.getCovariance().getColumns(), 1);
+                assertEquals(1, dist.getCovariance().getRows());
+                assertEquals(1, dist.getCovariance().getColumns());
 
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
@@ -2503,7 +2503,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -2518,13 +2518,13 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, LINE2_PARAMS);
+            assertEquals(LINE2_PARAMS, fitter.getA().length);
             for (int i = 0; i < LINE2_PARAMS; i++) {
                 assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
             }
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getCovar().getRows(), LINE2_PARAMS);
-            assertEquals(fitter.getCovar().getColumns(), LINE2_PARAMS);
+            assertEquals(LINE2_PARAMS, fitter.getCovar().getRows());
+            assertEquals(LINE2_PARAMS, fitter.getCovar().getColumns());
             assertTrue(fitter.getChisq() > 0);
 
             final double chiSqrDegreesOfFreedom = npoints - LINE2_PARAMS;
@@ -2681,8 +2681,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 assertEquals(y[i], amplitude * Math.sin(freq * xi + phase),
                         SMALL_ABSOLUTE_ERROR);
 
-                assertEquals(dist.getCovariance().getRows(), 1);
-                assertEquals(dist.getCovariance().getColumns(), 1);
+                assertEquals(1, dist.getCovariance().getRows());
+                assertEquals(1, dist.getCovariance().getColumns());
 
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
@@ -2740,7 +2740,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -2755,7 +2755,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, SINE_UNI_PARAMS);
+            assertEquals(SINE_UNI_PARAMS, fitter.getA().length);
             boolean valid = true;
             for (int i = 0; i < SINE_UNI_PARAMS; i++) {
                 if (Math.abs(fitter.getA()[i] - params[i]) > ABSOLUTE_ERROR) {
@@ -2765,8 +2765,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
             }
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getCovar().getRows(), SINE_UNI_PARAMS);
-            assertEquals(fitter.getCovar().getColumns(), SINE_UNI_PARAMS);
+            assertEquals(SINE_UNI_PARAMS, fitter.getCovar().getRows());
+            assertEquals(SINE_UNI_PARAMS, fitter.getCovar().getColumns());
             assertTrue(fitter.getChisq() > 0);
 
             final double chiSqrDegreesOfFreedom = npoints - SINE_UNI_PARAMS;
@@ -2942,8 +2942,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], yi, SMALL_ABSOLUTE_ERROR);
 
-                assertEquals(dist.getCovariance().getRows(), 1);
-                assertEquals(dist.getCovariance().getColumns(), 1);
+                assertEquals(1, dist.getCovariance().getRows());
+                assertEquals(1, dist.getCovariance().getColumns());
 
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
@@ -3005,7 +3005,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -3218,8 +3218,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 assertEquals(y[i], amplitude * Math.sin(freqx * xi0 + phasex) *
                         Math.sin(freqy * xi1 + phasey), SMALL_ABSOLUTE_ERROR);
 
-                assertEquals(dist.getCovariance().getRows(), 1);
-                assertEquals(dist.getCovariance().getColumns(), 1);
+                assertEquals(1, dist.getCovariance().getRows());
+                assertEquals(1, dist.getCovariance().getColumns());
 
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
@@ -3292,7 +3292,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -3307,7 +3307,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, SINE_MULTI_PARAMS);
+            assertEquals(SINE_MULTI_PARAMS, fitter.getA().length);
             boolean valid = true;
             for (int i = 0; i < SINE_MULTI_PARAMS; i++) {
                 if (Math.abs(fitter.getA()[i] - params[i]) > ABSOLUTE_ERROR) {
@@ -3318,8 +3318,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             }
 
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getCovar().getRows(), SINE_MULTI_PARAMS);
-            assertEquals(fitter.getCovar().getColumns(), SINE_MULTI_PARAMS);
+            assertEquals(SINE_MULTI_PARAMS, fitter.getCovar().getRows());
+            assertEquals(SINE_MULTI_PARAMS, fitter.getCovar().getColumns());
             assertTrue(fitter.getChisq() > 0);
 
             final double chiSqrDegreesOfFreedom = npoints - SINE_MULTI_PARAMS;
@@ -3531,8 +3531,8 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
                 y[i] = dist.getMean()[0];
                 assertEquals(y[i], yi, SMALL_ABSOLUTE_ERROR);
 
-                assertEquals(dist.getCovariance().getRows(), 1);
-                assertEquals(dist.getCovariance().getColumns(), 1);
+                assertEquals(1, dist.getCovariance().getRows());
+                assertEquals(1, dist.getCovariance().getColumns());
 
                 sigmas[i] = Math.sqrt(dist.getCovariance().
                         getElementAt(0, 0));
@@ -3609,7 +3609,7 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -3683,7 +3683,6 @@ public class LevenbergMarquardtMultiDimensionFitterTest {
 
                 tmp1.fromArray(derivatives);
                 tmp2.fromArray(derivatives);
-
 
                 tmp1.multiply(tmp2, tmpInvCov);
 

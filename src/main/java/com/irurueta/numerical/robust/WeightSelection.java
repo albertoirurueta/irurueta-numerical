@@ -113,7 +113,7 @@ public class WeightSelection {
             // weights after sorting
             final int[] indices = sorter.sortWithIndices(weightsCopy);
 
-            // traverse indices array from greatest position which corresponds
+            // traverse indices array from the greatest position which corresponds
             // to the greatest weight value after sorting in decreasing order
             // up to maxPoints positions
             int counter = 0;

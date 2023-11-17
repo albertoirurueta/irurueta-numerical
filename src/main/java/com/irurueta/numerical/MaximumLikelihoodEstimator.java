@@ -45,7 +45,7 @@ public abstract class MaximumLikelihoodEstimator {
     public static final double MIN_GAUSSIAN_SIGMA = 0.0;
 
     /**
-     * Default method to find the most likely value. By default the accurate
+     * Default method to find the most likely value. By default, the accurate
      * method is used which refines the solution found by using a histogram and
      * a maximum detector.
      */

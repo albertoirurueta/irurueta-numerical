@@ -302,7 +302,7 @@ public class Polynomial implements Serializable {
     }
 
     /**
-     * Multiplies all parameters of this polynomial by an scalar and stores the
+     * Multiplies all parameters of this polynomial by a scalar and stores the
      * result into provided polynomial instance.
      *
      * @param scalar scalar to multiply parameters with.
@@ -327,7 +327,7 @@ public class Polynomial implements Serializable {
     }
 
     /**
-     * Multiplies all parameters of this polynomial by an scalar and returns a
+     * Multiplies all parameters of this polynomial by a scalar and returns a
      * new polynomial containing the result.
      *
      * @param scalar scalar to multiply parameters with.

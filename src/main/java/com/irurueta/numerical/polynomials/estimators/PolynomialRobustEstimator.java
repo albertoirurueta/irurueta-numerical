@@ -42,7 +42,7 @@ public abstract class PolynomialRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -120,7 +120,7 @@ public abstract class PolynomialRobustEstimator {
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
-     * equivalent to 100%9. The amount of confidence indicates the probability
+     * equivalent to 100%). The amount of confidence indicates the probability
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
@@ -266,7 +266,7 @@ public abstract class PolynomialRobustEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @throws LockedException          if estimator is locked.
      * @throws IllegalArgumentException if provided list of evaluations does
-     *                                  not containing enough evaluations to estimate the polynomial using current
+     *                                  not contain enough evaluations to estimate the polynomial using current
      *                                  settings.
      */
     public void setEvaluations(final List<PolynomialEvaluation> evaluations)
@@ -660,11 +660,11 @@ public abstract class PolynomialRobustEstimator {
         switch (method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator();
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator();
             case MSAC:
                 return new MSACPolynomialRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator();
             case PROSAC:
             default:
@@ -685,11 +685,11 @@ public abstract class PolynomialRobustEstimator {
         switch (method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(degree);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(degree);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(degree);
             case PROSAC:
             default:
@@ -711,11 +711,11 @@ public abstract class PolynomialRobustEstimator {
         switch (method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(evaluations);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(evaluations);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(evaluations);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(evaluations);
             case PROSAC:
             default:
@@ -737,11 +737,11 @@ public abstract class PolynomialRobustEstimator {
         switch (method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(listener);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(listener);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(listener);
             case PROSAC:
             default:
@@ -765,11 +765,11 @@ public abstract class PolynomialRobustEstimator {
         switch (method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree, evaluations);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(degree, evaluations);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(degree, evaluations);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(degree,
                         evaluations);
             case PROSAC:
@@ -795,11 +795,11 @@ public abstract class PolynomialRobustEstimator {
         switch (method) {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree, listener);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(degree, listener);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(degree, listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(degree, listener);
             case PROSAC:
             default:
@@ -825,12 +825,12 @@ public abstract class PolynomialRobustEstimator {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(evaluations,
                         listener);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(evaluations,
                         listener);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(evaluations, listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(evaluations,
                         listener);
             case PROSAC:
@@ -860,13 +860,13 @@ public abstract class PolynomialRobustEstimator {
             case RANSAC:
                 return new RANSACPolynomialRobustEstimator(degree, evaluations,
                         listener);
-            case LMedS:
+            case LMEDS:
                 return new LMedSPolynomialRobustEstimator(degree, evaluations,
                         listener);
             case MSAC:
                 return new MSACPolynomialRobustEstimator(degree, evaluations,
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPolynomialRobustEstimator(degree, evaluations,
                         listener);
             case PROSAC:

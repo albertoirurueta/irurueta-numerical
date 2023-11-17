@@ -27,10 +27,10 @@
  * SingleRootEstimator for any unidimensional function, or a
  * PolynomialRootsEstimator if the function is polynomial.
  * <p>
- * - robust estimators to discard outliers (RANSAC, LMedS, PROSAC, etc)
+ * - robust estimators to discard outliers (RANSAC, LMedS, PROSAC, etc.)
  * <p>
  * - classes for model fitting in order to find the parameters of a given model.
  * Both unidimensional and multidimensional implementations exist for both
- * linear and non linear models
+ * linear and non-linear models
  */
 package com.irurueta.numerical;

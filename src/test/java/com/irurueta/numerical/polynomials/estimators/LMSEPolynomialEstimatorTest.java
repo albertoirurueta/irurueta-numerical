@@ -46,29 +46,29 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check correctness
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // constructor with degree
         estimator = new LMSEPolynomialEstimator(2);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -84,43 +84,43 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator = new LMSEPolynomialEstimator(evaluations);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // constructor with listener
         estimator = new LMSEPolynomialEstimator(this);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // constructor with degree and evaluations
         estimator = new LMSEPolynomialEstimator(2, evaluations);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -135,15 +135,15 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator = new LMSEPolynomialEstimator(2, this);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -158,29 +158,29 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator = new LMSEPolynomialEstimator(evaluations, this);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // constructor with degree, evaluations and listener
         estimator = new LMSEPolynomialEstimator(2, evaluations, this);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -211,13 +211,13 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default value
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
 
         // set new value
         estimator.setDegree(2);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
 
         // Force IllegalArgumentException
         try {
@@ -247,7 +247,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
 
         // set new values
@@ -255,7 +255,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setDegreeAndEvaluations(2, evaluations);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
 
         // Force IllegalArgumentException
@@ -271,7 +271,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default value
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
 
         // create random 1st degree polynomial
@@ -281,9 +281,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations =
                 new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
@@ -341,7 +341,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -360,9 +360,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -382,8 +382,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -392,8 +392,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -404,7 +404,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -423,9 +423,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -445,8 +445,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -455,8 +455,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -466,7 +466,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -485,9 +485,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations() - 1; i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -513,8 +513,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -523,8 +523,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -535,7 +535,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -554,9 +554,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -585,8 +585,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -595,8 +595,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -606,7 +606,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -625,9 +625,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -651,9 +651,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
-
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -661,8 +660,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -673,7 +672,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -692,9 +691,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -718,8 +717,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -728,8 +727,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -739,7 +738,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -758,9 +757,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -784,8 +783,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -794,8 +793,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -806,7 +805,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -825,9 +824,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -851,8 +850,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -861,8 +860,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -873,7 +872,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(2);
 
         // check default values
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -891,9 +890,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 2);
+        assertEquals(2, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -913,8 +912,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -923,8 +922,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -936,7 +935,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -954,9 +953,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 2);
+        assertEquals(2, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -976,8 +975,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -986,8 +985,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -998,7 +997,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(2);
 
         // check default values
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -1016,9 +1015,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 2);
+        assertEquals(2, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations() - 2; i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1049,8 +1048,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -1059,8 +1058,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -1072,7 +1071,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -1090,9 +1089,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 2);
+        assertEquals(2, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1123,8 +1122,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -1133,8 +1132,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -1144,7 +1143,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -1163,9 +1162,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1189,8 +1188,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -1199,8 +1198,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -1211,7 +1210,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -1230,9 +1229,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1256,8 +1255,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -1266,8 +1265,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -1277,7 +1276,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLMSESolutionAllowed());
 
@@ -1296,9 +1295,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
             final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1326,8 +1325,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -1336,8 +1335,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -1348,7 +1347,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isLMSESolutionAllowed());
 
@@ -1367,9 +1366,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
             final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1397,8 +1396,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
 
         // estimate
@@ -1407,8 +1406,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
 

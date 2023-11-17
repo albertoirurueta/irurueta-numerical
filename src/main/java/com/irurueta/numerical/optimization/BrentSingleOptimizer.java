@@ -155,12 +155,12 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
     /**
      * This function estimates a function minimum within provided or computed
      * bracket of values.
-     * Given a function f, and given a bracketing triplet of abscissas ax, bx,
-     * cx (such that bx is between ax and cx, and f(bx) is less than both f(ax)
+     * Given a function f, and given a bracketing triplet of abscissas "ax", "bx",
+     * "cx" (such that bx is between ax and cx, and f(bx) is less than both f(ax)
      * and f(cx), this routine isolates the minimum to a fractional prevision of
      * about tolerance using Brent's method. The abscissa of the minimum is
-     * returned as xmin, and the function value of the minimum is returned as
-     * fmin, the returned function value.
+     * returned as "xmin", and the function value of the minimum is returned as
+     * "fmin", the returned function value.
      *
      * @throws LockedException       Raised if this instance is locked, because
      *                               estimation is being computed.
@@ -282,7 +282,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                     v1[0] = v;
                     v2[0] = w;
                     v3[0] = x;
-                    shft3(v1, v2, v3, u);
+                    shift3(v1, v2, v3, u);
                     v = v1[0];
                     w = v2[0];
                     x = v3[0];
@@ -290,7 +290,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                     v1[0] = fv;
                     v2[0] = fw;
                     v3[0] = fx;
-                    shft3(v1, v2, v3, fu);
+                    shift3(v1, v2, v3, fu);
                     fv = v1[0];
                     fw = v2[0];
                     fx = v3[0];

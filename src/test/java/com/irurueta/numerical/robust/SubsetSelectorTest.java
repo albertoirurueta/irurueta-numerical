@@ -38,8 +38,8 @@ public class SubsetSelectorTest {
         // Test create with number of samples and type
         SubsetSelector selector = SubsetSelector.create(numSamples,
                 SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
-        assertEquals(selector.getType(),
-                SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
+        assertEquals(SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR,
+                selector.getType());
         assertEquals(selector.getNumSamples(), numSamples);
 
         // Force IllegalArgumentException
@@ -54,8 +54,8 @@ public class SubsetSelectorTest {
 
         // Test create with number of samples
         selector = SubsetSelector.create(numSamples);
-        assertEquals(selector.getType(),
-                SubsetSelector.DEFAULT_SUBSET_SELECTOR_TYPE);
+        assertEquals(SubsetSelector.DEFAULT_SUBSET_SELECTOR_TYPE,
+                selector.getType());
         assertEquals(selector.getNumSamples(), numSamples);
 
         // Force IllegalArgumentException
@@ -74,8 +74,8 @@ public class SubsetSelectorTest {
         final int numSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
 
         final SubsetSelector selector = SubsetSelector.create(numSamples);
-        assertEquals(selector.getType(),
-                SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR);
+        assertEquals(SubsetSelectorType.FAST_RANDOM_SUBSET_SELECTOR,
+                selector.getType());
     }
 
     @Test
