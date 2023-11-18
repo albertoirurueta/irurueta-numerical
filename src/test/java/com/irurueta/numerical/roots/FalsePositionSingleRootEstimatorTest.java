@@ -120,17 +120,17 @@ public class FalsePositionSingleRootEstimatorTest {
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                FalsePositionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
-        assertEquals(estimator.getMinEvaluationPoint(),
-                FalsePositionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
+        assertEquals(FalsePositionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(FalsePositionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(), 0.0);
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getTolerance(),
-                FalsePositionSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(FalsePositionSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -216,10 +216,10 @@ public class FalsePositionSingleRootEstimatorTest {
 
         // check default values
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(estimator.getMinEvaluationPoint(),
-                FalsePositionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                FalsePositionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(FalsePositionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(), 0.0);
+        assertEquals(FalsePositionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(), 0.0);
 
 
         // set new values
@@ -247,8 +247,8 @@ public class FalsePositionSingleRootEstimatorTest {
                 new FalsePositionSingleRootEstimator();
 
         // check default values
-        assertEquals(estimator.getTolerance(),
-                FalsePositionSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(FalsePositionSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
 
         // set new value
         estimator.setTolerance(tolerance);

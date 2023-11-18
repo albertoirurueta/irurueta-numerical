@@ -27,7 +27,7 @@ public enum RobustEstimatorMethod {
     /**
      * Least Median of Squares.
      */
-    LMedS,
+    LMEDS,
 
     /**
      * Median Sample Consensus.
@@ -42,5 +42,5 @@ public enum RobustEstimatorMethod {
     /**
      * Progressive Median of Squares.
      */
-    PROMedS
+    PROMEDS
 }

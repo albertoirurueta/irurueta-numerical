@@ -27,7 +27,7 @@ import com.irurueta.numerical.NotReadyException;
  * b * x^2 + c * x + d, hence the polynomial can be simply be defined by an
  * array of length 4 [d, c, b, a]
  * This class is based on:
- * http://en.wikipedia.org/wiki/Cubic_function
+ * <a href="http://en.wikipedia.org/wiki/Cubic_function">http://en.wikipedia.org/wiki/Cubic_function</a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class ThirdDegreePolynomialRootsEstimator

@@ -86,16 +86,16 @@ public class DerivativeBrentSingleOptimizerTest implements OnIterationCompletedL
         // testing 1st constructor
         optimizer = new DerivativeBrentSingleOptimizer();
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(),
-                DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(optimizer.getMinEvaluationPoint(),
-                BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(),
-                BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(),
-                BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                optimizer.getMaxEvaluationPoint(), 0.0);
         try {
             optimizer.getEvaluationAtMin();
             fail("NotAvailableException expected but not thrown");
@@ -278,8 +278,8 @@ public class DerivativeBrentSingleOptimizerTest implements OnIterationCompletedL
         final DerivativeBrentSingleOptimizer optimizer =
                 new DerivativeBrentSingleOptimizer();
 
-        assertEquals(optimizer.getTolerance(),
-                DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
@@ -311,12 +311,12 @@ public class DerivativeBrentSingleOptimizerTest implements OnIterationCompletedL
                 new DerivativeBrentSingleOptimizer();
 
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(optimizer.getMinEvaluationPoint(),
-                DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(),
-                DerivativeBrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, 0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(),
-                DerivativeBrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(DerivativeBrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(DerivativeBrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                optimizer.getMaxEvaluationPoint(), 0.0);
 
         // set new bracket
         optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);

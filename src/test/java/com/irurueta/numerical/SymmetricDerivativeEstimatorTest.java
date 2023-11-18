@@ -82,7 +82,7 @@ public class SymmetricDerivativeEstimatorTest
     }
 
     @Override
-    public double evaluate(final double point) throws EvaluationException {
+    public double evaluate(final double point) {
         return (point - minimum) * (point - minimum) / width + offset;
     }
 

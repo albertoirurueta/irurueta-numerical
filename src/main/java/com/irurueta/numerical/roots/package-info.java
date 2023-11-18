@@ -16,7 +16,7 @@
 
 /**
  * This package contains classes to find function roots. Functions can be
- * single dimension, multi dimensional or polynomials.
+ * single dimension, multidimensional or polynomials.
  * Any implementation of RootEstimator can be used to find function roots.
  * SingleRootEstimator implementations are used for unidimensional functions,
  * and more specifically PolynomialRootsEstimator can be used if the function

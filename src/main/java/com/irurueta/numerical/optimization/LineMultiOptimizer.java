@@ -53,7 +53,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
     private DirectionalEvaluator evaluator;
 
     /**
-     * Internal optimizer to find a minimum of a function along aline of
+     * Internal optimizer to find a minimum of a function along a line of
      * input values. Hence, input is converted to a single dimension using a
      * DirectionalEvaluator.
      */

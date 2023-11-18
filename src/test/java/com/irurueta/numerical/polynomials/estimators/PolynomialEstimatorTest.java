@@ -31,28 +31,28 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree
         estimator = PolynomialEstimator.create(2);
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -60,84 +60,84 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with listener
         estimator = PolynomialEstimator.create(this);
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree and evaluations
         estimator = PolynomialEstimator.create(2, evaluations);
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree and listener
         estimator = PolynomialEstimator.create(2, this);
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with evaluations and listener
         estimator = PolynomialEstimator.create(evaluations, this);
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree, evaluations and listener
         estimator = PolynomialEstimator.create(2, evaluations, this);
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
     }
 
     @Test
@@ -148,14 +148,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree
         estimator = PolynomialEstimator.create(2,
@@ -163,14 +163,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -179,14 +179,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with listener
         estimator = PolynomialEstimator.create(this,
@@ -194,14 +194,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree and evaluations
         estimator = PolynomialEstimator.create(2, evaluations,
@@ -209,14 +209,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree and listener
         estimator = PolynomialEstimator.create(2, this,
@@ -224,14 +224,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with evaluations and listener
         estimator = PolynomialEstimator.create(evaluations, this,
@@ -239,14 +239,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree, evaluations and listener
         estimator = PolynomialEstimator.create(2, evaluations, this,
@@ -254,14 +254,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof LMSEPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
     }
 
     @Test
@@ -272,14 +272,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree
         estimator = PolynomialEstimator.create(2,
@@ -287,14 +287,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with evaluations
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
@@ -303,14 +303,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with listener
         estimator = PolynomialEstimator.create(this,
@@ -318,14 +318,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree and evaluations
         estimator = PolynomialEstimator.create(2, evaluations,
@@ -333,14 +333,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree and listener
         estimator = PolynomialEstimator.create(2, this,
@@ -348,14 +348,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with evaluations and listener
         estimator = PolynomialEstimator.create(evaluations, this,
@@ -363,14 +363,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // default type with degree, evaluations and listener
         estimator = PolynomialEstimator.create(2, evaluations, this,
@@ -378,14 +378,14 @@ public class PolynomialEstimatorTest implements PolynomialEstimatorListener {
 
         // check correctness
         assertTrue(estimator instanceof WeightedPolynomialEstimator);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
     }
 
     @Override

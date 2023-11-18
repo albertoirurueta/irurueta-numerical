@@ -113,10 +113,10 @@ public class LevenbergMarquardtMultiDimensionFitter
      * Indicates whether covariance must be adjusted or not.
      * When covariance adjustment is enabled, then covariance is recomputed taking
      * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
+     * jacobians of the model function overestimated parameters using the following
      * expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -124,7 +124,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
+     * By default, covariance is adjusted after fitting finishes.
      */
     private boolean adjustCovariance = DEFAULT_ADJUST_COVARIANCE;
 
@@ -389,10 +389,10 @@ public class LevenbergMarquardtMultiDimensionFitter
      * Indicates whether covariance must be adjusted or not.
      * When covariance adjustment is enabled, then covariance is recomputed taking
      * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
+     * jacobians of the model function overestimated parameters using the following
      * expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -400,9 +400,9 @@ public class LevenbergMarquardtMultiDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
-     * http://people.duke.edu/~hpgavin/ce281/lm.pdf
-     * https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf
+     * By default, covariance is adjusted after fitting finishes.
+     * <a href="http://people.duke.edu/~hpgavin/ce281/lm.pdf">http://people.duke.edu/~hpgavin/ce281/lm.pdf</a>
+     * <a href="https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf">https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf</a>
      * Numerical Recipes 3rd Ed, page 812
      *
      * @return true if covariance must be adjusted, false otherwise.
@@ -415,10 +415,10 @@ public class LevenbergMarquardtMultiDimensionFitter
      * Specifies whether covariance must be adjusted or not.
      * When covariance adjustment is enabled, then covariance is recomputed taking
      * into account input samples, input standard deviations of the samples and
-     * jacobians of the model function over estimated parameters using the following
+     * jacobians of the model function overestimated parameters using the following
      * expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -426,7 +426,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * reciprocal of the input variances (squared input standard deviations). That is:
      * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
      * the k-th standard deviation of input sample k.
-     * By default covariance is adjusted after fitting finishes.
+     * By default, covariance is adjusted after fitting finishes.
      *
      * @param adjustCovariance true if covariance must be adjusted, false otherwise.
      */
@@ -440,7 +440,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * square value.
      * If chi square value is close to 1, the fit is usually good.
      * If it is much larger, then error cannot be properly fitted.
-     * If it is close to zero, then the model overfits the error.
+     * If it is close to zero, then the model over-fits the error.
      * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
      * the quality of the fit.
      *
@@ -578,7 +578,7 @@ public class LevenbergMarquardtMultiDimensionFitter
     }
 
     /**
-     * Releases parameter at position i of linear combination of basis functions
+     * Releases parameter at position i of linear combination of basis functions,
      * so it can be modified again if needed.
      *
      * @param i position of parameter to be released.
@@ -595,10 +595,10 @@ public class LevenbergMarquardtMultiDimensionFitter
      * the curvature matrix, which is just a solution of the covariance up to scale.
      * <p>
      * Covariance is adjusted taking into account input samples, input standard
-     * deviations of the samples and jacobians of the model function over estimated
+     * deviations of the samples and jacobians of the model function overestimated
      * parameters using the following expression: Cov = (J'*W*J)^-1 where:
      * Cov is the covariance of estimated parameters
-     * J is a matrix containing the Jacobians of the function over estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
      * for each input parameter x. Each row of J matrix contains an evaluation of
      * the model function Jacobian for i-th input parameter x. Each column of J matrix
      * contains the partial derivative of model function over j-th estimated parameter.
@@ -748,7 +748,7 @@ public class LevenbergMarquardtMultiDimensionFitter
     }
 
     /**
-     * Expand in storage the covariance matrix covar, so as to take into account
+     * Expand in storage the covariance matrix covar, to take into account
      * parameters that are being held fixed. (For the latter, return zero
      * covariances).
      *

@@ -28,12 +28,12 @@ import java.util.List;
  * estimate a data model.
  * MSAC is a mixture between LMedS and RANSAC, where a fixed threshold is
  * used such as in RANSAC to determine the number of remaining iterations, and
- * the least median of residuals is used to pick best solution, rather than
+ * the least median of residuals is used to pick the best solution, rather than
  * the one producing a higher number of inliers based on the fixed threshold,
  * such as in RANSAC.
  * This algorithm requires a threshold known beforehand such as RANSAC, but
  * might get better accuracy if the inlier samples are very accurate, since
- * the solution with smallest median of residuals will be picked. In typical
+ * the solution with the smallest median of residuals will be picked. In typical
  * situations however, this algorithm will produce similar results to RANSAC in
  * both terms of accuracy and computational cost, since typically inlier samples
  * tend to have certain error.
@@ -224,7 +224,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
     }
 
     /**
-     * Returns data related to best inliers found for best result.
+     * Returns data related to the best inliers found for best result.
      *
      * @return data related to inliers found for best result.
      */
@@ -343,7 +343,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
                         // keep current solution
                         bestResult = iterResult;
 
-                        // keep best inliers data corresponding to best solution
+                        // keep the best inliers data corresponding to best solution
                         // in case it can be useful along with the result
                         mBestResultInliersData = inliersData;
                         bestMedianResidual = inliersData.getBestMedianResidual();
@@ -397,7 +397,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
                         // create new inliers data instance until a new best solution
                         // is found
                         inliersData = new MSACInliersData(totalSamples);
-                        // update best median residual on new instance so that
+                        // update the best median residual on new instance so that
                         // only better solutions that are found later can update
                         // inliers data
                         inliersData.update(bestMedianResidual,

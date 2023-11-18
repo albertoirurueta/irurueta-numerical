@@ -173,12 +173,12 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * This function estimates a function minimum within provided or computed
      * bracket of values.
      * Given a function f that computes a function and also its derivative
-     * function df, and given a bracketing triplet of abscissas ax, bx, cx (such
+     * function df, and given a bracketing triplet of abscissas "ax", "bx", "cx" (such
      * that bx is between ax and cx, and f(bx) is less than both f(ax) and
      * f(cx), this routine isolates the minimum to a fractional precision of
      * about tolerance using a modification of Brent's method that uses
-     * derivatives. The abscissa of the minimum is returned as xmin and the
-     * minimum function value is returned as fmin.
+     * derivatives. The abscissa of the minimum is returned as "xmin" and the
+     * minimum function value is returned as "fmin".
      *
      * @throws LockedException       Raised if this instance is locked, because
      *                               estimation is being computed.
@@ -205,7 +205,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
         final double[] v3 = new double[3];
 
         try {
-            // Will be used as flags for whether proposed steps are accpetable or
+            // Will be used as flags for whether proposed steps are acceptable or
             // not
             boolean ok1;
             boolean ok2;

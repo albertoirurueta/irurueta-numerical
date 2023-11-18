@@ -72,13 +72,12 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         estimator = new AccurateMaximumLikelihoodEstimator();
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getGaussianSigma(),
-                AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
-        assertEquals(estimator.isHistogramInitialSolutionUsed(),
-                AccurateMaximumLikelihoodEstimator.
-                        DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
+        assertEquals(MaximumLikelihoodEstimatorMethod.
+                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
+        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(), 0.0);
+        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION,
+                estimator.isHistogramInitialSolutionUsed());
         try {
             estimator.getMinValue();
             fail("NotAvailableException expected but not thrown");
@@ -111,8 +110,7 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         estimator = new AccurateMaximumLikelihoodEstimator(gaussianSigma,
                 useHistogramInitialSolution);
 
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.isHistogramInitialSolutionUsed(),
                 useHistogramInitialSolution);
@@ -159,8 +157,7 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         estimator = new AccurateMaximumLikelihoodEstimator(inputData,
                 gaussianSigma, useHistogramInitialSolution);
 
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.isHistogramInitialSolutionUsed(),
                 useHistogramInitialSolution);
@@ -196,8 +193,7 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         estimator = new AccurateMaximumLikelihoodEstimator(minValue, maxValue,
                 inputData, gaussianSigma, useHistogramInitialSolution);
 
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.isHistogramInitialSolutionUsed(),
                 useHistogramInitialSolution);
@@ -220,7 +216,6 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         }
         assertNull(estimator);
 
-        estimator = null;
         try {
             estimator = new AccurateMaximumLikelihoodEstimator(minValue,
                     maxValue, inputData, 0.0, useHistogramInitialSolution);
@@ -236,8 +231,7 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         final AccurateMaximumLikelihoodEstimator estimator =
                 new AccurateMaximumLikelihoodEstimator();
 
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
     }
 
     @Test
@@ -249,8 +243,8 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         final AccurateMaximumLikelihoodEstimator estimator =
                 new AccurateMaximumLikelihoodEstimator();
 
-        assertEquals(estimator.getGaussianSigma(),
-                AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, 0.0);
+        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(), 0.0);
 
         // set new gaussian sigma
         estimator.setGaussianSigma(gaussianSigma);
@@ -405,9 +399,8 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         final AccurateMaximumLikelihoodEstimator estimator =
                 new AccurateMaximumLikelihoodEstimator();
 
-        assertEquals(estimator.isHistogramInitialSolutionUsed(),
-                AccurateMaximumLikelihoodEstimator.
-                        DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
+        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION,
+                estimator.isHistogramInitialSolutionUsed());
 
         // disable
         estimator.setHistogramInitialSolutionUsed(false);

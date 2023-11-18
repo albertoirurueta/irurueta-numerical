@@ -37,7 +37,7 @@ public class PROMedSRobustEstimatorTest {
     private static final double MIN_ERROR = 1e-5;
     private static final double MAX_ERROR = 1.0;
 
-    // error added to quality scores so they are not totally related to sample
+    // error added to quality scores, so they are not totally related to sample
     // error
     private static final double MIN_SCORE_ERROR = -0.30;
     private static final double MAX_SCORE_ERROR = 0.30;
@@ -63,29 +63,29 @@ public class PROMedSRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                PROMedSRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PROMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isStopThresholdEnabled(),
-                PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
-        assertEquals(estimator.getInlierFactor(),
-                PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
-        assertEquals(estimator.isUseInlierThresholds(),
-                PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
-        assertEquals(estimator.getNIters(),
-                PROMedSRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED,
+                estimator.isStopThresholdEnabled());
+        assertEquals(PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR,
+                estimator.getInlierFactor(), 0.0);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD,
+                estimator.isUseInlierThresholds());
+        assertEquals(PROMedSRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
-        assertEquals(estimator.getMaxOutliersProportion(),
-                PROMedSRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
-        assertEquals(estimator.getEta0(),
-                PROSACRobustEstimator.DEFAULT_ETA0, 0.0);
-        assertEquals(estimator.getBeta(),
-                PROSACRobustEstimator.DEFAULT_BETA, 0.0);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION,
+                estimator.getMaxOutliersProportion(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_ETA0,
+                estimator.getEta0(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_BETA,
+                estimator.getBeta(), 0.0);
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
 
@@ -99,29 +99,29 @@ public class PROMedSRobustEstimatorTest {
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertTrue(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.isStopThresholdEnabled(),
-                PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
-        assertEquals(estimator.getInlierFactor(),
-                PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
-        assertEquals(estimator.isUseInlierThresholds(),
-                PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
-        assertEquals(estimator.getNIters(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED,
+                estimator.isStopThresholdEnabled());
+        assertEquals(PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR,
+                estimator.getInlierFactor(), 0.0);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD,
+                estimator.isUseInlierThresholds());
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
-        assertEquals(estimator.getMaxOutliersProportion(),
-                PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
-        assertEquals(estimator.getEta0(),
-                PROSACRobustEstimator.DEFAULT_ETA0, 0.0);
-        assertEquals(estimator.getBeta(),
-                PROSACRobustEstimator.DEFAULT_BETA, 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION,
+                estimator.getMaxOutliersProportion(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_ETA0,
+                estimator.getEta0(), 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_BETA,
+                estimator.getBeta(), 0.0);
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
     }
@@ -153,8 +153,8 @@ public class PROMedSRobustEstimatorTest {
     public void testGetSetProgressDelta() throws IllegalArgumentException,
             LockedException {
         final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -181,8 +181,8 @@ public class PROMedSRobustEstimatorTest {
     public void testGetSetConfidence() throws IllegalArgumentException,
             LockedException {
         final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getConfidence(),
-                PROSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(PROSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -210,8 +210,8 @@ public class PROMedSRobustEstimatorTest {
             LockedException {
         final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getMaxIterations(),
-                PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PROSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -233,8 +233,8 @@ public class PROMedSRobustEstimatorTest {
     @Test
     public void testIsSetStopThresholdEnabled() throws LockedException {
         final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
-        assertEquals(estimator.isStopThresholdEnabled(),
-                PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_STOP_THRESHOLD_ENABLED,
+                estimator.isStopThresholdEnabled());
 
         // set new value
         estimator.setStopThresholdEnabled(
@@ -249,14 +249,14 @@ public class PROMedSRobustEstimatorTest {
     public void testGetSetInlierFactor() throws IllegalArgumentException,
             LockedException {
         final PROMedSRobustEstimator<double[]> estimator = new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getInlierFactor(),
-                PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR, 0.0);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_INLIER_FACTOR,
+                estimator.getInlierFactor(), 0.0);
 
         // set new value
         estimator.setInlierFactor(0.5);
 
         // check correctness
-        assertEquals(estimator.getInlierFactor(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getInlierFactor(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -270,8 +270,8 @@ public class PROMedSRobustEstimatorTest {
     public void testIsSetUseInlierThresholds() throws LockedException {
         final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        assertEquals(estimator.isUseInlierThresholds(),
-                PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_USE_INLIER_THRESHOLD,
+                estimator.isUseInlierThresholds());
 
         // set new value
         estimator.setUseInlierThresholds(
@@ -287,14 +287,14 @@ public class PROMedSRobustEstimatorTest {
             throws IllegalArgumentException, LockedException {
         final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getMaxOutliersProportion(),
-                PROMedSRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION, 0.0);
+        assertEquals(PROMedSRobustEstimator.DEFAULT_MAX_OUTLIERS_PROPORTION,
+                estimator.getMaxOutliersProportion(), 0.0);
 
         // set new value
         estimator.setMaxOutliersProportion(0.5);
 
         // check correctness
-        assertEquals(estimator.getMaxOutliersProportion(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getMaxOutliersProportion(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -314,14 +314,14 @@ public class PROMedSRobustEstimatorTest {
             LockedException {
         final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
-        assertEquals(estimator.getEta0(), PROMedSRobustEstimator.DEFAULT_ETA0,
+        assertEquals(PROMedSRobustEstimator.DEFAULT_ETA0, estimator.getEta0(),
                 0.0);
 
         // set new value
         estimator.setEta0(0.5);
 
         // check correctness
-        assertEquals(estimator.getEta0(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getEta0(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -342,14 +342,14 @@ public class PROMedSRobustEstimatorTest {
         final PROMedSRobustEstimator<double[]> estimator =
                 new PROMedSRobustEstimator<>();
 
-        assertEquals(estimator.getBeta(), PROMedSRobustEstimator.DEFAULT_BETA,
+        assertEquals(PROMedSRobustEstimator.DEFAULT_BETA, estimator.getBeta(),
                 0.0);
 
         // set new value
         estimator.setBeta(0.5);
 
         // check correctness
-        assertEquals(estimator.getBeta(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getBeta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -386,8 +386,8 @@ public class PROMedSRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -395,12 +395,12 @@ public class PROMedSRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
 

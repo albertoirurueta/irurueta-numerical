@@ -47,7 +47,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
     public static final double MIN_THRESHOLD = 0.0;
 
     /**
-     * Threshold to determine whether polynomial evaluations are inlers or not
+     * Threshold to determine whether polynomial evaluations are inliers or not
      * when testing possible estimation solutions
      */
     private double mThreshold;

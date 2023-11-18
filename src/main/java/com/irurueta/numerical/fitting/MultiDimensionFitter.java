@@ -25,7 +25,7 @@ import java.util.Arrays;
  */
 public abstract class MultiDimensionFitter extends Fitter {
     /**
-     * Input points x where a multi dimensional function f(x1, x2, ...) is
+     * Input points x where a multidimensional function f(x1, x2, ...) is
      * evaluated where each column of the matrix represents each dimension of
      * the point and each row is related to each sample corresponding to
      * provided y pairs of values
@@ -33,7 +33,7 @@ public abstract class MultiDimensionFitter extends Fitter {
     protected Matrix x;
 
     /**
-     * Result of evaluation of multi dimensional function f(x1, x2, ...)
+     * Result of evaluation of multidimensional function f(x1, x2, ...)
      * at provided x points. This is provided as input data along x array
      */
     protected double[] y;
@@ -72,9 +72,9 @@ public abstract class MultiDimensionFitter extends Fitter {
     /**
      * Constructor
      *
-     * @param x   input points x where a multi dimensional function f(x1, x2, ...)
+     * @param x   input points x where a multidimensional function f(x1, x2, ...)
      *            is evaluated
-     * @param y   result of evaluation of multi dimensional function
+     * @param y   result of evaluation of multidimensional function
      *            f(x1, x2, ...) at provided x points
      * @param sig standard deviations of each pair of points (x, y)
      * @throws IllegalArgumentException if provided matrix rows and arrays
@@ -87,9 +87,9 @@ public abstract class MultiDimensionFitter extends Fitter {
     /**
      * Constructor
      *
-     * @param x   input points x where a multi dimensional function f(x1, x2, ...)
+     * @param x   input points x where a multidimensional function f(x1, x2, ...)
      *            is evaluated
-     * @param y   result of evaluation of linear multi dimensional function
+     * @param y   result of evaluation of linear multidimensional function
      *            f(x1, x2, ...) at provided x points
      * @param sig standard deviation of all pair of points assuming that
      *            standard deviations are constant
@@ -101,7 +101,7 @@ public abstract class MultiDimensionFitter extends Fitter {
     }
 
     /**
-     * Returns input points x where a multi dimensional function f(x1, x2, ...)
+     * Returns input points x where a multidimensional function f(x1, x2, ...)
      * is evaluated and where each column of the matrix represents
      * each dimension of the point and each row is related to each sample
      * corresponding to provided y pairs of values
@@ -113,7 +113,7 @@ public abstract class MultiDimensionFitter extends Fitter {
     }
 
     /**
-     * Returns result of evaluation of multi dimensional function f(x)
+     * Returns result of evaluation of multidimensional function f(x)
      * at provided x points. This is provided as input data along with x array
      *
      * @return result of evaluation
@@ -134,11 +134,11 @@ public abstract class MultiDimensionFitter extends Fitter {
     /**
      * Sets required input data to start function fitting
      *
-     * @param x   input points x where a multi dimensional function f(x1, x2, ...)
+     * @param x   input points x where a multidimensional function f(x1, x2, ...)
      *            is evaluated and where each column of the matrix represents each
      *            dimension of the point and each row is related to each sample
      *            corresponding to provided y pairs of values
-     * @param y   result of evaluation of multi dimensional function
+     * @param y   result of evaluation of multidimensional function
      *            f(x1, x2, ...) at provided x points. This is provided as input data along
      *            with x array
      * @param sig standard deviations of each pair of points (x,y)
@@ -161,11 +161,11 @@ public abstract class MultiDimensionFitter extends Fitter {
      * Sets required input data to start function fitting and assuming constant
      * standard deviation errors in input data
      *
-     * @param x   input points x where a multi dimensional function f(x1, x2, ...)
+     * @param x   input points x where a multidimensional function f(x1, x2, ...)
      *            is evaluated and where each column of the matrix represents each
      *            dimension of the point and each row is related to each sample
      *            corresponding to provided y pairs of values
-     * @param y   result of evaluation of multi dimensional function
+     * @param y   result of evaluation of multidimensional function
      *            f(x1, x2, ...) at provided x points. This is provided as input data along
      *            with x array
      * @param sig standard deviation of all pair of points assuming that

@@ -35,10 +35,10 @@ public class DirectPolynomialEvaluationTest {
         DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
 
         // check initial values
-        assertEquals(eval.getX(), 0.0, 0.0);
-        assertEquals(eval.getEvaluation(), 0.0, 0.0);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.DIRECT_EVALUATION);
+        assertEquals(0.0, eval.getX(), 0.0);
+        assertEquals(0.0, eval.getEvaluation(), 0.0);
+        assertEquals(PolynomialEvaluationType.DIRECT_EVALUATION,
+                eval.getType());
 
         // test constructor with values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -59,7 +59,7 @@ public class DirectPolynomialEvaluationTest {
         final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
 
         // check initial value
-        assertEquals(eval.getX(), 0.0, 0.0);
+        assertEquals(0.0, eval.getX(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -75,7 +75,7 @@ public class DirectPolynomialEvaluationTest {
         final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
 
         // check initial value
-        assertEquals(eval.getEvaluation(), 0.0, 0.0);
+        assertEquals(0.0, eval.getEvaluation(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());

@@ -19,8 +19,5 @@
         <module name="irurueta-numerical" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="irurueta-numerical" target="1.7" />
-    </bytecodeTargetLevel>
   </component>
 </project>

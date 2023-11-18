@@ -329,7 +329,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      *
      * @param a Value to be compared.
      * @param b Value to be compared.
-     * @return Returns a if a and b have the same sign or -a otherwise.
+     * @return Returns "a" if "a" and "b" have the same sign or "-a" otherwise.
      */
     protected double sign(final double a, final double b) {
         if (b >= 0.0) {

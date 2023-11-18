@@ -59,7 +59,7 @@ public class PolynomialEvaluatorTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
-        assertEquals(evaluate, 0.0, 0.0);
+        assertEquals(0.0, evaluate, 0.0);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class PolynomialEvaluatorTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
-        assertEquals(evaluate, 0.0, 0.0);
+        assertEquals(0.0, evaluate, 0.0);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class PolynomialEvaluatorTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
-        assertEquals(evaluate, 0.0, 0.0);
+        assertEquals(0.0, evaluate, 0.0);
     }
 
     @Test
@@ -156,7 +156,7 @@ public class PolynomialEvaluatorTest {
                 fail("IllegalArgumentException expected but not thrown");
             } catch (final IllegalArgumentException ignore) {
             }
-            assertEquals(evaluate, 0.0, 0.0);
+            assertEquals(0.0, evaluate, 0.0);
 
             numValid++;
             break;

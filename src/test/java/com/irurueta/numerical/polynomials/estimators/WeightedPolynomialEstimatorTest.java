@@ -50,18 +50,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertNull(estimator.getWeights());
         assertFalse(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
 
         // test constructor with degree
@@ -70,18 +70,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertNull(estimator.getWeights());
         assertFalse(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -102,22 +102,22 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertSame(estimator.getWeights(), weights);
         assertTrue(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
+        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
         estimator = null;
         try {
             estimator = new WeightedPolynomialEstimator(null, weights);
@@ -130,7 +130,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator = new WeightedPolynomialEstimator(wrongEvals, weights);
+            estimator = new WeightedPolynomialEstimator(wrongEvaluations, weights);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -149,18 +149,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertNull(estimator.getWeights());
         assertFalse(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
 
         // test constructor with degree, evaluations and weights
@@ -169,18 +169,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertSame(estimator.getWeights(), weights);
         assertTrue(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
 
         // Force IllegalArgumentException
@@ -198,7 +198,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator = new WeightedPolynomialEstimator(2, wrongEvals, weights);
+            estimator = new WeightedPolynomialEstimator(2, wrongEvaluations, weights);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -217,18 +217,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertNull(estimator.getWeights());
         assertFalse(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(2, estimator.getDegree());
         assertNull(estimator.getEvaluations());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -246,18 +246,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertSame(estimator.getWeights(), weights);
         assertTrue(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(1, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
 
         // Force IllegalArgumentException
@@ -275,7 +275,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator = new WeightedPolynomialEstimator(wrongEvals, weights,
+            estimator = new WeightedPolynomialEstimator(wrongEvaluations, weights,
                     this);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
@@ -296,18 +296,18 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertSame(estimator.getWeights(), weights);
         assertTrue(estimator.areWeightsAvailable());
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertSame(estimator.getListener(), this);
-        assertEquals(estimator.getType(),
-                PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR);
+        assertEquals(PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR,
+                estimator.getType());
 
 
         // Force IllegalArgumentException
@@ -325,7 +325,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator = new WeightedPolynomialEstimator(2, wrongEvals, weights);
+            estimator = new WeightedPolynomialEstimator(2, wrongEvaluations, weights);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -344,14 +344,14 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxEvaluations(),
-                WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_MAX_EVALUATIONS,
+                estimator.getMaxEvaluations());
 
         // set new value
         estimator.setMaxEvaluations(100);
 
         // check correctness
-        assertEquals(estimator.getMaxEvaluations(), 100);
+        assertEquals(100, estimator.getMaxEvaluations());
 
         // Force IllegalArgumentException
         try {
@@ -367,8 +367,8 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default value
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS);
+        assertEquals(WeightedPolynomialEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
 
         // set new value
         estimator.setSortWeightsEnabled(
@@ -409,7 +409,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
 
-        final List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
+        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
         try {
             estimator.setEvaluationsAndWeights(null,
                     weights);
@@ -422,7 +422,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator.setEvaluationsAndWeights(wrongEvals, weights);
+            estimator.setEvaluationsAndWeights(wrongEvaluations, weights);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -439,13 +439,13 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default value
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
 
         // set new value
         estimator.setDegree(2);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
 
         // Force IllegalArgumentException
         try {
@@ -460,8 +460,8 @@ public class WeightedPolynomialEstimatorTest implements
         final WeightedPolynomialEstimator estimator =
                 new WeightedPolynomialEstimator();
 
-        assertEquals(estimator.getDegree(),
-                WeightedPolynomialEstimator.MIN_DEGREE);
+        assertEquals(WeightedPolynomialEstimator.MIN_DEGREE,
+                estimator.getDegree());
         assertNull(estimator.getWeights());
         assertNull(estimator.getEvaluations());
 
@@ -472,7 +472,7 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setDegreeEvaluationsAndWeights(2, evaluations, weights);
 
         // check correctness
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertSame(estimator.getEvaluations(), evaluations);
         assertSame(estimator.getWeights(), weights);
 
@@ -493,8 +493,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
 
-
-        final List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
+        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
         try {
             estimator.setDegreeEvaluationsAndWeights(2,
                     null, weights);
@@ -508,7 +507,7 @@ public class WeightedPolynomialEstimatorTest implements
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            estimator.setDegreeEvaluationsAndWeights(2, wrongEvals, weights);
+            estimator.setDegreeEvaluationsAndWeights(2, wrongEvaluations, weights);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -526,7 +525,7 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default value
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
 
         // create random 1st degree polynomial
@@ -536,9 +535,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights = new double[2];
         for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
@@ -601,9 +600,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -620,9 +619,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[2 * estimator.getMinNumberOfEvaluations()];
@@ -646,8 +645,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -655,8 +654,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -667,9 +666,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -686,9 +685,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[4 * estimator.getMinNumberOfEvaluations()];
@@ -723,8 +722,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -732,8 +731,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -744,9 +743,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -763,9 +762,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[2 * estimator.getMinNumberOfEvaluations()];
@@ -793,8 +792,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -802,8 +801,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -814,9 +813,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -833,9 +832,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[2 * estimator.getMinNumberOfEvaluations()];
@@ -863,8 +862,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -872,8 +871,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -884,9 +883,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator(2);
 
         // check default values
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -903,9 +902,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 2);
+        assertEquals(2, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[2 * estimator.getMinNumberOfEvaluations()];
@@ -929,8 +928,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -938,8 +937,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -950,9 +949,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator(2);
 
         // check default values
-        assertEquals(estimator.getDegree(), 2);
+        assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -969,9 +968,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 2);
+        assertEquals(2, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 3);
+        assertEquals(3, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[2 * estimator.getMinNumberOfEvaluations()];
@@ -999,8 +998,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -1008,8 +1007,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Test
@@ -1020,9 +1019,9 @@ public class WeightedPolynomialEstimatorTest implements
                 new WeightedPolynomialEstimator();
 
         // check default values
-        assertEquals(estimator.getDegree(), 1);
+        assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getMaxEvaluations(), 50);
+        assertEquals(50, estimator.getMaxEvaluations());
 
         // Force NotReadyException
         try {
@@ -1039,9 +1038,9 @@ public class WeightedPolynomialEstimatorTest implements
 
         final Polynomial polynomial = new Polynomial(polyParams);
 
-        assertEquals(polynomial.getDegree(), 1);
+        assertEquals(1, polynomial.getDegree());
 
-        assertEquals(estimator.getMinNumberOfEvaluations(), 2);
+        assertEquals(2, estimator.getMinNumberOfEvaluations());
         final List<PolynomialEvaluation> evaluations = new ArrayList<>();
         final double[] weights =
                 new double[2 * estimator.getMinNumberOfEvaluations()];
@@ -1073,8 +1072,8 @@ public class WeightedPolynomialEstimatorTest implements
         estimator.setListener(this);
         reset();
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
 
         // estimate
         final Polynomial polynomial2 = estimator.estimate();
@@ -1082,8 +1081,8 @@ public class WeightedPolynomialEstimatorTest implements
         // check correctness
         assertArrayEquals(polynomial2.getPolyParams(), polyParams,
                 ABSOLUTE_ERROR);
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
     }
 
     @Override

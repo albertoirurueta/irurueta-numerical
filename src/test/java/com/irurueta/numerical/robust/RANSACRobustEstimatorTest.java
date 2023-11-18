@@ -58,23 +58,23 @@ public class RANSACRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                RANSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
-                RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
-        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
-                RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+        assertEquals(RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS,
+                estimator.isComputeAndKeepInliersEnabled());
+        assertEquals(RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS,
+                estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with listener
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -86,24 +86,24 @@ public class RANSACRobustEstimatorTest {
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertEquals(estimator.isReady(), listener.isReady());
         assertTrue(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                RANSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
-        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
-                RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
-        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
-                RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+        assertEquals(RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS,
+                estimator.isComputeAndKeepInliersEnabled());
+        assertEquals(RANSACRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS,
+                estimator.isComputeAndKeepResidualsEnabled());
     }
 
     @Test
@@ -135,8 +135,8 @@ public class RANSACRobustEstimatorTest {
             LockedException {
         final RANSACRobustEstimator<double[]> estimator =
                 new RANSACRobustEstimator<>();
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -164,8 +164,8 @@ public class RANSACRobustEstimatorTest {
             LockedException {
         final RANSACRobustEstimator<double[]> estimator =
                 new RANSACRobustEstimator<>();
-        assertEquals(estimator.getConfidence(),
-                RANSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -193,8 +193,8 @@ public class RANSACRobustEstimatorTest {
             LockedException {
         final RANSACRobustEstimator<double[]> estimator =
                 new RANSACRobustEstimator<>();
-        assertEquals(estimator.getMaxIterations(),
-                RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -270,8 +270,8 @@ public class RANSACRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -279,12 +279,12 @@ public class RANSACRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             boolean failed = false;
             for (int i = 0; i < params.length; i++) {
@@ -335,8 +335,8 @@ public class RANSACRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -344,12 +344,12 @@ public class RANSACRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             boolean failed = false;
             for (int i = 0; i < params.length; i++) {

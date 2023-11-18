@@ -15,7 +15,6 @@
  */
 package com.irurueta.numerical.optimization;
 
-import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientFunctionEvaluatorListener;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
@@ -86,17 +85,17 @@ public class ConjugateGradientMultiOptimizerTest
         optimizer = new ConjugateGradientMultiOptimizer();
         assertNotNull(optimizer);
         assertFalse(optimizer.isReady());
-        assertEquals(optimizer.getTolerance(),
-                ConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
-        assertEquals(optimizer.getIterations(), 0);
+        assertEquals(ConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
+        assertEquals(0, optimizer.getIterations());
         try {
             optimizer.getGradientListener();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
         assertFalse(optimizer.isGradientListenerAvailable());
-        assertEquals(optimizer.isPolakRibiereEnabled(),
-                ConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE);
+        assertEquals(ConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE,
+                optimizer.isPolakRibiereEnabled());
         assertFalse(optimizer.isStartPointAvailable());
         try {
             optimizer.getStartPoint();
@@ -143,7 +142,7 @@ public class ConjugateGradientMultiOptimizerTest
         assertArrayEquals(optimizer.getDirection(), direction, 0.0);
         assertEquals(optimizer.getListener(), this);
         assertFalse(optimizer.isResultAvailable());
-        assertEquals(optimizer.getIterations(), 0);
+        assertEquals(0, optimizer.getIterations());
         try {
             optimizer.getResult();
             fail("NotAvailableException expected but not thrown");
@@ -215,8 +214,8 @@ public class ConjugateGradientMultiOptimizerTest
                 new ConjugateGradientMultiOptimizer();
 
         // get tolerance
-        assertEquals(optimizer.getTolerance(),
-                ConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(ConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
+                optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
@@ -260,8 +259,8 @@ public class ConjugateGradientMultiOptimizerTest
                 new ConjugateGradientMultiOptimizer();
 
         // get initial status
-        assertEquals(optimizer.isPolakRibiereEnabled(),
-                ConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE);
+        assertEquals(ConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE,
+                optimizer.isPolakRibiereEnabled());
 
         // disable
         optimizer.setUsePolakRibiere(false);
@@ -437,7 +436,7 @@ public class ConjugateGradientMultiOptimizerTest
     }
 
     @Override
-    public double evaluate(final double[] point) throws EvaluationException {
+    public double evaluate(final double[] point) {
         final int dims = Math.min(Math.min(point.length, minimum.length),
                 width.length);
 

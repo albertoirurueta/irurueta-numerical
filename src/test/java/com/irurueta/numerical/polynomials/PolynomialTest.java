@@ -48,7 +48,7 @@ public class PolynomialTest {
 
         // check correctness
         assertArrayEquals(p.getPolyParams(), new double[1], 0.0);
-        assertEquals(p.getDegree(), 0);
+        assertEquals(0, p.getDegree());
         assertNull(p.getRoots());
         assertNull(p.getMaxima());
         assertNull(p.getMaxima(1.0));
@@ -63,7 +63,7 @@ public class PolynomialTest {
 
         // check correctness
         assertArrayEquals(p.getPolyParams(), new double[2], 0.0);
-        assertEquals(p.getDegree(), 0);
+        assertEquals(0, p.getDegree());
         assertNull(p.getRoots());
         assertNull(p.getMaxima());
         assertNull(p.getMaxima(1.0));
@@ -88,7 +88,7 @@ public class PolynomialTest {
 
         // check correctness
         assertSame(p.getPolyParams(), polyParams);
-        assertEquals(p.getDegree(), 0);
+        assertEquals(0, p.getDegree());
         assertNull(p.getRoots());
         assertNull(p.getMaxima());
         assertNull(p.getMaxima(1.0));
@@ -135,22 +135,22 @@ public class PolynomialTest {
     @Test
     public void testGetDegree() {
         final Polynomial p = new Polynomial(1.0);
-        assertEquals(p.getDegree(), 0);
+        assertEquals(0, p.getDegree());
 
         p.setPolyParams(1.0, 0.0);
-        assertEquals(p.getDegree(), 0);
+        assertEquals(0, p.getDegree());
 
         p.setPolyParams(1.0, 1.0);
-        assertEquals(p.getDegree(), 1);
+        assertEquals(1, p.getDegree());
 
         p.setPolyParams(1.0, 1.0, 0.0);
-        assertEquals(p.getDegree(), 1);
+        assertEquals(1, p.getDegree());
 
         p.setPolyParams(1.0, 1.0, 1.0);
-        assertEquals(p.getDegree(), 2);
+        assertEquals(2, p.getDegree());
 
         p.setPolyParams(1.0, 1.0, 1.0, 0.0);
-        assertEquals(p.getDegree(), 2);
+        assertEquals(2, p.getDegree());
     }
 
     @Test
@@ -705,10 +705,10 @@ public class PolynomialTest {
             Complex[] roots = p.getRoots();
 
             // check correctness
-            assertEquals(roots.length, 1);
+            assertEquals(1, roots.length);
             assertEquals(roots[0].getReal(), root1, ABSOLUTE_ERROR);
-            assertEquals(roots[0].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[0].getReal()), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[0].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[0].getReal()), ABSOLUTE_ERROR);
 
 
             // test degree 2
@@ -721,15 +721,15 @@ public class PolynomialTest {
             roots = p.getRoots();
 
             // check correctness
-            assertEquals(roots.length, 2);
+            assertEquals(2, roots.length);
             assertTrue(Math.abs(roots[0].getReal() - root1) <= ABSOLUTE_ERROR ||
                     Math.abs(roots[0].getReal() - root2) <= ABSOLUTE_ERROR);
             assertTrue(Math.abs(roots[1].getReal() - root1) <= ABSOLUTE_ERROR ||
                     Math.abs(roots[1].getReal() - root2) <= ABSOLUTE_ERROR);
-            assertEquals(roots[0].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(roots[1].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[0].getReal()), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[1].getReal()), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[0].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[1].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[0].getReal()), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[1].getReal()), ABSOLUTE_ERROR);
 
 
             // test degree 3
@@ -741,7 +741,7 @@ public class PolynomialTest {
             roots = p.getRoots();
 
             // check correctness
-            assertEquals(roots.length, 3);
+            assertEquals(3, roots.length);
             assertTrue(Math.abs(roots[0].getReal() - root1) <= ABSOLUTE_ERROR ||
                     Math.abs(roots[0].getReal() - root2) <= ABSOLUTE_ERROR ||
                     Math.abs(roots[0].getReal() - root3) <= ABSOLUTE_ERROR);
@@ -751,12 +751,12 @@ public class PolynomialTest {
             assertTrue(Math.abs(roots[2].getReal() - root1) <= ABSOLUTE_ERROR ||
                     Math.abs(roots[2].getReal() - root2) <= ABSOLUTE_ERROR ||
                     Math.abs(roots[2].getReal() - root3) <= ABSOLUTE_ERROR);
-            assertEquals(roots[0].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(roots[1].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(roots[2].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[0].getReal()), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[1].getReal()), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[2].getReal()), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[0].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[1].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[2].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[0].getReal()), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[1].getReal()), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[2].getReal()), ABSOLUTE_ERROR);
 
 
             // test degree 4
@@ -769,7 +769,7 @@ public class PolynomialTest {
             roots = p.getRoots();
 
             // check correctness
-            assertEquals(roots.length, 4);
+            assertEquals(4, roots.length);
             final boolean cond1 = Math.abs(roots[0].getReal() - root1) <= LARGE_ABSOLUTE_ERROR ||
                     Math.abs(roots[0].getReal() - root2) <= LARGE_ABSOLUTE_ERROR ||
                     Math.abs(roots[0].getReal() - root3) <= LARGE_ABSOLUTE_ERROR ||
@@ -802,17 +802,17 @@ public class PolynomialTest {
                 continue;
             }
 
-            assertEquals(roots[0].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(roots[1].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(roots[2].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(roots[3].getImaginary(), 0.0, ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[0].getReal()), 0.0,
+            assertEquals(0.0, roots[0].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[1].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[2].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, roots[3].getImaginary(), ABSOLUTE_ERROR);
+            assertEquals(0.0, p.evaluate(roots[0].getReal()),
                     VERY_LARGE_ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[1].getReal()), 0.0,
+            assertEquals(0.0, p.evaluate(roots[1].getReal()),
                     VERY_LARGE_ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[2].getReal()), 0.0,
+            assertEquals(0.0, p.evaluate(roots[2].getReal()),
                     VERY_LARGE_ABSOLUTE_ERROR);
-            assertEquals(p.evaluate(roots[3].getReal()), 0.0,
+            assertEquals(0.0, p.evaluate(roots[3].getReal()),
                     VERY_LARGE_ABSOLUTE_ERROR);
 
             numValid++;
@@ -5423,7 +5423,7 @@ public class PolynomialTest {
             p.multiplyByScalar(-1.0);
 
             double[] maxima = p.getMaxima();
-            assertEquals(maxima.length, 1);
+            assertEquals(1, maxima.length);
             assertEquals(maxima[0], 0.5 * (root1 + root2), ABSOLUTE_ERROR);
 
             // 4th degree
@@ -5437,14 +5437,14 @@ public class PolynomialTest {
                     multiplyAndReturnNew(p4);
 
             maxima = p.getMaxima();
-            assertEquals(maxima.length, 1);
+            assertEquals(1, maxima.length);
             assertTrue(maxima[0] >= root2 && maxima[0] <= root3);
 
             // reverse sign
             p.multiplyByScalar(-1.0);
 
             maxima = p.getMaxima();
-            assertEquals(maxima.length, 2);
+            assertEquals(2, maxima.length);
 
             assertTrue(maxima[0] >= root1 && maxima[0] <= root2);
             assertTrue(maxima[1] >= root3 && maxima[1] <= root4);
@@ -5475,7 +5475,7 @@ public class PolynomialTest {
             p.multiplyByScalar(-1.0);
 
             double[] maxima = p.getMaxima(ABSOLUTE_ERROR);
-            assertEquals(maxima.length, 1);
+            assertEquals(1, maxima.length);
             assertEquals(maxima[0], 0.5 * (root1 + root2), ABSOLUTE_ERROR);
 
             // 4th degree
@@ -5489,14 +5489,14 @@ public class PolynomialTest {
                     multiplyAndReturnNew(p4);
 
             maxima = p.getMaxima(ABSOLUTE_ERROR);
-            assertEquals(maxima.length, 1);
+            assertEquals(1, maxima.length);
             assertTrue(maxima[0] >= root2 && maxima[0] <= root3);
 
             // reverse sign
             p.multiplyByScalar(-1.0);
 
             maxima = p.getMaxima();
-            assertEquals(maxima.length, 2);
+            assertEquals(2, maxima.length);
 
             assertTrue(maxima[0] >= root1 && maxima[0] <= root2);
             assertTrue(maxima[1] >= root3 && maxima[1] <= root4);
@@ -5529,7 +5529,7 @@ public class PolynomialTest {
             p = p1.multiplyAndReturnNew(p2);
 
             double[] minima = p.getMinima();
-            assertEquals(minima.length, 1);
+            assertEquals(1, minima.length);
             assertEquals(minima[0], 0.5 * (root1 + root2), ABSOLUTE_ERROR);
 
             // reverse sign
@@ -5549,7 +5549,7 @@ public class PolynomialTest {
                     multiplyAndReturnNew(p4);
 
             minima = p.getMinima();
-            assertEquals(minima.length, 2);
+            assertEquals(2, minima.length);
 
             assertTrue(minima[0] >= root1 && minima[0] <= root2);
             assertTrue(minima[1] >= root3 && minima[1] <= root4);
@@ -5558,7 +5558,7 @@ public class PolynomialTest {
             p.multiplyByScalar(-1.0);
 
             minima = p.getMinima();
-            assertEquals(minima.length, 1);
+            assertEquals(1, minima.length);
             assertTrue(minima[0] >= root2 && minima[0] <= root3);
         }
     }
@@ -5582,7 +5582,7 @@ public class PolynomialTest {
             p = p1.multiplyAndReturnNew(p2);
 
             double[] minima = p.getMinima(ABSOLUTE_ERROR);
-            assertEquals(minima.length, 1);
+            assertEquals(1, minima.length);
             assertEquals(minima[0], 0.5 * (root1 + root2), ABSOLUTE_ERROR);
 
             // reverse sign
@@ -5602,7 +5602,7 @@ public class PolynomialTest {
                     multiplyAndReturnNew(p4);
 
             minima = p.getMinima(ABSOLUTE_ERROR);
-            assertEquals(minima.length, 2);
+            assertEquals(2, minima.length);
 
             assertTrue(minima[0] >= root1 && minima[0] <= root2);
             assertTrue(minima[1] >= root3 && minima[1] <= root4);
@@ -5611,7 +5611,7 @@ public class PolynomialTest {
             p.multiplyByScalar(-1.0);
 
             minima = p.getMinima(ABSOLUTE_ERROR);
-            assertEquals(minima.length, 1);
+            assertEquals(1, minima.length);
             assertTrue(minima[0] >= root2 && minima[0] <= root3);
         }
     }
@@ -5635,7 +5635,7 @@ public class PolynomialTest {
             p = p1.multiplyAndReturnNew(p2);
 
             double[] extrema = p.getExtrema();
-            assertEquals(extrema.length, 1);
+            assertEquals(1, extrema.length);
             assertEquals(extrema[0], 0.5 * (root1 + root2), ABSOLUTE_ERROR);
 
             // 4th degree
@@ -5649,7 +5649,7 @@ public class PolynomialTest {
                     multiplyAndReturnNew(p4);
 
             extrema = p.getExtrema();
-            assertEquals(extrema.length, 3);
+            assertEquals(3, extrema.length);
             assertTrue(extrema[0] >= root1 && extrema[0] <= root2);
             assertTrue(extrema[1] >= root2 && extrema[1] <= root3);
             assertTrue(extrema[2] >= root3 && extrema[2] <= root4);
@@ -5675,7 +5675,7 @@ public class PolynomialTest {
             p = p1.multiplyAndReturnNew(p2);
 
             double[] extrema = p.getExtrema(ABSOLUTE_ERROR);
-            assertEquals(extrema.length, 1);
+            assertEquals(1, extrema.length);
             assertEquals(extrema[0], 0.5 * (root1 + root2), ABSOLUTE_ERROR);
 
             // 4th degree
@@ -5689,7 +5689,7 @@ public class PolynomialTest {
                     multiplyAndReturnNew(p4);
 
             extrema = p.getExtrema(ABSOLUTE_ERROR);
-            assertEquals(extrema.length, 3);
+            assertEquals(3, extrema.length);
             assertTrue(extrema[0] >= root1 && extrema[0] <= root2);
             assertTrue(extrema[1] >= root2 && extrema[1] <= root3);
             assertTrue(extrema[2] >= root3 && extrema[2] <= root4);

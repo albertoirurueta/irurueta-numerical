@@ -57,16 +57,16 @@ public class MSACRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                MSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                MSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestResultInliersData());
@@ -82,16 +82,16 @@ public class MSACRobustEstimatorTest {
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertTrue(estimator.isReady());
-        assertEquals(estimator.getConfidence(),
-                MSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getNIters(),
-                MSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestResultInliersData());
@@ -125,8 +125,8 @@ public class MSACRobustEstimatorTest {
     public void testGetSetProgressDelta() throws IllegalArgumentException,
             LockedException {
         final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
-        assertEquals(estimator.getProgressDelta(),
-                RobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -153,8 +153,8 @@ public class MSACRobustEstimatorTest {
     public void testGetSetConfidence() throws IllegalArgumentException,
             LockedException {
         final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
-        assertEquals(estimator.getConfidence(),
-                MSACRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -181,8 +181,8 @@ public class MSACRobustEstimatorTest {
     public void testGetSetMaxIterations() throws IllegalArgumentException,
             LockedException {
         final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
-        assertEquals(estimator.getMaxIterations(),
-                MSACRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -222,8 +222,8 @@ public class MSACRobustEstimatorTest {
             // set listener
             estimator.setListener(listener);
             listener.reset();
-            assertEquals(listener.getStartCounter(), 0);
-            assertEquals(listener.getEndCounter(), 0);
+            assertEquals(0, listener.getStartCounter());
+            assertEquals(0, listener.getEndCounter());
             assertFalse(estimator.isLocked());
 
             // estimate
@@ -235,12 +235,12 @@ public class MSACRobustEstimatorTest {
 
             // check status after estimation
             assertFalse(estimator.isLocked());
-            assertEquals(listener.getStartCounter(), 1);
-            assertEquals(listener.getEndCounter(), 1);
+            assertEquals(1, listener.getStartCounter());
+            assertEquals(1, listener.getEndCounter());
 
             // check correctness of estimation
             assertEquals(params.length, listener.getParams().length);
-            assertEquals(params.length, NUM_PARAMS);
+            assertEquals(NUM_PARAMS, params.length);
 
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
 

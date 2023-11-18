@@ -63,113 +63,113 @@ public class KalmanFilterTest {
         KalmanFilter filter = new KalmanFilter(6, 9, -1);
 
         // check correctness
-        assertEquals(filter.getDynamicParameters(), 6);
-        assertEquals(filter.getMeasureParameters(), 9);
+        assertEquals(6, filter.getDynamicParameters());
+        assertEquals(9, filter.getMeasureParameters());
         // and because control parameters were set to negative value...
-        assertEquals(filter.getControlParameters(), 6);
+        assertEquals(6, filter.getControlParameters());
 
-        assertEquals(filter.getStatePre().getRows(), 6);
-        assertEquals(filter.getStatePre().getColumns(), 1);
+        assertEquals(6, filter.getStatePre().getRows());
+        assertEquals(1, filter.getStatePre().getColumns());
 
-        assertEquals(filter.getStatePost().getRows(), 6);
-        assertEquals(filter.getStatePost().getColumns(), 1);
+        assertEquals(6, filter.getStatePost().getRows());
+        assertEquals(1, filter.getStatePost().getColumns());
 
-        assertEquals(filter.getTransitionMatrix().getRows(), 6);
-        assertEquals(filter.getTransitionMatrix().getColumns(), 6);
+        assertEquals(6, filter.getTransitionMatrix().getRows());
+        assertEquals(6, filter.getTransitionMatrix().getColumns());
 
-        assertEquals(filter.getProcessNoiseCov().getRows(), 6);
-        assertEquals(filter.getProcessNoiseCov().getColumns(), 6);
+        assertEquals(6, filter.getProcessNoiseCov().getRows());
+        assertEquals(6, filter.getProcessNoiseCov().getColumns());
 
-        assertEquals(filter.getMeasurementMatrix().getRows(), 9);
-        assertEquals(filter.getMeasurementMatrix().getColumns(), 6);
+        assertEquals(9, filter.getMeasurementMatrix().getRows());
+        assertEquals(6, filter.getMeasurementMatrix().getColumns());
 
-        assertEquals(filter.getMeasurementNoiseCov().getRows(), 9);
-        assertEquals(filter.getMeasurementNoiseCov().getColumns(), 9);
+        assertEquals(9, filter.getMeasurementNoiseCov().getRows());
+        assertEquals(9, filter.getMeasurementNoiseCov().getColumns());
 
-        assertEquals(filter.getErrorCovPre().getRows(), 6);
-        assertEquals(filter.getErrorCovPre().getColumns(), 6);
+        assertEquals(6, filter.getErrorCovPre().getRows());
+        assertEquals(6, filter.getErrorCovPre().getColumns());
 
-        assertEquals(filter.getErrorCovPost().getRows(), 6);
-        assertEquals(filter.getErrorCovPost().getColumns(), 6);
+        assertEquals(6, filter.getErrorCovPost().getRows());
+        assertEquals(6, filter.getErrorCovPost().getColumns());
 
-        assertEquals(filter.getGain().getRows(), 6);
-        assertEquals(filter.getGain().getColumns(), 9);
+        assertEquals(6, filter.getGain().getRows());
+        assertEquals(9, filter.getGain().getColumns());
 
-        assertEquals(filter.getControlMatrix().getRows(), 6);
-        assertEquals(filter.getControlMatrix().getColumns(), 6);
+        assertEquals(6, filter.getControlMatrix().getRows());
+        assertEquals(6, filter.getControlMatrix().getColumns());
 
         // test with control parameters
         filter = new KalmanFilter(6, 9, 1);
 
         // check correctness
-        assertEquals(filter.getDynamicParameters(), 6);
-        assertEquals(filter.getMeasureParameters(), 9);
-        assertEquals(filter.getControlParameters(), 1);
+        assertEquals(6, filter.getDynamicParameters());
+        assertEquals(9, filter.getMeasureParameters());
+        assertEquals(1, filter.getControlParameters());
 
-        assertEquals(filter.getStatePre().getRows(), 6);
-        assertEquals(filter.getStatePre().getColumns(), 1);
+        assertEquals(6, filter.getStatePre().getRows());
+        assertEquals(1, filter.getStatePre().getColumns());
 
-        assertEquals(filter.getStatePost().getRows(), 6);
-        assertEquals(filter.getStatePost().getColumns(), 1);
+        assertEquals(6, filter.getStatePost().getRows());
+        assertEquals(1, filter.getStatePost().getColumns());
 
-        assertEquals(filter.getTransitionMatrix().getRows(), 6);
-        assertEquals(filter.getTransitionMatrix().getColumns(), 6);
+        assertEquals(6, filter.getTransitionMatrix().getRows());
+        assertEquals(6, filter.getTransitionMatrix().getColumns());
 
-        assertEquals(filter.getProcessNoiseCov().getRows(), 6);
-        assertEquals(filter.getProcessNoiseCov().getColumns(), 6);
+        assertEquals(6, filter.getProcessNoiseCov().getRows());
+        assertEquals(6, filter.getProcessNoiseCov().getColumns());
 
-        assertEquals(filter.getMeasurementMatrix().getRows(), 9);
-        assertEquals(filter.getMeasurementMatrix().getColumns(), 6);
+        assertEquals(9, filter.getMeasurementMatrix().getRows());
+        assertEquals(6, filter.getMeasurementMatrix().getColumns());
 
-        assertEquals(filter.getMeasurementNoiseCov().getRows(), 9);
-        assertEquals(filter.getMeasurementNoiseCov().getColumns(), 9);
+        assertEquals(9, filter.getMeasurementNoiseCov().getRows());
+        assertEquals(9, filter.getMeasurementNoiseCov().getColumns());
 
-        assertEquals(filter.getErrorCovPre().getRows(), 6);
-        assertEquals(filter.getErrorCovPre().getColumns(), 6);
+        assertEquals(6, filter.getErrorCovPre().getRows());
+        assertEquals(6, filter.getErrorCovPre().getColumns());
 
-        assertEquals(filter.getErrorCovPost().getRows(), 6);
-        assertEquals(filter.getErrorCovPost().getColumns(), 6);
+        assertEquals(6, filter.getErrorCovPost().getRows());
+        assertEquals(6, filter.getErrorCovPost().getColumns());
 
-        assertEquals(filter.getGain().getRows(), 6);
-        assertEquals(filter.getGain().getColumns(), 9);
+        assertEquals(6, filter.getGain().getRows());
+        assertEquals(9, filter.getGain().getColumns());
 
-        assertEquals(filter.getControlMatrix().getRows(), 6);
-        assertEquals(filter.getControlMatrix().getColumns(), 1);
+        assertEquals(6, filter.getControlMatrix().getRows());
+        assertEquals(1, filter.getControlMatrix().getColumns());
 
         // test without control parameters
         filter = new KalmanFilter(6, 9);
 
         // check correctness
-        assertEquals(filter.getDynamicParameters(), 6);
-        assertEquals(filter.getMeasureParameters(), 9);
-        assertEquals(filter.getControlParameters(), 0);
+        assertEquals(6, filter.getDynamicParameters());
+        assertEquals(9, filter.getMeasureParameters());
+        assertEquals(0, filter.getControlParameters());
 
-        assertEquals(filter.getStatePre().getRows(), 6);
-        assertEquals(filter.getStatePre().getColumns(), 1);
+        assertEquals(6, filter.getStatePre().getRows());
+        assertEquals(1, filter.getStatePre().getColumns());
 
-        assertEquals(filter.getStatePost().getRows(), 6);
-        assertEquals(filter.getStatePost().getColumns(), 1);
+        assertEquals(6, filter.getStatePost().getRows());
+        assertEquals(1, filter.getStatePost().getColumns());
 
-        assertEquals(filter.getTransitionMatrix().getRows(), 6);
-        assertEquals(filter.getTransitionMatrix().getColumns(), 6);
+        assertEquals(6, filter.getTransitionMatrix().getRows());
+        assertEquals(6, filter.getTransitionMatrix().getColumns());
 
-        assertEquals(filter.getProcessNoiseCov().getRows(), 6);
-        assertEquals(filter.getProcessNoiseCov().getColumns(), 6);
+        assertEquals(6, filter.getProcessNoiseCov().getRows());
+        assertEquals(6, filter.getProcessNoiseCov().getColumns());
 
-        assertEquals(filter.getMeasurementMatrix().getRows(), 9);
-        assertEquals(filter.getMeasurementMatrix().getColumns(), 6);
+        assertEquals(9, filter.getMeasurementMatrix().getRows());
+        assertEquals(6, filter.getMeasurementMatrix().getColumns());
 
-        assertEquals(filter.getMeasurementNoiseCov().getRows(), 9);
-        assertEquals(filter.getMeasurementNoiseCov().getColumns(), 9);
+        assertEquals(9, filter.getMeasurementNoiseCov().getRows());
+        assertEquals(9, filter.getMeasurementNoiseCov().getColumns());
 
-        assertEquals(filter.getErrorCovPre().getRows(), 6);
-        assertEquals(filter.getErrorCovPre().getColumns(), 6);
+        assertEquals(6, filter.getErrorCovPre().getRows());
+        assertEquals(6, filter.getErrorCovPre().getColumns());
 
-        assertEquals(filter.getErrorCovPost().getRows(), 6);
-        assertEquals(filter.getErrorCovPost().getColumns(), 6);
+        assertEquals(6, filter.getErrorCovPost().getRows());
+        assertEquals(6, filter.getErrorCovPost().getColumns());
 
-        assertEquals(filter.getGain().getRows(), 6);
-        assertEquals(filter.getGain().getColumns(), 9);
+        assertEquals(6, filter.getGain().getRows());
+        assertEquals(9, filter.getGain().getColumns());
 
         assertNull(filter.getControlMatrix());
 
@@ -194,13 +194,13 @@ public class KalmanFilterTest {
     public void testGetSetMeasureParameters() throws SignalProcessingException {
         final KalmanFilter filter = new KalmanFilter(6, 9, -1);
 
-        assertEquals(filter.getMeasureParameters(), 9);
+        assertEquals(9, filter.getMeasureParameters());
 
         // set new value
         filter.setMeasureParameters(10);
 
         // check correctness
-        assertEquals(filter.getMeasureParameters(), 10);
+        assertEquals(10, filter.getMeasureParameters());
 
         // Force IllegalArgumentException
         try {
@@ -1386,8 +1386,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix statePre = filter.getStatePre();
 
-        assertEquals(statePre.getRows(), 6);
-        assertEquals(statePre.getColumns(), 1);
+        assertEquals(6, statePre.getRows());
+        assertEquals(1, statePre.getColumns());
 
         // set new value
         final Matrix statePre2 = new Matrix(6, 1);
@@ -1420,8 +1420,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix statePost = filter.getStatePost();
 
-        assertEquals(statePost.getRows(), 6);
-        assertEquals(statePost.getColumns(), 1);
+        assertEquals(6, statePost.getRows());
+        assertEquals(1, statePost.getColumns());
 
         // set new value
         final Matrix statePost2 = new Matrix(6, 1);
@@ -1454,8 +1454,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix transitionMatrix = filter.getTransitionMatrix();
 
-        assertEquals(transitionMatrix.getRows(), 6);
-        assertEquals(transitionMatrix.getColumns(), 6);
+        assertEquals(6, transitionMatrix.getRows());
+        assertEquals(6, transitionMatrix.getColumns());
 
         // set new value
         final Matrix transitionMatrix2 = new Matrix(6, 6);
@@ -1488,8 +1488,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix controlMatrix = filter.getControlMatrix();
 
-        assertEquals(controlMatrix.getRows(), 6);
-        assertEquals(controlMatrix.getColumns(), 1);
+        assertEquals(6, controlMatrix.getRows());
+        assertEquals(1, controlMatrix.getColumns());
 
         // set new value
         final Matrix controlMatrix2 = new Matrix(6, 1);
@@ -1522,8 +1522,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix measurementMatrix = filter.getMeasurementMatrix();
 
-        assertEquals(measurementMatrix.getRows(), 9);
-        assertEquals(measurementMatrix.getColumns(), 6);
+        assertEquals(9, measurementMatrix.getRows());
+        assertEquals(6, measurementMatrix.getColumns());
 
         // set new value
         final Matrix measurementMatrix2 = new Matrix(9, 6);
@@ -1556,8 +1556,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix processNoiseCov = filter.getProcessNoiseCov();
 
-        assertEquals(processNoiseCov.getRows(), 6);
-        assertEquals(processNoiseCov.getColumns(), 6);
+        assertEquals(6, processNoiseCov.getRows());
+        assertEquals(6, processNoiseCov.getColumns());
 
         // set new value
         final Matrix processNoiseCov2 = Matrix.diagonal(new double[]{1, 2, 3, 4, 5, 6});
@@ -1598,8 +1598,8 @@ public class KalmanFilterTest {
         // check default value
         final Matrix measurementNoiseCov = filter.getMeasurementNoiseCov();
 
-        assertEquals(measurementNoiseCov.getRows(), 9);
-        assertEquals(measurementNoiseCov.getColumns(), 9);
+        assertEquals(9, measurementNoiseCov.getRows());
+        assertEquals(9, measurementNoiseCov.getColumns());
 
         // set new value
         final Matrix measurementNoiseCov2 = Matrix.diagonal(
@@ -1640,8 +1640,8 @@ public class KalmanFilterTest {
 
         final Matrix errorCovPre = filter.getErrorCovPre();
 
-        assertEquals(errorCovPre.getRows(), 6);
-        assertEquals(errorCovPre.getColumns(), 6);
+        assertEquals(6, errorCovPre.getRows());
+        assertEquals(6, errorCovPre.getColumns());
 
         // set new value
         final Matrix errorCovPre2 = Matrix.diagonal(new double[]{1, 2, 3, 4, 5, 6});
@@ -1681,8 +1681,8 @@ public class KalmanFilterTest {
 
         final Matrix gain = filter.getGain();
 
-        assertEquals(gain.getRows(), 6);
-        assertEquals(gain.getColumns(), 9);
+        assertEquals(6, gain.getRows());
+        assertEquals(9, gain.getColumns());
 
         // set new value
         final Matrix gain2 = new Matrix(6, 9);
@@ -1714,8 +1714,8 @@ public class KalmanFilterTest {
 
         final Matrix errorCovPost = filter.getErrorCovPost();
 
-        assertEquals(errorCovPost.getRows(), 6);
-        assertEquals(errorCovPost.getColumns(), 6);
+        assertEquals(6, errorCovPost.getRows());
+        assertEquals(6, errorCovPost.getColumns());
 
         // set new value
         final Matrix errorCovPost2 = Matrix.diagonal(new double[]{1, 2, 3, 4, 5, 6});

@@ -114,7 +114,7 @@ public class JacobianEstimatorTest
     }
 
     @Override
-    public void evaluate(final double[] point, final double[] result) throws EvaluationException {
+    public void evaluate(final double[] point, final double[] result) {
         final int dims = Math.min(Math.min(point.length, minimums.getColumns()),
                 widths.getColumns());
         final int vars = result.length;

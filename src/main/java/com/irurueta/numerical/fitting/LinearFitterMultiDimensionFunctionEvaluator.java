@@ -18,7 +18,7 @@ package com.irurueta.numerical.fitting;
 import com.irurueta.numerical.EvaluationException;
 
 /**
- * Interface to evaluate linear multi dimensional functions
+ * Interface to evaluate linear multidimensional functions
  * f(x1, x2, ...) = a * f0(x1, x2, ...) + b * f1(x1, x2, ...) + ...
  * Where the linear function is composed of a linear combination of a basis of
  * functions f0, f1, ... fM

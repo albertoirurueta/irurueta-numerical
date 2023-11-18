@@ -132,17 +132,17 @@ public class BisectionSingleRootEstimatorTest {
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                BisectionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
-        assertEquals(estimator.getMinEvaluationPoint(),
-                BisectionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
+        assertEquals(BisectionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(BisectionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(), 0.0);
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getTolerance(),
-                BisectionSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(BisectionSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -229,10 +229,10 @@ public class BisectionSingleRootEstimatorTest {
 
         // check default values
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(estimator.getMinEvaluationPoint(),
-                BisectionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                BisectionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(BisectionSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(), 0.0);
+        assertEquals(BisectionSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(), 0.0);
 
         // set new values
         estimator.setBracket(minEvalPoint, maxEvalPoint);
@@ -259,8 +259,8 @@ public class BisectionSingleRootEstimatorTest {
                 new BisectionSingleRootEstimator();
 
         // check default values
-        assertEquals(estimator.getTolerance(),
-                BisectionSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(BisectionSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
 
         // set new value
         estimator.setTolerance(tolerance);

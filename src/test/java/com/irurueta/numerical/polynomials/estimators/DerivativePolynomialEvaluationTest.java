@@ -39,11 +39,11 @@ public class DerivativePolynomialEvaluationTest {
                 new DerivativePolynomialEvaluation();
 
         // check initial values
-        assertEquals(eval.getDerivativeOrder(), 1);
-        assertEquals(eval.getX(), 0.0, 0.0);
-        assertEquals(eval.getEvaluation(), 0.0, 0.0);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.DERIVATIVE_EVALUATION);
+        assertEquals(1, eval.getDerivativeOrder());
+        assertEquals(0.0, eval.getX(), 0.0);
+        assertEquals(0.0, eval.getEvaluation(), 0.0);
+        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION,
+                eval.getType());
 
         // test constructor with values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -59,18 +59,18 @@ public class DerivativePolynomialEvaluationTest {
         assertEquals(eval.getDerivativeOrder(), order);
         assertEquals(eval.getX(), x, 0.0);
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.DERIVATIVE_EVALUATION);
+        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION,
+                eval.getType());
 
         // test constructor with values (without order)
         eval = new DerivativePolynomialEvaluation(x, evaluation);
 
         // check correctness
-        assertEquals(eval.getDerivativeOrder(), 1);
+        assertEquals(1, eval.getDerivativeOrder());
         assertEquals(eval.getX(), x, 0.0);
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.DERIVATIVE_EVALUATION);
+        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION,
+                eval.getType());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class DerivativePolynomialEvaluationTest {
                 new DerivativePolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getEvaluation(), 0.0, 0.0);
+        assertEquals(0.0, eval.getEvaluation(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -97,7 +97,7 @@ public class DerivativePolynomialEvaluationTest {
                 new DerivativePolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getX(), 0.0, 0.0);
+        assertEquals(0.0, eval.getX(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -114,7 +114,7 @@ public class DerivativePolynomialEvaluationTest {
                 new DerivativePolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getDerivativeOrder(), 1);
+        assertEquals(1, eval.getDerivativeOrder());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());

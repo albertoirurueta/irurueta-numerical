@@ -101,7 +101,7 @@ public class SimpleSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertFalse(fitter.isReady());
 
@@ -180,7 +180,7 @@ public class SimpleSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertTrue(fitter.isReady());
 
@@ -288,7 +288,7 @@ public class SimpleSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
 
         // Force IllegalArgumentException
@@ -394,7 +394,7 @@ public class SimpleSingleDimensionLinearFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -476,7 +476,7 @@ public class SimpleSingleDimensionLinearFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 
@@ -486,7 +486,7 @@ public class SimpleSingleDimensionLinearFitterTest {
             // check correctness
             assertTrue(fitter.isResultAvailable());
             assertNotNull(fitter.getA());
-            assertEquals(fitter.getA().length, TRIGO_PARAMS);
+            assertEquals(TRIGO_PARAMS, fitter.getA().length);
             boolean failed = false;
             for (int i = 0; i < TRIGO_PARAMS; i++) {
                 if (Math.abs(fitter.getA()[i] - params[i]) > ABSOLUTE_ERROR) {
@@ -561,7 +561,7 @@ public class SimpleSingleDimensionLinearFitterTest {
             // check default values
             assertNotNull(fitter.getA());
             assertNotNull(fitter.getCovar());
-            assertEquals(fitter.getChisq(), 0.0, 0.0);
+            assertEquals(0.0, fitter.getChisq(), 0.0);
             assertFalse(fitter.isResultAvailable());
             assertTrue(fitter.isReady());
 

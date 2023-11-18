@@ -19,7 +19,7 @@ package com.irurueta.numerical;
  * This class evaluates a multidimensional function and obtains its gradient
  * along a line; such line is defined by an input point and a given direction.
  * Using provided input point and direction, the multidimensional function's
- * input parameters are determined so they all lay on a line.
+ * input parameters are determined, so they all lay on a line.
  */
 public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
 

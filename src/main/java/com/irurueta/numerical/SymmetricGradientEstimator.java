@@ -20,7 +20,7 @@ package com.irurueta.numerical;
  * This class evaluates a function at very close locations of a given input
  * point in order to determine the gradient at such point
  * The algorithm used in this implementation is valid for continuous functions
- * only, otherwise inaccurate results might be obtain.
+ * only, otherwise inaccurate results might be obtained.
  * This implementation is more accurate although slower than
  * GradientEstimator.
  */

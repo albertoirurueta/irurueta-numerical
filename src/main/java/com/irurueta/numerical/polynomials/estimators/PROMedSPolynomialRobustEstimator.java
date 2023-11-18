@@ -425,7 +425,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

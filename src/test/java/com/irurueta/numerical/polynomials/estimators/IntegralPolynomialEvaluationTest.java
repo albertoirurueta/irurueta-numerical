@@ -37,12 +37,12 @@ public class IntegralPolynomialEvaluationTest {
         IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
 
         // check default values
-        assertEquals(eval.getEvaluation(), 0.0, 0.0);
-        assertEquals(eval.getX(), 0.0, 0.0);
+        assertEquals(0.0, eval.getEvaluation(), 0.0);
+        assertEquals(0.0, eval.getX(), 0.0);
         assertNull(eval.getConstants());
-        assertEquals(eval.getIntegralOrder(), 1);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(1, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval.getType());
 
         // test constructor with values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -62,8 +62,8 @@ public class IntegralPolynomialEvaluationTest {
         assertEquals(eval.getX(), x, 0.0);
         assertSame(eval.getConstants(), constants);
         assertEquals(eval.getIntegralOrder(), order);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval.getType());
 
 
         eval = new IntegralPolynomialEvaluation(x, evaluation, constants);
@@ -72,9 +72,9 @@ public class IntegralPolynomialEvaluationTest {
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
         assertEquals(eval.getX(), x, 0.0);
         assertSame(eval.getConstants(), constants);
-        assertEquals(eval.getIntegralOrder(), 1);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(1, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval.getType());
 
 
         eval = new IntegralPolynomialEvaluation(x, evaluation, order);
@@ -84,8 +84,8 @@ public class IntegralPolynomialEvaluationTest {
         assertEquals(eval.getX(), x, 0.0);
         assertNull(eval.getConstants());
         assertEquals(eval.getIntegralOrder(), order);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval.getType());
 
 
         eval = new IntegralPolynomialEvaluation(x, evaluation);
@@ -94,9 +94,9 @@ public class IntegralPolynomialEvaluationTest {
         assertEquals(eval.getEvaluation(), evaluation, 0.0);
         assertEquals(eval.getX(), x, 0.0);
         assertNull(eval.getConstants());
-        assertEquals(eval.getIntegralOrder(), 1);
-        assertEquals(eval.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(1, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval.getType());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class IntegralPolynomialEvaluationTest {
         final IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getX(), 0.0, 0.0);
+        assertEquals(0.0, eval.getX(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -139,7 +139,7 @@ public class IntegralPolynomialEvaluationTest {
         final IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
 
         // check default value
-        assertEquals(eval.getIntegralOrder(), 1);
+        assertEquals(1, eval.getIntegralOrder());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -177,8 +177,8 @@ public class IntegralPolynomialEvaluationTest {
         assertEquals(eval1.getX(), x, 0.0);
         assertSame(eval1.getConstants(), constants);
         assertEquals(eval1.getIntegralOrder(), order);
-        assertEquals(eval1.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval1.getType());
 
         // serialize and deserialize
         final byte[] bytes = SerializationHelper.serialize(eval1);
@@ -189,7 +189,7 @@ public class IntegralPolynomialEvaluationTest {
         assertEquals(eval2.getX(), x, 0.0);
         assertArrayEquals(eval2.getConstants(), constants, 0.0);
         assertEquals(eval2.getIntegralOrder(), order);
-        assertEquals(eval2.getType(),
-                PolynomialEvaluationType.INTEGRAL_EVALUATION);
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
+                eval2.getType());
     }
 }

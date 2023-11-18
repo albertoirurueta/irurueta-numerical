@@ -18,7 +18,7 @@ package com.irurueta.numerical.fitting;
 import com.irurueta.numerical.EvaluationException;
 
 /**
- * Interface to evaluate non-linear multi dimensional functions.
+ * Interface to evaluate non-linear multidimensional functions.
  * Evaluation of functions requires both function value at provided point x and
  * function gradient respect to its parameters (i.e. derivatives respect to its
  * parameters).

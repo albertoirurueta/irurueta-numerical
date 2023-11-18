@@ -143,17 +143,17 @@ public class BrentSingleRootEstimatorTest {
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                BrentSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
-        assertEquals(estimator.getMinEvaluationPoint(),
-                BrentSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
+        assertEquals(BrentSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(BrentSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(), 0.0);
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getTolerance(),
-                BrentSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(BrentSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -237,10 +237,10 @@ public class BrentSingleRootEstimatorTest {
 
         // check default values
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(estimator.getMinEvaluationPoint(),
-                BrentSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, 0.0);
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                BrentSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, 0.0);
+        assertEquals(BrentSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(), 0.0);
+        assertEquals(BrentSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(), 0.0);
 
         // set new values
         estimator.setBracket(minEvalPoint, maxEvalPoint);
@@ -266,8 +266,8 @@ public class BrentSingleRootEstimatorTest {
         final BrentSingleRootEstimator estimator = new BrentSingleRootEstimator();
 
         // check default values
-        assertEquals(estimator.getTolerance(),
-                BrentSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(BrentSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
 
         // set new value
         estimator.setTolerance(tolerance);

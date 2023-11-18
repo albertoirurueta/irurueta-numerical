@@ -70,13 +70,12 @@ public class HistogramMaximumLikelihoodEstimatorTest {
         estimator = new HistogramMaximumLikelihoodEstimator();
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimatorMethod.
-                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
-        assertEquals(estimator.getNumberOfBins(),
-                HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
-        assertEquals(estimator.getGaussianSigma(),
-                HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
+        assertEquals(HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS,
+                estimator.getNumberOfBins());
+        assertEquals(HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(),
                 0.0);
         try {
             estimator.getMinValue();
@@ -109,9 +108,8 @@ public class HistogramMaximumLikelihoodEstimatorTest {
                 numberOfBins);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimatorMethod.
-                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
@@ -166,9 +164,8 @@ public class HistogramMaximumLikelihoodEstimatorTest {
                 gaussianSigma, numberOfBins);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimatorMethod.
-                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         try {
@@ -215,9 +212,7 @@ public class HistogramMaximumLikelihoodEstimatorTest {
                 inputData, gaussianSigma, numberOfBins);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getMethod(),
-                MaximumLikelihoodEstimatorMethod.
-                        HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
         assertEquals(estimator.getNumberOfBins(), numberOfBins);
         assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
         assertEquals(estimator.getMinValue(), minValue, 0.0);
@@ -281,8 +276,8 @@ public class HistogramMaximumLikelihoodEstimatorTest {
         final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
 
-        assertEquals(estimator.getMethod(), MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR);
+        assertEquals(MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR,
+                estimator.getMethod());
     }
 
     @Test
@@ -294,8 +289,8 @@ public class HistogramMaximumLikelihoodEstimatorTest {
         final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
 
-        assertEquals(estimator.getNumberOfBins(),
-                HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
+        assertEquals(HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS,
+                estimator.getNumberOfBins());
 
         // set new number of bins
         estimator.setNumberOfBins(numberOfBins);
@@ -321,8 +316,8 @@ public class HistogramMaximumLikelihoodEstimatorTest {
         final HistogramMaximumLikelihoodEstimator estimator =
                 new HistogramMaximumLikelihoodEstimator();
 
-        assertEquals(estimator.getGaussianSigma(),
-                HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+        assertEquals(HistogramMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
+                estimator.getGaussianSigma(),
                 0.0);
 
         // set new gaussian sigma

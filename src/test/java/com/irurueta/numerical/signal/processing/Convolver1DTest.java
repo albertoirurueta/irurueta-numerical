@@ -39,9 +39,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         // check default values
         assertNull(convolver.getSignal());
         assertNull(convolver.getKernel());
-        assertEquals(convolver.getKernelCenter(), 0);
-        assertEquals(convolver.getEdgeMethod(), ConvolverEdgeMethod.ZERO_EDGE);
-        assertEquals(convolver.getConstantValue(), 0.0, 0.0);
+        assertEquals(0, convolver.getKernelCenter());
+        assertEquals(ConvolverEdgeMethod.ZERO_EDGE, convolver.getEdgeMethod());
+        assertEquals(0.0, convolver.getConstantValue(), 0.0);
         assertNull(convolver.getListener());
         assertFalse(convolver.isReady());
 
@@ -53,9 +53,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         // check default values
         assertSame(convolver.getSignal(), signal);
         assertSame(convolver.getKernel(), kernel);
-        assertEquals(convolver.getKernelCenter(), 0);
-        assertEquals(convolver.getEdgeMethod(), ConvolverEdgeMethod.ZERO_EDGE);
-        assertEquals(convolver.getConstantValue(), 0.0, 0.0);
+        assertEquals(0, convolver.getKernelCenter());
+        assertEquals(ConvolverEdgeMethod.ZERO_EDGE, convolver.getEdgeMethod());
+        assertEquals(0.0, convolver.getConstantValue(), 0.0);
         assertNull(convolver.getListener());
         assertTrue(convolver.isReady());
     }
@@ -95,13 +95,13 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         final Convolver1D convolver = new Convolver1D();
 
         // check default value
-        assertEquals(convolver.getKernelCenter(), 0);
+        assertEquals(0, convolver.getKernelCenter());
 
         // set new value
         convolver.setKernelCenter(2);
 
         // check correctness
-        assertEquals(convolver.getKernelCenter(), 2);
+        assertEquals(2, convolver.getKernelCenter());
 
         // Force IllegalArgumentException
         try {
@@ -116,14 +116,14 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         final Convolver1D convolver = new Convolver1D();
 
         // check default value
-        assertEquals(convolver.getEdgeMethod(), ConvolverEdgeMethod.ZERO_EDGE);
+        assertEquals(ConvolverEdgeMethod.ZERO_EDGE, convolver.getEdgeMethod());
 
         // set new value
         convolver.setEdgeMethod(ConvolverEdgeMethod.REPEAT_EDGE);
 
         // check correctness
-        assertEquals(convolver.getEdgeMethod(),
-                ConvolverEdgeMethod.REPEAT_EDGE);
+        assertEquals(ConvolverEdgeMethod.REPEAT_EDGE,
+                convolver.getEdgeMethod());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         final Convolver1D convolver = new Convolver1D();
 
         // default value
-        assertEquals(convolver.getConstantValue(), 0.0, 0.0);
+        assertEquals(0.0, convolver.getConstantValue(), 0.0);
 
         // set new value
         convolver.setConstantValue(constantValue);
@@ -197,18 +197,18 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
         // test: center = 0, zero edge
         final double[] result = new double[7];
         Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.ZERO_EDGE, 0.0, result, this);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         // check correctness
         assertArrayEquals(result,
@@ -236,9 +236,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -249,9 +249,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         result2 = Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.ZERO_EDGE, 0.0);
@@ -262,9 +262,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
         Convolver1D.convolve(signal, kernel, 0, ConvolverEdgeMethod.ZERO_EDGE,
                 result, this);
@@ -273,9 +273,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -293,9 +293,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -312,9 +312,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -330,9 +330,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -348,9 +348,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -366,9 +366,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -386,9 +386,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -398,9 +398,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{1.0, 4.0, 8.0, 12.0, 16.0, 14.0, 5.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -413,9 +413,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{0.0, 1.0, 4.0, 8.0, 12.0, 16.0, 14.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -434,9 +434,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{0.0, 1.0, 4.0, 8.0, 12.0, 16.0, 14.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -454,9 +454,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{0.0, 1.0, 4.0, 8.0, 12.0, 16.0, 14.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -474,9 +474,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{0.0, 1.0, 4.0, 8.0, 12.0, 16.0, 14.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -493,9 +493,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{0.0, 1.0, 4.0, 8.0, 12.0, 16.0, 14.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -511,9 +511,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{0.0, 1.0, 4.0, 8.0, 12.0, 16.0, 14.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -533,18 +533,18 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
         // test: center = 0, constant edge
         final double[] result = new double[7];
         Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.CONSTANT_EDGE, constantValue, result, this);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -582,9 +582,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{31.0, 14.0, 8.0, 12.0, 16.0, 24.0, 35.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         result2 = Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.CONSTANT_EDGE, constantValue);
@@ -595,9 +595,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
 
         // test: center = 1, constant edge
@@ -608,9 +608,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{40.0, 31.0, 14.0, 8.0, 12.0, 16.0, 24.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -629,9 +629,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{40.0, 31.0, 14.0, 8.0, 12.0, 16.0, 24.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -650,18 +650,18 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
         // test: center = 0, repeat edge
         final double[] result = new double[7];
         Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.REPEAT_EDGE, 0.0, result, this);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -698,9 +698,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{15.0, 9.0, 8.0, 12.0, 16.0, 15.0, 9.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         result2 = Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.REPEAT_EDGE, 0.0);
@@ -711,9 +711,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
 
         // test: center = 1, repeat edge
@@ -724,9 +724,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{16.0, 15.0, 9.0, 8.0, 12.0, 16.0, 15.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -744,9 +744,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{16.0, 15.0, 9.0, 8.0, 12.0, 16.0, 15.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -765,18 +765,18 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
         // test: center = 0, mirror edge
         final double[] result = new double[7];
         Convolver1D.convolve(signal, kernel, 0, ConvolverEdgeMethod.MIRROR_EDGE,
                 0.0, result, this);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -813,9 +813,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{5.0, 5.0, 8.0, 12.0, 16.0, 19.0, 19.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         result2 = Convolver1D.convolve(signal, kernel, 0,
                 ConvolverEdgeMethod.MIRROR_EDGE, 0.0);
@@ -826,9 +826,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         reset();
 
-        assertEquals(startConvolution, 0);
-        assertEquals(finishConvolution, 0);
-        assertEquals(convolveProgressChange, 0);
+        assertEquals(0, startConvolution);
+        assertEquals(0, finishConvolution);
+        assertEquals(0, convolveProgressChange);
 
 
         // test: center = 1, mirror edge
@@ -839,9 +839,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result,
                 new double[]{8.0, 5.0, 5.0, 8.0, 12.0, 16.0, 19.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -859,9 +859,9 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
         assertArrayEquals(result2,
                 new double[]{8.0, 5.0, 5.0, 8.0, 12.0, 16.0, 19.0}, 0.0);
 
-        assertEquals(startConvolution, 1);
-        assertEquals(finishConvolution, 1);
-        assertEquals(convolveProgressChange, 7);
+        assertEquals(1, startConvolution);
+        assertEquals(1, finishConvolution);
+        assertEquals(7, convolveProgressChange);
 
         reset();
 
@@ -877,13 +877,13 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
     public void testGetSignalValueZero() {
         final double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0};
 
-        assertEquals(Convolver1D.getSignalValueZero(signal, -1), 0.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueZero(signal, 0), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueZero(signal, 1), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueZero(signal, 2), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueZero(signal, 3), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueZero(signal, 4), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueZero(signal, 5), 0.0, 0.0);
+        assertEquals(0.0, Convolver1D.getSignalValueZero(signal, -1), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueZero(signal, 0), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueZero(signal, 1), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueZero(signal, 2), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueZero(signal, 3), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueZero(signal, 4), 0.0);
+        assertEquals(0.0, Convolver1D.getSignalValueZero(signal, 5), 0.0);
     }
 
     @Test
@@ -896,16 +896,16 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
 
         assertEquals(Convolver1D.getSignalValueConstant(signal, -1,
                 constantValue), constantValue, 0.0);
-        assertEquals(Convolver1D.getSignalValueConstant(signal, 0,
-                constantValue), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueConstant(signal, 1,
-                constantValue), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueConstant(signal, 2,
-                constantValue), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueConstant(signal, 3,
-                constantValue), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueConstant(signal, 4,
-                constantValue), 5.0, 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueConstant(signal, 0,
+                constantValue), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueConstant(signal, 1,
+                constantValue), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueConstant(signal, 2,
+                constantValue), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueConstant(signal, 3,
+                constantValue), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueConstant(signal, 4,
+                constantValue), 0.0);
         assertEquals(Convolver1D.getSignalValueConstant(signal, 5,
                 constantValue), constantValue, 0.0);
     }
@@ -914,60 +914,60 @@ public class Convolver1DTest implements Convolver1D.Convolver1DListener {
     public void testGetSignalValueRepeat() {
         final double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0};
 
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -12), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -11), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -10), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -9), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -8), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -7), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -6), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -5), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -4), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -3), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -2), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, -1), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 0), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 1), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 2), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 3), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 4), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 5), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 6), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 7), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 8), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 9), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 10), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueRepeat(signal, 11), 2.0, 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueRepeat(signal, -12), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueRepeat(signal, -11), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueRepeat(signal, -10), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueRepeat(signal, -9), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueRepeat(signal, -8), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueRepeat(signal, -7), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueRepeat(signal, -6), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueRepeat(signal, -5), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueRepeat(signal, -4), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueRepeat(signal, -3), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueRepeat(signal, -2), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueRepeat(signal, -1), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueRepeat(signal, 0), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueRepeat(signal, 1), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueRepeat(signal, 2), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueRepeat(signal, 3), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueRepeat(signal, 4), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueRepeat(signal, 5), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueRepeat(signal, 6), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueRepeat(signal, 7), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueRepeat(signal, 8), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueRepeat(signal, 9), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueRepeat(signal, 10), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueRepeat(signal, 11), 0.0);
     }
 
     @Test
     public void testGetSignalValueMirror() {
         final double[] signal = {1.0, 2.0, 3.0, 4.0, 5.0};
 
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -12), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -11), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -10), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -9), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -8), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -7), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -6), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -5), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -4), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -3), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -2), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, -1), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 0), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 1), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 2), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 3), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 4), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 5), 5.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 6), 4.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 7), 3.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 8), 2.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 9), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 10), 1.0, 0.0);
-        assertEquals(Convolver1D.getSignalValueMirror(signal, 11), 2.0, 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueMirror(signal, -12), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueMirror(signal, -11), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueMirror(signal, -10), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueMirror(signal, -9), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueMirror(signal, -8), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueMirror(signal, -7), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueMirror(signal, -6), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueMirror(signal, -5), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueMirror(signal, -4), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueMirror(signal, -3), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueMirror(signal, -2), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueMirror(signal, -1), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueMirror(signal, 0), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueMirror(signal, 1), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueMirror(signal, 2), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueMirror(signal, 3), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueMirror(signal, 4), 0.0);
+        assertEquals(5.0, Convolver1D.getSignalValueMirror(signal, 5), 0.0);
+        assertEquals(4.0, Convolver1D.getSignalValueMirror(signal, 6), 0.0);
+        assertEquals(3.0, Convolver1D.getSignalValueMirror(signal, 7), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueMirror(signal, 8), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueMirror(signal, 9), 0.0);
+        assertEquals(1.0, Convolver1D.getSignalValueMirror(signal, 10), 0.0);
+        assertEquals(2.0, Convolver1D.getSignalValueMirror(signal, 11), 0.0);
     }
 
     private void reset() {

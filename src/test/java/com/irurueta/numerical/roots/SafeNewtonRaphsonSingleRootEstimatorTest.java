@@ -217,19 +217,19 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+        assertEquals(SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(),
                 0.0);
-        assertEquals(estimator.getMinEvaluationPoint(),
-                SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+        assertEquals(SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(),
                 0.0);
         try {
             estimator.getRoot();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
-        assertEquals(estimator.getTolerance(),
-                SafeNewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(SafeNewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isDerivativeListenerAvailable());
@@ -382,11 +382,11 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
 
         // check default values
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(estimator.getMinEvaluationPoint(),
-                SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+        assertEquals(SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
+                estimator.getMinEvaluationPoint(),
                 0.0);
-        assertEquals(estimator.getMaxEvaluationPoint(),
-                SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+        assertEquals(SafeNewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
+                estimator.getMaxEvaluationPoint(),
                 0.0);
 
         // set new values
@@ -414,8 +414,8 @@ public class SafeNewtonRaphsonSingleRootEstimatorTest {
                 new SafeNewtonRaphsonSingleRootEstimator();
 
         // check default values
-        assertEquals(estimator.getTolerance(),
-                SafeNewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE, 0.0);
+        assertEquals(SafeNewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE,
+                estimator.getTolerance(), 0.0);
 
         // set new value
         estimator.setTolerance(tolerance);

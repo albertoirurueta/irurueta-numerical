@@ -19,7 +19,7 @@ package com.irurueta.numerical;
  * Class to estimate the derivative of a single dimension function at a given
  * point.
  * The algorithm used in this implementation is valid for continuous functions
- * only, otherwise inaccurate results might be obtain.
+ * only, otherwise inaccurate results might be obtained.
  * This implementation is more accurate although slower than
  * DerivativeEstimator.
  */

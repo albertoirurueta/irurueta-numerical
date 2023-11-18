@@ -121,12 +121,12 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
     /**
      * This function estimates a function minimum within provided or computed
      * bracket of values.
-     * Given a function f, and given a bracketing triplet of abscissas ax, bx,
-     * cx (such that bx is between ax and cx, and f(bx) is less than both f(ax)
+     * Given a function f, and given a bracketing triplet of abscissas "ax", "bx",
+     * "cx" (such that bx is between ax and cx, and f(bx) is less than both f(ax)
      * and f(cx), this routine isolates the minimum to a fractional prevision of
      * about tolerance using Brent's method. The abscissa of the minimum is
-     * returned as xmin, and the function value of the minimum is returned as
-     * fmin, the returned function value.
+     * returned as "xmin", and the function value of the minimum is returned as
+     * "fmin", the returned function value.
      *
      * @throws LockedException       Raised if this instance is locked, because
      *                               estimation is being computed.
@@ -184,14 +184,14 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                     v1[0] = x0;
                     v2[0] = x1;
                     v3[0] = x2;
-                    shft3(v1, v2, v3, R * x2 + C * x3);
+                    shift3(v1, v2, v3, R * x2 + C * x3);
                     x0 = v1[0];
                     x1 = v2[0];
                     x2 = v3[0];
 
                     v1[0] = f1;
                     v2[0] = f2;
-                    shft2(v1, v2, listener.evaluate(x2));
+                    shift2(v1, v2, listener.evaluate(x2));
                     f1 = v1[0];
                     f2 = v2[0];
                 } else {
@@ -199,14 +199,14 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
                     v1[0] = x3;
                     v2[0] = x2;
                     v3[0] = x1;
-                    shft3(v1, v2, v3, R * x1 + C * x0);
+                    shift3(v1, v2, v3, R * x1 + C * x0);
                     x3 = v1[0];
                     x2 = v2[0];
                     x1 = v3[0];
 
                     v1[0] = f2;
                     v2[0] = f1;
-                    shft2(v1, v2, listener.evaluate(x1));
+                    shift2(v1, v2, listener.evaluate(x1));
                     f2 = v1[0];
                     f1 = v2[0];
                 }

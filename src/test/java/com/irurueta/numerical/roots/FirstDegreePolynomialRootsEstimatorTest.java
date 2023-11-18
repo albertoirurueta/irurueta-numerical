@@ -234,7 +234,7 @@ public class FirstDegreePolynomialRootsEstimatorTest {
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
 
-            assertEquals(roots.length, 1);
+            assertEquals(1, roots.length);
             assertTrue(roots[0].equals(new Complex(realRoot1), TOLERANCE));
         }
     }

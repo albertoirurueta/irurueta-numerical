@@ -50,25 +50,25 @@ public class MeasurementNoiseCovarianceEstimator {
     private long sampleCount;
 
     /**
-     * A sample after removing its mean. This is used internally and it is
+     * A sample after removing its mean. This is used internally, and it is
      * kept as an instance variable for reuse purposes.
      */
     private final double[] sampleNoMean;
 
     /**
-     * A sample expressed in matrix form. This is used internally and it is kept
+     * A sample expressed in matrix form. This is used internally, and it is kept
      * as an instance variable for reuse purposes.
      */
     private final Matrix sampleMatrix;
 
     /**
-     * The transposed sample matrix. This is used internally and it is kept as
+     * The transposed sample matrix. This is used internally, and it is kept as
      * an instance variable for reuse purposes.
      */
     private final Matrix transposedSampleMatrix;
 
     /**
-     * A covariance matrix for a single sample. This is used internally and it
+     * A covariance matrix for a single sample. This is used internally, and it
      * is kept as an instance variable for reuse purposes.
      */
     private final Matrix singleCov;

@@ -52,7 +52,7 @@ public class SvdSingleDimensionLinearFitterTest {
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // test constructor with input data
         final double[] x = new double[2];
@@ -67,7 +67,7 @@ public class SvdSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         final double[] shortX = new double[1];
@@ -101,10 +101,10 @@ public class SvdSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         fitter = null;
@@ -142,7 +142,7 @@ public class SvdSingleDimensionLinearFitterTest {
         assertNull(fitter.getY());
         assertNull(fitter.getSig());
         assertFalse(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // test constructor with evaluator and input data
         fitter = new SvdSingleDimensionLinearFitter(evaluator, x, y, sig);
@@ -153,7 +153,7 @@ public class SvdSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertSame(fitter.getSig(), sig);
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         fitter = null;
@@ -183,10 +183,10 @@ public class SvdSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
         assertTrue(fitter.isReady());
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // Force IllegalArgumentException
         fitter = null;
@@ -292,7 +292,7 @@ public class SvdSingleDimensionLinearFitterTest {
         assertSame(fitter.getY(), y);
         assertNotNull(fitter.getSig());
         for (int i = 0; i < fitter.getSig().length; i++) {
-            assertEquals(fitter.getSig()[i], 1.0, 0.0);
+            assertEquals(1.0, fitter.getSig()[i], 0.0);
         }
 
         // Force IllegalArgumentException
@@ -349,13 +349,13 @@ public class SvdSingleDimensionLinearFitterTest {
         final SvdSingleDimensionLinearFitter fitter = new SvdSingleDimensionLinearFitter();
 
         // check default values
-        assertEquals(fitter.getTol(), SvdSingleDimensionLinearFitter.DEFAULT_TOL, 0.0);
+        assertEquals(SvdSingleDimensionLinearFitter.DEFAULT_TOL, fitter.getTol(), 0.0);
 
         // set new value
         fitter.setTol(1e-3);
 
         // check correctness
-        assertEquals(fitter.getTol(), 1e-3, 0.0);
+        assertEquals(1e-3, fitter.getTol(), 0.0);
     }
 
     @Test
@@ -411,7 +411,7 @@ public class SvdSingleDimensionLinearFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -476,7 +476,7 @@ public class SvdSingleDimensionLinearFitterTest {
         // check default values
         assertNotNull(fitter.getA());
         assertNotNull(fitter.getCovar());
-        assertEquals(fitter.getChisq(), 0.0, 0.0);
+        assertEquals(0.0, fitter.getChisq(), 0.0);
         assertFalse(fitter.isResultAvailable());
         assertTrue(fitter.isReady());
 
@@ -486,7 +486,7 @@ public class SvdSingleDimensionLinearFitterTest {
         // check correctness
         assertTrue(fitter.isResultAvailable());
         assertNotNull(fitter.getA());
-        assertEquals(fitter.getA().length, TRIGO_PARAMS);
+        assertEquals(TRIGO_PARAMS, fitter.getA().length);
         for (int i = 0; i < TRIGO_PARAMS; i++) {
             assertEquals(fitter.getA()[i], params[i], ABSOLUTE_ERROR);
         }

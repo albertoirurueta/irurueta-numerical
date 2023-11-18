@@ -155,7 +155,7 @@ public class StraightLineFitter extends Fitter {
     }
 
     /**
-     * Sets input data to to fit a straight line to.
+     * Sets input data to fit a straight line to.
      *
      * @param x x coordinates.
      * @param y y coordinates.

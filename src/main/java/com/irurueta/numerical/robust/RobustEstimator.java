@@ -27,7 +27,7 @@ public abstract class RobustEstimator<T> {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%
+     * estimation progress. By default, this is set to 5%
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
