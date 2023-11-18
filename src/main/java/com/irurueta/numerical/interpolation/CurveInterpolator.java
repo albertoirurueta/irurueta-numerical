@@ -167,6 +167,12 @@ public class CurveInterpolator {
      * Utility for estimating the derivatives at the endpoints, x and y point to the abscissa and
      * ordinate of the endpoint. If pm is +1, points to the right will be used (left endpoint): if it
      * is -1, points to the left will be used (right endpoint).
+     *
+     * @param x  abscissa of endpoint.
+     * @param y ordinate of endpoint.
+     * @param pm +1 or -1.
+     * @param xoff offset of x.
+     * @param yoff offset of y.
      */
     private double fprime(final double[] x, final double[] y, final int pm, final int xoff,
                           final int yoff) {

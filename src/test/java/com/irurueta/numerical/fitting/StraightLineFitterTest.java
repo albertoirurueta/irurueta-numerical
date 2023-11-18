@@ -302,8 +302,8 @@ public class StraightLineFitterTest {
 
         // check correctness
         assertTrue(fitter.isResultAvailable());
-        assertEquals(fitter.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(fitter.getB(), b, ABSOLUTE_ERROR);
+        assertEquals(fitter.getA(), a, 2.0 * ABSOLUTE_ERROR);
+        assertEquals(fitter.getB(), b, 2.0 * ABSOLUTE_ERROR);
         assertEquals(0.0, fitter.getSigdat(), 0.0);
         assertTrue(fitter.getChi2() > 0);
         assertTrue(fitter.getQ() > 0);

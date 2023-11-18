@@ -280,7 +280,7 @@ public class KrigingInterpolator {
      * Follows expression: v(r) = alpha * r^beta
      * where beta is considered fixed and alpha is fitted by unweighted least squares over all pairs
      * of data points i and j.
-     * The value of beta should be in the range 1 <= beta < 2.
+     * The value of beta should be in the range 1 &lt;= beta &lt; 2.
      * A good general choice is 1.5, but for functions with a strong linear trend, you may want to
      * experiment with values as large as 1.99 (The value 2 gives a degenerate matrix and meaningless
      * results).
@@ -319,7 +319,7 @@ public class KrigingInterpolator {
          *             number of columns determines the number of dimensions of provided points.
          * @param y    Function values for each provided point.
          * @param beta Beta to be used for variogram. The value of beta should be in the range
-         *             1 <= beta < 2.
+         *             1 &lt;= beta &lt; 2.
          * @param nug  Offset of variogram.
          */
         public Variogram(final Matrix x, final double[] y, final double beta, final double nug) {
@@ -355,7 +355,7 @@ public class KrigingInterpolator {
          *             number of columns determines the number of dimensions of provided points.
          * @param y    Function values for each provided point.
          * @param beta Beta to be used for variogram. The value of beta should be in the range
-         *             1 <= beta < 2.
+         *             1 &lt;= beta &lt; 2.
          */
         public Variogram(final Matrix x, final double[] y, final double beta) {
             this(x, y, beta, DEFAULT_NUG);
