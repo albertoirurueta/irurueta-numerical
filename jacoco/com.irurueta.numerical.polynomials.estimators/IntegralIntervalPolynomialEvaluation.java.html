@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntegralIntervalPolynomialEvaluation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">IntegralIntervalPolynomialEvaluation.java</span></div><h1>IntegralIntervalPolynomialEvaluation.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+/**
+ * Contains an evaluation of an interval of the nth-integral of a polynomial.
+ */
+public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
+
+    /**
+     * Minimum allowed integral order.
+     */
+    public static final int MIN_INTEGRAL_ORDER = 1;
+
+    /**
+     * Start point of interval being integrated.
+     */
+    private double mStartX;
+
+    /**
+     * End point of interval being integrated.
+     */
+    private double mEndX;
+
+    /**
+     * Order of integral.
+     */
+    private int mIntegralOrder;
+
+    /**
+     * Constant terms of integral.
+     */
+    private double[] mConstants;
+
+    /**
+     * Constructor.
+     */
+    public IntegralIntervalPolynomialEvaluation() {
+<span class="fc" id="L52">        super();</span>
+<span class="fc" id="L53">        setIntegralOrder(MIN_INTEGRAL_ORDER);</span>
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param startX        start point of interval being integrated.
+     * @param endX          end point of interval being integrated.
+     * @param evaluation    evaluation of nth-integral of polynomial between startX
+     *                      and endX.
+     * @param integralOrder order of integral.
+     * @throws IllegalArgumentException if order of integral is less than 1.
+     */
+    public IntegralIntervalPolynomialEvaluation(
+            final double startX, final double endX, final double evaluation,
+            final int integralOrder) {
+<span class="fc" id="L69">        super(evaluation);</span>
+<span class="fc" id="L70">        mStartX = startX;</span>
+<span class="fc" id="L71">        mEndX = endX;</span>
+<span class="fc" id="L72">        setIntegralOrder(integralOrder);</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param startX     start point of interval being integrated.
+     * @param endX       end point of interval being integrated.
+     * @param evaluation evaluation of nth-integral of polynomial between startX
+     *                   and endX.
+     */
+    public IntegralIntervalPolynomialEvaluation(
+            final double startX, final double endX, final double evaluation) {
+<span class="fc" id="L85">        this(startX, endX, evaluation, MIN_INTEGRAL_ORDER);</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Gets start point of interval being integrated.
+     *
+     * @return start point of interval being integrated.
+     */
+    public double getStartX() {
+<span class="fc" id="L94">        return mStartX;</span>
+    }
+
+    /**
+     * Sets start point of interval being integrated.
+     *
+     * @param startX start point of interval being integrated.
+     */
+    public void setStartX(final double startX) {
+<span class="fc" id="L103">        mStartX = startX;</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * Gets end point of interval being integrated.
+     *
+     * @return end point of interval being integrated.
+     */
+    public double getEndX() {
+<span class="fc" id="L112">        return mEndX;</span>
+    }
+
+    /**
+     * Sets end point of interval being integrated.
+     *
+     * @param endX end point of interval being integrated.
+     */
+    public void setEndX(final double endX) {
+<span class="fc" id="L121">        mEndX = endX;</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Gets integral order.
+     *
+     * @return integral order.
+     */
+    public int getIntegralOrder() {
+<span class="fc" id="L130">        return mIntegralOrder;</span>
+    }
+
+    /**
+     * Sets integral order.
+     *
+     * @param integralOrder integral order.
+     * @throws IllegalArgumentException if integral order is less than 1.
+     */
+    public final void setIntegralOrder(final int integralOrder) {
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (integralOrder &lt; MIN_INTEGRAL_ORDER) {</span>
+<span class="nc" id="L141">            throw new IllegalArgumentException(</span>
+                    &quot;integral order must be at least 1&quot;);
+        }
+
+<span class="fc" id="L145">        mIntegralOrder = integralOrder;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Gets constant terms of integral.
+     *
+     * @return constant terms of integral.
+     */
+    public double[] getConstants() {
+<span class="fc" id="L154">        return mConstants;</span>
+    }
+
+    /**
+     * Sets constant terms of integral.
+     *
+     * @param constants constant terms of integral.
+     */
+    public void setConstants(final double[] constants) {
+<span class="fc" id="L163">        mConstants = constants;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Gets type of polynomial evaluation.
+     *
+     * @return type of polynomial evaluation.
+     */
+    @Override
+    public PolynomialEvaluationType getType() {
+<span class="fc" id="L173">        return PolynomialEvaluationType.INTEGRAL_INTERVAL;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

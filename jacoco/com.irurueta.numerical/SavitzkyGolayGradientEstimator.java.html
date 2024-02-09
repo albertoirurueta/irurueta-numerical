@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SavitzkyGolayGradientEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">SavitzkyGolayGradientEstimator.java</span></div><h1>SavitzkyGolayGradientEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Class to estimate the gradient of a multidimensional function.
+ * This class evaluates a function at very close locations of a given input
+ * point in order to determine the gradient at such point
+ * The algorithm used in this implementation is valid for continuous functions
+ * only, otherwise inaccurate results might be obtained.
+ * This implementation is more robust against small discontinuities than
+ * SymmetricGradientEstimator, but it is also slower to compute.
+ * This method interpolates the sampled function values into a polynomial of
+ * 2nd degree (parabolic) on each direction, whose derivative is known.
+ * Because a linear system of equations has to be solved to determine such
+ * polynomials, this method might be less accurate when large values are
+ * involved due to limited machine precision.
+ */
+public class SavitzkyGolayGradientEstimator extends GradientEstimator {
+    /**
+     * Number of required point to evaluate to compute derivative.
+     */
+    public static final int N_POINTS = 3;
+
+    /**
+     * Constructor.
+     *
+     * @param listener Listener to evaluate a multidimensional function.
+     */
+    public SavitzkyGolayGradientEstimator(
+            final MultiDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L52">        super(listener);</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Sets estimated gradient in provided result array of a multidimensional
+     * function at provided point.
+     * This method is preferred respect to gradient(double[]) because result
+     * array can be reused and hence is more memory efficient.
+     *
+     * @param point  Input point.
+     * @param result Output parameter containing estimated array. This parameter
+     *               must be an array of length equal to point.
+     * @throws EvaluationException      Raised if function cannot be evaluated.
+     * @throws IllegalArgumentException Raised if length of result and point are
+     *                                  not equal.
+     */
+    @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void gradient(final double[] point, final double[] result)
+            throws EvaluationException {
+<span class="fc" id="L72">        final int n = point.length;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (result.length != n) {</span>
+<span class="nc" id="L74">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L77">        final double[] xh1 = new double[n];</span>
+<span class="fc" id="L78">        final double[] xh2 = new double[n];</span>
+
+<span class="fc" id="L80">        final double f = listener.evaluate(point);</span>
+<span class="fc" id="L81">        System.arraycopy(point, 0, xh1, 0, n);</span>
+<span class="fc" id="L82">        System.arraycopy(point, 0, xh2, 0, n);</span>
+
+        final Matrix a;
+        try {
+<span class="fc" id="L86">            a = new Matrix(N_POINTS, N_POINTS);</span>
+<span class="nc" id="L87">        } catch (final WrongSizeException e) {</span>
+<span class="nc" id="L88">            throw new EvaluationException(e);</span>
+<span class="fc" id="L89">        }</span>
+
+<span class="fc" id="L91">        final double[] b = new double[N_POINTS];</span>
+
+<span class="fc" id="L93">        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L96">            final double temp = point[j];</span>
+<span class="fc" id="L97">            double h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+                // Trick to reduce finite-precision error
+<span class="nc" id="L100">                h = EPS;</span>
+            }
+
+<span class="fc" id="L103">            final double p1 = xh1[j] = temp + h;</span>
+<span class="fc" id="L104">            final double p2 = xh2[j] = temp - h;</span>
+
+<span class="fc" id="L106">            final double fh1 = listener.evaluate(xh1);</span>
+<span class="fc" id="L107">            final double fh2 = listener.evaluate(xh2);</span>
+
+<span class="fc" id="L109">            xh1[j] = temp;</span>
+<span class="fc" id="L110">            xh2[j] = temp;</span>
+
+<span class="fc" id="L112">            a.setElementAt(0, 0, temp * temp);</span>
+<span class="fc" id="L113">            a.setElementAt(1, 0, p1 * p1);</span>
+<span class="fc" id="L114">            a.setElementAt(2, 0, p2 * p2);</span>
+
+<span class="fc" id="L116">            a.setElementAt(0, 1, temp);</span>
+<span class="fc" id="L117">            a.setElementAt(1, 1, p1);</span>
+<span class="fc" id="L118">            a.setElementAt(2, 1, p2);</span>
+
+<span class="fc" id="L120">            a.setElementAt(0, 2, 1.0);</span>
+<span class="fc" id="L121">            a.setElementAt(1, 2, 1.0);</span>
+<span class="fc" id="L122">            a.setElementAt(2, 2, 1.0);</span>
+
+            // normalize to increase accuracy
+<span class="fc" id="L125">            final double normA = Utils.normF(a);</span>
+<span class="fc" id="L126">            a.multiplyByScalar(1.0 / normA);</span>
+
+<span class="fc" id="L128">            b[0] = f;</span>
+<span class="fc" id="L129">            b[1] = fh1;</span>
+<span class="fc" id="L130">            b[2] = fh2;</span>
+
+            // normalize to increase accuracy
+<span class="fc" id="L133">            ArrayUtils.multiplyByScalar(b, 1.0 / normA, b);</span>
+
+            final double aParam;
+            final double bParam;
+            try {
+<span class="fc" id="L138">                decomposer.setInputMatrix(a);</span>
+<span class="fc" id="L139">                decomposer.decompose();</span>
+
+                // now solve the system of equations in Least Mean Squared Error
+                // because SVD allows the system of equations to be solved using
+                // the pseudo-inverse
+<span class="fc" id="L144">                final double[] params = decomposer.solve(b);</span>
+<span class="fc" id="L145">                aParam = params[0];</span>
+<span class="fc" id="L146">                bParam = params[1];</span>
+                // and c = params[2], but we don't need it
+
+                // because we have fitted the function in dimension j into a
+                // polynomial that has expression: a * x^2 + b * x + c, then its
+                // partial derivative on dimension j is:
+                // 2.0 * a * x + b , therefore:
+<span class="fc" id="L153">                result[j] = 2.0 * aParam * temp + bParam;</span>
+<span class="nc" id="L154">            } catch (final AlgebraException e) {</span>
+<span class="nc" id="L155">                result[j] = Double.NaN;</span>
+<span class="fc" id="L156">            }</span>
+        }
+<span class="fc" id="L158">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

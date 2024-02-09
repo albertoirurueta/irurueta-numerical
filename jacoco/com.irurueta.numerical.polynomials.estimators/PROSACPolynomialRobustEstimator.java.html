@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACPolynomialRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">PROSACPolynomialRobustEstimator.java</span></div><h1>PROSACPolynomialRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best polynomial using PROSAC algorithm.
+ */
+public class PROSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether polynomials are
+     * inliers or not.
+     * Threshold will be used to compare either algebraic or geometric distance
+     * of estimated polynomial respect each provided evaluation.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-6;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether polynomial evaluations are inlers or not
+     * when testing possible estimation solutions
+     */
+    private double mThreshold;
+
+    /**
+     * Quality scores corresponding to each provided polynomial evaluation.
+     * The larger the score value the better the quality of the sample.
+     */
+    private double[] mQualityScores;
+
+    /**
+     * Constructor.
+     */
+    public PROSACPolynomialRobustEstimator() {
+<span class="fc" id="L65">        super();</span>
+<span class="fc" id="L66">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public PROSACPolynomialRobustEstimator(final int degree) {
+<span class="fc" id="L76">        super(degree);</span>
+<span class="fc" id="L77">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    public PROSACPolynomialRobustEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L89">        super(evaluations);</span>
+<span class="fc" id="L90">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROSACPolynomialRobustEstimator(
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L101">        super(listener);</span>
+<span class="fc" id="L102">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    public PROSACPolynomialRobustEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L116">        super(degree, evaluations);</span>
+<span class="fc" id="L117">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public PROSACPolynomialRobustEstimator(
+            final int degree, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L130">        super(degree, listener);</span>
+<span class="fc" id="L131">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    public PROSACPolynomialRobustEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L146">        super(evaluations, listener);</span>
+<span class="fc" id="L147">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L148">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    public PROSACPolynomialRobustEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L164">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L165">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L166">    }</span>
+
+    /**
+     * Returns threshold to determine whether polynomials are inliers or not
+     * when testing possible estimation solutions.
+     *
+     * @return threshold to determine whether polynomials are inliers or not
+     * when testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L176">        return mThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether polynomials are inliers or not when
+     * testing possible estimation solutions.
+     *
+     * @param threshold threshold to determine whether polynomials are inliers
+     *                  or not when testing possible estimation solutions.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L191">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L194">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L196">        mThreshold = threshold;</span>
+<span class="fc" id="L197">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each provided point.
+     * The larger the score value the betther the quality of the sampled point
+     *
+     * @return quality scores corresponding to each point
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L207">        return mQualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point.
+     *
+     * @param qualityScores quality scores corresponding to each point.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than required minimum size.
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L223">            throw new LockedException();</span>
+        }
+<span class="fc" id="L225">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L226">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the polynomial estimation.
+     * This is true when input data (i.e. polynomial evaluations and quality
+     * scores) are provided and enough data is available.
+     *
+     * @return true if estimator is ready, false otherwise
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L237" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">                mQualityScores.length == mEvaluations.size();</span>
+    }
+
+
+    /**
+     * Estimates polynomial.
+     *
+     * @return estimated polynomial.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any other reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Polynomial estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException {
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L257">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L260">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L263">        final PROSACRobustEstimator&lt;Polynomial&gt; innerEstimator =</span>
+                new PROSACRobustEstimator&lt;&gt;(
+<span class="fc" id="L265">                        new PROSACRobustEstimatorListener&lt;Polynomial&gt;() {</span>
+
+                            // subset of evaluations picked on each iteration
+<span class="fc" id="L268">                            private final List&lt;PolynomialEvaluation&gt; mSubsetEvaluations =</span>
+                                    new ArrayList&lt;&gt;();
+
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L273">                                return mThreshold;</span>
+                            }
+
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L278">                                return mEvaluations.size();</span>
+                            }
+
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L283">                                return mPolynomialEstimator.getMinNumberOfEvaluations();</span>
+                            }
+
+                            @SuppressWarnings(&quot;DuplicatedCode&quot;)
+                            @Override
+                            public void estimatePreliminarSolutions(
+                                    final int[] samplesIndices,
+                                    final List&lt;Polynomial&gt; solutions) {
+<span class="fc" id="L291">                                mSubsetEvaluations.clear();</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L293">                                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));</span>
+                                }
+
+                                try {
+<span class="fc" id="L297">                                    mPolynomialEstimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L298">                                    mPolynomialEstimator.setEvaluations(mSubsetEvaluations);</span>
+
+<span class="fc" id="L300">                                    final Polynomial polynomial = mPolynomialEstimator.estimate();</span>
+<span class="fc" id="L301">                                    solutions.add(polynomial);</span>
+<span class="fc" id="L302">                                } catch (final Exception e) {</span>
+                                    // if anything fails, no solution is added
+<span class="fc" id="L304">                                }</span>
+<span class="fc" id="L305">                            }</span>
+
+                            @Override
+                            public double computeResidual(
+                                    final Polynomial currentEstimation, final int i) {
+<span class="fc" id="L310">                                final PolynomialEvaluation eval = mEvaluations.get(i);</span>
+<span class="fc" id="L311">                                return getDistance(eval, currentEstimation);</span>
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L316">                                return PROSACPolynomialRobustEstimator.this.isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(
+                                    final RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L323">                                    mListener.onEstimateStart(</span>
+                                            PROSACPolynomialRobustEstimator.this);
+                                }
+<span class="fc" id="L326">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(
+                                    final RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L332">                                    mListener.onEstimateEnd(</span>
+                                            PROSACPolynomialRobustEstimator.this);
+                                }
+<span class="fc" id="L335">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;Polynomial&gt; estimator,
+                                    final int iteration) {
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L342">                                    mListener.onEstimateNextIteration(</span>
+                                            PROSACPolynomialRobustEstimator.this, iteration);
+                                }
+<span class="fc" id="L345">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;Polynomial&gt; estimator,
+                                    final float progress) {
+<span class="nc bnc" id="L351" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L352">                                    mListener.onEstimateProgressChange(</span>
+                                            PROSACPolynomialRobustEstimator.this, progress);
+                                }
+<span class="nc" id="L355">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L359">                                return mQualityScores;</span>
+                            }
+                        });
+
+        try {
+<span class="fc" id="L364">            mLocked = true;</span>
+<span class="fc" id="L365">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L366">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L367">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L368">            return innerEstimator.estimate();</span>
+        } finally {
+<span class="fc" id="L370">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L381">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each provided polynomial evaluation.
+     * This method is used internally and does not check whether instance is
+     * locked or not
+     *
+     * @param qualityScores quality scores to be set
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than required minimum size.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc" id="L394">        if (qualityScores.length &lt;</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">                mPolynomialEstimator.getMinNumberOfEvaluations()) {</span>
+<span class="fc" id="L396">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L399">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L400">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

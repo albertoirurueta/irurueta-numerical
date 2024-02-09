@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LevenbergMarquardtMultiDimensionFitter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.fitting</a> &gt; <span class="el_source">LevenbergMarquardtMultiDimensionFitter.java</span></div><h1>LevenbergMarquardtMultiDimensionFitter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.fitting;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.GaussJordanElimination;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.statistics.ChiSqDist;
+import com.irurueta.statistics.MaxIterationsExceededException;
+
+import java.util.Arrays;
+
+/**
+ * Fits provided data (x, y) to a generic non-linear function using
+ * Levenberg-Marquardt iterative algorithm.
+ * This class is based on the implementation available at Numerical Recipes 3rd
+ * Ed, page 801.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class LevenbergMarquardtMultiDimensionFitter
+        extends MultiDimensionFitter {
+
+    /**
+     * Default convergence parameter. Number of times that tolerance is assumed
+     * to be reached to consider that algorithm has finished iterating.
+     */
+    public static final int DEFAULT_NDONE = 4;
+
+    /**
+     * Default maximum number of iterations.
+     */
+    public static final int DEFAULT_ITMAX = 5000;
+
+    /**
+     * Default tolerance to reach convergence.
+     */
+    public static final double DEFAULT_TOL = 1e-3;
+
+    /**
+     * Indicates whether covariance must be adjusted or not after fitting is finished.
+     */
+    public static final boolean DEFAULT_ADJUST_COVARIANCE = true;
+
+    /**
+     * Convergence parameter.
+     */
+<span class="fc" id="L63">    private int ndone = DEFAULT_NDONE;</span>
+
+    /**
+     * Maximum number of iterations.
+     */
+<span class="fc" id="L68">    private int itmax = DEFAULT_ITMAX;</span>
+
+    /**
+     * Tolerance to reach convergence.
+     */
+<span class="fc" id="L73">    private double tol = DEFAULT_TOL;</span>
+
+    /**
+     * Evaluator of functions.
+     */
+    private LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator;
+
+    /**
+     * Number of function parameters to be estimated.
+     */
+    private int ma;
+
+    /**
+     * Determines which parameters can be modified during estimation (if true)
+     * and which ones are locked (if false).
+     */
+    private boolean[] ia;
+
+    /**
+     * Curvature matrix.
+     */
+    private Matrix alpha;
+
+    /**
+     * Number of parameters ot be fitted.
+     */
+<span class="fc" id="L99">    private int mfit = 0;</span>
+
+    /**
+     * An input point to be evaluated.
+     * This is internally reused for memory efficiency.
+     */
+    private double[] xRow;
+
+    /**
+     * Mean square error.
+     */
+<span class="fc" id="L110">    private double mse = 0.0;</span>
+
+    /**
+     * Indicates whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function overestimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default, covariance is adjusted after fitting finishes.
+     */
+<span class="fc" id="L129">    private boolean adjustCovariance = DEFAULT_ADJUST_COVARIANCE;</span>
+
+    /**
+     * Constructor.
+     */
+    public LevenbergMarquardtMultiDimensionFitter() {
+<span class="fc" id="L135">        super();</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where function f(x1, x2, ...) is evaluated.
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided multidimensional x points.
+     * @param sig standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public LevenbergMarquardtMultiDimensionFitter(
+            final Matrix x, final double[] y, final double[] sig) {
+<span class="fc" id="L150">        super(x, y, sig);</span>
+<span class="fc" id="L151">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where function f(x1, x2, ...) is evaluated.
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided multidimensional x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length .
+     */
+    public LevenbergMarquardtMultiDimensionFitter(
+            final Matrix x, final double[] y, final double sig) {
+<span class="fc" id="L166">        super(x, y, sig);</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @throws FittingException if evaluation fails.
+     */
+    public LevenbergMarquardtMultiDimensionFitter(
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+<span class="fc" id="L179">        this();</span>
+<span class="fc" id="L180">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L181">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where function f(x1, x2, ...) is evaluated.
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided multidimensional x points.
+     * @param sig       standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     * @throws FittingException         if evaluation fails.
+     */
+    public LevenbergMarquardtMultiDimensionFitter(
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator,
+            final Matrix x, final double[] y, final double[] sig)
+            throws FittingException {
+<span class="fc" id="L200">        this(x, y, sig);</span>
+<span class="fc" id="L201">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where function f(x1, x2, ...) is evaluated.
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided multidimensional x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length .
+     * @throws FittingException         if evaluation fails.
+     */
+    public LevenbergMarquardtMultiDimensionFitter(
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator,
+            final Matrix x, final double[] y, final double sig) throws FittingException {
+<span class="fc" id="L221">        this(x, y, sig);</span>
+<span class="fc" id="L222">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L223">    }</span>
+
+    /**
+     * Returns convergence parameter.
+     *
+     * @return convergence parameter.
+     */
+    public int getNdone() {
+<span class="fc" id="L231">        return ndone;</span>
+    }
+
+    /**
+     * Sets convergence parameter.
+     *
+     * @param ndone convergence parameter.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     */
+    public void setNdone(final int ndone) {
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (ndone &lt; 1) {</span>
+<span class="fc" id="L242">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L244">        this.ndone = ndone;</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * Returns maximum number of iterations.
+     *
+     * @return maximum number of iterations.
+     */
+    public int getItmax() {
+<span class="fc" id="L253">        return itmax;</span>
+    }
+
+    /**
+     * Sets maximum number of iterations.
+     *
+     * @param itmax maximum number of iterations.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     */
+    public void setItmax(final int itmax) {
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (itmax &lt;= 0) {</span>
+<span class="fc" id="L264">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L266">        this.itmax = itmax;</span>
+<span class="fc" id="L267">    }</span>
+
+    /**
+     * Returns tolerance to reach convergence.
+     *
+     * @return tolerance to reach convergence.
+     */
+    public double getTol() {
+<span class="fc" id="L275">        return tol;</span>
+    }
+
+    /**
+     * Sets tolerance to reach convergence.
+     *
+     * @param tol tolerance to reach convergence.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     */
+    public void setTol(final double tol) {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (tol &lt;= 0.0) {</span>
+<span class="fc" id="L286">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L288">        this.tol = tol;</span>
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Returns function evaluator to evaluate function at a given point and
+     * obtain function derivatives respect to each provided parameter.
+     *
+     * @return function evaluator.
+     */
+    public LevenbergMarquardtMultiDimensionFunctionEvaluator getFunctionEvaluator() {
+<span class="fc" id="L298">        return evaluator;</span>
+    }
+
+    /**
+     * Sets function evaluator to evaluate function at a given point and obtain
+     * function derivatives respect to each provided parameter.
+     *
+     * @param evaluator function evaluator.
+     * @throws FittingException if evaluation fails.
+     */
+    public final void setFunctionEvaluator(
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+<span class="fc" id="L311">        internalSetFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L312">    }</span>
+
+    /**
+     * Indicates whether provided instance has enough data to start the function
+     * fitting.
+     *
+     * @return true if this instance is ready to start the function fitting,
+     * false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L323" title="1 of 6 branches missed.">        return evaluator != null &amp;&amp; x != null &amp;&amp; y != null &amp;&amp;</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">                x.getRows() == y.length &amp;&amp;</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">                x.getColumns() == evaluator.getNumberOfDimensions();</span>
+    }
+
+    /**
+     * Returns curvature matrix.
+     *
+     * @return curvature matrix.
+     */
+    public Matrix getAlpha() {
+<span class="fc" id="L334">        return alpha;</span>
+    }
+
+    /**
+     * Returns degrees of freedom of computed chi square value.
+     * Degrees of freedom is equal to the number of sampled data minus the
+     * number of estimated parameters.
+     *
+     * @return degrees of freedom of computed chi square value.
+     */
+    public int getChisqDegreesOfFreedom() {
+<span class="fc" id="L345">        return ndat - ma;</span>
+    }
+
+    /**
+     * Gets mean square error produced by estimated parameters respect to
+     * provided sample data.
+     *
+     * @return mean square error.
+     */
+    public double getMse() {
+<span class="fc" id="L355">        return mse;</span>
+    }
+
+    /**
+     * Gets the probability of finding a smaller chi square value.
+     * The smaller the found chi square value is, the better the fit of the estimated
+     * parameters to the actual parameter.
+     * Thus, the smaller the chance of finding a smaller chi square value, then the
+     * better the estimated fit is.
+     *
+     * @return probability of finding a smaller chi square value (better fit), expressed
+     * as a value between 0.0 and 1.0.
+     * @throws MaxIterationsExceededException if convergence of incomplete
+     *                                        gamma function cannot be reached. This is rarely thrown and happens
+     *                                        usually for numerically unstable input values.
+     */
+    public double getP() throws MaxIterationsExceededException {
+<span class="fc" id="L372">        return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());</span>
+    }
+
+    /**
+     * Gets a measure of quality of estimated fit as a value between 0.0 and 1.0.
+     * The larger the quality value is, the better the fit that has been estimated.
+     *
+     * @return measure of quality of estimated fit.
+     * @throws MaxIterationsExceededException if convergence of incomplete
+     *                                        gamma function cannot be reached. This is rarely thrown and happens
+     *                                        usually for numerically unstable input values.
+     */
+    public double getQ() throws MaxIterationsExceededException {
+<span class="fc" id="L385">        return 1.0 - getP();</span>
+    }
+
+    /**
+     * Indicates whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function overestimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default, covariance is adjusted after fitting finishes.
+     * &lt;a href=&quot;http://people.duke.edu/~hpgavin/ce281/lm.pdf&quot;&gt;http://people.duke.edu/~hpgavin/ce281/lm.pdf&lt;/a&gt;
+     * &lt;a href=&quot;https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf&quot;&gt;https://www8.cs.umu.se/kurser/5DA001/HT07/lectures/lsq-handouts.pdf&lt;/a&gt;
+     * Numerical Recipes 3rd Ed, page 812
+     *
+     * @return true if covariance must be adjusted, false otherwise.
+     */
+    public boolean isCovarianceAdjusted() {
+<span class="fc" id="L411">        return adjustCovariance;</span>
+    }
+
+    /**
+     * Specifies whether covariance must be adjusted or not.
+     * When covariance adjustment is enabled, then covariance is recomputed taking
+     * into account input samples, input standard deviations of the samples and
+     * jacobians of the model function overestimated parameters using the following
+     * expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     * By default, covariance is adjusted after fitting finishes.
+     *
+     * @param adjustCovariance true if covariance must be adjusted, false otherwise.
+     */
+    public void setCovarianceAdjusted(final boolean adjustCovariance) {
+<span class="fc" id="L434">        this.adjustCovariance = adjustCovariance;</span>
+<span class="fc" id="L435">    }</span>
+
+    /**
+     * Fits a function to provided data so that parameters associated to that
+     * function can be estimated along with their covariance matrix and chi
+     * square value.
+     * If chi square value is close to 1, the fit is usually good.
+     * If it is much larger, then error cannot be properly fitted.
+     * If it is close to zero, then the model over-fits the error.
+     * Methods {@link #getP()} and {@link #getQ()} can also be used to determine
+     * the quality of the fit.
+     *
+     * @throws FittingException  if fitting fails.
+     * @throws NotReadyException if enough input data has not yet been provided.
+     */
+    @Override
+    public void fit() throws FittingException, NotReadyException {
+<span class="pc bpc" id="L452" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L453">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L457">            resultAvailable = false;</span>
+
+            int j;
+            int k;
+            int l;
+            int iter;
+<span class="fc" id="L463">            int done = 0;</span>
+<span class="fc" id="L464">            double alamda = 0.001;</span>
+            double ochisq;
+<span class="fc" id="L466">            final double[] atry = new double[ma];</span>
+<span class="fc" id="L467">            final double[] beta = new double[ma];</span>
+<span class="fc" id="L468">            final double[] da = new double[ma];</span>
+
+            // number of parameters to be fitted
+<span class="fc" id="L471">            mfit = 0;</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc bfc" id="L473" title="All 2 branches covered.">                if (ia[j]) {</span>
+<span class="fc" id="L474">                    mfit++;</span>
+                }
+            }
+
+<span class="fc" id="L478">            final Matrix oneda = new Matrix(mfit, 1);</span>
+<span class="fc" id="L479">            final Matrix temp = new Matrix(mfit, mfit);</span>
+
+            // initialization
+<span class="fc" id="L482">            mrqcof(a, alpha, beta);</span>
+<span class="fc" id="L483">            System.arraycopy(a, 0, atry, 0, ma);</span>
+
+<span class="fc" id="L485">            ochisq = chisq;</span>
+<span class="pc bpc" id="L486" title="1 of 2 branches missed.">            for (iter = 0; iter &lt; itmax; iter++) {</span>
+
+<span class="fc bfc" id="L488" title="All 2 branches covered.">                if (done == ndone) {</span>
+                    // last pass. Use zero alamda
+<span class="fc" id="L490">                    alamda = 0.0;</span>
+                }
+
+<span class="fc bfc" id="L493" title="All 2 branches covered.">                for (j = 0; j &lt; mfit; j++) {</span>
+                    // alter linearized fitting matrix, by augmenting diagonal
+                    // elements
+<span class="fc bfc" id="L496" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L497">                        covar.setElementAt(j, k, alpha.getElementAt(j, k));</span>
+                    }
+<span class="fc" id="L499">                    covar.setElementAt(j, j, alpha.getElementAt(j, j) * (1.0 + alamda));</span>
+<span class="fc bfc" id="L500" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L501">                        temp.setElementAt(j, k, covar.getElementAt(j, k));</span>
+                    }
+<span class="fc" id="L503">                    oneda.setElementAt(j, 0, beta[j]);</span>
+                }
+
+                // matrix solution
+<span class="fc" id="L507">                GaussJordanElimination.process(temp, oneda);</span>
+
+<span class="fc bfc" id="L509" title="All 2 branches covered.">                for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">                    for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L511">                        covar.setElementAt(j, k, temp.getElementAt(j, k));</span>
+                    }
+<span class="fc" id="L513">                    da[j] = oneda.getElementAt(j, 0);</span>
+                }
+
+<span class="fc bfc" id="L516" title="All 2 branches covered.">                if (done == ndone) {</span>
+                    // Converged. Clean up and return
+<span class="fc" id="L518">                    covsrt(covar);</span>
+<span class="fc" id="L519">                    covsrt(alpha);</span>
+
+<span class="fc bfc" id="L521" title="All 2 branches covered.">                    if (adjustCovariance) {</span>
+<span class="fc" id="L522">                        adjustCovariance();</span>
+                    }
+
+<span class="fc" id="L525">                    resultAvailable = true;</span>
+
+<span class="fc" id="L527">                    return;</span>
+                }
+
+                // did the trial succeed?
+<span class="fc bfc" id="L531" title="All 2 branches covered.">                for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L532" title="All 2 branches covered.">                    if (ia[l]) {</span>
+<span class="fc" id="L533">                        atry[l] = a[l] + da[j++];</span>
+                    }
+                }
+
+<span class="fc" id="L537">                mrqcof(atry, covar, da);</span>
+<span class="fc bfc" id="L538" title="All 2 branches covered.">                if (Math.abs(chisq - ochisq) &lt; Math.max(tol, tol * chisq)) {</span>
+<span class="fc" id="L539">                    done++;</span>
+                }
+
+<span class="fc bfc" id="L542" title="All 2 branches covered.">                if (chisq &lt; ochisq) {</span>
+                    // success, accept the new solution
+<span class="fc" id="L544">                    alamda *= 0.1;</span>
+<span class="fc" id="L545">                    ochisq = chisq;</span>
+<span class="fc bfc" id="L546" title="All 2 branches covered.">                    for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L547" title="All 2 branches covered.">                        for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L548">                            alpha.setElementAt(j, k, covar.getElementAt(j, k));</span>
+                        }
+<span class="fc" id="L550">                        beta[j] = da[j];</span>
+                    }
+<span class="fc" id="L552">                    System.arraycopy(atry, 0, a, 0, ma);</span>
+                } else {
+                    // failure, increase alamda
+<span class="fc" id="L555">                    alamda *= 10.0;</span>
+<span class="fc" id="L556">                    chisq = ochisq;</span>
+                }
+            }
+
+            // too many iterations
+<span class="nc" id="L561">            throw new FittingException(&quot;too many iterations&quot;);</span>
+
+<span class="nc" id="L563">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L564">            throw new FittingException(e);</span>
+        }
+    }
+
+    /**
+     * Prevents parameter at position i of linear combination of basis functions
+     * to be modified during function fitting.
+     *
+     * @param i   position of parameter to be retained.
+     * @param val value to be set for parameter at position i.
+     */
+    public void hold(final int i, final double val) {
+<span class="fc" id="L576">        ia[i] = false;</span>
+<span class="fc" id="L577">        a[i] = val;</span>
+<span class="fc" id="L578">    }</span>
+
+    /**
+     * Releases parameter at position i of linear combination of basis functions,
+     * so it can be modified again if needed.
+     *
+     * @param i position of parameter to be released.
+     */
+    public void free(final int i) {
+<span class="fc" id="L587">        ia[i] = true;</span>
+<span class="fc" id="L588">    }</span>
+
+    /**
+     * Adjusts covariance.
+     * Covariance must be adjusted to produce more real results close to the scale
+     * of problem, otherwise estimated covariance will just be a measure of
+     * goodness similar to chi square value because it will be the inverse of
+     * the curvature matrix, which is just a solution of the covariance up to scale.
+     * &lt;p&gt;
+     * Covariance is adjusted taking into account input samples, input standard
+     * deviations of the samples and jacobians of the model function overestimated
+     * parameters using the following expression: Cov = (J'*W*J)^-1 where:
+     * Cov is the covariance of estimated parameters
+     * J is a matrix containing the Jacobians of the function overestimated parameters
+     * for each input parameter x. Each row of J matrix contains an evaluation of
+     * the model function Jacobian for i-th input parameter x. Each column of J matrix
+     * contains the partial derivative of model function over j-th estimated parameter.
+     * W is the inverse of input variances. It's a diagonal matrix containing the
+     * reciprocal of the input variances (squared input standard deviations). That is:
+     * W = diag(w) where k element of w is wk = 1 / sigmak^2, which corresponds to
+     * the k-th standard deviation of input sample k.
+     *
+     * @throws AlgebraException    if there are numerical instabilities.
+     * @throws EvaluationException if function evaluation fails.
+     */
+    private void adjustCovariance() throws AlgebraException, EvaluationException {
+
+<span class="fc" id="L615">        final int xCols = x.getColumns();</span>
+<span class="pc bpc" id="L616" title="1 of 2 branches missed.">        if (xRow == null) {</span>
+<span class="nc" id="L617">            xRow = new double[x.getColumns()];</span>
+        }
+
+<span class="fc" id="L620">        final Matrix invCov = new Matrix(a.length, a.length);</span>
+<span class="fc" id="L621">        final Matrix tmp1 = new Matrix(a.length, 1);</span>
+<span class="fc" id="L622">        final Matrix tmp2 = new Matrix(1, a.length);</span>
+<span class="fc" id="L623">        final Matrix tmpInvCov = new Matrix(a.length, a.length);</span>
+<span class="fc" id="L624">        final double[] derivatives = new double[a.length];</span>
+<span class="fc" id="L625">        final int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc bfc" id="L626" title="All 2 branches covered.">        for (int i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L627">            x.getSubmatrixAsArray(i, 0, i,</span>
+                    xCols - 1, xRow);
+
+<span class="fc" id="L630">            evaluator.evaluate(i, xRow, a, derivatives);</span>
+
+<span class="fc" id="L632">            tmp1.fromArray(derivatives);</span>
+<span class="fc" id="L633">            tmp2.fromArray(derivatives);</span>
+
+<span class="fc" id="L635">            tmp1.multiply(tmp2, tmpInvCov);</span>
+
+<span class="fc" id="L637">            final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);</span>
+<span class="fc" id="L638">            tmpInvCov.multiplyByScalar(w);</span>
+<span class="fc" id="L639">            invCov.add(tmpInvCov);</span>
+        }
+
+<span class="fc" id="L642">        covar = Utils.inverse(invCov);</span>
+<span class="fc" id="L643">    }</span>
+
+    /**
+     * Internal method to set function evaluator to evaluate function at a given
+     * point and obtain function derivatives respect to each provided parameter.
+     *
+     * @param evaluator function evaluator.
+     * @throws FittingException if evaluation fails.
+     */
+    private void internalSetFunctionEvaluator(
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+
+        try {
+<span class="fc" id="L657">            this.evaluator = evaluator;</span>
+
+<span class="pc bpc" id="L659" title="1 of 2 branches missed.">            if (evaluator != null) {</span>
+<span class="fc" id="L660">                a = evaluator.createInitialParametersArray();</span>
+<span class="fc" id="L661">                ma = a.length;</span>
+<span class="fc" id="L662">                covar = new Matrix(ma, ma);</span>
+<span class="fc" id="L663">                alpha = new Matrix(ma, ma);</span>
+<span class="fc" id="L664">                ia = new boolean[ma];</span>
+<span class="fc" id="L665">                Arrays.fill(ia, true);</span>
+            }
+<span class="nc" id="L667">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L668">            throw new FittingException(e);</span>
+<span class="fc" id="L669">        }</span>
+<span class="fc" id="L670">    }</span>
+
+    /**
+     * Used by fit to evaluate the linearized fitting matrix alpha, and vector
+     * beta to calculate chi square.
+     *
+     * @param a     estimated parameters so far.
+     * @param alpha curvature (i.e. fitting) matrix.
+     * @param beta  array where derivative increments for each parameter are
+     *              stored.
+     * @throws AlgebraException    if there are numerical instabilities.
+     * @throws EvaluationException if function evaluation fails.
+     */
+    private void mrqcof(final double[] a, final Matrix alpha, final double[] beta)
+            throws AlgebraException, EvaluationException {
+
+        int i;
+        int j;
+        int k;
+        int l;
+        int m;
+        double ymod;
+        double wt;
+        double sig2i;
+        double dy;
+<span class="fc" id="L695">        final double[] dyda = new double[ma];</span>
+
+<span class="fc bfc" id="L697" title="All 2 branches covered.">        if (xRow == null) {</span>
+<span class="fc" id="L698">            xRow = new double[x.getColumns()];</span>
+        }
+<span class="fc" id="L700">        final int xCols = evaluator.getNumberOfDimensions();</span>
+
+        // initialize (symmetric) alpha, beta
+<span class="fc bfc" id="L703" title="All 2 branches covered.">        for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L704" title="All 2 branches covered.">            for (k = 0; k &lt;= j; k++) {</span>
+<span class="fc" id="L705">                alpha.setElementAt(j, k, 0.0);</span>
+            }
+<span class="fc" id="L707">            beta[j] = 0.;</span>
+        }
+
+<span class="fc" id="L710">        chisq = 0.;</span>
+<span class="fc" id="L711">        mse = 0.0;</span>
+<span class="fc" id="L712">        final int degreesOfFreedom = getChisqDegreesOfFreedom();</span>
+<span class="fc bfc" id="L713" title="All 2 branches covered.">        for (i = 0; i &lt; ndat; i++) {</span>
+            // summation loop over all data
+<span class="fc" id="L715">            x.getSubmatrixAsArray(i, 0, i, xCols - 1,</span>
+                    xRow);
+<span class="fc" id="L717">            ymod = evaluator.evaluate(i, xRow, a, dyda);</span>
+
+<span class="fc" id="L719">            sig2i = 1.0 / (sig[i] * sig[i]);</span>
+<span class="fc" id="L720">            dy = y[i] - ymod;</span>
+<span class="fc bfc" id="L721" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L722" title="All 2 branches covered.">                if (ia[l]) {</span>
+<span class="fc" id="L723">                    wt = dyda[l] * sig2i;</span>
+<span class="fc" id="L724">                    final double[] alphaBuffer = alpha.getBuffer();</span>
+<span class="fc bfc" id="L725" title="All 2 branches covered.">                    for (k = 0, m = 0; m &lt; l + 1; m++) {</span>
+<span class="fc bfc" id="L726" title="All 2 branches covered.">                        if (ia[m]) {</span>
+<span class="fc" id="L727">                            final int index = alpha.getIndex(j, k++);</span>
+<span class="fc" id="L728">                            alphaBuffer[index] += wt * dyda[m];</span>
+                        }
+                    }
+<span class="fc" id="L731">                    beta[j++] += dy * wt;</span>
+                }
+            }
+
+            // add to mse
+<span class="fc" id="L736">            mse += dy * dy / Math.abs(degreesOfFreedom);</span>
+
+            // and find chi square
+<span class="fc" id="L739">            chisq += dy * dy * sig2i / degreesOfFreedom;</span>
+        }
+
+        // fill in the symmetric side
+<span class="fc bfc" id="L743" title="All 2 branches covered.">        for (j = 1; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L744" title="All 2 branches covered.">            for (k = 0; k &lt; j; k++) {</span>
+<span class="fc" id="L745">                alpha.setElementAt(k, j, alpha.getElementAt(j, k));</span>
+            }
+        }
+<span class="fc" id="L748">    }</span>
+
+    /**
+     * Expand in storage the covariance matrix covar, to take into account
+     * parameters that are being held fixed. (For the latter, return zero
+     * covariances).
+     *
+     * @param covar covariance matrix.
+     */
+    private void covsrt(final Matrix covar) {
+        int i;
+        int j;
+        int k;
+<span class="fc bfc" id="L761" title="All 2 branches covered.">        for (i = mfit; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L762" title="All 2 branches covered.">            for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L763">                covar.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L764">                covar.setElementAt(j, i, 0.0);</span>
+            }
+        }
+
+<span class="fc" id="L768">        k = mfit - 1;</span>
+<span class="fc bfc" id="L769" title="All 2 branches covered.">        for (j = ma - 1; j &gt;= 0; j--) {</span>
+<span class="fc bfc" id="L770" title="All 2 branches covered.">            if (ia[j]) {</span>
+<span class="fc" id="L771">                final double[] buffer = covar.getBuffer();</span>
+<span class="fc bfc" id="L772" title="All 2 branches covered.">                for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L773">                    final int pos1 = covar.getIndex(i, k);</span>
+<span class="fc" id="L774">                    final int pos2 = covar.getIndex(i, j);</span>
+<span class="fc" id="L775">                    swap(buffer, buffer, pos1, pos2);</span>
+                }
+<span class="fc bfc" id="L777" title="All 2 branches covered.">                for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L778">                    final int pos1 = covar.getIndex(k, i);</span>
+<span class="fc" id="L779">                    final int pos2 = covar.getIndex(j, i);</span>
+<span class="fc" id="L780">                    swap(buffer, buffer, pos1, pos2);</span>
+                }
+
+<span class="fc" id="L783">                k--;</span>
+            }
+        }
+<span class="fc" id="L786">    }</span>
+
+    /**
+     * Swaps values of arrays at provided positions.
+     *
+     * @param array1 1st array.
+     * @param array2 2nd array.
+     * @param pos1   1st position.
+     * @param pos2   2nd position.
+     */
+    private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
+<span class="fc" id="L797">        final double value1 = array1[pos1];</span>
+<span class="fc" id="L798">        final double value2 = array2[pos2];</span>
+<span class="fc" id="L799">        array1[pos1] = value2;</span>
+<span class="fc" id="L800">        array2[pos2] = value1;</span>
+<span class="fc" id="L801">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
