@@ -21,15 +21,13 @@ import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class BrentSingleOptimizerTest implements
-        SingleDimensionFunctionEvaluatorListener,
-        OnIterationCompletedListener {
+class BrentSingleOptimizerTest implements SingleDimensionFunctionEvaluatorListener, OnIterationCompletedListener {
 
     private static final double MIN_EVAL_POINT = -1e3;
     private static final double MAX_EVAL_POINT = 1e3;
@@ -51,355 +49,180 @@ public class BrentSingleOptimizerTest implements
     private int iterations = 0;
 
     @Test
-    public void testConstructor() throws NotAvailableException,
-            InvalidBracketRangeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double middleEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(middleEvalPoint,
-                MAX_EVAL_POINT);
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+    void testConstructor() throws NotAvailableException, InvalidBracketRangeException {
+        final var randomizer = new UniformRandomizer(new Random());
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var middleEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(middleEvalPoint, MAX_EVAL_POINT);
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
         BrentSingleOptimizer optimizer;
-
 
         // test 1st constructor
         optimizer = new BrentSingleOptimizer();
         assertNotNull(optimizer);
-        assertEquals(BrentSingleOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(BrentSingleOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                optimizer.getMinEvaluationPoint(), 0.0);
-        assertEquals(BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                optimizer.getMiddleEvaluationPoint(), 0.0);
-        assertEquals(BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
-                optimizer.getMaxEvaluationPoint(), 0.0);
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, optimizer.getMiddleEvaluationPoint(),
+                0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT, optimizer.getMaxEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
         assertFalse(optimizer.areBracketEvaluationsAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
-
 
         // test 2nd constructor
-        optimizer = new BrentSingleOptimizer(minEvalPoint, middleEvalPoint,
-                maxEvalPoint, tolerance);
+        optimizer = new BrentSingleOptimizer(minEvalPoint, middleEvalPoint, maxEvalPoint, tolerance);
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(optimizer.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint,
-                0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(minEvalPoint, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(middleEvalPoint, optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(maxEvalPoint, optimizer.getMaxEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
         assertFalse(optimizer.areBracketEvaluationsAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force InvalidBracketRangeException
-        optimizer = null;
-        try {
-            optimizer = new BrentSingleOptimizer(maxEvalPoint, middleEvalPoint,
-                    minEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(minEvalPoint, maxEvalPoint,
-                    middleEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(maxEvalPoint, minEvalPoint,
-                    middleEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(middleEvalPoint, minEvalPoint,
-                    maxEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(middleEvalPoint, maxEvalPoint,
-                    minEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(maxEvalPoint, middleEvalPoint,
+                minEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(minEvalPoint, maxEvalPoint,
+                middleEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(maxEvalPoint, minEvalPoint,
+                middleEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(middleEvalPoint, minEvalPoint,
+                maxEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(middleEvalPoint, maxEvalPoint,
+                minEvalPoint, tolerance));
 
         // Force IllegalArgumentException
-        try {
-            optimizer = new BrentSingleOptimizer(minEvalPoint, middleEvalPoint,
-                    maxEvalPoint, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
-
+        assertThrows(IllegalArgumentException.class, () -> new BrentSingleOptimizer(minEvalPoint, middleEvalPoint,
+                maxEvalPoint, -tolerance));
 
         // test 3rd constructor
-        optimizer = new BrentSingleOptimizer(this, minEvalPoint,
-                middleEvalPoint, maxEvalPoint, tolerance);
+        optimizer = new BrentSingleOptimizer(this, minEvalPoint, middleEvalPoint, maxEvalPoint, tolerance);
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertTrue(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(optimizer.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint,
-                0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(minEvalPoint, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(middleEvalPoint, optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(maxEvalPoint, optimizer.getMaxEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
         assertFalse(optimizer.areBracketEvaluationsAvailable());
-        assertEquals(optimizer.getListener(), this);
+        assertEquals(this, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force InvalidBracketRangeException
-        optimizer = null;
-        try {
-            optimizer = new BrentSingleOptimizer(this, maxEvalPoint,
-                    middleEvalPoint, minEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(this, minEvalPoint,
-                    maxEvalPoint, middleEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(this, maxEvalPoint,
-                    minEvalPoint, middleEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(this, middleEvalPoint,
-                    minEvalPoint, maxEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
-        try {
-            optimizer = new BrentSingleOptimizer(this, middleEvalPoint,
-                    maxEvalPoint, minEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(this, maxEvalPoint,
+                middleEvalPoint, minEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(this, minEvalPoint,
+                maxEvalPoint, middleEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(this, maxEvalPoint,
+                minEvalPoint, middleEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(this, middleEvalPoint,
+                minEvalPoint, maxEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new BrentSingleOptimizer(this, middleEvalPoint,
+                maxEvalPoint, minEvalPoint, tolerance));
 
         // Force IllegalArgumentException
-        try {
-            optimizer = new BrentSingleOptimizer(this, minEvalPoint,
-                    middleEvalPoint, maxEvalPoint, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new BrentSingleOptimizer(this, minEvalPoint,
+                middleEvalPoint, maxEvalPoint, -tolerance));
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+    void testGetSetTolerance() throws LockedException {
+        final var randomizer = new UniformRandomizer(new Random());
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+        final var optimizer = new BrentSingleOptimizer();
 
-        assertEquals(BrentSingleOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(BrentSingleOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
 
         // check correctness
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            optimizer.setTolerance(-tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> optimizer.setTolerance(-tolerance));
     }
 
     @Test
-    public void testGetSetBracketAndAvailability() throws NotAvailableException,
-            LockedException, InvalidBracketRangeException {
+    void testGetSetBracketAndAvailability() throws NotAvailableException, LockedException, InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double middleEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(middleEvalPoint,
-                MAX_EVAL_POINT);
+        final var randomizer = new UniformRandomizer(new Random());
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var middleEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(middleEvalPoint, MAX_EVAL_POINT);
 
-
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+        final var optimizer = new BrentSingleOptimizer();
 
         assertTrue(optimizer.isBracketAvailable());
 
-        assertEquals(BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                optimizer.getMinEvaluationPoint(), 0.0);
-        assertEquals(BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                optimizer.getMiddleEvaluationPoint(), 0.0);
-        assertEquals(BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
-                optimizer.getMaxEvaluationPoint(), 0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, optimizer.getMiddleEvaluationPoint(),
+                0.0);
+        assertEquals(BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT, optimizer.getMaxEvaluationPoint(), 0.0);
 
         // set new bracket
         optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
 
         // check correctness
         assertEquals(optimizer.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint,
-                0.0);
+        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint, 0.0);
         assertEquals(optimizer.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
 
         // Force InvalidBracketRangeException
-        try {
-            optimizer.setBracket(maxEvalPoint, middleEvalPoint, minEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(minEvalPoint, maxEvalPoint, middleEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(maxEvalPoint, minEvalPoint, middleEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(middleEvalPoint, minEvalPoint, maxEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(middleEvalPoint, maxEvalPoint, minEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
+        assertThrows(InvalidBracketRangeException.class,
+                () -> optimizer.setBracket(maxEvalPoint, middleEvalPoint, minEvalPoint));
+        assertThrows(InvalidBracketRangeException.class,
+                () -> optimizer.setBracket(minEvalPoint, maxEvalPoint, middleEvalPoint));
+        assertThrows(InvalidBracketRangeException.class,
+                () -> optimizer.setBracket(maxEvalPoint, minEvalPoint, middleEvalPoint));
+        assertThrows(InvalidBracketRangeException.class,
+                () -> optimizer.setBracket(middleEvalPoint, minEvalPoint, maxEvalPoint));
+        assertThrows(InvalidBracketRangeException.class,
+                () -> optimizer.setBracket(middleEvalPoint, maxEvalPoint, minEvalPoint));
     }
 
     @Test
-    public void testGetEvaluationsAndEvaluateBracket() throws Throwable {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetEvaluationsAndEvaluateBracket() throws Throwable {
+        final var randomizer = new UniformRandomizer(new Random());
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
         // set bracket
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double middleEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(middleEvalPoint,
-                MAX_EVAL_POINT);
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var middleEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(middleEvalPoint, MAX_EVAL_POINT);
 
         // set offset
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
@@ -407,27 +230,14 @@ public class BrentSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer(this,
-                minEvalPoint, middleEvalPoint, maxEvalPoint,
+        final var optimizer = new BrentSingleOptimizer(this, minEvalPoint, middleEvalPoint, maxEvalPoint,
                 BrentSingleOptimizer.DEFAULT_TOLERANCE);
 
         // attempting to retrieve evaluation fails because although bracket is
         // available, evaluations have not yet been computed
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
 
         assertFalse(optimizer.areBracketEvaluationsAvailable());
 
@@ -437,19 +247,15 @@ public class BrentSingleOptimizerTest implements
         assertTrue(optimizer.areBracketEvaluationsAvailable());
 
         // check correctness
-        assertEquals(optimizer.getEvaluationAtMin(), evaluate(minEvalPoint),
-                0.0);
-        assertEquals(optimizer.getEvaluationAtMiddle(), evaluate(
-                middleEvalPoint), 0.0);
-        assertEquals(optimizer.getEvaluationAtMax(), evaluate(maxEvalPoint),
-                0.0);
+        assertEquals(optimizer.getEvaluationAtMin(), evaluate(minEvalPoint), 0.0);
+        assertEquals(optimizer.getEvaluationAtMiddle(), evaluate(middleEvalPoint), 0.0);
+        assertEquals(optimizer.getEvaluationAtMax(), evaluate(maxEvalPoint), 0.0);
     }
 
     @Test
-    public void testComputeBracket() throws LockedException, NotReadyException,
-            OptimizationException, NotAvailableException {
+    void testComputeBracket() throws LockedException, NotReadyException, OptimizationException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer(new Random());
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -460,7 +266,7 @@ public class BrentSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+        final var optimizer = new BrentSingleOptimizer();
         optimizer.setListener(this);
 
         assertTrue(optimizer.isBracketAvailable());
@@ -473,14 +279,10 @@ public class BrentSingleOptimizerTest implements
 
         // after computing bracket we can only ensure that ax < bx < cx and also
         // that fa > fb and fc > fb
-        assertTrue(optimizer.getMinEvaluationPoint() <=
-                optimizer.getMiddleEvaluationPoint());
-        assertTrue(optimizer.getMiddleEvaluationPoint() <=
-                optimizer.getMaxEvaluationPoint());
-        assertTrue(optimizer.getEvaluationAtMin() >=
-                optimizer.getEvaluationAtMiddle());
-        assertTrue(optimizer.getEvaluationAtMax() >=
-                optimizer.getEvaluationAtMiddle());
+        assertTrue(optimizer.getMinEvaluationPoint() <= optimizer.getMiddleEvaluationPoint());
+        assertTrue(optimizer.getMiddleEvaluationPoint() <= optimizer.getMaxEvaluationPoint());
+        assertTrue(optimizer.getEvaluationAtMin() >= optimizer.getEvaluationAtMiddle());
+        assertTrue(optimizer.getEvaluationAtMax() >= optimizer.getEvaluationAtMiddle());
 
         // also bracket limits must surround the real minimum location, that is
         // ax < minimum and cx > minimum
@@ -489,9 +291,8 @@ public class BrentSingleOptimizerTest implements
     }
 
     @Test
-    public void testGetSetListenerAndAvailability() throws LockedException,
-            NotAvailableException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetSetListenerAndAvailability() throws LockedException, NotAvailableException {
+        final var randomizer = new UniformRandomizer(new Random());
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -502,13 +303,10 @@ public class BrentSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+        final var optimizer = new BrentSingleOptimizer();
 
         assertFalse(optimizer.isListenerAvailable());
-        try {
-            optimizer.getListener();
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isReady());
 
         // set listener
@@ -521,14 +319,14 @@ public class BrentSingleOptimizerTest implements
     }
 
     @Test
-    public void testIsLocked() {
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+    void testIsLocked() {
+        final var optimizer = new BrentSingleOptimizer();
         assertFalse(optimizer.isLocked());
     }
 
     @Test
-    public void testIsReady() throws LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testIsReady() throws LockedException {
+        final var randomizer = new UniformRandomizer(new Random());
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -539,7 +337,7 @@ public class BrentSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+        final var optimizer = new BrentSingleOptimizer();
 
         assertFalse(optimizer.isReady());
 
@@ -551,8 +349,8 @@ public class BrentSingleOptimizerTest implements
     }
 
     @Test
-    public void testGetSetOnIterationCompletedListener() throws LockedException {
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+    void testGetSetOnIterationCompletedListener() throws LockedException {
+        final var optimizer = new BrentSingleOptimizer();
 
         assertNull(optimizer.getOnIterationCompletedListener());
 
@@ -564,8 +362,8 @@ public class BrentSingleOptimizerTest implements
     }
 
     @Test
-    public void testMinimizeGetResultAndAvailability() throws Throwable {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testMinimizeGetResultAndAvailability() throws Throwable {
+        final var randomizer = new UniformRandomizer(new Random());
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -576,16 +374,12 @@ public class BrentSingleOptimizerTest implements
         //set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final BrentSingleOptimizer optimizer = new BrentSingleOptimizer();
+        final var optimizer = new BrentSingleOptimizer();
         optimizer.setListener(this);
         optimizer.setOnIterationCompletedListener(this);
 
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
 
         // minimize
         if (minimum > 0.0) {
@@ -602,8 +396,7 @@ public class BrentSingleOptimizerTest implements
         // test correctness
         assertTrue(optimizer.isResultAvailable());
         assertEquals(optimizer.getResult(), minimum, optimizer.getTolerance());
-        assertEquals(optimizer.getEvaluationAtResult(), evaluate(
-                optimizer.getResult()), 0.0);
+        assertEquals(optimizer.getEvaluationAtResult(), evaluate(optimizer.getResult()), 0.0);
         assertTrue(iterations > 0);
     }
 
@@ -613,8 +406,7 @@ public class BrentSingleOptimizerTest implements
     }
 
     @Override
-    public void onIterationCompleted(
-            final Optimizer optimizer, final int iteration, final Integer maxIterations) {
+    public void onIterationCompleted(final Optimizer optimizer, final int iteration, final Integer maxIterations) {
         assertNotNull(optimizer);
         assertTrue(optimizer.isLocked());
         assertTrue(iteration >= 0);

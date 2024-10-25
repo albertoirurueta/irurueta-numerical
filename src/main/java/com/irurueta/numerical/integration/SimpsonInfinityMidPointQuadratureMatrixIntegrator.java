@@ -44,8 +44,7 @@ public class SimpsonInfinityMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public SimpsonInfinityMidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new InfinityMidPointMatrixQuadrature(a, b, listener), eps);
     }
@@ -59,8 +58,7 @@ public class SimpsonInfinityMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public SimpsonInfinityMidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }

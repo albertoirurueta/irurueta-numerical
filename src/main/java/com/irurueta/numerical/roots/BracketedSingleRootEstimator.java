@@ -94,9 +94,8 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      *                                      maxEvalPoint.
      */
     protected BracketedSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint) throws InvalidBracketRangeException {
         super(listener);
         internalSetBracket(minEvalPoint, maxEvalPoint);
     }
@@ -114,8 +113,8 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      * @throws InvalidBracketRangeException Raised if minEvalPoint &lt;
      *                                      maxEvalPoint.
      */
-    public void setBracket(final double minEvalPoint, final double maxEvalPoint)
-            throws LockedException, InvalidBracketRangeException {
+    public void setBracket(final double minEvalPoint, final double maxEvalPoint) throws LockedException,
+            InvalidBracketRangeException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -205,8 +204,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      *                                      convergence was not achieved.
      */
     public void computeBracket(final double minEvalPoint, final double maxEvalPoint)
-            throws LockedException, NotReadyException,
-            InvalidBracketRangeException, RootEstimationException {
+            throws LockedException, NotReadyException, InvalidBracketRangeException, RootEstimationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -221,16 +219,16 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
         locked = true;
 
         // expand initial bracket until function contains a sign change
-        double x1 = minEvalPoint;
-        double x2 = maxEvalPoint;
+        var x1 = minEvalPoint;
+        var x2 = maxEvalPoint;
         double f1;
         double f2;
         try {
             f1 = listener.evaluate(x1);
             f2 = listener.evaluate(x2);
 
-            boolean found = false;
-            for (int j = 0; j < NTRY; j++) {
+            var found = false;
+            for (var j = 0; j < NTRY; j++) {
                 if (f1 * f2 < 0.0) {
                     found = true;
                     break;
@@ -280,9 +278,8 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      *                                      inside the provided limits because no zero crossing was present or
      *                                      convergence was not achieved.
      */
-    public void computeBracket(final double point) throws LockedException,
-            NotReadyException, InvalidBracketRangeException,
-            RootEstimationException {
+    public void computeBracket(final double point) throws LockedException, NotReadyException,
+            InvalidBracketRangeException, RootEstimationException {
         computeBracket(point, FACTOR * point + BRACKET_EPS);
     }
 
@@ -302,8 +299,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      *                                 inside the provided limits because no zero crossing was present or
      *                                 convergence was not achieved.
      */
-    public void computeBracket() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void computeBracket() throws LockedException, NotReadyException, RootEstimationException {
         try {
             computeBracket(0.0, BRACKET_EPS);
         } catch (final InvalidBracketRangeException ignore) {
@@ -319,7 +315,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
      * @param b Value to be swapped.
      */
     protected void swap(final double[] a, final double[] b) {
-        final double tmp = a[0];
+        final var tmp = a[0];
         a[0] = b[0];
         b[0] = tmp;
     }

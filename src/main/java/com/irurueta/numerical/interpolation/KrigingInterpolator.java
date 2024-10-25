@@ -90,16 +90,16 @@ public class KrigingInterpolator {
             vgram = vargram;
             npt = xx.getRows();
             ndim = xx.getColumns();
-            final int nptPlus1 = npt + 1;
+            final var nptPlus1 = npt + 1;
             dstar = new Matrix(nptPlus1, 1);
             vstar = new Matrix(nptPlus1, 1);
-            final Matrix v = new Matrix(nptPlus1, nptPlus1);
-            final Matrix y = new Matrix(nptPlus1, 1);
+            final var v = new Matrix(nptPlus1, nptPlus1);
+            final var y = new Matrix(nptPlus1, 1);
             yvi = new Matrix(nptPlus1, 1);
 
             xi = new double[ndim];
-            final double[] xj = new double[ndim];
-            final int end = ndim - 1;
+            final var xj = new double[ndim];
+            final var end = ndim - 1;
 
             int i;
             int j;
@@ -109,7 +109,7 @@ public class KrigingInterpolator {
                 for (j = i; j < npt; j++) {
                     x.getSubmatrixAsArray(i, 0, i, end, xi);
                     x.getSubmatrixAsArray(j, 0, j, end, xj);
-                    final double evaluation = vgram.evaluate(rdist(xi, xj));
+                    final var evaluation = vgram.evaluate(rdist(xi, xj));
                     v.setElementAt(i, j, evaluation);
                     v.setElementAt(j, i, evaluation);
                 }
@@ -206,7 +206,7 @@ public class KrigingInterpolator {
     public double interpolate(final double[] xstar) throws InterpolationException {
         try {
             int i;
-            final int end = ndim - 1;
+            final var end = ndim - 1;
             for (i = 0; i < npt; i++) {
                 x.getSubmatrixAsArray(i, 0, i, end, xi);
                 vstar.setElementAtIndex(i, vgram.evaluate(rdist(xstar, xi)));
@@ -232,13 +232,12 @@ public class KrigingInterpolator {
      * @return computed interpolation.
      * @throws InterpolationException if interpolation fails.
      */
-    public double interpolate(final double[] xstar, final double[] esterr)
-            throws InterpolationException {
+    public double interpolate(final double[] xstar, final double[] esterr) throws InterpolationException {
         try {
             lastval = interpolate(xstar);
             vi.solve(vstar, dstar);
             lasterr = 0;
-            for (int i = 0; i <= npt; i++) {
+            for (var i = 0; i <= npt; i++) {
                 lasterr += dstar.getElementAtIndex(i) * vstar.getElementAtIndex(i);
             }
 
@@ -258,8 +257,8 @@ public class KrigingInterpolator {
      * @return euclidean distance.
      */
     private double rdist(final double[] x1, final double[] x2) {
-        double d = 0.;
-        for (int i = 0; i < ndim; i++) {
+        var d = 0.0;
+        for (var i = 0; i < ndim; i++) {
             d += sqr(x1[i] - x2[i]);
         }
         return Math.sqrt(d);
@@ -329,11 +328,11 @@ public class KrigingInterpolator {
             int i;
             int j;
             int k;
-            final int npt = x.getRows();
-            final int ndim = x.getColumns();
+            final var npt = x.getRows();
+            final var ndim = x.getColumns();
             double rb;
-            double num = 0.0;
-            double denom = 0.0;
+            var num = 0.0;
+            var denom = 0.0;
             for (i = 0; i < npt; i++) {
                 for (j = i + 1; j < npt; j++) {
                     rb = 0.;

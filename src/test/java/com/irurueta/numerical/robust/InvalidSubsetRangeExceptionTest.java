@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.robust;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class InvalidSubsetRangeExceptionTest {
+class InvalidSubsetRangeExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InvalidSubsetRangeException ex = new InvalidSubsetRangeException();
+    void testConstructor() {
+        var ex = new InvalidSubsetRangeException();
         assertNotNull(ex);
 
         ex = new InvalidSubsetRangeException("message");

@@ -24,8 +24,7 @@ import com.irurueta.algebra.WrongSizeException;
  * integrators (i.e., require fewer function evaluations) when the function
  * to be integrated has a finite fourth derivative (i.e., a continuous third derivative).
  */
-public class SimpsonMidPointQuadratureMatrixIntegrator
-        extends SimpsonMatrixIntegrator<MidPointMatrixQuadrature> {
+public class SimpsonMidPointQuadratureMatrixIntegrator extends SimpsonMatrixIntegrator<MidPointMatrixQuadrature> {
 
     /**
      * Constructor.
@@ -38,8 +37,7 @@ public class SimpsonMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public SimpsonMidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new MidPointMatrixQuadrature(a, b, listener), eps);
     }
@@ -53,8 +51,7 @@ public class SimpsonMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public SimpsonMidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }

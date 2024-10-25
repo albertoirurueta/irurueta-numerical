@@ -76,9 +76,8 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public SecantSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -126,8 +125,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
      *                                 numerical instability or convergence problems, or no roots are found).
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -139,15 +137,15 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
         rootAvailable = false;
 
         try {
-            final double x1 = minEvalPoint;
-            final double x2 = maxEvalPoint;
-            final double xacc = tolerance;
+            final var x1 = minEvalPoint;
+            final var x2 = maxEvalPoint;
+            final var xacc = tolerance;
             double xl;
             double rts;
-            double fl = listener.evaluate(x1);
-            double f = listener.evaluate(x2);
-            final double[] v1 = new double[1];
-            final double[] v2 = new double[1];
+            var fl = listener.evaluate(x1);
+            var f = listener.evaluate(x2);
+            final var v1 = new double[1];
+            final var v2 = new double[1];
 
             if (Math.abs(fl) < Math.abs(f)) {
                 rts = x1;
@@ -162,7 +160,7 @@ public class SecantSingleRootEstimator extends BracketedSingleRootEstimator {
                 rts = x2;
             }
             for (int j = 0; j < MAXIT; j++) {
-                final double dx = (xl - rts) * f / (f - fl);
+                final var dx = (xl - rts) * f / (f - fl);
                 xl = rts;
                 fl = f;
                 rts += dx;

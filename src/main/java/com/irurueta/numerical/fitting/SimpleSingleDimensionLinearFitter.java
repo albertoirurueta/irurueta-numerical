@@ -31,8 +31,7 @@ import java.util.Arrays;
  * This class is based on the implementation available at Numerical Recipes
  * 3rd Ed, page 791
  */
-public class SimpleSingleDimensionLinearFitter
-        extends SingleDimensionLinearFitter {
+public class SimpleSingleDimensionLinearFitter extends SingleDimensionLinearFitter {
 
     /**
      * Determines which parameters can be modified during estimation (if true)
@@ -59,8 +58,7 @@ public class SimpleSingleDimensionLinearFitter
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SimpleSingleDimensionLinearFitter(
-            final double[] x, final double[] y, final double[] sig) {
+    public SimpleSingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
         super(x, y, sig);
     }
 
@@ -76,8 +74,7 @@ public class SimpleSingleDimensionLinearFitter
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SimpleSingleDimensionLinearFitter(
-            final double[] x, final double[] y, final double sig) {
+    public SimpleSingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
         super(x, y, sig);
     }
 
@@ -89,8 +86,7 @@ public class SimpleSingleDimensionLinearFitter
      * @throws FittingException if evaluation fails.
      */
     public SimpleSingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
         super();
         setFunctionEvaluator(evaluator);
     }
@@ -111,9 +107,8 @@ public class SimpleSingleDimensionLinearFitter
      *                                  length .
      */
     public SimpleSingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double[] sig)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double[] sig) throws FittingException {
         super(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -134,9 +129,8 @@ public class SimpleSingleDimensionLinearFitter
      *                                  length.
      */
     public SimpleSingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double sig)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double sig) throws FittingException {
         super(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -150,8 +144,7 @@ public class SimpleSingleDimensionLinearFitter
      */
     @Override
     public final void setFunctionEvaluator(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
         super.setFunctionEvaluator(evaluator);
         if (ma > 0) {
             ia = new boolean[ma];
@@ -170,7 +163,9 @@ public class SimpleSingleDimensionLinearFitter
     @Override
     @SuppressWarnings("Duplicates")
     public void fit() throws FittingException, NotReadyException {
-        if (!isReady()) throw new NotReadyException();
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
 
         try {
             resultAvailable = false;
@@ -180,7 +175,7 @@ public class SimpleSingleDimensionLinearFitter
             int k;
             int l;
             int m;
-            int mfit = 0;
+            var mfit = 0;
             double ym;
             double wt;
             double sum;
@@ -191,11 +186,10 @@ public class SimpleSingleDimensionLinearFitter
                 }
             }
             if (mfit == 0) {
-                throw new FittingException(
-                        "lfit: no parameters to be fitted");
+                throw new FittingException("lfit: no parameters to be fitted");
             }
-            final Matrix temp = new Matrix(mfit, mfit);
-            final Matrix beta = new Matrix(mfit, 1);
+            final var temp = new Matrix(mfit, mfit);
+            final var beta = new Matrix(mfit, 1);
             for (i = 0; i < ndat; i++) {
                 evaluator.evaluate(x[i], afunc);
                 ym = y[i];
@@ -303,9 +297,9 @@ public class SimpleSingleDimensionLinearFitter
      * @param pos1   1st position.
      * @param pos2   2nd position.
      */
-    private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
-        double value1 = array1[pos1];
-        double value2 = array2[pos2];
+    private static void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
+        final var value1 = array1[pos1];
+        final var value2 = array2[pos2];
         array1[pos1] = value2;
         array2[pos2] = value1;
     }

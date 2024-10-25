@@ -46,8 +46,7 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
      *
      * @param listener listener to evaluate a single dimension function.
      */
-    public SavitzkyGolayDerivativeEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener) {
+    public SavitzkyGolayDerivativeEstimator(final SingleDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
 
@@ -63,29 +62,28 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
     @SuppressWarnings("Duplicates")
     public double derivative(final double x) throws EvaluationException {
         // fit a polynomial of degree 2 by evaluating function at x-h, x and x+h
-        double h = EPS * Math.abs(x);
+        var h = EPS * Math.abs(x);
         if (h == 0.0) {
             // Trick to reduce finite-precision error
             h = EPS;
         }
 
-        final double xh1 = x + h;
-        final double xh2 = x - h;
+        final var xh1 = x + h;
+        final var xh2 = x - h;
 
-        final double f = listener.evaluate(x);
-        final double fh1 = listener.evaluate(xh1);
-        final double fh2 = listener.evaluate(xh2);
+        final var f = listener.evaluate(x);
+        final var fh1 = listener.evaluate(xh1);
+        final var fh2 = listener.evaluate(xh2);
 
         // express the problem as:
         // a * x^2 + b * x + c = f(x)
         // b * xh1^2 + b * xh1 + c = f(xh1)
         // c * xh2^2 + b * xh2 + c = f(xh2)
 
-        final Matrix a;
         final double aParam;
         final double bParam;
         try {
-            a = new Matrix(N_POINTS, N_POINTS);
+            final var a = new Matrix(N_POINTS, N_POINTS);
 
             a.setElementAt(0, 0, x * x);
             a.setElementAt(1, 0, xh1 * xh1);
@@ -99,11 +97,11 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
             a.setElementAt(1, 2, 1.0);
             a.setElementAt(2, 2, 1.0);
 
-            final double[] b = new double[N_POINTS];
+            final var b = new double[N_POINTS];
 
 
             // normalize to increase accuracy
-            final double normA = Utils.normF(a);
+            final var normA = Utils.normF(a);
             a.multiplyByScalar(1.0 / normA);
 
             b[0] = f;

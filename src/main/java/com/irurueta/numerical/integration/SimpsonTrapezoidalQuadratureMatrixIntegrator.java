@@ -28,8 +28,7 @@ import com.irurueta.algebra.WrongSizeException;
  * function to be integrated has a finite fourth derivative (i.e. a continuous third derivative,
  * which means that the function is sufficiently smooth).
  */
-public class SimpsonTrapezoidalQuadratureMatrixIntegrator
-        extends SimpsonMatrixIntegrator<TrapezoidalMatrixQuadrature> {
+public class SimpsonTrapezoidalQuadratureMatrixIntegrator extends SimpsonMatrixIntegrator<TrapezoidalMatrixQuadrature> {
     /**
      * Constructor.
      *
@@ -41,8 +40,7 @@ public class SimpsonTrapezoidalQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public SimpsonTrapezoidalQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new TrapezoidalMatrixQuadrature(a, b, listener), eps);
     }
@@ -56,8 +54,7 @@ public class SimpsonTrapezoidalQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public SimpsonTrapezoidalQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }

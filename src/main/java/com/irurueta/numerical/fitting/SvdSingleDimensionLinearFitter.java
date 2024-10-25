@@ -63,8 +63,7 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SvdSingleDimensionLinearFitter(
-            final double[] x, final double[] y, final double[] sig) {
+    public SvdSingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
         super(x, y, sig);
         tol = DEFAULT_TOL;
     }
@@ -81,8 +80,7 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public SvdSingleDimensionLinearFitter(
-            final double[] x, final double[] y, final double sig) {
+    public SvdSingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
         super(x, y, sig);
         tol = DEFAULT_TOL;
     }
@@ -94,8 +92,7 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      *                  obtain the evaluation of function basis at such point.
      * @throws FittingException if evaluation fails.
      */
-    public SvdSingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
+    public SvdSingleDimensionLinearFitter(final LinearFitterSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
         super(evaluator);
         tol = DEFAULT_TOL;
@@ -117,8 +114,8 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      *                                  length.
      */
     public SvdSingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double[] sig) throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double[] sig) throws FittingException {
         super(evaluator, x, y, sig);
         tol = DEFAULT_TOL;
     }
@@ -139,8 +136,8 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
      *                                  length.
      */
     public SvdSingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double sig) throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double sig) throws FittingException {
         super(evaluator, x, y, sig);
         tol = DEFAULT_TOL;
     }
@@ -187,8 +184,8 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
             double tmp;
             final double thresh;
             double sum;
-            final Matrix aa = new Matrix(ndat, ma);
-            final double[] b = new double[ndat];
+            final var aa = new Matrix(ndat, ma);
+            final var b = new double[ndat];
             for (i = 0; i < ndat; i++) {
                 evaluator.evaluate(x[i], afunc);
                 tmp = 1.0 / sig[i];
@@ -198,8 +195,7 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
                 b[i] = y[i] * tmp;
             }
 
-            final SingularValueDecomposer svd =
-                    new SingularValueDecomposer(aa);
+            final var svd = new SingularValueDecomposer(aa);
             svd.decompose();
             thresh = (tol > 0.0 ? tol * svd.getSingularValues()[0] : -1.0);
             svd.solve(b, thresh, a);
@@ -214,13 +210,12 @@ public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter 
             for (i = 0; i < ma; i++) {
                 for (j = 0; j < i + 1; j++) {
                     sum = 0.0;
-                    final double[] w = svd.getSingularValues();
-                    final double tsh = svd.getNegligibleSingularValueThreshold();
-                    final Matrix v = svd.getV();
+                    final var w = svd.getSingularValues();
+                    final var tsh = svd.getNegligibleSingularValueThreshold();
+                    final var v = svd.getV();
                     for (k = 0; k < ma; k++) {
                         if (w[k] > tsh) {
-                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) /
-                                    Math.pow(w[k], 2.0);
+                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / Math.pow(w[k], 2.0);
                         }
                     }
                     covar.setElementAt(j, i, sum);

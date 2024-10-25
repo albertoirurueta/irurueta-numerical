@@ -60,9 +60,7 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
      * @param q   Quadrature used for integration.
      * @param eps Required accuracy.
      */
-    protected SimpsonIntegrator(
-            final T q,
-            final double eps) {
+    protected SimpsonIntegrator(final T q, final double eps) {
         this.q = q;
         this.eps = eps;
     }
@@ -78,9 +76,9 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
         try {
             double s;
             double st;
-            double ost = 0.0;
-            double os = 0.0;
-            for (int j = 0; j < JMAX; j++) {
+            var ost = 0.0;
+            var os = 0.0;
+            for (var j = 0; j < JMAX; j++) {
                 st = q.next();
                 s = (4.0 * st - ost) / 3.0;
                 if (j > JMIN && (Math.abs(s - os) < eps * Math.abs(os) || (s == 0.0 && os == 0.0))) {
@@ -119,26 +117,20 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
      * @throws IllegalArgumentException if provided quadrature type is not supported.
      */
     public static SimpsonIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
             final QuadratureType quadratureType) {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new SimpsonTrapezoidalQuadratureIntegrator(a, b, listener, eps));
-            case MID_POINT:
-                return cast(new SimpsonMidPointQuadratureIntegrator(a, b, listener, eps));
-            case INFINITY_MID_POINT:
-                return cast(new SimpsonInfinityMidPointQuadratureIntegrator(a, b, listener, eps));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonLowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonUpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new SimpsonDoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new SimpsonTrapezoidalQuadratureIntegrator(a, b, listener, eps));
+            case MID_POINT -> cast(new SimpsonMidPointQuadratureIntegrator(a, b, listener, eps));
+            case INFINITY_MID_POINT -> cast(new SimpsonInfinityMidPointQuadratureIntegrator(a, b, listener, eps));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonLowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonUpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new SimpsonDoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -152,26 +144,19 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
      * @throws IllegalArgumentException if provided quadrature type is not supported.
      */
     public static SimpsonIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
             final QuadratureType quadratureType) {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new SimpsonTrapezoidalQuadratureIntegrator(a, b, listener));
-            case MID_POINT:
-                return cast(new SimpsonMidPointQuadratureIntegrator(a, b, listener));
-            case INFINITY_MID_POINT:
-                return cast(new SimpsonInfinityMidPointQuadratureIntegrator(a, b, listener));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonLowerSquareRootMidPointQuadratureIntegrator(a, b, listener));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonUpperSquareRootMidPointQuadratureIntegrator(a, b, listener));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new SimpsonDoubleExponentialRuleQuadratureIntegrator(a, b, listener));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new SimpsonTrapezoidalQuadratureIntegrator(a, b, listener));
+            case MID_POINT -> cast(new SimpsonMidPointQuadratureIntegrator(a, b, listener));
+            case INFINITY_MID_POINT -> cast(new SimpsonInfinityMidPointQuadratureIntegrator(a, b, listener));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonLowerSquareRootMidPointQuadratureIntegrator(a, b, listener));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonUpperSquareRootMidPointQuadratureIntegrator(a, b, listener));
+            case DOUBLE_EXPONENTIAL_RULE -> cast(new SimpsonDoubleExponentialRuleQuadratureIntegrator(a, b, listener));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -184,8 +169,7 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
      * @return created integrator.
      */
     public static SimpsonIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);
     }
 
@@ -198,8 +182,7 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
      * @return created integrator.
      */
     public static SimpsonIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);
     }
 

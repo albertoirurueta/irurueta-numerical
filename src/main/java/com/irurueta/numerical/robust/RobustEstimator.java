@@ -45,27 +45,27 @@ public abstract class RobustEstimator<T> {
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected RobustEstimatorListener<T> mListener;
+    protected RobustEstimatorListener<T> listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Constructor.
      */
     protected RobustEstimator() {
-        mListener = null;
-        mLocked = false;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
+        listener = null;
+        locked = false;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
     }
 
     /**
@@ -75,9 +75,9 @@ public abstract class RobustEstimator<T> {
      *                 starts, ends or its progress significantly changes.
      */
     protected RobustEstimator(final RobustEstimatorListener<T> listener) {
-        mListener = listener;
-        mLocked = false;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
+        this.listener = listener;
+        locked = false;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class RobustEstimator<T> {
      * @return listener to be notified of events.
      */
     public RobustEstimatorListener<T> getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -97,12 +97,11 @@ public abstract class RobustEstimator<T> {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final RobustEstimatorListener<T> listener)
-            throws LockedException {
+    public void setListener(final RobustEstimatorListener<T> listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -112,7 +111,7 @@ public abstract class RobustEstimator<T> {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -121,7 +120,7 @@ public abstract class RobustEstimator<T> {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -132,7 +131,7 @@ public abstract class RobustEstimator<T> {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -150,11 +149,10 @@ public abstract class RobustEstimator<T> {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -167,8 +165,7 @@ public abstract class RobustEstimator<T> {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract T estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException;
+    public abstract T estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns data about inliers once estimation has been done.
@@ -190,8 +187,8 @@ public abstract class RobustEstimator<T> {
      * @return true if ready, false otherwise.
      */
     public boolean isReady() {
-        if (mListener != null) {
-            return mListener.isReady();
+        if (listener != null) {
+            return listener.isReady();
         } else {
             return false;
         }

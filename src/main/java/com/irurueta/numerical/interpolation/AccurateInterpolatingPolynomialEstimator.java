@@ -39,22 +39,21 @@ public class AccurateInterpolatingPolynomialEstimator extends InterpolatingPolyn
      * @throws InterpolationException   if interpolation fails for numerical reasons.
      */
     @Override
-    public void estimate(final double[] xa, final double[] ya, final double[] cof)
-            throws InterpolationException {
+    public void estimate(final double[] xa, final double[] ya, final double[] cof) throws InterpolationException {
         int k;
         int j;
         int i;
         double xmin;
-        final int n = xa.length;
-        final double[] x = new double[n];
-        final double[] y = new double[n];
+        final var n = xa.length;
+        final var x = new double[n];
+        final var y = new double[n];
 
         for (j = 0; j < n; j++) {
             x[j] = xa[j];
             y[j] = ya[j];
         }
         for (j = 0; j < n; j++) {
-            final PolynomialInterpolator interp = new PolynomialInterpolator(x, y, n - j, false);
+            final var interp = new PolynomialInterpolator(x, y, n - j, false);
             // extrapolate to x = 0
             cof[j] = interp.rawinterp(0, 0.);
             xmin = 1.0e99;
@@ -65,9 +64,10 @@ public class AccurateInterpolatingPolynomialEstimator extends InterpolatingPolyn
                     xmin = Math.abs(x[i]);
                     k = i;
                 }
-                if (x[i] != 0.0)
+                if (x[i] != 0.0) {
                     // (meanwhile reducing all the terms)
                     y[i] = (y[i] - cof[j]) / x[i];
+                }
             }
             // and eliminate it
             for (i = k + 1; i < n - j; i++) {

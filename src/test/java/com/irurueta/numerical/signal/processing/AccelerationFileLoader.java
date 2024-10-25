@@ -27,17 +27,17 @@ import java.nio.file.Files;
 class AccelerationFileLoader {
 
     static Data load(final File f) throws IOException {
-        final int bufferSize = computeBufferSizes(f);
-        final DataInputStream stream = new DataInputStream(Files.newInputStream(f.toPath()));
+        final var bufferSize = computeBufferSizes(f);
+        final var stream = new DataInputStream(Files.newInputStream(f.toPath()));
 
-        final float[] accelerationX = new float[bufferSize];
-        final float[] accelerationY = new float[bufferSize];
-        final float[] accelerationZ = new float[bufferSize];
+        final var accelerationX = new float[bufferSize];
+        final var accelerationY = new float[bufferSize];
+        final var accelerationZ = new float[bufferSize];
 
-        final long[] timestamp = new long[bufferSize];
-        final long[] count = new long[bufferSize];
+        final var timestamp = new long[bufferSize];
+        final var count = new long[bufferSize];
 
-        for (int i = 0; i < bufferSize; i++) {
+        for (var i = 0; i < bufferSize; i++) {
             count[i] = stream.readLong();
             timestamp[i] = stream.readLong();
 
@@ -48,7 +48,7 @@ class AccelerationFileLoader {
 
         stream.close();
 
-        final Data data = new Data();
+        final var data = new Data();
         data.accelerationX = accelerationX;
         data.accelerationY = accelerationY;
         data.accelerationZ = accelerationZ;
@@ -60,10 +60,10 @@ class AccelerationFileLoader {
     }
 
     private static int computeBufferSizes(final File f) {
-        final long fileLength = f.length();
+        final var fileLength = f.length();
 
-        final int floatSize = Float.SIZE / Byte.SIZE;
-        final int longSize = Long.SIZE / Byte.SIZE;
+        final var floatSize = Float.SIZE / Byte.SIZE;
+        final var longSize = Long.SIZE / Byte.SIZE;
 
         return (int) fileLength / (3 * floatSize + 2 * longSize);
     }

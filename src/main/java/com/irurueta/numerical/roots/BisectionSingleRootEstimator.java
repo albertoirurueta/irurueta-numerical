@@ -95,9 +95,8 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException     Raised if provided tolerance is negative.
      */
     public BisectionSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -163,8 +162,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
      *                                 numerical instability or convergence problems, or no roots are found).
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -176,14 +174,14 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
         rootAvailable = false;
 
         try {
-            final double x1 = minEvalPoint;
-            final double x2 = maxEvalPoint;
-            final double xacc = tolerance;
+            final var x1 = minEvalPoint;
+            final var x2 = maxEvalPoint;
+            final var xacc = tolerance;
             double dx;
             double xmid;
             double rtb;
-            final double f = listener.evaluate(x1);
-            double fmid = listener.evaluate(x2);
+            final var f = listener.evaluate(x1);
+            var fmid = listener.evaluate(x2);
 
             if (f * fmid >= 0.0) {
                 // check that bracket contains a sign change in function
@@ -197,7 +195,7 @@ public class BisectionSingleRootEstimator extends BracketedSingleRootEstimator {
                 dx = x1 - x2;
                 rtb = x2;
             }
-            for (int j = 0; j < JMAX; j++) {
+            for (var j = 0; j < JMAX; j++) {
                 dx *= 0.5;
                 xmid = rtb + dx;
                 fmid = listener.evaluate(xmid);

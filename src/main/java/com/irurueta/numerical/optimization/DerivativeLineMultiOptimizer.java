@@ -16,13 +16,11 @@
 package com.irurueta.numerical.optimization;
 
 import com.irurueta.numerical.DirectionalDerivativeEvaluator;
-import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientFunctionEvaluatorListener;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NumericalException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
  * Class to find a minimum on a multidimensional function along a given line
@@ -101,8 +99,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */
     protected DerivativeLineMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener,
-            final double[] point, final double[] direction) {
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double[] direction) {
         super(listener);
         internalSetStartPointAndDirection(point, direction);
         n = 0;
@@ -181,8 +178,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    private void internalSetStartPointAndDirection(final double[] point,
-                                                   final double[] direction) {
+    private void internalSetStartPointAndDirection(final double[] point, final double[] direction) {
         if (point.length != direction.length) {
             throw new IllegalArgumentException();
         }
@@ -208,8 +204,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    public void setStartPointAndDirection(final double[] point, final double[] direction)
-            throws LockedException {
+    public void setStartPointAndDirection(final double[] point, final double[] direction) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -226,8 +221,8 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isGradientListenerAvailable() &&
-                isStartPointAvailable() && isDirectionAvailable();
+        return isListenerAvailable() && isGradientListenerAvailable() && isStartPointAvailable()
+                && isDirectionAvailable();
     }
 
     /**
@@ -241,8 +236,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @throws NotAvailableException Raised if gradient listener is not
      *                               available for retrieval.
      */
-    public GradientFunctionEvaluatorListener getGradientListener()
-            throws NotAvailableException {
+    public GradientFunctionEvaluatorListener getGradientListener() throws NotAvailableException {
         if (!isGradientListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -259,9 +253,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
      * @param gradientListener Gradient listener.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setGradientListener(
-            final GradientFunctionEvaluatorListener gradientListener)
-            throws LockedException {
+    public void setGradientListener(final GradientFunctionEvaluatorListener gradientListener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -293,8 +285,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
 
         if (evaluator == null) {
             //attempt to reuse evaluator
-            evaluator = new DirectionalDerivativeEvaluator(listener,
-                    gradientListener, p, xi);
+            evaluator = new DirectionalDerivativeEvaluator(listener, gradientListener, p, xi);
         }
         if (evaluator.getListener() != listener) {
             //update listener
@@ -315,21 +306,11 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
             if (dbrent == null) {
                 // attempt to reuse brent single optimizer
                 dbrent = new DerivativeBrentSingleOptimizer(
-                        new SingleDimensionFunctionEvaluatorListener() {
-
-                            @Override
-                            public double evaluate(double point) throws EvaluationException {
-                                return evaluator.evaluateAt(point);
-                            }
-                        }, new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(double point) throws EvaluationException {
-                        return evaluator.differentiateAt(point);
-                    }
-                }, DerivativeBrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                        DerivativeBrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                        DerivativeBrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                        point -> evaluator.evaluateAt(point),
+                        point -> evaluator.differentiateAt(point),
+                        BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
                         DerivativeBrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
 
@@ -337,7 +318,7 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
             dbrent.minimize();
             linxmin = dbrent.getResult();
 
-            for (int j = 0; j < n; j++) {
+            for (var j = 0; j < n; j++) {
                 xi[j] *= linxmin;
                 p[j] += xi[j];
             }

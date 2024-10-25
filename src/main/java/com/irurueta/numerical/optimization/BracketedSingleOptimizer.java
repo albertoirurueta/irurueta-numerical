@@ -131,9 +131,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws InvalidBracketRangeException Raised if the following condition is
      *                                      not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
      */
-    protected BracketedSingleOptimizer(final double minEvalPoint,
-                                       final double middleEvalPoint,
-                                       final double maxEvalPoint)
+    protected BracketedSingleOptimizer(
+            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint)
             throws InvalidBracketRangeException {
         internalSetBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
     }
@@ -160,9 +159,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      *                                      not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
      */
     protected BracketedSingleOptimizer(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double middleEvalPoint, final double maxEvalPoint) throws InvalidBracketRangeException {
         super(listener);
         internalSetBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
     }
@@ -184,8 +182,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      *                                      will be locked while doing some operations. Attempting to change any
      *                                      parameter while being locked will raise this exception.
      */
-    public void setBracket(final double minEvalPoint, final double middleEvalPoint,
-                           final double maxEvalPoint) throws LockedException,
+    public void setBracket(
+            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint) throws LockedException,
             InvalidBracketRangeException {
 
         if (isLocked()) {
@@ -317,9 +315,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      *                                      because convergence was not achieved or function evaluation failed.
      */
     @SuppressWarnings("Duplicates")
-    public void computeBracket(final double minEvalPoint, final double middleEvalPoint)
-            throws LockedException, NotReadyException,
-            InvalidBracketRangeException, OptimizationException {
+    public void computeBracket(final double minEvalPoint, final double middleEvalPoint) throws LockedException,
+            NotReadyException, InvalidBracketRangeException, OptimizationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -333,9 +330,9 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
 
         locked = true;
 
-        final double[] a = new double[1];
-        final double[] b = new double[1];
-        final double[] c = new double[1];
+        final var a = new double[1];
+        final var b = new double[1];
+        final var c = new double[1];
 
         try {
             ax = minEvalPoint;
@@ -368,11 +365,11 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
             while (fb > fc) {
                 //Compute u by parabolic extrapolation from a, b, c. TINY is
                 //used to prevent any possible division by zero.
-                final double r = (bx - ax) * (fb - fc);
-                final double q = (bx - cx) * (fb - fa);
-                double u = bx - ((bx - cx) * q - (bx - ax) * r) /
+                final var r = (bx - ax) * (fb - fc);
+                final var q = (bx - cx) * (fb - fa);
+                var u = bx - ((bx - cx) * q - (bx - ax) * r) /
                         (2.0 * sign(Math.max(Math.abs(q - r), TINY), q - r));
-                final double ulim = bx + GLIMIT * (cx - bx);
+                final var ulim = bx + GLIMIT * (cx - bx);
 
                 //We won't go farther than this. Test various possibilities:
                 if ((bx - u) * (u - cx) > 0.0) {
@@ -475,9 +472,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws OptimizationException        Raised if a bracket couldn't be found
      *                                      because convergence was not achieved or function evaluation failed.
      */
-    public void computeBracket(final double minEvalPoint) throws LockedException,
-            NotReadyException, OptimizationException,
-            InvalidBracketRangeException {
+    public void computeBracket(final double minEvalPoint) throws LockedException, NotReadyException,
+            OptimizationException, InvalidBracketRangeException {
         computeBracket(minEvalPoint, DEFAULT_MIDDLE_EVAL_POINT);
     }
 
@@ -501,8 +497,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @throws OptimizationException Raised if a bracket couldn't be found
      *                               because convergence was not achieved or function evaluation failed.
      */
-    public void computeBracket() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void computeBracket() throws LockedException, NotReadyException, OptimizationException {
         try {
             computeBracket(DEFAULT_MIN_EVAL_POINT, DEFAULT_MIDDLE_EVAL_POINT);
         } catch (InvalidBracketRangeException ignore) {
@@ -521,8 +516,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      *                               listener has not yet been provided.
      * @throws OptimizationException Raised if function evaluation failed.
      */
-    public void evaluateBracket() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void evaluateBracket() throws LockedException, NotReadyException, OptimizationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -612,8 +606,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @param e a value to be copied.
      * @param f a value to be copied.
      */
-    protected void mov3(final double[] a, final double[] b, final double[] c, final double d,
-                        final double e, final double f) {
+    protected void mov3(final double[] a, final double[] b, final double[] c, final double d, final double e,
+                        final double f) {
         a[0] = d;
         b[0] = e;
         c[0] = f;
@@ -627,7 +621,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
      * @param b Value to be swapped.
      */
     private void swap(final double[] a, final double[] b) {
-        double tmp = a[0];
+        final var tmp = a[0];
         a[0] = b[0];
         b[0] = tmp;
     }
@@ -645,8 +639,8 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     private void internalSetBracket(final double minEvalPoint, final double middleEvalPoint,
                                     final double maxEvalPoint) throws InvalidBracketRangeException {
 
-        if ((minEvalPoint > middleEvalPoint) ||
-                (middleEvalPoint > maxEvalPoint)) { //which also means || (minEvalPoint > maxEvalPoint))
+        if ((minEvalPoint > middleEvalPoint) || (middleEvalPoint > maxEvalPoint)) {
+            //which also means || (minEvalPoint > maxEvalPoint))
             throw new InvalidBracketRangeException();
         }
 

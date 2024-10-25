@@ -105,8 +105,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @throws IllegalArgumentException Raised if length of provided parameters
      *                                  is not valid. It has to be greater or equal than 2.
      */
-    public LaguerrePolynomialRootsEstimator(final Complex[] polyParams,
-                                            final boolean polishRoots) {
+    public LaguerrePolynomialRootsEstimator(final Complex[] polyParams, final boolean polishRoots) {
         super();
         this.polishRoots = polishRoots;
         internalSetPolynomialParameters(polyParams);
@@ -136,8 +135,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      *                                 some reason (lack of convergence, etc.).
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -153,27 +151,27 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
         locked = true;
 
-        final Complex[] a = polyParams;
+        final var a = polyParams;
         roots = new Complex[a.length - 1];
 
         int i;
-        final int[] its = new int[1];
-        Complex x = new Complex();
+        final var its = new int[1];
+        var x = new Complex();
         Complex b;
         Complex c;
-        final int m = a.length - 1;
+        final var m = a.length - 1;
 
-        final Complex[] ad = Arrays.copyOf(a, a.length);
-        for (int j = m - 1; j >= 0; j--) {
+        final var ad = Arrays.copyOf(a, a.length);
+        for (var j = m - 1; j >= 0; j--) {
             x.setRealAndImaginary(0.0, 0.0);
-            final Complex[] adV = Arrays.copyOf(ad, j + 2);
+            final var adV = Arrays.copyOf(ad, j + 2);
             internalLaguer(adV, x, its);
             if (Math.abs(x.getImaginary()) <= 2.0 * EPS * Math.abs(x.getReal())) {
                 x = new Complex(x.getReal(), 0.0);
             }
             roots[j] = new Complex(x);
             b = new Complex(ad[j + 1]);
-            for (int jj = j; jj >= 0; jj--) {
+            for (var jj = j; jj >= 0; jj--) {
                 c = new Complex(ad[jj]);
                 ad[jj] = new Complex(b);
                 b.multiply(x);
@@ -181,11 +179,11 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             }
         }
         if (polishRoots) {
-            for (int j = 0; j < m; j++) {
+            for (var j = 0; j < m; j++) {
                 internalLaguer(a, roots[j], its);
             }
         }
-        for (int j = 1; j < m; j++) {
+        for (var j = 1; j < m; j++) {
             x = new Complex(roots[j]);
             for (i = j - 1; i >= 0; i--) {
                 if (roots[i].getReal() <= x.getReal()) {
@@ -236,8 +234,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      *                                  valid.
      */
     @Override
-    protected final void internalSetPolynomialParameters(
-            final Complex[] polyParams) {
+    protected final void internalSetPolynomialParameters(final Complex[] polyParams) {
         if (polyParams.length < MIN_VALID_POLY_PARAMS_LENGTH) {
             throw new IllegalArgumentException();
         }
@@ -256,29 +253,28 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
      * @throws RootEstimationException Raised if root couldn't be estimated
      *                                 because of lack of convergence.
      */
-    private void internalLaguer(final Complex[] a, final Complex x, final int[] its)
-            throws RootEstimationException {
+    private void internalLaguer(final Complex[] a, final Complex x, final int[] its) throws RootEstimationException {
 
         Complex x1;
         Complex b;
         Complex g;
         Complex g2;
-        final Complex dx = new Complex();
-        final Complex d = new Complex();
-        final Complex f = new Complex();
-        final Complex h = new Complex();
-        final Complex sq = new Complex();
-        Complex gp = new Complex();
-        final Complex gm = new Complex();
-        final int m = a.length - 1;
-        for (int iter = 1; iter <= MAXIT; iter++) {
+        final var dx = new Complex();
+        final var d = new Complex();
+        final var f = new Complex();
+        final var h = new Complex();
+        final var sq = new Complex();
+        var gp = new Complex();
+        final var gm = new Complex();
+        final var m = a.length - 1;
+        for (var iter = 1; iter <= MAXIT; iter++) {
             its[0] = iter;
             b = new Complex(a[m]);
-            double err = b.getModulus();
+            var err = b.getModulus();
             d.setRealAndImaginary(0.0, 0.0);
             f.setRealAndImaginary(0.0, 0.0);
-            final double abx = x.getModulus();
-            for (int j = m - 1; j >= 0; j--) {
+            final var abx = x.getModulus();
+            for (var j = m - 1; j >= 0; j--) {
                 f.multiply(x);
                 f.add(d);
 
@@ -302,14 +298,14 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
             h.multiplyByScalar(m, sq);
             sq.subtract(g2);
-            sq.multiplyByScalar(m - 1);
+            sq.multiplyByScalar(m - 1.0);
             sq.sqrt();
 
             g.add(sq, gp);
             g.subtract(sq, gm);
 
-            final double abp = gp.getModulus();
-            final double abm = gm.getModulus();
+            final var abp = gp.getModulus();
+            final var abm = gm.getModulus();
             if (abp < abm) {
                 gp = gm;
             }

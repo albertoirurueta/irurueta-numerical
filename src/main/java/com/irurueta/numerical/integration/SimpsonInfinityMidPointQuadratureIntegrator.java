@@ -30,8 +30,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * new SimpsonInfinityMidPointQuadratureIntegrator(2.0, 1e99, listener);
  * double integral = integrator1.integrate() + integrator2.integrate();
  */
-public class SimpsonInfinityMidPointQuadratureIntegrator
-        extends SimpsonIntegrator<InfinityMidPointQuadrature> {
+public class SimpsonInfinityMidPointQuadratureIntegrator extends SimpsonIntegrator<InfinityMidPointQuadrature> {
 
     /**
      * Constructor.
@@ -42,9 +41,7 @@ public class SimpsonInfinityMidPointQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public SimpsonInfinityMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new InfinityMidPointQuadrature(a, b, listener), eps);
     }
 
@@ -56,8 +53,7 @@ public class SimpsonInfinityMidPointQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public SimpsonInfinityMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

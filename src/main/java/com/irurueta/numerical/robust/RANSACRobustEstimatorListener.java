@@ -20,8 +20,7 @@ package com.irurueta.numerical.robust;
  *
  * @param <T> type of object to be estimated
  */
-public interface RANSACRobustEstimatorListener<T>
-        extends LMedSRobustEstimatorListener<T> {
+public interface RANSACRobustEstimatorListener<T> extends LMedSRobustEstimatorListener<T> {
 
     /**
      * Threshold to determine whether samples are inliers or not.

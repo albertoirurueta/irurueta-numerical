@@ -15,16 +15,16 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CurveInterpolatorTest {
+class CurveInterpolatorTest {
 
     private static final double MIN_VALUE = -1.0;
 
@@ -35,44 +35,43 @@ public class CurveInterpolatorTest {
     private static final double ABSOLUTE_ERROR = 3.0;
 
     @Test
-    public void interpolate_whenFirstDegreePolynomial1_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_whenFirstDegreePolynomial1_returnsExpectedResult() throws InterpolationException,
+            WrongSizeException {
         assertInterpolation(1);
     }
 
     @Test
-    public void interpolate_whenFirstDegreePolynomial2_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_whenFirstDegreePolynomial2_returnsExpectedResult() throws InterpolationException,
+            WrongSizeException {
         assertInterpolation(2);
     }
 
 
-    private static void assertInterpolation(final int dims)
-            throws WrongSizeException, InterpolationException {
-        final Polynomial[] polynomials = new Polynomial[dims];
-        for (int i = 0; i < dims; i++) {
+    private static void assertInterpolation(final int dims) throws WrongSizeException, InterpolationException {
+        final var polynomials = new Polynomial[dims];
+        for (var i = 0; i < dims; i++) {
             polynomials[i] = buildPolynomial();
         }
 
         // create multiple points
-        final int nPoints = 1 + 1;
-        final Matrix points = new Matrix(nPoints, dims);
-        for (int i = 0; i < nPoints; i++) {
-            final double x = (double) i / (double) nPoints;
-            for (int j = 0; j < dims; j++) {
+        final var nPoints = 1 + 1;
+        final var points = new Matrix(nPoints, dims);
+        for (var i = 0; i < nPoints; i++) {
+            final var x = (double) i / (double) nPoints;
+            for (var j = 0; j < dims; j++) {
                 points.setElementAt(i, j, polynomials[j].evaluate(x));
             }
         }
 
-        final CurveInterpolator interpolator = new CurveInterpolator(points);
+        final var interpolator = new CurveInterpolator(points);
 
         // check random values
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        for (int i = 0; i < INTERPOLATIONS; i++) {
-            final double x = randomizer.nextDouble(0.0, 1.0);
-            final double[] result = interpolator.interpolate(x);
-            final double[] expected = new double[dims];
-            for (int j = 0; j < dims; j++) {
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < INTERPOLATIONS; i++) {
+            final var x = randomizer.nextDouble(0.0, 1.0);
+            final var result = interpolator.interpolate(x);
+            final var expected = new double[dims];
+            for (var j = 0; j < dims; j++) {
                 expected[j] = polynomials[j].evaluate(x);
             }
 
@@ -81,8 +80,8 @@ public class CurveInterpolatorTest {
     }
 
     private static Polynomial buildPolynomial() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
 
         return new Polynomial(-root, 1.0);
     }

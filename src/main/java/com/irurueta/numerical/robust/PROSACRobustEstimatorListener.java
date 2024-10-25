@@ -20,8 +20,7 @@ package com.irurueta.numerical.robust;
  *
  * @param <T> type of object to be estimated.
  */
-public interface PROSACRobustEstimatorListener<T>
-        extends RANSACRobustEstimatorListener<T> {
+public interface PROSACRobustEstimatorListener<T> extends RANSACRobustEstimatorListener<T> {
 
     /**
      * Returns quality scores corresponding to each sample.

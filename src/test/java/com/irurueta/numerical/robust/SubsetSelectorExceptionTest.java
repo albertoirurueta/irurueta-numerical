@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.robust;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class SubsetSelectorExceptionTest {
+class SubsetSelectorExceptionTest {
 
     @Test
-    public void testConstructor() {
-        SubsetSelectorException ex = new SubsetSelectorException();
+    void testConstructor() {
+        var ex = new SubsetSelectorException();
         assertNotNull(ex);
 
         ex = new SubsetSelectorException("message");

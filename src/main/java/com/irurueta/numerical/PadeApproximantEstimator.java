@@ -106,11 +106,10 @@ public class PadeApproximantEstimator {
      * @throws IllegalArgumentException if provided number of Taylor series coefficients is less
      * than 3.
      */
-    public Result estimatePadeCoefficients(final double[] taylorCoefficients)
-            throws NumericalException {
-        final int coefN = (taylorCoefficients.length - 1) / 2;
-        final double[] num = new double[coefN + 1];
-        final double[] denom = new double[coefN + 1];
+    public Result estimatePadeCoefficients(final double[] taylorCoefficients) throws NumericalException {
+        final var coefN = (taylorCoefficients.length - 1) / 2;
+        final var num = new double[coefN + 1];
+        final var denom = new double[coefN + 1];
         estimatePadeCoefficients(taylorCoefficients, coefN, num, denom);
         return new Result(num, denom);
     }
@@ -128,9 +127,9 @@ public class PadeApproximantEstimator {
      * than 3 or if provided numerator or denominator result coefficients have an invalid size.
      */
     public void estimatePadeCoefficients(
-            final double[] taylorCoefficients, final double[] numeratorResult,
-            final double[] denominatorResult) throws NumericalException {
-        final int coefN = (taylorCoefficients.length - 1) / 2;
+            final double[] taylorCoefficients, final double[] numeratorResult, final double[] denominatorResult)
+            throws NumericalException {
+        final var coefN = (taylorCoefficients.length - 1) / 2;
         estimatePadeCoefficients(taylorCoefficients, coefN, numeratorResult, denominatorResult);
     }
 
@@ -151,13 +150,12 @@ public class PadeApproximantEstimator {
             final double[] taylorCoefficients, final int n, final double[] numeratorResult,
             final double[] denominatorResult) throws NumericalException {
         if (taylorCoefficients.length < 3) {
-            throw new IllegalArgumentException(
-                    "Length of Taylor series coefficients must be at least 3");
+            throw new IllegalArgumentException("Length of Taylor series coefficients must be at least 3");
         }
 
         try {
             // Based on Numerical Recipes section 5.12 Padé Approximants page 245.
-            final int nPlusOne = n +1;
+            final var nPlusOne = n +1;
             if (numeratorResult.length != nPlusOne || denominatorResult.length != nPlusOne) {
                 throw new IllegalArgumentException("Wrong numerator or denominator array length");
             }
@@ -259,12 +257,12 @@ public class PadeApproximantEstimator {
         /**
          * Numerator coefficients.
          */
-        private final double[] mNumerators;
+        private final double[] numerators;
 
         /**
          * Denominator coefficients.
          */
-        private final double[] mDenominators;
+        private final double[] denominators;
 
         /**
          * Constructor.
@@ -273,8 +271,8 @@ public class PadeApproximantEstimator {
          * @param denominators denominator coefficients.
          */
         public Result(final double[] numerators, final double[] denominators) {
-            mNumerators = numerators;
-            mDenominators = denominators;
+            this.numerators = numerators;
+            this.denominators = denominators;
         }
 
         /**
@@ -283,7 +281,7 @@ public class PadeApproximantEstimator {
          * @return numerator coefficients.
          */
         public double[] getNumerators() {
-            return mNumerators;
+            return numerators;
         }
 
         /**
@@ -292,7 +290,7 @@ public class PadeApproximantEstimator {
          * @return denominator coefficients.
          */
         public double[] getDenominators() {
-            return mDenominators;
+            return denominators;
         }
     }
 }

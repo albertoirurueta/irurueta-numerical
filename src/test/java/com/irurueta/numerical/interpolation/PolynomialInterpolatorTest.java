@@ -15,20 +15,21 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PolynomialInterpolatorTest {
+class PolynomialInterpolatorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -49,144 +50,142 @@ public class PolynomialInterpolatorTest {
     private static final double ABSOLUTE_ERROR_5 = 3.0;
 
     @Test
-    public void interpolate_whenFirstDegreePolynomial_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenFirstDegreePolynomial_returnsExpectedResult() throws InterpolationException, SortingException {
         assertInterpolation(1, SAMPLES, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void interpolate_whenFirstDegreePolynomialMinimumSamples_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenFirstDegreePolynomialMinimumSamples_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(1, 2, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void interpolate_whenSecondDegreePolynomial_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenSecondDegreePolynomial_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(2, SAMPLES, ABSOLUTE_ERROR_2);
     }
 
     @Test
-    public void interpolate_whenSecondDegreePolynomialMinimumSamples_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenSecondDegreePolynomialMinimumSamples_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(2, 3, ABSOLUTE_ERROR_2);
     }
 
     @Test
-    public void interpolate_whenThirdDegreePolynomial_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenThirdDegreePolynomial_returnsExpectedResult() throws InterpolationException, SortingException {
         assertInterpolation(3, SAMPLES, ABSOLUTE_ERROR_3);
     }
 
     @Test
-    public void interpolate_whenThirdDegreePolynomialMinimumSamples_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenThirdDegreePolynomialMinimumSamples_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(3, 4, ABSOLUTE_ERROR_3);
     }
 
     @Test
-    public void interpolate_whenFourthDegreePolynomial_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenFourthDegreePolynomial_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(4, SAMPLES, ABSOLUTE_ERROR_4);
     }
 
     @Test
-    public void interpolate_whenFourthDegreePolynomialMinimumSamples_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenFourthDegreePolynomialMinimumSamples_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(4, 5, ABSOLUTE_ERROR_4);
     }
 
     @Test
-    public void interpolate_whenFifthDegreePolynomialMinimumSamples_returnsExpectedResult()
-            throws InterpolationException, SortingException {
+    void interpolate_whenFifthDegreePolynomialMinimumSamples_returnsExpectedResult() throws InterpolationException,
+            SortingException {
         assertInterpolation(5, 6, ABSOLUTE_ERROR_5);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void interpolate_whenMismatchedLength_throwsIllegalArgumentException() {
-        final double[] x = new double[SAMPLES];
-        final double[] y = new double[SAMPLES + 1];
-        new PolynomialInterpolator(x, y);
+    @Test
+    void interpolate_whenMismatchedLength_throwsIllegalArgumentException() {
+        final var x = new double[SAMPLES];
+        final var y = new double[SAMPLES + 1];
+        assertThrows(IllegalArgumentException.class, () -> new PolynomialInterpolator(x, y));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void interpolate_whenNotEnoughSamples_throwsIllegalArgumentException() {
-        final double[] x = new double[1];
-        final double[] y = new double[1];
-        new PolynomialInterpolator(x, y);
+    @Test
+    void interpolate_whenNotEnoughSamples_throwsIllegalArgumentException() {
+        final var x = new double[1];
+        final var y = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> new PolynomialInterpolator(x, y));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void interpolate_whenNotEnoughSamplesToTakeIntoAccount_throwsIllegalArgumentException() {
-        final double[] x = new double[SAMPLES];
-        final double[] y = new double[SAMPLES];
-        new PolynomialInterpolator(x, y, 1);
+    @Test
+    void interpolate_whenNotEnoughSamplesToTakeIntoAccount_throwsIllegalArgumentException() {
+        final var x = new double[SAMPLES];
+        final var y = new double[SAMPLES];
+        assertThrows(IllegalArgumentException.class, () -> new PolynomialInterpolator(x, y, 1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void interpolate_whenTooManyPointsToTakeIntoAccount_throwsIllegalArgumentException() {
-        final double[] x = new double[SAMPLES];
-        final double[] y = new double[SAMPLES];
-        new PolynomialInterpolator(x, y, SAMPLES + 1);
+    @Test
+    void interpolate_whenTooManyPointsToTakeIntoAccount_throwsIllegalArgumentException() {
+        final var x = new double[SAMPLES];
+        final var y = new double[SAMPLES];
+        assertThrows(IllegalArgumentException.class, () -> new PolynomialInterpolator(x, y, SAMPLES + 1));
     }
 
     private static void assertInterpolation(final int degree, final int samples, final double error)
             throws InterpolationException, SortingException {
-        final double[] roots = new double[degree];
-        final Polynomial polynomial = buildPolynomial(degree, roots);
+        final var roots = new double[degree];
+        final var polynomial = buildPolynomial(degree, roots);
 
-        for (int i = 0; i < degree; i++) {
+        for (var i = 0; i < degree; i++) {
             assertEquals(0.0, polynomial.evaluate(roots[i]), error);
         }
 
         // create multiple samples and evaluations
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double[] unorderedX = new double[samples];
-        final double[] unorderedY = new double[samples];
-        for (int i = 0; i < samples; i++) {
+        final var randomizer = new UniformRandomizer();
+        final var unorderedX = new double[samples];
+        final var unorderedY = new double[samples];
+        for (var i = 0; i < samples; i++) {
             unorderedX[i] = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             unorderedY[i] = polynomial.evaluate(unorderedX[i]);
         }
 
         // order values by ascending x
-        final double[] x = Arrays.copyOf(unorderedX, samples);
-        final double[] y = new double[samples];
-        final int[] indices = Sorter.create().sortWithIndices(x);
-        for (int i = 0; i < samples; i++) {
+        final var x = Arrays.copyOf(unorderedX, samples);
+        final var y = new double[samples];
+        final var indices = Sorter.create().sortWithIndices(x);
+        for (var i = 0; i < samples; i++) {
             y[i] = unorderedY[indices[i]];
         }
 
         // check data
-        for (int i = 0; i < samples; i++) {
+        for (var i = 0; i < samples; i++) {
             assertEquals(y[i], polynomial.evaluate(x[i]), 0.0);
         }
 
-        final PolynomialInterpolator interpolator = new PolynomialInterpolator(x, y);
+        final var interpolator = new PolynomialInterpolator(x, y);
 
         // check that interpolator passes through provided points
-        for (int i = 0; i < samples; i++) {
+        for (var i = 0; i < samples; i++) {
             assertEquals(y[i], interpolator.interpolate(x[i]), 0.0);
         }
 
         // check random values
-        double accuracy = 0.0;
-        for (int i = 0; i < INTERPOLATIONS; i++) {
-            final double xi = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        var accuracy = 0.0;
+        for (var i = 0; i < INTERPOLATIONS; i++) {
+            final var xi = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             assertEquals(polynomial.evaluate(xi), interpolator.interpolate(xi), error);
-            final double dy = interpolator.getDy();
+            final var dy = interpolator.getDy();
             accuracy += dy / INTERPOLATIONS;
         }
 
         Logger.getLogger(PolynomialInterpolatorTest.class.getName())
-                .log(Level.INFO, "accuracy: " + accuracy + " degree: " + degree);
+                .log(Level.INFO, String.format("accuracy: %f degree: %d", accuracy, degree));
     }
 
     private static Polynomial buildPolynomial(final int degree, final double[] roots) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
 
             roots[i] = root;

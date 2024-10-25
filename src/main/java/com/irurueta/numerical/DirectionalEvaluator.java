@@ -58,8 +58,7 @@ public class DirectionalEvaluator {
      *                                  the same length.
      */
     public DirectionalEvaluator(
-            final MultiDimensionFunctionEvaluatorListener listener, final double[] point,
-            final double[] direction) {
+            final MultiDimensionFunctionEvaluatorListener listener, final double[] point, final double[] direction) {
 
         setPointAndDirection(point, direction);
         this.listener = listener;
@@ -137,7 +136,7 @@ public class DirectionalEvaluator {
      * @throws EvaluationException Thrown if function evaluation fails
      */
     public double evaluateAt(final double x) throws EvaluationException {
-        for (int i = 0; i < point.length; i++) {
+        for (var i = 0; i < point.length; i++) {
             p[i] = point[i] + x * direction[i];
         }
         return listener.evaluate(p);

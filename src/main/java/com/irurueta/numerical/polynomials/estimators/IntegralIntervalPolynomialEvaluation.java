@@ -28,22 +28,22 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
     /**
      * Start point of interval being integrated.
      */
-    private double mStartX;
+    private double startX;
 
     /**
      * End point of interval being integrated.
      */
-    private double mEndX;
+    private double endX;
 
     /**
      * Order of integral.
      */
-    private int mIntegralOrder;
+    private int integralOrder;
 
     /**
      * Constant terms of integral.
      */
-    private double[] mConstants;
+    private double[] constants;
 
     /**
      * Constructor.
@@ -64,11 +64,10 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
     public IntegralIntervalPolynomialEvaluation(
-            final double startX, final double endX, final double evaluation,
-            final int integralOrder) {
+            final double startX, final double endX, final double evaluation, final int integralOrder) {
         super(evaluation);
-        mStartX = startX;
-        mEndX = endX;
+        this.startX = startX;
+        this.endX = endX;
         setIntegralOrder(integralOrder);
     }
 
@@ -80,8 +79,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param evaluation evaluation of nth-integral of polynomial between startX
      *                   and endX.
      */
-    public IntegralIntervalPolynomialEvaluation(
-            final double startX, final double endX, final double evaluation) {
+    public IntegralIntervalPolynomialEvaluation(final double startX, final double endX, final double evaluation) {
         this(startX, endX, evaluation, MIN_INTEGRAL_ORDER);
     }
 
@@ -91,7 +89,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @return start point of interval being integrated.
      */
     public double getStartX() {
-        return mStartX;
+        return startX;
     }
 
     /**
@@ -100,7 +98,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param startX start point of interval being integrated.
      */
     public void setStartX(final double startX) {
-        mStartX = startX;
+        this.startX = startX;
     }
 
     /**
@@ -109,7 +107,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @return end point of interval being integrated.
      */
     public double getEndX() {
-        return mEndX;
+        return endX;
     }
 
     /**
@@ -118,7 +116,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param endX end point of interval being integrated.
      */
     public void setEndX(final double endX) {
-        mEndX = endX;
+        this.endX = endX;
     }
 
     /**
@@ -127,7 +125,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @return integral order.
      */
     public int getIntegralOrder() {
-        return mIntegralOrder;
+        return integralOrder;
     }
 
     /**
@@ -138,11 +136,10 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      */
     public final void setIntegralOrder(final int integralOrder) {
         if (integralOrder < MIN_INTEGRAL_ORDER) {
-            throw new IllegalArgumentException(
-                    "integral order must be at least 1");
+            throw new IllegalArgumentException("integral order must be at least 1");
         }
 
-        mIntegralOrder = integralOrder;
+        this.integralOrder = integralOrder;
     }
 
     /**
@@ -151,7 +148,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @return constant terms of integral.
      */
     public double[] getConstants() {
-        return mConstants;
+        return constants;
     }
 
     /**
@@ -160,7 +157,7 @@ public class IntegralIntervalPolynomialEvaluation extends PolynomialEvaluation {
      * @param constants constant terms of integral.
      */
     public void setConstants(final double[] constants) {
-        mConstants = constants;
+        this.constants = constants;
     }
 
     /**

@@ -117,8 +117,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      */
     public QuasiNewtonMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener,
-            final double tolerance) {
+            final GradientFunctionEvaluatorListener gradientListener, final double tolerance) {
         super(listener);
         internalSetTolerance(tolerance);
         p = null;
@@ -143,8 +142,8 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      */
     public QuasiNewtonMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener,
-            final double[] startPoint, final double tolerance) {
+            final GradientFunctionEvaluatorListener gradientListener, final double[] startPoint,
+            final double tolerance) {
         super(listener);
         internalSetTolerance(tolerance);
         p = startPoint;
@@ -174,8 +173,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      *                               lack of convergence or because function couldn't be evaluated.
      */
     @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -186,8 +184,8 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
 
         locked = true;
 
-        boolean validResult = false;
-        final int n = p.length;
+        var validResult = false;
+        final var n = p.length;
 
         try {
             double den;
@@ -196,25 +194,25 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
             double fae;
             double fp;
             final double stpmax;
-            double sum = 0.0;
+            var sum = 0.0;
             double sumdg;
             double sumxi;
             double temp;
             double test;
-            final double[] dg = new double[n];
-            final double[] g = new double[n];
-            final double[] hdg = new double[n];
-            final double[] pnew = new double[n];
-            final double[] xi = new double[n];
-            final double[] fretArray = new double[1];
-            final boolean[] check = new boolean[1];
+            final var dg = new double[n];
+            final var g = new double[n];
+            final var hdg = new double[n];
+            final var pnew = new double[n];
+            final var xi = new double[n];
+            final var fretArray = new double[1];
+            final var check = new boolean[1];
 
-            final Matrix hessin = new Matrix(n, n);
+            final var hessin = new Matrix(n, n);
             fp = listener.evaluate(p);
             gradientListener.evaluateGradient(p, g);
 
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++) {
                     hessin.setElementAt(i, j, 0.0);
                 }
                 hessin.setElementAt(i, i, 1.0);
@@ -222,17 +220,17 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                 sum += p[i] * p[i];
             }
             stpmax = STPMX * Math.max(Math.sqrt(sum), n);
-            for (int its = 0; its < ITMAX; its++) {
+            for (var its = 0; its < ITMAX; its++) {
                 iter = its;
                 lnsrch(p, fp, g, xi, pnew, fretArray, stpmax, check);
                 fret = fretArray[0];
                 fp = fret;
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     xi[i] = pnew[i] - p[i];
                     p[i] = pnew[i];
                 }
                 test = 0.0;
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     temp = Math.abs(xi[i]) / Math.max(Math.abs(p[i]), 1.0);
                     if (temp > test) {
                         test = temp;
@@ -251,7 +249,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                 test = 0.0;
                 den = Math.max(Math.abs(fret), 1.0);
 
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     temp = Math.abs(g[i]) * Math.max(Math.abs(p[i]), 1.0) / den;
                     if (temp > test) {
                         test = temp;
@@ -263,18 +261,18 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                     break;
                 }
 
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     dg[i] = g[i] - dg[i];
                 }
 
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     hdg[i] = 0.0;
-                    for (int j = 0; j < n; j++) {
+                    for (var j = 0; j < n; j++) {
                         hdg[i] += hessin.getElementAt(i, j) * dg[j];
                     }
                 }
                 fac = fae = sumdg = sumxi = 0.0;
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     fac += dg[i] * xi[i];
                     fae += dg[i] * hdg[i];
                     sumdg += sqr(dg[i]);
@@ -284,25 +282,21 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                 if (fac > Math.sqrt(EPS * sumdg * sumxi)) {
                     fac = 1.0 / fac;
                     fad = 1.0 / fae;
-                    for (int i = 0; i < n; i++) {
+                    for (var i = 0; i < n; i++) {
                         dg[i] = fac * xi[i] - fad * hdg[i];
                     }
 
-                    for (int i = 0; i < n; i++) {
-                        for (int j = i; j < n; j++) {
-                            hessin.setElementAt(i, j,
-                                    hessin.getElementAt(i, j) +
-                                            fac * xi[i] * xi[j] -
-                                            fad * hdg[i] * hdg[j] +
-                                            fae * dg[i] * dg[j]);
-                            hessin.setElementAt(j, i,
-                                    hessin.getElementAt(i, j));
+                    for (var i = 0; i < n; i++) {
+                        for (var j = i; j < n; j++) {
+                            hessin.setElementAt(i, j, hessin.getElementAt(i, j) + fac * xi[i] * xi[j]
+                                    - fad * hdg[i] * hdg[j] + fae * dg[i] * dg[j]);
+                            hessin.setElementAt(j, i, hessin.getElementAt(i, j));
                         }
                     }
                 }
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     xi[i] = 0.0;
-                    for (int j = 0; j < n; j++) {
+                    for (var j = 0; j < n; j++) {
                         xi[i] -= hessin.getElementAt(i, j) * g[j];
                     }
                 }
@@ -339,8 +333,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isGradientListenerAvailable() &&
-                isStartPointAvailable();
+        return isListenerAvailable() && isGradientListenerAvailable() && isStartPointAvailable();
     }
 
     /**
@@ -432,8 +425,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @throws NotAvailableException Raised if gradient listener has not yet
      *                               been provided.
      */
-    public GradientFunctionEvaluatorListener getGradientListener()
-            throws NotAvailableException {
+    public GradientFunctionEvaluatorListener getGradientListener() throws NotAvailableException {
         if (!isGradientListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -447,9 +439,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @param gradientListener Gradient listener.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setGradientListener(
-            final GradientFunctionEvaluatorListener gradientListener)
-            throws LockedException {
+    public void setGradientListener(final GradientFunctionEvaluatorListener gradientListener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -499,25 +489,24 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * @param check  checks line search.
      * @throws OptimizationException Raised if convergence was not achieved.
      */
-    private void lnsrch(final double[] xold, final double fold, final double[] g, final double[] p,
-                        final double[] x, final double[] f, final double stpmax, final boolean[] check)
-            throws OptimizationException {
+    private void lnsrch(final double[] xold, final double fold, final double[] g, final double[] p, final double[] x,
+                        final double[] f, final double stpmax, final boolean[] check) throws OptimizationException {
         double a;
         double alam;
-        double alam2 = 0.0;
+        var alam2 = 0.0;
         final double alamin;
         double b;
         double disc;
-        double f2 = 0.0;
+        var f2 = 0.0;
         double rhs1;
         double rhs2;
-        double slope = 0.0;
-        double sum = 0.0;
+        var slope = 0.0;
+        var sum = 0.0;
         double temp;
         double test;
         double tmplam;
         int i;
-        final int n = xold.length;
+        final var n = xold.length;
         check[0] = false;
 
         for (i = 0; i < n; i++) {
@@ -567,10 +556,8 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                 } else {
                     rhs1 = f[0] - fold - alam * slope;
                     rhs2 = f2 - fold - alam2 * slope;
-                    a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) /
-                            (alam - alam2);
-                    b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 /
-                            (alam2 * alam2)) / (alam - alam2);
+                    a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) / (alam - alam2);
+                    b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 / (alam2 * alam2)) / (alam - alam2);
                     if (a == 0.0) {
                         tmplam = -slope / (2.0 * b);
                     } else {
@@ -578,8 +565,7 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
                         if (disc < 0.0) {
                             tmplam = 0.5 * alam;
                         } else if (b <= 0.0) {
-                            tmplam = (-b + Math.sqrt(disc)) /
-                                    (3.0 * a);
+                            tmplam = (-b + Math.sqrt(disc)) / (3.0 * a);
                         } else {
                             tmplam = -slope / (b + Math.sqrt(disc));
                         }

@@ -76,9 +76,8 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public RidderSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint,
-            final double tolerance) throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -145,8 +144,7 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -156,9 +154,9 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
 
         locked = true;
 
-        final double x1 = minEvalPoint;
-        final double x2 = maxEvalPoint;
-        final double xacc = tolerance;
+        final var x1 = minEvalPoint;
+        final var x2 = maxEvalPoint;
+        final var xacc = tolerance;
         double fl;
         double fh;
         try {
@@ -169,29 +167,28 @@ public class RidderSingleRootEstimator extends BracketedSingleRootEstimator {
         }
 
         double ans;
-        boolean found = false;
+        var found = false;
         if ((fl > 0.0 && fh < 0.0) || (fl < 0.0 && fh > 0.0)) {
-            double xl = x1;
-            double xh = x2;
+            var xl = x1;
+            var xh = x2;
             ans = -9.99e99;
             try {
-                for (int j = 0; j < MAXIT; j++) {
-                    final double xm = 0.5 * (xl + xh);
-                    final double fm = listener.evaluate(xm);
-                    final double s = Math.sqrt(fm * fm - fl * fh);
+                for (var j = 0; j < MAXIT; j++) {
+                    final var xm = 0.5 * (xl + xh);
+                    final var fm = listener.evaluate(xm);
+                    final var s = Math.sqrt(fm * fm - fl * fh);
                     if (s == 0.0) {
                         found = true;
                         break;
                     }
-                    final double xnew = xm + (xm - xl) * ((fl >= fh ? 1.0 : -1.0) *
-                            fm / s);
+                    final var xnew = xm + (xm - xl) * ((fl >= fh ? 1.0 : -1.0) * fm / s);
                     if (Math.abs(xnew - ans) <= xacc) {
                         // result found
                         found = true;
                         break;
                     }
                     ans = xnew;
-                    final double fnew = listener.evaluate(ans);
+                    final var fnew = listener.evaluate(ans);
                     if (sign(fm, fnew) != fm) {
                         xl = xm;
                         fl = fm;

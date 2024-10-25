@@ -17,95 +17,90 @@ package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DirectPolynomialEvaluationTest {
+class DirectPolynomialEvaluationTest {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor
-        DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
+        var eval = new DirectPolynomialEvaluation();
 
         // check initial values
         assertEquals(0.0, eval.getX(), 0.0);
         assertEquals(0.0, eval.getEvaluation(), 0.0);
-        assertEquals(PolynomialEvaluationType.DIRECT_EVALUATION,
-                eval.getType());
+        assertEquals(PolynomialEvaluationType.DIRECT_EVALUATION, eval.getType());
 
         // test constructor with values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         eval = new DirectPolynomialEvaluation(x, evaluation);
 
         // check correctness
-        assertEquals(eval.getX(), x, 0.0);
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
+        assertEquals(x, eval.getX(), 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
     }
 
     @Test
-    public void testGetSetX() {
-        final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
+    void testGetSetX() {
+        final var eval = new DirectPolynomialEvaluation();
 
         // check initial value
         assertEquals(0.0, eval.getX(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setX(x);
 
         // check correctness
-        assertEquals(eval.getX(), x, 0.0);
+        assertEquals(x, eval.getX(), 0.0);
     }
 
     @Test
-    public void testGetSetEvaluation() {
-        final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation();
+    void testGetSetEvaluation() {
+        final var eval = new DirectPolynomialEvaluation();
 
         // check initial value
         assertEquals(0.0, eval.getEvaluation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setEvaluation(evaluation);
 
         // check correctness
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final DirectPolynomialEvaluation eval1 = new DirectPolynomialEvaluation();
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var eval1 = new DirectPolynomialEvaluation();
 
         // set new values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval1.setX(x);
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval1.setEvaluation(evaluation);
 
         // check correctness
-        assertEquals(eval1.getX(), x, 0.0);
-        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
+        assertEquals(x, eval1.getX(), 0.0);
+        assertEquals(evaluation, eval1.getEvaluation(), 0.0);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(eval1);
-        final DirectPolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(eval1);
+        final var eval2 = SerializationHelper.<DirectPolynomialEvaluation>deserialize(bytes);
 
         // check correctness
         assertEquals(eval2.getX(), x, 0.0);

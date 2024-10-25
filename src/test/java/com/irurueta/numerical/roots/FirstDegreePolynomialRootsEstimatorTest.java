@@ -21,13 +21,11 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class FirstDegreePolynomialRootsEstimatorTest {
+class FirstDegreePolynomialRootsEstimatorTest {
 
     private static final double MIN_EVAL_POINT = 0.0;
     private static final double MAX_EVAL_POINT = 1.0;
@@ -37,40 +35,24 @@ public class FirstDegreePolynomialRootsEstimatorTest {
     private static final int TIMES = 100;
 
     @Test
-    public void testConstructor() throws LockedException,
-            NotAvailableException, NotReadyException {
+    void testConstructor() throws NotAvailableException, NotReadyException {
 
-        final double[] polyParams = new double[2];
+        final var polyParams = new double[2];
         // to ensure it's second degree
         polyParams[1] = 1.0;
 
-        FirstDegreePolynomialRootsEstimator estimator;
-
         // test 1st constructor
-        estimator = new FirstDegreePolynomialRootsEstimator();
+        var estimator = new FirstDegreePolynomialRootsEstimator();
         assertNotNull(estimator);
 
         assertFalse(estimator.arePolynomialParametersAvailable());
         assertFalse(estimator.areRootsAvailable());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        try {
-            estimator.getPolynomialParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
+        assertThrows(NotAvailableException.class, estimator::getPolynomialParameters);
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
-        try {
-            estimator.isFirstDegree();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::isFirstDegree);
         assertTrue(estimator.isRealSolution());
-
 
         // test 2nd constructor
         estimator = new FirstDegreePolynomialRootsEstimator(polyParams);
@@ -79,157 +61,92 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         assertTrue(estimator.arePolynomialParametersAvailable());
         assertFalse(estimator.areRootsAvailable());
         assertEquals(estimator.getRealPolynomialParameters(), polyParams);
-        try {
-            estimator.getPolynomialParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getRoots();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getPolynomialParameters);
+        assertThrows(NotAvailableException.class, estimator::getRoots);
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isFirstDegree());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        final double[] badPolyParams = new double[1];
-
-        estimator = null;
-        try {
-            estimator = new FirstDegreePolynomialRootsEstimator(badPolyParams);
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var badPolyParams = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> new FirstDegreePolynomialRootsEstimator(badPolyParams));
     }
 
     @Test
-    public void testGetSetPolynomialParameters() throws LockedException,
-            NotAvailableException {
+    void testGetSetPolynomialParameters() throws LockedException, NotAvailableException {
 
-        final double[] polyParams = new double[2];
+        final var polyParams = new double[2];
         polyParams[1] = 1.0;
-        final double[] polyParams2 = new double[3];
+        final var polyParams2 = new double[3];
         polyParams2[1] = 1.0;
         polyParams2[2] = 0.0;
-        final double[] badPolyParams = new double[1];
-        final double[] badPolyParams2 = new double[2];
+        final var badPolyParams = new double[1];
+        final var badPolyParams2 = new double[2];
         badPolyParams2[1] = 0.0;
 
-        final FirstDegreePolynomialRootsEstimator estimator =
-                new FirstDegreePolynomialRootsEstimator();
+        final var estimator = new FirstDegreePolynomialRootsEstimator();
 
         // check default values
-        try {
-            estimator.getPolynomialParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getRealPolynomialParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getPolynomialParameters);
+        assertThrows(NotAvailableException.class, estimator::getRealPolynomialParameters);
         assertFalse(estimator.arePolynomialParametersAvailable());
 
         // set polynomial parameters
         estimator.setPolynomialParameters(polyParams);
         // check correctness
-        assertEquals(estimator.getRealPolynomialParameters(), polyParams);
-        try {
-            estimator.getPolynomialParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(polyParams, estimator.getRealPolynomialParameters());
+        assertThrows(NotAvailableException.class, estimator::getPolynomialParameters);
 
         estimator.setPolynomialParameters(polyParams2);
         // check correctness
         assertEquals(estimator.getRealPolynomialParameters(), polyParams2);
-        try {
-            estimator.getPolynomialParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-
+        assertThrows(NotAvailableException.class, estimator::getPolynomialParameters);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setPolynomialParameters(badPolyParams);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            estimator.setPolynomialParameters(badPolyParams2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPolynomialParameters(badPolyParams));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPolynomialParameters(badPolyParams2));
 
         // attempting to use complex parameters will also raise an
         // IllegalArgumentException
-        try {
-            estimator.setPolynomialParameters(new Complex[3]);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPolynomialParameters(new Complex[3]));
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            NotAvailableException {
+    void testEstimate() throws LockedException, NotReadyException, NotAvailableException {
 
-        for (int t = 0; t < TIMES; t++) {
+        for (var t = 0; t < TIMES; t++) {
 
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double realRoot1 = randomizer.nextDouble(MIN_EVAL_POINT,
-                    MAX_EVAL_POINT);
+            final var randomizer = new UniformRandomizer();
+            final var realRoot1 = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-            final Complex root1 = new Complex();
-            root1.setReal(randomizer.nextDouble(MIN_EVAL_POINT,
-                    MAX_EVAL_POINT));
-            root1.setImaginary(randomizer.nextDouble(MIN_EVAL_POINT,
-                    MAX_EVAL_POINT));
+            final var root1 = new Complex();
+            root1.setReal(randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT));
+            root1.setImaginary(randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT));
 
+            final var estimator = new FirstDegreePolynomialRootsEstimator();
 
-            final FirstDegreePolynomialRootsEstimator estimator =
-                    new FirstDegreePolynomialRootsEstimator();
-
-            double[] polyParams;
             final Complex[] roots;
 
             // attempt set parameters for constant
-            polyParams = generateConstantPolynomialParams(realRoot1);
+            final var polyParams = generateConstantPolynomialParams(realRoot1);
             assertFalse(FirstDegreePolynomialRootsEstimator.isFirstDegree(
                     polyParams));
-            try {
-                estimator.setPolynomialParameters(polyParams);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            try {
-                estimator.isFirstDegree();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(IllegalArgumentException.class, () -> estimator.setPolynomialParameters(polyParams));
+            assertThrows(NotReadyException.class, estimator::isFirstDegree);
+            assertThrows(NotReadyException.class, estimator::estimate);
+
             // check correctness
             assertFalse(estimator.areRootsAvailable());
 
-
             // set parameters for first degree polynomial with real root
-            polyParams = generateFirstDegreePolynomialParams(realRoot1);
-            assertTrue(FirstDegreePolynomialRootsEstimator.isFirstDegree(
-                    polyParams));
-            estimator.setPolynomialParameters(polyParams);
+            final var polyParams2 = generateFirstDegreePolynomialParams(realRoot1);
+            assertTrue(FirstDegreePolynomialRootsEstimator.isFirstDegree(polyParams2));
+            estimator.setPolynomialParameters(polyParams2);
             assertTrue(estimator.isFirstDegree());
             assertTrue(estimator.isRealSolution());
             estimator.estimate();
+
             // check correctness
             assertTrue(estimator.areRootsAvailable());
             roots = estimator.getRoots();
@@ -239,9 +156,9 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         }
     }
 
-    private double vectorNorm(double[] v) {
-        double normValue = 0.0;
-        for (final double value : v) {
+    private static double vectorNorm(double[] v) {
+        var normValue = 0.0;
+        for (final var value : v) {
             // square norm
             normValue += value * value;
         }
@@ -249,21 +166,21 @@ public class FirstDegreePolynomialRootsEstimatorTest {
         return Math.sqrt(normValue);
     }
 
-    private double[] generateConstantPolynomialParams(final double param) {
+    private static double[] generateConstantPolynomialParams(final double param) {
 
-        final double[] out = new double[1];
+        final var out = new double[1];
         out[0] = param;
         return out;
     }
 
-    private double[] generateFirstDegreePolynomialParams(final double root1) {
+    private static double[] generateFirstDegreePolynomialParams(final double root1) {
 
-        final double[] out = new double[2];
+        final var out = new double[2];
         // p(x) = x - root1
         out[1] = 1.0;
         out[0] = -root1;
 
-        final double normValue = vectorNorm(out);
+        final var normValue = vectorNorm(out);
         // normalize vector of complex values
         ArrayUtils.multiplyByScalar(out, 1.0 / normValue, out);
         return out;

@@ -15,16 +15,16 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.NormalDist;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RombergTrapezoidalQuadratureIntegratorTest {
+class RombergTrapezoidalQuadratureIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -45,163 +45,119 @@ public class RombergTrapezoidalQuadratureIntegratorTest {
     private static final double ALMOST_INFINITY = 1e99;
 
     @Test
-    public void integrate_whenFirstDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFirstDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(1, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenSecondDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenSecondDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(2, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenThirdDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenThirdDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(3, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenFourthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFourthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(4, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenFifthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFifthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(5, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenSixthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenSixthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(6, ABSOLUTE_ERROR_6);
     }
 
     @Test
-    public void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double mu = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double sigma = ABSOLUTE_ERROR_GAUSSIAN
-                + Math.abs(randomizer.nextDouble(a, MAX_VALUE));
+    void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var mu = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var sigma = ABSOLUTE_ERROR_GAUSSIAN + Math.abs(randomizer.nextDouble(a, MAX_VALUE));
 
-        final double expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
+        final var expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
 
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return NormalDist.p(point, mu, sigma);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(a, b,
+                point -> NormalDist.p(point, mu, sigma));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_GAUSSIAN);
     }
 
     @Test
-    public void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
+    void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
 
-        final double expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
+        final var expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
 
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.exp(lambda * point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(a, b,
+                point -> Math.exp(lambda * point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_EXPONENTIAL);
     }
 
-    @Test(expected = IntegrationException.class)
-    public void integrate_whenImproperIntegrandWithSingularities_throwsIntegrationException()
-            throws IntegrationException {
+    @Test
+    void integrate_whenImproperIntegrandWithSingularities_throwsIntegrationException() {
 
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(0.0, 1.0,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.log(point) * Math.log(1 - point);
-                            }
-                        });
-        integrator.integrate();
-    }
-
-    @Test(expected = IntegrationException.class)
-    public void integrate_whenImproperIntegralFromZeroToInfinity3_throwsIntegrationException()
-            throws IntegrationException {
-
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(0.0, ALMOST_INFINITY,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point);
-                            }
-                        });
-        integrator.integrate();
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(0.0, 1.0,
+                point -> Math.log(point) * Math.log(1 - point));
+        assertThrows(IntegrationException.class, integrator::integrate);
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() {
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(0.0, 1.0, null);
+    void integrate_whenImproperIntegralFromZeroToInfinity3_throwsIntegrationException() {
+
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(0.0, ALMOST_INFINITY,
+                point -> Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
+        assertThrows(IntegrationException.class, integrator::integrate);
+    }
+
+    @Test
+    void getIntegratorType_returnsExpectedValue() {
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() {
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(0.0, 1.0, null);
+    void getQuadratureType_returnsExpectedValue() {
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
 
-    private void assertPolynomialIntegration(final int degree, final double error)
-            throws IntegrationException {
-        final Polynomial polynomial = buildPolynomial(degree);
-        final Polynomial integrationPolynomial = polynomial.integrationAndReturnNew();
+    private void assertPolynomialIntegration(final int degree, final double error) throws IntegrationException {
+        final var polynomial = buildPolynomial(degree);
+        final var integrationPolynomial = polynomial.integrationAndReturnNew();
 
         // set integration interval
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final double expected = integrationPolynomial.evaluate(b)
-                - integrationPolynomial.evaluate(a);
+        final var expected = integrationPolynomial.evaluate(b) - integrationPolynomial.evaluate(a);
 
-        final RombergTrapezoidalQuadratureIntegrator integrator =
-                new RombergTrapezoidalQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return polynomial.evaluate(point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergTrapezoidalQuadratureIntegrator(a, b, polynomial::evaluate);
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, error);
     }
 
     private static Polynomial buildPolynomial(final int degree) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
         }
 

@@ -15,7 +15,7 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
@@ -24,11 +24,11 @@ import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-public class Polynomial2DInterpolatorTest {
+class Polynomial2DInterpolatorTest {
 
     private static final double MIN_VALUE = -1.0;
 
@@ -41,102 +41,101 @@ public class Polynomial2DInterpolatorTest {
     private static final double ABSOLUTE_ERROR_2 = 1e-1;
 
     @Test
-    public void interpolate_whenFirstDegree2DPolynomial_returnsExpectedResult()
-            throws SortingException, WrongSizeException, InterpolationException {
+    void interpolate_whenFirstDegree2DPolynomial_returnsExpectedResult() throws SortingException, WrongSizeException,
+            InterpolationException {
         assertInterpolation(1, SAMPLES, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void interpolate_whenFirstDegree2DPolynomialMinimumSamples_returnsExpectedResult()
-            throws SortingException, WrongSizeException, InterpolationException {
+    void interpolate_whenFirstDegree2DPolynomialMinimumSamples_returnsExpectedResult() throws SortingException,
+            WrongSizeException, InterpolationException {
         assertInterpolation(1, 2, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void interpolate_whenSecondDegree2DPolynomial_returnsExpectedResult()
-            throws SortingException, WrongSizeException, InterpolationException {
+    void interpolate_whenSecondDegree2DPolynomial_returnsExpectedResult() throws SortingException, WrongSizeException,
+            InterpolationException {
         assertInterpolation(2, SAMPLES, ABSOLUTE_ERROR_2);
     }
 
     @Test
-    public void interpolate_whenSecondDegree2DPolynomialMinimumSamples_returnsExpectedResult()
-            throws SortingException, WrongSizeException, InterpolationException {
+    void interpolate_whenSecondDegree2DPolynomialMinimumSamples_returnsExpectedResult() throws SortingException,
+            WrongSizeException, InterpolationException {
         assertInterpolation(2, 3, ABSOLUTE_ERROR_2);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void interpolate_whenNotEnoughSamples_throwsIllegalArgumentException()
-            throws WrongSizeException {
-        final double[] x1 = new double[1];
-        final double[] x2 = new double[1];
-        final Matrix y = new Matrix(SAMPLES, SAMPLES);
-        new Polynomial2DInterpolator(x1, x2, y);
+    @Test
+    void interpolate_whenNotEnoughSamples_throwsIllegalArgumentException() throws WrongSizeException {
+        final var x1 = new double[1];
+        final var x2 = new double[1];
+        final var y = new Matrix(SAMPLES, SAMPLES);
+        assertThrows(IllegalArgumentException.class, () -> new Polynomial2DInterpolator(x1, x2, y));
     }
 
     @Test
-    public void getM_returnsExpectedValue() throws WrongSizeException {
-        final double[] x1 = new double[SAMPLES];
-        final double[] x2 = new double[SAMPLES + 1];
-        final Matrix y = new Matrix(SAMPLES, SAMPLES + 1);
-        final Polynomial2DInterpolator interpolator = new Polynomial2DInterpolator(x1, x2, y);
+    void getM_returnsExpectedValue() throws WrongSizeException {
+        final var x1 = new double[SAMPLES];
+        final var x2 = new double[SAMPLES + 1];
+        final var y = new Matrix(SAMPLES, SAMPLES + 1);
+        final var interpolator = new Polynomial2DInterpolator(x1, x2, y);
 
         assertEquals(SAMPLES, interpolator.getM());
     }
 
     @Test
-    public void getN_returnsExpectedValue() throws WrongSizeException {
-        final double[] x1 = new double[SAMPLES];
-        final double[] x2 = new double[SAMPLES + 1];
-        final Matrix y = new Matrix(SAMPLES, SAMPLES + 1);
-        final Polynomial2DInterpolator interpolator = new Polynomial2DInterpolator(x1, x2, y);
+    void getN_returnsExpectedValue() throws WrongSizeException {
+        final var x1 = new double[SAMPLES];
+        final var x2 = new double[SAMPLES + 1];
+        final var y = new Matrix(SAMPLES, SAMPLES + 1);
+        final var interpolator = new Polynomial2DInterpolator(x1, x2, y);
 
         assertEquals(SAMPLES + 1, interpolator.getN());
     }
 
     private static void assertInterpolation(final int degree, final int samples, final double error)
             throws SortingException, WrongSizeException, InterpolationException {
-        final double[] roots1 = new double[degree];
-        final Polynomial polynomial1 = buildPolynomial(degree, roots1);
+        final var roots1 = new double[degree];
+        final var polynomial1 = buildPolynomial(degree, roots1);
 
-        final double[] roots2 = new double[degree];
-        final Polynomial polynomial2 = buildPolynomial(degree, roots2);
+        final var roots2 = new double[degree];
+        final var polynomial2 = buildPolynomial(degree, roots2);
 
-        for (int i = 0; i < degree; i++) {
+        for (var i = 0; i < degree; i++) {
             assertEquals(0.0, polynomial1.evaluate(roots1[i]), error);
             assertEquals(0.0, polynomial2.evaluate(roots2[i]), error);
         }
 
         // create multiple samples and evaluations
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double[] unorderedX1 = new double[samples];
-        final double[] unorderedX2 = new double[samples];
-        for (int i = 0; i < samples; i++) {
+        final var randomizer = new UniformRandomizer();
+        final var unorderedX1 = new double[samples];
+        final var unorderedX2 = new double[samples];
+        for (var i = 0; i < samples; i++) {
             unorderedX1[i] = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             unorderedX2[i] = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
         }
 
         // order values by ascending x and create evaluations
-        final double[] x1 = Arrays.copyOf(unorderedX1, samples);
-        final double[] x2 = Arrays.copyOf(unorderedX2, samples);
-        final Matrix y = new Matrix(samples, samples);
-        final Sorter<Double> sorter = Sorter.create();
+        final var x1 = Arrays.copyOf(unorderedX1, samples);
+        final var x2 = Arrays.copyOf(unorderedX2, samples);
+        final var y = new Matrix(samples, samples);
+        final var sorter = Sorter.<Double>create();
         sorter.sort(x1);
         sorter.sort(x2);
-        for (int i = 0; i < samples; i++) {
-            for (int j = 0; j < samples; j++) {
+        for (var i = 0; i < samples; i++) {
+            for (var j = 0; j < samples; j++) {
                 y.setElementAt(i, j, polynomial1.evaluate(x1[i]) * polynomial2.evaluate(x2[j]));
             }
         }
 
         // check data
-        for (int i = 0; i < samples; i++) {
-            for (int j = 0; j < samples; j++) {
-                assertEquals(y.getElementAt(i, j),
-                        polynomial1.evaluate(x1[i]) * polynomial2.evaluate(x2[j]), 0.0);
+        for (var i = 0; i < samples; i++) {
+            for (var j = 0; j < samples; j++) {
+                assertEquals(y.getElementAt(i, j), polynomial1.evaluate(x1[i]) * polynomial2.evaluate(x2[j]),
+                        0.0);
             }
         }
 
-        final Polynomial2DInterpolator interpolator = new Polynomial2DInterpolator(x1, x2, y);
+        final var interpolator = new Polynomial2DInterpolator(x1, x2, y);
 
         assertEquals(samples, interpolator.getM());
         assertEquals(samples, interpolator.getN());
@@ -144,17 +143,17 @@ public class Polynomial2DInterpolatorTest {
         assertEquals(x2.length, interpolator.getNn());
 
         // check that interpolator passes through provided points
-        for (int i = 0; i < samples; i++) {
-            for (int j = 0; j < samples; j++) {
+        for (var i = 0; i < samples; i++) {
+            for (var j = 0; j < samples; j++) {
                 assertEquals(y.getElementAt(i, j), interpolator.interpolate(x1[i], x2[j]), 0.0);
             }
         }
 
         // check random values
-        for (int i = 0; i < SAMPLES; i++) {
-            final double xi = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            for (int j = 0; j < SAMPLES; j++) {
-                final double xj = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        for (var i = 0; i < SAMPLES; i++) {
+            final var xi = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            for (var j = 0; j < SAMPLES; j++) {
+                final var xj = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
                 assertEquals(polynomial1.evaluate(xi) * polynomial2.evaluate(xj),
                         interpolator.interpolate(xi, xj), error);
             }
@@ -162,11 +161,11 @@ public class Polynomial2DInterpolatorTest {
     }
 
     private static Polynomial buildPolynomial(final int degree, final double[] roots) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
 
             roots[i] = root;

@@ -38,8 +38,7 @@ public class SimpsonDoubleExponentialRuleQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public SimpsonDoubleExponentialRuleQuadratureIntegrator(
-            final double a, final double b, final double hmax,
-            final SingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final double hmax, final SingleDimensionFunctionEvaluatorListener listener,
             final double eps) {
         super(new DoubleExponentialRuleQuadrature(listener, a, b, hmax), eps);
     }
@@ -53,8 +52,7 @@ public class SimpsonDoubleExponentialRuleQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public SimpsonDoubleExponentialRuleQuadratureIntegrator(
-            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new DoubleExponentialRuleQuadrature(listener, a, b), eps);
     }
 
@@ -81,8 +79,7 @@ public class SimpsonDoubleExponentialRuleQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public SimpsonDoubleExponentialRuleQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 
@@ -100,8 +97,7 @@ public class SimpsonDoubleExponentialRuleQuadratureIntegrator
      */
     public SimpsonDoubleExponentialRuleQuadratureIntegrator(
             final double a, final double b, final double hmax,
-            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new DoubleExponentialRuleQuadrature(listener, a, b, hmax), eps);
     }
 
@@ -116,8 +112,7 @@ public class SimpsonDoubleExponentialRuleQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public SimpsonDoubleExponentialRuleQuadratureIntegrator(
-            final double a, final double b,
-            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
             final double eps) {
         super(new DoubleExponentialRuleQuadrature(listener, a, b), eps);
     }
@@ -149,8 +144,7 @@ public class SimpsonDoubleExponentialRuleQuadratureIntegrator
      *                 singularities.
      */
     public SimpsonDoubleExponentialRuleQuadratureIntegrator(
-            final double a, final double b,
-            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

@@ -83,15 +83,15 @@ public class ShepardInterpolator extends BaseRadialBasisFunctionInterpolator {
     public double interpolate(final double[] pt) {
         double r;
         double w;
-        double sum = 0.0;
-        double sumw = 0.0;
+        var sum = 0.0;
+        var sumw = 0.0;
         if (pt.length != dim) {
             throw new IllegalArgumentException("Wrong point length");
         }
 
         try {
-            for (int i = 0; i < n; i++) {
-                final int endCol = dim - 1;
+            for (var i = 0; i < n; i++) {
+                final var endCol = dim - 1;
                 pts.getSubmatrixAsArray(i, 0, i, endCol, pi);
                 if ((r = rad(pt, pi)) == 0.0) return vals[i];
                 sum += (w = Math.pow(r, pneg));

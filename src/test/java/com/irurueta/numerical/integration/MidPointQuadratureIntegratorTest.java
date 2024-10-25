@@ -15,17 +15,16 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.Gamma;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MidPointQuadratureIntegratorTest {
+class MidPointQuadratureIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -46,112 +45,80 @@ public class MidPointQuadratureIntegratorTest {
     private static final double ALMOST_INFINITY = 1e99;
 
     @Test
-    public void integrate_whenFirstDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFirstDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration();
     }
 
     @Test
-    public void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
+    void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
 
-        final double expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
+        final var expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
 
-        final MidPointQuadratureIntegrator integrator = new MidPointQuadratureIntegrator(a, b,
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return Math.exp(lambda * point);
-                    }
-                });
-        final double result = integrator.integrate();
+        final var integrator = new MidPointQuadratureIntegrator(a, b, point -> Math.exp(lambda * point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_EXPONENTIAL);
     }
 
     @Test
-    public void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult()
-            throws IntegrationException {
-        final double expected = 2.0 - Math.PI * Math.PI / 6.0;
+    void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult() throws IntegrationException {
+        final var expected = 2.0 - Math.PI * Math.PI / 6.0;
 
-        final MidPointQuadratureIntegrator integrator =
-                new MidPointQuadratureIntegrator(0.0, 1.0,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.log(point) * Math.log(1 - point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new MidPointQuadratureIntegrator(0.0, 1.0,
+                point -> Math.log(point) * Math.log(1 - point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_1);
     }
 
     @Test
-    public void integrate_whenImproperIntegralFromZeroToInfinity3_returnsWrongResult()
-            throws IntegrationException {
-        final double expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
+    void integrate_whenImproperIntegralFromZeroToInfinity3_returnsWrongResult() throws IntegrationException {
+        final var expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
         assertEquals(1.24663, expected, ABSOLUTE_ERROR_IMPROPER_3);
 
-        final MidPointQuadratureIntegrator integrator =
-                new MidPointQuadratureIntegrator(0.0, ALMOST_INFINITY,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new MidPointQuadratureIntegrator(0.0, ALMOST_INFINITY,
+                point -> Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
+        final var result = integrator.integrate();
 
         assertNotEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_3);
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() {
-        final MidPointQuadratureIntegrator integrator =
-                new MidPointQuadratureIntegrator(0.0, 1.0, null);
+    void getIntegratorType_returnsExpectedValue() {
+        final var integrator = new MidPointQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() {
-        final MidPointQuadratureIntegrator integrator =
-                new MidPointQuadratureIntegrator(0.0, 1.0, null);
+    void getQuadratureType_returnsExpectedValue() {
+        final var integrator = new MidPointQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
     }
 
-    private static void assertPolynomialIntegration()
-            throws IntegrationException {
-        final Polynomial polynomial = buildPolynomial();
-        final Polynomial integrationPolynomial = polynomial.integrationAndReturnNew();
+    private static void assertPolynomialIntegration() throws IntegrationException {
+        final var polynomial = buildPolynomial();
+        final var integrationPolynomial = polynomial.integrationAndReturnNew();
 
         // set integration interval
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final double expected = integrationPolynomial.evaluate(b)
-                - integrationPolynomial.evaluate(a);
+        final var expected = integrationPolynomial.evaluate(b) - integrationPolynomial.evaluate(a);
 
-        final MidPointQuadratureIntegrator integrator =
-                new MidPointQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return polynomial.evaluate(point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new MidPointQuadratureIntegrator(a, b, polynomial::evaluate);
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, MidPointQuadratureIntegratorTest.ABSOLUTE_ERROR_1);
     }
 
     private static Polynomial buildPolynomial() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
         return new Polynomial(-root, 1.0);
     }
 }

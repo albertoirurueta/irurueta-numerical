@@ -24,8 +24,7 @@ import com.irurueta.algebra.WrongSizeException;
  * singularities that make an improper integral (integrands with singularities, or infinite upper or
  * lower bounds of integration).
  */
-public class TrapezoidalQuadratureMatrixIntegrator
-        extends QuadratureMatrixIntegrator<TrapezoidalMatrixQuadrature> {
+public class TrapezoidalQuadratureMatrixIntegrator extends QuadratureMatrixIntegrator<TrapezoidalMatrixQuadrature> {
 
     /**
      * Constructor.
@@ -38,8 +37,7 @@ public class TrapezoidalQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public TrapezoidalQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new TrapezoidalMatrixQuadrature(a, b, listener), eps);
     }
@@ -53,8 +51,7 @@ public class TrapezoidalQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public TrapezoidalQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }

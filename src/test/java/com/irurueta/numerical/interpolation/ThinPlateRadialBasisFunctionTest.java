@@ -1,33 +1,33 @@
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ThinPlateRadialBasisFunctionTest {
+class ThinPlateRadialBasisFunctionTest {
 
     @Test
-    public void evaluate_whenDefaultScale_returnsExpectedValue() {
-        final ThinPlateRadialBasisFunction rbf = new ThinPlateRadialBasisFunction();
+    void evaluate_whenDefaultScale_returnsExpectedValue() {
+        final var rbf = new ThinPlateRadialBasisFunction();
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double r = randomizer.nextDouble(-1.0, 1.0);
-        final double expected = r <= 0.0 ? 0.0 : r * r * Math.log(r);
+        final var randomizer = new UniformRandomizer();
+        final var r = randomizer.nextDouble(-1.0, 1.0);
+        final var expected = r <= 0.0 ? 0.0 : r * r * Math.log(r);
 
         assertEquals(expected, rbf.evaluate(r), 0.0);
     }
 
     @Test
-    public void evaluate_whenRandomScale_returnsExpectedValue() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double scale = randomizer.nextDouble();
+    void evaluate_whenRandomScale_returnsExpectedValue() {
+        final var randomizer = new UniformRandomizer();
+        final var scale = randomizer.nextDouble();
 
-        final ThinPlateRadialBasisFunction rbf = new ThinPlateRadialBasisFunction(scale);
+        final var rbf = new ThinPlateRadialBasisFunction(scale);
 
-        final double r = randomizer.nextDouble();
-        final double expected = r <= 0.0 ? 0.0 : r * r * Math.log(r / scale);
+        final var r = randomizer.nextDouble();
+        final var expected = r <= 0.0 ? 0.0 : r * r * Math.log(r / scale);
 
         assertEquals(expected, rbf.evaluate(r), 0.0);
     }

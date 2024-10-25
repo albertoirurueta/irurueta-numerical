@@ -71,20 +71,20 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each provided polynomial evaluation.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSPolynomialRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -95,7 +95,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     public PROMedSPolynomialRobustEstimator(final int degree) {
         super(degree);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -105,10 +105,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    public PROMedSPolynomialRobustEstimator(
-            final List<PolynomialEvaluation> evaluations) {
+    public PROMedSPolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations) {
         super(evaluations);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -117,10 +116,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PROMedSPolynomialRobustEstimator(
-            final PolynomialRobustEstimatorListener listener) {
+    public PROMedSPolynomialRobustEstimator(final PolynomialRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -132,10 +130,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    public PROMedSPolynomialRobustEstimator(
-            final int degree, final List<PolynomialEvaluation> evaluations) {
+    public PROMedSPolynomialRobustEstimator(final int degree, final List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -146,10 +143,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      *                 starts, ends or its progress significantly changes.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public PROMedSPolynomialRobustEstimator(
-            final int degree, final PolynomialRobustEstimatorListener listener) {
+    public PROMedSPolynomialRobustEstimator(final int degree, final PolynomialRobustEstimatorListener listener) {
         super(degree, listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -162,10 +158,9 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      *                                  less than the required minimum.
      */
     public PROMedSPolynomialRobustEstimator(
-            final List<PolynomialEvaluation> evaluations,
-            final PolynomialRobustEstimatorListener listener) {
+            final List<PolynomialEvaluation> evaluations, final PolynomialRobustEstimatorListener listener) {
         super(evaluations, listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -183,7 +178,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
             final int degree, final List<PolynomialEvaluation> evaluations,
             final PolynomialRobustEstimatorListener listener) {
         super(degree, evaluations, listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -206,7 +201,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * accuracy has been reached
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -231,8 +226,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      * @throws LockedException          if robust estimator is locked because an
      *                                  estimation is already in progress
      */
-    public void setStopThreshold(final double stopThreshold)
-            throws LockedException {
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -240,7 +234,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -251,7 +245,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -281,8 +275,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mEvaluations.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == evaluations.size();
     }
 
     /**
@@ -297,8 +290,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Polynomial estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Polynomial estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -306,115 +298,102 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<Polynomial> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<Polynomial>() {
+        final PROMedSRobustEstimator<Polynomial> innerEstimator = new PROMedSRobustEstimator<>(
+                new PROMedSRobustEstimatorListener<>() {
 
-                            // subset of evaluations picked on each iteration
-                            private final List<PolynomialEvaluation> mSubsetEvaluations =
-                                    new ArrayList<>();
+                    // subset of evaluations picked on each iteration
+                    private final List<PolynomialEvaluation> subsetEvaluations = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return stopThreshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mEvaluations.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return evaluations.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return mPolynomialEstimator.getMinNumberOfEvaluations();
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return polynomialEstimator.getMinNumberOfEvaluations();
+                    }
 
-                            @SuppressWarnings("DuplicatedCode")
-                            @Override
-                            public void estimatePreliminarSolutions(
-                                    final int[] samplesIndices,
-                                    final List<Polynomial> solutions) {
-                                mSubsetEvaluations.clear();
-                                for (int samplesIndex : samplesIndices) {
-                                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));
-                                }
+                    @SuppressWarnings("DuplicatedCode")
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<Polynomial> solutions) {
+                        subsetEvaluations.clear();
+                        for (var samplesIndex : samplesIndices) {
+                            subsetEvaluations.add(evaluations.get(samplesIndex));
+                        }
 
-                                try {
-                                    mPolynomialEstimator.setLMSESolutionAllowed(false);
-                                    mPolynomialEstimator.setEvaluations(mSubsetEvaluations);
+                        try {
+                            polynomialEstimator.setLMSESolutionAllowed(false);
+                            polynomialEstimator.setEvaluations(subsetEvaluations);
 
-                                    final Polynomial polynomial = mPolynomialEstimator.estimate();
-                                    solutions.add(polynomial);
-                                } catch (final Exception e) {
-                                    // if anything fails, no solution is added
-                                }
-                            }
+                            final var polynomial = polynomialEstimator.estimate();
+                            solutions.add(polynomial);
+                        } catch (final Exception e) {
+                            // if anything fails, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(final Polynomial currentEstimation, int i) {
-                                final PolynomialEvaluation eval = mEvaluations.get(i);
-                                return getDistance(eval, currentEstimation);
-                            }
+                    @Override
+                    public double computeResidual(final Polynomial currentEstimation, int i) {
+                        final var eval = evaluations.get(i);
+                        return getDistance(eval, currentEstimation);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSPolynomialRobustEstimator.this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return PROMedSPolynomialRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<Polynomial> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSPolynomialRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<Polynomial> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(PROMedSPolynomialRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<Polynomial> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROMedSPolynomialRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<Polynomial> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(PROMedSPolynomialRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Polynomial> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSPolynomialRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<Polynomial> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(PROMedSPolynomialRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Polynomial> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSPolynomialRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<Polynomial> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(PROMedSPolynomialRobustEstimator.this, progress);
+                        }
+                    }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+                    @Override
+                    public double[] getQualityScores() {
+                        return qualityScores;
+                    }
+                });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -438,11 +417,10 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
      *                                  smaller than required minimum size.
      */
     private void internalSetQualityScores(final double[] qualityScores) {
-        if (qualityScores.length <
-                mPolynomialEstimator.getMinNumberOfEvaluations()) {
+        if (qualityScores.length < polynomialEstimator.getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IntegrationExceptionTest {
+class IntegrationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        IntegrationException ex = new IntegrationException();
+    void testConstructor() {
+        var ex = new IntegrationException();
         assertNotNull(ex);
 
         ex = new IntegrationException("message");

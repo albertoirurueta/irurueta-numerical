@@ -80,17 +80,17 @@ public class RationalInterpolator extends BaseInterpolator {
     public double rawinterp(int jl, double x) throws InterpolationException {
         int m;
         int i;
-        int ns = 0;
+        var ns = 0;
         double y;
         double w;
         double t;
         double hh;
         double h;
         double dd;
-        final double[] xa = xx;
-        final double[] ya = yy;
-        final double[] c = new double[mm];
-        final double[] d = new double[mm];
+        final var xa = xx;
+        final var ya = yy;
+        final var c = new double[mm];
+        final var d = new double[mm];
         hh = Math.abs(x - xa[jl]);
         for (i = 0; i < mm; i++) {
             h = Math.abs(x - xa[jl + i]);

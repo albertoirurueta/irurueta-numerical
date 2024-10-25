@@ -85,9 +85,7 @@ public abstract class RombergIntegrator<T extends Quadrature> extends Integrator
      * @param q   Quadrature used for integration.
      * @param eps Required accuracy.
      */
-    protected RombergIntegrator(
-            final T q,
-            final double eps) {
+    protected RombergIntegrator(final T q, final double eps) {
         this.q = q;
         this.eps = eps;
     }
@@ -103,10 +101,10 @@ public abstract class RombergIntegrator<T extends Quadrature> extends Integrator
     public double integrate() throws IntegrationException {
         try {
             h[0] = 1.0;
-            for (int j = 1; j <= JMAX; j++) {
+            for (var j = 1; j <= JMAX; j++) {
                 s[j - 1] = q.next();
                 if (j >= K) {
-                    final double ss = interpolator.rawinterp(j - K, 0.0);
+                    final var ss = interpolator.rawinterp(j - K, 0.0);
                     if (Math.abs(interpolator.getDy()) <= eps * Math.abs(ss)) {
                         return ss;
                     }
@@ -144,26 +142,20 @@ public abstract class RombergIntegrator<T extends Quadrature> extends Integrator
      * @return created integrator.
      */
     public static RombergIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
             final QuadratureType quadratureType) {
-        switch (quadratureType) {
-            case MID_POINT:
-                return cast(new RombergMidPointQuadratureIntegrator(a, b, listener, eps));
-            case INFINITY_MID_POINT:
-                return cast(new RombergInfinityMidPointQuadratureIntegrator(a, b, listener, eps));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergLowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
-            case EXPONENTIAL_MID_POINT:
-                return cast(new RombergExponentialMidPointQuadratureIntegrator(a, listener, eps));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));
-            case TRAPEZOIDAL:
-            default:
-                return cast(new RombergTrapezoidalQuadratureIntegrator(a, b, listener, eps));
-        }
+        return switch (quadratureType) {
+            case MID_POINT -> cast(new RombergMidPointQuadratureIntegrator(a, b, listener, eps));
+            case INFINITY_MID_POINT -> cast(new RombergInfinityMidPointQuadratureIntegrator(a, b, listener, eps));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergLowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
+            case EXPONENTIAL_MID_POINT -> cast(new RombergExponentialMidPointQuadratureIntegrator(a, listener, eps));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));
+            default -> cast(new RombergTrapezoidalQuadratureIntegrator(a, b, listener, eps));
+        };
     }
 
     /**
@@ -178,26 +170,19 @@ public abstract class RombergIntegrator<T extends Quadrature> extends Integrator
      * @return created integrator.
      */
     public static RombergIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
             final QuadratureType quadratureType) {
-        switch (quadratureType) {
-            case MID_POINT:
-                return cast(new RombergMidPointQuadratureIntegrator(a, b, listener));
-            case INFINITY_MID_POINT:
-                return cast(new RombergInfinityMidPointQuadratureIntegrator(a, b, listener));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergLowerSquareRootMidPointQuadratureIntegrator(a, b, listener));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, listener));
-            case EXPONENTIAL_MID_POINT:
-                return cast(new RombergExponentialMidPointQuadratureIntegrator(a, listener));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, listener));
-            case TRAPEZOIDAL:
-            default:
-                return cast(new RombergTrapezoidalQuadratureIntegrator(a, b, listener));
-        }
+        return switch (quadratureType) {
+            case MID_POINT -> cast(new RombergMidPointQuadratureIntegrator(a, b, listener));
+            case INFINITY_MID_POINT -> cast(new RombergInfinityMidPointQuadratureIntegrator(a, b, listener));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergLowerSquareRootMidPointQuadratureIntegrator(a, b, listener));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, listener));
+            case EXPONENTIAL_MID_POINT -> cast(new RombergExponentialMidPointQuadratureIntegrator(a, listener));
+            case DOUBLE_EXPONENTIAL_RULE -> cast(new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, listener));
+            default -> cast(new RombergTrapezoidalQuadratureIntegrator(a, b, listener));
+        };
     }
 
     /**
@@ -212,8 +197,7 @@ public abstract class RombergIntegrator<T extends Quadrature> extends Integrator
      * @return created integrator.
      */
     public static RombergIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);
     }
 
@@ -228,8 +212,7 @@ public abstract class RombergIntegrator<T extends Quadrature> extends Integrator
      * @return created integrator.
      */
     public static RombergIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);
     }
 

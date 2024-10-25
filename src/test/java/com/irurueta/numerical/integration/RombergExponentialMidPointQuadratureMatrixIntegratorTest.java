@@ -15,105 +15,100 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.Gamma;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RombergExponentialMidPointQuadratureMatrixIntegratorTest {
+class RombergExponentialMidPointQuadratureMatrixIntegratorTest {
 
     private static final double ABSOLUTE_ERROR_IMPROPER_3 = 1e-4;
 
     @Test
-    public void integrate_whenImproperIntegralFromZeroToInfinity3_returnsExpectedResult()
-            throws IntegrationException, WrongSizeException {
+    void integrate_whenImproperIntegralFromZeroToInfinity3_returnsExpectedResult() throws IntegrationException,
+            WrongSizeException {
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                        result.setElementAtIndex(0,
-                                Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                result.setElementAtIndex(0, Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final RombergExponentialMidPointQuadratureMatrixIntegrator integrator =
-                new RombergExponentialMidPointQuadratureMatrixIntegrator(0.0, listener);
+        final var integrator = new RombergExponentialMidPointQuadratureMatrixIntegrator(0.0, listener);
 
-        final double expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
+        final var expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
         assertEquals(1.24663, expected, ABSOLUTE_ERROR_IMPROPER_3);
 
-        final Matrix integrationResult = new Matrix(1, 1);
+        final var integrationResult = new Matrix(1, 1);
         integrator.integrate(integrationResult);
 
         // check
-        final Matrix expectedResult = new Matrix(1, 1);
+        final var expectedResult = new Matrix(1, 1);
         expectedResult.setElementAtIndex(0, expected);
         assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_IMPROPER_3));
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final RombergExponentialMidPointQuadratureMatrixIntegrator integrator =
-                new RombergExponentialMidPointQuadratureMatrixIntegrator(0.0, listener);
+        final var integrator = new RombergExponentialMidPointQuadratureMatrixIntegrator(0.0, listener);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final RombergExponentialMidPointQuadratureMatrixIntegrator integrator =
-                new RombergExponentialMidPointQuadratureMatrixIntegrator(0.0, listener);
+        final var integrator = new RombergExponentialMidPointQuadratureMatrixIntegrator(0.0, listener);
         assertEquals(QuadratureType.EXPONENTIAL_MID_POINT, integrator.getQuadratureType());
     }
 }

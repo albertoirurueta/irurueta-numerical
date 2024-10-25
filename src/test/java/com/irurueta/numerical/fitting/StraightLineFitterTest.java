@@ -18,13 +18,11 @@ package com.irurueta.numerical.fitting;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class StraightLineFitterTest {
+class StraightLineFitterTest {
     private static final double MIN_PARAM_VALUE = -100.0;
     private static final double MAX_PARAM_VALUE = 100.0;
 
@@ -40,9 +38,9 @@ public class StraightLineFitterTest {
     private static final double ABSOLUTE_ERROR = 1e-1;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        StraightLineFitter fitter = new StraightLineFitter();
+        var fitter = new StraightLineFitter();
 
         // check default values
         assertFalse(fitter.isResultAvailable());
@@ -59,15 +57,15 @@ public class StraightLineFitterTest {
         assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // test constructor with input data
-        final double[] x = new double[2];
-        final double[] y = new double[2];
+        final var x = new double[2];
+        final var y = new double[2];
 
         fitter = new StraightLineFitter(x, y);
 
         // check default values
         assertFalse(fitter.isResultAvailable());
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
         assertNull(fitter.getSig());
         assertTrue(fitter.isReady());
         assertEquals(0.0, fitter.getA(), 0.0);
@@ -79,25 +77,19 @@ public class StraightLineFitterTest {
         assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // Force IllegalArgumentException
-        final double[] shortX = new double[1];
+        final var shortX = new double[1];
 
-        fitter = null;
-        try {
-            fitter = new StraightLineFitter(shortX, y);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(fitter);
+        assertThrows(IllegalArgumentException.class, () -> new StraightLineFitter(shortX, y));
 
         // test constructor with input data and sigmas
-        final double[] sig = new double[2];
+        final var sig = new double[2];
         fitter = new StraightLineFitter(x, y, sig);
 
         // check default values
         assertFalse(fitter.isResultAvailable());
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
-        assertSame(fitter.getSig(), sig);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
+        assertSame(sig, fitter.getSig());
         assertTrue(fitter.isReady());
         assertEquals(0.0, fitter.getA(), 0.0);
         assertEquals(0.0, fitter.getB(), 0.0);
@@ -108,20 +100,13 @@ public class StraightLineFitterTest {
         assertEquals(0.0, fitter.getSigdat(), 0.0);
 
         // Force IllegalArgumentException
-        final double[] shortSig = new double[1];
-
-        fitter = null;
-        try {
-            fitter = new StraightLineFitter(x, y, shortSig);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(fitter);
+        final var shortSig = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> new StraightLineFitter(x, y, shortSig));
     }
 
     @Test
-    public void testGetSetInputDataAndIsReady() {
-        final StraightLineFitter fitter = new StraightLineFitter();
+    void testGetSetInputDataAndIsReady() {
+        final var fitter = new StraightLineFitter();
 
         // check default values
         assertNull(fitter.getX());
@@ -130,30 +115,25 @@ public class StraightLineFitterTest {
         assertFalse(fitter.isReady());
 
         // set new values
-        final double[] x = new double[2];
-        final double[] y = new double[2];
+        final var x = new double[2];
+        final var y = new double[2];
 
         fitter.setInputData(x, y);
 
         // check correctness
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
         assertNull(fitter.getSig());
         assertTrue(fitter.isReady());
 
         // Force IllegalArgumentException
-        final double[] shortX = new double[1];
-
-        try {
-            fitter.setInputData(shortX, y);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var shortX = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> fitter.setInputData(shortX, y));
     }
 
     @Test
-    public void testGetSetInputDataAndStandardDeviations() {
-        final StraightLineFitter fitter = new StraightLineFitter();
+    void testGetSetInputDataAndStandardDeviations() {
+        final var fitter = new StraightLineFitter();
 
         // check default values
         assertNull(fitter.getX());
@@ -162,67 +142,57 @@ public class StraightLineFitterTest {
         assertFalse(fitter.isReady());
 
         // set new values
-        final double[] x = new double[2];
-        final double[] y = new double[2];
-        final double[] sig = new double[2];
+        final var x = new double[2];
+        final var y = new double[2];
+        final var sig = new double[2];
 
         fitter.setInputDataAndStandardDeviations(x, y, sig);
 
         // check correctness
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
-        assertSame(fitter.getSig(), sig);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
+        assertSame(sig, fitter.getSig());
         assertTrue(fitter.isReady());
 
         fitter.setInputDataAndStandardDeviations(x, y, null);
 
         // check correctness
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
         assertNull(fitter.getSig());
         assertTrue(fitter.isReady());
 
         // Force IllegalArgumentException
-        final double[] shortX = new double[1];
-        final double[] shortSig = new double[1];
-        try {
-            fitter.setInputDataAndStandardDeviations(shortX, y, sig);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            fitter.setInputDataAndStandardDeviations(x, y, shortSig);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var shortX = new double[1];
+        final var shortSig = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> fitter.setInputDataAndStandardDeviations(shortX, y, sig));
+        assertThrows(IllegalArgumentException.class, () -> fitter.setInputDataAndStandardDeviations(x, y, shortSig));
     }
 
     @Test
-    public void testFitNoSig() throws FittingException, NotReadyException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
-        final double b = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
-        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+    void testFitNoSig() throws FittingException, NotReadyException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
+        final var b = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
+        final var sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, sigma);
-
+        final var errorRandomizer = new GaussianRandomizer(0.0, sigma);
 
         // generate data
-        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final double[] x = new double[nPoints];
-        final double[] y = new double[nPoints];
-        for (int i = 0; i < nPoints; i++) {
+        final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var x = new double[nPoints];
+        final var y = new double[nPoints];
+        for (var i = 0; i < nPoints; i++) {
             x[i] = randomizer.nextDouble(MIN_DATA_VALUE, MAX_DATA_VALUE);
             y[i] = a + b * x[i] + errorRandomizer.nextDouble();
         }
 
-        StraightLineFitter fitter = new StraightLineFitter(x, y);
+        var fitter = new StraightLineFitter(x, y);
 
         // check default values
         assertFalse(fitter.isResultAvailable());
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
         assertNull(fitter.getSig());
         assertTrue(fitter.isReady());
         assertEquals(0.0, fitter.getA(), 0.0);
@@ -238,56 +208,49 @@ public class StraightLineFitterTest {
 
         // check correctness
         assertTrue(fitter.isResultAvailable());
-        assertEquals(fitter.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(fitter.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(fitter.getSigdat(), sigma, ABSOLUTE_ERROR);
+        assertEquals(a, fitter.getA(), ABSOLUTE_ERROR);
+        assertEquals(b, fitter.getB(), ABSOLUTE_ERROR);
+        assertEquals(sigma, fitter.getSigdat(), ABSOLUTE_ERROR);
         assertTrue(fitter.getChi2() > 0);
         assertTrue(fitter.getQ() > 0);
         assertTrue(fitter.getSigA() > 0);
-        assertEquals(fitter.getSigA(),
-                fitter.getSigB() * Math.abs(fitter.getA()), ABSOLUTE_ERROR);
+        assertEquals(fitter.getSigA(), fitter.getSigB() * Math.abs(fitter.getA()), ABSOLUTE_ERROR);
         assertTrue(fitter.getSigB() > 0);
 
         // Force NotReadyException
-        fitter = new StraightLineFitter();
+        final var fitter2 = new StraightLineFitter();
 
-        assertFalse(fitter.isReady());
-        try {
-            fitter.fit();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertFalse(fitter2.isReady());
+        assertThrows(NotReadyException.class, fitter2::fit);
     }
 
     @Test
-    public void testFitSig() throws FittingException, NotReadyException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
-        final double b = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
-        final double sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
+    void testFitSig() throws FittingException, NotReadyException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
+        final var b = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
+        final var sigma = randomizer.nextDouble(MIN_SIGMA_VALUE, MAX_SIGMA_VALUE);
 
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, sigma);
-
+        final var errorRandomizer = new GaussianRandomizer(0.0, sigma);
 
         // generate data
-        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final double[] x = new double[nPoints];
-        final double[] y = new double[nPoints];
-        final double[] sig = new double[nPoints];
-        for (int i = 0; i < nPoints; i++) {
+        final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var x = new double[nPoints];
+        final var y = new double[nPoints];
+        final var sig = new double[nPoints];
+        for (var i = 0; i < nPoints; i++) {
             x[i] = randomizer.nextDouble(MIN_DATA_VALUE, MAX_DATA_VALUE);
             y[i] = a + b * x[i] + errorRandomizer.nextDouble();
             sig[i] = sigma;
         }
 
-        StraightLineFitter fitter = new StraightLineFitter(x, y, sig);
+        var fitter = new StraightLineFitter(x, y, sig);
 
         // check default values
         assertFalse(fitter.isResultAvailable());
-        assertSame(fitter.getX(), x);
-        assertSame(fitter.getY(), y);
-        assertSame(fitter.getSig(), sig);
+        assertSame(x, fitter.getX());
+        assertSame(y, fitter.getY());
+        assertSame(sig, fitter.getSig());
         assertTrue(fitter.isReady());
         assertEquals(0.0, fitter.getA(), 0.0);
         assertEquals(0.0, fitter.getB(), 0.0);
@@ -302,24 +265,19 @@ public class StraightLineFitterTest {
 
         // check correctness
         assertTrue(fitter.isResultAvailable());
-        assertEquals(fitter.getA(), a, 2.0 * ABSOLUTE_ERROR);
-        assertEquals(fitter.getB(), b, 2.0 * ABSOLUTE_ERROR);
+        assertEquals(a, fitter.getA(), 2.0 * ABSOLUTE_ERROR);
+        assertEquals(b, fitter.getB(), 2.0 * ABSOLUTE_ERROR);
         assertEquals(0.0, fitter.getSigdat(), 0.0);
         assertTrue(fitter.getChi2() > 0);
         assertTrue(fitter.getQ() > 0);
         assertTrue(fitter.getSigA() > 0);
-        assertEquals(fitter.getSigA(),
-                fitter.getSigB() * Math.abs(fitter.getA()), ABSOLUTE_ERROR);
+        assertEquals(fitter.getSigA(), fitter.getSigB() * Math.abs(fitter.getA()), ABSOLUTE_ERROR);
         assertTrue(fitter.getSigB() > 0);
 
         // Force NotReadyException
-        fitter = new StraightLineFitter();
+        final var fitter2 = new StraightLineFitter();
 
-        assertFalse(fitter.isReady());
-        try {
-            fitter.fit();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertFalse(fitter2.isReady());
+        assertThrows(NotReadyException.class, fitter2::fit);
     }
 }

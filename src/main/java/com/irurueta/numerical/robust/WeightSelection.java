@@ -94,33 +94,35 @@ public class WeightSelection {
      * @return instance containing the selection that was made.
      * @throws SortingException if weights couldn't be sorted.
      */
-    public static WeightSelection selectWeights(
-            final double[] weights, final boolean sortWeights, final int maxPoints) throws SortingException {
+    public static WeightSelection selectWeights(final double[] weights, final boolean sortWeights, final int maxPoints)
+            throws SortingException {
 
-        final int length = weights.length;
+        final var length = weights.length;
 
         // instantiate selected array with all its values as unselected
-        boolean[] selected = new boolean[length];
+        var selected = new boolean[length];
         int numSelected;
 
         if (sortWeights) {
             // sort weights
 
             // copy weights because this array will be sorted
-            final double[] weightsCopy = Arrays.copyOf(weights, length);
-            final Sorter<Double> sorter = Sorter.create();
+            final var weightsCopy = Arrays.copyOf(weights, length);
+            final var sorter = Sorter.<Double>create();
             // array that will contain original indices in ascending order of
             // weights after sorting
-            final int[] indices = sorter.sortWithIndices(weightsCopy);
+            final var indices = sorter.sortWithIndices(weightsCopy);
 
             // traverse indices array from the greatest position which corresponds
             // to the greatest weight value after sorting in decreasing order
             // up to maxPoints positions
-            int counter = 0;
-            for (int i = length - 1; i >= 0; i--) {
+            var counter = 0;
+            for (var i = length - 1; i >= 0; i--) {
                 selected[indices[i]] = true;
                 counter++;
-                if (counter >= maxPoints) break;
+                if (counter >= maxPoints) {
+                    break;
+                }
             }
             numSelected = counter;
         } else {
@@ -131,14 +133,14 @@ public class WeightSelection {
                 numSelected = length;
             } else {
                 // weights aren't sorted so we pick the first maxPoints
-                for (int i = 0; i < maxPoints; i++) {
+                for (var i = 0; i < maxPoints; i++) {
                     selected[i] = true;
                 }
                 numSelected = maxPoints;
             }
         }
 
-        final WeightSelection selection = new WeightSelection();
+        final var selection = new WeightSelection();
         selection.setSelected(selected);
         selection.setNumSelected(numSelected);
         return selection;

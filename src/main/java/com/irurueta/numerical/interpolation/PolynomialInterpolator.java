@@ -53,8 +53,7 @@ public class PolynomialInterpolator extends BaseInterpolator {
      * @param check true to make validations, false otherwise.
      * @throws IllegalArgumentException if x or y have invalid length or m exceeds length of x or y.
      */
-    public PolynomialInterpolator(final double[] x, final double[] y, final int m,
-                                     final boolean check) {
+    public PolynomialInterpolator(final double[] x, final double[] y, final int m, final boolean check) {
         super(x, y, m, check);
         dy = 0.0;
     }
@@ -101,10 +100,10 @@ public class PolynomialInterpolator extends BaseInterpolator {
         double ho;
         double hp;
         double w;
-        final double[] xa = xx;
-        final double[] ya = yy;
-        final double[] c = new double[mm];
-        final double[] d = new double[mm];
+        final var xa = xx;
+        final var ya = yy;
+        final var c = new double[mm];
+        final var d = new double[mm];
         dif = Math.abs(x - xa[jl]);
         for (i = 0; i < mm; i++) {
             // Here we find the index ns of the closest table entry

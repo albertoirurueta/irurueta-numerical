@@ -95,8 +95,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      *                  minimum.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
-    public PowellMultiOptimizer(
-            final MultiDimensionFunctionEvaluatorListener listener, final double tolerance) {
+    public PowellMultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener, final double tolerance) {
         super(listener);
         internalSetTolerance(tolerance);
         iter = 0;
@@ -123,8 +122,8 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      *                                  don't have the same length or if provided tolerance is negative.
      */
     public PowellMultiOptimizer(
-            final MultiDimensionFunctionEvaluatorListener listener, final double[] point,
-            final Matrix directions, final double tolerance) {
+            final MultiDimensionFunctionEvaluatorListener listener, final double[] point, final Matrix directions,
+            final double tolerance) {
         super(listener);
         internalSetPointAndDirections(point, directions);
         internalSetTolerance(tolerance);
@@ -176,8 +175,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    public void setPointAndDirections(final double[] point, final Matrix directions)
-            throws LockedException {
+    public void setPointAndDirections(final double[] point, final Matrix directions) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -257,8 +255,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      *                               lack of convergence or because function couldn't be evaluated.
      */
     @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -280,8 +277,8 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
         }
 
         double fptt;
-        final double[] pt = new double[n];
-        final double[] ptt = new double[n];
+        final var pt = new double[n];
+        final var ptt = new double[n];
 
         // set vector of directions
         if (!isDirectionAvailable() || xi.length != n) {
@@ -295,12 +292,12 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
             System.arraycopy(p, 0, pt, 0, n);
 
             for (iter = 0; ; ++iter) {
-                final double fp = fret;
-                int ibig = 0;
+                final var fp = fret;
+                var ibig = 0;
                 // Will be the biggest function decrease
-                double del = 0.0;
+                var del = 0.0;
                 // In each iteration, loop over all directions in the set.
-                for (int i = 0; i < n; i++) {
+                for (var i = 0; i < n; i++) {
                     // Copy the direction contained in i-th column of ximat
                     ximat.getSubmatrixAsArray(0, i, n - 1, i, xi);
                     fptt = fret;
@@ -328,7 +325,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
 
                 // Construct the extrapolated point and the average direction
                 // moved. Save the old starting point
-                for (int j = 0; j < n; j++) {
+                for (var j = 0; j < n; j++) {
                     ptt[j] = 2.0 * p[j] - pt[j];
                     xi[j] = p[j] - pt[j];
                     pt[j] = p[j];
@@ -338,17 +335,19 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
                 fptt = listener.evaluate(ptt);
 
                 if (fptt < fp) {
-                    final double t = 2.0 * (fp - 2.0 * fret + fptt) *
-                            sqr(fp - fret - del) - del * sqr(fp - fptt);
+                    final var t = 2.0 * (fp - 2.0 * fret + fptt) * sqr(fp - fret - del) - del * sqr(fp - fptt);
 
                     if (t < 0.0) {
                         // Move to the minimum of the new direction, and save the
                         // new direction
                         fret = linmin();
 
-                        ximat.setSubmatrix(0, ibig - 1, n - 1, ibig - 1, ximat,
-                                0, n - 1, n - 1, n - 1);
-                        ximat.setSubmatrix(0, n - 1, n - 1, n - 1, xi);
+                        ximat.setSubmatrix(0, ibig - 1,
+                                n - 1, ibig - 1, ximat,
+                                0, n - 1,
+                                n - 1, n - 1);
+                        ximat.setSubmatrix(0, n - 1,
+                                n - 1, n - 1, xi);
                     }
                 }
 
@@ -397,10 +396,8 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    private void internalSetPointAndDirections(final double[] point,
-                                               final Matrix directions) {
-        if ((point.length != directions.getRows()) ||
-                (point.length != directions.getColumns())) {
+    private void internalSetPointAndDirections(final double[] point, final Matrix directions) {
+        if ((point.length != directions.getRows()) || (point.length != directions.getColumns())) {
             throw new IllegalArgumentException();
         }
         p = point;
@@ -418,10 +415,9 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
             throw new NotReadyException();
         }
 
-        final int n = p.length;
+        final var n = p.length;
 
-        if (areDirectionsAvailable() && (ximat.getRows() == n) &&
-                (ximat.getColumns() == n)) {
+        if (areDirectionsAvailable() && (ximat.getRows() == n) && (ximat.getColumns() == n)) {
             return;
         }
 

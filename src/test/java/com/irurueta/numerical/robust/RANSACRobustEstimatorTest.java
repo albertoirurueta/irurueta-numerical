@@ -17,16 +17,14 @@ package com.irurueta.numerical.robust;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.robust.RANSACRobustEstimator.RANSACInliersData;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class RANSACRobustEstimatorTest {
+class RANSACRobustEstimatorTest {
 
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
@@ -51,23 +49,18 @@ public class RANSACRobustEstimatorTest {
     private static final int TIMES = 100;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor
-        RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
+        var estimator = new RANSACRobustEstimator<double[]>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getNIters());
+        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
@@ -77,26 +70,20 @@ public class RANSACRobustEstimatorTest {
                 estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with listener
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final TestRANSACRobustEstimatorListener listener =
-                new TestRANSACRobustEstimatorListener(numSamples,
-                        PERCENTAGE_OUTLIER, THRESHOLD);
+        final var randomizer = new UniformRandomizer();
+        final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var listener = new TestRANSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
         estimator = new RANSACRobustEstimator<>(listener);
         assertEquals(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertEquals(estimator.isReady(), listener.isReady());
         assertTrue(estimator.isReady());
-        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getNIters());
+        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestInliersData());
@@ -107,116 +94,81 @@ public class RANSACRobustEstimatorTest {
     }
 
     @Test
-    public void testGetSetListenerAvailabilityAndIsReady()
-            throws LockedException {
-        final RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
+    void testGetSetListenerAvailabilityAndIsReady() throws LockedException {
+        final var estimator = new RANSACRobustEstimator<double[]>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
 
         // set listener
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final TestRANSACRobustEstimatorListener listener =
-                new TestRANSACRobustEstimatorListener(numSamples,
-                        PERCENTAGE_OUTLIER, THRESHOLD);
+        final var randomizer = new UniformRandomizer();
+        final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var listener = new TestRANSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
 
         estimator.setListener(listener);
 
         // check correctness
-        assertEquals(estimator.getListener(), listener);
+        assertEquals(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isReady());
     }
 
     @Test
-    public void testGetSetProgressDelta() throws IllegalArgumentException,
-            LockedException {
-        final RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
-        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+    void testGetSetProgressDelta() throws IllegalArgumentException, LockedException {
+        final var estimator = new RANSACRobustEstimator<double[]>();
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final float progressDelta = randomizer.nextFloat(0.0f, 1.0f);
+        final var randomizer = new UniformRandomizer();
+        final var progressDelta = randomizer.nextFloat(0.0f, 1.0f);
         estimator.setProgressDelta(progressDelta);
 
         // check correctness
         assertEquals(estimator.getProgressDelta(), progressDelta, 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws IllegalArgumentException,
-            LockedException {
-        final RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
-        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+    void testGetSetConfidence() throws IllegalArgumentException, LockedException {
+        final var estimator = new RANSACRobustEstimator<double[]>();
+        assertEquals(RANSACRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double confidence = randomizer.nextDouble(0.0, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var confidence = randomizer.nextDouble(0.0, 1.0);
         estimator.setConfidence(confidence);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), confidence, 0.0);
+        assertEquals(confidence, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws IllegalArgumentException,
-            LockedException {
-        final RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
-        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+    void testGetSetMaxIterations() throws IllegalArgumentException, LockedException {
+        final var estimator = new RANSACRobustEstimator<double[]>();
+        assertEquals(RANSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int maxIterations = randomizer.nextInt(MIN_MAX_ITERATIONS,
-                MAX_MAX_ITERATIONS);
+        final var randomizer = new UniformRandomizer();
+        final var maxIterations = randomizer.nextInt(MIN_MAX_ITERATIONS, MAX_MAX_ITERATIONS);
         estimator.setMaxIterations(maxIterations);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), maxIterations);
+        assertEquals(maxIterations, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
-        final RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
+    void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
+        final var estimator = new RANSACRobustEstimator<double[]>();
 
         // check default value
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -229,10 +181,8 @@ public class RANSACRobustEstimatorTest {
     }
 
     @Test
-    public void testIsSetComputeAndKeepResidualsEnabled()
-            throws LockedException {
-        final RANSACRobustEstimator<double[]> estimator =
-                new RANSACRobustEstimator<>();
+    void testIsSetComputeAndKeepResidualsEnabled() throws LockedException {
+        final var estimator = new RANSACRobustEstimator<double[]>();
 
         // check default value
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
@@ -245,27 +195,19 @@ public class RANSACRobustEstimatorTest {
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final TestRANSACRobustEstimatorListener listener =
-                    new TestRANSACRobustEstimatorListener(numSamples,
-                            PERCENTAGE_OUTLIER, THRESHOLD);
-            final RANSACRobustEstimator<double[]> estimator =
-                    new RANSACRobustEstimator<>();
+    void testEstimate() throws LockedException, NotReadyException, RobustEstimatorException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var listener = new TestRANSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
+            final var estimator = new RANSACRobustEstimator<double[]>();
 
             estimator.setComputeAndKeepInliersEnabled(false);
             estimator.setComputeAndKeepResidualsEnabled(false);
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // set listener
             estimator.setListener(listener);
@@ -275,7 +217,7 @@ public class RANSACRobustEstimatorTest {
             assertFalse(estimator.isLocked());
 
             // estimate
-            final double[] params = estimator.estimate();
+            final var params = estimator.estimate();
 
             // check status after estimation
             assertFalse(estimator.isLocked());
@@ -286,8 +228,8 @@ public class RANSACRobustEstimatorTest {
             assertEquals(params.length, listener.getParams().length);
             assertEquals(NUM_PARAMS, params.length);
 
-            boolean failed = false;
-            for (int i = 0; i < params.length; i++) {
+            var failed = false;
+            for (var i = 0; i < params.length; i++) {
                 if (Math.abs(params[i] - listener.getParams()[i]) > 10.0 * ABSOLUTE_ERROR) {
                     failed = true;
                     break;
@@ -310,27 +252,19 @@ public class RANSACRobustEstimatorTest {
     }
 
     @Test
-    public void testEstimateWithInliersData() throws LockedException,
-            NotReadyException, RobustEstimatorException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final TestRANSACRobustEstimatorListener listener =
-                    new TestRANSACRobustEstimatorListener(numSamples,
-                            PERCENTAGE_OUTLIER, THRESHOLD);
-            final RANSACRobustEstimator<double[]> estimator =
-                    new RANSACRobustEstimator<>();
+    void testEstimateWithInliersData() throws LockedException, NotReadyException, RobustEstimatorException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var listener = new TestRANSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
+            final var estimator = new RANSACRobustEstimator<double[]>();
 
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // set listener
             estimator.setListener(listener);
@@ -340,7 +274,7 @@ public class RANSACRobustEstimatorTest {
             assertFalse(estimator.isLocked());
 
             // estimate
-            final double[] params = estimator.estimate();
+            final var params = estimator.estimate();
 
             // check status after estimation
             assertFalse(estimator.isLocked());
@@ -351,8 +285,8 @@ public class RANSACRobustEstimatorTest {
             assertEquals(params.length, listener.getParams().length);
             assertEquals(NUM_PARAMS, params.length);
 
-            boolean failed = false;
-            for (int i = 0; i < params.length; i++) {
+            var failed = false;
+            for (var i = 0; i < params.length; i++) {
                 if (Math.abs(params[i] - listener.getParams()[i]) > ABSOLUTE_ERROR) {
                     failed = true;
                     break;
@@ -363,7 +297,7 @@ public class RANSACRobustEstimatorTest {
             }
             assertArrayEquals(params, listener.getParams(), ABSOLUTE_ERROR);
 
-            final RANSACInliersData inliersData = estimator.getBestInliersData();
+            final var inliersData = estimator.getBestInliersData();
             assertNotNull(inliersData);
             assertSame(inliersData, estimator.getInliersData());
             assertTrue(inliersData.getNumInliers() > 0);
@@ -377,10 +311,10 @@ public class RANSACRobustEstimatorTest {
         assertTrue(numValid > 0);
     }
 
-    private double[] computeParams() {
+    private static double[] computeParams() {
         // we will estimate parameters a and b for equation y = a*x + b
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] params = new double[NUM_PARAMS];
+        final var randomizer = new UniformRandomizer();
+        final var params = new double[NUM_PARAMS];
         // a parameter
         params[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // b parameter
@@ -388,25 +322,24 @@ public class RANSACRobustEstimatorTest {
         return params;
     }
 
-    private void computeSamples(final double[] params, final int numSamples,
-                                final int percentageOutliers, final double[] ys, final double[] xs) {
+    private static void computeSamples(final double[] params, final int numSamples, final int percentageOutliers,
+                                       final double[] ys, final double[] xs) {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        for (int i = 0; i < numSamples; i++) {
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < numSamples; i++) {
             // compute x values
             xs[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             // compute exact y values
             ys[i] = params[0] * xs[i] + params[1];
             if (randomizer.nextInt(0, 100) < percentageOutliers) {
                 // is outlier, so we add a certain amount of error
-                final double error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
+                final var error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
                 ys[i] += error;
             }
         }
     }
 
-    public class TestRANSACRobustEstimatorListener implements
-            RANSACRobustEstimatorListener<double[]> {
+    private static class TestRANSACRobustEstimatorListener implements RANSACRobustEstimatorListener<double[]> {
 
         private final double[] params;
         private final double[] xs;
@@ -418,8 +351,7 @@ public class RANSACRobustEstimatorTest {
         private int endCounter;
         private float previousProgress;
 
-        TestRANSACRobustEstimatorListener(final int numSamples,
-                                          final int percentageOutliers, final double threshold) {
+        TestRANSACRobustEstimatorListener(final int numSamples, final int percentageOutliers, final double threshold) {
             this.numSamples = numSamples;
             params = computeParams();
             xs = new double[numSamples];
@@ -458,24 +390,23 @@ public class RANSACRobustEstimatorTest {
         }
 
         @Override
-        public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                final List<double[]> solutions) {
+        public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
 
             if (samplesIndices.length != NUM_PARAMS) {
                 throw new IllegalArgumentException();
             }
-            final int index1 = samplesIndices[0];
-            final int index2 = samplesIndices[1];
+            final var index1 = samplesIndices[0];
+            final var index2 = samplesIndices[1];
 
-            final double y1 = ys[index1];
-            final double y2 = ys[index2];
-            final double x1 = xs[index1];
-            final double x2 = xs[index2];
+            final var y1 = ys[index1];
+            final var y2 = ys[index2];
+            final var x1 = xs[index1];
+            final var x2 = xs[index2];
 
-            final double a = (y2 - y1) / (x2 - x1);
-            final double b = y1 - a * x1;
+            final var a = (y2 - y1) / (x2 - x1);
+            final var b = y1 - a * x1;
 
-            final double[] solution = new double[NUM_PARAMS];
+            final var solution = new double[NUM_PARAMS];
             solution[0] = a;
             solution[1] = b;
 
@@ -484,11 +415,11 @@ public class RANSACRobustEstimatorTest {
 
         @Override
         public double computeResidual(final double[] currentEstimation, final int i) {
-            final double a = currentEstimation[0];
-            final double b = currentEstimation[1];
+            final var a = currentEstimation[0];
+            final var b = currentEstimation[1];
 
-            final double estimatedY = a * xs[i] + b;
-            final double y = ys[i];
+            final var estimatedY = a * xs[i] + b;
+            final var y = ys[i];
 
             return Math.abs(estimatedY - y);
         }
@@ -511,10 +442,8 @@ public class RANSACRobustEstimatorTest {
         }
 
         @Override
-        public void onEstimateNextIteration(final RobustEstimator<double[]> estimator,
-                                            final int iteration) {
-            final RANSACRobustEstimator<double[]> ransacEstimator =
-                    (RANSACRobustEstimator<double[]>) estimator;
+        public void onEstimateNextIteration(final RobustEstimator<double[]> estimator, final int iteration) {
+            final var ransacEstimator = (RANSACRobustEstimator<double[]>) estimator;
             testIsLocked(ransacEstimator);
             assertTrue(iteration > 0);
             assertTrue(ransacEstimator.getNIters() >= 0);
@@ -522,8 +451,7 @@ public class RANSACRobustEstimatorTest {
         }
 
         @Override
-        public void onEstimateProgressChange(
-                final RobustEstimator<double[]> estimator, final float progress) {
+        public void onEstimateProgressChange(final RobustEstimator<double[]> estimator, final float progress) {
             testIsLocked((RANSACRobustEstimator<double[]>) estimator);
             assertTrue(progress >= 0.0f);
             assertTrue(progress <= 1.0f);
@@ -542,26 +470,10 @@ public class RANSACRobustEstimatorTest {
         private void testIsLocked(final RANSACRobustEstimator<double[]> estimator) {
             assertTrue(estimator.isLocked());
             // test that estimator cannot be modified while locked
-            try {
-                estimator.setConfidence(0.5);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
-            try {
-                estimator.setListener(this);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
-            try {
-                estimator.setMaxIterations(1);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
-            try {
-                estimator.setProgressDelta(0.5f);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
+            assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+            assertThrows(LockedException.class, () -> estimator.setListener(this));
+            assertThrows(LockedException.class, () -> estimator.setMaxIterations(1));
+            assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
         }
 
         private void reset() {

@@ -103,8 +103,8 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      *                                  don't have the same length.
      */
     public SvdMultiDimensionLinearFitter(
-            final LinearFitterMultiDimensionFunctionEvaluator evaluator, final Matrix x,
-            final double[] y, final double[] sig) throws FittingException {
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator, final Matrix x, final double[] y,
+            final double[] sig) throws FittingException {
         super(evaluator, x, y, sig);
         tol = DEFAULT_TOL;
     }
@@ -125,8 +125,8 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
      *                                  don't have the same length.
      */
     public SvdMultiDimensionLinearFitter(
-            final LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            final Matrix x, final double[] y, final double sig) throws FittingException {
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator, final Matrix x, final double[] y,
+            final double sig) throws FittingException {
         super(evaluator, x, y, sig);
         tol = DEFAULT_TOL;
     }
@@ -172,8 +172,8 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
             throw new NotReadyException();
         }
 
-        final double[] xRow = new double[x.getColumns()];
-        final int xCols = evaluator.getNumberOfDimensions();
+        final var xRow = new double[x.getColumns()];
+        final var xCols = evaluator.getNumberOfDimensions();
 
         try {
             resultAvailable = false;
@@ -184,8 +184,8 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
             double tmp;
             final double thresh;
             double sum;
-            final Matrix aa = new Matrix(ndat, ma);
-            final double[] b = new double[ndat];
+            final var aa = new Matrix(ndat, ma);
+            final var b = new double[ndat];
             for (i = 0; i < ndat; i++) {
                 x.getSubmatrixAsArray(i, 0, i, xCols - 1, xRow);
                 evaluator.evaluate(xRow, afunc);
@@ -196,8 +196,7 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
                 b[i] = y[i] * tmp;
             }
 
-            final SingularValueDecomposer svd =
-                    new SingularValueDecomposer(aa);
+            final var svd = new SingularValueDecomposer(aa);
             svd.decompose();
             thresh = (tol > 0. ? tol * svd.getSingularValues()[0] : -1.0);
             svd.solve(b, thresh, a);
@@ -212,13 +211,12 @@ public class SvdMultiDimensionLinearFitter extends MultiDimensionLinearFitter {
             for (i = 0; i < ma; i++) {
                 for (j = 0; j < i + 1; j++) {
                     sum = 0.0;
-                    final double[] w = svd.getSingularValues();
-                    final double tsh = svd.getNegligibleSingularValueThreshold();
-                    final Matrix v = svd.getV();
+                    final var w = svd.getSingularValues();
+                    final var tsh = svd.getNegligibleSingularValueThreshold();
+                    final var v = svd.getV();
                     for (k = 0; k < ma; k++) {
                         if (w[k] > tsh) {
-                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) /
-                                    Math.pow(w[k], 2.0);
+                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / Math.pow(w[k], 2.0);
                         }
                     }
                     covar.setElementAt(j, i, sum);

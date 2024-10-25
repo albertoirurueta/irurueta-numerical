@@ -49,8 +49,7 @@ public class RombergExponentialMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public RombergExponentialMidPointQuadratureMatrixIntegrator(
-            final double a, final MatrixSingleDimensionFunctionEvaluatorListener listener)
-            throws WrongSizeException {
+            final double a, final MatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
         this(a, listener, EPS);
     }
 

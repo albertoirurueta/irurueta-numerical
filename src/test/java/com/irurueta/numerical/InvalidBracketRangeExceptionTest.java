@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class InvalidBracketRangeExceptionTest {
+class InvalidBracketRangeExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InvalidBracketRangeException ex = new InvalidBracketRangeException();
+    void testConstructor() {
+        var ex = new InvalidBracketRangeException();
         assertNotNull(ex);
 
         ex = new InvalidBracketRangeException("message");

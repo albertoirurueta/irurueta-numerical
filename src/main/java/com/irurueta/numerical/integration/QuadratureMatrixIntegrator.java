@@ -30,8 +30,7 @@ import com.irurueta.numerical.EvaluationException;
  *
  * @param <T> a quadrature.
  */
-public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
-        extends MatrixIntegrator {
+public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature> extends MatrixIntegrator {
     /**
      * Default accuracy.
      */
@@ -78,14 +77,14 @@ public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
     @Override
     public void integrate(final Matrix result) throws IntegrationException {
         try {
-            final int rows = q.getRows();
-            final int columns = q.getColumns();
-            final Matrix s = new Matrix(rows, columns);
+            final var rows = q.getRows();
+            final var columns = q.getColumns();
+            final var s = new Matrix(rows, columns);
 
             // Initial value of olds is arbitrary.
-            final Matrix olds = new Matrix(rows, columns);
+            final var olds = new Matrix(rows, columns);
 
-            for (int j = 0; j < JMAX; j++) {
+            for (var j = 0; j < JMAX; j++) {
                 q.next(s);
                 if (j > JMIN && (Math.abs(normMin(s) - normMin(olds)) < eps * normMin(olds)
                         || (normMin(s) == 0.0 && normMin(olds) == 0.0))) {
@@ -126,26 +125,20 @@ public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
      * @throws WrongSizeException       if size notified by provided listener is invalid.
      */
     public static QuadratureMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps,
-            final QuadratureType quadratureType) throws WrongSizeException {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new TrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));
-            case MID_POINT:
-                return cast(new MidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case INFINITY_MID_POINT:
-                return cast(new InfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new LowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new UpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new DoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps, final QuadratureType quadratureType) throws WrongSizeException {
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new TrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));
+            case MID_POINT -> cast(new MidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case INFINITY_MID_POINT -> cast(new InfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new LowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new UpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new DoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -160,26 +153,19 @@ public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
      * @throws WrongSizeException       if size notified by provided listener is invalid.
      */
     public static QuadratureMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final QuadratureType quadratureType) throws WrongSizeException {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new TrapezoidalQuadratureMatrixIntegrator(a, b, listener));
-            case MID_POINT:
-                return cast(new MidPointQuadratureMatrixIntegrator(a, b, listener));
-            case INFINITY_MID_POINT:
-                return cast(new InfinityMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new LowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new UpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new DoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new TrapezoidalQuadratureMatrixIntegrator(a, b, listener));
+            case MID_POINT -> cast(new MidPointQuadratureMatrixIntegrator(a, b, listener));
+            case INFINITY_MID_POINT -> cast(new InfinityMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new LowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new UpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case DOUBLE_EXPONENTIAL_RULE -> cast(new DoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -193,9 +179,8 @@ public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public static QuadratureMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
-            throws WrongSizeException {
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps) throws WrongSizeException {
         return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);
     }
 
@@ -209,8 +194,7 @@ public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public static QuadratureMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);
     }
@@ -224,10 +208,10 @@ public abstract class QuadratureMatrixIntegrator<T extends MatrixQuadrature>
      */
     @SuppressWarnings("Duplicates")
     private static double normMin(final Matrix a) {
-        double min = Double.MAX_VALUE;
-        double[] buffer = a.getBuffer();
-        for (double v : buffer) {
-            double value = Math.abs(v);
+        var min = Double.MAX_VALUE;
+        final var buffer = a.getBuffer();
+        for (var v : buffer) {
+            var value = Math.abs(v);
             if (Double.isNaN(value)) {
                 return value;
             }

@@ -15,17 +15,17 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class KrigingInterpolatorTest {
+class KrigingInterpolatorTest {
 
     private static final double MIN_VALUE = -1.0e-3;
 
@@ -38,33 +38,31 @@ public class KrigingInterpolatorTest {
     private static final double ABSOLUTE_ERROR_2 = 1e-1;
 
     @Test
-    public void interpolate_dim1_returnsExpectedResult()
-            throws WrongSizeException, InterpolationException {
+    void interpolate_dim1_returnsExpectedResult() throws WrongSizeException, InterpolationException {
         assertInterpolation(1, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void interpolate_dim2_returnsExpectedResult()
-            throws WrongSizeException, InterpolationException {
+    void interpolate_dim2_returnsExpectedResult() throws WrongSizeException, InterpolationException {
         assertInterpolation(2, ABSOLUTE_ERROR_2);
     }
 
-    private static void assertInterpolation(final int dim, final double error)
-            throws WrongSizeException, InterpolationException {
-        final double[] roots = new double[dim];
-        final Polynomial[] polynomials = buildPolynomials(dim, roots);
+    private static void assertInterpolation(final int dim, final double error) throws WrongSizeException,
+            InterpolationException {
+        final var roots = new double[dim];
+        final var polynomials = buildPolynomials(dim, roots);
 
-        for (int i = 0; i < dim; i++) {
+        for (var i = 0; i < dim; i++) {
             assertEquals(0.0, polynomials[i].evaluate(roots[i]), 0.0);
         }
         assertEquals(0.0, evaluate(polynomials, roots), 0.0);
 
         // create multiple samples and evaluations
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double[] point = new double[dim];
-        final Matrix pts = new Matrix(SAMPLES, dim);
-        final double[] values = new double[SAMPLES];
-        for (int i = 0; i < SAMPLES; i++) {
+        final var randomizer = new UniformRandomizer();
+        final var point = new double[dim];
+        final var pts = new Matrix(SAMPLES, dim);
+        final var values = new double[SAMPLES];
+        for (var i = 0; i < SAMPLES; i++) {
             randomizer.fill(point, MIN_VALUE, MAX_VALUE);
             pts.setSubmatrix(i, 0, i, dim - 1, point);
             values[i] = evaluate(polynomials, point);
@@ -76,46 +74,46 @@ public class KrigingInterpolatorTest {
             assertEquals(values[i], evaluate(polynomials, point), 0.0);
         }
 
-        final KrigingInterpolator interpolator = new KrigingInterpolator(pts, values);
+        final var interpolator = new KrigingInterpolator(pts, values);
 
         assertEquals(dim, interpolator.getNdim());
         assertEquals(SAMPLES, interpolator.getNpt());
 
         // check that interpolator at provided points
-        for (int i = 0; i < SAMPLES; i++) {
+        for (var i = 0; i < SAMPLES; i++) {
             pts.getSubmatrixAsArray(i, 0, i, dim - 1, point);
-            final double value = interpolator.interpolate(point);
+            final var value = interpolator.interpolate(point);
             assertEquals(value, interpolator.getLastVal(), 0.0);
             assertTrue(interpolator.getLastErr() >= 0.0);
             assertEquals(values[i], value, error);
         }
 
         // check random values
-        final double[] lastError = new double[1];
-        for (int i = 0; i < SAMPLES; i++) {
+        final var lastError = new double[1];
+        for (var i = 0; i < SAMPLES; i++) {
             randomizer.fill(point, MIN_VALUE, MAX_VALUE);
-            final double value = interpolator.interpolate(point);
+            final var value = interpolator.interpolate(point);
             assertEquals(evaluate(polynomials, point), value, error);
             assertEquals(value, interpolator.interpolate(point, lastError), 0.0);
-            final double lastErr = interpolator.getLastErr();
+            final var lastErr = interpolator.getLastErr();
             assertTrue(lastErr >= 0.0);
             assertEquals(lastErr, lastError[0], 0.0);
         }
     }
 
     private static double evaluate(final Polynomial[] polynomials, double[] point) {
-        final int dim = polynomials.length;
-        double result = 1.0;
-        for (int i = 0; i < dim; i++) {
+        final var dim = polynomials.length;
+        var result = 1.0;
+        for (var i = 0; i < dim; i++) {
             result *= polynomials[i].evaluate(point[i]);
         }
         return result;
     }
 
     private static Polynomial[] buildPolynomials(int dim, final double[] roots) {
-        final double[] r = new double[1];
-        final Polynomial[] result = new Polynomial[dim];
-        for (int i = 0; i < dim; i++) {
+        final var r = new double[1];
+        final var result = new Polynomial[dim];
+        for (var i = 0; i < dim; i++) {
             result[i] = buildPolynomial(r);
             roots[i] = r[0];
         }
@@ -123,9 +121,9 @@ public class KrigingInterpolatorTest {
     }
 
     private static Polynomial buildPolynomial(final double[] roots) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final Polynomial result = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var result = new Polynomial(-root, 1.0);
         roots[0] = root;
 
         return result;

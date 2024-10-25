@@ -28,8 +28,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * function to be integrated has a finite fourth derivative (i.e. a continuous third derivative,
  * which means that the function is sufficiently smooth).
  */
-public class SimpsonTrapezoidalQuadratureIntegrator
-        extends SimpsonIntegrator<TrapezoidalQuadrature> {
+public class SimpsonTrapezoidalQuadratureIntegrator extends SimpsonIntegrator<TrapezoidalQuadrature> {
 
     /**
      * Constructor.
@@ -40,9 +39,7 @@ public class SimpsonTrapezoidalQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public SimpsonTrapezoidalQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new TrapezoidalQuadrature(a, b, listener), eps);
     }
 
@@ -54,8 +51,7 @@ public class SimpsonTrapezoidalQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public SimpsonTrapezoidalQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

@@ -20,6 +20,5 @@ package com.irurueta.numerical.robust;
  *
  * @param <T> type of object to be estimated.
  */
-public interface PROMedSRobustEstimatorListener<T>
-        extends PROSACRobustEstimatorListener<T> {
+public interface PROMedSRobustEstimatorListener<T> extends PROSACRobustEstimatorListener<T> {
 }

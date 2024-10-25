@@ -197,8 +197,7 @@ public class KalmanFilter implements Serializable {
             throws SignalProcessingException {
 
         if (dynamParams <= 0 || measureParams <= 0) {
-            throw new IllegalArgumentException(
-                    "Kalman filter: Illegal dimensions");
+            throw new IllegalArgumentException("Kalman filter: Illegal dimensions");
         }
 
         if (controlParams < 0) {
@@ -222,8 +221,7 @@ public class KalmanFilter implements Serializable {
 
             measurementMatrix = Matrix.identity(mp, dp);
             measurementNoiseCov = Matrix.identity(mp, mp);
-            measurementNoiseCov.multiplyByScalar(
-                    DEFAULT_MEASUREMENT_NOISE_VARIANCE);
+            measurementNoiseCov.multiplyByScalar(DEFAULT_MEASUREMENT_NOISE_VARIANCE);
 
             errorCovPre = new Matrix(dp, dp);
             errorCovPost = Matrix.identity(dp, dp);
@@ -264,8 +262,7 @@ public class KalmanFilter implements Serializable {
      *                                   measurement parameters is zero or negative.
      * @throws SignalProcessingException if something else fails.
      */
-    public KalmanFilter(final int dynamParams, final int measureParams)
-            throws SignalProcessingException {
+    public KalmanFilter(final int dynamParams, final int measureParams) throws SignalProcessingException {
         this(dynamParams, measureParams, 0);
     }
 
@@ -423,8 +420,7 @@ public class KalmanFilter implements Serializable {
      * @throws IllegalArgumentException  if provided value is zero or negative.
      * @throws SignalProcessingException if something else fails
      */
-    public void setMeasureParameters(final int measureParameters)
-            throws SignalProcessingException {
+    public void setMeasureParameters(final int measureParameters) throws SignalProcessingException {
         if (measureParameters <= 0) {
             throw new IllegalArgumentException("");
         }
@@ -433,8 +429,7 @@ public class KalmanFilter implements Serializable {
         try {
             measurementMatrix = Matrix.identity(mp, dp);
             measurementNoiseCov = Matrix.identity(mp, mp);
-            measurementNoiseCov.multiplyByScalar(
-                    DEFAULT_MEASUREMENT_NOISE_VARIANCE);
+            measurementNoiseCov.multiplyByScalar(DEFAULT_MEASUREMENT_NOISE_VARIANCE);
 
             gain = new Matrix(dp, mp);
 
@@ -549,8 +544,7 @@ public class KalmanFilter implements Serializable {
      *                                  and columns
      */
     public void setTransitionMatrix(final Matrix transitionMatrix) {
-        if (transitionMatrix.getRows() != dp ||
-                transitionMatrix.getColumns() != dp) {
+        if (transitionMatrix.getRows() != dp || transitionMatrix.getColumns() != dp) {
             throw new IllegalArgumentException();
         }
         this.transitionMatrix = transitionMatrix;
@@ -581,8 +575,7 @@ public class KalmanFilter implements Serializable {
      */
     public void setControlMatrix(final Matrix controlMatrix) {
         if (cp > 0) {
-            if (controlMatrix == null || (controlMatrix.getRows() != dp ||
-                    controlMatrix.getColumns() != cp)) {
+            if (controlMatrix == null || (controlMatrix.getRows() != dp || controlMatrix.getColumns() != cp)) {
                 throw new IllegalArgumentException();
             }
         } else {
@@ -624,8 +617,7 @@ public class KalmanFilter implements Serializable {
      *                                  and dp columns.
      */
     public void setMeasurementMatrix(final Matrix measurementMatrix) {
-        if (measurementMatrix.getRows() != mp ||
-                measurementMatrix.getColumns() != dp) {
+        if (measurementMatrix.getRows() != mp || measurementMatrix.getColumns() != dp) {
             throw new IllegalArgumentException();
         }
         this.measurementMatrix = measurementMatrix;
@@ -666,9 +658,8 @@ public class KalmanFilter implements Serializable {
      *                                  rows and columns, or it is not symmetric
      */
     public void setProcessNoiseCov(final Matrix processNoiseCov) {
-        if (processNoiseCov.getRows() != dp ||
-                processNoiseCov.getColumns() != dp ||
-                !Utils.isSymmetric(processNoiseCov)) {
+        if (processNoiseCov.getRows() != dp || processNoiseCov.getColumns() != dp
+                || !Utils.isSymmetric(processNoiseCov)) {
             throw new IllegalArgumentException();
         }
 
@@ -711,9 +702,8 @@ public class KalmanFilter implements Serializable {
      *                                  rows and columns, or it is not symmetric
      */
     public void setMeasurementNoiseCov(final Matrix measurementNoiseCov) {
-        if (measurementNoiseCov.getRows() != mp ||
-                measurementNoiseCov.getColumns() != mp ||
-                !Utils.isSymmetric(measurementNoiseCov)) {
+        if (measurementNoiseCov.getRows() != mp || measurementNoiseCov.getColumns() != mp
+                || !Utils.isSymmetric(measurementNoiseCov)) {
             throw new IllegalArgumentException();
         }
 
@@ -748,8 +738,7 @@ public class KalmanFilter implements Serializable {
      *                                  and columns, or it is not symmetric
      */
     public void setErrorCovPre(final Matrix errorCovPre) {
-        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp ||
-                !Utils.isSymmetric(errorCovPre)) {
+        if (errorCovPre.getRows() != dp || errorCovPre.getColumns() != dp || !Utils.isSymmetric(errorCovPre)) {
             throw new IllegalArgumentException();
         }
         this.errorCovPre = errorCovPre;
@@ -820,8 +809,7 @@ public class KalmanFilter implements Serializable {
      *                                  and columns, or it is not symmetric
      */
     public void setErrorCovPost(final Matrix errorCovPost) {
-        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp ||
-                !Utils.isSymmetric(errorCovPost)) {
+        if (errorCovPost.getRows() != dp || errorCovPost.getColumns() != dp || !Utils.isSymmetric(errorCovPost)) {
             throw new IllegalArgumentException();
         }
         this.errorCovPost = errorCovPost;

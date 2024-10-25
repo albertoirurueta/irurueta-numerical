@@ -64,8 +64,7 @@ public abstract class RootEstimator {
      *                                 some other reason (usually inability to evaluate the function,
      *                                 numerical instability or convergence problems, or no roots are found).
      */
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
     }
 
     /**

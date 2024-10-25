@@ -18,15 +18,12 @@ package com.irurueta.numerical;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class JacobianEstimatorTest
-        implements MultiVariateFunctionEvaluatorListener {
+class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
 
     private static final int MIN_DIMS = 2;
     private static final int MAX_DIMS = 3;
@@ -54,60 +51,54 @@ public class JacobianEstimatorTest
     private double[] offsets;
 
     @Test
-    public void testConstructor() throws WrongSizeException {
+    void testConstructor() throws WrongSizeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
         nvars = randomizer.nextInt(MIN_VARS, MAX_VARS);
 
-        minimums = Matrix.createWithUniformRandomValues(nvars, ndims,
-                MIN_EVAL_POINT, MAX_EVAL_POINT, new Random());
-        final double[] point = new double[ndims];
+        minimums = Matrix.createWithUniformRandomValues(nvars, ndims, MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var point = new double[ndims];
         randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
         offsets = new double[nvars];
         randomizer.fill(offsets, MIN_OFFSET, MAX_OFFSET);
 
-        widths = Matrix.createWithUniformRandomValues(nvars, ndims,
-                MIN_WIDTH, MAX_WIDTH, new Random());
+        widths = Matrix.createWithUniformRandomValues(nvars, ndims, MIN_WIDTH, MAX_WIDTH);
 
-        final JacobianEstimator estimator = new JacobianEstimator(this);
+        final var estimator = new JacobianEstimator(this);
         assertNotNull(estimator);
     }
 
     @Test
-    public void testJacobian() throws EvaluationException, WrongSizeException {
+    void testJacobian() throws EvaluationException, WrongSizeException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
             nvars = randomizer.nextInt(MIN_VARS, MAX_VARS);
 
-            minimums = Matrix.createWithUniformRandomValues(nvars, ndims,
-                    MIN_EVAL_POINT, MAX_EVAL_POINT, new Random());
-            final double[] point = new double[ndims];
+            minimums = Matrix.createWithUniformRandomValues(nvars, ndims, MIN_EVAL_POINT, MAX_EVAL_POINT);
+            final var point = new double[ndims];
             randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
             offsets = new double[nvars];
             randomizer.fill(offsets, MIN_OFFSET, MAX_OFFSET);
 
-            widths = Matrix.createWithUniformRandomValues(nvars, ndims,
-                    MIN_WIDTH, MAX_WIDTH, new Random());
+            widths = Matrix.createWithUniformRandomValues(nvars, ndims, MIN_WIDTH, MAX_WIDTH);
 
-            final JacobianEstimator estimator = new JacobianEstimator(this);
+            final var estimator = new JacobianEstimator(this);
 
-            final Matrix jacobian1 = estimator.jacobian(point);
-            final Matrix jacobian2 = new Matrix(nvars, ndims);
+            final var jacobian1 = estimator.jacobian(point);
+            final var jacobian2 = new Matrix(nvars, ndims);
             estimator.jacobian(point, jacobian2);
 
             // check correctness
-            final Matrix jacobian3 = jacobian(point);
+            final var jacobian3 = jacobian(point);
             assertNotNull(jacobian3);
-            for (int j = 0; j < nvars; j++) {
-                for (int i = 0; i < ndims; i++) {
-                    assertEquals(jacobian1.getElementAt(j, i),
-                            jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);
-                    assertEquals(jacobian2.getElementAt(j, i),
-                            jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);
+            for (var j = 0; j < nvars; j++) {
+                for (var i = 0; i < ndims; i++) {
+                    assertEquals(jacobian1.getElementAt(j, i), jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);
+                    assertEquals(jacobian2.getElementAt(j, i), jacobian3.getElementAt(j, i), ABSOLUTE_ERROR);
                 }
             }
         }
@@ -115,17 +106,13 @@ public class JacobianEstimatorTest
 
     @Override
     public void evaluate(final double[] point, final double[] result) {
-        final int dims = Math.min(Math.min(point.length, minimums.getColumns()),
-                widths.getColumns());
-        final int vars = result.length;
+        final var dims = Math.min(Math.min(point.length, minimums.getColumns()), widths.getColumns());
+        final var vars = result.length;
 
-        for (int j = 0; j < vars; j++) {
-
-            double value = 1.0;
-
-            for (int i = 0; i < dims; i++) {
-                value *= Math.pow(point[i] - minimums.getElementAt(j, i), 2.0) /
-                        widths.getElementAt(j, i);
+        for (var j = 0; j < vars; j++) {
+            var value = 1.0;
+            for (var i = 0; i < dims; i++) {
+                value *= Math.pow(point[i] - minimums.getElementAt(j, i), 2.0) / widths.getElementAt(j, i);
             }
 
             value += offsets[j];
@@ -140,25 +127,20 @@ public class JacobianEstimatorTest
     }
 
     private Matrix jacobian(final double[] params) {
-        final int dims = Math.min(Math.min(params.length, minimums.getColumns()),
-                widths.getColumns());
-        final int vars = nvars;
+        final var dims = Math.min(Math.min(params.length, minimums.getColumns()), widths.getColumns());
+        final var vars = nvars;
 
         try {
-            final Matrix jacobian = new Matrix(vars, dims);
-
-            for (int k = 0; k < vars; k++) {
-
-                double value;
-                for (int j = 0; j < dims; j++) {
-                    value = 1.0;
-                    for (int i = 0; i < dims; i++) {
+            final var jacobian = new Matrix(vars, dims);
+            for (var k = 0; k < vars; k++) {
+                for (var j = 0; j < dims; j++) {
+                    var value = 1.0;
+                    for (var i = 0; i < dims; i++) {
                         if (i != j) {
-                            value *= Math.pow(params[i] - minimums.getElementAt(k, i), 2.0) /
-                                    widths.getElementAt(k, i);
+                            value *= Math.pow(params[i] - minimums.getElementAt(k, i), 2.0)
+                                    / widths.getElementAt(k, i);
                         } else {
-                            value *= 2.0 * (params[i] - minimums.getElementAt(k, i)) /
-                                    widths.getElementAt(k, i);
+                            value *= 2.0 * (params[i] - minimums.getElementAt(k, i)) / widths.getElementAt(k, i);
                         }
                     }
 

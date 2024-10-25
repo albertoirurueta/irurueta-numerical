@@ -74,9 +74,9 @@ public abstract class BaseRadialBasisFunctionInterpolator {
      * @return euclidean distance.
      */
     protected double rad(final double[] p1, final double[] p2) {
-        double sum = 0.0;
+        var sum = 0.0;
         for (int i = 0; i < dim; i++) {
-            final double value = p1[i] - p2[i];
+            final var value = p1[i] - p2[i];
             sum += value * value;
         }
 

@@ -28,7 +28,7 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
      * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
      * Hence, the array of polynomial coefficients is [a0, a1, ... a(n-1), an]
      */
-    private final double[] mPolyParams;
+    private final double[] polyParams;
 
     /**
      * Constructor.
@@ -42,7 +42,7 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
             throw new IllegalArgumentException();
         }
 
-        mPolyParams = polyParams;
+        this.polyParams = polyParams;
     }
 
     /**
@@ -51,7 +51,7 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
      * @return polynomial parameters.
      */
     public double[] getPolyParams() {
-        return mPolyParams;
+        return polyParams;
     }
 
     /**
@@ -61,6 +61,6 @@ public class RealPolynomialEvaluator extends PolynomialEvaluator {
      * @return result of evaluation.
      */
     public double evaluate(final double x) {
-        return evaluate(mPolyParams, x);
+        return evaluate(polyParams, x);
     }
 }

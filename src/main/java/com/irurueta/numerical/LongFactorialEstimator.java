@@ -56,7 +56,7 @@ public class LongFactorialEstimator {
         // initialize cache
         cache = new long[cacheSize];
         cache[0] = 1;
-        for (int i = 1; i < cacheSize; i++) {
+        for (var i = 1; i < cacheSize; i++) {
             cache[i] = i * cache[i - 1];
         }
     }

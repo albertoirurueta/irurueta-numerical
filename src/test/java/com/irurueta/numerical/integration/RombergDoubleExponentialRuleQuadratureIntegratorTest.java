@@ -15,9 +15,9 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.polynomials.Polynomial;
@@ -25,9 +25,9 @@ import com.irurueta.statistics.Gamma;
 import com.irurueta.statistics.NormalDist;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RombergDoubleExponentialRuleQuadratureIntegratorTest {
+class RombergDoubleExponentialRuleQuadratureIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -62,267 +62,168 @@ public class RombergDoubleExponentialRuleQuadratureIntegratorTest {
     private static final double EPS = 3.0e-9;
 
     @Test
-    public void constructor_makesNewInstance() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void constructor_makesNewInstance() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator1 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return 0;
-                            }
-                        }, EPS);
+        final var interpolator1 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX, point -> 0, EPS);
 
         assertNotNull(interpolator1);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator2 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return 0;
-                            }
-                        }, EPS);
+        final var interpolator2 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, point -> 0, EPS);
 
         assertNotNull(interpolator2);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator3 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return 0;
-                            }
-                        });
+        final var interpolator3 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX, point -> 0);
 
         assertNotNull(interpolator3);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator4 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return 0;
-                            }
-                        });
+        final var interpolator4 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, point -> 0);
 
         assertNotNull(interpolator4);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator5 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX,
-                        new DoubleExponentialSingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point, final double delta) {
-                                return 0;
-                            }
-                        }, EPS);
+        final var interpolator5 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX,
+                (point, delta) -> 0, EPS);
 
         assertNotNull(interpolator5);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator6 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new DoubleExponentialSingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point, final double delta) {
-                                return 0;
-                            }
-                        }, EPS);
+        final var interpolator6 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, (point, delta) -> 0, EPS);
 
         assertNotNull(interpolator6);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator7 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX,
-                        new DoubleExponentialSingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point, final double delta) {
-                                return 0;
-                            }
-                        });
+        final var interpolator7 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, HMAX, (point, delta) -> 0);
 
         assertNotNull(interpolator7);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator interpolator8 =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new DoubleExponentialSingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point, final double delta) {
-                                return 0;
-                            }
-                        });
+        final var interpolator8 = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, (point, delta) -> 0);
 
         assertNotNull(interpolator8);
     }
 
     @Test
-    public void integrate_whenFirstDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFirstDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(1, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenSecondDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenSecondDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(2, ABSOLUTE_ERROR_2);
     }
 
     @Test
-    public void integrate_whenThirdDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenThirdDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(3, ABSOLUTE_ERROR_3);
     }
 
     @Test
-    public void integrate_whenFourthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFourthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(4, ABSOLUTE_ERROR_4);
     }
 
     @Test
-    public void integrate_whenFifthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFifthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(5, ABSOLUTE_ERROR_5);
     }
 
     @Test
-    public void integrate_whenSixthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenSixthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(6, ABSOLUTE_ERROR_5);
     }
 
     @Test
-    public void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double mu = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double sigma = ABSOLUTE_ERROR_GAUSSIAN
-                + Math.abs(randomizer.nextDouble(MIN_VALUE, MAX_VALUE));
+    void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var mu = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var sigma = ABSOLUTE_ERROR_GAUSSIAN + Math.abs(randomizer.nextDouble(MIN_VALUE, MAX_VALUE));
 
-        final double expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
+        final var expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return NormalDist.p(point, mu, sigma);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
+                point -> NormalDist.p(point, mu, sigma));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_GAUSSIAN);
     }
 
     @Test
-    public void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
+    void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
 
-        final double expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
+        final var expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.exp(lambda * point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
+                point -> Math.exp(lambda * point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_EXPONENTIAL);
     }
 
     @Test
-    public void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult()
-            throws IntegrationException {
-        final double expected = 2.0 - Math.PI * Math.PI / 6.0;
+    void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult() throws IntegrationException {
+        final var expected = 2.0 - Math.PI * Math.PI / 6.0;
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, 1.0,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.log(point) * Math.log(1 - point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, 1.0,
+                point -> Math.log(point) * Math.log(1 - point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_1);
     }
 
     @Test
-    public void integrate_whenImproperIntegralFromZeroToInfinity3_returnsExpectedResult()
-            throws IntegrationException {
-        final double expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
+    void integrate_whenImproperIntegralFromZeroToInfinity3_returnsExpectedResult() throws IntegrationException {
+        final var expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
         assertEquals(1.24663, expected, ABSOLUTE_ERROR_IMPROPER_3);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, ALMOST_INFINITY,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, ALMOST_INFINITY,
+                point -> Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
+        final var result = integrator.integrate();
 
         assertNotEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_3);
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() {
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, 1.0,
-                        (SingleDimensionFunctionEvaluatorListener) null);
+    void getIntegratorType_returnsExpectedValue() {
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, 1.0,
+                (SingleDimensionFunctionEvaluatorListener) null);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() {
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, 1.0,
-                        (SingleDimensionFunctionEvaluatorListener) null);
+    void getQuadratureType_returnsExpectedValue() {
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(0.0, 1.0,
+                (SingleDimensionFunctionEvaluatorListener) null);
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
     }
 
-    private static void assertPolynomialIntegration(final int degree, final double error)
-            throws IntegrationException {
-        final Polynomial polynomial = buildPolynomial(degree);
-        final Polynomial integrationPolynomial = polynomial.integrationAndReturnNew();
+    private static void assertPolynomialIntegration(final int degree, final double error) throws IntegrationException {
+        final var polynomial = buildPolynomial(degree);
+        final var integrationPolynomial = polynomial.integrationAndReturnNew();
 
         // set integration interval
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final double expected = integrationPolynomial.evaluate(b)
-                - integrationPolynomial.evaluate(a);
+        final var expected = integrationPolynomial.evaluate(b) - integrationPolynomial.evaluate(a);
 
-        final RombergDoubleExponentialRuleQuadratureIntegrator integrator =
-                new RombergDoubleExponentialRuleQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return polynomial.evaluate(point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, polynomial::evaluate);
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, error);
     }
 
     private static Polynomial buildPolynomial(final int degree) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
         }
 

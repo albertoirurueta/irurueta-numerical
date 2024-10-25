@@ -19,15 +19,13 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener {
+class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -41,9 +39,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
     private int estimateEnd;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // empty constructor
-        LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        var estimator = new LMSEPolynomialEstimator();
 
         // check correctness
         assertEquals(1, estimator.getDegree());
@@ -53,8 +51,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // constructor with degree
         estimator = new LMSEPolynomialEstimator(2);
@@ -67,32 +64,24 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new LMSEPolynomialEstimator(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new LMSEPolynomialEstimator(0));
 
         // constructor with evaluations
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         estimator = new LMSEPolynomialEstimator(evaluations);
 
         // check correctness
         assertEquals(1, estimator.getDegree());
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertSame(evaluations, estimator.getEvaluations());
         assertFalse(estimator.isReady());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // constructor with listener
         estimator = new LMSEPolynomialEstimator(this);
@@ -103,10 +92,9 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isReady());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // constructor with degree and evaluations
         estimator = new LMSEPolynomialEstimator(2, evaluations);
@@ -119,17 +107,10 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLocked());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new LMSEPolynomialEstimator(0, evaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new LMSEPolynomialEstimator(0, evaluations));
 
         // constructor with degree and listener
         estimator = new LMSEPolynomialEstimator(2, this);
@@ -140,61 +121,47 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isReady());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new LMSEPolynomialEstimator(0, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new LMSEPolynomialEstimator(0, this));
 
         // constructor with evaluations and listener
         estimator = new LMSEPolynomialEstimator(evaluations, this);
 
         // check correctness
         assertEquals(1, estimator.getDegree());
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertSame(evaluations, estimator.getEvaluations());
         assertFalse(estimator.isReady());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // constructor with degree, evaluations and listener
         estimator = new LMSEPolynomialEstimator(2, evaluations, this);
 
         // check correctness
         assertEquals(2, estimator.getDegree());
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertSame(evaluations, estimator.getEvaluations());
         assertFalse(estimator.isReady());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertFalse(estimator.isLocked());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLMSESolutionAllowed());
-        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR, estimator.getType());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new LMSEPolynomialEstimator(0, evaluations, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new LMSEPolynomialEstimator(0, evaluations,
+                this));
     }
 
     @Test
-    public void testIsSetLMSESolutionAllowed() throws LockedException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testIsSetLMSESolutionAllowed() throws LockedException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default value
         assertFalse(estimator.isLMSESolutionAllowed());
@@ -207,8 +174,8 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
     }
 
     @Test
-    public void testGetSetDegree() throws LockedException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testGetSetDegree() throws LockedException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default value
         assertEquals(1, estimator.getDegree());
@@ -220,79 +187,68 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(2, estimator.getDegree());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setDegree(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setDegree(0));
     }
 
     @Test
-    public void testGetSetEvaluations() throws LockedException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testGetSetEvaluations() throws LockedException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default value
         assertNull(estimator.getEvaluations());
 
         // set new value
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         estimator.setEvaluations(evaluations);
 
         // check correctness
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertSame(evaluations, estimator.getEvaluations());
     }
 
     @Test
-    public void testSetDegreeAndEvaluations() throws LockedException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testSetDegreeAndEvaluations() throws LockedException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
         assertNull(estimator.getEvaluations());
 
         // set new values
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         estimator.setDegreeAndEvaluations(2, evaluations);
 
         // check correctness
         assertEquals(2, estimator.getDegree());
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertSame(evaluations, estimator.getEvaluations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setDegreeAndEvaluations(0, evaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setDegreeAndEvaluations(0, evaluations));
     }
 
     @Test
-    public void testIsReady() throws LockedException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testIsReady() throws LockedException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default value
         assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations =
-                new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
@@ -302,27 +258,22 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
     }
 
     @Test
-    public void testGetMinNumberOfEvaluations() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetMinNumberOfEvaluations() {
+        final var randomizer = new UniformRandomizer();
 
-        final int degree = randomizer.nextInt(MIN_DEGREE, MAX_DEGREE);
-        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(degree),
-                degree + 1);
+        final var degree = randomizer.nextInt(MIN_DEGREE, MAX_DEGREE);
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(degree), degree + 1);
 
         // Force IllegalArgumentException
-        try {
-            assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(0), degree + 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEstimator.getMinNumberOfEvaluations(0));
 
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(degree);
-        assertEquals(estimator.getMinNumberOfEvaluations(), degree + 1);
+        final var estimator = new LMSEPolynomialEstimator(degree);
+        assertEquals(degree + 1, estimator.getMinNumberOfEvaluations());
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -331,14 +282,13 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
     }
 
     @Test
-    public void testEstimateWithDirectEvaluationsNoLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithDirectEvaluationsNoLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
@@ -346,38 +296,31 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -387,20 +330,18 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
 
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectEvaluationsLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithDirectEvaluationsLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -409,38 +350,31 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -448,22 +382,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectAndDerivativeEvaluationsNoLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithDirectAndDerivativeEvaluationsNoLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
@@ -471,40 +402,31 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations() - 1; i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations() - 1; i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double value = polynomial.evaluateDerivative(x);
-        final DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation(x, value, 1);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var value = polynomial.evaluateDerivative(x);
+        final var eval = new DerivativePolynomialEvaluation(x, value, 1);
         evaluations.add(eval);
 
-
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
@@ -516,22 +438,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectAndDerivativeEvaluationLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithDirectAndDerivativeEvaluationLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -540,42 +459,32 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluateDerivative(x);
-            final DerivativePolynomialEvaluation eval =
-                    new DerivativePolynomialEvaluation(x, value, 1);
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluateDerivative(x);
+            final var eval = new DerivativePolynomialEvaluation(x, value, 1);
             evaluations.add(eval);
         }
-
 
         estimator.setEvaluations(evaluations);
 
@@ -588,22 +497,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithIntegralEvaluationsNoLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithIntegralEvaluationsNoLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
@@ -611,42 +517,33 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double constant = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final Polynomial integral = polynomial.integrationAndReturnNew(constant);
-            final double value = integral.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var constant = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var integral = polynomial.integrationAndReturnNew(constant);
+            final var value = integral.evaluate(x);
 
-            final IntegralPolynomialEvaluation eval =
-                    new IntegralPolynomialEvaluation(x, value,
-                            new double[]{constant}, 1);
+            final var eval = new IntegralPolynomialEvaluation(x, value, new double[]{constant}, 1);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -655,20 +552,18 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateEnd);
 
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithIntegralEvaluationsLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithIntegralEvaluationsLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -677,42 +572,33 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double constant = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final Polynomial integral = polynomial.integrationAndReturnNew(constant);
-            final double value = integral.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var constant = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var integral = polynomial.integrationAndReturnNew(constant);
+            final var value = integral.evaluate(x);
 
-            final IntegralPolynomialEvaluation eval =
-                    new IntegralPolynomialEvaluation(x, value,
-                            new double[]{constant}, 1);
+            final var eval = new IntegralPolynomialEvaluation(x, value, new double[]{constant}, 1);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -720,22 +606,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithIntegralIntervalEvaluationsNoLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithIntegralIntervalEvaluationsNoLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
@@ -743,34 +626,25 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.integrateInterval(startX, endX);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var startX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var endX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.integrateInterval(startX, endX);
 
-            final IntegralIntervalPolynomialEvaluation eval =
-                    new IntegralIntervalPolynomialEvaluation(startX, endX,
-                            value, 1);
+            final var eval = new IntegralIntervalPolynomialEvaluation(startX, endX, value, 1);
             eval.setConstants(new double[]{0.0});
             evaluations.add(eval);
         }
@@ -778,7 +652,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -786,22 +660,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polyParams, polynomial2.getPolyParams(), ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithIntegralIntervalEvaluationsLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithIntegralIntervalEvaluationsLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -810,34 +681,25 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.integrateInterval(startX, endX);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var startX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var endX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.integrateInterval(startX, endX);
 
-            final IntegralIntervalPolynomialEvaluation eval =
-                    new IntegralIntervalPolynomialEvaluation(startX, endX,
-                            value, 1);
+            final var eval = new IntegralIntervalPolynomialEvaluation(startX, endX, value, 1);
             eval.setConstants(new double[]{0.0});
             evaluations.add(eval);
         }
@@ -845,7 +707,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -855,21 +717,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
 
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectEvaluationsNoLMSEAllowedSecondDegree()
-            throws LockedException, NotReadyException,
+    void testEstimateWithDirectEvaluationsNoLMSEAllowedSecondDegree() throws LockedException, NotReadyException,
             PolynomialEstimationException {
 
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(2);
+        final var estimator = new LMSEPolynomialEstimator(2);
 
         // check default values
         assertEquals(2, estimator.getDegree());
@@ -877,37 +737,31 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 2nd degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[3];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[3];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(2, polynomial.getDegree());
 
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -915,23 +769,20 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectEvaluationsLMSEAllowedSecondDegree()
-            throws LockedException, NotReadyException,
+    void testEstimateWithDirectEvaluationsLMSEAllowedSecondDegree() throws LockedException, NotReadyException,
             PolynomialEstimationException {
 
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(2);
+        final var estimator = new LMSEPolynomialEstimator(2);
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -940,37 +791,31 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 2nd degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[3];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[3];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(2, polynomial.getDegree());
 
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -978,23 +823,20 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polyParams, polynomial2.getPolyParams(), ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectAndSecondOrderDerivativeEvaluationsNoLMSEAllowedSecondDegree()
-            throws LockedException, NotReadyException,
-            PolynomialEstimationException {
+    void testEstimateWithDirectAndSecondOrderDerivativeEvaluationsNoLMSEAllowedSecondDegree() throws LockedException,
+            NotReadyException, PolynomialEstimationException {
 
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(2);
+        final var estimator = new LMSEPolynomialEstimator(2);
 
         // check default values
         assertEquals(2, estimator.getDegree());
@@ -1002,37 +844,30 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 2nd degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[3];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[3];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(2, polynomial.getDegree());
 
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations() - 2; i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations() - 2; i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double value = polynomial.evaluateDerivative(x);
-        DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation(x, value, 1);
+        var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var value = polynomial.evaluateDerivative(x);
+        var eval = new DerivativePolynomialEvaluation(x, value, 1);
         evaluations.add(eval);
 
         x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1053,21 +888,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
 
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithDirectAndSecondOrderDerivativeEvaluationLMSEAllowedSecondDegree()
-            throws LockedException, NotReadyException,
-            PolynomialEstimationException {
+    void testEstimateWithDirectAndSecondOrderDerivativeEvaluationLMSEAllowedSecondDegree() throws LockedException,
+            NotReadyException, PolynomialEstimationException {
 
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator(2);
+        final var estimator = new LMSEPolynomialEstimator(2);
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -1076,37 +909,30 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 2nd degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[3];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[3];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(2, polynomial.getDegree());
 
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double value = polynomial.evaluate(x);
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var value = polynomial.evaluate(x);
 
-            final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                    value);
+            final var eval = new DirectPolynomialEvaluation(x, value);
             evaluations.add(eval);
         }
 
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double value = polynomial.evaluateDerivative(x);
-        DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation(x, value, 1);
+        var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var value = polynomial.evaluateDerivative(x);
+        var eval = new DerivativePolynomialEvaluation(x, value, 1);
         evaluations.add(eval);
 
         x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1117,7 +943,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -1125,22 +951,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithSecondOrderIntegralEvaluationsNoLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithSecondOrderIntegralEvaluationsNoLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
@@ -1148,42 +971,34 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double[] constants = new double[2];
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var constants = new double[2];
             randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Polynomial integral = polynomial.nthIntegrationAndReturnNew(2,
-                    constants);
-            final double value = integral.evaluate(x);
+            final var integral = polynomial.nthIntegrationAndReturnNew(2, constants);
+            final var value = integral.evaluate(x);
 
-            final IntegralPolynomialEvaluation eval =
-                    new IntegralPolynomialEvaluation(x, value, constants, 2);
+            final var eval = new IntegralPolynomialEvaluation(x, value, constants, 2);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -1191,22 +1006,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithSecondOrderIntegralEvaluationLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithSecondOrderIntegralEvaluationLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -1215,42 +1027,34 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double[] constants = new double[2];
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var constants = new double[2];
             randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Polynomial integral = polynomial.nthIntegrationAndReturnNew(2,
-                    constants);
-            final double value = integral.evaluate(x);
+            final var integral = polynomial.nthIntegrationAndReturnNew(2, constants);
+            final var value = integral.evaluate(x);
 
-            final IntegralPolynomialEvaluation eval =
-                    new IntegralPolynomialEvaluation(x, value, constants, 2);
+            final var eval = new IntegralPolynomialEvaluation(x, value, constants, 2);
             evaluations.add(eval);
         }
 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -1260,20 +1064,18 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
 
 
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithSecondOrderIntegralIntervalEvaluationsNoLMSEAllowed()
-            throws LockedException, NotReadyException,
-            PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+    void testEstimateWithSecondOrderIntegralIntervalEvaluationsNoLMSEAllowed() throws LockedException,
+            NotReadyException, PolynomialEstimationException {
+        final var estimator = new LMSEPolynomialEstimator();
 
         // check default values
         assertEquals(1, estimator.getDegree());
@@ -1281,38 +1083,28 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertFalse(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
-            final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double[] constants = new double[2];
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < estimator.getMinNumberOfEvaluations(); i++) {
+            final var startX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var endX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var constants = new double[2];
             randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final double value = polynomial.nthOrderIntegrateInterval(startX, endX, 2,
-                    constants);
+            final var value = polynomial.nthOrderIntegrateInterval(startX, endX, 2, constants);
 
-            final IntegralIntervalPolynomialEvaluation eval =
-                    new IntegralIntervalPolynomialEvaluation(startX, endX,
-                            value, 2);
+            final var eval = new IntegralIntervalPolynomialEvaluation(startX, endX, value, 2);
             eval.setConstants(constants);
             evaluations.add(eval);
         }
@@ -1320,7 +1112,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -1328,22 +1120,19 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
 
     @Test
-    public void testEstimateWithSecondOrderIntegralIntervalEvaluationLMSEAllowed()
-            throws LockedException, NotReadyException,
+    void testEstimateWithSecondOrderIntegralIntervalEvaluationLMSEAllowed() throws LockedException, NotReadyException,
             PolynomialEstimationException {
-        final LMSEPolynomialEstimator estimator = new LMSEPolynomialEstimator();
+        final var estimator = new LMSEPolynomialEstimator();
         estimator.setLMSESolutionAllowed(true);
 
         // check default values
@@ -1352,38 +1141,28 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLMSESolutionAllowed());
 
         // Force NotReadyException
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // create random 1st degree polynomial
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] polyParams = new double[2];
+        final var randomizer = new UniformRandomizer();
+        final var polyParams = new double[2];
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Polynomial polynomial = new Polynomial(polyParams);
+        final var polynomial = new Polynomial(polyParams);
 
         assertEquals(1, polynomial.getDegree());
 
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-        for (int i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
-            final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double[] constants = new double[2];
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
+        for (var i = 0; i < 2 * estimator.getMinNumberOfEvaluations(); i++) {
+            final var startX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var constants = new double[2];
             randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final double value = polynomial.nthOrderIntegrateInterval(startX, endX, 2,
-                    constants);
+            final var value = polynomial.nthOrderIntegrateInterval(startX, endX, 2, constants);
 
-            final IntegralIntervalPolynomialEvaluation eval =
-                    new IntegralIntervalPolynomialEvaluation(startX, endX,
-                            value, 2);
+            final var eval = new IntegralIntervalPolynomialEvaluation(startX, endX, value, 2);
             eval.setConstants(constants);
             evaluations.add(eval);
         }
@@ -1391,7 +1170,7 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         estimator.setEvaluations(evaluations);
 
         assertTrue(estimator.isReady());
-        assertSame(polynomial.getPolyParams(), polyParams);
+        assertSame(polyParams, polynomial.getPolyParams());
 
         estimator.setListener(this);
         reset();
@@ -1399,13 +1178,11 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertEquals(0, estimateStart);
         assertEquals(0, estimateEnd);
 
-
         // estimate
-        final Polynomial polynomial2 = estimator.estimate();
+        final var polynomial2 = estimator.estimate();
 
         // check correctness
-        assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(polyParams, polynomial2.getPolyParams(), ABSOLUTE_ERROR);
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
     }
@@ -1431,32 +1208,10 @@ public class LMSEPolynomialEstimatorTest implements PolynomialEstimatorListener 
         assertTrue(estimator.isLocked());
 
         // Force LockedException
-        try {
-            estimator.setDegree(2);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setEvaluations(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception ignore) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            ((LMSEPolynomialEstimator) estimator).setLMSESolutionAllowed(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> estimator.setDegree(2));
+        assertThrows(LockedException.class, () -> estimator.setEvaluations(null));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, estimator::estimate);
+        assertThrows(LockedException.class, () -> ((LMSEPolynomialEstimator) estimator).setLMSESolutionAllowed(true));
     }
 }

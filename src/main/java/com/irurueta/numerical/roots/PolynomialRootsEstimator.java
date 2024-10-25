@@ -70,8 +70,7 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      * @throws IllegalArgumentException Raised if the length of the array is not
      *                                  valid depending on the subclass implementation.
      */
-    public void setPolynomialParameters(final Complex[] polyParams)
-            throws LockedException {
+    public void setPolynomialParameters(final Complex[] polyParams) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -138,6 +137,5 @@ public abstract class PolynomialRootsEstimator extends RootEstimator {
      * @throws IllegalArgumentException Raised if the length of the array is not
      *                                  valid depending on the subclass implementation.
      */
-    protected abstract void internalSetPolynomialParameters(
-            Complex[] polyParams);
+    protected abstract void internalSetPolynomialParameters(Complex[] polyParams);
 }

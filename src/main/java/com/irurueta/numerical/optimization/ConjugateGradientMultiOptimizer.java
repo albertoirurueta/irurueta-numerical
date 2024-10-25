@@ -132,8 +132,8 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      */
     public ConjugateGradientMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener, final double[] point,
-            final double[] direction, final double tolerance, final boolean usePolakRibiere) {
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double[] direction,
+            final double tolerance, final boolean usePolakRibiere) {
         super(listener, point, direction);
         internalSetTolerance(tolerance);
         this.usePolakRibiere = usePolakRibiere;
@@ -160,8 +160,8 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      */
     public ConjugateGradientMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener, final double[] point,
-            final double tolerance, final boolean usePolakRibiere) {
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double tolerance,
+            final boolean usePolakRibiere) {
         super(listener);
         internalSetStartPoint(point);
         internalSetTolerance(tolerance);
@@ -189,8 +189,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -201,7 +200,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
 
         locked = true;
 
-        final int n = p.length;
+        final var n = p.length;
 
         // set vector of directions
         if (!isDirectionAvailable()) {
@@ -212,27 +211,26 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
             }
         }
 
-        boolean validResult = false;
+        var validResult = false;
         try {
             double gg;
             double dgg;
 
-            final double[] g = new double[n];
-            final double[] h = new double[n];
+            final var g = new double[n];
+            final var h = new double[n];
 
-            double fp = listener.evaluate(p);
+            var fp = listener.evaluate(p);
             gradientListener.evaluateGradient(p, xi);
 
-            for (int j = 0; j < n; j++) {
+            for (var j = 0; j < n; j++) {
                 g[j] = -xi[j];
                 h[j] = g[j];
                 xi[j] = h[j];
             }
-            for (int its = 0; its < ITMAX; its++) {
+            for (var its = 0; its < ITMAX; its++) {
                 iter = its;
                 fret = linmin();
-                if (2.0 * Math.abs(fret - fp) <= tolerance * (Math.abs(fret) +
-                        Math.abs(fp) + EPS)) {
+                if (2.0 * Math.abs(fret - fp) <= tolerance * (Math.abs(fret) + Math.abs(fp) + EPS)) {
                     // minimum found
                     validResult = true;
 
@@ -246,11 +244,10 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
 
                 gradientListener.evaluateGradient(p, xi);
 
-                double test = 0.0;
-                final double den = Math.max(Math.abs(fp), 1.0);
-                for (int j = 0; j < n; j++) {
-                    final double temp = Math.abs(xi[j]) *
-                            Math.max(Math.abs(p[j]), 1.0) / den;
+                var test = 0.0;
+                final var den = Math.max(Math.abs(fp), 1.0);
+                for (var j = 0; j < n; j++) {
+                    final var temp = Math.abs(xi[j]) * Math.max(Math.abs(p[j]), 1.0) / den;
 
                     if (temp > test) {
                         test = temp;
@@ -267,7 +264,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
                 }
 
                 dgg = gg = 0.0;
-                for (int j = 0; j < n; j++) {
+                for (var j = 0; j < n; j++) {
                     gg += g[j] * g[j];
 
                     if (isPolakRibiereEnabled()) {
@@ -289,8 +286,8 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
                     break;
                 }
 
-                double gam = dgg / gg;
-                for (int j = 0; j < n; j++) {
+                final var gam = dgg / gg;
+                for (var j = 0; j < n; j++) {
                     g[j] = -xi[j];
                     h[j] = g[j] + gam * h[j];
                     xi[j] = h[j];
@@ -328,8 +325,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isGradientListenerAvailable() &&
-                isStartPointAvailable();
+        return isListenerAvailable() && isGradientListenerAvailable() && isStartPointAvailable();
     }
 
     /**
@@ -365,8 +361,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      * @throws NotAvailableException Raised if gradient listener has not yet
      *                               been provided.
      */
-    public GradientFunctionEvaluatorListener getGradientListener()
-            throws NotAvailableException {
+    public GradientFunctionEvaluatorListener getGradientListener() throws NotAvailableException {
         if (!isGradientListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -380,9 +375,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      * @param gradientListener Gradient listener.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setGradientListener(
-            final GradientFunctionEvaluatorListener gradientListener)
-            throws LockedException {
+    public void setGradientListener(final GradientFunctionEvaluatorListener gradientListener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -433,8 +426,7 @@ public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
      * @param point Start point to search for a local minimum.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setStartPoint(final double[] point)
-            throws LockedException {
+    public void setStartPoint(final double[] point) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

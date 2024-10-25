@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.roots;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RootEstimationExceptionTest {
+class RootEstimationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        RootEstimationException ex = new RootEstimationException();
+    void testConstructor() {
+        var ex = new RootEstimationException();
         assertNotNull(ex);
 
         ex = new RootEstimationException("message");

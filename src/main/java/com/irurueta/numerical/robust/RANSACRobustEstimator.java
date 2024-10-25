@@ -20,7 +20,6 @@ import com.irurueta.numerical.NotReadyException;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 
 /**
  * This class implements RANSAC (RANdom SAmple Consensus) algorithm to robustly
@@ -86,14 +85,14 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    private double mConfidence;
+    private double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    private int mMaxIterations;
+    private int maxIterations;
 
     /**
      * Instance in charge of picking random subsets of samples.
@@ -113,30 +112,30 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Data related to inliers found for best result.
      */
-    private RANSACInliersData mBestInliersData;
+    private RANSACInliersData bestInliersData;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public RANSACRobustEstimator() {
         super();
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        nIters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        bestInliersData = null;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -148,13 +147,13 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     public RANSACRobustEstimator(final RANSACRobustEstimatorListener<T> listener) {
         super(listener);
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        nIters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        bestInliersData = null;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -166,7 +165,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -188,7 +187,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -199,7 +198,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -212,15 +211,14 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setMaxIterations(final int maxIterations)
-            throws LockedException {
+    public void setMaxIterations(final int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -247,7 +245,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return data related to inliers found for best result.
      */
     public RANSACInliersData getBestInliersData() {
-        return mBestInliersData;
+        return bestInliersData;
     }
 
     /**
@@ -257,7 +255,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -267,12 +265,11 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -282,7 +279,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -292,12 +289,11 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -310,7 +306,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (mListener instanceof RANSACRobustEstimatorListener);
+        return (listener instanceof RANSACRobustEstimatorListener);
     }
 
     /**
@@ -324,8 +320,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public T estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public T estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -334,44 +329,42 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         try {
-            final RANSACRobustEstimatorListener<T> listener =
-                    (RANSACRobustEstimatorListener<T>) mListener;
+            final var listener = (RANSACRobustEstimatorListener<T>) this.listener;
 
-            mLocked = true;
+            locked = true;
 
             listener.onEstimateStart(this);
 
-            final int totalSamples = listener.getTotalSamples();
-            final int subsetSize = listener.getSubsetSize();
-            final double threshold = listener.getThreshold();
+            final var totalSamples = listener.getTotalSamples();
+            final var subsetSize = listener.getSubsetSize();
+            final var threshold = listener.getThreshold();
             // only positive thresholds are allowed
             if (threshold < MIN_THRESHOLD) {
                 throw new RobustEstimatorException();
             }
 
-            int bestNumInliers = 0;
+            var bestNumInliers = 0;
             nIters = Integer.MAX_VALUE;
             int newNIters;
-            int currentIter = 0;
+            var currentIter = 0;
             // reusable list that will contain preliminary solutions on each
             // iteration
-            final List<T> iterResults = new ArrayList<>();
+            final var iterResults = new ArrayList<T>();
             bestResult = null;
             int currentInliers;
-            float previousProgress = 0.0f;
+            var previousProgress = 0.0f;
             float progress;
-            final int[] subsetIndices = new int[subsetSize];
+            final var subsetIndices = new int[subsetSize];
 
             BitSet inliers = null;
             double[] residuals = null;
-            if (mComputeAndKeepInliers || mComputeAndKeepResiduals) {
-                mBestInliersData = new RANSACInliersData(totalSamples,
-                        mComputeAndKeepInliers, mComputeAndKeepResiduals);
+            if (computeAndKeepInliers || computeAndKeepResiduals) {
+                bestInliersData = new RANSACInliersData(totalSamples, computeAndKeepInliers, computeAndKeepResiduals);
 
-                if (mComputeAndKeepInliers) {
+                if (computeAndKeepInliers) {
                     inliers = new BitSet(totalSamples);
                 }
-                if (mComputeAndKeepResiduals) {
+                if (computeAndKeepResiduals) {
                     residuals = new double[totalSamples];
                 }
             }
@@ -384,21 +377,20 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                 subsetSelector.setNumSamples(totalSamples);
             }
 
-            while ((nIters > currentIter) && (currentIter < mMaxIterations)) {
+            while ((nIters > currentIter) && (currentIter < maxIterations)) {
                 // generate a random subset of samples
                 subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);
 
                 // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
-                listener.estimatePreliminarSolutions(subsetIndices,
-                        iterResults);
+                listener.estimatePreliminarSolutions(subsetIndices, iterResults);
 
-                for (final T iterResult : iterResults) {
+                for (final var iterResult : iterResults) {
                     // compute number of inliers
                     currentInliers = 0;
-                    for (int i = 0; i < totalSamples; i++) {
-                        final double error = listener.computeResidual(iterResult, i);
+                    for (var i = 0; i < totalSamples; i++) {
+                        final var error = listener.computeResidual(iterResult, i);
                         if (error <= threshold) {
                             currentInliers++;
                             // keep inlier data if needed
@@ -426,9 +418,8 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                         bestResult = iterResult;
 
                         // update best inlier data
-                        if (mBestInliersData != null) {
-                            mBestInliersData.update(inliers, residuals,
-                                    bestNumInliers);
+                        if (bestInliersData != null) {
+                            bestInliersData.update(inliers, residuals, bestNumInliers);
                         }
 
                         // recompute number of times the algorithm needs to be
@@ -436,24 +427,17 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                         // achieve with probability mConfidence that we have
                         // inliers and probability 1 - mConfidence that we have
                         // outliers
-                        final double probSubsetAllInliers = Math.pow(
-                                (double) bestNumInliers / (double) totalSamples,
+                        final var probSubsetAllInliers = Math.pow((double) bestNumInliers / (double) totalSamples,
                                 subsetSize);
 
-                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                                Double.isNaN(probSubsetAllInliers)) {
+                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE || Double.isNaN(probSubsetAllInliers)) {
                             newNIters = Integer.MAX_VALUE;
                         } else {
-                            final double logProbSomeOutliers =
-                                    Math.log(1.0 - probSubsetAllInliers);
-                            if (Math.abs(logProbSomeOutliers) <
-                                    Double.MIN_VALUE ||
-                                    Double.isNaN(logProbSomeOutliers)) {
+                            final var logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
+                            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE || Double.isNaN(logProbSomeOutliers)) {
                                 newNIters = Integer.MAX_VALUE;
                             } else {
-                                newNIters = (int) Math.ceil(Math.abs(
-                                        Math.log(1.0 - mConfidence) /
-                                                logProbSomeOutliers));
+                                newNIters = (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) / logProbSomeOutliers));
                             }
                         }
                         if (newNIters < nIters) {
@@ -463,12 +447,11 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                 }
 
                 if (nIters > 0) {
-                    progress = Math.min((float) currentIter / (float) nIters,
-                            1.0f);
+                    progress = Math.min((float) currentIter / (float) nIters, 1.0f);
                 } else {
                     progress = 1.0f;
                 }
-                if (progress - previousProgress > mProgressDelta) {
+                if (progress - previousProgress > progressDelta) {
                     previousProgress = progress;
                     listener.onEstimateProgressChange(this, progress);
                 }
@@ -488,7 +471,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
         } catch (final SubsetSelectorException e) {
             throw new RobustEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -522,7 +505,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
          * Efficiently stores which samples are considered inliers and which
          * ones aren't.
          */
-        private BitSet mInliers;
+        private BitSet inliers;
 
         /**
          * Constructor.
@@ -531,15 +514,14 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
          * @param keepInliers   true to keep inliers, false otherwise.
          * @param keepResiduals true to keep residuals, false otherwise.
          */
-        protected RANSACInliersData(final int totalSamples, final boolean keepInliers,
-                                    final boolean keepResiduals) {
+        protected RANSACInliersData(final int totalSamples, final boolean keepInliers, final boolean keepResiduals) {
             if (keepInliers) {
-                mInliers = new BitSet(totalSamples);
+                inliers = new BitSet(totalSamples);
             }
             if (keepResiduals) {
-                mResiduals = new double[totalSamples];
+                residuals = new double[totalSamples];
             }
-            mNumInliers = 0;
+            numInliers = 0;
         }
 
         /**
@@ -551,7 +533,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
          */
         @Override
         public BitSet getInliers() {
-            return mInliers;
+            return inliers;
         }
 
         /**
@@ -562,9 +544,8 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
          * @param residuals  residuals obtained for each sample of data.
          * @param numInliers number of inliers found on current iteration.
          */
-        protected void update(final BitSet inliers, final double[] residuals,
-                              final int numInliers) {
-            int totalSamples = 0;
+        protected void update(final BitSet inliers, final double[] residuals, final int numInliers) {
+            var totalSamples = 0;
             if (inliers != null) {
                 totalSamples = inliers.length();
             }
@@ -572,23 +553,22 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
                 totalSamples = residuals.length;
             }
 
-            if (mInliers != null && inliers != null && mResiduals != null &&
-                    residuals != null) {
+            if (this.inliers != null && inliers != null && this.residuals != null && residuals != null) {
                 // update inliers and residuals
-                for (int i = 0; i < totalSamples; i++) {
-                    mInliers.set(i, inliers.get(i));
-                    mResiduals[i] = residuals[i];
+                for (var i = 0; i < totalSamples; i++) {
+                    this.inliers.set(i, inliers.get(i));
+                    this.residuals[i] = residuals[i];
                 }
-            } else if (mInliers != null && inliers != null) {
+            } else if (this.inliers != null && inliers != null) {
                 // update inliers but not the residuals
-                for (int i = 0; i < totalSamples; i++) {
-                    mInliers.set(i, inliers.get(i));
+                for (var i = 0; i < totalSamples; i++) {
+                    this.inliers.set(i, inliers.get(i));
                 }
-            } else if (mResiduals != null && residuals != null) {
+            } else if (this.residuals != null && residuals != null) {
                 // update residuals but not inliers
-                System.arraycopy(residuals, 0, mResiduals, 0, totalSamples);
+                System.arraycopy(residuals, 0, this.residuals, 0, totalSamples);
             }
-            mNumInliers = numInliers;
+            this.numInliers = numInliers;
         }
     }
 }

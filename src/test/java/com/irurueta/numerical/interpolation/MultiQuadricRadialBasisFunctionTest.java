@@ -1,35 +1,33 @@
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MultiQuadricRadialBasisFunctionTest {
+class MultiQuadricRadialBasisFunctionTest {
 
     @Test
-    public void evaluate_whenDefaultScale_returnsExpectedValue() {
-        final MultiQuadricRadialBasisFunction rbf =
-                new MultiQuadricRadialBasisFunction();
+    void evaluate_whenDefaultScale_returnsExpectedValue() {
+        final var rbf = new MultiQuadricRadialBasisFunction();
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double r = randomizer.nextDouble();
-        final double expected = Math.sqrt((r * r) + 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var r = randomizer.nextDouble();
+        final var expected = Math.sqrt((r * r) + 1.0);
 
         assertEquals(expected, rbf.evaluate(r), 0.0);
     }
 
     @Test
-    public void evaluate_whenRandomScale_returnsExpectedValue() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double scale = randomizer.nextDouble();
+    void evaluate_whenRandomScale_returnsExpectedValue() {
+        final var randomizer = new UniformRandomizer();
+        final var scale = randomizer.nextDouble();
 
-        final MultiQuadricRadialBasisFunction rbf =
-                new MultiQuadricRadialBasisFunction(scale);
+        final var rbf = new MultiQuadricRadialBasisFunction(scale);
 
-        final double r = randomizer.nextDouble();
-        final double expected = Math.sqrt((r * r) + (scale * scale));
+        final var r = randomizer.nextDouble();
+        final var expected = Math.sqrt((r * r) + (scale * scale));
 
         assertEquals(expected, rbf.evaluate(r), 0.0);
     }

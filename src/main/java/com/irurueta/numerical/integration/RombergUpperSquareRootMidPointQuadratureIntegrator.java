@@ -35,9 +35,7 @@ public class RombergUpperSquareRootMidPointQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public RombergUpperSquareRootMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new UpperSquareRootMidPointQuadrature(a, b, listener), eps);
     }
 
@@ -49,8 +47,7 @@ public class RombergUpperSquareRootMidPointQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public RombergUpperSquareRootMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

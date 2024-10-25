@@ -17,13 +17,11 @@ package com.irurueta.numerical;
 
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class AccurateMaximumLikelihoodEstimatorTest {
+class AccurateMaximumLikelihoodEstimatorTest {
 
     private static final int NUMBER_OF_SAMPLES = 100000;
 
@@ -39,22 +37,20 @@ public class AccurateMaximumLikelihoodEstimatorTest {
     private static final double RELATIVE_ERROR = 0.2;
 
     @Test
-    public void testConstructor() throws NotAvailableException {
+    void testConstructor() throws NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
-        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
-                MAX_GAUSSIAN_SIGMA);
+        final var randomizer = new UniformRandomizer();
+        final var mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final var standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+        final var gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA, MAX_GAUSSIAN_SIGMA);
 
-        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+        final var inputData = new double[NUMBER_OF_SAMPLES];
 
         // initialize input data with gaussian data
-        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
-                new Random(), mean, standardDeviation);
-        double minValue = Double.MAX_VALUE;
-        double maxValue = -Double.MAX_VALUE;
-        for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
+        final var gaussianRandomizer = new GaussianRandomizer(mean, standardDeviation);
+        var minValue = Double.MAX_VALUE;
+        var maxValue = -Double.MAX_VALUE;
+        for (var i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
             if (inputData[i] < minValue) {
                 minValue = inputData[i];
@@ -64,218 +60,129 @@ public class AccurateMaximumLikelihoodEstimatorTest {
             }
         }
 
-        final boolean useHistogramInitialSolution = randomizer.nextBoolean();
-
-        AccurateMaximumLikelihoodEstimator estimator;
+        final var useHistogramInitialSolution = randomizer.nextBoolean();
 
         // instantiate with empty constructor
-        estimator = new AccurateMaximumLikelihoodEstimator();
+        var estimator = new AccurateMaximumLikelihoodEstimator();
         assertNotNull(estimator);
 
-        assertEquals(MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
-        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
-                estimator.getGaussianSigma(), 0.0);
+        assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
+        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, estimator.getGaussianSigma(),
+                0.0);
         assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION,
                 estimator.isHistogramInitialSolutionUsed());
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getMinValue);
+        assertThrows(NotAvailableException.class, estimator::getMaxValue);
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getInputData);
         assertFalse(estimator.isInputDataAvailable());
         assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final LockedException e) {
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // Instantiate with gaussian sigma and use histogram initial solution
-        estimator = new AccurateMaximumLikelihoodEstimator(gaussianSigma,
-                useHistogramInitialSolution);
+        estimator = new AccurateMaximumLikelihoodEstimator(gaussianSigma, useHistogramInitialSolution);
 
         assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        assertEquals(estimator.isHistogramInitialSolutionUsed(),
-                useHistogramInitialSolution);
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(gaussianSigma, estimator.getGaussianSigma(), 0.0);
+        assertEquals(estimator.isHistogramInitialSolutionUsed(), useHistogramInitialSolution);
+        assertThrows(NotAvailableException.class, estimator::getMinValue);
+        assertThrows(NotAvailableException.class, estimator::getMaxValue);
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getInputData);
         assertFalse(estimator.isInputDataAvailable());
         assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final LockedException ignore) {
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new AccurateMaximumLikelihoodEstimator(0.0,
-                    useHistogramInitialSolution);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new AccurateMaximumLikelihoodEstimator(0.0,
+                useHistogramInitialSolution));
 
         // Instantiate with input data, gaussian sigma and use histogram initial
         // solution
-        estimator = new AccurateMaximumLikelihoodEstimator(inputData,
-                gaussianSigma, useHistogramInitialSolution);
+        estimator = new AccurateMaximumLikelihoodEstimator(inputData, gaussianSigma, useHistogramInitialSolution);
 
         assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        assertEquals(estimator.isHistogramInitialSolutionUsed(),
-                useHistogramInitialSolution);
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(gaussianSigma, estimator.getGaussianSigma(), 0.0);
+        assertEquals(useHistogramInitialSolution, estimator.isHistogramInitialSolutionUsed());
+        assertThrows(NotAvailableException.class, estimator::getMinValue);
+        assertThrows(NotAvailableException.class, estimator::getMaxValue);
         assertFalse(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getInputData(), inputData);
+        assertEquals(inputData, estimator.getInputData());
         assertTrue(estimator.isInputDataAvailable());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new AccurateMaximumLikelihoodEstimator(inputData, 0.0,
-                    useHistogramInitialSolution);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new AccurateMaximumLikelihoodEstimator(inputData,
+                0.0, useHistogramInitialSolution));
 
         // Instantiate with min, max values, input data, gaussian sigma and
         // use histogram initial solution
-        estimator = new AccurateMaximumLikelihoodEstimator(minValue, maxValue,
-                inputData, gaussianSigma, useHistogramInitialSolution);
+        estimator = new AccurateMaximumLikelihoodEstimator(minValue, maxValue, inputData, gaussianSigma,
+                useHistogramInitialSolution);
 
         assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
-        assertEquals(estimator.isHistogramInitialSolutionUsed(),
-                useHistogramInitialSolution);
-        assertEquals(estimator.getMinValue(), minValue, 0.0);
-        assertEquals(estimator.getMaxValue(), maxValue, 0.0);
+        assertEquals(gaussianSigma, estimator.getGaussianSigma(), 0.0);
+        assertEquals(estimator.isHistogramInitialSolutionUsed(), useHistogramInitialSolution);
+        assertEquals(minValue, estimator.getMinValue(), 0.0);
+        assertEquals(maxValue, estimator.getMaxValue(), 0.0);
         assertTrue(estimator.areMinMaxValuesAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getInputData(), inputData);
+        assertEquals(inputData, estimator.getInputData());
         assertTrue(estimator.isInputDataAvailable());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new AccurateMaximumLikelihoodEstimator(maxValue,
-                    minValue, inputData, gaussianSigma,
-                    useHistogramInitialSolution);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
-        try {
-            estimator = new AccurateMaximumLikelihoodEstimator(minValue,
-                    maxValue, inputData, 0.0, useHistogramInitialSolution);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        final var minValue2 = minValue;
+        final var maxValue2 = maxValue;
+        assertThrows(IllegalArgumentException.class, () -> new AccurateMaximumLikelihoodEstimator(maxValue2, minValue2,
+                inputData, gaussianSigma, useHistogramInitialSolution));
+        assertThrows(IllegalArgumentException.class, () -> new AccurateMaximumLikelihoodEstimator(minValue2, maxValue2,
+                inputData, 0.0, useHistogramInitialSolution));
     }
 
     @Test
-    public void testGetMethod() {
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
-
+    void testGetMethod() {
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
         assertEquals(MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR, estimator.getMethod());
     }
 
     @Test
-    public void testGetSetGaussianSigma() throws LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA,
-                MAX_GAUSSIAN_SIGMA);
+    void testGetSetGaussianSigma() throws LockedException {
+        final var randomizer = new UniformRandomizer();
+        final var gaussianSigma = randomizer.nextDouble(MIN_GAUSSIAN_SIGMA, MAX_GAUSSIAN_SIGMA);
 
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
 
-        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA,
-                estimator.getGaussianSigma(), 0.0);
+        assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_GAUSSIAN_SIGMA, estimator.getGaussianSigma(),
+                0.0);
 
         // set new gaussian sigma
         estimator.setGaussianSigma(gaussianSigma);
 
         // check correctness
-        assertEquals(estimator.getGaussianSigma(), gaussianSigma, 0.0);
+        assertEquals(gaussianSigma, estimator.getGaussianSigma(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setGaussianSigma(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setGaussianSigma(0.0));
     }
 
     @Test
-    public void testGetSetMinMaxValuesAndAvailability() throws LockedException,
-            NotAvailableException {
+    void testGetSetMinMaxValuesAndAvailability() throws LockedException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+        final var randomizer = new UniformRandomizer();
+        final var mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final var standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
 
-        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+        final var inputData = new double[NUMBER_OF_SAMPLES];
 
         // initialize input data with gaussian data
-        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
-                new Random(), mean, standardDeviation);
-        double minValue = Double.MAX_VALUE;
-        double maxValue = -Double.MAX_VALUE;
-        for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
+        final var gaussianRandomizer = new GaussianRandomizer(mean, standardDeviation);
+        var minValue = Double.MAX_VALUE;
+        var maxValue = -Double.MAX_VALUE;
+        for (var i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
             if (inputData[i] < minValue) {
                 minValue = inputData[i];
@@ -285,59 +192,45 @@ public class AccurateMaximumLikelihoodEstimatorTest {
             }
         }
 
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
 
-        try {
-            estimator.getMinValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getMaxValue();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getMinValue);
+        assertThrows(NotAvailableException.class, estimator::getMaxValue);
         assertFalse(estimator.areMinMaxValuesAvailable());
 
         // set min max values
         estimator.setMinMaxValues(minValue, maxValue);
 
         // check correctness
-        assertEquals(estimator.getMinValue(), minValue, 0.0);
-        assertEquals(estimator.getMaxValue(), maxValue, 0.0);
+        assertEquals(minValue, estimator.getMinValue(), 0.0);
+        assertEquals(maxValue, estimator.getMaxValue(), 0.0);
         assertTrue(estimator.areMinMaxValuesAvailable());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMinMaxValues(maxValue, minValue);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var minValue2 = minValue;
+        final var maxValue2 = maxValue;
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMinMaxValues(maxValue2, minValue2));
     }
 
     @Test
-    public void testIsLocked() {
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
-
+    void testIsLocked() {
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
         assertFalse(estimator.isLocked());
     }
 
     @Test
-    public void testGetSetInputDataAndAvailability() throws LockedException, NotAvailableException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+    void testGetSetInputDataAndAvailability() throws LockedException, NotAvailableException {
+        final var randomizer = new UniformRandomizer();
+        final var mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final var standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
 
-        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+        final var inputData = new double[NUMBER_OF_SAMPLES];
 
         // initialize input data with gaussian data
-        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
-                new Random(), mean, standardDeviation);
-        double minValue = Double.MAX_VALUE;
-        double maxValue = -Double.MAX_VALUE;
-        for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
+        final var gaussianRandomizer = new GaussianRandomizer(mean, standardDeviation);
+        var minValue = Double.MAX_VALUE;
+        var maxValue = -Double.MAX_VALUE;
+        for (var i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
             if (inputData[i] < minValue) {
                 minValue = inputData[i];
@@ -347,33 +240,27 @@ public class AccurateMaximumLikelihoodEstimatorTest {
             }
         }
 
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
 
-        try {
-            estimator.getInputData();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getInputData);
         assertFalse(estimator.isInputDataAvailable());
 
         // set input data
         estimator.setInputData(inputData);
 
         // check correctness
-        assertEquals(estimator.getInputData(), inputData);
+        assertEquals(inputData, estimator.getInputData());
         assertTrue(estimator.isInputDataAvailable());
     }
 
     @Test
-    public void testIsReady() throws LockedException {
-        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+    void testIsReady() throws LockedException {
+        final var inputData = new double[NUMBER_OF_SAMPLES];
 
-        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
-                new Random());
-        double minValue = Double.MAX_VALUE;
-        double maxValue = -Double.MAX_VALUE;
-        for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
+        final var gaussianRandomizer = new GaussianRandomizer();
+        var minValue = Double.MAX_VALUE;
+        var maxValue = -Double.MAX_VALUE;
+        for (var i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
             if (inputData[i] < minValue) {
                 minValue = inputData[i];
@@ -383,8 +270,7 @@ public class AccurateMaximumLikelihoodEstimatorTest {
             }
         }
 
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
 
         assertFalse(estimator.isReady());
 
@@ -395,9 +281,8 @@ public class AccurateMaximumLikelihoodEstimatorTest {
     }
 
     @Test
-    public void testGetSetHistogramInitialSolutionUsed() throws LockedException {
-        final AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
+    void testGetSetHistogramInitialSolutionUsed() throws LockedException {
+        final var estimator = new AccurateMaximumLikelihoodEstimator();
 
         assertEquals(AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION,
                 estimator.isHistogramInitialSolutionUsed());
@@ -416,19 +301,18 @@ public class AccurateMaximumLikelihoodEstimatorTest {
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
-        final double standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
+    void testEstimate() throws LockedException, NotReadyException {
+        final var randomizer = new UniformRandomizer();
+        final var mean = randomizer.nextDouble(MIN_MEAN, MAX_MEAN);
+        final var standardDeviation = randomizer.nextDouble(MIN_STD, MAX_STD);
 
-        final double[] inputData = new double[NUMBER_OF_SAMPLES];
+        final var inputData = new double[NUMBER_OF_SAMPLES];
 
         // initialize input data with gaussian data
-        final GaussianRandomizer gaussianRandomizer = new GaussianRandomizer(
-                new Random(), mean, standardDeviation);
-        double minValue = Double.MAX_VALUE;
-        double maxValue = -Double.MAX_VALUE;
-        for (int i = 0; i < NUMBER_OF_SAMPLES; i++) {
+        final var gaussianRandomizer = new GaussianRandomizer(mean, standardDeviation);
+        var minValue = Double.MAX_VALUE;
+        var maxValue = -Double.MAX_VALUE;
+        for (var i = 0; i < NUMBER_OF_SAMPLES; i++) {
             inputData[i] = gaussianRandomizer.nextDouble();
             if (inputData[i] < minValue) {
                 minValue = inputData[i];
@@ -438,14 +322,13 @@ public class AccurateMaximumLikelihoodEstimatorTest {
             }
         }
 
-        AccurateMaximumLikelihoodEstimator estimator =
-                new AccurateMaximumLikelihoodEstimator();
+        var estimator = new AccurateMaximumLikelihoodEstimator();
         estimator.setInputData(inputData);
 
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
-        final double estimatedMean = estimator.estimate();
+        final var estimatedMean = estimator.estimate();
         assertFalse(estimator.isLocked());
 
         assertEquals(mean, estimatedMean, RELATIVE_ERROR * estimatedMean);
@@ -453,10 +336,6 @@ public class AccurateMaximumLikelihoodEstimatorTest {
         // Force NotReadyException
         estimator = new AccurateMaximumLikelihoodEstimator();
         assertFalse(estimator.isReady());
-        try {
-            estimator.estimate();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, estimator::estimate);
     }
 }

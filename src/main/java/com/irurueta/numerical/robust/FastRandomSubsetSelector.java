@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 import com.irurueta.statistics.UniformRandomizer;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -38,7 +37,7 @@ public class FastRandomSubsetSelector extends SubsetSelector {
     /**
      * Randomizer to pick random indexes.
      */
-    private UniformRandomizer mRandomizer;
+    private UniformRandomizer randomizer;
 
     /**
      * Set containing selected indices on a given run.
@@ -49,7 +48,7 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      * on different threads, then each thread needs to have a different subset
      * selector instance.
      */
-    private final Set<Integer> mSelectedIndices;
+    private final Set<Integer> selectedIndices;
 
     /**
      * Constructor.
@@ -71,11 +70,10 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      * @throws IllegalArgumentException if provided number of samples is zero
      *                                  or negative.
      */
-    public FastRandomSubsetSelector(
-            final int numSamples, final boolean seedRandomizerWithTime) {
+    public FastRandomSubsetSelector(final int numSamples, final boolean seedRandomizerWithTime) {
         super(numSamples);
         createRandomizer(seedRandomizerWithTime);
-        mSelectedIndices = new HashSet<>();
+        selectedIndices = new HashSet<>();
     }
 
     /**
@@ -103,39 +101,38 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      *                                    array does not have at least a length of subsetSize.
      */
     @Override
-    public void computeRandomSubsets(final int subsetSize, final int[] result)
-            throws NotEnoughSamplesException, InvalidSubsetSizeException {
+    public void computeRandomSubsets(final int subsetSize, final int[] result) throws NotEnoughSamplesException,
+            InvalidSubsetSizeException {
         if (subsetSize == 0) {
             throw new InvalidSubsetSizeException();
         }
         if (result.length < subsetSize) {
             throw new InvalidSubsetSizeException();
         }
-        if (mNumSamples < subsetSize) {
+        if (numSamples < subsetSize) {
             throw new NotEnoughSamplesException();
         }
 
         // On start set of selected indices is empty
-        mSelectedIndices.clear();
+        selectedIndices.clear();
 
-        int counter = 0;
+        var counter = 0;
         int index;
         do {
-            index = mRandomizer.nextInt(0, mNumSamples);
+            index = randomizer.nextInt(0, numSamples);
 
             // check whether this index has already been selected
-            final Integer intIndex = index;
-            if (mSelectedIndices.contains(intIndex)) {
+            if (selectedIndices.contains(index)) {
                 continue;
             }
 
             // if not selected, pick it now
-            mSelectedIndices.add(intIndex);
+            selectedIndices.add(index);
             result[counter] = index;
             counter++;
         } while (counter < subsetSize);
 
-        mSelectedIndices.clear();
+        selectedIndices.clear();
     }
 
     /**
@@ -167,10 +164,8 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      */
     @Override
     public void computeRandomSubsetsInRange(
-            final int minPos, final int maxPos,
-            final int subsetSize, final boolean pickLast, final int[] result)
-            throws NotEnoughSamplesException, InvalidSubsetSizeException,
-            InvalidSubsetRangeException {
+            final int minPos, final int maxPos, final int subsetSize, final boolean pickLast, final int[] result)
+            throws NotEnoughSamplesException, InvalidSubsetSizeException, InvalidSubsetRangeException {
         if (subsetSize == 0) {
             throw new InvalidSubsetSizeException();
         }
@@ -183,27 +178,25 @@ public class FastRandomSubsetSelector extends SubsetSelector {
         if ((maxPos - minPos) < subsetSize) {
             throw new InvalidSubsetSizeException();
         }
-        if (mNumSamples < subsetSize) {
+        if (numSamples < subsetSize) {
             throw new NotEnoughSamplesException();
         }
-        if (maxPos > mNumSamples) {
+        if (maxPos > numSamples) {
             throw new NotEnoughSamplesException();
         }
 
         // On start set of selected indices is empty
-        mSelectedIndices.clear();
+        selectedIndices.clear();
 
-        int counter = 0;
+        var counter = 0;
         int index;
 
-        Integer intIndex;
         if (pickLast) {
             // this is done to accelerate computations and obtain more
             // stable results in some cases
             // pick last element in range
             index = maxPos - 1;
-            intIndex = index;
-            mSelectedIndices.add(intIndex);
+            selectedIndices.add(index);
             result[counter] = index;
             counter++;
         }
@@ -211,22 +204,21 @@ public class FastRandomSubsetSelector extends SubsetSelector {
         if (!pickLast || counter < result.length) {
             // keep selecting only if not all elements have already been selected
             do {
-                index = mRandomizer.nextInt(minPos, maxPos);
+                index = randomizer.nextInt(minPos, maxPos);
 
                 // check whether this index has already been selected
-                intIndex = index;
-                if (mSelectedIndices.contains(intIndex)) {
+                if (selectedIndices.contains(index)) {
                     continue;
                 }
 
                 // if not selected, pick it now
-                mSelectedIndices.add(intIndex);
+                selectedIndices.add(index);
                 result[counter] = index;
                 counter++;
             } while (counter < subsetSize);
         }
 
-        mSelectedIndices.clear();
+        selectedIndices.clear();
     }
 
     /**
@@ -236,7 +228,7 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      * @return internal randomizer.
      */
     protected UniformRandomizer getRandomizer() {
-        return mRandomizer;
+        return randomizer;
     }
 
     /**
@@ -247,9 +239,9 @@ public class FastRandomSubsetSelector extends SubsetSelector {
      *                     pseudo-random sequence on each JVM execution.
      */
     private void createRandomizer(final boolean seedWithTime) {
-        mRandomizer = new UniformRandomizer(new Random());
+        randomizer = new UniformRandomizer();
         if (seedWithTime) {
-            mRandomizer.setSeed(System.currentTimeMillis());
+            randomizer.setSeed(System.currentTimeMillis());
         }
     }
 }

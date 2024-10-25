@@ -39,8 +39,7 @@ public class LowerSquareRootMidPointMatrixQuadrature extends MidPointMatrixQuadr
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public LowerSquareRootMidPointMatrixQuadrature(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         super(0.0, Math.sqrt(b - a), listener);
         aOrig = a;

@@ -33,9 +33,7 @@ public class LowerSquareRootMidPointQuadratureIntegrator
     * @param eps      required accuracy.
     */
    public LowerSquareRootMidPointQuadratureIntegrator(
-           final double a, final double b,
-           final SingleDimensionFunctionEvaluatorListener listener,
-           final double eps) {
+           final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
       super(new LowerSquareRootMidPointQuadrature(a, b, listener), eps);
    }
 
@@ -47,8 +45,7 @@ public class LowerSquareRootMidPointQuadratureIntegrator
     * @param listener listener to evaluate a single dimension function at required points.
     */
    public LowerSquareRootMidPointQuadratureIntegrator(
-           final double a, final double b,
-           final SingleDimensionFunctionEvaluatorListener listener) {
+           final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
       this(a, b, listener, EPS);
    }
 

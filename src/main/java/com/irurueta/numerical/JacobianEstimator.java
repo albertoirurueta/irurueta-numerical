@@ -59,8 +59,7 @@ public class JacobianEstimator {
      */
     public Matrix jacobian(final double[] point) throws EvaluationException {
         try {
-            final Matrix result = new Matrix(listener.getNumberOfVariables(),
-                    point.length);
+            final var result = new Matrix(listener.getNumberOfVariables(), point.length);
             jacobian(point, result);
             return result;
         } catch (final WrongSizeException e) {
@@ -82,10 +81,9 @@ public class JacobianEstimator {
      * @throws EvaluationException      raised if function cannot be evaluated.
      * @throws IllegalArgumentException if size of result is not valid.
      */
-    public void jacobian(final double[] point, final Matrix result)
-            throws EvaluationException {
-        final int numdims = point.length;
-        final int numvars = listener.getNumberOfVariables();
+    public void jacobian(final double[] point, final Matrix result) throws EvaluationException {
+        final var numdims = point.length;
+        final var numvars = listener.getNumberOfVariables();
         if (result.getColumns() != numdims) {
             throw new IllegalArgumentException();
         }
@@ -93,8 +91,8 @@ public class JacobianEstimator {
             throw new IllegalArgumentException();
         }
 
-        final double[] fold = new double[numvars];
-        final double[] fh = new double[numvars];
+        final var fold = new double[numvars];
+        final var fh = new double[numvars];
         if (xh == null || xh.length != numdims) {
             xh = new double[numdims];
         }
@@ -103,7 +101,7 @@ public class JacobianEstimator {
         double temp;
         double h;
         listener.evaluate(point, fold);
-        for (int j = 0; j < numdims; j++) {
+        for (var j = 0; j < numdims; j++) {
             temp = point[j];
             h = EPS * Math.abs(temp);
             if (h == 0.0) {
@@ -113,7 +111,7 @@ public class JacobianEstimator {
             h = xh[j] - temp;
             listener.evaluate(xh, fh);
             xh[j] = temp;
-            for (int i = 0; i < numvars; i++) {
+            for (var i = 0; i < numvars; i++) {
                 result.setElementAt(i, j, (fh[i] - fold[i]) / h);
             }
         }

@@ -31,7 +31,7 @@ public abstract class InterpolatingPolynomialEstimator {
      * @throws InterpolationException   if interpolation fails for numerical reasons.
      */
     public Polynomial estimate(final double[] x, final double[] y) throws InterpolationException {
-        final Polynomial polynomial = new Polynomial(x.length);
+        final var polynomial = new Polynomial(x.length);
         estimate(x, y, polynomial);
         return polynomial;
     }
@@ -45,9 +45,8 @@ public abstract class InterpolatingPolynomialEstimator {
      * @throws IllegalArgumentException if any of the provided values doesn't have the same length.
      * @throws InterpolationException   if interpolation fails for numerical reasons.
      */
-    public double[] estimateCoefficients(final double[] x, final double[] y)
-            throws InterpolationException {
-        final double[] result = new double[x.length];
+    public double[] estimateCoefficients(final double[] x, final double[] y) throws InterpolationException {
+        final var result = new double[x.length];
         estimate(x, y, result);
         return result;
     }
@@ -62,8 +61,7 @@ public abstract class InterpolatingPolynomialEstimator {
      *                                  or polynomial doesn't have expected order.
      * @throws InterpolationException   if interpolation fails for numerical reasons.
      */
-    public void estimate(final double[] x, final double[] y, final Polynomial result)
-            throws InterpolationException {
+    public void estimate(final double[] x, final double[] y, final Polynomial result) throws InterpolationException {
         estimate(x, y, result.getPolyParams());
     }
 

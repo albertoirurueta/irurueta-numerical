@@ -42,8 +42,7 @@ public class CubicSplineInterpolator extends BaseInterpolator {
      * @param yp1 1st derivative at lowest endpoint.
      * @param ypn 1st derivative at highest endpoint
      */
-    public CubicSplineInterpolator(
-            final double[] x, final double[] y, final double yp1, final double ypn) {
+    public CubicSplineInterpolator(final double[] x, final double[] y, final double yp1, final double ypn) {
         super(x, y, M);
         y2 = new double[x.length];
         setY2(x, y, yp1, ypn);
@@ -72,19 +71,18 @@ public class CubicSplineInterpolator extends BaseInterpolator {
     public double rawinterp(int jl, double x) throws InterpolationException {
         // Given a value x, and using pointers to data xx and yy, and the stored vector of second
         // derivatives y2, this routine this cubic spline interpolated value y
-        final int khi = jl + 1;
+        final var khi = jl + 1;
 
-        final double h = xx[khi] - xx[jl];
+        final var h = xx[khi] - xx[jl];
         if (h == 0.0) {
             // The xa's must be distinct
             throw new InterpolationException();
         }
 
         // Cubic spline polynomial is now evaluated
-        final double a = (xx[khi] - x) / h;
-        final double b = (x - xx[jl]) / h;
-        return a * yy[jl] + b * yy[khi] + ((a * a * a - a) * y2[jl]
-                + (b * b * b - b) * y2[khi]) * (h * h) / 6.0;
+        final var a = (xx[khi] - x) / h;
+        final var b = (x - xx[jl]) / h;
+        return a * yy[jl] + b * yy[khi] + ((a * a * a - a) * y2[jl] + (b * b * b - b) * y2[khi]) * (h * h) / 6.0;
     }
 
     /**
@@ -107,13 +105,13 @@ public class CubicSplineInterpolator extends BaseInterpolator {
         final double qn;
         double sig;
         final double un;
-        final int n = y2.length;
-        final double[] u = new double[n - 1];
+        final var n = y2.length;
+        final var u = new double[n - 1];
 
-        if (yp1 > 0.99e99)
+        if (yp1 > 0.99e99) {
             // The lower boundary condition is set either to be "natural"
             y2[0] = u[0] = 0.0;
-        else {
+        } else {
             // or else to have a specified first derivative
             y2[0] = -0.5;
             u[0] = (3.0 / (xv[1] - xv[0])) * ((yv[1] - yv[0]) / (xv[1] - xv[0]) - yp1);
@@ -129,10 +127,10 @@ public class CubicSplineInterpolator extends BaseInterpolator {
             u[i] = (6.0 * u[i] / (xv[i + 1] - xv[i - 1]) - sig * u[i - 1]) / p;
         }
 
-        if (ypn > 0.99e99)
+        if (ypn > 0.99e99) {
             // The upper boundary condition is set either to be "natural"
             qn = un = 0.0;
-        else {
+        } else {
             // or else to have a specified first derivative
             qn = 0.5;
             un = (3.0 / (xv[n - 1] - xv[n - 2])) * (ypn - (yv[n - 1] - yv[n - 2]) / (xv[n - 1] - xv[n - 2]));

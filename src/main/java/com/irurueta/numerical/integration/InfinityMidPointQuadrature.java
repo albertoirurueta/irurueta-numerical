@@ -34,8 +34,7 @@ public class InfinityMidPointQuadrature extends MidPointQuadrature {
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public InfinityMidPointQuadrature(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         super(1.0 / b, 1.0 / a, listener);
     }
 

@@ -35,7 +35,7 @@ public abstract class SubsetSelector {
      * Total number of samples to pick subsets from.
      * Subsets need to be always smaller or equal than total number of samples.
      */
-    protected int mNumSamples;
+    protected int numSamples;
 
     /**
      * Constructor.
@@ -54,7 +54,7 @@ public abstract class SubsetSelector {
      * @return number of samples to select subsets from.
      */
     public int getNumSamples() {
-        return mNumSamples;
+        return numSamples;
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class SubsetSelector {
         if (numSamples < MIN_NUM_SAMPLES) {
             throw new IllegalArgumentException();
         }
-        mNumSamples = numSamples;
+        this.numSamples = numSamples;
     }
 
     /**
@@ -87,9 +87,9 @@ public abstract class SubsetSelector {
      *                                    array does not have at least a length of subsetSize.
      * @see #computeRandomSubsets(int, int[])
      */
-    public int[] computeRandomSubsets(final int subsetSize)
-            throws NotEnoughSamplesException, InvalidSubsetSizeException {
-        final int[] result = new int[subsetSize];
+    public int[] computeRandomSubsets(final int subsetSize) throws NotEnoughSamplesException,
+            InvalidSubsetSizeException {
+        final var result = new int[subsetSize];
         computeRandomSubsets(subsetSize, result);
         return result;
     }
@@ -121,13 +121,11 @@ public abstract class SubsetSelector {
      * @throws InvalidSubsetRangeException if maximum position is smaller than
      *                                     minimum position or maximum or minimum position are negative.
      */
-    public int[] computeRandomSubsetsInRange(final int minPos, final int maxPos,
-                                             final int subsetSize, final boolean pickLast)
-            throws NotEnoughSamplesException, InvalidSubsetSizeException,
-            InvalidSubsetRangeException {
-        final int[] result = new int[subsetSize];
-        computeRandomSubsetsInRange(minPos, maxPos, subsetSize, pickLast,
-                result);
+    public int[] computeRandomSubsetsInRange(
+            final int minPos, final int maxPos, final int subsetSize, final boolean pickLast)
+            throws NotEnoughSamplesException, InvalidSubsetSizeException, InvalidSubsetRangeException {
+        final var result = new int[subsetSize];
+        computeRandomSubsetsInRange(minPos, maxPos, subsetSize, pickLast, result);
         return result;
     }
 
@@ -182,31 +180,9 @@ public abstract class SubsetSelector {
      * @throws InvalidSubsetRangeException if maximum position is smaller than
      *                                     minimum position or maximum or minimum position are negative.
      */
-    public abstract void computeRandomSubsetsInRange(
-            final int minPos, final int maxPos, final int subsetSize,
-            final boolean pickLast, final int[] result)
-            throws NotEnoughSamplesException, InvalidSubsetSizeException,
+    public abstract void computeRandomSubsetsInRange(final int minPos, final int maxPos, final int subsetSize,
+            final boolean pickLast, final int[] result) throws NotEnoughSamplesException, InvalidSubsetSizeException,
             InvalidSubsetRangeException;
-
-    /**
-     * Creates a new subset selector instance using provided total number of
-     * samples and subset selector type.
-     *
-     * @param numSamples number of samples to select subsets from.
-     * @param type       subset selector type.
-     * @return a subset selector.
-     * @throws IllegalArgumentException if provided number of samples is zero
-     *                                  or negative.
-     */
-    public static SubsetSelector create(
-            final int numSamples, final SubsetSelectorType type) {
-        //noinspection SwitchStatementWithTooFewBranches
-        switch (type) {
-            case FAST_RANDOM_SUBSET_SELECTOR:
-            default:
-                return new FastRandomSubsetSelector(numSamples);
-        }
-    }
 
     /**
      * Creates a new subset selector instance using provided total number of
@@ -218,6 +194,6 @@ public abstract class SubsetSelector {
      *                                  negative.
      */
     public static SubsetSelector create(final int numSamples) {
-        return create(numSamples, DEFAULT_SUBSET_SELECTOR_TYPE);
+        return new FastRandomSubsetSelector(numSamples);
     }
 }

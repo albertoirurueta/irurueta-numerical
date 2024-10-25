@@ -30,8 +30,7 @@ import com.irurueta.numerical.NotReadyException;
  * <a href="http://en.wikipedia.org/wiki/Quadratic_function">http://en.wikipedia.org/wiki/Quadratic_function</a>
  */
 @SuppressWarnings("Duplicates")
-public class SecondDegreePolynomialRootsEstimator
-        extends PolynomialRootsEstimator {
+public class SecondDegreePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
     /**
      * Constant defining machine precision.
@@ -79,8 +78,7 @@ public class SecondDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException Raised if the length of the provided
      *                                  array is not valid.
      */
-    public void setPolynomialParameters(final double[] polyParams)
-            throws LockedException {
+    public void setPolynomialParameters(final double[] polyParams) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -139,8 +137,7 @@ public class SecondDegreePolynomialRootsEstimator
      *                                 some reason
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -153,16 +150,16 @@ public class SecondDegreePolynomialRootsEstimator
 
         roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];
 
-        final double c = realPolyParams[0];
-        final double b = realPolyParams[1];
-        final double a = realPolyParams[2];
+        final var c = realPolyParams[0];
+        final var b = realPolyParams[1];
+        final var a = realPolyParams[2];
 
-        final Complex x1 = new Complex();
-        final Complex x2 = new Complex();
+        final var x1 = new Complex();
+        final var x2 = new Complex();
         solveQuadratic(a, b, c, x1, x2);
 
-        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||
-                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary())) {
+        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) || Double.isNaN(x2.getReal())
+                || Double.isNaN(x2.getImaginary())) {
             locked = false;
             throw new RootEstimationException();
         }
@@ -190,10 +187,9 @@ public class SecondDegreePolynomialRootsEstimator
      * @return True if is a second degree polynomial, false otherwise
      */
     public static boolean isSecondDegree(final double[] polyParams) {
-        final int length = polyParams.length;
-        if (length >= VALID_POLY_PARAMS_LENGTH &&
-                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
-            for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+        final var length = polyParams.length;
+        if (length >= VALID_POLY_PARAMS_LENGTH && Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+            for (var i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
                 if (Math.abs(polyParams[i]) > EPS) {
                     return false;
                 }
@@ -344,9 +340,9 @@ public class SecondDegreePolynomialRootsEstimator
      */
     private static double getDiscriminant(final double[] polyParams) {
 
-        final double c = polyParams[0];
-        final double b = polyParams[1];
-        final double a = polyParams[2];
+        final var c = polyParams[0];
+        final var b = polyParams[1];
+        final var a = polyParams[2];
 
         return b * b - 4.0 * a * c;
     }
@@ -360,21 +356,18 @@ public class SecondDegreePolynomialRootsEstimator
      * @param x1 1st root (output parameter)
      * @param x2 2nd root (output parameter)
      */
-    private void solveQuadratic(final double a, final double b, final double c, final Complex x1,
-                                final Complex x2) {
+    private void solveQuadratic(final double a, final double b, final double c, final Complex x1, final Complex x2) {
 
-        final double discriminant = b * b - 4.0 * a * c;
+        final var discriminant = b * b - 4.0 * a * c;
 
         if (discriminant >= 0.0) {
             // real solutions (double or distinct)
-            x1.setRealAndImaginary((-b + Math.sqrt(discriminant)) / (2.0 * a),
-                    0.0);
-            x2.setRealAndImaginary((-b - Math.sqrt(discriminant)) / (2.0 * a),
-                    0.0);
+            x1.setRealAndImaginary((-b + Math.sqrt(discriminant)) / (2.0 * a), 0.0);
+            x2.setRealAndImaginary((-b - Math.sqrt(discriminant)) / (2.0 * a), 0.0);
         } else {
             // complex conjugate solutions
-            final double real = -b / (2.0 * a);
-            final double imag = Math.sqrt(Math.abs(discriminant)) / (2.0 * a);
+            final var real = -b / (2.0 * a);
+            final var imag = Math.sqrt(Math.abs(discriminant)) / (2.0 * a);
             x1.setRealAndImaginary(real, imag);
             x2.setRealAndImaginary(real, -imag);
         }

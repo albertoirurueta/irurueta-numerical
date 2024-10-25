@@ -41,8 +41,7 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
            final double a, final double b, final double hmax,
-           final MatrixSingleDimensionFunctionEvaluatorListener listener,
-           final double eps) throws WrongSizeException {
+           final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps) throws WrongSizeException {
       super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b, hmax), eps);
    }
 
@@ -57,8 +56,7 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     * @throws WrongSizeException if size notified by provided listener is invalid.
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
-           final double a, final double b,
-           final MatrixSingleDimensionFunctionEvaluatorListener listener,
+           final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
            final double eps) throws WrongSizeException {
       super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b), eps);
    }
@@ -76,8 +74,7 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
            final double a, final double b, final double hmax,
-           final MatrixSingleDimensionFunctionEvaluatorListener listener)
-           throws WrongSizeException {
+           final MatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
       this(a, b, hmax, listener, EPS);
    }
 
@@ -91,8 +88,7 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     * @throws WrongSizeException if size notified by provided listener is invalid.
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
-           final double a, final double b,
-           final MatrixSingleDimensionFunctionEvaluatorListener listener)
+           final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
            throws WrongSizeException {
       this(a, b, listener, EPS);
    }
@@ -112,8 +108,8 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
            final double a, final double b, final double hmax,
-           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener,
-           final double eps) throws WrongSizeException {
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
+           throws WrongSizeException {
       super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b, hmax), eps);
    }
 
@@ -130,8 +126,8 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
            final double a, final double b,
-           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener,
-           final double eps) throws WrongSizeException {
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
+           throws WrongSizeException {
       super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b), eps);
    }
 
@@ -149,8 +145,7 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
            final double a, final double b, final double hmax,
-           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener)
-           throws WrongSizeException {
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
       this(a, b, hmax, listener, EPS);
    }
 
@@ -166,8 +161,7 @@ public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
     */
    public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
            final double a, final double b,
-           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener)
-           throws WrongSizeException {
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
       this(a, b, listener, EPS);
    }
 

@@ -24,8 +24,7 @@ import com.irurueta.numerical.interpolation.PolynomialInterpolator;
 /**
  * Computes matrix function integration by using Romberg integration.
  */
-public class RombergTrapezoidalQuadratureMatrixIntegrator
-        extends RombergMatrixIntegrator<TrapezoidalMatrixQuadrature> {
+public class RombergTrapezoidalQuadratureMatrixIntegrator extends RombergMatrixIntegrator<TrapezoidalMatrixQuadrature> {
 
     /**
      * Default accuracy.
@@ -68,8 +67,7 @@ public class RombergTrapezoidalQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public RombergTrapezoidalQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new TrapezoidalMatrixQuadrature(a, b, listener), eps);
     }
@@ -84,8 +82,7 @@ public class RombergTrapezoidalQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public RombergTrapezoidalQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }
@@ -100,31 +97,31 @@ public class RombergTrapezoidalQuadratureMatrixIntegrator
     @Override
     public void integrate(final Matrix result) throws IntegrationException {
         try {
-            final int rows = q.getRows();
-            final int columns = q.getColumns();
-            final int elems = rows * columns;
-            for (int i = 0; i < JMAX; i++) {
+            final var rows = q.getRows();
+            final var columns = q.getColumns();
+            final var elems = rows * columns;
+            for (var i = 0; i < JMAX; i++) {
                 s[i] = new Matrix(rows, columns);
             }
 
-            final PolynomialInterpolator[] interpolators = new PolynomialInterpolator[elems];
-            final double[][] sInterp = new double[elems][JMAX];
-            for (int i = 0; i < elems; i++) {
+            final var interpolators = new PolynomialInterpolator[elems];
+            final var sInterp = new double[elems][JMAX];
+            for (var i = 0; i < elems; i++) {
                 sInterp[i] = new double[JMAX];
                 interpolators[i] = new PolynomialInterpolator(h, sInterp[i], K, false);
             }
 
             h[0] = 1.0;
-            for (int j = 1; j <= JMAX; j++) {
+            for (var j = 1; j <= JMAX; j++) {
                 q.next(s[j - 1]);
                 // update sInterp
-                for (int i = 0; i < elems; i++) {
+                for (var i = 0; i < elems; i++) {
                     sInterp[i][j - 1] = s[j - 1].getElementAtIndex(i);
                 }
                 if (j >= K) {
-                    boolean finished = true;
-                    for (int i = 0; i < elems; i++) {
-                        final double ss = interpolators[i].rawinterp(j - K, 0.0);
+                    var finished = true;
+                    for (var i = 0; i < elems; i++) {
+                        final var ss = interpolators[i].rawinterp(j - K, 0.0);
                         if (Double.isNaN(ss)) {
                             throw new IntegrationException("NaN was found");
                         }

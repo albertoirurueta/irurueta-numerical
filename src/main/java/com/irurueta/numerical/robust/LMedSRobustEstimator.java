@@ -21,7 +21,6 @@ import com.irurueta.sorting.Sorter;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 
 /**
  * This class implements LMedS (Least Median of Squares) algorithm to robustly
@@ -115,14 +114,14 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    private double mConfidence;
+    private double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    private int mMaxIterations;
+    private int maxIterations;
 
     /**
      * Instance in charge of picking random subsets of samples.
@@ -132,7 +131,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Number of iterations to be done to obtain required confidence.
      */
-    private int nIters;
+    private int iters;
 
     /**
      * Best solution that has been found so far during an estimation.
@@ -142,14 +141,14 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Data related to inliers found for best result.
      */
-    private LMedSInliersData mBestInliersData;
+    private LMedSInliersData bestInliersData;
 
     /**
      * Threshold to be used to keep the algorithm iterating in case that
      * best threshold is not small enough. Once a better solution is found
      * yielding a threshold smaller than this value, the algorithm will stop.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Factor to normalize threshold to determine inliers. This factor can be
@@ -159,7 +158,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * it can converge. By default, the factor is 1.0, which makes the threshold
      * to be computed as the median of residuals.
      */
-    private double mInlierFactor;
+    private double inlierFactor;
 
 
     /**
@@ -167,13 +166,13 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      */
     public LMedSRobustEstimator() {
         super();
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        iters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
-        mInlierFactor = DEFAULT_INLIER_FACTOR;
+        bestInliersData = null;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
+        inlierFactor = DEFAULT_INLIER_FACTOR;
     }
 
     /**
@@ -185,13 +184,13 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      */
     public LMedSRobustEstimator(final LMedSRobustEstimatorListener<T> listener) {
         super(listener);
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        iters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
-        mInlierFactor = DEFAULT_INLIER_FACTOR;
+        bestInliersData = null;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
+        inlierFactor = DEFAULT_INLIER_FACTOR;
     }
 
     /**
@@ -203,7 +202,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -225,7 +224,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -236,7 +235,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -256,7 +255,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -268,7 +267,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * best threshold is not small enough.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -291,7 +290,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -305,7 +304,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return factor to normalize threshold to determine inliers.
      */
     public double getInlierFactor() {
-        return mInlierFactor;
+        return inlierFactor;
     }
 
     /**
@@ -330,7 +329,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             throw new IllegalArgumentException();
         }
 
-        mInlierFactor = inlierFactor;
+        this.inlierFactor = inlierFactor;
     }
 
     /**
@@ -339,7 +338,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return number of iterations to be done to obtain required confidence.
      */
     public int getNIters() {
-        return nIters;
+        return iters;
     }
 
     /**
@@ -357,7 +356,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return data related to inliers found for best result.
      */
     public LMedSInliersData getBestInliersData() {
-        return mBestInliersData;
+        return bestInliersData;
     }
 
     /**
@@ -370,7 +369,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (mListener instanceof LMedSRobustEstimatorListener);
+        return (listener instanceof LMedSRobustEstimatorListener);
     }
 
     /**
@@ -384,8 +383,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public T estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public T estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -394,35 +392,34 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         try {
-            final LMedSRobustEstimatorListener<T> listener =
-                    (LMedSRobustEstimatorListener<T>) mListener;
+            final var listener = (LMedSRobustEstimatorListener<T>) this.listener;
 
-            mLocked = true;
+            locked = true;
 
             listener.onEstimateStart(this);
 
-            final int totalSamples = listener.getTotalSamples();
-            final int subsetSize = listener.getSubsetSize();
+            final var totalSamples = listener.getTotalSamples();
+            final var subsetSize = listener.getSubsetSize();
             int bestNumInliers;
-            double threshold = Double.MAX_VALUE;
-            nIters = Integer.MAX_VALUE;
+            var threshold = Double.MAX_VALUE;
+            iters = Integer.MAX_VALUE;
             int newNIters;
-            int currentIter = 0;
+            var currentIter = 0;
             // reusable list that will contain preliminary solutions on each
             // iteration
-            final List<T> iterResults = new ArrayList<>();
+            final var iterResults = new ArrayList<T>();
             bestResult = null; // best result found so far
             // progress and previous progress to determine when progress
             // notification must occur
-            float previousProgress = 0.0f;
+            var previousProgress = 0.0f;
             float progress;
             // indices of subset picked in one iteration
-            final int[] subsetIndices = new int[subsetSize];
-            final double[] residualsTemp = new double[totalSamples];
+            final var subsetIndices = new int[subsetSize];
+            final var residualsTemp = new double[totalSamples];
             // indicates if result improved
             boolean improved;
             // indicates whether algorithm must continue iterating
-            boolean continueIteration = true;
+            var continueIteration = true;
 
             if (subsetSelector == null) {
                 // create new subset selector
@@ -433,9 +430,9 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             }
 
             // data related to inliers
-            LMedSInliersData inliersData = new LMedSInliersData(totalSamples);
+            var inliersData = new LMedSInliersData(totalSamples);
             // sorter to compute medians
-            final Sorter<Double> sorter = Sorter.create();
+            final var sorter = Sorter.<Double>create();
 
             while (continueIteration) {
                 // generate a random subset of samples
@@ -444,15 +441,13 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
                 // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
-                listener.estimatePreliminarSolutions(subsetIndices,
-                        iterResults);
+                listener.estimatePreliminarSolutions(subsetIndices, iterResults);
 
                 // iterate over all solutions that have been found
                 improved = false;
-                for (final T iterResult : iterResults) {
+                for (final var iterResult : iterResults) {
                     // compute inliers
-                    computeInliers(iterResult, subsetSize, mInlierFactor,
-                            residualsTemp, listener, sorter, inliersData);
+                    computeInliers(iterResult, subsetSize, inlierFactor, residualsTemp, listener, sorter, inliersData);
 
                     // save solution that produces the best residual
                     if (inliersData.isMedianResidualImproved()) {
@@ -463,7 +458,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
 
                         // keep the best inliers data corresponding to best solution,
                         // in case it can be useful along with the result
-                        mBestInliersData = inliersData;
+                        bestInliersData = inliersData;
 
                         // recompute number of times the algorithm needs to be
                         // executed depending on current number of inliers to
@@ -471,67 +466,53 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
                         // inliers and probability 1 - mConfidence that we have
                         // outliers
                         bestNumInliers = inliersData.getNumInliers();
-                        final double probInlier = ((double) bestNumInliers) /
-                                ((double) totalSamples);
+                        final var probInlier = ((double) bestNumInliers) / ((double) totalSamples);
 
-                        final double probSubsetAllInliers =
-                                Math.pow(probInlier, subsetSize);
+                        final var probSubsetAllInliers = Math.pow(probInlier, subsetSize);
 
-                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                                Double.isNaN(probSubsetAllInliers)) {
+                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE || Double.isNaN(probSubsetAllInliers)) {
                             newNIters = Integer.MAX_VALUE;
                         } else {
-                            final double logProbSomeOutliers =
-                                    Math.log(1.0 - probSubsetAllInliers);
-                            if (Math.abs(logProbSomeOutliers) <
-                                    Double.MIN_VALUE ||
-                                    Double.isNaN(logProbSomeOutliers)) {
+                            final var logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
+                            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE || Double.isNaN(logProbSomeOutliers)) {
                                 newNIters = Integer.MAX_VALUE;
                             } else {
-                                newNIters = (int) Math.ceil(Math.abs(
-                                        Math.log(1.0 - mConfidence) /
-                                                logProbSomeOutliers));
+                                newNIters = (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) / logProbSomeOutliers));
                             }
                         }
 
-                        if (newNIters < nIters) {
-                            nIters = newNIters;
+                        if (newNIters < iters) {
+                            iters = newNIters;
                         }
 
                         threshold = inliersData.getEstimatedThreshold();
 
                         // create new inliers data instance until a new best
                         // solution is found
-                        final double bestMedianResidual =
-                                inliersData.getBestMedianResidual();
+                        final var bestMedianResidual = inliersData.getBestMedianResidual();
                         inliersData = new LMedSInliersData(totalSamples);
                         // update the best median residual on new instance so
                         // that only better solutions that are found later
                         // can update inliers data
-                        inliersData.update(bestMedianResidual,
-                                inliersData.getStandardDeviation(),
-                                inliersData.getInliers(),
-                                inliersData.getResiduals(),
-                                inliersData.getNumInliers(),
+                        inliersData.update(bestMedianResidual, inliersData.getStandardDeviation(),
+                                inliersData.getInliers(), inliersData.getResiduals(), inliersData.getNumInliers(),
                                 inliersData.getEstimatedThreshold(), false);
                     }
                 }
 
-                if (nIters > 0) {
-                    progress = Math.min((float) currentIter / (float) nIters,
-                            1.0f);
+                if (iters > 0) {
+                    progress = Math.min((float) currentIter / (float) iters, 1.0f);
                 } else {
                     progress = 1.0f;
                 }
-                if (progress - previousProgress > mProgressDelta) {
+                if (progress - previousProgress > progressDelta) {
                     previousProgress = progress;
                     listener.onEstimateProgressChange(this, progress);
                 }
                 currentIter++;
-                continueIteration = (currentIter < mMaxIterations) &&
-                        (threshold > mStopThreshold);
+                continueIteration = (currentIter < maxIterations) && (threshold > stopThreshold);
                 if (!improved) {
-                    continueIteration &= (currentIter < nIters);
+                    continueIteration &= (currentIter < iters);
                 }
 
                 listener.onEstimateNextIteration(this, currentIter);
@@ -548,7 +529,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         } catch (final SubsetSelectorException e) {
             throw new RobustEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -587,34 +568,33 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param inliersData   inliers data to be reused on each iteration.
      */
     private static <T> void computeInliers(
-            final T iterResult, final int subsetSize, final double inlierFactor,
-            final double[] residualsTemp, final LMedSRobustEstimatorListener<T> listener,
-            final Sorter<Double> sorter, LMedSInliersData inliersData) {
+            final T iterResult, final int subsetSize, final double inlierFactor, final double[] residualsTemp,
+            final LMedSRobustEstimatorListener<T> listener, final Sorter<Double> sorter, LMedSInliersData inliersData) {
 
-        final double[] residuals = inliersData.getResiduals();
-        final BitSet inliers = inliersData.getInliers();
-        double bestMedianResidual = inliersData.getBestMedianResidual();
-        boolean medianResidualImproved = false;
+        final var residuals = inliersData.getResiduals();
+        final var inliers = inliersData.getInliers();
+        var bestMedianResidual = inliersData.getBestMedianResidual();
+        var medianResidualImproved = false;
 
-        final int totalSamples = residuals.length;
+        final var totalSamples = residuals.length;
 
-        for (int i = 0; i < totalSamples; i++) {
+        for (var i = 0; i < totalSamples; i++) {
             residuals[i] = Math.abs(listener.computeResidual(iterResult, i));
         }
         System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);
-        final double medianResidual = sorter.median(residualsTemp);
+        final var medianResidual = sorter.median(residualsTemp);
         if (medianResidual < bestMedianResidual) {
             bestMedianResidual = medianResidual;
             medianResidualImproved = true;
         }
 
-        final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 / (totalSamples - subsetSize))
+        final var standardDeviation = STD_CONSTANT * (1.0 + 5.0 / (totalSamples - subsetSize))
                 * Math.sqrt(medianResidual);
-        final double normEstimatedThreshold = inlierFactor * medianResidual;
+        final var normEstimatedThreshold = inlierFactor * medianResidual;
 
         // determine which points are inliers
-        int numInliers = 0;
-        for (int i = 0; i < totalSamples; i++) {
+        var numInliers = 0;
+        for (var i = 0; i < totalSamples; i++) {
             if (residuals[i] <= normEstimatedThreshold) {
                 numInliers++;
                 inliers.set(i);
@@ -625,8 +605,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
 
         // store values in inliers data, only if residuals improve
         if (medianResidualImproved) {
-            inliersData.update(bestMedianResidual, standardDeviation, inliers,
-                    residuals, numInliers,
+            inliersData.update(bestMedianResidual, standardDeviation, inliers, residuals, numInliers,
                     normEstimatedThreshold, true);
         }
     }
@@ -639,30 +618,30 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * Best median of error found so far taking into account all provided
          * samples.
          */
-        private double mBestMedianResidual;
+        private double bestMedianResidual;
 
         /**
          * Standard deviation of error among all provided samples respect to
          * currently estimated result.
          */
-        private double mStandardDeviation;
+        private double standardDeviation;
 
         /**
          * Efficiently stores which samples are considered inliers and which
          * ones aren't.
          */
-        private BitSet mInliers;
+        private BitSet inliers;
 
         /**
          * Estimated threshold to determine whether samples are inliers or not.
          */
-        private double mEstimatedThreshold;
+        private double estimatedThreshold;
 
         /**
          * Indicates whether median residual computed in current iteration has
          * improved respect to previous iterations.
          */
-        private boolean mMedianResidualImproved;
+        private boolean medianResidualImproved;
 
         /**
          * Constructor.
@@ -670,13 +649,13 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @param totalSamples total number of samples.
          */
         protected LMedSInliersData(final int totalSamples) {
-            mBestMedianResidual = Double.MAX_VALUE;
-            mStandardDeviation = Double.MAX_VALUE;
-            mEstimatedThreshold = Double.MAX_VALUE;
-            mInliers = new BitSet(totalSamples);
-            mResiduals = new double[totalSamples];
-            mNumInliers = 0;
-            mMedianResidualImproved = false;
+            bestMedianResidual = Double.MAX_VALUE;
+            standardDeviation = Double.MAX_VALUE;
+            estimatedThreshold = Double.MAX_VALUE;
+            inliers = new BitSet(totalSamples);
+            residuals = new double[totalSamples];
+            numInliers = 0;
+            medianResidualImproved = false;
         }
 
         /**
@@ -687,7 +666,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * provided samples.
          */
         public double getBestMedianResidual() {
-            return mBestMedianResidual;
+            return bestMedianResidual;
         }
 
         /**
@@ -698,7 +677,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * respect to currently estimated result.
          */
         public double getStandardDeviation() {
-            return mStandardDeviation;
+            return standardDeviation;
         }
 
         /**
@@ -710,7 +689,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          */
         @Override
         public BitSet getInliers() {
-            return mInliers;
+            return inliers;
         }
 
         /**
@@ -721,7 +700,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * or not.
          */
         public double getEstimatedThreshold() {
-            return mEstimatedThreshold;
+            return estimatedThreshold;
         }
 
         /**
@@ -731,7 +710,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return true if median residual improved, false otherwise.
          */
         public boolean isMedianResidualImproved() {
-            return mMedianResidualImproved;
+            return medianResidualImproved;
         }
 
         /**
@@ -753,15 +732,14 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
          */
         protected void update(final double bestMedianResidual, final double standardDeviation,
                               final BitSet inliers, final double[] residuals, final int numInliers,
-                              final double estimatedThreshold,
-                              final boolean medianResidualImproved) {
-            mBestMedianResidual = bestMedianResidual;
-            mStandardDeviation = standardDeviation;
-            mInliers = inliers;
-            mResiduals = residuals;
-            mNumInliers = numInliers;
-            mEstimatedThreshold = estimatedThreshold;
-            mMedianResidualImproved = medianResidualImproved;
+                              final double estimatedThreshold, final boolean medianResidualImproved) {
+            this.bestMedianResidual = bestMedianResidual;
+            this.standardDeviation = standardDeviation;
+            this.inliers = inliers;
+            this.residuals = residuals;
+            this.numInliers = numInliers;
+            this.estimatedThreshold = estimatedThreshold;
+            this.medianResidualImproved = medianResidualImproved;
         }
     }
 }

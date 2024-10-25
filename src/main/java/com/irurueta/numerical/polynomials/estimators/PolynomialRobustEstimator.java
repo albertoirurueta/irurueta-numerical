@@ -37,8 +37,7 @@ public abstract class PolynomialRobustEstimator {
      * In general for Polynomial estimation is best to use PROSAC or RANSAC
      * than any other method, as it provides more robust methods.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROSAC;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROSAC;
 
     /**
      * Default amount of progress variation before notifying a change in
@@ -93,30 +92,30 @@ public abstract class PolynomialRobustEstimator {
      * Collection of polynomial evaluations and their corresponding point of
      * evaluation used to determine a polynomial of required degree.
      */
-    protected List<PolynomialEvaluation> mEvaluations;
+    protected List<PolynomialEvaluation> evaluations;
 
     /**
      * Internal non robust estimator of polynomial estimator.
      */
-    protected final LMSEPolynomialEstimator mPolynomialEstimator;
+    protected final LMSEPolynomialEstimator polynomialEstimator;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends or
      * its progress significantly changes.
      */
-    protected PolynomialRobustEstimatorListener mListener;
+    protected PolynomialRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected boolean mLocked;
+    protected boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -124,30 +123,30 @@ public abstract class PolynomialRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * Indicates whether geometric distance will be used to find outliers or
      * algebraic distance will be used instead.
      */
-    protected boolean mUseGeometricDistance;
+    protected boolean useGeometricDistance;
 
     /**
      * Constructor.
      */
     protected PolynomialRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mUseGeometricDistance = DEFAULT_USE_GEOMETRIC_DISTANCE;
-        mPolynomialEstimator = new LMSEPolynomialEstimator();
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        useGeometricDistance = DEFAULT_USE_GEOMETRIC_DISTANCE;
+        polynomialEstimator = new LMSEPolynomialEstimator();
     }
 
     /**
@@ -157,11 +156,11 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     protected PolynomialRobustEstimator(final int degree) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mUseGeometricDistance = DEFAULT_USE_GEOMETRIC_DISTANCE;
-        mPolynomialEstimator = new LMSEPolynomialEstimator(degree);
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        useGeometricDistance = DEFAULT_USE_GEOMETRIC_DISTANCE;
+        polynomialEstimator = new LMSEPolynomialEstimator(degree);
     }
 
     /**
@@ -182,10 +181,9 @@ public abstract class PolynomialRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    protected PolynomialRobustEstimator(
-            final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(final PolynomialRobustEstimatorListener listener) {
         this();
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -197,8 +195,8 @@ public abstract class PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    protected PolynomialRobustEstimator(final int degree,
-                                        final List<PolynomialEvaluation> evaluations) {
+    protected PolynomialRobustEstimator(
+            final int degree, final List<PolynomialEvaluation> evaluations) {
         this(degree);
         internalSetEvaluations(evaluations);
     }
@@ -211,10 +209,10 @@ public abstract class PolynomialRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    protected PolynomialRobustEstimator(final int degree,
-                                        final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(
+            final int degree, final PolynomialRobustEstimatorListener listener) {
         this(degree);
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -226,10 +224,10 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    protected PolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations,
-                                        final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(
+            final List<PolynomialEvaluation> evaluations, final PolynomialRobustEstimatorListener listener) {
         this(evaluations);
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -242,11 +240,11 @@ public abstract class PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    protected PolynomialRobustEstimator(final int degree,
-                                        final List<PolynomialEvaluation> evaluations,
-                                        final PolynomialRobustEstimatorListener listener) {
+    protected PolynomialRobustEstimator(
+            final int degree, final List<PolynomialEvaluation> evaluations,
+            final PolynomialRobustEstimatorListener listener) {
         this(degree, evaluations);
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -256,7 +254,7 @@ public abstract class PolynomialRobustEstimator {
      * @return collection of polynomial evaluations.
      */
     public List<PolynomialEvaluation> getEvaluations() {
-        return mEvaluations;
+        return evaluations;
     }
 
     /**
@@ -269,8 +267,7 @@ public abstract class PolynomialRobustEstimator {
      *                                  not contain enough evaluations to estimate the polynomial using current
      *                                  settings.
      */
-    public void setEvaluations(final List<PolynomialEvaluation> evaluations)
-            throws LockedException {
+    public void setEvaluations(final List<PolynomialEvaluation> evaluations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -284,7 +281,7 @@ public abstract class PolynomialRobustEstimator {
      * @return number of required evaluations.
      */
     public int getMinNumberOfEvaluations() {
-        return mPolynomialEstimator.getMinNumberOfEvaluations();
+        return polynomialEstimator.getMinNumberOfEvaluations();
     }
 
     /**
@@ -294,7 +291,7 @@ public abstract class PolynomialRobustEstimator {
      * @return listener to be notified of events.
      */
     public PolynomialRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -304,7 +301,7 @@ public abstract class PolynomialRobustEstimator {
      * @param listener listener to be notified of events.
      */
     public void setListener(final PolynomialRobustEstimatorListener listener) {
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -314,7 +311,7 @@ public abstract class PolynomialRobustEstimator {
      * @return true if this estimator is locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -325,7 +322,7 @@ public abstract class PolynomialRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -339,16 +336,14 @@ public abstract class PolynomialRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setProgressDelta(final float progressDelta)
-            throws LockedException {
+    public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -360,7 +355,7 @@ public abstract class PolynomialRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -375,15 +370,14 @@ public abstract class PolynomialRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimator
      *                                  is being computed.
      */
-    public void setConfidence(final double confidence)
-            throws LockedException {
+    public void setConfidence(final double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -394,7 +388,7 @@ public abstract class PolynomialRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -407,15 +401,14 @@ public abstract class PolynomialRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setMaxIterations(final int maxIterations)
-            throws LockedException {
+    public void setMaxIterations(final int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -425,7 +418,7 @@ public abstract class PolynomialRobustEstimator {
      * @return true if geometric distance is used, false otherwise.
      */
     public boolean isGeometricDistanceUsed() {
-        return mUseGeometricDistance;
+        return useGeometricDistance;
     }
 
     /**
@@ -436,12 +429,11 @@ public abstract class PolynomialRobustEstimator {
      *                              otherwise.
      * @throws LockedException if this estimator is locked.
      */
-    public void setGeometricDistanceUsed(final boolean geometricDistanceUsed)
-            throws LockedException {
+    public void setGeometricDistanceUsed(final boolean geometricDistanceUsed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mUseGeometricDistance = geometricDistanceUsed;
+        useGeometricDistance = geometricDistanceUsed;
     }
 
     /**
@@ -450,7 +442,7 @@ public abstract class PolynomialRobustEstimator {
      * @return degree of polynomial to be estimated.
      */
     public int getDegree() {
-        return mPolynomialEstimator.getDegree();
+        return polynomialEstimator.getDegree();
     }
 
     /**
@@ -464,7 +456,7 @@ public abstract class PolynomialRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mPolynomialEstimator.setDegree(degree);
+        polynomialEstimator.setDegree(degree);
     }
 
     /**
@@ -474,22 +466,22 @@ public abstract class PolynomialRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        final int nParams = mPolynomialEstimator.getDegree() + 1;
-        if (mEvaluations == null || mEvaluations.size() < nParams) {
+        final var nParams = polynomialEstimator.getDegree() + 1;
+        if (evaluations == null || evaluations.size() < nParams) {
             return false;
         }
 
         // also ensure that at least a direct or integral evaluation exists
-        int count = 0;
-        for (final PolynomialEvaluation eval : mEvaluations) {
-            if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION ||
-                    eval.getType() == PolynomialEvaluationType.INTEGRAL_EVALUATION ||
-                    eval.getType() == PolynomialEvaluationType.INTEGRAL_INTERVAL) {
+        var count = 0;
+        for (final var eval : evaluations) {
+            if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION
+                    || eval.getType() == PolynomialEvaluationType.INTEGRAL_EVALUATION
+                    || eval.getType() == PolynomialEvaluationType.INTEGRAL_INTERVAL) {
                 count++;
             }
         }
 
-        return count >= 1 && mEvaluations.size() >= nParams;
+        return count >= 1 && evaluations.size() >= nParams;
     }
 
     /**
@@ -532,8 +524,7 @@ public abstract class PolynomialRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any other reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Polynomial estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Polynomial estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -570,8 +561,7 @@ public abstract class PolynomialRobustEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @return an instance of a robust polynomial estimator.
      */
-    public static PolynomialRobustEstimator create(
-            final List<PolynomialEvaluation> evaluations) {
+    public static PolynomialRobustEstimator create(final List<PolynomialEvaluation> evaluations) {
         return create(evaluations, DEFAULT_ROBUST_METHOD);
     }
 
@@ -583,8 +573,7 @@ public abstract class PolynomialRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a robust polynomial estimator.
      */
-    public static PolynomialRobustEstimator create(
-            final PolynomialRobustEstimatorListener listener) {
+    public static PolynomialRobustEstimator create(final PolynomialRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -597,8 +586,7 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public static PolynomialRobustEstimator create(
-            final int degree, final List<PolynomialEvaluation> evaluations) {
+    public static PolynomialRobustEstimator create(final int degree, final List<PolynomialEvaluation> evaluations) {
         return create(degree, evaluations, DEFAULT_ROBUST_METHOD);
     }
 
@@ -612,8 +600,7 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public static PolynomialRobustEstimator create(
-            final int degree, final PolynomialRobustEstimatorListener listener) {
+    public static PolynomialRobustEstimator create(final int degree, final PolynomialRobustEstimatorListener listener) {
         return create(degree, listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -627,8 +614,7 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      */
     public static PolynomialRobustEstimator create(
-            final List<PolynomialEvaluation> evaluations,
-            final PolynomialRobustEstimatorListener listener) {
+            final List<PolynomialEvaluation> evaluations, final PolynomialRobustEstimatorListener listener) {
         return create(evaluations, listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -655,21 +641,14 @@ public abstract class PolynomialRobustEstimator {
      * @param method method of a robust polynomial estimator.
      * @return an instance of a robust polynomial estimator.
      */
-    public static PolynomialRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator();
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator();
-            case MSAC:
-                return new MSACPolynomialRobustEstimator();
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator();
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator();
-        }
+    public static PolynomialRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator();
+            case LMEDS -> new LMedSPolynomialRobustEstimator();
+            case MSAC -> new MSACPolynomialRobustEstimator();
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator();
+            default -> new PROSACPolynomialRobustEstimator();
+        };
     }
 
     /**
@@ -680,21 +659,14 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public static PolynomialRobustEstimator create(
-            final int degree, final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(degree);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(degree);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(degree);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(degree);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(degree);
-        }
+    public static PolynomialRobustEstimator create(final int degree, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(degree);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(degree);
+            case MSAC -> new MSACPolynomialRobustEstimator(degree);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(degree);
+            default -> new PROSACPolynomialRobustEstimator(degree);
+        };
     }
 
     /**
@@ -706,21 +678,14 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      */
     public static PolynomialRobustEstimator create(
-            final List<PolynomialEvaluation> evaluations,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(evaluations);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(evaluations);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(evaluations);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(evaluations);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(evaluations);
-        }
+            final List<PolynomialEvaluation> evaluations, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(evaluations);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(evaluations);
+            case MSAC -> new MSACPolynomialRobustEstimator(evaluations);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(evaluations);
+            default -> new PROSACPolynomialRobustEstimator(evaluations);
+        };
     }
 
     /**
@@ -732,21 +697,14 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      */
     public static PolynomialRobustEstimator create(
-            final PolynomialRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(listener);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(listener);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(listener);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(listener);
-        }
+            final PolynomialRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(listener);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(listener);
+            case MSAC -> new MSACPolynomialRobustEstimator(listener);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(listener);
+            default -> new PROSACPolynomialRobustEstimator(listener);
+        };
     }
 
     /**
@@ -760,22 +718,14 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialRobustEstimator create(
-            final int degree, final List<PolynomialEvaluation> evaluations,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(degree, evaluations);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(degree, evaluations);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(degree, evaluations);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(degree,
-                        evaluations);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(degree, evaluations);
-        }
+            final int degree, final List<PolynomialEvaluation> evaluations, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(degree, evaluations);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(degree, evaluations);
+            case MSAC -> new MSACPolynomialRobustEstimator(degree, evaluations);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(degree, evaluations);
+            default -> new PROSACPolynomialRobustEstimator(degree, evaluations);
+        };
     }
 
     /**
@@ -790,21 +740,14 @@ public abstract class PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
     public static PolynomialRobustEstimator create(
-            final int degree, final PolynomialRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(degree, listener);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(degree, listener);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(degree, listener);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(degree, listener);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(degree, listener);
-        }
+            final int degree, final PolynomialRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(degree, listener);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(degree, listener);
+            case MSAC -> new MSACPolynomialRobustEstimator(degree, listener);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(degree, listener);
+            default -> new PROSACPolynomialRobustEstimator(degree, listener);
+        };
     }
 
     /**
@@ -818,26 +761,15 @@ public abstract class PolynomialRobustEstimator {
      * @return an instance of a robust polynomial estimator.
      */
     public static PolynomialRobustEstimator create(
-            final List<PolynomialEvaluation> evaluations,
-            final PolynomialRobustEstimatorListener listener,
+            final List<PolynomialEvaluation> evaluations, final PolynomialRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(evaluations,
-                        listener);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(evaluations,
-                        listener);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(evaluations, listener);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(evaluations,
-                        listener);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(evaluations,
-                        listener);
-        }
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(evaluations, listener);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(evaluations, listener);
+            case MSAC -> new MSACPolynomialRobustEstimator(evaluations, listener);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(evaluations, listener);
+            default -> new PROSACPolynomialRobustEstimator(evaluations, listener);
+        };
     }
 
     /**
@@ -854,26 +786,14 @@ public abstract class PolynomialRobustEstimator {
      */
     public static PolynomialRobustEstimator create(
             final int degree, final List<PolynomialEvaluation> evaluations,
-            final PolynomialRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case RANSAC:
-                return new RANSACPolynomialRobustEstimator(degree, evaluations,
-                        listener);
-            case LMEDS:
-                return new LMedSPolynomialRobustEstimator(degree, evaluations,
-                        listener);
-            case MSAC:
-                return new MSACPolynomialRobustEstimator(degree, evaluations,
-                        listener);
-            case PROMEDS:
-                return new PROMedSPolynomialRobustEstimator(degree, evaluations,
-                        listener);
-            case PROSAC:
-            default:
-                return new PROSACPolynomialRobustEstimator(degree, evaluations,
-                        listener);
-        }
+            final PolynomialRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case RANSAC -> new RANSACPolynomialRobustEstimator(degree, evaluations, listener);
+            case LMEDS -> new LMedSPolynomialRobustEstimator(degree, evaluations, listener);
+            case MSAC -> new MSACPolynomialRobustEstimator(degree, evaluations, listener);
+            case PROMEDS -> new PROMedSPolynomialRobustEstimator(degree, evaluations, listener);
+            default -> new PROSACPolynomialRobustEstimator(degree, evaluations, listener);
+        };
     }
 
     /**
@@ -884,9 +804,8 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return distance.
      */
-    protected double getDistance(final PolynomialEvaluation eval,
-                                 final Polynomial polynomial) {
-        if (mUseGeometricDistance) {
+    protected double getDistance(final PolynomialEvaluation eval, final Polynomial polynomial) {
+        if (useGeometricDistance) {
             return getGeometricOrAlgebraicDistance(eval, polynomial);
         } else {
             return getAlgebraicDistance(eval, polynomial);
@@ -900,24 +819,13 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return algebraic distance.
      */
-    protected double getAlgebraicDistance(final PolynomialEvaluation eval,
-                                          final Polynomial polynomial) {
-        switch (eval.getType()) {
-            case DIRECT_EVALUATION:
-                return getAlgebraicDistance((DirectPolynomialEvaluation) eval,
-                        polynomial);
-            case DERIVATIVE_EVALUATION:
-                return getAlgebraicDistance(
-                        (DerivativePolynomialEvaluation) eval, polynomial);
-            case INTEGRAL_EVALUATION:
-                return getAlgebraicDistance((IntegralPolynomialEvaluation) eval,
-                        polynomial);
-            case INTEGRAL_INTERVAL:
-                return getAlgebraicDistance(
-                        (IntegralIntervalPolynomialEvaluation) eval, polynomial);
-            default:
-                return Double.MAX_VALUE;
-        }
+    protected double getAlgebraicDistance(final PolynomialEvaluation eval, final Polynomial polynomial) {
+        return switch (eval.getType()) {
+            case DIRECT_EVALUATION -> getAlgebraicDistance((DirectPolynomialEvaluation) eval, polynomial);
+            case DERIVATIVE_EVALUATION -> getAlgebraicDistance((DerivativePolynomialEvaluation) eval, polynomial);
+            case INTEGRAL_EVALUATION -> getAlgebraicDistance((IntegralPolynomialEvaluation) eval, polynomial);
+            case INTEGRAL_INTERVAL -> getAlgebraicDistance((IntegralIntervalPolynomialEvaluation) eval, polynomial);
+        };
     }
 
     /**
@@ -928,11 +836,10 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return algebraic distance.
      */
-    protected double getAlgebraicDistance(final DirectPolynomialEvaluation eval,
-                                          final Polynomial polynomial) {
-        final double x = eval.getX();
-        final double y1 = eval.getEvaluation();
-        final double y2 = polynomial.evaluate(x);
+    protected double getAlgebraicDistance(final DirectPolynomialEvaluation eval, final Polynomial polynomial) {
+        final var x = eval.getX();
+        final var y1 = eval.getEvaluation();
+        final var y2 = polynomial.evaluate(x);
         return Math.abs(y2 - y1);
     }
 
@@ -944,12 +851,11 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return algebraic distance.
      */
-    protected double getAlgebraicDistance(final DerivativePolynomialEvaluation eval,
-                                          final Polynomial polynomial) {
-        final double x = eval.getX();
-        final int order = eval.getDerivativeOrder();
-        final double d1 = eval.getEvaluation();
-        final double d2 = polynomial.evaluateNthDerivative(x, order);
+    protected double getAlgebraicDistance(final DerivativePolynomialEvaluation eval, final Polynomial polynomial) {
+        final var x = eval.getX();
+        final var order = eval.getDerivativeOrder();
+        final var d1 = eval.getEvaluation();
+        final var d2 = polynomial.evaluateNthDerivative(x, order);
         return Math.abs(d2 - d1);
     }
 
@@ -961,14 +867,12 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return algebraic distance.
      */
-    protected double getAlgebraicDistance(final IntegralPolynomialEvaluation eval,
-                                          final Polynomial polynomial) {
-        final double x = eval.getX();
-        final int order = eval.getIntegralOrder();
-        final double[] constants = eval.getConstants();
-        final double i1 = eval.getEvaluation();
-        final double i2 = polynomial.nthIntegrationAndReturnNew(order, constants).
-                evaluate(x);
+    protected double getAlgebraicDistance(final IntegralPolynomialEvaluation eval, final Polynomial polynomial) {
+        final var x = eval.getX();
+        final var order = eval.getIntegralOrder();
+        final var constants = eval.getConstants();
+        final var i1 = eval.getEvaluation();
+        final var i2 = polynomial.nthIntegrationAndReturnNew(order, constants).evaluate(x);
         return Math.abs(i2 - i1);
     }
 
@@ -980,15 +884,14 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return algebraic distance.
      */
-    protected double getAlgebraicDistance(
-            final IntegralIntervalPolynomialEvaluation eval, final Polynomial polynomial) {
-        final double startX = eval.getStartX();
-        final double endX = eval.getEndX();
-        final int order = eval.getIntegralOrder();
-        final double[] constants = eval.getConstants();
-        final double i1 = eval.getEvaluation();
-        final double i2 = polynomial.nthOrderIntegrateInterval(startX, endX, order,
-                constants);
+    protected double getAlgebraicDistance(final IntegralIntervalPolynomialEvaluation eval,
+                                          final Polynomial polynomial) {
+        final var startX = eval.getStartX();
+        final var endX = eval.getEndX();
+        final var order = eval.getIntegralOrder();
+        final var constants = eval.getConstants();
+        final var i1 = eval.getEvaluation();
+        final var i2 = polynomial.nthOrderIntegrateInterval(startX, endX, order, constants);
         return Math.abs(i2 - i1);
     }
 
@@ -1002,11 +905,9 @@ public abstract class PolynomialRobustEstimator {
      * @return geometric distance for direct evaluation or algebraic distance
      * otherwise.
      */
-    protected double getGeometricOrAlgebraicDistance(
-            final PolynomialEvaluation eval, final Polynomial polynomial) {
+    protected double getGeometricOrAlgebraicDistance(final PolynomialEvaluation eval, final Polynomial polynomial) {
         if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION) {
-            return getGeometricDistance((DirectPolynomialEvaluation) eval,
-                    polynomial);
+            return getGeometricDistance((DirectPolynomialEvaluation) eval, polynomial);
         } else {
             return getAlgebraicDistance(eval, polynomial);
         }
@@ -1021,13 +922,12 @@ public abstract class PolynomialRobustEstimator {
      * @param polynomial polynomial.
      * @return geometric distance.
      */
-    protected double getGeometricDistance(final DirectPolynomialEvaluation eval,
-                                          final Polynomial polynomial) {
-        final double x = eval.getX();
-        final double y1 = eval.getEvaluation();
-        final double y2 = polynomial.evaluate(x);
+    protected double getGeometricDistance(final DirectPolynomialEvaluation eval, final Polynomial polynomial) {
+        final var x = eval.getX();
+        final var y1 = eval.getEvaluation();
+        final var y2 = polynomial.evaluate(x);
 
-        final double slope = polynomial.evaluateDerivative(x);
+        final var slope = polynomial.evaluateDerivative(x);
         final double a;
         final double b;
         final double c;
@@ -1041,8 +941,8 @@ public abstract class PolynomialRobustEstimator {
             c = slope * x - y2;
         }
 
-        final double num = x * a + y1 * b + c;
-        final double den = Math.sqrt(a * a + b * b);
+        final var num = x * a + y1 * b + c;
+        final var den = Math.sqrt(a * a + b * b);
 
         return Math.abs(num / den);
     }
@@ -1056,10 +956,9 @@ public abstract class PolynomialRobustEstimator {
      *                                  or too small.
      */
     private void internalSetEvaluations(final List<PolynomialEvaluation> evaluations) {
-        if (evaluations == null ||
-                evaluations.size() < getMinNumberOfEvaluations()) {
+        if (evaluations == null || evaluations.size() < getMinNumberOfEvaluations()) {
             throw new IllegalArgumentException();
         }
-        mEvaluations = evaluations;
+        this.evaluations = evaluations;
     }
 }

@@ -33,9 +33,7 @@ public class ExponentialMidPointMatrixQuadrature extends MidPointMatrixQuadratur
     * @throws WrongSizeException if size notified by provided listener is invalid.
     */
    public ExponentialMidPointMatrixQuadrature(
-           final double a,
-           final MatrixSingleDimensionFunctionEvaluatorListener listener)
-           throws WrongSizeException {
+           final double a, final MatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
       super(0.0, Math.exp(-a), listener);
    }
 

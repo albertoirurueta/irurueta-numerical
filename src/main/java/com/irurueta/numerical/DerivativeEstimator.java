@@ -40,8 +40,7 @@ public class DerivativeEstimator {
      *
      * @param listener listener to evaluate a single dimension function
      */
-    public DerivativeEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener) {
+    public DerivativeEstimator(final SingleDimensionFunctionEvaluatorListener listener) {
         this.listener = listener;
     }
 
@@ -54,17 +53,17 @@ public class DerivativeEstimator {
      *                             evaluated
      */
     public double derivative(final double x) throws EvaluationException {
-        final double fold = listener.evaluate(x);
+        final var fold = listener.evaluate(x);
 
-        double h = EPS * Math.abs(x);
+        var h = EPS * Math.abs(x);
         if (h == 0.0) {
             // Trick to reduce finite-precision error
             h = EPS;
         }
-        final double xh = x + h;
+        final var xh = x + h;
         h = xh - x;
 
-        final double fh = listener.evaluate(xh);
+        final var fh = listener.evaluate(xh);
         return (fh - fold) / h;
     }
 }

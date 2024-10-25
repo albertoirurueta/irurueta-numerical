@@ -27,8 +27,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * new InfinityMidPointQuadratureIntegrator(2.0, 1e99, listener);
  * double integral = integrator1.integrate() + integrator2.integrate();
  */
-public class InfinityMidPointQuadratureIntegrator
-        extends QuadratureIntegrator<InfinityMidPointQuadrature> {
+public class InfinityMidPointQuadratureIntegrator extends QuadratureIntegrator<InfinityMidPointQuadrature> {
 
     /**
      * Constructor.
@@ -39,9 +38,7 @@ public class InfinityMidPointQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public InfinityMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new InfinityMidPointQuadrature(a, b, listener), eps);
     }
 
@@ -53,8 +50,7 @@ public class InfinityMidPointQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public InfinityMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

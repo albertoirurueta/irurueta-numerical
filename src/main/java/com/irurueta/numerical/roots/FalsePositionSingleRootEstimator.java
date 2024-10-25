@@ -29,8 +29,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This implementation is based on Numerical Recipes 3rd ed. Section 9.2
  * page 451.
  */
-public class FalsePositionSingleRootEstimator
-        extends BracketedSingleRootEstimator {
+public class FalsePositionSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**
      * Maximum allowed number of iterations.
@@ -80,9 +79,8 @@ public class FalsePositionSingleRootEstimator
      * @throws IllegalArgumentException     Raised if provided tolerance is negative.
      */
     public FalsePositionSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -130,8 +128,7 @@ public class FalsePositionSingleRootEstimator
      *                                 numerical instability or convergence problems, or no roots are found).
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -143,17 +140,17 @@ public class FalsePositionSingleRootEstimator
         rootAvailable = false;
 
         try {
-            final double[] v1 = new double[1];
-            final double[] v2 = new double[1];
+            final var v1 = new double[1];
+            final var v2 = new double[1];
 
-            final double x1 = minEvalPoint;
-            final double x2 = maxEvalPoint;
-            final double xacc = tolerance;
+            final var x1 = minEvalPoint;
+            final var x2 = maxEvalPoint;
+            final var xacc = tolerance;
             double xl;
             double xh;
             double del;
-            double fl = listener.evaluate(x1);
-            double fh = listener.evaluate(x2);
+            var fl = listener.evaluate(x1);
+            var fh = listener.evaluate(x2);
             if (fl * fh > 0.0) {
                 // root must be bracketed
                 locked = false;
@@ -172,10 +169,10 @@ public class FalsePositionSingleRootEstimator
                 fl = v1[0];
                 fh = v2[0];
             }
-            double dx = xh - xl;
-            for (int j = 0; j < MAXIT; j++) {
-                final double rtf = xl + dx * fl / (fl - fh);
-                final double f = listener.evaluate(rtf);
+            var dx = xh - xl;
+            for (var j = 0; j < MAXIT; j++) {
+                final var rtf = xl + dx * fl / (fl - fh);
+                final var f = listener.evaluate(rtf);
                 if (f < 0.0) {
                     del = xl - rtf;
                     xl = rtf;

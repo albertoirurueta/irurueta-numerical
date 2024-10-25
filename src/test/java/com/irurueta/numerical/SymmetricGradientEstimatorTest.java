@@ -16,15 +16,12 @@
 package com.irurueta.numerical;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class SymmetricGradientEstimatorTest
-        implements MultiDimensionFunctionEvaluatorListener {
+class SymmetricGradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
 
     private static final int MIN_DIMS = 1;
     private static final int MAX_DIMS = 3;
@@ -48,53 +45,51 @@ public class SymmetricGradientEstimatorTest
     private double offset;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
         minimum = new double[ndims];
         randomizer.fill(minimum, MIN_EVAL_POINT, MAX_EVAL_POINT);
-        final double[] point = new double[ndims];
+        final var point = new double[ndims];
         randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
         width = new double[ndims];
         randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
 
-        final SymmetricGradientEstimator estimator = new SymmetricGradientEstimator(
-                this);
+        final var estimator = new SymmetricGradientEstimator(this);
         assertNotNull(estimator);
     }
 
     @Test
-    public void testGradient() throws EvaluationException {
+    void testGradient() throws EvaluationException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
             ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
             minimum = new double[ndims];
             randomizer.fill(minimum, MIN_EVAL_POINT, MAX_EVAL_POINT);
-            final double[] point = new double[ndims];
+            final var point = new double[ndims];
             randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
             offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
             width = new double[ndims];
             randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
 
-            final SymmetricGradientEstimator estimator = new SymmetricGradientEstimator(
-                    this);
+            final var estimator = new SymmetricGradientEstimator(this);
 
-            final double[] gradient1 = estimator.gradient(point);
-            final double[] gradient2 = new double[ndims];
+            final var gradient1 = estimator.gradient(point);
+            final var gradient2 = new double[ndims];
             estimator.gradient(point, gradient2);
 
             // check correctness
-            final double[] gradient3 = gradient(point);
+            final var gradient3 = gradient(point);
 
             assertEquals(gradient1.length, ndims);
             assertEquals(gradient2.length, ndims);
             assertEquals(gradient3.length, ndims);
-            for (int i = 0; i < ndims; i++) {
+            for (var i = 0; i < ndims; i++) {
                 assertEquals(gradient1[i], gradient3[i], ABSOLUTE_ERROR);
                 assertEquals(gradient2[i], gradient3[i], ABSOLUTE_ERROR);
             }
@@ -103,11 +98,10 @@ public class SymmetricGradientEstimatorTest
 
     @Override
     public double evaluate(final double[] point) {
-        final int dims = Math.min(Math.min(point.length, minimum.length),
-                width.length);
+        final var dims = Math.min(Math.min(point.length, minimum.length), width.length);
 
-        double value = 1.0;
-        for (int i = 0; i < dims; i++) {
+        var value = 1.0;
+        for (var i = 0; i < dims; i++) {
             value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
         }
 
@@ -116,15 +110,13 @@ public class SymmetricGradientEstimatorTest
     }
 
     private double[] gradient(final double[] params) {
-        final int dims = Math.min(Math.min(params.length, minimum.length),
-                width.length);
+        final var dims = Math.min(Math.min(params.length, minimum.length), width.length);
 
-        final double[] gradient = new double[dims];
+        final var gradient = new double[dims];
 
-        double value;
-        for (int j = 0; j < dims; j++) {
-            value = 1.0;
-            for (int i = 0; i < dims; i++) {
+        for (var j = 0; j < dims; j++) {
+            var value = 1.0;
+            for (var i = 0; i < dims; i++) {
                 if (i != j) {
                     value *= Math.pow(params[i] - minimum[i], 2.0) / width[i];
                 } else {

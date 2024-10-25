@@ -206,8 +206,7 @@ public class StraightLineFitter extends Fitter {
      */
     @Override
     public boolean isReady() {
-        return x != null && y != null && x.length == y.length &&
-                (sig == null || sig.length == y.length);
+        return x != null && y != null && x.length == y.length && (sig == null || sig.length == y.length);
     }
 
     /**
@@ -306,7 +305,7 @@ public class StraightLineFitter extends Fitter {
      * @throws FittingException if fitting fails.
      */
     private void fitWithSig() throws FittingException {
-        final Gamma gam = new Gamma();
+        final var gam = new Gamma();
         int i;
         double ss = 0.0;
         double sx = 0.0;
@@ -315,7 +314,7 @@ public class StraightLineFitter extends Fitter {
         double t;
         double wt;
         final double sxoss;
-        final int ndata = x.length;
+        final var ndata = x.length;
         b = 0.0;
         for (i = 0; i < ndata; i++) {
             wt = 1.0 / Math.pow(sig[i], 2.0);
@@ -351,12 +350,12 @@ public class StraightLineFitter extends Fitter {
     private void fitWithoutSig() {
         int i;
         final double ss;
-        double sx = 0.0;
-        double sy = 0.0;
-        double st2 = 0.0;
+        var sx = 0.0;
+        var sy = 0.0;
+        var st2 = 0.0;
         double t;
         final double sxoss;
-        final int ndata = x.length;
+        final var ndata = x.length;
         b = 0.0;
         for (i = 0; i < ndata; i++) {
             sx += x[i];

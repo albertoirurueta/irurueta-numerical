@@ -41,8 +41,7 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      *
      * @param listener Listener to evaluate a multidimensional function.
      */
-    public SymmetricGradientEstimator(
-            final MultiDimensionFunctionEvaluatorListener listener) {
+    public SymmetricGradientEstimator(final MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
 
@@ -60,9 +59,8 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      *                                  not equal.
      */
     @Override
-    public void gradient(final double[] point, final double[] result)
-            throws EvaluationException {
-        final int n = point.length;
+    public void gradient(final double[] point, final double[] result) throws EvaluationException {
+        final var n = point.length;
         if (result.length != n) {
             throw new IllegalArgumentException();
         }
@@ -84,7 +82,7 @@ public class SymmetricGradientEstimator extends GradientEstimator {
         double fh1;
         double fh2;
 
-        for (int j = 0; j < n; j++) {
+        for (var j = 0; j < n; j++) {
             temp = point[j];
             h = EPS * Math.abs(temp);
             if (h == 0.0) {

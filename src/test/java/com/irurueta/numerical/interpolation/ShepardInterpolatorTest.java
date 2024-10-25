@@ -15,16 +15,16 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ShepardInterpolatorTest {
+class ShepardInterpolatorTest {
 
     private static final double MIN_VALUE = -1.0;
 
@@ -37,72 +37,69 @@ public class ShepardInterpolatorTest {
     private static final double ABSOLUTE_ERROR_2 = 2.0;
 
     @Test
-    public void interpolate_dim1_returnsExpectedResult()
-            throws WrongSizeException {
+    void interpolate_dim1_returnsExpectedResult() throws WrongSizeException {
         assertInterpolation(1, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void interpolate_dim2_returnsExpectedResult()
-            throws WrongSizeException {
+    void interpolate_dim2_returnsExpectedResult() throws WrongSizeException {
         assertInterpolation(2, ABSOLUTE_ERROR_2);
     }
 
-    private static void assertInterpolation(final int dim, final double error)
-            throws WrongSizeException {
-        final double[] roots = new double[dim];
-        final Polynomial[] polynomials = buildPolynomials(dim, roots);
+    private static void assertInterpolation(final int dim, final double error) throws WrongSizeException {
+        final var roots = new double[dim];
+        final var polynomials = buildPolynomials(dim, roots);
 
-        for (int i = 0; i < dim; i++) {
+        for (var i = 0; i < dim; i++) {
             assertEquals(0.0, polynomials[i].evaluate(roots[i]), 0.0);
         }
         assertEquals(0.0, evaluate(polynomials, roots), 0.0);
 
         // create multiple samples and evaluations
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double[] point = new double[dim];
-        final Matrix pts = new Matrix(SAMPLES, dim);
-        final double[] values = new double[SAMPLES];
-        for (int i = 0; i < SAMPLES; i++) {
+        final var randomizer = new UniformRandomizer();
+        final var point = new double[dim];
+        final var pts = new Matrix(SAMPLES, dim);
+        final var values = new double[SAMPLES];
+        for (var i = 0; i < SAMPLES; i++) {
             randomizer.fill(point, MIN_VALUE, MAX_VALUE);
             pts.setSubmatrix(i, 0, i, dim -1, point);
             values[i] = evaluate(polynomials, point);
         }
 
         // check data
-        for (int i = 0; i < SAMPLES; i++) {
+        for (var i = 0; i < SAMPLES; i++) {
             pts.getSubmatrixAsArray(i, 0, i, dim - 1, point);
             assertEquals(values[i], evaluate(polynomials, point), 0.0);
         }
 
-        final ShepardInterpolator interpolator = new ShepardInterpolator(pts, values);
+        final var interpolator = new ShepardInterpolator(pts, values);
 
         // check that interpolator at provided points
-        for (int i = 0; i < SAMPLES; i++) {
+        for (var i = 0; i < SAMPLES; i++) {
             pts.getSubmatrixAsArray(i, 0, i, dim - 1, point);
             assertEquals(values[i], interpolator.interpolate(point), error);
         }
 
         // check random values
-        for (int i = 0; i < SAMPLES; i++) {
+        for (var i = 0; i < SAMPLES; i++) {
             randomizer.fill(point, MIN_VALUE, MAX_VALUE);
             assertEquals(evaluate(polynomials, point), interpolator.interpolate(point), error);
         }
     }
 
     private static double evaluate(final Polynomial[] polynomials, double[] point) {
-        final int dim = polynomials.length;
-        double result = 1.0;
-        for(int i = 0; i < dim; i++) {
+        final var dim = polynomials.length;
+        var result = 1.0;
+        for(var i = 0; i < dim; i++) {
             result *= polynomials[i].evaluate(point[i]);
         }
         return result;
     }
 
     private static Polynomial[] buildPolynomials(int dim, final double[] roots) {
-        final double[] r = new double[1];
-        final Polynomial[] result = new Polynomial[dim];
-        for (int i = 0; i < dim; i++) {
+        final var r = new double[1];
+        final var result = new Polynomial[dim];
+        for (var i = 0; i < dim; i++) {
             result[i] = buildPolynomial(r);
             roots[i] = r[0];
         }
@@ -110,9 +107,9 @@ public class ShepardInterpolatorTest {
     }
 
     private static Polynomial buildPolynomial(final double[] roots) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final Polynomial result = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var result = new Polynomial(-root, 1.0);
         roots[0] = root;
 
         return result;

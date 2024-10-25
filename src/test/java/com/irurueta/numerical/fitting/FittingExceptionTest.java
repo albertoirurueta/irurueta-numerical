@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.fitting;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class FittingExceptionTest {
+class FittingExceptionTest {
 
     @Test
-    public void testConstructor() {
-        FittingException ex = new FittingException();
+    void testConstructor() {
+        var ex = new FittingException();
         assertNotNull(ex);
 
         ex = new FittingException("message");

@@ -17,16 +17,14 @@ package com.irurueta.numerical.robust;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
-import com.irurueta.numerical.robust.MSACRobustEstimator.MSACInliersData;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MSACRobustEstimatorTest {
+class MSACRobustEstimatorTest {
 
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
@@ -51,35 +49,29 @@ public class MSACRobustEstimatorTest {
     private static final int TIMES = 100;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor
-        MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
+        var estimator = new MSACRobustEstimator<double[]>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertFalse(estimator.isReady());
-        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getNIters());
+        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getNIters());
         assertNull(estimator.getBestResult());
         assertNull(estimator.getInliersData());
         assertNull(estimator.getBestResultInliersData());
         assertNull(estimator.getBestNumberInliersData());
 
         // test constructor with listener
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final TestMSACRobustEstimatorListener listener =
-                new TestMSACRobustEstimatorListener(numSamples,
-                        PERCENTAGE_OUTLIER, THRESHOLD);
+        final var randomizer = new UniformRandomizer();
+        final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var listener = new TestMSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
         estimator = new MSACRobustEstimator<>(listener);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
@@ -99,125 +91,88 @@ public class MSACRobustEstimatorTest {
     }
 
     @Test
-    public void testGetSetListenerAvailabilityAndIsReady()
-            throws LockedException {
-        final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
+    void testGetSetListenerAvailabilityAndIsReady() throws LockedException {
+        final var estimator = new MSACRobustEstimator<double[]>();
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
 
         // set listener
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final TestMSACRobustEstimatorListener listener =
-                new TestMSACRobustEstimatorListener(numSamples,
-                        PERCENTAGE_OUTLIER, THRESHOLD);
+        final var randomizer = new UniformRandomizer();
+        final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var listener = new TestMSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
 
         estimator.setListener(listener);
 
         // check correctness
-        assertEquals(estimator.getListener(), listener);
+        assertEquals(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isReady());
     }
 
     @Test
-    public void testGetSetProgressDelta() throws IllegalArgumentException,
-            LockedException {
-        final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
-        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+    void testGetSetProgressDelta() throws IllegalArgumentException, LockedException {
+        final var estimator = new MSACRobustEstimator<double[]>();
+        assertEquals(RobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final float progressDelta = randomizer.nextFloat(0.0f, 1.0f);
+        final var randomizer = new UniformRandomizer();
+        final var progressDelta = randomizer.nextFloat(0.0f, 1.0f);
         estimator.setProgressDelta(progressDelta);
 
         // check correctness
         assertEquals(estimator.getProgressDelta(), progressDelta, 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws IllegalArgumentException,
-            LockedException {
-        final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
-        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+    void testGetSetConfidence() throws IllegalArgumentException, LockedException {
+        final var estimator = new MSACRobustEstimator<double[]>();
+        assertEquals(MSACRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double confidence = randomizer.nextDouble(0.0, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var confidence = randomizer.nextDouble(0.0, 1.0);
         estimator.setConfidence(confidence);
 
         // check correctness
         assertEquals(estimator.getConfidence(), confidence, 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws IllegalArgumentException,
-            LockedException {
-        final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
-        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+    void testGetSetMaxIterations() throws IllegalArgumentException, LockedException {
+        final var estimator = new MSACRobustEstimator<double[]>();
+        assertEquals(MSACRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int maxIterations = randomizer.nextInt(MIN_MAX_ITERATIONS,
-                MAX_MAX_ITERATIONS);
+        final var randomizer = new UniformRandomizer();
+        final var maxIterations = randomizer.nextInt(MIN_MAX_ITERATIONS, MAX_MAX_ITERATIONS);
         estimator.setMaxIterations(maxIterations);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), maxIterations);
+        assertEquals(maxIterations, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
-        for (int i = 0; i < TIMES; i++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final TestMSACRobustEstimatorListener listener =
-                    new TestMSACRobustEstimatorListener(numSamples,
-                            PERCENTAGE_OUTLIER, THRESHOLD);
-            final MSACRobustEstimator<double[]> estimator = new MSACRobustEstimator<>();
+    void testEstimate() throws LockedException, NotReadyException, RobustEstimatorException {
+        for (var i = 0; i < TIMES; i++) {
+            final var randomizer = new UniformRandomizer();
+            final var numSamples = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var listener = new TestMSACRobustEstimatorListener(numSamples, PERCENTAGE_OUTLIER, THRESHOLD);
+            final var estimator = new MSACRobustEstimator<double[]>();
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // set listener
             estimator.setListener(listener);
@@ -227,7 +182,7 @@ public class MSACRobustEstimatorTest {
             assertFalse(estimator.isLocked());
 
             // estimate
-            final double[] params = estimator.estimate();
+            final var params = estimator.estimate();
 
             assertNotNull(estimator.getBestResult());
             assertNotNull(estimator.getBestResultInliersData());
@@ -246,7 +201,7 @@ public class MSACRobustEstimatorTest {
 
             assertNotNull(estimator.getBestResultInliersData());
 
-            final MSACInliersData inliersData = estimator.getBestNumberInliersData();
+            final var inliersData = estimator.getBestNumberInliersData();
             assertNotNull(inliersData);
             assertSame(inliersData, estimator.getInliersData());
             assertTrue(inliersData.getNumInliers() > 0);
@@ -255,10 +210,10 @@ public class MSACRobustEstimatorTest {
         }
     }
 
-    private double[] computeParams() {
+    private static double[] computeParams() {
         // we will estimate parameters a and b for equation y = a*x + b
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] params = new double[NUM_PARAMS];
+        final var randomizer = new UniformRandomizer();
+        final var params = new double[NUM_PARAMS];
         // a parameter
         params[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // b parameter
@@ -266,25 +221,24 @@ public class MSACRobustEstimatorTest {
         return params;
     }
 
-    private void computeSamples(final double[] params, final int numSamples,
-                                final int percentageOutliers, final double[] ys, final double[] xs) {
+    private static void computeSamples(final double[] params, final int numSamples, final int percentageOutliers,
+                                       final double[] ys, final double[] xs) {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        for (int i = 0; i < numSamples; i++) {
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < numSamples; i++) {
             // compute x values
             xs[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             // compute exact y values
             ys[i] = params[0] * xs[i] + params[1];
             if (randomizer.nextInt(0, 100) < percentageOutliers) {
                 // is outlier, so we add a certain amount of error
-                final double error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
+                final var error = randomizer.nextDouble(MIN_ERROR, MAX_ERROR);
                 ys[i] += error;
             }
         }
     }
 
-    public class TestMSACRobustEstimatorListener implements
-            MSACRobustEstimatorListener<double[]> {
+    private static  class TestMSACRobustEstimatorListener implements MSACRobustEstimatorListener<double[]> {
 
         private final double[] params;
         private final double[] xs;
@@ -296,8 +250,7 @@ public class MSACRobustEstimatorTest {
         private int endCounter;
         private float previousProgress;
 
-        TestMSACRobustEstimatorListener(final int numSamples,
-                                        final int percentageOutliers, final double threshold) {
+        TestMSACRobustEstimatorListener(final int numSamples, final int percentageOutliers, final double threshold) {
             this.numSamples = numSamples;
             params = computeParams();
             xs = new double[numSamples];
@@ -336,24 +289,23 @@ public class MSACRobustEstimatorTest {
         }
 
         @Override
-        public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                final List<double[]> solutions) {
+        public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
 
             if (samplesIndices.length != NUM_PARAMS) {
                 throw new IllegalArgumentException();
             }
-            final int index1 = samplesIndices[0];
-            final int index2 = samplesIndices[1];
+            final var index1 = samplesIndices[0];
+            final var index2 = samplesIndices[1];
 
-            final double y1 = ys[index1];
-            final double y2 = ys[index2];
-            final double x1 = xs[index1];
-            final double x2 = xs[index2];
+            final var y1 = ys[index1];
+            final var y2 = ys[index2];
+            final var x1 = xs[index1];
+            final var x2 = xs[index2];
 
-            final double a = (y2 - y1) / (x2 - x1);
-            final double b = y1 - a * x1;
+            final var a = (y2 - y1) / (x2 - x1);
+            final var b = y1 - a * x1;
 
-            final double[] solution = new double[NUM_PARAMS];
+            final var solution = new double[NUM_PARAMS];
             solution[0] = a;
             solution[1] = b;
 
@@ -362,11 +314,11 @@ public class MSACRobustEstimatorTest {
 
         @Override
         public double computeResidual(final double[] currentEstimation, final int i) {
-            final double a = currentEstimation[0];
-            final double b = currentEstimation[1];
+            final var a = currentEstimation[0];
+            final var b = currentEstimation[1];
 
-            final double estimatedY = a * xs[i] + b;
-            final double y = ys[i];
+            final var estimatedY = a * xs[i] + b;
+            final var y = ys[i];
 
             return Math.abs(estimatedY - y);
         }
@@ -389,10 +341,8 @@ public class MSACRobustEstimatorTest {
         }
 
         @Override
-        public void onEstimateNextIteration(final RobustEstimator<double[]> estimator,
-                                            final int iteration) {
-            final MSACRobustEstimator<double[]> ransacEstimator =
-                    (MSACRobustEstimator<double[]>) estimator;
+        public void onEstimateNextIteration(final RobustEstimator<double[]> estimator, final int iteration) {
+            final var ransacEstimator = (MSACRobustEstimator<double[]>) estimator;
             testIsLocked(ransacEstimator);
             assertTrue(iteration > 0);
             assertTrue(ransacEstimator.getNIters() >= 0);
@@ -400,8 +350,7 @@ public class MSACRobustEstimatorTest {
         }
 
         @Override
-        public void onEstimateProgressChange(
-                final RobustEstimator<double[]> estimator, final float progress) {
+        public void onEstimateProgressChange(final RobustEstimator<double[]> estimator, final float progress) {
             testIsLocked((MSACRobustEstimator<double[]>) estimator);
             assertTrue(progress >= 0.0f);
             assertTrue(progress <= 1.0f);
@@ -420,26 +369,10 @@ public class MSACRobustEstimatorTest {
         private void testIsLocked(final MSACRobustEstimator<double[]> estimator) {
             assertTrue(estimator.isLocked());
             // test that estimator cannot be modified while locked
-            try {
-                estimator.setConfidence(0.5);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
-            try {
-                estimator.setListener(this);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
-            try {
-                estimator.setMaxIterations(1);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
-            try {
-                estimator.setProgressDelta(0.5f);
-                fail("LockedException expected but not thrown");
-            } catch (final LockedException ignore) {
-            }
+            assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+            assertThrows(LockedException.class, () -> estimator.setListener(this));
+            assertThrows(LockedException.class, () -> estimator.setMaxIterations(1));
+            assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
         }
 
         public final void reset() {

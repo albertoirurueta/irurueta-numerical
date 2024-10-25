@@ -15,17 +15,15 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class QuadratureMatrixIntegratorTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class QuadratureMatrixIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -34,173 +32,152 @@ public class QuadratureMatrixIntegratorTest {
     private static final double EPS = 1e-6;
 
     @Test
-    public void create_whenAccuracyAndQuadratureType_returnsExpectedIntegrator()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenAccuracyAndQuadratureType_returnsExpectedIntegrator() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        QuadratureMatrixIntegrator<?> integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                EPS, QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof TrapezoidalQuadratureMatrixIntegrator);
+        var integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(TrapezoidalQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof MidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS, QuadratureType.MID_POINT);
+        assertInstanceOf(MidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof InfinityMidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(InfinityMidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS,
-                QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof LowerSquareRootMidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS, QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(LowerSquareRootMidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS,
-                QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof UpperSquareRootMidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS, QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(UpperSquareRootMidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS,
-                QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof DoubleExponentialRuleQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+        assertInstanceOf(DoubleExponentialRuleQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            QuadratureMatrixIntegrator.create(a, b, listener, EPS,
-                    QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> QuadratureMatrixIntegrator.create(a, b, listener, EPS,
+                QuadratureType.EXPONENTIAL_MID_POINT));
     }
 
     @Test
-    public void create_whenDefaultAccuracyAndQuadratureType_returnsExpectedIntegrator()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenDefaultAccuracyAndQuadratureType_returnsExpectedIntegrator() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        QuadratureMatrixIntegrator<?> integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof TrapezoidalQuadratureMatrixIntegrator);
+        var integrator = QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(TrapezoidalQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof MidPointQuadratureMatrixIntegrator);
+        assertInstanceOf(MidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof InfinityMidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(InfinityMidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof LowerSquareRootMidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(LowerSquareRootMidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof UpperSquareRootMidPointQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(UpperSquareRootMidPointQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof DoubleExponentialRuleQuadratureMatrixIntegrator);
+        integrator = QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+        assertInstanceOf(DoubleExponentialRuleQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> QuadratureMatrixIntegrator.create(a, b, listener, QuadratureType.EXPONENTIAL_MID_POINT));
     }
 
     @Test
-    public void create_whenNoQuadratureType_returnsExpectedIntegrator() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenNoQuadratureType_returnsExpectedIntegrator() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        QuadratureMatrixIntegrator<?> integrator = QuadratureMatrixIntegrator.create(a, b, listener,
-                EPS);
-        assertTrue(integrator instanceof TrapezoidalQuadratureMatrixIntegrator);
+        var integrator = QuadratureMatrixIntegrator.create(a, b, listener, EPS);
+        assertInstanceOf(TrapezoidalQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = QuadratureMatrixIntegrator.create(a, b, listener);
-        assertTrue(integrator instanceof TrapezoidalQuadratureMatrixIntegrator);
+        assertInstanceOf(TrapezoidalQuadratureMatrixIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }

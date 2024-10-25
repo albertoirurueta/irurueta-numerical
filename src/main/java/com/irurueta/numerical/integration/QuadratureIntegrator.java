@@ -76,9 +76,9 @@ public abstract class QuadratureIntegrator<T extends Quadrature> extends Integra
         try {
             double s;
             // Initial value of olds is arbitrary.
-            double olds = 0.0;
+            var olds = 0.0;
 
-            for (int j = 0; j < JMAX; j++) {
+            for (var j = 0; j < JMAX; j++) {
                 s = q.next();
                 if (j > JMIN && (Math.abs(s - olds) < eps * Math.abs(olds) || (s == 0.0 && olds == 0.0))) {
                     // Avoid spurious early convergence.
@@ -116,26 +116,19 @@ public abstract class QuadratureIntegrator<T extends Quadrature> extends Integra
      * @throws IllegalArgumentException if provided quadrature type is not supported.
      */
     public static QuadratureIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
             final QuadratureType quadratureType) {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new TrapezoidalQuadratureIntegrator(a, b, listener, eps));
-            case MID_POINT:
-                return cast(new MidPointQuadratureIntegrator(a, b, listener, eps));
-            case INFINITY_MID_POINT:
-                return cast(new InfinityMidPointQuadratureIntegrator(a, b, listener, eps));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new LowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new UpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new DoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new TrapezoidalQuadratureIntegrator(a, b, listener, eps));
+            case MID_POINT -> cast(new MidPointQuadratureIntegrator(a, b, listener, eps));
+            case INFINITY_MID_POINT -> cast(new InfinityMidPointQuadratureIntegrator(a, b, listener, eps));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new LowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new UpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));
+            case DOUBLE_EXPONENTIAL_RULE -> cast(new DoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -149,26 +142,17 @@ public abstract class QuadratureIntegrator<T extends Quadrature> extends Integra
      * @throws IllegalArgumentException if provided quadrature type is not supported.
      */
     public static QuadratureIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
             final QuadratureType quadratureType) {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new TrapezoidalQuadratureIntegrator(a, b, listener));
-            case MID_POINT:
-                return cast(new MidPointQuadratureIntegrator(a, b, listener));
-            case INFINITY_MID_POINT:
-                return cast(new InfinityMidPointQuadratureIntegrator(a, b, listener));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new LowerSquareRootMidPointQuadratureIntegrator(a, b, listener));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new UpperSquareRootMidPointQuadratureIntegrator(a, b, listener));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new DoubleExponentialRuleQuadratureIntegrator(a, b, listener));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new TrapezoidalQuadratureIntegrator(a, b, listener));
+            case MID_POINT -> cast(new MidPointQuadratureIntegrator(a, b, listener));
+            case INFINITY_MID_POINT -> cast(new InfinityMidPointQuadratureIntegrator(a, b, listener));
+            case LOWER_SQUARE_ROOT_MID_POINT -> cast(new LowerSquareRootMidPointQuadratureIntegrator(a, b, listener));
+            case UPPER_SQUARE_ROOT_MID_POINT -> cast(new UpperSquareRootMidPointQuadratureIntegrator(a, b, listener));
+            case DOUBLE_EXPONENTIAL_RULE -> cast(new DoubleExponentialRuleQuadratureIntegrator(a, b, listener));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -181,8 +165,7 @@ public abstract class QuadratureIntegrator<T extends Quadrature> extends Integra
      * @return created integrator.
      */
     public static QuadratureIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);
     }
 
@@ -195,8 +178,7 @@ public abstract class QuadratureIntegrator<T extends Quadrature> extends Integra
      * @return created integrator.
      */
     public static QuadratureIntegrator<Quadrature> create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);
     }
 

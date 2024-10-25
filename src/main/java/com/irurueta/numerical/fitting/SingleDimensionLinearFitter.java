@@ -89,8 +89,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws FittingException if evaluation fails.
      */
     protected SingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
         internalSetFunctionEvaluator(evaluator);
     }
 
@@ -110,9 +109,8 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      *                                  length.
      */
     protected SingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double[] sig)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double[] sig) throws FittingException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }
@@ -133,9 +131,8 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      *                                  length.
      */
     protected SingleDimensionLinearFitter(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double sig)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double sig) throws FittingException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }
@@ -158,8 +155,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      * @throws FittingException if evaluation fails.
      */
     public void setFunctionEvaluator(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
         internalSetFunctionEvaluator(evaluator);
     }
 
@@ -172,8 +168,7 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      */
     @SuppressWarnings("DuplicatedCode")
     private void internalSetFunctionEvaluator(
-            final LinearFitterSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
 
         try {
             this.evaluator = evaluator;
@@ -198,7 +193,6 @@ public abstract class SingleDimensionLinearFitter extends SingleDimensionFitter 
      */
     @Override
     public boolean isReady() {
-        return evaluator != null && x != null && y != null &&
-                x.length == y.length;
+        return evaluator != null && x != null && y != null && x.length == y.length;
     }
 }

@@ -33,8 +33,7 @@ import java.util.Arrays;
  * Ed, page 801.
  */
 @SuppressWarnings("DuplicatedCode")
-public class LevenbergMarquardtMultiDimensionFitter
-        extends MultiDimensionFitter {
+public class LevenbergMarquardtMultiDimensionFitter extends MultiDimensionFitter {
 
     /**
      * Default convergence parameter. Number of times that tolerance is assumed
@@ -145,8 +144,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public LevenbergMarquardtMultiDimensionFitter(
-            final Matrix x, final double[] y, final double[] sig) {
+    public LevenbergMarquardtMultiDimensionFitter(final Matrix x, final double[] y, final double[] sig) {
         super(x, y, sig);
     }
 
@@ -161,8 +159,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length .
      */
-    public LevenbergMarquardtMultiDimensionFitter(
-            final Matrix x, final double[] y, final double sig) {
+    public LevenbergMarquardtMultiDimensionFitter(final Matrix x, final double[] y, final double sig) {
         super(x, y, sig);
     }
 
@@ -174,8 +171,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @throws FittingException if evaluation fails.
      */
     public LevenbergMarquardtMultiDimensionFitter(
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator) throws FittingException {
         this();
         setFunctionEvaluator(evaluator);
     }
@@ -195,8 +191,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      */
     public LevenbergMarquardtMultiDimensionFitter(
             final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator,
-            final Matrix x, final double[] y, final double[] sig)
-            throws FittingException {
+            final Matrix x, final double[] y, final double[] sig) throws FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -306,8 +301,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @throws FittingException if evaluation fails.
      */
     public final void setFunctionEvaluator(
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator) throws FittingException {
         internalSetFunctionEvaluator(evaluator);
     }
 
@@ -320,9 +314,8 @@ public class LevenbergMarquardtMultiDimensionFitter
      */
     @Override
     public boolean isReady() {
-        return evaluator != null && x != null && y != null &&
-                x.getRows() == y.length &&
-                x.getColumns() == evaluator.getNumberOfDimensions();
+        return evaluator != null && x != null && y != null && x.getRows() == y.length
+                && x.getColumns() == evaluator.getNumberOfDimensions();
     }
 
     /**
@@ -461,11 +454,11 @@ public class LevenbergMarquardtMultiDimensionFitter
             int l;
             int iter;
             int done = 0;
-            double alamda = 0.001;
+            var alamda = 0.001;
             double ochisq;
-            final double[] atry = new double[ma];
-            final double[] beta = new double[ma];
-            final double[] da = new double[ma];
+            final var atry = new double[ma];
+            final var beta = new double[ma];
+            final var da = new double[ma];
 
             // number of parameters to be fitted
             mfit = 0;
@@ -475,8 +468,8 @@ public class LevenbergMarquardtMultiDimensionFitter
                 }
             }
 
-            final Matrix oneda = new Matrix(mfit, 1);
-            final Matrix temp = new Matrix(mfit, mfit);
+            final var oneda = new Matrix(mfit, 1);
+            final var temp = new Matrix(mfit, mfit);
 
             // initialization
             mrqcof(a, alpha, beta);
@@ -612,20 +605,19 @@ public class LevenbergMarquardtMultiDimensionFitter
      */
     private void adjustCovariance() throws AlgebraException, EvaluationException {
 
-        final int xCols = x.getColumns();
+        final var xCols = x.getColumns();
         if (xRow == null) {
             xRow = new double[x.getColumns()];
         }
 
-        final Matrix invCov = new Matrix(a.length, a.length);
-        final Matrix tmp1 = new Matrix(a.length, 1);
-        final Matrix tmp2 = new Matrix(1, a.length);
-        final Matrix tmpInvCov = new Matrix(a.length, a.length);
-        final double[] derivatives = new double[a.length];
-        final int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
-        for (int i = 0; i < ndat; i++) {
-            x.getSubmatrixAsArray(i, 0, i,
-                    xCols - 1, xRow);
+        final var invCov = new Matrix(a.length, a.length);
+        final var tmp1 = new Matrix(a.length, 1);
+        final var tmp2 = new Matrix(1, a.length);
+        final var tmpInvCov = new Matrix(a.length, a.length);
+        final var derivatives = new double[a.length];
+        final var chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
+        for (var i = 0; i < ndat; i++) {
+            x.getSubmatrixAsArray(i, 0, i, xCols - 1, xRow);
 
             evaluator.evaluate(i, xRow, a, derivatives);
 
@@ -634,7 +626,7 @@ public class LevenbergMarquardtMultiDimensionFitter
 
             tmp1.multiply(tmp2, tmpInvCov);
 
-            final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
+            final var w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
             tmpInvCov.multiplyByScalar(w);
             invCov.add(tmpInvCov);
         }
@@ -649,8 +641,7 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @param evaluator function evaluator.
      * @throws FittingException if evaluation fails.
      */
-    private void internalSetFunctionEvaluator(
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
+    private void internalSetFunctionEvaluator(final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator)
             throws FittingException {
 
         try {
@@ -692,12 +683,12 @@ public class LevenbergMarquardtMultiDimensionFitter
         double wt;
         double sig2i;
         double dy;
-        final double[] dyda = new double[ma];
+        final var dyda = new double[ma];
 
         if (xRow == null) {
             xRow = new double[x.getColumns()];
         }
-        final int xCols = evaluator.getNumberOfDimensions();
+        final var xCols = evaluator.getNumberOfDimensions();
 
         // initialize (symmetric) alpha, beta
         for (j = 0; j < mfit; j++) {
@@ -709,7 +700,7 @@ public class LevenbergMarquardtMultiDimensionFitter
 
         chisq = 0.;
         mse = 0.0;
-        final int degreesOfFreedom = getChisqDegreesOfFreedom();
+        final var degreesOfFreedom = getChisqDegreesOfFreedom();
         for (i = 0; i < ndat; i++) {
             // summation loop over all data
             x.getSubmatrixAsArray(i, 0, i, xCols - 1,
@@ -721,7 +712,7 @@ public class LevenbergMarquardtMultiDimensionFitter
             for (j = 0, l = 0; l < ma; l++) {
                 if (ia[l]) {
                     wt = dyda[l] * sig2i;
-                    final double[] alphaBuffer = alpha.getBuffer();
+                    final var alphaBuffer = alpha.getBuffer();
                     for (k = 0, m = 0; m < l + 1; m++) {
                         if (ia[m]) {
                             final int index = alpha.getIndex(j, k++);
@@ -768,15 +759,15 @@ public class LevenbergMarquardtMultiDimensionFitter
         k = mfit - 1;
         for (j = ma - 1; j >= 0; j--) {
             if (ia[j]) {
-                final double[] buffer = covar.getBuffer();
+                final var buffer = covar.getBuffer();
                 for (i = 0; i < ma; i++) {
-                    final int pos1 = covar.getIndex(i, k);
-                    final int pos2 = covar.getIndex(i, j);
+                    final var pos1 = covar.getIndex(i, k);
+                    final var pos2 = covar.getIndex(i, j);
                     swap(buffer, buffer, pos1, pos2);
                 }
                 for (i = 0; i < ma; i++) {
-                    final int pos1 = covar.getIndex(k, i);
-                    final int pos2 = covar.getIndex(j, i);
+                    final var pos1 = covar.getIndex(k, i);
+                    final var pos2 = covar.getIndex(j, i);
                     swap(buffer, buffer, pos1, pos2);
                 }
 
@@ -793,9 +784,9 @@ public class LevenbergMarquardtMultiDimensionFitter
      * @param pos1   1st position.
      * @param pos2   2nd position.
      */
-    private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
-        final double value1 = array1[pos1];
-        final double value2 = array2[pos2];
+    private static void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
+        final var value1 = array1[pos1];
+        final var value2 = array2[pos2];
         array1[pos1] = value2;
         array2[pos2] = value1;
     }

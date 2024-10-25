@@ -29,8 +29,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * This implementation is based on Numerical Recipes 3rd ed. Section 9.4, page
  * 456.
  */
-public class SafeNewtonRaphsonSingleRootEstimator
-        extends DerivativeSingleRootEstimator {
+public class SafeNewtonRaphsonSingleRootEstimator extends DerivativeSingleRootEstimator {
 
     /**
      * Maximum number of iterations.
@@ -77,9 +76,8 @@ public class SafeNewtonRaphsonSingleRootEstimator
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public SafeNewtonRaphsonSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -101,9 +99,8 @@ public class SafeNewtonRaphsonSingleRootEstimator
      */
     public SafeNewtonRaphsonSingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener,
-            final SingleDimensionFunctionEvaluatorListener derivativeListener,
-            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener derivativeListener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, derivativeListener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -170,8 +167,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -183,9 +179,9 @@ public class SafeNewtonRaphsonSingleRootEstimator
         locked = true;
         rootAvailable = false;
 
-        final double x1 = minEvalPoint;
-        final double x2 = maxEvalPoint;
-        final double xacc = tolerance;
+        final var x1 = minEvalPoint;
+        final var x2 = maxEvalPoint;
+        final var xacc = tolerance;
 
         double xh;
         double xl;
@@ -222,9 +218,9 @@ public class SafeNewtonRaphsonSingleRootEstimator
             xh = x1;
             xl = x2;
         }
-        double rts = 0.5 * (x1 + x2);
-        double dxold = Math.abs(x2 - x1);
-        double dx = dxold;
+        var rts = 0.5 * (x1 + x2);
+        var dxold = Math.abs(x2 - x1);
+        var dx = dxold;
         double f;
         double df;
         try {
@@ -234,9 +230,8 @@ public class SafeNewtonRaphsonSingleRootEstimator
             throw new RootEstimationException(e);
         }
 
-        for (int j = 0; j < MAXIT; j++) {
-            if ((((rts - xh) * df - f) * ((rts - xl) * df - f) > 0.0)
-                    || (Math.abs(2.0 * f) > Math.abs(dxold * df))) {
+        for (var j = 0; j < MAXIT; j++) {
+            if ((((rts - xh) * df - f) * ((rts - xl) * df - f) > 0.0) || (Math.abs(2.0 * f) > Math.abs(dxold * df))) {
                 dxold = dx;
                 dx = 0.5 * (xh - xl);
                 rts = xl + dx;
@@ -249,7 +244,7 @@ public class SafeNewtonRaphsonSingleRootEstimator
             } else {
                 dxold = dx;
                 dx = f / df;
-                final double temp = rts;
+                final var temp = rts;
                 rts -= dx;
                 if (temp == rts) {
                     root = rts;

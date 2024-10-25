@@ -28,8 +28,7 @@ import java.util.Arrays;
  * samples as a series of Gaussian functions with a small sigma and centered at
  * the exact value of the sample.
  */
-public class HistogramMaximumLikelihoodEstimator
-        extends MaximumLikelihoodEstimator {
+public class HistogramMaximumLikelihoodEstimator extends MaximumLikelihoodEstimator {
 
     /**
      * Default number of bins to be used on the histogram.
@@ -90,8 +89,7 @@ public class HistogramMaximumLikelihoodEstimator
      *                                  negative or zero, or if provided number of bins is smaller than the
      *                                  minimum allowed number of bins.
      */
-    public HistogramMaximumLikelihoodEstimator(
-            final double gaussianSigma, final int numberOfBins) {
+    public HistogramMaximumLikelihoodEstimator(final double gaussianSigma, final int numberOfBins) {
         super(gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -109,8 +107,8 @@ public class HistogramMaximumLikelihoodEstimator
      *                                  negative or zero, or if provided number of bins is smaller than the
      *                                  minimum allowed number of bins.
      */
-    public HistogramMaximumLikelihoodEstimator(
-            final double[] inputData, final double gaussianSigma, final int numberOfBins) {
+    public HistogramMaximumLikelihoodEstimator(final double[] inputData, final double gaussianSigma,
+                                               final int numberOfBins) {
         super(inputData, gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -133,8 +131,8 @@ public class HistogramMaximumLikelihoodEstimator
      *                                  minimum allowed number of bins or if minValue &lt; maxValue.
      */
     public HistogramMaximumLikelihoodEstimator(
-            final double minValue, final double maxValue, final double[] inputData,
-            final double gaussianSigma, final int numberOfBins) {
+            final double minValue, final double maxValue, final double[] inputData, final double gaussianSigma,
+            final int numberOfBins) {
         super(minValue, maxValue, inputData, gaussianSigma);
         internalSetNumberOfBins(numberOfBins);
         bins = null;
@@ -151,8 +149,7 @@ public class HistogramMaximumLikelihoodEstimator
      */
     @Override
     public MaximumLikelihoodEstimatorMethod getMethod() {
-        return MaximumLikelihoodEstimatorMethod.
-                HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR;
+        return MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR;
     }
 
     /**
@@ -235,11 +232,11 @@ public class HistogramMaximumLikelihoodEstimator
         }
 
         // set of data values between bins
-        final double delta = (maxValue - minValue) / (double) (numberOfBins - 1);
+        final var delta = (maxValue - minValue) / (numberOfBins - 1);
 
         // iterate over input data to add data to histogram
         double gaussianCenterPos;
-        for (double data : inputData) {
+        for (var data : inputData) {
             gaussianCenterPos = (data - minValue) / delta;
             computeGaussian(gaussian, gaussianCenterPos);
 
@@ -248,10 +245,10 @@ public class HistogramMaximumLikelihoodEstimator
         }
 
         // find location of maximum in histogram
-        double maxBin = 0.0;
+        var maxBin = 0.0;
         final double maxFuncValue;
         int maxPos = 0;
-        for (int i = 0; i < numberOfBins; i++) {
+        for (var i = 0; i < numberOfBins; i++) {
             if (bins[i] > maxBin) {
                 maxBin = bins[i];
                 maxPos = i;
@@ -273,14 +270,13 @@ public class HistogramMaximumLikelihoodEstimator
      * @param centerPos Value where Gaussian is centered
      */
     protected void computeGaussian(final double[] gaussian, final double centerPos) {
-        final int length = gaussian.length;
+        final var length = gaussian.length;
 
         double x;
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             x = i - centerPos;
-            gaussian[i] = Math.exp(-x * x /
-                    (2.0 * gaussianSigma * gaussianSigma)) /
-                    (Math.sqrt(2.0 * Math.PI) * gaussianSigma);
+            gaussian[i] = Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma))
+                    / (Math.sqrt(2.0 * Math.PI) * gaussianSigma);
         }
     }
 

@@ -36,8 +36,7 @@ public class UpperSquareRootMidPointQuadrature extends MidPointQuadrature {
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public UpperSquareRootMidPointQuadrature(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         super(0.0, Math.sqrt(b - a), listener);
         borig = b;
     }

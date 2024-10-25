@@ -63,9 +63,7 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @param q   Quadrature used for integration.
      * @param eps Required accuracy.
      */
-    protected SimpsonMatrixIntegrator(
-            final T q,
-            final double eps) {
+    protected SimpsonMatrixIntegrator(final T q, final double eps) {
         this.q = q;
         this.eps = eps;
     }
@@ -80,17 +78,17 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
     @Override
     public void integrate(final Matrix result) throws IntegrationException {
         try {
-            final int rows = q.getRows();
-            final int columns = q.getColumns();
-            final Matrix st = new Matrix(rows, columns);
-            final Matrix s = new Matrix(rows, columns);
-            final Matrix ost = new Matrix(rows, columns);
-            final Matrix os = new Matrix(rows, columns);
-            final Matrix tmp = new Matrix(rows, columns);
-            for (int j = 0; j < JMAX; j++) {
+            final var rows = q.getRows();
+            final var columns = q.getColumns();
+            final var st = new Matrix(rows, columns);
+            final var s = new Matrix(rows, columns);
+            final var ost = new Matrix(rows, columns);
+            final var os = new Matrix(rows, columns);
+            final var tmp = new Matrix(rows, columns);
+            for (var j = 0; j < JMAX; j++) {
                 q.next(st);
 
-                // s = (4.0 * st - ost) / 3.0;
+                // s = (4.0 * st - ost) / 3.0
                 tmp.copyFrom(st);
                 tmp.multiplyByScalar(4.0);
                 tmp.subtract(ost);
@@ -136,26 +134,20 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException       if size notified by provided listener is invalid.
      */
     public static SimpsonMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps,
-            final QuadratureType quadratureType) throws WrongSizeException {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new SimpsonTrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));
-            case MID_POINT:
-                return cast(new SimpsonMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case INFINITY_MID_POINT:
-                return cast(new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps, final QuadratureType quadratureType) throws WrongSizeException {
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new SimpsonTrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));
+            case MID_POINT -> cast(new SimpsonMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case INFINITY_MID_POINT -> cast(new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -170,26 +162,20 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException       if size notified by provided listener is invalid.
      */
     public static SimpsonMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final QuadratureType quadratureType) throws WrongSizeException {
-        switch (quadratureType) {
-            case TRAPEZOIDAL:
-                return cast(new SimpsonTrapezoidalQuadratureMatrixIntegrator(a, b, listener));
-            case MID_POINT:
-                return cast(new SimpsonMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case INFINITY_MID_POINT:
-                return cast(new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));
-            case EXPONENTIAL_MID_POINT:
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (quadratureType) {
+            case TRAPEZOIDAL -> cast(new SimpsonTrapezoidalQuadratureMatrixIntegrator(a, b, listener));
+            case MID_POINT -> cast(new SimpsonMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case INFINITY_MID_POINT -> cast(new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**
@@ -203,9 +189,8 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public static SimpsonMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
-            throws WrongSizeException {
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps) throws WrongSizeException {
         return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);
     }
 
@@ -219,8 +204,7 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public static SimpsonMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);
     }
@@ -233,10 +217,10 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @return estimated min norm.
      */
     private static double normMin(final Matrix a) {
-        double min = Double.MAX_VALUE;
-        double[] buffer = a.getBuffer();
-        for (double v : buffer) {
-            double value = Math.abs(v);
+        var min = Double.MAX_VALUE;
+        var buffer = a.getBuffer();
+        for (var v : buffer) {
+            final var value = Math.abs(v);
             if (Double.isNaN(value)) {
                 return value;
             }

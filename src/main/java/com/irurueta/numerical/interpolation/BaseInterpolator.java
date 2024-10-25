@@ -102,7 +102,7 @@ public abstract class BaseInterpolator {
      * @throws InterpolationException if interpolation fails.
      */
     public double interpolate(final double x) throws InterpolationException {
-        final int jlo = cor != 0 ? hunt(x) : locate(x);
+        final var jlo = cor != 0 ? hunt(x) : locate(x);
         return rawinterp(jlo, x);
     }
 
@@ -114,8 +114,7 @@ public abstract class BaseInterpolator {
      * @return interpolated value.
      * @throws InterpolationException if interpolation fails.
      */
-    public abstract double rawinterp(final int jlo, final double x)
-            throws InterpolationException;
+    public abstract double rawinterp(final int jlo, final double x) throws InterpolationException;
 
     /**
      * Given a value x, returns a value j such that x is (insofar as possible) centered in the
@@ -131,7 +130,7 @@ public abstract class BaseInterpolator {
         int jm;
         int jl;
         // True if ascending order of table, false otherwise.
-        final boolean ascend = (xx[n - 1] >= xx[0]);
+        final var ascend = (xx[n - 1] >= xx[0]);
 
         // Initialize lower and upper limits.
         jl = 0;
@@ -174,13 +173,13 @@ public abstract class BaseInterpolator {
      */
     @SuppressWarnings("Duplicates")
     protected int hunt(final double x) {
-        int jl = jsav;
+        var jl = jsav;
         int jm;
         int ju;
-        int inc = 1;
+        var inc = 1;
 
         // Ture if ascending order of table, false otherwise
-        final boolean ascnd = (xx[n - 1] >= xx[0]);
+        final var ascnd = (xx[n - 1] >= xx[0]);
         if (jl < 0 || jl > n - 1) {
             // Input guess not useful. Go immediately to bisection
             jl = 0;

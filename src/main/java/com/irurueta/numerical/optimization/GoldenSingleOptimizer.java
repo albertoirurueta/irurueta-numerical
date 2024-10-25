@@ -78,9 +78,9 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public GoldenSingleOptimizer(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint,
-            final double tolerance) throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double middleEvalPoint, final double maxEvalPoint, final double tolerance)
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -137,8 +137,7 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -148,17 +147,17 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
 
         locked = true;
 
-        final double[] v1 = new double[1];
-        final double[] v2 = new double[2];
-        final double[] v3 = new double[3];
+        final var v1 = new double[1];
+        final var v2 = new double[2];
+        final var v3 = new double[3];
 
 
         try {
             // At any given time we will keep track of four points x0, x1, x2, x3
             double x1;
             double x2;
-            double x0 = ax;
-            double x3 = cx;
+            var x0 = ax;
+            var x3 = cx;
 
             // Make x0 to x1 the smaller segment, and fill in the new point to be
             // tried
@@ -172,12 +171,11 @@ public class GoldenSingleOptimizer extends BracketedSingleOptimizer {
 
             // The initial function evaluations. Note that we never need to
             // evaluate the function at the original endpoints
-            double f1 = listener.evaluate(x1);
-            double f2 = listener.evaluate(x2);
+            var f1 = listener.evaluate(x1);
+            var f2 = listener.evaluate(x2);
 
-            int iter = 0;
-            while (Math.abs(x3 - x0) > tolerance * (Math.abs(x1) +
-                    Math.abs(x2))) {
+            var iter = 0;
+            while (Math.abs(x3 - x0) > tolerance * (Math.abs(x1) + Math.abs(x2))) {
                 if (f2 < f1) {
                     // One possible outcome, its housekeeping and a new function
                     // evaluation

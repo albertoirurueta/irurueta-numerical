@@ -33,8 +33,7 @@ public interface DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener
      * @param result matrix where function evaluation will be stored.
      * @throws EvaluationException raised if something failed during the evaluation.
      */
-    void evaluate(final double x, final double delta, final Matrix result)
-            throws EvaluationException;
+    void evaluate(final double x, final double delta, final Matrix result) throws EvaluationException;
 
     /**
      * Gets number of rows of matrix result of function f.

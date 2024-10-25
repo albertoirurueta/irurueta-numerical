@@ -96,9 +96,9 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     protected DerivativeBrentSingleOptimizer(
             final SingleDimensionFunctionEvaluatorListener listener,
-            final SingleDimensionFunctionEvaluatorListener derivativeListener,
-            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint,
-            final double tolerance) throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener derivativeListener, final double minEvalPoint,
+            final double middleEvalPoint, final double maxEvalPoint, final double tolerance)
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);
         this.derivativeListener = derivativeListener;
         internalSetTolerance(tolerance);
@@ -111,8 +111,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws NotAvailableException Raised if derivative listener is not
      *                               available for retrieval.
      */
-    public SingleDimensionFunctionEvaluatorListener getDerivativeListener()
-            throws NotAvailableException {
+    public SingleDimensionFunctionEvaluatorListener getDerivativeListener() throws NotAvailableException {
         if (!isDerivativeListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -125,8 +124,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      * @param derivativeListener Sets derivative listener.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setDerivativeListener(
-            final SingleDimensionFunctionEvaluatorListener derivativeListener)
+    public void setDerivativeListener(final SingleDimensionFunctionEvaluatorListener derivativeListener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -189,8 +187,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -200,9 +197,9 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
 
         locked = true;
 
-        final double[] v1 = new double[1];
-        final double[] v2 = new double[2];
-        final double[] v3 = new double[3];
+        final var v1 = new double[1];
+        final var v2 = new double[2];
+        final var v3 = new double[3];
 
         try {
             // Will be used as flags for whether proposed steps are acceptable or
@@ -211,14 +208,14 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
             boolean ok2;
             double a;
             double b;
-            double d = 0.0;
+            var d = 0.0;
             double d1;
             double d2;
             double du;
             double dv;
             double dw;
             double dx;
-            double e = 0.0;
+            var e = 0.0;
             double fu;
             double fv;
             double fw;
@@ -244,7 +241,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
 
             // All out housekeeping chores are doubled by the necessity of moving
             // around derivative values as well as function values
-            for (int iter = 0; iter < ITMAX; iter++) {
+            for (var iter = 0; iter < ITMAX; iter++) {
                 xm = 0.5 * (a + b);
                 tol1 = tolerance * Math.abs(x) + ZEPS;
                 tol2 = 2.0 * tol1;
@@ -257,7 +254,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     return;
                 }
 
-                double tmp = dx >= 0.0 ? a - x : b - x;
+                final var tmp = dx >= 0.0 ? a - x : b - x;
                 if (Math.abs(e) > tol1) {
                     // Initialize these d's to an out-of-bracket value
                     d1 = 2.0 * (b - a);
@@ -293,8 +290,9 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
 
                         if (Math.abs(d) <= Math.abs(0.5 * olde)) {
                             u = x + d;
-                            if (u - a < tol2 || b - u < tol2)
+                            if (u - a < tol2 || b - u < tol2) {
                                 d = sign(tol1, xm - x);
+                            }
                         } else {
                             // Bisect, not golden section.
                             e = tmp;
@@ -418,8 +416,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isDerivativeListenerAvailable() &&
-                isBracketAvailable();
+        return isListenerAvailable() && isDerivativeListenerAvailable() && isBracketAvailable();
     }
 
     /**

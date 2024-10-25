@@ -20,6 +20,5 @@ package com.irurueta.numerical.robust;
  *
  * @param <T> type of object to be estimated
  */
-public interface MSACRobustEstimatorListener<T> extends
-        RANSACRobustEstimatorListener<T> {
+public interface MSACRobustEstimatorListener<T> extends RANSACRobustEstimatorListener<T> {
 }

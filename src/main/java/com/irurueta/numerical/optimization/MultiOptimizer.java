@@ -74,8 +74,7 @@ public abstract class MultiOptimizer extends Optimizer {
      * @throws NotAvailableException Raised if listener has not yet been
      *                               provided and is not available for retrieval.
      */
-    public MultiDimensionFunctionEvaluatorListener getListener()
-            throws NotAvailableException {
+    public MultiDimensionFunctionEvaluatorListener getListener() throws NotAvailableException {
         if (!isListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -88,8 +87,7 @@ public abstract class MultiOptimizer extends Optimizer {
      * @param listener Listener to evaluate a multidimensional function.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setListener(final MultiDimensionFunctionEvaluatorListener listener)
-            throws LockedException {
+    public void setListener(final MultiDimensionFunctionEvaluatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

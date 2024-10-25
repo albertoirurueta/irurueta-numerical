@@ -23,7 +23,7 @@ public class DirectPolynomialEvaluation extends PolynomialEvaluation {
     /**
      * Point where polynomial has been evaluated.
      */
-    private double mX;
+    private double x;
 
     /**
      * Constructor.
@@ -40,7 +40,7 @@ public class DirectPolynomialEvaluation extends PolynomialEvaluation {
      */
     public DirectPolynomialEvaluation(final double x, final double evaluation) {
         super(evaluation);
-        mX = x;
+        this.x = x;
     }
 
     /**
@@ -49,7 +49,7 @@ public class DirectPolynomialEvaluation extends PolynomialEvaluation {
      * @return point where polynomial has been evaluated.
      */
     public double getX() {
-        return mX;
+        return x;
     }
 
     /**
@@ -58,7 +58,7 @@ public class DirectPolynomialEvaluation extends PolynomialEvaluation {
      * @param x point where polynomial has been evaluated.
      */
     public void setX(final double x) {
-        mX = x;
+        this.x = x;
     }
 
     /**

@@ -56,8 +56,7 @@ public abstract class Optimizer {
      * @param iterationCompletedListener listener to handle minimization events.
      * @throws LockedException Raised if this instance is locked, because estimation is being computed.
      */
-    public void setOnIterationCompletedListener(
-            final OnIterationCompletedListener iterationCompletedListener)
+    public void setOnIterationCompletedListener(final OnIterationCompletedListener iterationCompletedListener)
             throws LockedException {
         if (locked) {
             throw new LockedException();
@@ -84,8 +83,7 @@ public abstract class Optimizer {
      * @throws OptimizationException Raised if the algorithm failed because of lack of convergence or because function couldn't be
      *                               evaluated.
      */
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
         throw new NotReadyException();
     }
 

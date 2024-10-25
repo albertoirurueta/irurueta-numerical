@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class InterpolationExceptionTest {
+class InterpolationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InterpolationException ex = new InterpolationException();
+    void testConstructor() {
+        var ex = new InterpolationException();
         assertNotNull(ex);
 
         ex = new InterpolationException("message");
