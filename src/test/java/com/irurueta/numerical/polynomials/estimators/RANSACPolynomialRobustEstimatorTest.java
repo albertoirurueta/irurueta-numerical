@@ -22,16 +22,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class RANSACPolynomialRobustEstimatorTest implements
-        PolynomialRobustEstimatorListener {
+class RANSACPolynomialRobustEstimatorTest implements PolynomialRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -53,291 +50,191 @@ public class RANSACPolynomialRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor
-        RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+        var estimator = new RANSACPolynomialRobustEstimator();
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(
-                        PolynomialEstimator.MIN_DEGREE));
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(PolynomialEstimator.MIN_DEGREE),
+                estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
-
 
         // test constructor with degree
         estimator = new RANSACPolynomialRobustEstimator(2);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(2));
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(2), estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(0));
 
         // test constructor with evaluations
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = new RANSACPolynomialRobustEstimator(evaluations);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
-        assertSame(estimator.getEvaluations(), evaluations);
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(
-                        PolynomialEstimator.MIN_DEGREE));
+        assertSame(evaluations, estimator.getEvaluations());
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(PolynomialEstimator.MIN_DEGREE),
+                estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(wrongEvaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        final var wrongEvaluations = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(wrongEvaluations));
 
         // test constructor with listener
         estimator = new RANSACPolynomialRobustEstimator(this);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(
-                        PolynomialEstimator.MIN_DEGREE));
-        assertSame(estimator.getListener(), this);
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(PolynomialEstimator.MIN_DEGREE),
+                estimator.getMinNumberOfEvaluations());
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
-
 
         // test constructor with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = new RANSACPolynomialRobustEstimator(2, evaluations);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertSame(estimator.getEvaluations(), evaluations);
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(2));
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(2), estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(0, evaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(2, wrongEvaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(0, evaluations));
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(2,
+                wrongEvaluations));
 
         // test constructor with degree and listener
         estimator = new RANSACPolynomialRobustEstimator(2, this);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getEvaluations());
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(2));
-        assertSame(estimator.getListener(), this);
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(2), estimator.getMinNumberOfEvaluations());
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(0, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(0, this));
 
         // test constructor with evaluations and listener
         estimator = new RANSACPolynomialRobustEstimator(evaluations, this);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertSame(estimator.getEvaluations(), evaluations);
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(
-                        PolynomialEstimator.MIN_DEGREE));
-        assertSame(estimator.getListener(), this);
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(PolynomialEstimator.MIN_DEGREE),
+                estimator.getMinNumberOfEvaluations());
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(wrongEvaluations, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(wrongEvaluations,
+                this));
 
         // test constructor with degree, evaluations and listener
         estimator = new RANSACPolynomialRobustEstimator(2, evaluations, this);
 
         // check correctness
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
-        assertSame(estimator.getEvaluations(), evaluations);
-        assertEquals(estimator.getMinNumberOfEvaluations(),
-                PolynomialEstimator.getMinNumberOfEvaluations(2));
-        assertSame(estimator.getListener(), this);
+        assertSame(evaluations, estimator.getEvaluations());
+        assertEquals(PolynomialEstimator.getMinNumberOfEvaluations(2), estimator.getMinNumberOfEvaluations());
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(0, evaluations,
-                    this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new RANSACPolynomialRobustEstimator(2, wrongEvaluations,
-                    this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(0, evaluations,
+                this));
+        assertThrows(IllegalArgumentException.class, () -> new RANSACPolynomialRobustEstimator(2,
+                wrongEvaluations, this));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPolynomialRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(1.0);
@@ -346,47 +243,34 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertEquals(1.0, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetEvaluations() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetEvaluations() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
         assertNull(estimator.getEvaluations());
 
         // set new value
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator.setEvaluations(evaluations);
 
         // check correctness
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertSame(evaluations, estimator.getEvaluations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setEvaluations(null);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setEvaluations(new ArrayList<PolynomialEvaluation>());
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setEvaluations(null));
+        final var wrong = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setEvaluations(wrong));
     }
 
     @Test
-    public void testGetSetListener() {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetListener() {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -395,17 +279,15 @@ public class RANSACPolynomialRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -414,26 +296,16 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertEquals(0.5, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
@@ -442,26 +314,16 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
@@ -470,35 +332,26 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testIsSetGeometricDistanceUsed() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testIsSetGeometricDistanceUsed() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
 
         // set new value
-        estimator.setGeometricDistanceUsed(
-                !PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
+        estimator.setGeometricDistanceUsed(!PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
 
         // check correctness
-        assertEquals(estimator.isGeometricDistanceUsed(),
-                !PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
+        assertEquals(estimator.isGeometricDistanceUsed(), !PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE);
     }
 
     @Test
-    public void testGetSetDegree() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetDegree() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
@@ -510,17 +363,12 @@ public class RANSACPolynomialRobustEstimatorTest implements
         assertEquals(2, estimator.getDegree());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setDegree(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setDegree(0));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final RANSACPolynomialRobustEstimator estimator =
-                new RANSACPolynomialRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new RANSACPolynomialRobustEstimator();
 
         // check default value
         assertNull(estimator.getQualityScores());
@@ -533,13 +381,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateDirectEvaluationsAlgebraicDistance()
-            throws LockedException, NotReadyException,
+    void testEstimateDirectEvaluationsAlgebraicDistance() throws LockedException, NotReadyException,
             RobustEstimatorException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPolynomialRobustEstimator estimator =
-                    new RANSACPolynomialRobustEstimator();
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = new RANSACPolynomialRobustEstimator();
             estimator.setListener(this);
 
             // check default values
@@ -548,40 +394,32 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isGeometricDistanceUsed());
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // create random 1st degree polynomial
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double[] polyParams = new double[2];
+            final var randomizer = new UniformRandomizer();
+            final var polyParams = new double[2];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Polynomial polynomial = new Polynomial(polyParams);
+            final var polynomial = new Polynomial(polyParams);
 
-            final int numEvaluations = randomizer.nextInt(MIN_EVALUATIONS,
-                    MAX_EVALUATIONS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-            for (int i = 0; i < numEvaluations; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.evaluate(x);
+            final var numEvaluations = randomizer.nextInt(MIN_EVALUATIONS, MAX_EVALUATIONS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var evaluations = new ArrayList<PolynomialEvaluation>();
+            for (var i = 0; i < numEvaluations; i++) {
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.evaluate(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                        valueWithError);
+                final var eval = new DirectPolynomialEvaluation(x, valueWithError);
                 evaluations.add(eval);
             }
 
@@ -598,11 +436,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isLocked());
 
             // estimate
-            final Polynomial polynomial2 = estimator.estimate();
+            final var polynomial2 = estimator.estimate();
 
             // check correctness
-            assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                    ABSOLUTE_ERROR);
+            assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
@@ -611,13 +448,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateDirectAndDerivativeEvaluationsAlgebraicDistance()
-            throws LockedException, NotReadyException,
+    void testEstimateDirectAndDerivativeEvaluationsAlgebraicDistance() throws LockedException, NotReadyException,
             RobustEstimatorException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPolynomialRobustEstimator estimator =
-                    new RANSACPolynomialRobustEstimator();
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = new RANSACPolynomialRobustEstimator();
             estimator.setListener(this);
 
             // check default values
@@ -626,59 +461,48 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isGeometricDistanceUsed());
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // create random 1st degree polynomial
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double[] polyParams = new double[2];
+            final var randomizer = new UniformRandomizer();
+            final var polyParams = new double[2];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Polynomial polynomial = new Polynomial(polyParams);
+            final var polynomial = new Polynomial(polyParams);
 
-            final int numEvaluations = randomizer.nextInt(MIN_EVALUATIONS,
-                    MAX_EVALUATIONS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+            final var numEvaluations = randomizer.nextInt(MIN_EVALUATIONS, MAX_EVALUATIONS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var evaluations = new ArrayList<PolynomialEvaluation>();
             for (int i = 0; i < numEvaluations / 2; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.evaluate(x);
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.evaluate(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                        valueWithError);
+                final var eval = new DirectPolynomialEvaluation(x, valueWithError);
                 evaluations.add(eval);
             }
-            for (int i = 0; i < numEvaluations / 2; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.evaluateDerivative(x);
+            for (var i = 0; i < numEvaluations / 2; i++) {
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.evaluateDerivative(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final DerivativePolynomialEvaluation eval =
-                        new DerivativePolynomialEvaluation(x, valueWithError,
-                                1);
+                final var eval = new DerivativePolynomialEvaluation(x, valueWithError, 1);
                 evaluations.add(eval);
             }
 
@@ -695,11 +519,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isLocked());
 
             // estimate
-            final Polynomial polynomial2 = estimator.estimate();
+            final var polynomial2 = estimator.estimate();
 
             // check correctness
-            assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                    ABSOLUTE_ERROR);
+            assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
@@ -708,13 +531,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateIntegralEvaluationsAlgebraicDistance()
-            throws LockedException, NotReadyException,
+    void testEstimateIntegralEvaluationsAlgebraicDistance() throws LockedException, NotReadyException,
             RobustEstimatorException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPolynomialRobustEstimator estimator =
-                    new RANSACPolynomialRobustEstimator();
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = new RANSACPolynomialRobustEstimator();
             estimator.setListener(this);
 
             // check default values
@@ -723,45 +544,35 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isGeometricDistanceUsed());
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // create random 1st degree polynomial
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double[] polyParams = new double[2];
+            final var randomizer = new UniformRandomizer();
+            final var polyParams = new double[2];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Polynomial polynomial = new Polynomial(polyParams);
+            final var polynomial = new Polynomial(polyParams);
 
-            final int numEvaluations = randomizer.nextInt(MIN_EVALUATIONS,
-                    MAX_EVALUATIONS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-            for (int i = 0; i < numEvaluations; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double constant = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final Polynomial integral = polynomial.integrationAndReturnNew(
-                        constant);
-                final double value = integral.evaluate(x);
+            final var numEvaluations = randomizer.nextInt(MIN_EVALUATIONS, MAX_EVALUATIONS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var evaluations = new ArrayList<PolynomialEvaluation>();
+            for (var i = 0; i < numEvaluations; i++) {
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var constant = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var integral = polynomial.integrationAndReturnNew(constant);
+                final var value = integral.evaluate(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final IntegralPolynomialEvaluation eval =
-                        new IntegralPolynomialEvaluation(x, valueWithError,
-                                new double[]{constant}, 1);
+                final var eval = new IntegralPolynomialEvaluation(x, valueWithError, new double[]{constant},
+                        1);
                 evaluations.add(eval);
             }
 
@@ -778,11 +589,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isLocked());
 
             // estimate
-            final Polynomial polynomial2 = estimator.estimate();
+            final var polynomial2 = estimator.estimate();
 
             // check correctness
-            assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                    ABSOLUTE_ERROR);
+            assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
@@ -791,13 +601,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateIntegralIntervalEvaluationsAlgebraicDistance()
-            throws LockedException, NotReadyException,
+    void testEstimateIntegralIntervalEvaluationsAlgebraicDistance() throws LockedException, NotReadyException,
             RobustEstimatorException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPolynomialRobustEstimator estimator =
-                    new RANSACPolynomialRobustEstimator();
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = new RANSACPolynomialRobustEstimator();
             estimator.setListener(this);
 
             // check default values
@@ -806,43 +614,33 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isGeometricDistanceUsed());
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // create random 1st degree polynomial
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double[] polyParams = new double[2];
+            final var randomizer = new UniformRandomizer();
+            final var polyParams = new double[2];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Polynomial polynomial = new Polynomial(polyParams);
+            final var polynomial = new Polynomial(polyParams);
 
-            final int numEvaluations = randomizer.nextInt(MIN_EVALUATIONS,
-                    MAX_EVALUATIONS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-            for (int i = 0; i < numEvaluations; i++) {
-                final double startX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double endX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.integrateInterval(startX, endX);
+            final var numEvaluations = randomizer.nextInt(MIN_EVALUATIONS, MAX_EVALUATIONS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var evaluations = new ArrayList<PolynomialEvaluation>();
+            for (var i = 0; i < numEvaluations; i++) {
+                final var startX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var endX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.integrateInterval(startX, endX);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final IntegralIntervalPolynomialEvaluation eval =
-                        new IntegralIntervalPolynomialEvaluation(startX, endX,
-                                valueWithError, 1);
+                final var eval = new IntegralIntervalPolynomialEvaluation(startX, endX, valueWithError, 1);
                 evaluations.add(eval);
             }
 
@@ -859,11 +657,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isLocked());
 
             // estimate
-            final Polynomial polynomial2 = estimator.estimate();
+            final var polynomial2 = estimator.estimate();
 
             // check correctness
-            assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                    ABSOLUTE_ERROR);
+            assertArrayEquals(polyParams, polynomial2.getPolyParams(), ABSOLUTE_ERROR);
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
@@ -872,12 +669,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateDirectEvaluationsGeometricDistance()
-            throws LockedException, NotReadyException, RobustEstimatorException {
+    void testEstimateDirectEvaluationsGeometricDistance() throws LockedException, NotReadyException,
+            RobustEstimatorException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPolynomialRobustEstimator estimator =
-                    new RANSACPolynomialRobustEstimator();
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = new RANSACPolynomialRobustEstimator();
             estimator.setListener(this);
             estimator.setGeometricDistanceUsed(true);
 
@@ -887,40 +683,32 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertTrue(estimator.isGeometricDistanceUsed());
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // create random 1st degree polynomial
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double[] polyParams = new double[2];
+            final var randomizer = new UniformRandomizer();
+            final var polyParams = new double[2];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Polynomial polynomial = new Polynomial(polyParams);
+            final var polynomial = new Polynomial(polyParams);
 
-            final int numEvaluations = randomizer.nextInt(MIN_EVALUATIONS,
-                    MAX_EVALUATIONS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-            for (int i = 0; i < numEvaluations; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.evaluate(x);
+            final var numEvaluations = randomizer.nextInt(MIN_EVALUATIONS, MAX_EVALUATIONS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var evaluations = new ArrayList<PolynomialEvaluation>();
+            for (var i = 0; i < numEvaluations; i++) {
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.evaluate(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                        valueWithError);
+                final var eval = new DirectPolynomialEvaluation(x, valueWithError);
                 evaluations.add(eval);
             }
 
@@ -937,11 +725,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isLocked());
 
             // estimate
-            final Polynomial polynomial2 = estimator.estimate();
+            final var polynomial2 = estimator.estimate();
 
             // check correctness
-            assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                    ABSOLUTE_ERROR);
+            assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
@@ -950,13 +737,11 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateDirectAndDerivativeEvaluationsGeometricDistance()
-            throws LockedException, NotReadyException,
+    void testEstimateDirectAndDerivativeEvaluationsGeometricDistance() throws LockedException, NotReadyException,
             RobustEstimatorException {
 
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPolynomialRobustEstimator estimator =
-                    new RANSACPolynomialRobustEstimator();
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = new RANSACPolynomialRobustEstimator();
             estimator.setListener(this);
             estimator.setGeometricDistanceUsed(true);
 
@@ -966,59 +751,48 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertTrue(estimator.isGeometricDistanceUsed());
 
             // Force NotReadyException
-            try {
-                estimator.estimate();
-                fail("NotReadyException expected but not thrown");
-            } catch (final NotReadyException ignore) {
-            }
+            assertThrows(NotReadyException.class, estimator::estimate);
 
             // create random 1st degree polynomial
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double[] polyParams = new double[2];
+            final var randomizer = new UniformRandomizer();
+            final var polyParams = new double[2];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Polynomial polynomial = new Polynomial(polyParams);
+            final var polynomial = new Polynomial(polyParams);
 
-            final int numEvaluations = randomizer.nextInt(MIN_EVALUATIONS,
-                    MAX_EVALUATIONS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<PolynomialEvaluation> evaluations = new ArrayList<>();
-            for (int i = 0; i < numEvaluations / 2; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.evaluate(x);
+            final var numEvaluations = randomizer.nextInt(MIN_EVALUATIONS, MAX_EVALUATIONS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var evaluations = new ArrayList<PolynomialEvaluation>();
+            for (var i = 0; i < numEvaluations / 2; i++) {
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.evaluate(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final DirectPolynomialEvaluation eval = new DirectPolynomialEvaluation(x,
-                        valueWithError);
+                final var eval = new DirectPolynomialEvaluation(x, valueWithError);
                 evaluations.add(eval);
             }
-            for (int i = 0; i < numEvaluations / 2; i++) {
-                final double x = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double value = polynomial.evaluateDerivative(x);
+            for (var i = 0; i < numEvaluations / 2; i++) {
+                final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var value = polynomial.evaluateDerivative(x);
 
                 final double valueWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // evaluation is outlier
-                    final double error = errorRandomizer.nextDouble();
+                    final var error = errorRandomizer.nextDouble();
                     valueWithError = value + error;
                 } else {
                     valueWithError = value;
                 }
 
-                final DerivativePolynomialEvaluation eval =
-                        new DerivativePolynomialEvaluation(x, valueWithError,
-                                1);
+                final var eval = new DerivativePolynomialEvaluation(x, valueWithError, 1);
                 evaluations.add(eval);
             }
 
@@ -1035,11 +809,10 @@ public class RANSACPolynomialRobustEstimatorTest implements
             assertFalse(estimator.isLocked());
 
             // estimate
-            final Polynomial polynomial2 = estimator.estimate();
+            final var polynomial2 = estimator.estimate();
 
             // check correctness
-            assertArrayEquals(polynomial2.getPolyParams(), polyParams,
-                    ABSOLUTE_ERROR);
+            assertArrayEquals(polynomial2.getPolyParams(), polyParams, ABSOLUTE_ERROR);
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
@@ -1058,19 +831,16 @@ public class RANSACPolynomialRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(final PolynomialRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final PolynomialRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
     }
 
     @Override
-    public void onEstimateProgressChange(final PolynomialRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final PolynomialRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 }

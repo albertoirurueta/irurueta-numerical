@@ -29,17 +29,17 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
     /**
      * Point where integral of a given order has been evaluated.
      */
-    private double mX;
+    private double x;
 
     /**
      * Constant terms of integral.
      */
-    private double[] mConstants;
+    private double[] constants;
 
     /**
      * Order of integral.
      */
-    private int mIntegralOrder;
+    private int integralOrder;
 
     /**
      * Constructor.
@@ -59,11 +59,10 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
     public IntegralPolynomialEvaluation(
-            final double x, final double evaluation,
-            final double[] constants, final int integralOrder) {
+            final double x, final double evaluation, final double[] constants, final int integralOrder) {
         super(evaluation);
-        mX = x;
-        mConstants = constants;
+        this.x = x;
+        this.constants = constants;
         setIntegralOrder(integralOrder);
     }
 
@@ -74,9 +73,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @param evaluation evaluation of nth-integral of polynomial at point x.
      * @param constants  constant terms of nth-integral.
      */
-    public IntegralPolynomialEvaluation(
-            final double x, final double evaluation,
-            final double[] constants) {
+    public IntegralPolynomialEvaluation(final double x, final double evaluation, final double[] constants) {
         this(x, evaluation, constants, MIN_INTEGRAL_ORDER);
     }
 
@@ -88,9 +85,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @param integralOrder order of integral.
      * @throws IllegalArgumentException if order of integral is less than 1.
      */
-    public IntegralPolynomialEvaluation(
-            final double x, final double evaluation,
-            final int integralOrder) {
+    public IntegralPolynomialEvaluation(final double x, final double evaluation, final int integralOrder) {
         this(x, evaluation, null, integralOrder);
     }
 
@@ -100,8 +95,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @param x          point where integral of polynomial has been evaluated.
      * @param evaluation evaluation of nth-integral of polynomial at point x.
      */
-    public IntegralPolynomialEvaluation(
-            final double x, final double evaluation) {
+    public IntegralPolynomialEvaluation(final double x, final double evaluation) {
         this(x, evaluation, null, MIN_INTEGRAL_ORDER);
     }
 
@@ -111,7 +105,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @return point where nth-polynomial integral has been evaluated.
      */
     public double getX() {
-        return mX;
+        return x;
     }
 
     /**
@@ -120,7 +114,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @param x point where nth-polynomial integral has been evaluated.
      */
     public void setX(final double x) {
-        mX = x;
+        this.x = x;
     }
 
     /**
@@ -129,7 +123,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @return constant terms of integral.
      */
     public double[] getConstants() {
-        return mConstants;
+        return constants;
     }
 
     /**
@@ -138,7 +132,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @param constants constant terms of integral.
      */
     public void setConstant(final double[] constants) {
-        mConstants = constants;
+        this.constants = constants;
     }
 
     /**
@@ -147,7 +141,7 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      * @return integral order.
      */
     public int getIntegralOrder() {
-        return mIntegralOrder;
+        return integralOrder;
     }
 
     /**
@@ -158,11 +152,10 @@ public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
      */
     public final void setIntegralOrder(final int integralOrder) {
         if (integralOrder < MIN_INTEGRAL_ORDER) {
-            throw new IllegalArgumentException(
-                    "integral order must be at least 1");
+            throw new IllegalArgumentException("integral order must be at least 1");
         }
 
-        mIntegralOrder = integralOrder;
+        this.integralOrder = integralOrder;
     }
 
     /**

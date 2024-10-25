@@ -15,45 +15,34 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-
-public class LowerSquareRootMidPointQuadratureIntegratorTest {
+class LowerSquareRootMidPointQuadratureIntegratorTest {
 
     private static final double ABSOLUTE_ERROR_IMPROPER_1 = 1e-5;
 
     @Test
-    public void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult()
-            throws IntegrationException {
-        final double expected = 2.0 - Math.PI * Math.PI / 6.0;
+    void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult() throws IntegrationException {
+        final var expected = 2.0 - Math.PI * Math.PI / 6.0;
 
-        final LowerSquareRootMidPointQuadratureIntegrator integrator =
-                new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.log(point) * Math.log(1 - point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0,
+                point -> Math.log(point) * Math.log(1 - point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_1);
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() {
-        final LowerSquareRootMidPointQuadratureIntegrator integrator =
-                new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
+    void getIntegratorType_returnsExpectedValue() {
+        final var integrator = new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() {
-        final LowerSquareRootMidPointQuadratureIntegrator integrator =
-                new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
+    void getQuadratureType_returnsExpectedValue() {
+        final var integrator = new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
     }
 }

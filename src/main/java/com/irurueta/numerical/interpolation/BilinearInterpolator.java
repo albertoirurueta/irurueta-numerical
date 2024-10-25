@@ -89,18 +89,16 @@ public class BilinearInterpolator {
      * @return interpolated value.
      */
     public double interpolate(final double x1p, final double x2p) {
-        final int i = x1terp.cor != 0 ? x1terp.hunt(x1p) : x1terp.locate(x1p);
-        final int j = x2terp.cor != 0 ? x2terp.hunt(x2p) : x2terp.locate(x2p);
+        final var i = x1terp.cor != 0 ? x1terp.hunt(x1p) : x1terp.locate(x1p);
+        final var j = x2terp.cor != 0 ? x2terp.hunt(x2p) : x2terp.locate(x2p);
 
         // Find the grid square
-        final double t = (x1p - x1terp.xx[i]) / (x1terp.xx[i + 1] - x1terp.xx[i]);
-        final double u = (x2p - x2terp.xx[j]) / (x2terp.xx[j + 1] - x2terp.xx[j]);
+        final var t = (x1p - x1terp.xx[i]) / (x1terp.xx[i + 1] - x1terp.xx[i]);
+        final var u = (x2p - x2terp.xx[j]) / (x2terp.xx[j + 1] - x2terp.xx[j]);
 
         // Interpolate
-        return (1. - t) * (1. - u) * y.getElementAt(i, j)
-                + t * (1. - u) * y.getElementAt(i + 1, j)
-                + (1. - t) * u * y.getElementAt(i, j + 1)
-                + t * u * y.getElementAt(i + 1, j + 1);
+        return (1. - t) * (1. - u) * y.getElementAt(i, j) + t * (1. - u) * y.getElementAt(i + 1, j)
+                + (1. - t) * u * y.getElementAt(i, j + 1) + t * u * y.getElementAt(i + 1, j + 1);
     }
 
 }

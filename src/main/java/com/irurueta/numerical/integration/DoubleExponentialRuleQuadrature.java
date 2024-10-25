@@ -65,8 +65,8 @@ public class DoubleExponentialRuleQuadrature extends Quadrature {
      *                 [-hmax, hmax].
      */
     public DoubleExponentialRuleQuadrature(
-            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b, final double hmax) {
+            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener, final double a, final double b,
+            final double hmax) {
         this.listener = listener;
         this.a = a;
         this.b = b;
@@ -82,8 +82,7 @@ public class DoubleExponentialRuleQuadrature extends Quadrature {
      * @param b        Upper limit of integration.
      */
     public DoubleExponentialRuleQuadrature(
-            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b) {
+            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener, final double a, final double b) {
         this(listener, a, b, DEFAULT_HMAX);
     }
 
@@ -97,14 +96,9 @@ public class DoubleExponentialRuleQuadrature extends Quadrature {
      *                 [-hmax, hmax].
      */
     public DoubleExponentialRuleQuadrature(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b, final double hmax) {
-        this(new DoubleExponentialSingleDimensionFunctionEvaluatorListener() {
-            @Override
-            public double evaluate(double x, double delta) throws EvaluationException {
-                return listener.evaluate(x);
-            }
-        }, a, b, hmax);
+            final SingleDimensionFunctionEvaluatorListener listener, final double a, final double b,
+            final double hmax) {
+        this((x, delta) -> listener.evaluate(x), a, b, hmax);
     }
 
     /**
@@ -115,8 +109,7 @@ public class DoubleExponentialRuleQuadrature extends Quadrature {
      * @param b        Upper limit of integration.
      */
     public DoubleExponentialRuleQuadrature(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b) {
+            final SingleDimensionFunctionEvaluatorListener listener, final double a, final double b) {
         this(listener, a, b, DEFAULT_HMAX);
     }
 
@@ -155,7 +148,7 @@ public class DoubleExponentialRuleQuadrature extends Quadrature {
             for (sum = 0.0, j = 0; j < it; j++) {
                 q = Math.exp(-2.0 * Math.sinh(t));
                 del = (b - a) * q / (1.0 + q);
-                final double value = 1.0 + q;
+                final var value = 1.0 + q;
                 fact = q / (value * value) * Math.cosh(t);
                 sum += fact * (listener.evaluate(a + del, del) + listener.evaluate(b - del, del));
                 t += twoh;

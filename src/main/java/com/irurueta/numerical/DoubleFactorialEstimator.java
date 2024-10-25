@@ -56,7 +56,7 @@ public class DoubleFactorialEstimator {
         // initialize cache
         cache = new double[cacheSize];
         cache[0] = 1.0;
-        for (int i = 1; i < cacheSize; i++) {
+        for (var i = 1; i < cacheSize; i++) {
             cache[i] = i * cache[i - 1];
         }
     }

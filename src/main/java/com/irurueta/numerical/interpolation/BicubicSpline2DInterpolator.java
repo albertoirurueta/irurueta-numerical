@@ -61,9 +61,9 @@ public class BicubicSpline2DInterpolator {
         x1 = x1v;
         srp = new CubicSplineInterpolator[m];
 
-        for (int i = 0; i < m; i++) {
+        for (var i = 0; i < m; i++) {
             // get i-th row of y
-            final double[] yi = ym.getSubmatrixAsArray(i, 0, i, ym.getColumns() - 1);
+            final var yi = ym.getSubmatrixAsArray(i, 0, i, ym.getColumns() - 1);
             srp[i] = new CubicSplineInterpolator(x2v, yi);
         }
     }
@@ -99,7 +99,7 @@ public class BicubicSpline2DInterpolator {
             yv[i] = srp[i].interpolate(x2p);
         }
 
-        final CubicSplineInterpolator scol = new CubicSplineInterpolator(x1, yv);
+        final var scol = new CubicSplineInterpolator(x1, yv);
         return scol.interpolate(x1p);
     }
 }

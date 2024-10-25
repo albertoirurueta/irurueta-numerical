@@ -15,36 +15,34 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class InverseMultiQuadricRadialBasisFunctionTest {
+class InverseMultiQuadricRadialBasisFunctionTest {
 
     @Test
-    public void evaluate_whenDefaultScale_returnsExpectedValue() {
-        final InverseMultiQuadricRadialBasisFunction rbf =
-                new InverseMultiQuadricRadialBasisFunction();
+    void evaluate_whenDefaultScale_returnsExpectedValue() {
+        final var rbf = new InverseMultiQuadricRadialBasisFunction();
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double r = randomizer.nextDouble();
-        final double expected = 1.0 / Math.sqrt((r * r) + 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var r = randomizer.nextDouble();
+        final var expected = 1.0 / Math.sqrt((r * r) + 1.0);
 
         assertEquals(expected, rbf.evaluate(r), 0.0);
     }
 
     @Test
-    public void evaluate_whenRandomScale_returnsExpectedValue() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double scale = randomizer.nextDouble();
+    void evaluate_whenRandomScale_returnsExpectedValue() {
+        final var randomizer = new UniformRandomizer();
+        final var scale = randomizer.nextDouble();
 
-        final InverseMultiQuadricRadialBasisFunction rbf =
-                new InverseMultiQuadricRadialBasisFunction(scale);
+        final var rbf = new InverseMultiQuadricRadialBasisFunction(scale);
 
-        final double r = randomizer.nextDouble();
-        final double expected = 1.0 / Math.sqrt((r * r) + (scale * scale));
+        final var r = randomizer.nextDouble();
+        final var expected = 1.0 / Math.sqrt((r * r) + (scale * scale));
 
         assertEquals(expected, rbf.evaluate(r), 0.0);
     }

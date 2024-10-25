@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.optimization;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class OptimizationExceptionTest {
+class OptimizationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        OptimizationException ex = new OptimizationException();
+    void testConstructor() {
+        var ex = new OptimizationException();
         assertNotNull(ex);
 
         ex = new OptimizationException("message");

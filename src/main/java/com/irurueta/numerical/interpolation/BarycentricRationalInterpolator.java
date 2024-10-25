@@ -48,14 +48,14 @@ public class BarycentricRationalInterpolator extends BaseInterpolator {
         }
 
         for (int k = 0; k < n; k++) {
-            int imin = Math.max(k - d, 0);
-            int imax = k >= n - d ? n - d - 1 : k;
-            double temp = (imin & 1) != 0 ? -1.0 : 1.0;
-            double sum = 0.0;
+            var imin = Math.max(k - d, 0);
+            var imax = k >= n - d ? n - d - 1 : k;
+            var temp = (imin & 1) != 0 ? -1.0 : 1.0;
+            var sum = 0.0;
             for (int i = imin; i <= imax; i++) {
-                int jmax = Math.min(i + d, n - 1);
-                double term = 1.0;
-                for (int j = i; j <= jmax; j++) {
+                var jmax = Math.min(i + d, n - 1);
+                var term = 1.0;
+                for (var j = i; j <= jmax; j++) {
                     if (j == k) {
                         continue;
                     }
@@ -99,14 +99,14 @@ public class BarycentricRationalInterpolator extends BaseInterpolator {
      */
     @Override
     public double rawinterp(int jlo, double x) {
-        double num = 0;
-        double den = 0;
-        for (int i = 0; i < n; i++) {
-            double h = x - xx[i];
+        var num = 0.0;
+        var den = 0.0;
+        for (var i = 0; i < n; i++) {
+            var h = x - xx[i];
             if (h == 0.0) {
                 return yy[i];
             } else {
-                double temp = w[i] / h;
+                var temp = w[i] / h;
                 num += temp * yy[i];
                 den += temp;
             }

@@ -63,8 +63,7 @@ public class MidPointQuadrature extends Quadrature {
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public MidPointQuadrature(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this.n = 0;
         this.a = a;
         this.b = b;

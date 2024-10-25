@@ -17,13 +17,11 @@ package com.irurueta.numerical;
 
 import com.irurueta.algebra.Complex;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class PolynomialEvaluatorTest {
+class PolynomialEvaluatorTest {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -35,109 +33,80 @@ public class PolynomialEvaluatorTest {
     private static final int TIMES = 10;
 
     @Test
-    public void testEvaluateRealConstant() {
+    void testEvaluateRealConstant() {
 
-        final double[] polyParams = new double[1];
+        final var polyParams = new double[1];
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        assertEquals(PolynomialEvaluator.evaluate(polyParams, x),
-                polyParams[0], 0.0);
+        assertEquals(PolynomialEvaluator.evaluate(polyParams, x), polyParams[0], 0.0);
 
         // Force IllegalArgumentException
-        double evaluate = 0.0;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new double[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertEquals(0.0, evaluate, 0.0);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+        //noinspection ObviousNullCheck
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new double[0], x));
     }
 
     @Test
-    public void testEvaluateRealFirstDegree() {
+    void testEvaluateRealFirstDegree() {
 
-        final double[] polyParams = new double[2];
+        final var polyParams = new double[2];
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        assertEquals(PolynomialEvaluator.evaluate(polyParams, x),
-                polyParams[0] * x + polyParams[1], ABSOLUTE_ERROR);
-
-        // Force IllegalArgumentException
-        double evaluate = 0.0;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new double[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertEquals(0.0, evaluate, 0.0);
-    }
-
-    @Test
-    public void testEvaluateRealSecondDegree() {
-
-        final double[] polyParams = new double[3];
-
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-
-        assertEquals(PolynomialEvaluator.evaluate(polyParams, x),
-                polyParams[0] * x * x + polyParams[1] * x + polyParams[2],
+        assertEquals(polyParams[0] * x + polyParams[1], PolynomialEvaluator.evaluate(polyParams, x),
                 ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        double evaluate = 0.0;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new double[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertEquals(0.0, evaluate, 0.0);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+        //noinspection ObviousNullCheck
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new double[0], x));
     }
 
     @Test
-    public void testEvaluateReal() {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-            final int degree = length - 1;
+    void testEvaluateRealSecondDegree() {
 
-            final double[] polyParams = new double[length];
+        final var polyParams = new double[3];
+
+        final var randomizer = new UniformRandomizer();
+        randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        assertEquals(polyParams[0] * x * x + polyParams[1] * x + polyParams[2],
+                PolynomialEvaluator.evaluate(polyParams, x), ABSOLUTE_ERROR);
+
+        // Force IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+        //noinspection ObviousNullCheck
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new double[0], x));
+    }
+
+    @Test
+    void testEvaluateReal() {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+            final var degree = length - 1;
+
+            final var polyParams = new double[length];
             randomizer.fill(polyParams, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            double value = 0.0;
-            for (int i = 0; i < length; i++) {
+            var value = 0.0;
+            for (var i = 0; i < length; i++) {
                 value += polyParams[i] * Math.pow(x, degree - i);
             }
 
-            final double value2 = PolynomialEvaluator.evaluate(polyParams, x);
+            final var value2 = PolynomialEvaluator.evaluate(polyParams, x);
             if (Math.abs(value2 - value) > ABSOLUTE_ERROR) {
                 continue;
             }
@@ -145,18 +114,9 @@ public class PolynomialEvaluatorTest {
             assertEquals(value2, value, ABSOLUTE_ERROR);
 
             // Force IllegalArgumentException
-            double evaluate = 0.0;
-            try {
-                evaluate = PolynomialEvaluator.evaluate(null, x);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            try {
-                evaluate = PolynomialEvaluator.evaluate(new double[0], x);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            assertEquals(0.0, evaluate, 0.0);
+            assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+            //noinspection ObviousNullCheck
+            assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new double[0], x));
 
             numValid++;
             break;
@@ -166,89 +126,61 @@ public class PolynomialEvaluatorTest {
     }
 
     @Test
-    public void testEvaluateComplexConstant() {
+    void testEvaluateComplexConstant() {
 
-        final Complex[] polyParams = new Complex[1];
+        final var polyParams = new Complex[1];
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        for (int i = 0; i < polyParams.length; i++) {
-            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE));
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < polyParams.length; i++) {
+            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         }
 
-        final Complex x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final var x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        assertEquals(PolynomialEvaluator.evaluate(polyParams, x),
-                polyParams[0]);
+        assertEquals(polyParams[0], PolynomialEvaluator.evaluate(polyParams, x));
 
         // Force IllegalArgumentException
-        Complex evaluate = null;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new Complex[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(evaluate);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new Complex[0], x));
     }
 
     @Test
-    public void testEvaluateComplexFirstDegree() {
+    void testEvaluateComplexFirstDegree() {
 
-        final Complex[] polyParams = new Complex[2];
+        final var polyParams = new Complex[2];
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        for (int i = 0; i < polyParams.length; i++) {
-            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE));
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < polyParams.length; i++) {
+            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         }
 
-        final Complex x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final var x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        assertEquals(PolynomialEvaluator.evaluate(polyParams, x),
-                polyParams[0].multiplyAndReturnNew(x).
-                        addAndReturnNew(polyParams[1]));
+        assertEquals(polyParams[0].multiplyAndReturnNew(x).addAndReturnNew(polyParams[1]),
+                PolynomialEvaluator.evaluate(polyParams, x));
 
         // Force IllegalArgumentException
-        Complex evaluate = null;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new Complex[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(evaluate);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new Complex[0], x));
     }
 
     @Test
-    public void testEvaluateComplexSecondDegree() {
+    void testEvaluateComplexSecondDegree() {
 
-        final Complex[] polyParams = new Complex[3];
+        final var polyParams = new Complex[3];
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        for (int i = 0; i < polyParams.length; i++) {
-            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE));
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < polyParams.length; i++) {
+            polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         }
 
-        final Complex x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final var x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         assertTrue(PolynomialEvaluator.evaluate(polyParams, x).equals(
                 polyParams[0].multiplyAndReturnNew(x.multiplyAndReturnNew(x)).
@@ -256,64 +188,40 @@ public class PolynomialEvaluatorTest {
                         addAndReturnNew(polyParams[2]), ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        Complex evaluate = null;
-        try {
-            evaluate = PolynomialEvaluator.evaluate(null, x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            evaluate = PolynomialEvaluator.evaluate(new Complex[0], x);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(evaluate);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new Complex[0], x));
     }
 
     @Test
-    public void testEvaluateComplex() {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-            final int degree = length - 1;
+    void testEvaluateComplex() {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+            final var degree = length - 1;
 
-            final Complex[] polyParams = new Complex[length];
-            for (int i = 0; i < polyParams.length; i++) {
-                polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+            final var polyParams = new Complex[length];
+            for (var i = 0; i < polyParams.length; i++) {
+                polyParams[i] = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
 
-            final Complex x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE), randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE));
+            final var x = new Complex(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-            final Complex value = new Complex();
-            for (int i = 0; i < length; i++) {
-                value.add(polyParams[i].multiplyAndReturnNew(
-                        x.powAndReturnNew(degree - i)));
+            final var value = new Complex();
+            for (var i = 0; i < length; i++) {
+                value.add(polyParams[i].multiplyAndReturnNew(x.powAndReturnNew(degree - i)));
             }
 
             if (!PolynomialEvaluator.evaluate(polyParams, x).equals(value, ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(PolynomialEvaluator.evaluate(polyParams, x).
-                    equals(value, ABSOLUTE_ERROR));
+            assertTrue(PolynomialEvaluator.evaluate(polyParams, x).equals(value, ABSOLUTE_ERROR));
 
             // Force IllegalArgumentException
-            Complex evaluate = null;
-            try {
-                evaluate = PolynomialEvaluator.evaluate(null, x);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            try {
-                evaluate = PolynomialEvaluator.evaluate(new Complex[0], x);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            assertNull(evaluate);
+            assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(null, x));
+            assertThrows(IllegalArgumentException.class, () -> PolynomialEvaluator.evaluate(new Complex[0], x));
 
             numValid++;
             break;

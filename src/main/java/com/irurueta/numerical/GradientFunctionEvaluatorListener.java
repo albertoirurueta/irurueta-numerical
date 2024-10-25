@@ -30,6 +30,5 @@ public interface GradientFunctionEvaluatorListener {
      *               and this array will contain the estimated or evaluated gradient
      * @throws EvaluationException Raised if something fails.
      */
-    void evaluateGradient(final double[] params, final double[] result)
-            throws EvaluationException;
+    void evaluateGradient(final double[] params, final double[] result) throws EvaluationException;
 }

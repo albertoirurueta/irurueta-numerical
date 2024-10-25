@@ -50,14 +50,14 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * Threshold to determine whether polynomial evaluations are inliers or not
      * when testing possible estimation solutions
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public RANSACPolynomialRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -68,7 +68,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      */
     public RANSACPolynomialRobustEstimator(final int degree) {
         super(degree);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -78,10 +78,9 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @throws IllegalArgumentException if provided number of evaluations is
      *                                  less than the required minimum.
      */
-    public RANSACPolynomialRobustEstimator(
-            final List<PolynomialEvaluation> evaluations) {
+    public RANSACPolynomialRobustEstimator(final List<PolynomialEvaluation> evaluations) {
         super(evaluations);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -90,10 +89,9 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public RANSACPolynomialRobustEstimator(
-            final PolynomialRobustEstimatorListener listener) {
+    public RANSACPolynomialRobustEstimator(final PolynomialRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -105,10 +103,9 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      *                                  provided number of evaluations is less than the required minimum for
      *                                  provided degree.
      */
-    public RANSACPolynomialRobustEstimator(
-            final int degree, final List<PolynomialEvaluation> evaluations) {
+    public RANSACPolynomialRobustEstimator(final int degree, final List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -119,10 +116,9 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public RANSACPolynomialRobustEstimator(
-            final int degree, final PolynomialRobustEstimatorListener listener) {
+    public RANSACPolynomialRobustEstimator(final int degree, final PolynomialRobustEstimatorListener listener) {
         super(degree, listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -135,10 +131,9 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      *                                  less than the required minimum.
      */
     public RANSACPolynomialRobustEstimator(
-            final List<PolynomialEvaluation> evaluations,
-            final PolynomialRobustEstimatorListener listener) {
+            final List<PolynomialEvaluation> evaluations, final PolynomialRobustEstimatorListener listener) {
         super(evaluations, listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -156,7 +151,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
             final int degree, final List<PolynomialEvaluation> evaluations,
             final PolynomialRobustEstimatorListener listener) {
         super(degree, evaluations, listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -167,7 +162,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      * when testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -187,7 +182,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
 
@@ -203,8 +198,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Polynomial estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Polynomial estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -212,108 +206,96 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
             throw new NotReadyException();
         }
 
-        final RANSACRobustEstimator<Polynomial> innerEstimator =
-                new RANSACRobustEstimator<>(
-                        new RANSACRobustEstimatorListener<Polynomial>() {
+        final RANSACRobustEstimator<Polynomial> innerEstimator = new RANSACRobustEstimator<>(
+                new RANSACRobustEstimatorListener<>() {
 
-                            // subset of evaluations picked on each iteration
-                            private final List<PolynomialEvaluation> mSubsetEvaluations =
-                                    new ArrayList<>();
+                    // subset of evaluations picked on each iteration
+                    private final List<PolynomialEvaluation> subsetEvaluations = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return threshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mEvaluations.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return evaluations.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return mPolynomialEstimator.getMinNumberOfEvaluations();
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return polynomialEstimator.getMinNumberOfEvaluations();
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(
-                                    final int[] samplesIndices,
-                                    final List<Polynomial> solutions) {
-                                mSubsetEvaluations.clear();
-                                for (int samplesIndex : samplesIndices) {
-                                    mSubsetEvaluations.add(mEvaluations.get(samplesIndex));
-                                }
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<Polynomial> solutions) {
+                        subsetEvaluations.clear();
+                        for (var samplesIndex : samplesIndices) {
+                            subsetEvaluations.add(evaluations.get(samplesIndex));
+                        }
 
-                                try {
-                                    mPolynomialEstimator.setLMSESolutionAllowed(false);
-                                    mPolynomialEstimator.setEvaluations(mSubsetEvaluations);
+                        try {
+                            polynomialEstimator.setLMSESolutionAllowed(false);
+                            polynomialEstimator.setEvaluations(subsetEvaluations);
 
-                                    final Polynomial polynomial = mPolynomialEstimator.estimate();
-                                    solutions.add(polynomial);
-                                } catch (Exception e) {
-                                    // if anything fails, no solution is added
-                                }
-                            }
+                            final var polynomial = polynomialEstimator.estimate();
+                            solutions.add(polynomial);
+                        } catch (Exception e) {
+                            // if anything fails, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final Polynomial currentEstimation, final int i) {
-                                final PolynomialEvaluation eval = mEvaluations.get(i);
-                                return getDistance(eval, currentEstimation);
-                            }
+                    @Override
+                    public double computeResidual(final Polynomial currentEstimation, final int i) {
+                        final var eval = evaluations.get(i);
+                        return getDistance(eval, currentEstimation);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return RANSACPolynomialRobustEstimator.this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return RANSACPolynomialRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<Polynomial> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            RANSACPolynomialRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<Polynomial> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(RANSACPolynomialRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<Polynomial> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            RANSACPolynomialRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<Polynomial> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(RANSACPolynomialRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Polynomial> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            RANSACPolynomialRobustEstimator.this, iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<Polynomial> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(RANSACPolynomialRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Polynomial> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            RANSACPolynomialRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<Polynomial> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(RANSACPolynomialRobustEstimator.this, progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

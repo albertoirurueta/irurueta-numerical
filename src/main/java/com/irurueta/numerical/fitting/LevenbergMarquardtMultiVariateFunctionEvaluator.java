@@ -70,7 +70,7 @@ public interface LevenbergMarquardtMultiVariateFunctionEvaluator {
      *                 respect to each provided parameter for each function output or variable
      * @throws EvaluationException raised if something failed during the evaluation
      */
-    void evaluate(final int i, final double[] point, final double[] result,
-                  final double[] params, final Matrix jacobian) throws EvaluationException;
+    void evaluate(final int i, final double[] point, final double[] result, final double[] params,
+                  final Matrix jacobian) throws EvaluationException;
 
 }

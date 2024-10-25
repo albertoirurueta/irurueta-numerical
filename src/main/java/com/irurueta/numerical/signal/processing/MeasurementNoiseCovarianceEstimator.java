@@ -83,12 +83,10 @@ public class MeasurementNoiseCovarianceEstimator {
      *                                   is less than 1.
      * @throws SignalProcessingException if something fails.
      */
-    public MeasurementNoiseCovarianceEstimator(final int measureParams)
-            throws SignalProcessingException {
+    public MeasurementNoiseCovarianceEstimator(final int measureParams) throws SignalProcessingException {
 
         if (measureParams < 1) {
-            throw new IllegalArgumentException(
-                    "Measure parameters must be greater than zero");
+            throw new IllegalArgumentException("Measure parameters must be greater than zero");
         }
 
         try {
@@ -122,20 +120,18 @@ public class MeasurementNoiseCovarianceEstimator {
             throw new IllegalArgumentException("wrong sample size");
         }
 
-        final long nextCount = sampleCount + 1;
+        final var nextCount = sampleCount + 1;
 
         // update sample average
         for (int i = 0; i < mp; i++) {
-            sampleAverage[i] = (sampleAverage[i] * sampleCount + sample[i]) /
-                    nextCount;
+            sampleAverage[i] = (sampleAverage[i] * sampleCount + sample[i]) / nextCount;
         }
 
         // compute sample without mean
         ArrayUtils.subtract(sample, sampleAverage, sampleNoMean);
 
         // copy sample without mean into matrix form
-        sampleMatrix.setSubmatrix(0, 0,
-                mp - 1, 0, sampleNoMean);
+        sampleMatrix.setSubmatrix(0, 0, mp - 1, 0, sampleNoMean);
         // compute transpose of matrix form
         sampleMatrix.transpose(transposedSampleMatrix);
 

@@ -109,8 +109,8 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      *                                  don't have the same length
      */
     protected MultiDimensionLinearFitter(
-            final LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            final Matrix x, final double[] y, final double[] sig) throws FittingException {
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator, final Matrix x, final double[] y,
+            final double[] sig) throws FittingException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }
@@ -131,8 +131,8 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      *                                  don't have the same length
      */
     protected MultiDimensionLinearFitter(
-            final LinearFitterMultiDimensionFunctionEvaluator evaluator,
-            final Matrix x, final double[] y, final double sig) throws FittingException {
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator, final Matrix x, final double[] y,
+            final double sig) throws FittingException {
         super(x, y, sig);
         internalSetFunctionEvaluator(evaluator);
     }
@@ -155,8 +155,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      * @throws FittingException if evaluation fails
      */
     public void setFunctionEvaluator(
-            final LinearFitterMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator) throws FittingException {
         internalSetFunctionEvaluator(evaluator);
     }
 
@@ -169,8 +168,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      */
     @SuppressWarnings("DuplicatedCode")
     private void internalSetFunctionEvaluator(
-            final LinearFitterMultiDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LinearFitterMultiDimensionFunctionEvaluator evaluator) throws FittingException {
 
         try {
             this.evaluator = evaluator;
@@ -195,8 +193,7 @@ public abstract class MultiDimensionLinearFitter extends MultiDimensionFitter {
      */
     @Override
     public boolean isReady() {
-        return evaluator != null && x != null && y != null &&
-                x.getRows() == y.length &&
-                x.getColumns() == evaluator.getNumberOfDimensions();
+        return evaluator != null && x != null && y != null && x.getRows() == y.length
+                && x.getColumns() == evaluator.getNumberOfDimensions();
     }
 }

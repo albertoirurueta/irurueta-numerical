@@ -18,14 +18,14 @@ package com.irurueta.numerical.integration;
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class IntegratorTest {
+class IntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -38,409 +38,335 @@ public class IntegratorTest {
     private static final double EPS = 1e-6;
 
     @Test
-    public void create_whenAccuracyIntegratorAndQuadratureTypes_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenAccuracyIntegratorAndQuadratureTypes_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        Integrator integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
+        var integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
                 QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof TrapezoidalQuadratureIntegrator);
+        assertInstanceOf(TrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof MidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE, QuadratureType.MID_POINT);
+        assertInstanceOf(MidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
                 QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof InfinityMidPointQuadratureIntegrator);
+        assertInstanceOf(InfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
                 QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof LowerSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(LowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
                 QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof UpperSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(UpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
                 QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof DoubleExponentialRuleQuadratureIntegrator);
+        assertInstanceOf(DoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE,
-                    QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Integrator.create(a, b, listener, EPS,
+                IntegratorType.QUADRATURE, QuadratureType.EXPONENTIAL_MID_POINT));
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof SimpsonMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON, QuadratureType.MID_POINT);
+        assertInstanceOf(SimpsonMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof SimpsonInfinityMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(SimpsonInfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
                 QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonLowerSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonLowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
                 QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonUpperSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonUpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
                 QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof SimpsonDoubleExponentialRuleQuadratureIntegrator);
+        assertInstanceOf(SimpsonDoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON,
-                    QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Integrator.create(a, b, listener, EPS,
+                IntegratorType.SIMPSON, QuadratureType.EXPONENTIAL_MID_POINT));
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof RombergTrapezoidalQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(RombergTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof RombergMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG, QuadratureType.MID_POINT);
+        assertInstanceOf(RombergMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof RombergInfinityMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(RombergInfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
                 QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof RombergLowerSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(RombergLowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
                 QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof RombergUpperSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(RombergUpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
                 QuadratureType.EXPONENTIAL_MID_POINT);
-        assertTrue(integrator instanceof RombergExponentialMidPointQuadratureIntegrator);
+        assertInstanceOf(RombergExponentialMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.EXPONENTIAL_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG,
                 QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof RombergDoubleExponentialRuleQuadratureIntegrator);
+        assertInstanceOf(RombergDoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
     }
 
     @Test
-    public void create_whenDefaultAccuracyIntegratorAndQuadratureTypes_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenDefaultAccuracyIntegratorAndQuadratureTypes_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        Integrator integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof TrapezoidalQuadratureIntegrator);
+        var integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(TrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof MidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE, QuadratureType.MID_POINT);
+        assertInstanceOf(MidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof InfinityMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(InfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
                 QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof LowerSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(LowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
                 QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof UpperSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(UpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
                 QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof DoubleExponentialRuleQuadratureIntegrator);
+        assertInstanceOf(DoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
-                    QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Integrator.create(a, b, listener, IntegratorType.QUADRATURE,
+                QuadratureType.EXPONENTIAL_MID_POINT));
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof SimpsonMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON, QuadratureType.MID_POINT);
+        assertInstanceOf(SimpsonMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof SimpsonInfinityMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(SimpsonInfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON,
                 QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonLowerSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonLowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON,
                 QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonUpperSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonUpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON,
-                QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof SimpsonDoubleExponentialRuleQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+        assertInstanceOf(SimpsonDoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            Integrator.create(a, b, listener, IntegratorType.SIMPSON,
-                    QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Integrator.create(a, b, listener, IntegratorType.SIMPSON,
+                QuadratureType.EXPONENTIAL_MID_POINT));
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof RombergTrapezoidalQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(RombergTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
-                QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof RombergMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG, QuadratureType.MID_POINT);
+        assertInstanceOf(RombergMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof RombergInfinityMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(RombergInfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
                 QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof RombergLowerSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(RombergLowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
                 QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof RombergUpperSquareRootMidPointQuadratureIntegrator);
+        assertInstanceOf(RombergUpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
-                QuadratureType.EXPONENTIAL_MID_POINT);
-        assertTrue(integrator instanceof RombergExponentialMidPointQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG, QuadratureType.EXPONENTIAL_MID_POINT);
+        assertInstanceOf(RombergExponentialMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.EXPONENTIAL_MID_POINT, integrator.getQuadratureType());
 
-        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG,
-                QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof RombergDoubleExponentialRuleQuadratureIntegrator);
+        integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+        assertInstanceOf(RombergDoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
     }
 
     @Test
-    public void create_whenAccuracyAndIntegratorType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenAccuracyAndIntegratorType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        Integrator integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE);
-        assertTrue(integrator instanceof TrapezoidalQuadratureIntegrator);
+        var integrator = Integrator.create(a, b, listener, EPS, IntegratorType.QUADRATURE);
+        assertInstanceOf(TrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.SIMPSON);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, EPS, IntegratorType.ROMBERG);
-        assertTrue(integrator instanceof RombergTrapezoidalQuadratureIntegrator);
+        assertInstanceOf(RombergTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
 
     @Test
-    public void create_whenDefaultAccuracyAndIntegratorType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenDefaultAccuracyAndIntegratorType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        Integrator integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE);
-        assertTrue(integrator instanceof TrapezoidalQuadratureIntegrator);
+        var integrator = Integrator.create(a, b, listener, IntegratorType.QUADRATURE);
+        assertInstanceOf(TrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.SIMPSON);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = Integrator.create(a, b, listener, IntegratorType.ROMBERG);
-        assertTrue(integrator instanceof RombergTrapezoidalQuadratureIntegrator);
+        assertInstanceOf(RombergTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
 
     @Test
-    public void create_whenAccuracyAndDefaultIntegratorType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenAccuracyAndDefaultIntegratorType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        Integrator integrator = Integrator.create(a, b, listener, EPS);
-        assertTrue(integrator instanceof RombergTrapezoidalQuadratureIntegrator);
+        final var integrator = Integrator.create(a, b, listener, EPS);
+        assertInstanceOf(RombergTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
 
     @Test
-    public void create_whenDefaultAccuracyAndDefaultIntegratorType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenDefaultAccuracyAndDefaultIntegratorType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        Integrator integrator = Integrator.create(a, b, listener);
-        assertTrue(integrator instanceof RombergTrapezoidalQuadratureIntegrator);
+        final var integrator = Integrator.create(a, b, listener);
+        assertInstanceOf(RombergTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
 
     @Test
-    public void comparePerformance() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
+    void comparePerformance() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
 
-        final int[] evaluations = new int[1];
+        final var evaluations = new int[1];
         final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        evaluations[0] += 1;
-                        return Math.exp(lambda * point);
-                    }
+                point -> {
+                    evaluations[0] += 1;
+                    return Math.exp(lambda * point);
                 };
 
-        final double expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
+        final var expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
 
         int bestEvaluations = Integer.MAX_VALUE;
         IntegratorType bestEvaluationsIntegratorType = null;
@@ -454,22 +380,21 @@ public class IntegratorTest {
         IntegratorType bestErrorIntegratorType = null;
         QuadratureType bestErrorQuadratureType = null;
 
-        for (final IntegratorType integratorType : IntegratorType.values()) {
-            for (final QuadratureType quadratureType : QuadratureType.values()) {
-                final Integrator integrator = Integrator.create(a, b, listener);
+        for (final var integratorType : IntegratorType.values()) {
+            for (final var quadratureType : QuadratureType.values()) {
+                final var integrator = Integrator.create(a, b, listener);
                 assertNotNull(integrator);
 
                 evaluations[0] = 0;
-                final long start = System.nanoTime();
-                final double result = integrator.integrate();
-                final long end = System.nanoTime();
-                final long duration = end - start;
-                final double error = Math.abs(expected - result);
+                final var start = System.nanoTime();
+                final var result = integrator.integrate();
+                final var end = System.nanoTime();
+                final var duration = end - start;
+                final var error = Math.abs(expected - result);
 
-                Logger.getGlobal().log(Level.INFO, "Integrator type: " + integratorType
-                        + ", Quadrature type: " + quadratureType
-                        + ", evaluations: " + evaluations[0]
-                        + ", duration: " + duration + "ns, error: " + error);
+                Logger.getGlobal().log(Level.INFO, String.format(
+                        "Integrator type: %s, Quadrature type: %s, evaluations: %s, duration: %d" + "ns, error: %f",
+                        integratorType, quadratureType, evaluations[0], duration, error));
 
                 if (evaluations[0] < bestEvaluations) {
                     bestEvaluations = evaluations[0];
@@ -491,19 +416,16 @@ public class IntegratorTest {
             }
         }
 
-        Logger.getGlobal().log(Level.INFO,
-                "Best evaluations - Integrator type: " + bestEvaluationsIntegratorType
-                + ", Quadrature type: " + bestEvaluationsQuadratureType
-                + ", evaluations: " + bestEvaluations);
+        Logger.getGlobal().log(Level.INFO, String.format(
+                "Best evaluations - Integrator type: %s, Quadrature type: %s, evaluations: %d",
+                bestEvaluationsIntegratorType, bestEvaluationsQuadratureType, bestEvaluations));
 
-        Logger.getGlobal().log(Level.INFO,
-                "Best duration - Integrator type: " + bestDurationIntegratorType
-                + ", Quadrature type: " + bestDurationQuadratureType
-                + ", duration: " + bestDuration + "ns");
+        Logger.getGlobal().log(Level.INFO, String.format(
+                "Best duration - Integrator type: %s, Quadrature type: %s, duration: %d" + "ns",
+                bestDurationIntegratorType, bestDurationQuadratureType, bestDuration));
 
-        Logger.getGlobal().log(Level.INFO,
-                "Best error - Integrator type: " + bestErrorIntegratorType
-                + ", Quadrature type: " + bestErrorQuadratureType
-                + ", error: " + bestError);
+        Logger.getGlobal().log(Level.INFO, String.format(
+                "Best error - Integrator type: %s, Quadrature type: %s, error: %f",
+                bestErrorIntegratorType, bestErrorQuadratureType, bestError));
     }
 }

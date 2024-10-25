@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.polynomials.estimators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PolynomialEstimationExceptionTest {
+class PolynomialEstimationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        PolynomialEstimationException ex = new PolynomialEstimationException();
+    void testConstructor() {
+        var ex = new PolynomialEstimationException();
         assertNotNull(ex);
 
         ex = new PolynomialEstimationException("message");

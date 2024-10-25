@@ -15,6 +15,7 @@
  */
 package com.irurueta.numerical;
 
+import com.irurueta.numerical.optimization.BracketedSingleOptimizer;
 import com.irurueta.numerical.optimization.BrentSingleOptimizer;
 
 /**
@@ -27,8 +28,7 @@ import com.irurueta.numerical.optimization.BrentSingleOptimizer;
  * is computed by aggregating small Gaussians (of size gaussianSigma) centered
  * at the location of each sample.
  */
-public class AccurateMaximumLikelihoodEstimator
-        extends MaximumLikelihoodEstimator {
+public class AccurateMaximumLikelihoodEstimator extends MaximumLikelihoodEstimator {
 
     /**
      * Boolean indicating if an initial solution should be obtained first by
@@ -75,8 +75,7 @@ public class AccurateMaximumLikelihoodEstimator
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero.
      */
-    public AccurateMaximumLikelihoodEstimator(final double gaussianSigma,
-                                              final boolean useHistogramInitialSolution) {
+    public AccurateMaximumLikelihoodEstimator(final double gaussianSigma, final boolean useHistogramInitialSolution) {
         super(gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -88,8 +87,7 @@ public class AccurateMaximumLikelihoodEstimator
      */
     public AccurateMaximumLikelihoodEstimator() {
         super();
-        this.useHistogramInitialSolution =
-                DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION;
+        this.useHistogramInitialSolution = DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION;
         internalEstimator = null;
         optimizer = null;
     }
@@ -108,8 +106,7 @@ public class AccurateMaximumLikelihoodEstimator
      *                                  negative or zero.
      */
     public AccurateMaximumLikelihoodEstimator(
-            final double[] inputData, final double gaussianSigma,
-            final boolean useHistogramInitialSolution) {
+            final double[] inputData, final double gaussianSigma, final boolean useHistogramInitialSolution) {
         super(inputData, gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
         internalEstimator = null;
@@ -134,8 +131,7 @@ public class AccurateMaximumLikelihoodEstimator
      *                                  negative or zero, or if minValue &lt; maxValue.
      */
     public AccurateMaximumLikelihoodEstimator(
-            final double minValue, final double maxValue,
-            final double[] inputData, final double gaussianSigma,
+            final double minValue, final double maxValue, final double[] inputData, final double gaussianSigma,
             final boolean useHistogramInitialSolution) {
         super(minValue, maxValue, inputData, gaussianSigma);
         this.useHistogramInitialSolution = useHistogramInitialSolution;
@@ -152,8 +148,7 @@ public class AccurateMaximumLikelihoodEstimator
      */
     @Override
     public MaximumLikelihoodEstimatorMethod getMethod() {
-        return MaximumLikelihoodEstimatorMethod.
-                ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR;
+        return MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR;
     }
 
     /**
@@ -181,8 +176,7 @@ public class AccurateMaximumLikelihoodEstimator
      *                         This method can only be executed when computations finish and this
      *                         instance becomes unlocked.
      */
-    public void setHistogramInitialSolutionUsed(final boolean used)
-            throws LockedException {
+    public void setHistogramInitialSolutionUsed(final boolean used) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -226,8 +220,8 @@ public class AccurateMaximumLikelihoodEstimator
 
             middleEvalPoint = internalEstimator.estimate();
 
-            double localMinValue = 0.0;
-            double localMaxValue = 0.0;
+            var localMinValue = 0.0;
+            var localMaxValue = 0.0;
 
             try {
                 localMinValue = internalEstimator.getMinValue();
@@ -236,9 +230,9 @@ public class AccurateMaximumLikelihoodEstimator
                 // never happens
             }
 
-            final int numberOfBins = internalEstimator.getNumberOfBins();
+            final var numberOfBins = internalEstimator.getNumberOfBins();
 
-            final double delta = (localMaxValue - localMinValue) / (numberOfBins - 1);
+            final var delta = (localMaxValue - localMinValue) / (numberOfBins - 1);
 
             // pick two values around initial coarse solution
             minEvalPoint = middleEvalPoint - delta;
@@ -271,9 +265,9 @@ public class AccurateMaximumLikelihoodEstimator
             // Use an optimizer to find maximum value on histogram (PDF)
             if (optimizer == null) {
                 optimizer = new BrentSingleOptimizer(new EvaluatorListener(),
-                        BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                        BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                        BrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
 
@@ -302,8 +296,7 @@ public class AccurateMaximumLikelihoodEstimator
      * the aggregation of Gaussians for all the samples in input data array with
      * a high degree of precision.
      */
-    private class EvaluatorListener
-            implements SingleDimensionFunctionEvaluatorListener {
+    private class EvaluatorListener implements SingleDimensionFunctionEvaluatorListener {
 
 
         /**
@@ -321,10 +314,10 @@ public class AccurateMaximumLikelihoodEstimator
         public double evaluate(final double point) {
             double out = 0.0;
             double x;
-            for (final double data : inputData) {
+            for (final var data : inputData) {
                 x = point - data;
-                out += Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma)) /
-                        (Math.sqrt(2.0 * Math.PI) * gaussianSigma);
+                out += Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma))
+                        / (Math.sqrt(2.0 * Math.PI) * gaussianSigma);
             }
 
             // negate value because optimizers always attempt to

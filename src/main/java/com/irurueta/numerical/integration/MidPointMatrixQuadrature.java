@@ -89,8 +89,7 @@ public class MidPointMatrixQuadrature extends MatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public MidPointMatrixQuadrature(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this.n = 0;
         this.a = a;
@@ -177,7 +176,7 @@ public class MidPointMatrixQuadrature extends MatrixQuadrature {
                     x += del;
                 }
                 // The new sum is combined with the old integral to give a refined integral
-                // s = (s + (b - a) * sum / tnm) / 3.0;
+                // s = (s + (b - a) * sum / tnm) / 3.0
                 sum.multiplyByScalar((b - a) / tnm);
                 s.add(sum);
                 s.multiplyByScalar(1.0 / 3.0);

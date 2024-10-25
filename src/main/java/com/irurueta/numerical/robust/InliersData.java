@@ -25,12 +25,12 @@ public abstract class InliersData {
     /**
      * Residuals obtained for each sample of data.
      */
-    protected double[] mResiduals;
+    protected double[] residuals;
 
     /**
      * Number of inliers found on current iteration.
      */
-    protected int mNumInliers;
+    protected int numInliers;
 
     /**
      * Returns efficient array indicating which samples are considered inliers
@@ -48,7 +48,7 @@ public abstract class InliersData {
      * @return residuals obtained for each sample of data.
      */
     public double[] getResiduals() {
-        return mResiduals;
+        return residuals;
     }
 
     /**
@@ -57,6 +57,6 @@ public abstract class InliersData {
      * @return number of inliers found.
      */
     public int getNumInliers() {
-        return mNumInliers;
+        return numInliers;
     }
 }

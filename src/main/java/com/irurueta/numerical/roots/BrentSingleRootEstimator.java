@@ -75,9 +75,8 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public BrentSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint, final double tolerance)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -144,8 +143,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -155,14 +153,14 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
 
         locked = true;
 
-        final double x1 = minEvalPoint;
-        final double x2 = maxEvalPoint;
-        final double tol = tolerance;
-        double a = x1;
-        double b = x2;
-        double c = x2;
-        double d = 0.0;
-        double e = 0.0;
+        final var x1 = minEvalPoint;
+        final var x2 = maxEvalPoint;
+        final var tol = tolerance;
+        var a = x1;
+        var b = x2;
+        var c = x2;
+        var d = 0.0;
+        var e = 0.0;
         double fc;
         double p;
         double q;
@@ -185,7 +183,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
             throw new RootEstimationException();
         }
         fc = fb;
-        for (int iter = 0; iter < ITMAX; iter++) {
+        for (var iter = 0; iter < ITMAX; iter++) {
             if ((fb > 0.0 && fc > 0.0) || (fb < 0.0 && fc < 0.0)) {
                 c = a;
                 fc = fa;

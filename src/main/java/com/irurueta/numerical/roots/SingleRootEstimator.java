@@ -63,8 +63,7 @@ public abstract class SingleRootEstimator extends RootEstimator {
      * @param listener Listener that evaluates a single dimension function in
      *                 order to find its root.
      */
-    protected SingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener) {
+    protected SingleRootEstimator(final SingleDimensionFunctionEvaluatorListener listener) {
         super();
         this.listener = listener;
         rootAvailable = false;
@@ -79,8 +78,7 @@ public abstract class SingleRootEstimator extends RootEstimator {
      * @throws NotAvailableException Raised if listener has not yet been
      *                               provided.
      */
-    public SingleDimensionFunctionEvaluatorListener getListener()
-            throws NotAvailableException {
+    public SingleDimensionFunctionEvaluatorListener getListener() throws NotAvailableException {
         if (!isListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -94,8 +92,7 @@ public abstract class SingleRootEstimator extends RootEstimator {
      * @param listener Listener that evaluates a single dimension function.
      * @throws LockedException Raised if this instance is already locked.
      */
-    public void setListener(final SingleDimensionFunctionEvaluatorListener listener)
-            throws LockedException {
+    public void setListener(final SingleDimensionFunctionEvaluatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

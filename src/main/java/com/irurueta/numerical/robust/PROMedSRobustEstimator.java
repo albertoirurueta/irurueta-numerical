@@ -23,7 +23,6 @@ import com.irurueta.sorting.SortingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.List;
 
 /**
  * This class implements PROMedS (PROgressive least Median Sample) algorithm
@@ -186,14 +185,14 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    private double mConfidence;
+    private double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    private int mMaxIterations;
+    private int maxIterations;
 
     /**
      * In this implementation, PROSAC won't stop before having reached the
@@ -201,14 +200,14 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * Maximum allowed outliers proportion in the input data: used to compute
      * nIters (can be as high as 0.95).
      */
-    private double mMaxOutliersProportion;
+    private double maxOutliersProportion;
 
     /**
      * eta0 is the maximum probability that a solution with more than
      * inliersNStar inliers in U_nStar exists and was not found after k
      * samples (typically set to 5%).
      */
-    private double mEta0;
+    private double eta0;
 
     /**
      * beta is the probability that a match is declared inlier by mistake,
@@ -218,7 +217,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * the detection noise), and the total surface is the surface of the image
      * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!.
      */
-    private double mBeta;
+    private double beta;
 
     /**
      * Instance in charge of picking random subsets of samples.
@@ -228,7 +227,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Number of iterations to be done to obtain required confidence.
      */
-    private int nIters;
+    private int iters;
 
     /**
      * Best solution that has been found so far during an estimation.
@@ -238,7 +237,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Data related to inliers found for best result.
      */
-    private PROMedSInliersData mBestInliersData;
+    private PROMedSInliersData bestInliersData;
 
     /**
      * Indicates whether the algorithm must stop prematurely when dynamically
@@ -249,7 +248,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * computational cost). If more accuracy is desired at the expense of some
      * additional computation cost, then disable this flag.
      */
-    private boolean mStopThresholdEnabled;
+    private boolean stopThresholdEnabled;
 
     /**
      * Factor to normalize threshold to determine inliers. This factor can be
@@ -259,31 +258,31 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * it can converge. By default, the factor is 1.0, which makes the threshold
      * to be computed as the median of residuals.
      */
-    private double mInlierFactor;
+    private double inlierFactor;
 
     /**
      * Flag indicating whether thresholds to determine inliers are used, or if
      * only median of residuals is used. When true, the algorithm will try
      * to fit the best model, otherwise only median of residuals will be used.
      */
-    private boolean mUseInlierThresholds;
+    private boolean useInlierThresholds;
 
     /**
      * Constructor.
      */
     public PROMedSRobustEstimator() {
         super();
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mMaxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
-        mEta0 = DEFAULT_ETA0;
-        mBeta = DEFAULT_BETA;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        maxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
+        eta0 = DEFAULT_ETA0;
+        beta = DEFAULT_BETA;
+        iters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mStopThresholdEnabled = DEFAULT_STOP_THRESHOLD_ENABLED;
-        mInlierFactor = DEFAULT_INLIER_FACTOR;
-        mUseInlierThresholds = DEFAULT_USE_INLIER_THRESHOLD;
+        bestInliersData = null;
+        stopThresholdEnabled = DEFAULT_STOP_THRESHOLD_ENABLED;
+        inlierFactor = DEFAULT_INLIER_FACTOR;
+        useInlierThresholds = DEFAULT_USE_INLIER_THRESHOLD;
     }
 
     /**
@@ -295,17 +294,17 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      */
     public PROMedSRobustEstimator(final PROMedSRobustEstimatorListener<T> listener) {
         super(listener);
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mMaxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
-        mEta0 = DEFAULT_ETA0;
-        mBeta = DEFAULT_BETA;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        maxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
+        eta0 = DEFAULT_ETA0;
+        beta = DEFAULT_BETA;
+        iters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mStopThresholdEnabled = DEFAULT_STOP_THRESHOLD_ENABLED;
-        mInlierFactor = DEFAULT_INLIER_FACTOR;
-        mUseInlierThresholds = DEFAULT_USE_INLIER_THRESHOLD;
+        bestInliersData = null;
+        stopThresholdEnabled = DEFAULT_STOP_THRESHOLD_ENABLED;
+        inlierFactor = DEFAULT_INLIER_FACTOR;
+        useInlierThresholds = DEFAULT_USE_INLIER_THRESHOLD;
     }
 
     /**
@@ -317,7 +316,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -339,7 +338,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -350,7 +349,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -370,7 +369,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -385,7 +384,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return true if stop threshold is enabled, false otherwise.
      */
     public boolean isStopThresholdEnabled() {
-        return mStopThresholdEnabled;
+        return stopThresholdEnabled;
     }
 
     /**
@@ -402,12 +401,11 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      *                         is being computed.
      */
-    public void setStopThresholdEnabled(final boolean stopThresholdEnabled)
-            throws LockedException {
+    public void setStopThresholdEnabled(final boolean stopThresholdEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mStopThresholdEnabled = stopThresholdEnabled;
+        this.stopThresholdEnabled = stopThresholdEnabled;
     }
 
     /**
@@ -421,7 +419,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return factor to normalize threshold to determine inliers.
      */
     public double getInlierFactor() {
-        return mInlierFactor;
+        return inlierFactor;
     }
 
     /**
@@ -445,7 +443,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (inlierFactor <= MIN_INLER_FACTOR) {
             throw new IllegalArgumentException();
         }
-        mInlierFactor = inlierFactor;
+        this.inlierFactor = inlierFactor;
     }
 
     /**
@@ -457,7 +455,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * median of residuals will be used.
      */
     public boolean isUseInlierThresholds() {
-        return mUseInlierThresholds;
+        return useInlierThresholds;
     }
 
     /**
@@ -470,13 +468,12 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException if this estimator is locked because an estimation
      *                         is being computed.
      */
-    public void setUseInlierThresholds(final boolean useInlierThresholds)
-            throws LockedException {
+    public void setUseInlierThresholds(final boolean useInlierThresholds) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
 
-        mUseInlierThresholds = useInlierThresholds;
+        this.useInlierThresholds = useInlierThresholds;
     }
 
     /**
@@ -490,7 +487,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed outliers proportion in the input data.
      */
     public double getMaxOutliersProportion() {
-        return mMaxOutliersProportion;
+        return maxOutliersProportion;
     }
 
     /**
@@ -507,17 +504,16 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setMaxOutliersProportion(final double maxOutliersProportion)
-            throws LockedException {
+    public void setMaxOutliersProportion(final double maxOutliersProportion) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (maxOutliersProportion < MIN_MAX_OUTLIERS_PROPORTION ||
-                maxOutliersProportion > MAX_MAX_OUTLIERS_PROPORTION) {
+        if (maxOutliersProportion < MIN_MAX_OUTLIERS_PROPORTION
+                || maxOutliersProportion > MAX_MAX_OUTLIERS_PROPORTION) {
             throw new IllegalArgumentException();
         }
 
-        mMaxOutliersProportion = maxOutliersProportion;
+        this.maxOutliersProportion = maxOutliersProportion;
     }
 
     /**
@@ -528,7 +524,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return eta0 value.
      */
     public double getEta0() {
-        return mEta0;
+        return eta0;
     }
 
     /**
@@ -550,7 +546,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             throw new IllegalArgumentException();
         }
 
-        mEta0 = eta0;
+        this.eta0 = eta0;
     }
 
     /**
@@ -564,7 +560,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return beta value.
      */
     public double getBeta() {
-        return mBeta;
+        return beta;
     }
 
     /**
@@ -589,7 +585,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             throw new IllegalArgumentException();
         }
 
-        mBeta = beta;
+        this.beta = beta;
     }
 
     /**
@@ -600,7 +596,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return number of iterations to be done to obtain required confidence.
      */
     public int getNIters() {
-        return nIters;
+        return iters;
     }
 
     /**
@@ -618,7 +614,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return data related to inliers found for best result.
      */
     protected PROMedSInliersData getBestInliersData() {
-        return mBestInliersData;
+        return bestInliersData;
     }
 
     /**
@@ -631,7 +627,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (mListener instanceof PROMedSRobustEstimatorListener);
+        return (listener instanceof PROMedSRobustEstimatorListener);
     }
 
     /**
@@ -645,8 +641,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public T estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public T estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -655,79 +650,76 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         try {
-            PROMedSRobustEstimatorListener<T> listener =
-                    (PROMedSRobustEstimatorListener<T>) mListener;
+            var listener = (PROMedSRobustEstimatorListener<T>) this.listener;
 
-            mLocked = true;
+            locked = true;
 
             listener.onEstimateStart(this);
 
             // N = CORRESPONDENCES
-            final int totalSamples = listener.getTotalSamples();
-            final int subsetSize = listener.getSubsetSize();
+            final var totalSamples = listener.getTotalSamples();
+            final var subsetSize = listener.getSubsetSize();
 
-            final double[] qualityScores = listener.getQualityScores();
+            final var qualityScores = listener.getQualityScores();
             // check for invalid quality scores length
             if (qualityScores.length != totalSamples) {
                 throw new RobustEstimatorException();
             }
 
-            double inlierThreshold = 0.0;
-            if (mUseInlierThresholds) {
+            var inlierThreshold = 0.0;
+            if (useInlierThresholds) {
                 inlierThreshold = listener.getThreshold();
             }
             // obtain indices referring to original samples position after sorting
             // quality scores in descending order
-            final int[] sortedIndices = computeSortedQualityIndices(
-                    listener.getQualityScores());
+            final var sortedIndices = computeSortedQualityIndices(listener.getQualityScores());
 
             // reusable list that will contain preliminary solutions on each
             // iteration
-            final List<T> iterResults = new ArrayList<>();
+            final var iterResults = new ArrayList<T>();
             bestResult = null;
-            float previousProgress = 0.0f;
+            var previousProgress = 0.0f;
             float progress;
             // subset indices obtained from a subset selector
-            final int[] subsetIndices = new int[subsetSize];
-            final double[] residualsTemp = new double[totalSamples];
+            final var subsetIndices = new int[subsetSize];
+            final var residualsTemp = new double[totalSamples];
             // subset indices referred to the real samples positions after taking
             // into account the sorted indices obtained from quality scores
-            final int[] transformedSubsetIndices = new int[subsetSize];
+            final var transformedSubsetIndices = new int[subsetSize];
             // array containing inliers efficiently
-            final BitSet inliers = new BitSet(totalSamples);
+            final var inliers = new BitSet(totalSamples);
 
             // T_N
-            nIters = Math.min(computeIterations(
-                    1.0 - mMaxOutliersProportion, subsetSize, mConfidence),
-                    mMaxIterations);
+            iters = Math.min(computeIterations(1.0 - maxOutliersProportion, subsetSize, confidence),
+                    maxIterations);
 
             // termination length
-            int sampleSizeStar = totalSamples;
+            var sampleSizeStar = totalSamples;
             // number of inliers found within the first
             // nStar data points
-            int inliersNStar = 0;
+            var inliersNStar = 0;
             // best number of inliers found so far
             // (store the model that goes with it)
-            int inliersBest = -1;
+            var inliersBest = -1;
             // threshold to stop algorithm
-            double threshold = Double.MAX_VALUE;
-            final int inliersMin = (int) ((1.0 - mMaxOutliersProportion) * totalSamples);
+            var threshold = Double.MAX_VALUE;
+            final var inliersMin = (int) ((1.0 - maxOutliersProportion) * totalSamples);
             // iteration number (t)
-            int currentIter = 0;
+            var currentIter = 0;
             // (n) we draw samples from the set U_n
             // of the top n (sampleSize) data points
-            int sampleSize = subsetSize;
-            // average number of samples {M_i}_{i=1}^{Tn}
+            var sampleSize = subsetSize;
+            // average number of samples "{M_i}_{i=1}^{Tn}"
             // that contains samples from U_n only
-            double tn = nIters;
+            double tn = iters;
             // integer version of Tn
-            int tnPrime = 1;
+            var tnPrime = 1;
             // number of samples to draw to reach the
             // maximality constraint
-            int kNStar = nIters;
+            var kNStar = iters;
 
             // initialize Tn
-            for (int i = 0; i < subsetSize; i++) {
+            for (var i = 0; i < subsetSize; i++) {
                 tn *= (double) (sampleSize - i) / (double) (totalSamples - i);
             }
 
@@ -740,25 +732,23 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
             }
 
             // data related to inliers
-            PROMedSInliersData inliersData = new PROMedSInliersData(
-                    totalSamples);
+            var inliersData = new PROMedSInliersData(totalSamples);
             // sorter to compute medians
-            final Sorter<Double> sorter = Sorter.create();
+            final var sorter = Sorter.<Double>create();
 
             // indicates if result improved
             boolean improved;
-            boolean continueIteration = true;
+            var continueIteration = true;
 
             // iterate until the expected number of inliers or the estimated
             // number of iterations is reached
             while (continueIteration) {
                 if (kNStar > 0) {
-                    progress = Math.min((float) currentIter / (float) kNStar,
-                            1.0f);
+                    progress = Math.min((float) currentIter / (float) kNStar, 1.0f);
                 } else {
                     progress = 1.0f;
                 }
-                if (progress - previousProgress > mProgressDelta) {
+                if (progress - previousProgress > progressDelta) {
                     previousProgress = progress;
                     listener.onEstimateProgressChange(this, progress);
                 }
@@ -770,7 +760,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 // g(t) = min{n : TnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > TnPrime
                 if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
-                    final double TnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
+                    final var TnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
                     sampleSize++;
                     tnPrime += (int) Math.ceil(TnPlus1 - tn);
                     tn = TnPlus1;
@@ -782,24 +772,21 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                     // currentIter > TnPrime), draw a standard RANSAC sample
                     // The sample contains subsetSize points selected from U_n at
                     // random
-                    subsetSelector.computeRandomSubsets(subsetSize,
-                            subsetIndices);
+                    subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);
                 } else {
                     // The sample contains subsetSize-1 points selected from
                     // U_sampleSize_1 at random and u_sampleSize
 
-                    subsetSelector.computeRandomSubsetsInRange(0, sampleSize,
-                            subsetSize, true, subsetIndices);
+                    subsetSelector.computeRandomSubsetsInRange(0, sampleSize, subsetSize, true,
+                            subsetIndices);
                 }
 
-                transformIndices(subsetIndices, sortedIndices,
-                        transformedSubsetIndices);
+                transformIndices(subsetIndices, sortedIndices, transformedSubsetIndices);
 
                 // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
-                listener.estimatePreliminarSolutions(transformedSubsetIndices,
-                        iterResults);
+                listener.estimatePreliminarSolutions(transformedSubsetIndices, iterResults);
 
                 // total number of inliers for a
                 // given result
@@ -807,10 +794,9 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
 
                 // iterate over all solutions that have been found
                 improved = false;
-                for (final T iterResult : iterResults) {
+                for (final var iterResult : iterResults) {
                     // compute inliers
-                    computeInliers(iterResult, subsetSize, mInlierFactor,
-                            mUseInlierThresholds, inlierThreshold,
+                    computeInliers(iterResult, subsetSize, inlierFactor, useInlierThresholds, inlierThreshold,
                             residualsTemp, listener, sorter, inliersData);
                     inliersCurrent = inliersData.getNumInliers();
 
@@ -840,18 +826,15 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                         // so far
 
                         // best value found so far in terms of inliers ratio
-                        int sampleSizeBest = totalSamples;
-                        int inliersSampleSizeBest = inliersCurrent;
+                        var sampleSizeBest = totalSamples;
+                        var inliersSampleSizeBest = inliersCurrent;
                         // test value for the termination length
                         int sampleSizeTest;
                         // number of inliers for that test value
                         int inliersSampleSizeTest;
-                        double epsilonSampleSizeBest =
-                                (double) inliersSampleSizeBest /
-                                        (double) sampleSizeBest;
+                        var epsilonSampleSizeBest = (double) inliersSampleSizeBest / (double) sampleSizeBest;
 
-                        for (sampleSizeTest = totalSamples,
-                                     inliersSampleSizeTest = inliersCurrent;
+                        for (sampleSizeTest = totalSamples, inliersSampleSizeTest = inliersCurrent;
                              sampleSizeTest > subsetSize; sampleSizeTest--) {
                             // Loop invariants:
                             // - inliersSampleSizeTest is the number of inliers
@@ -889,49 +872,41 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                             //   provided)
                             //   We do the cheap test first, and the expensive test
                             //   only if the cheap one passes
-                            if ((inliersSampleSizeTest * sampleSizeBest >
-                                    inliersSampleSizeBest * sampleSizeTest) &&
-                                    (inliersSampleSizeTest >
-                                            epsilonSampleSizeBest * sampleSizeTest +
-                                                    Math.sqrt(sampleSizeTest * epsilonSampleSizeBest *
-                                                            (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
+                            if ((inliersSampleSizeTest * sampleSizeBest > inliersSampleSizeBest * sampleSizeTest)
+                                    && (inliersSampleSizeTest > epsilonSampleSizeBest * sampleSizeTest
+                                    + Math.sqrt(sampleSizeTest * epsilonSampleSizeBest
+                                    * (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
 
-                                if (inliersSampleSizeTest <
-                                        imin(subsetSize, sampleSizeTest, mBeta)) {
+                                if (inliersSampleSizeTest < imin(subsetSize, sampleSizeTest, beta)) {
                                     // equation not satisfied, no need to test for
                                     // smaller sampleSizeTest values anyway
 
-                                    // jump out of the for(sampleSizeTest) loop
+                                    // jump out of the for sampleSizeTest loop
                                     break;
                                 }
                                 sampleSizeBest = sampleSizeTest;
                                 inliersSampleSizeBest = inliersSampleSizeTest;
-                                epsilonSampleSizeBest =
-                                        (double) inliersSampleSizeBest /
-                                                (double) sampleSizeBest;
+                                epsilonSampleSizeBest = (double) inliersSampleSizeBest / (double) sampleSizeBest;
                             }
 
                             // prepare for next loop iteration
-                            inliersSampleSizeTest -=
-                                    inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
+                            inliersSampleSizeTest -= inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
                         }
 
                         // is the best one we found even better than sampleSizeStar?
-                        if (inliersSampleSizeBest * sampleSizeStar >
-                                inliersNStar * sampleSizeBest) {
+                        if (inliersSampleSizeBest * sampleSizeStar > inliersNStar * sampleSizeBest) {
 
                             // update all values
                             sampleSizeStar = sampleSizeBest;
                             inliersNStar = inliersSampleSizeBest;
-                            kNStar = computeIterations((double) inliersNStar /
-                                            (double) sampleSizeStar, subsetSize,
-                                    1.0 - mEta0);
+                            kNStar = computeIterations((double) inliersNStar
+                                            / (double) sampleSizeStar, subsetSize, 1.0 - eta0);
                         }
                     }
                 }
 
-                continueIteration = (currentIter < mMaxIterations);
-                if (mUseInlierThresholds && mStopThresholdEnabled) {
+                continueIteration = (currentIter < maxIterations);
+                if (useInlierThresholds && stopThresholdEnabled) {
                     // if inlier threshold is being used, and stop threshold is
                     // enabled, then stop the algorithm if threshold determined
                     // by median of residuals has a value lower than inlier
@@ -940,8 +915,8 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 }
 
                 if (!improved) {
-                    continueIteration &= ((inliersBest < inliersMin) ||
-                            (currentIter < kNStar)) && (currentIter < nIters);
+                    continueIteration &= ((inliersBest < inliersMin) || (currentIter < kNStar))
+                            && (currentIter < iters);
                 }
 
                 listener.onEstimateNextIteration(this, currentIter);
@@ -958,7 +933,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         } catch (final SubsetSelectorException | SortingException e) {
             throw new RobustEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -996,10 +971,9 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      *                                 the subset length.
      */
     private static void transformIndices(
-            final int[] subsetIndices, final int[] sortedIndices,
-            final int[] transformedSubsetIndices) {
-        final int length = transformedSubsetIndices.length;
-        for (int i = 0; i < length; i++) {
+            final int[] subsetIndices, final int[] sortedIndices, final int[] transformedSubsetIndices) {
+        final var length = transformedSubsetIndices.length;
+        for (var i = 0; i < length; i++) {
             transformedSubsetIndices[i] = sortedIndices[subsetIndices[i]];
         }
     }
@@ -1022,42 +996,41 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param inliersData         inliers data to be reused on each iteration
      */
     private static <T> void computeInliers(
-            final T iterResult, final int subsetSize, final double inlierFactor,
-            final boolean useInlierThresholds, final double inlierThreshold,
-            final double[] residualsTemp, final LMedSRobustEstimatorListener<T> listener,
+            final T iterResult, final int subsetSize, final double inlierFactor, final boolean useInlierThresholds,
+            final double inlierThreshold, final double[] residualsTemp, final LMedSRobustEstimatorListener<T> listener,
             final Sorter<Double> sorter, final PROMedSInliersData inliersData) {
 
-        final double[] residuals = inliersData.getResiduals();
-        final BitSet lmedsInliers = inliersData.getInliersLMedS();
-        final BitSet msacInliers = inliersData.getInliersMSAC();
-        double bestMedianResidual = inliersData.getBestMedianResidual();
-        boolean medianResidualImproved = false;
+        final var residuals = inliersData.getResiduals();
+        final var lmedsInliers = inliersData.getInliersLMedS();
+        final var msacInliers = inliersData.getInliersMSAC();
+        var bestMedianResidual = inliersData.getBestMedianResidual();
+        var medianResidualImproved = false;
 
-        final int totalSamples = residuals.length;
+        final var totalSamples = residuals.length;
 
-        for (int i = 0; i < totalSamples; i++) {
+        for (var i = 0; i < totalSamples; i++) {
             residuals[i] = Math.abs(listener.computeResidual(iterResult, i));
         }
 
         System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);
-        final double medianResidual = sorter.median(residualsTemp);
+        final var medianResidual = sorter.median(residualsTemp);
         if (medianResidual < bestMedianResidual) {
             bestMedianResidual = medianResidual;
             medianResidualImproved = true;
         }
 
-        final double standardDeviation = STD_CONSTANT * (1.0 + 5.0 /
-                (totalSamples - subsetSize)) * Math.sqrt(medianResidual);
-        final double normEstimatedThreshold = inlierFactor * medianResidual;
+        final var standardDeviation = STD_CONSTANT * (1.0 + 5.0 / (totalSamples - subsetSize))
+                * Math.sqrt(medianResidual);
+        final var normEstimatedThreshold = inlierFactor * medianResidual;
 
         // determine which points are inliers
-        int numInliers = 0;
+        var numInliers = 0;
         // by default if thresholds are not used
-        boolean lmedsInlierModelEnabled = true;
+        var lmedsInlierModelEnabled = true;
         if (useInlierThresholds) {
-            int numInliersMsac = 0;
-            int numInliersLmedS = 0;
-            for (int i = 0; i < totalSamples; i++) {
+            var numInliersMsac = 0;
+            var numInliersLmedS = 0;
+            for (var i = 0; i < totalSamples; i++) {
                 if (residuals[i] <= normEstimatedThreshold) {
                     numInliersLmedS++;
                     lmedsInliers.set(i);
@@ -1074,11 +1047,10 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
 
             // keep model with smaller number of inliers (to be more restrictive)
             lmedsInlierModelEnabled = numInliersLmedS < numInliersMsac;
-            numInliers = lmedsInlierModelEnabled ?
-                    numInliersLmedS : numInliersMsac;
+            numInliers = lmedsInlierModelEnabled ? numInliersLmedS : numInliersMsac;
         } else {
 
-            for (int i = 0; i < totalSamples; i++) {
+            for (var i = 0; i < totalSamples; i++) {
                 if (residuals[i] <= normEstimatedThreshold) {
                     numInliers++;
                     lmedsInliers.set(i);
@@ -1090,12 +1062,10 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
 
         // store values in inliers data, only if residuals improve
         if (medianResidualImproved) {
-            inliersData.update(bestMedianResidual, standardDeviation,
-                    lmedsInlierModelEnabled, residuals, numInliers,
-                    medianResidual, normEstimatedThreshold,
-                    true);
+            inliersData.update(bestMedianResidual, standardDeviation, lmedsInlierModelEnabled, residuals, numInliers,
+                    medianResidual, normEstimatedThreshold, true);
         } else {
-            inliersData.mMedianResidualImproved = false;
+            inliersData.medianResidualImproved = false;
         }
     }
 
@@ -1108,15 +1078,13 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return indices to sort samples in descending order of quality values.
      * @throws SortingException if sorting fails.
      */
-    private static int[] computeSortedQualityIndices(double[] qualityScores)
-            throws SortingException {
-        final Sorter<Double> sorter = Sorter.create();
-        final double[] qualityScoresCopy = Arrays.copyOf(qualityScores,
-                qualityScores.length);
+    private static int[] computeSortedQualityIndices(double[] qualityScores) throws SortingException {
+        final var sorter = Sorter.<Double>create();
+        final var qualityScoresCopy = Arrays.copyOf(qualityScores, qualityScores.length);
         // this method modifies quality scores copy array because it gets sorted
         // in ascending order. Indices contains indices of samples corresponding
         // to quality scores ordered in ascending order
-        final int[] indices = sorter.sortWithIndices(qualityScoresCopy);
+        final var indices = sorter.sortWithIndices(qualityScoresCopy);
 
         // reverse indices so we have indices of samples ordered in descending
         // order of quality
@@ -1131,10 +1099,10 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param array array to be reversed.
      */
     private static void reverse(final int[] array) {
-        int length = array.length;
-        for (int i = 0; i < length / 2; i++) {
-            int temp = array[i];
-            int pos = length - 1 - i;
+        var length = array.length;
+        for (var i = 0; i < length / 2; i++) {
+            var temp = array[i];
+            var pos = length - 1 - i;
             array[i] = array[pos];
             array[pos] = temp;
         }
@@ -1149,25 +1117,21 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param confidence required confidence of result.
      * @return number of required iterations.
      */
-    private static int computeIterations(
-            final double probInlier, final int subsetSize, final double confidence) {
+    private static int computeIterations(final double probInlier, final int subsetSize, final double confidence) {
 
         // compute number of times the algorithm needs to be executed depending
         // on number of inliers respect total points to achieve with probability
         // confidence that we have all inliers and probability 1 - confidence
         // that we have some outliers
-        final double probSubsetAllInliers = Math.pow(probInlier, subsetSize);
-        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                Double.isNaN(probSubsetAllInliers)) {
+        final var probSubsetAllInliers = Math.pow(probInlier, subsetSize);
+        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE || Double.isNaN(probSubsetAllInliers)) {
             return Integer.MAX_VALUE;
         } else {
-            final double logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
-            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE ||
-                    Double.isNaN(logProbSomeOutliers)) {
+            final var logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
+            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE || Double.isNaN(logProbSomeOutliers)) {
                 return Integer.MAX_VALUE;
             } else {
-                return (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) /
-                        logProbSomeOutliers));
+                return (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) / logProbSomeOutliers));
             }
         }
     }
@@ -1189,8 +1153,8 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @return i-m.
      */
     private static int imin(final int subsetSize, final int sampleSize, final double beta) {
-        final double mu = sampleSize * beta;
-        final double sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
+        final var mu = sampleSize * beta;
+        final var sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
 
         return (int) Math.ceil(subsetSize + mu + sigma * Math.sqrt(CHI_SQUARED));
     }
@@ -1202,26 +1166,21 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * @param inliersData  inliers data to be stored.
      * @param totalSamples total number of samples.
      */
-    private void keepInliersData(PROMedSInliersData inliersData,
-                                 final int totalSamples) {
+    private void keepInliersData(PROMedSInliersData inliersData, final int totalSamples) {
         // keep the best inliers data corresponding to best solution,
         // in case it can be useful along with the result
-        mBestInliersData = inliersData;
+        bestInliersData = inliersData;
 
         // create new inliers data instance until a new best solution
         // is found
-        final double bestMedianResidual = inliersData.getBestMedianResidual();
+        final var bestMedianResidual = inliersData.getBestMedianResidual();
         inliersData = new PROMedSInliersData(totalSamples);
         // update the best median residual on new instance so that
         // only better solutions that are found later can update
         // inliers data
-        inliersData.update(bestMedianResidual,
-                inliersData.getStandardDeviation(),
-                inliersData.isLMedSInlierModelEnabled(),
-                inliersData.getResiduals(),
-                inliersData.getNumInliers(),
-                bestMedianResidual,
-                inliersData.getEstimatedThreshold(), false);
+        inliersData.update(bestMedianResidual, inliersData.getStandardDeviation(),
+                inliersData.isLMedSInlierModelEnabled(), inliersData.getResiduals(), inliersData.getNumInliers(),
+                bestMedianResidual, inliersData.getEstimatedThreshold(), false);
     }
 
     /**
@@ -1232,45 +1191,45 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * Best median of error found so far taking into account all provided
          * samples.
          */
-        private double mBestMedianResidual;
+        private double bestMedianResidual;
 
         /**
          * Standard deviation of error among all provided samples respect to
          * currently estimated result.
          */
-        private double mStandardDeviation;
+        private double standardDeviation;
 
         /**
          * Inliers considering LMedS model.
          */
-        private BitSet mInliersLmeds;
+        private BitSet inliersLmeds;
 
         /**
          * Inliers considering MSAC model.
          */
-        private BitSet mInliersMsac;
+        private BitSet inliersMsac;
 
         /**
          * Indicates whether LMedS or MSAC inlier model is enabled.
          */
-        private boolean mLmedsInlierModelEnabled;
+        private boolean lmedsInlierModelEnabled;
 
         /**
          * Median of error found on current iteration among all provided
          * samples.
          */
-        private double mMedianResidual;
+        private double medianResidual;
 
         /**
          * Estimated threshold to determine whether samples are inliers or not.
          */
-        private double mEstimatedThreshold;
+        private double estimatedThreshold;
 
         /**
          * Indicates whether median residual computed in current iteration has
          * improved respect to previous iterations.
          */
-        private boolean mMedianResidualImproved;
+        private boolean medianResidualImproved;
 
         /**
          * Constructor.
@@ -1278,14 +1237,13 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @param totalSamples total number of samples.
          */
         PROMedSInliersData(final int totalSamples) {
-            mBestMedianResidual = mStandardDeviation = mMedianResidual =
-                    mEstimatedThreshold = Double.MAX_VALUE;
-            mInliersLmeds = new BitSet(totalSamples);
-            mInliersMsac = new BitSet(totalSamples);
-            mLmedsInlierModelEnabled = true;
-            mResiduals = new double[totalSamples];
-            mNumInliers = 0;
-            mMedianResidualImproved = false;
+            bestMedianResidual = standardDeviation = medianResidual = estimatedThreshold = Double.MAX_VALUE;
+            inliersLmeds = new BitSet(totalSamples);
+            inliersMsac = new BitSet(totalSamples);
+            lmedsInlierModelEnabled = true;
+            residuals = new double[totalSamples];
+            numInliers = 0;
+            medianResidualImproved = false;
         }
 
         /**
@@ -1297,7 +1255,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          */
         @Override
         public BitSet getInliers() {
-            return mLmedsInlierModelEnabled ? mInliersLmeds : mInliersMsac;
+            return lmedsInlierModelEnabled ? inliersLmeds : inliersMsac;
         }
 
         /**
@@ -1306,17 +1264,17 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return copy of inlier data.
          */
         PROMedSInliersData createCopy() {
-            PROMedSInliersData result = new PROMedSInliersData(mResiduals.length);
-            result.mBestMedianResidual = mBestMedianResidual;
-            result.mStandardDeviation = mStandardDeviation;
-            result.mMedianResidual = mMedianResidual;
-            result.mEstimatedThreshold = mEstimatedThreshold;
-            result.mInliersLmeds = (BitSet) mInliersLmeds.clone();
-            result.mInliersMsac = (BitSet) mInliersMsac.clone();
-            result.mLmedsInlierModelEnabled = mLmedsInlierModelEnabled;
-            result.mResiduals = Arrays.copyOf(mResiduals, mResiduals.length);
-            result.mNumInliers = mNumInliers;
-            result.mMedianResidualImproved = mMedianResidualImproved;
+            final var result = new PROMedSInliersData(residuals.length);
+            result.bestMedianResidual = bestMedianResidual;
+            result.standardDeviation = standardDeviation;
+            result.medianResidual = medianResidual;
+            result.estimatedThreshold = estimatedThreshold;
+            result.inliersLmeds = (BitSet) inliersLmeds.clone();
+            result.inliersMsac = (BitSet) inliersMsac.clone();
+            result.lmedsInlierModelEnabled = lmedsInlierModelEnabled;
+            result.residuals = Arrays.copyOf(residuals, residuals.length);
+            result.numInliers = numInliers;
+            result.medianResidualImproved = medianResidualImproved;
 
             return result;
         }
@@ -1329,7 +1287,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * provided samples.
          */
         double getBestMedianResidual() {
-            return mBestMedianResidual;
+            return bestMedianResidual;
         }
 
         /**
@@ -1340,7 +1298,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * respect to currently estimated result.
          */
         double getStandardDeviation() {
-            return mStandardDeviation;
+            return standardDeviation;
         }
 
         /**
@@ -1349,7 +1307,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return inliers considering LMedS model.
          */
         BitSet getInliersLMedS() {
-            return mInliersLmeds;
+            return inliersLmeds;
         }
 
         /**
@@ -1358,7 +1316,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return inliers considering MSAC model.
          */
         BitSet getInliersMSAC() {
-            return mInliersMsac;
+            return inliersMsac;
         }
 
         /**
@@ -1369,7 +1327,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return true if LMedS model is used, false if MSAC model is used.
          */
         boolean isLMedSInlierModelEnabled() {
-            return mLmedsInlierModelEnabled;
+            return lmedsInlierModelEnabled;
         }
 
         /**
@@ -1380,7 +1338,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * or not.
          */
         public double getEstimatedThreshold() {
-            return mEstimatedThreshold;
+            return estimatedThreshold;
         }
 
         /**
@@ -1390,7 +1348,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          * @return true if median residual improved, false otherwise.
          */
         boolean isMedianResidualImproved() {
-            return mMedianResidualImproved;
+            return medianResidualImproved;
         }
 
         /**
@@ -1412,18 +1370,18 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
          *                                computed in current iteration has improved respect to previous
          *                                iteration.
          */
-        protected void update(double bestMedianResidual, double standardDeviation,
-                              boolean lmedsInlierModelEnabled, double[] residuals,
-                              int numInliers, double medianResidual,
-                              double estimatedThreshold, boolean medianResidualImproved) {
-            mBestMedianResidual = bestMedianResidual;
-            mStandardDeviation = standardDeviation;
-            mLmedsInlierModelEnabled = lmedsInlierModelEnabled;
-            mResiduals = residuals;
-            mNumInliers = numInliers;
-            mMedianResidual = medianResidual;
-            mEstimatedThreshold = estimatedThreshold;
-            mMedianResidualImproved = medianResidualImproved;
+        protected void update(
+                final double bestMedianResidual, final double standardDeviation, final boolean lmedsInlierModelEnabled,
+                final double[] residuals, final int numInliers, final double medianResidual,
+                final double estimatedThreshold, final boolean medianResidualImproved) {
+            this.bestMedianResidual = bestMedianResidual;
+            this.standardDeviation = standardDeviation;
+            this.lmedsInlierModelEnabled = lmedsInlierModelEnabled;
+            this.residuals = residuals;
+            this.numInliers = numInliers;
+            this.medianResidual = medianResidual;
+            this.estimatedThreshold = estimatedThreshold;
+            this.medianResidualImproved = medianResidualImproved;
         }
     }
 

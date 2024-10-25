@@ -15,16 +15,14 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimpsonIntegratorTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class SimpsonIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -33,137 +31,104 @@ public class SimpsonIntegratorTest {
     private static final double EPS = 1e-6;
 
     @Test
-    public void create_whenAccuracyAndQuadratureType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenAccuracyAndQuadratureType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        SimpsonIntegrator<?> integrator = SimpsonIntegrator.create(a, b, listener, EPS,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        var integrator = SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof SimpsonMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener, EPS,
-                QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof SimpsonInfinityMidPointQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.INFINITY_MID_POINT);
+        assertInstanceOf(SimpsonInfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener, EPS,
-                QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonLowerSquareRootMidPointQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(SimpsonLowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener, EPS,
-                QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonUpperSquareRootMidPointQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(SimpsonUpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener, EPS,
-                QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof SimpsonDoubleExponentialRuleQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+        assertInstanceOf(SimpsonDoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> SimpsonIntegrator.create(a, b, listener, EPS, QuadratureType.EXPONENTIAL_MID_POINT));
     }
 
     @Test
-    public void create_whenDefaultAccuracyAndQuadratureType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenDefaultAccuracyAndQuadratureType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        SimpsonIntegrator<?> integrator = SimpsonIntegrator.create(a, b, listener,
-                QuadratureType.TRAPEZOIDAL);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        var integrator = SimpsonIntegrator.create(a, b, listener, QuadratureType.TRAPEZOIDAL);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = SimpsonIntegrator.create(a, b, listener, QuadratureType.MID_POINT);
-        assertTrue(integrator instanceof SimpsonMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.MID_POINT, integrator.getQuadratureType());
 
         integrator = SimpsonIntegrator.create(a, b, listener, QuadratureType.INFINITY_MID_POINT);
-        assertTrue(integrator instanceof SimpsonInfinityMidPointQuadratureIntegrator);
+        assertInstanceOf(SimpsonInfinityMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener,
-                QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonLowerSquareRootMidPointQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(SimpsonLowerSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener,
-                QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
-        assertTrue(integrator instanceof SimpsonUpperSquareRootMidPointQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, QuadratureType.UPPER_SQUARE_ROOT_MID_POINT);
+        assertInstanceOf(SimpsonUpperSquareRootMidPointQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
 
-        integrator = SimpsonIntegrator.create(a, b, listener,
-                QuadratureType.DOUBLE_EXPONENTIAL_RULE);
-        assertTrue(integrator instanceof SimpsonDoubleExponentialRuleQuadratureIntegrator);
+        integrator = SimpsonIntegrator.create(a, b, listener, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+        assertInstanceOf(SimpsonDoubleExponentialRuleQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.DOUBLE_EXPONENTIAL_RULE, integrator.getQuadratureType());
 
-        try {
-            SimpsonIntegrator.create(a, b, listener, QuadratureType.EXPONENTIAL_MID_POINT);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> SimpsonIntegrator.create(a, b, listener, QuadratureType.EXPONENTIAL_MID_POINT));
     }
 
     @Test
-    public void create_whenNoQuadratureType_returnsExpectedIntegrator() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+    void create_whenNoQuadratureType_returnsExpectedIntegrator() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final SingleDimensionFunctionEvaluatorListener listener =
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double point) {
-                        return 0.0;
-                    }
-                };
+        final SingleDimensionFunctionEvaluatorListener listener = point -> 0.0;
 
-        SimpsonIntegrator<?> integrator = SimpsonIntegrator.create(a, b, listener, EPS);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        var integrator = SimpsonIntegrator.create(a, b, listener, EPS);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
 
         integrator = SimpsonIntegrator.create(a, b, listener);
-        assertTrue(integrator instanceof SimpsonTrapezoidalQuadratureIntegrator);
+        assertInstanceOf(SimpsonTrapezoidalQuadratureIntegrator.class, integrator);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }

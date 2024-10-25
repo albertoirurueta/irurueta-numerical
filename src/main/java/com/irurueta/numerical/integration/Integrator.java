@@ -72,19 +72,13 @@ public abstract class Integrator {
      *                                  integrator type.
      */
     public static Integrator create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps,
-            final IntegratorType integratorType,
-            final QuadratureType quadratureType) {
-        switch (integratorType) {
-            case ROMBERG:
-                return RombergIntegrator.create(a, b, listener, eps, quadratureType);
-            case SIMPSON:
-                return SimpsonIntegrator.create(a, b, listener, eps, quadratureType);
-            case QUADRATURE:
-            default:
-                return QuadratureIntegrator.create(a, b, listener, eps, quadratureType);
-        }
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final IntegratorType integratorType, final QuadratureType quadratureType) {
+        return switch (integratorType) {
+            case ROMBERG -> RombergIntegrator.create(a, b, listener, eps, quadratureType);
+            case SIMPSON -> SimpsonIntegrator.create(a, b, listener, eps, quadratureType);
+            default -> QuadratureIntegrator.create(a, b, listener, eps, quadratureType);
+        };
     }
 
     /**
@@ -103,19 +97,13 @@ public abstract class Integrator {
      */
     @SuppressWarnings("Duplicates")
     public static Integrator create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final IntegratorType integratorType,
-            final QuadratureType quadratureType) {
-        switch (integratorType) {
-            case ROMBERG:
-                return RombergIntegrator.create(a, b, listener, quadratureType);
-            case SIMPSON:
-                return SimpsonIntegrator.create(a, b, listener, quadratureType);
-            case QUADRATURE:
-            default:
-                return QuadratureIntegrator.create(a, b, listener, quadratureType);
-        }
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
+            final IntegratorType integratorType, final QuadratureType quadratureType) {
+        return switch (integratorType) {
+            case ROMBERG -> RombergIntegrator.create(a, b, listener, quadratureType);
+            case SIMPSON -> SimpsonIntegrator.create(a, b, listener, quadratureType);
+            default -> QuadratureIntegrator.create(a, b, listener, quadratureType);
+        };
     }
 
     /**
@@ -132,18 +120,13 @@ public abstract class Integrator {
      */
     @SuppressWarnings("Duplicates")
     public static Integrator create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
             final IntegratorType integratorType) {
-        switch (integratorType) {
-            case ROMBERG:
-                return RombergIntegrator.create(a, b, listener, eps);
-            case SIMPSON:
-                return SimpsonIntegrator.create(a, b, listener, eps);
-            case QUADRATURE:
-            default:
-                return QuadratureIntegrator.create(a, b, listener, eps);
-        }
+        return switch (integratorType) {
+            case ROMBERG -> RombergIntegrator.create(a, b, listener, eps);
+            case SIMPSON -> SimpsonIntegrator.create(a, b, listener, eps);
+            default -> QuadratureIntegrator.create(a, b, listener, eps);
+        };
     }
 
     /**
@@ -159,18 +142,13 @@ public abstract class Integrator {
      * @return created integrator.
      */
     public static Integrator create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
             final IntegratorType integratorType) {
-        switch (integratorType) {
-            case ROMBERG:
-                return RombergIntegrator.create(a, b, listener);
-            case SIMPSON:
-                return SimpsonIntegrator.create(a, b, listener);
-            case QUADRATURE:
-            default:
-                return QuadratureIntegrator.create(a, b, listener);
-        }
+        return switch (integratorType) {
+            case ROMBERG -> RombergIntegrator.create(a, b, listener);
+            case SIMPSON -> SimpsonIntegrator.create(a, b, listener);
+            default -> QuadratureIntegrator.create(a, b, listener);
+        };
     }
 
     /**
@@ -185,8 +163,7 @@ public abstract class Integrator {
      * @return created integrator.
      */
     public static Integrator create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         return create(a, b, listener, eps, DEFAULT_INTEGRATOR_TYPE);
     }
 
@@ -201,8 +178,7 @@ public abstract class Integrator {
      * @return created integrator.
      */
     public static Integrator create(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         return create(a, b, listener, DEFAULT_INTEGRATOR_TYPE);
     }
 }

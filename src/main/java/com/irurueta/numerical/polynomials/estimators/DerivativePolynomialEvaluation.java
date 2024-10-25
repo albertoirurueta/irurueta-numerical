@@ -29,12 +29,12 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
     /**
      * Point where derivative of a given order has been evaluated.
      */
-    private double mX;
+    private double x;
 
     /**
      * Order of derivative.
      */
-    private int mDerivativeOrder;
+    private int derivativeOrder;
 
     /**
      * Constructor.
@@ -52,10 +52,9 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @param derivativeOrder order of derivative.
      * @throws IllegalArgumentException if order of derivative is less than 1.
      */
-    public DerivativePolynomialEvaluation(
-            final double x, final double evaluation, final int derivativeOrder) {
+    public DerivativePolynomialEvaluation(final double x, final double evaluation, final int derivativeOrder) {
         super(evaluation);
-        mX = x;
+        this.x = x;
         setDerivativeOrder(derivativeOrder);
     }
 
@@ -63,8 +62,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @param x          point where derivative of polynomial has been evaluated.
      * @param evaluation evaluation of nth-derivative of polynomial at point x.
      */
-    public DerivativePolynomialEvaluation(
-            final double x, final double evaluation) {
+    public DerivativePolynomialEvaluation(final double x, final double evaluation) {
         this(x, evaluation, MIN_DERIVATIVE_ORDER);
     }
 
@@ -74,7 +72,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @return point where polynomial derivative has been evaluated.
      */
     public double getX() {
-        return mX;
+        return x;
     }
 
     /**
@@ -83,7 +81,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @param x point where polynomial derivative has been evaluated.
      */
     public void setX(final double x) {
-        mX = x;
+        this.x = x;
     }
 
     /**
@@ -92,7 +90,7 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      * @return order of derivative.
      */
     public int getDerivativeOrder() {
-        return mDerivativeOrder;
+        return derivativeOrder;
     }
 
     /**
@@ -103,11 +101,10 @@ public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
      */
     public final void setDerivativeOrder(final int derivativeOrder) {
         if (derivativeOrder < MIN_DERIVATIVE_ORDER) {
-            throw new IllegalArgumentException(
-                    "derivative order must be at least 1");
+            throw new IllegalArgumentException("derivative order must be at least 1");
         }
 
-        mDerivativeOrder = derivativeOrder;
+        this.derivativeOrder = derivativeOrder;
     }
 
     /**

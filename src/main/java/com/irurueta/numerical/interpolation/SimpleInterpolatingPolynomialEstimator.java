@@ -37,7 +37,8 @@ public class SimpleInterpolatingPolynomialEstimator extends InterpolatingPolynom
      */
     @Override
     public void estimate(final double[] x, final double[] y, final double[] cof) {
-        if (x.length != y.length || x.length != cof.length) {
+        final var n = x.length;
+        if (n == 0 || n != y.length || n != cof.length) {
             throw new IllegalArgumentException("Wrong length of points or polynomial order");
         }
 
@@ -47,8 +48,8 @@ public class SimpleInterpolatingPolynomialEstimator extends InterpolatingPolynom
         double phi;
         double ff;
         double b;
-        final int n = x.length;
-        final double[] s = new double[n];
+
+        final var s = new double[n];
 
         for (i = 0; i < n; i++) {
             s[i] = cof[i] = 0.0;

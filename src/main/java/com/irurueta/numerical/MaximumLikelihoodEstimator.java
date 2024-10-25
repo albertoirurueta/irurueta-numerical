@@ -142,8 +142,8 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero, or if minValue &lt; maxValue.
      */
-    protected MaximumLikelihoodEstimator(final double minValue, final double maxValue,
-                                         final double[] inputData, final double gaussianSigma) {
+    protected MaximumLikelihoodEstimator(final double minValue, final double maxValue, final double[] inputData,
+                                         final double gaussianSigma) {
         this.inputData = inputData;
         locked = false;
         internalSetMinMaxValues(minValue, maxValue);
@@ -196,8 +196,7 @@ public abstract class MaximumLikelihoodEstimator {
      *                                  instance becomes unlocked.
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
-    public void setMinMaxValues(final double minValue, final double maxValue)
-            throws LockedException {
+    public void setMinMaxValues(final double minValue, final double maxValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -272,8 +271,8 @@ public abstract class MaximumLikelihoodEstimator {
      *                                  instance becomes unlocked.
      * @throws IllegalArgumentException Exception raised if minValue &lt; maxValue.
      */
-    public void setInputData(final double[] inputData, final double minValue,
-                             final double maxValue) throws LockedException {
+    public void setInputData(final double[] inputData, final double minValue, final double maxValue)
+            throws LockedException {
         setMinMaxValues(minValue, maxValue);
         this.inputData = inputData;
     }
@@ -322,8 +321,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Exception raised if provided Gaussian
      *                                  sigma is negative or zero.
      */
-    public void setGaussianSigma(final double gaussianSigma)
-            throws LockedException {
+    public void setGaussianSigma(final double gaussianSigma) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -354,19 +352,14 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero.
      */
-    public static MaximumLikelihoodEstimator create(
-            final double gaussianSigma, final MaximumLikelihoodEstimatorMethod method) {
-        switch (method) {
-            case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-                return new HistogramMaximumLikelihoodEstimator(gaussianSigma,
-                        HistogramMaximumLikelihoodEstimator.
-                                DEFAULT_NUMBER_OF_BINS);
-            case ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-            default:
-                return new AccurateMaximumLikelihoodEstimator(gaussianSigma,
-                        AccurateMaximumLikelihoodEstimator.
-                                DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
-
+    public static MaximumLikelihoodEstimator create(final double gaussianSigma,
+                                                    final MaximumLikelihoodEstimatorMethod method) {
+        if (method == MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR) {
+            return new HistogramMaximumLikelihoodEstimator(gaussianSigma,
+                    HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
+        } else {
+            return new AccurateMaximumLikelihoodEstimator(gaussianSigma,
+                    AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
         }
     }
 
@@ -406,18 +399,13 @@ public abstract class MaximumLikelihoodEstimator {
      *                                  negative or zero.
      */
     public static MaximumLikelihoodEstimator create(
-            final double[] inputData, final double gaussianSigma,
-            final MaximumLikelihoodEstimatorMethod method) {
-        switch (method) {
-            case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-                return new HistogramMaximumLikelihoodEstimator(inputData,
-                        gaussianSigma, HistogramMaximumLikelihoodEstimator.
-                        DEFAULT_NUMBER_OF_BINS);
-            case ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-            default:
-                return new AccurateMaximumLikelihoodEstimator(inputData,
-                        gaussianSigma, AccurateMaximumLikelihoodEstimator.
-                        DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
+            final double[] inputData, final double gaussianSigma, final MaximumLikelihoodEstimatorMethod method) {
+        if (method == MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR) {
+            return new HistogramMaximumLikelihoodEstimator(inputData, gaussianSigma,
+                    HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
+        } else {
+            return new AccurateMaximumLikelihoodEstimator(inputData, gaussianSigma,
+                    AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
         }
     }
 
@@ -432,8 +420,7 @@ public abstract class MaximumLikelihoodEstimator {
      * @throws IllegalArgumentException Raised if provided Gaussian sigma is
      *                                  negative or zero.
      */
-    public static MaximumLikelihoodEstimator create(
-            final double[] inputData, final double gaussianSigma) {
+    public static MaximumLikelihoodEstimator create(final double[] inputData, final double gaussianSigma) {
         return create(inputData, gaussianSigma, DEFAULT_METHOD);
     }
 
@@ -467,20 +454,14 @@ public abstract class MaximumLikelihoodEstimator {
      *                                  negative or zero, or if minValue &lt; maxValue.
      */
     public static MaximumLikelihoodEstimator create(
-            final double minValue, final double maxValue, final double[] inputData,
-            final double gaussianSigma, final MaximumLikelihoodEstimatorMethod method) {
-        switch (method) {
-            case HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-                return new HistogramMaximumLikelihoodEstimator(minValue,
-                        maxValue, inputData, gaussianSigma,
-                        HistogramMaximumLikelihoodEstimator.
-                                DEFAULT_NUMBER_OF_BINS);
-            case ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR:
-            default:
-                return new AccurateMaximumLikelihoodEstimator(minValue,
-                        maxValue, inputData, gaussianSigma,
-                        AccurateMaximumLikelihoodEstimator.
-                                DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
+            final double minValue, final double maxValue, final double[] inputData, final double gaussianSigma,
+            final MaximumLikelihoodEstimatorMethod method) {
+        if (method == MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR) {
+            return new HistogramMaximumLikelihoodEstimator(minValue, maxValue, inputData, gaussianSigma,
+                    HistogramMaximumLikelihoodEstimator.DEFAULT_NUMBER_OF_BINS);
+        } else {
+            return new AccurateMaximumLikelihoodEstimator(minValue, maxValue, inputData, gaussianSigma,
+                    AccurateMaximumLikelihoodEstimator.DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION);
         }
     }
 
@@ -499,10 +480,8 @@ public abstract class MaximumLikelihoodEstimator {
      *                                  negative or zero, or if minValue &lt; maxValue.
      */
     public static MaximumLikelihoodEstimator create(
-            final double minValue, final double maxValue, final double[] inputData,
-            final double gaussianSigma) {
-        return create(minValue, maxValue, inputData, gaussianSigma,
-                DEFAULT_METHOD);
+            final double minValue, final double maxValue, final double[] inputData, final double gaussianSigma) {
+        return create(minValue, maxValue, inputData, gaussianSigma, DEFAULT_METHOD);
     }
 
     /**
@@ -537,7 +516,7 @@ public abstract class MaximumLikelihoodEstimator {
         maxValue = -Integer.MAX_VALUE;
 
         double value;
-        for (final double data : inputData) {
+        for (final var data : inputData) {
             value = data;
             if (value < minValue) {
                 minValue = value;

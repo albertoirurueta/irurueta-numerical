@@ -23,8 +23,7 @@ import com.irurueta.algebra.WrongSizeException;
  *
  * @see MidPointMatrixQuadrature
  */
-public class RombergMidPointQuadratureMatrixIntegrator
-        extends RombergMatrixIntegrator<MidPointMatrixQuadrature> {
+public class RombergMidPointQuadratureMatrixIntegrator extends RombergMatrixIntegrator<MidPointMatrixQuadrature> {
 
     /**
      * Constructor.
@@ -37,8 +36,7 @@ public class RombergMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public RombergMidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new MidPointMatrixQuadrature(a, b, listener), eps);
     }
@@ -53,8 +51,7 @@ public class RombergMidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public RombergMidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }

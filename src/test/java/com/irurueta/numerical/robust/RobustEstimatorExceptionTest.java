@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.robust;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RobustEstimatorExceptionTest {
+class RobustEstimatorExceptionTest {
 
     @Test
-    public void testConstructor() {
-        RobustEstimatorException ex = new RobustEstimatorException();
+    void testConstructor() {
+        var ex = new RobustEstimatorException();
         assertNotNull(ex);
 
         ex = new RobustEstimatorException("message");

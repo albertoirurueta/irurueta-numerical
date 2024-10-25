@@ -21,14 +21,11 @@ import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class GoldenSingleOptimizerTest implements
-        SingleDimensionFunctionEvaluatorListener,
+public class GoldenSingleOptimizerTest implements SingleDimensionFunctionEvaluatorListener,
         OnIterationCompletedListener {
 
     public static final double MIN_EVAL_POINT = -1e3;
@@ -53,275 +50,154 @@ public class GoldenSingleOptimizerTest implements
     private int iterations = 0;
 
     @Test
-    public void testConstructor() throws NotAvailableException,
-            InvalidBracketRangeException {
+    void testConstructor() throws NotAvailableException, InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double middleEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(middleEvalPoint,
-                MAX_EVAL_POINT);
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var middleEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(middleEvalPoint, MAX_EVAL_POINT);
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
         // test 1st constructor
-        GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+        var optimizer = new GoldenSingleOptimizer();
         assertNotNull(optimizer);
-        assertEquals(GoldenSingleOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                optimizer.getMinEvaluationPoint(), 0.0);
-        assertEquals(GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                optimizer.getMiddleEvaluationPoint(), 0.0);
-        assertEquals(GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
-                optimizer.getMaxEvaluationPoint(), 0.0);
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT, optimizer.getMaxEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
         assertFalse(optimizer.areBracketEvaluationsAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // test 2nd constructor
-        optimizer = new GoldenSingleOptimizer(this, minEvalPoint,
-                middleEvalPoint, maxEvalPoint, tolerance);
+        optimizer = new GoldenSingleOptimizer(this, minEvalPoint, middleEvalPoint, maxEvalPoint, tolerance);
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertTrue(optimizer.isReady());
         assertTrue(optimizer.isBracketAvailable());
-        assertEquals(optimizer.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint,
-                0.0);
-        assertEquals(optimizer.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(minEvalPoint, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(middleEvalPoint, optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(maxEvalPoint, optimizer.getMaxEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
         assertFalse(optimizer.areBracketEvaluationsAvailable());
-        assertEquals(optimizer.getListener(), this);
+        assertEquals(this, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force InvalidBracketRangeException
-        optimizer = null;
-        try {
-            optimizer = new GoldenSingleOptimizer(this, maxEvalPoint,
-                    middleEvalPoint, minEvalPoint, tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, minEvalPoint,
-                    maxEvalPoint, middleEvalPoint, tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, maxEvalPoint,
-                    minEvalPoint, middleEvalPoint, tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, middleEvalPoint,
-                    minEvalPoint, maxEvalPoint, tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, middleEvalPoint,
-                    maxEvalPoint, minEvalPoint, tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-
-        try {
-            optimizer = new GoldenSingleOptimizer(this, maxEvalPoint,
-                    middleEvalPoint, minEvalPoint, -tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, minEvalPoint,
-                    maxEvalPoint, middleEvalPoint, -tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, maxEvalPoint,
-                    minEvalPoint, middleEvalPoint, -tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, middleEvalPoint,
-                    minEvalPoint, maxEvalPoint, -tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer = new GoldenSingleOptimizer(this, middleEvalPoint,
-                    maxEvalPoint, minEvalPoint, -tolerance);
-        } catch (final InvalidBracketRangeException ignore) {
-        }
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, maxEvalPoint,
+                middleEvalPoint, minEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, minEvalPoint,
+                maxEvalPoint, middleEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, maxEvalPoint,
+                minEvalPoint, middleEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, middleEvalPoint,
+                minEvalPoint, maxEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, middleEvalPoint,
+                maxEvalPoint, minEvalPoint, tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, maxEvalPoint,
+                middleEvalPoint, minEvalPoint, -tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, minEvalPoint,
+                maxEvalPoint, middleEvalPoint, -tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, maxEvalPoint,
+                minEvalPoint, middleEvalPoint, -tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, middleEvalPoint,
+                minEvalPoint, maxEvalPoint, -tolerance));
+        assertThrows(InvalidBracketRangeException.class, () -> new GoldenSingleOptimizer(this, middleEvalPoint,
+                maxEvalPoint, minEvalPoint, -tolerance));
 
         // Force IllegalArgumentException
-        try {
-            optimizer = new GoldenSingleOptimizer(this, minEvalPoint,
-                    middleEvalPoint, maxEvalPoint, -tolerance);
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new GoldenSingleOptimizer(this, minEvalPoint,
+                middleEvalPoint, maxEvalPoint, -tolerance));
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
+    void testGetSetTolerance() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+        final var optimizer = new GoldenSingleOptimizer();
 
-        assertEquals(GoldenSingleOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
 
         // check correctness
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            optimizer.setTolerance(-tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> optimizer.setTolerance(-tolerance));
     }
 
     @Test
-    public void testGetSetBracketAndAvailability() throws NotAvailableException,
-            LockedException, InvalidBracketRangeException {
+    void testGetSetBracketAndAvailability() throws NotAvailableException, LockedException,
+            InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double middleEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(middleEvalPoint,
-                MAX_EVAL_POINT);
+        final var randomizer = new UniformRandomizer();
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var middleEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(middleEvalPoint, MAX_EVAL_POINT);
 
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+        final var optimizer = new GoldenSingleOptimizer();
 
         assertTrue(optimizer.isBracketAvailable());
 
-        assertEquals(GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                optimizer.getMinEvaluationPoint(), 0.0);
-        assertEquals(GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                optimizer.getMiddleEvaluationPoint(), 0.0);
-        assertEquals(GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
-                optimizer.getMaxEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIN_EVAL_POINT, optimizer.getMinEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT, optimizer.getMiddleEvaluationPoint(), 0.0);
+        assertEquals(GoldenSingleOptimizer.DEFAULT_MAX_EVAL_POINT, optimizer.getMaxEvaluationPoint(), 0.0);
 
         // set new bracket
         optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
 
         // check correctness
         assertEquals(optimizer.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint,
-                0.0);
+        assertEquals(optimizer.getMiddleEvaluationPoint(), middleEvalPoint, 0.0);
         assertEquals(optimizer.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
 
         // Force InvalidBracketRangeException
-        try {
-            optimizer.setBracket(maxEvalPoint, middleEvalPoint, minEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(minEvalPoint, maxEvalPoint, middleEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(maxEvalPoint, minEvalPoint, middleEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(middleEvalPoint, minEvalPoint, maxEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        try {
-            optimizer.setBracket(middleEvalPoint, maxEvalPoint, minEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
+        assertThrows(InvalidBracketRangeException.class, () -> optimizer.setBracket(maxEvalPoint, middleEvalPoint,
+                minEvalPoint));
+        assertThrows(InvalidBracketRangeException.class, () -> optimizer.setBracket(minEvalPoint, maxEvalPoint,
+                middleEvalPoint));
+        assertThrows(InvalidBracketRangeException.class, () -> optimizer.setBracket(maxEvalPoint, minEvalPoint,
+                middleEvalPoint));
+        assertThrows(InvalidBracketRangeException.class, () -> optimizer.setBracket(middleEvalPoint, minEvalPoint,
+                maxEvalPoint));
+        assertThrows(InvalidBracketRangeException.class, () -> optimizer.setBracket(middleEvalPoint, maxEvalPoint,
+                minEvalPoint));
     }
 
     @Test
-    public void testGetEvaluationsAndEvaluateBracket()
-            throws InvalidBracketRangeException, LockedException,
-            NotReadyException, OptimizationException {
+    void testGetEvaluationsAndEvaluateBracket() throws InvalidBracketRangeException, LockedException, NotReadyException,
+            OptimizationException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
         // set bracket
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double middleEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(middleEvalPoint,
-                MAX_EVAL_POINT);
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var middleEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(middleEvalPoint, MAX_EVAL_POINT);
 
         // set offset
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
@@ -329,27 +205,14 @@ public class GoldenSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer(this,
-                minEvalPoint, middleEvalPoint, maxEvalPoint,
+        final var optimizer = new GoldenSingleOptimizer(this, minEvalPoint, middleEvalPoint, maxEvalPoint,
                 GoldenSingleOptimizer.DEFAULT_TOLERANCE);
 
         // attempting to retrieve evaluations fails because although bracket is
         // available, evaluations have not yet been computed
-        try {
-            optimizer.getEvaluationAtMin();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMiddle();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtMax();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMin);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMiddle);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtMax);
 
         assertFalse(optimizer.areBracketEvaluationsAvailable());
 
@@ -360,10 +223,9 @@ public class GoldenSingleOptimizerTest implements
     }
 
     @Test
-    public void testComputeBracket() throws LockedException, NotReadyException,
-            OptimizationException, NotAvailableException {
+    void testComputeBracket() throws LockedException, NotReadyException, OptimizationException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -374,7 +236,7 @@ public class GoldenSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+        final var optimizer = new GoldenSingleOptimizer();
         optimizer.setListener(this);
 
         assertTrue(optimizer.isBracketAvailable());
@@ -387,14 +249,10 @@ public class GoldenSingleOptimizerTest implements
 
         // after computing bracket we can only ensure that ax < bx < cx and also
         // that fa > fb and fc > fb
-        assertTrue(optimizer.getMinEvaluationPoint() <=
-                optimizer.getMiddleEvaluationPoint());
-        assertTrue(optimizer.getMiddleEvaluationPoint() <=
-                optimizer.getMaxEvaluationPoint());
-        assertTrue(optimizer.getEvaluationAtMin() >=
-                optimizer.getEvaluationAtMiddle());
-        assertTrue(optimizer.getEvaluationAtMax() >=
-                optimizer.getEvaluationAtMiddle());
+        assertTrue(optimizer.getMinEvaluationPoint() <= optimizer.getMiddleEvaluationPoint());
+        assertTrue(optimizer.getMiddleEvaluationPoint() <= optimizer.getMaxEvaluationPoint());
+        assertTrue(optimizer.getEvaluationAtMin() >= optimizer.getEvaluationAtMiddle());
+        assertTrue(optimizer.getEvaluationAtMax() >= optimizer.getEvaluationAtMiddle());
 
         // also bracket limits must surround the real minimum location, that is
         // ax < minimum and cx > minimum
@@ -403,10 +261,9 @@ public class GoldenSingleOptimizerTest implements
     }
 
     @Test
-    public void testGetSetListenerAndAvailability() throws LockedException,
-            NotAvailableException {
+    void testGetSetListenerAndAvailability() throws LockedException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -417,14 +274,10 @@ public class GoldenSingleOptimizerTest implements
         // set width
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+        final var optimizer = new GoldenSingleOptimizer();
 
         assertFalse(optimizer.isListenerAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isReady());
 
         // set listener
@@ -437,16 +290,15 @@ public class GoldenSingleOptimizerTest implements
     }
 
     @Test
-    public void testIsLocked() {
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
-
+    void testIsLocked() {
+        final var optimizer = new GoldenSingleOptimizer();
         assertFalse(optimizer.isLocked());
     }
 
     @Test
-    public void testIsReady() throws LockedException {
+    void testIsReady() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // set minimum to be estimated
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -458,7 +310,7 @@ public class GoldenSingleOptimizerTest implements
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
 
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+        final var optimizer = new GoldenSingleOptimizer();
 
         assertFalse(optimizer.isReady());
 
@@ -470,8 +322,8 @@ public class GoldenSingleOptimizerTest implements
     }
 
     @Test
-    public void testGetSetOnIterationCompletedListener() throws LockedException {
-        final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+    void testGetSetOnIterationCompletedListener() throws LockedException {
+        final var optimizer = new GoldenSingleOptimizer();
 
         assertNull(optimizer.getOnIterationCompletedListener());
 
@@ -483,10 +335,10 @@ public class GoldenSingleOptimizerTest implements
     }
 
     @Test
-    public void testMinimizeGetResultAndAvailability() throws Throwable {
+    void testMinimizeGetResultAndAvailability() throws Throwable {
 
-        for (int i = 0; i < TIMES; i++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        for (var i = 0; i < TIMES; i++) {
+            final var randomizer = new UniformRandomizer();
 
             // set minimum to be estimated
             minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -497,29 +349,19 @@ public class GoldenSingleOptimizerTest implements
             // set width
             width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-            final GoldenSingleOptimizer optimizer = new GoldenSingleOptimizer();
+            final var optimizer = new GoldenSingleOptimizer();
             optimizer.setListener(this);
             optimizer.setOnIterationCompletedListener(this);
 
             assertFalse(optimizer.isResultAvailable());
-            try {
-                optimizer.getResult();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
-            try {
-                optimizer.getEvaluationAtResult();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
+            assertThrows(NotAvailableException.class, optimizer::getResult);
+            assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
 
             // minimize
             if (minimum > 0.0) {
-                optimizer.setBracket(0.8 * minimum, 1.1 * minimum,
-                        1.5 * minimum);
+                optimizer.setBracket(0.8 * minimum, 1.1 * minimum, 1.5 * minimum);
             } else {
-                optimizer.setBracket(1.5 * minimum, 1.1 * minimum,
-                        0.8 * minimum);
+                optimizer.setBracket(1.5 * minimum, 1.1 * minimum, 0.8 * minimum);
             }
 
             reset();
@@ -530,8 +372,7 @@ public class GoldenSingleOptimizerTest implements
             // test correctness
             assertTrue(optimizer.isResultAvailable());
             assertEquals(optimizer.getResult(), minimum, ABSOLUTE_ERROR);
-            assertEquals(optimizer.getEvaluationAtResult(), evaluate(
-                    optimizer.getResult()), 0.0);
+            assertEquals(optimizer.getEvaluationAtResult(), evaluate(optimizer.getResult()), 0.0);
             assertTrue(iterations > 0);
         }
     }

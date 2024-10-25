@@ -25,8 +25,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * also its derivative information.
  * This class is meant to be extended by final implementations.
  */
-public abstract class DerivativeSingleRootEstimator
-        extends BracketedSingleRootEstimator {
+public abstract class DerivativeSingleRootEstimator extends BracketedSingleRootEstimator {
 
     /**
      * Listener to evaluate a function's derivative. If the function's
@@ -57,9 +56,8 @@ public abstract class DerivativeSingleRootEstimator
      *                                      maxEvalPoint.
      */
     protected DerivativeSingleRootEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double maxEvalPoint)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         derivativeListener = null;
     }
@@ -79,9 +77,8 @@ public abstract class DerivativeSingleRootEstimator
      */
     protected DerivativeSingleRootEstimator(
             final SingleDimensionFunctionEvaluatorListener listener,
-            final SingleDimensionFunctionEvaluatorListener derivativeListener,
-            final double minEvalPoint, final double maxEvalPoint)
-            throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener derivativeListener, final double minEvalPoint,
+            final double maxEvalPoint) throws InvalidBracketRangeException {
         super(listener, minEvalPoint, maxEvalPoint);
         this.derivativeListener = derivativeListener;
     }
@@ -95,8 +92,7 @@ public abstract class DerivativeSingleRootEstimator
      * @return Derivative listener.
      * @throws NotAvailableException if listener is not available for retrieval.
      */
-    public SingleDimensionFunctionEvaluatorListener getDerivativeListener()
-            throws NotAvailableException {
+    public SingleDimensionFunctionEvaluatorListener getDerivativeListener() throws NotAvailableException {
         if (!isDerivativeListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -112,8 +108,7 @@ public abstract class DerivativeSingleRootEstimator
      * @param derivativeListener Derivative listener to be set.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setDerivativeListener(
-            final SingleDimensionFunctionEvaluatorListener derivativeListener)
+    public void setDerivativeListener(final SingleDimensionFunctionEvaluatorListener derivativeListener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -142,7 +137,6 @@ public abstract class DerivativeSingleRootEstimator
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isBracketAvailable() &&
-                isDerivativeListenerAvailable();
+        return isListenerAvailable() && isBracketAvailable() && isDerivativeListenerAvailable();
     }
 }

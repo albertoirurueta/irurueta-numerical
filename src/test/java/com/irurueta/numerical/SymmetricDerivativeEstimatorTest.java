@@ -16,15 +16,12 @@
 package com.irurueta.numerical;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class SymmetricDerivativeEstimatorTest
-        implements SingleDimensionFunctionEvaluatorListener {
+class SymmetricDerivativeEstimatorTest implements SingleDimensionFunctionEvaluatorListener {
 
     private static final double MIN_EVAL_POINT = -10.0;
     private static final double MAX_EVAL_POINT = 10.0;
@@ -44,37 +41,35 @@ public class SymmetricDerivativeEstimatorTest
     private double offset;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final SymmetricDerivativeEstimator estimator =
-                new SymmetricDerivativeEstimator(this);
+        final var estimator = new SymmetricDerivativeEstimator(this);
         assertNotNull(estimator);
     }
 
     @Test
-    public void testDerivative() throws EvaluationException {
+    void testDerivative() throws EvaluationException {
 
-        for (int i = 0; i < TIMES; i++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        for (var i = 0; i < TIMES; i++) {
+            final var randomizer = new UniformRandomizer();
             minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
             offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
             width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-            final double x = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+            final var x = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-            final SymmetricDerivativeEstimator estimator =
-                    new SymmetricDerivativeEstimator(this);
+            final var estimator = new SymmetricDerivativeEstimator(this);
 
             // estimate derivative
-            final double estDerivative = estimator.derivative(x);
+            final var estDerivative = estimator.derivative(x);
 
             // real derivative
-            final double realDerivative = derivative(x);
+            final var realDerivative = derivative(x);
 
             // compare both results
             assertEquals(estDerivative, realDerivative, ABSOLUTE_ERROR);
@@ -86,7 +81,7 @@ public class SymmetricDerivativeEstimatorTest
         return (point - minimum) * (point - minimum) / width + offset;
     }
 
-    public double derivative(final double x) {
+    private double derivative(final double x) {
         return 2.0 * (x - minimum) / width;
     }
 }

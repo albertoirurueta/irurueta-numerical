@@ -33,8 +33,7 @@ import java.util.Arrays;
  * Ed, page 801.
  */
 @SuppressWarnings("DuplicatedCode")
-public class LevenbergMarquardtSingleDimensionFitter
-        extends SingleDimensionFitter {
+public class LevenbergMarquardtSingleDimensionFitter extends SingleDimensionFitter {
 
     /**
      * Default convergence parameter. Number of times that tolerance is assumed
@@ -139,8 +138,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public LevenbergMarquardtSingleDimensionFitter(
-            final double[] x, final double[] y, final double[] sig) {
+    public LevenbergMarquardtSingleDimensionFitter(final double[] x, final double[] y, final double[] sig) {
         super(x, y, sig);
     }
 
@@ -155,8 +153,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @throws IllegalArgumentException if provided arrays don't have the same
      *                                  length.
      */
-    public LevenbergMarquardtSingleDimensionFitter(
-            final double[] x, final double[] y, final double sig) {
+    public LevenbergMarquardtSingleDimensionFitter(final double[] x, final double[] y, final double sig) {
         super(x, y, sig);
     }
 
@@ -168,8 +165,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @throws FittingException if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
-            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator) throws FittingException {
         this();
         setFunctionEvaluator(evaluator);
     }
@@ -188,9 +184,8 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @throws FittingException         if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
-            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double[] sig)
-            throws FittingException {
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double[] sig) throws FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -210,8 +205,8 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @throws FittingException         if evaluation fails.
      */
     public LevenbergMarquardtSingleDimensionFitter(
-            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator,
-            final double[] x, final double[] y, final double sig) throws FittingException {
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double sig) throws FittingException {
         this(x, y, sig);
         setFunctionEvaluator(evaluator);
     }
@@ -300,8 +295,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @throws FittingException if evaluation fails
      */
     public final void setFunctionEvaluator(
-            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
-            throws FittingException {
+            final LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator) throws FittingException {
         internalSetFunctionEvaluator(evaluator);
     }
 
@@ -314,8 +308,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      */
     @Override
     public boolean isReady() {
-        return evaluator != null && x != null && y != null &&
-                x.length == y.length;
+        return evaluator != null && x != null && y != null && x.length == y.length;
     }
 
     /**
@@ -463,9 +456,9 @@ public class LevenbergMarquardtSingleDimensionFitter
             int done = 0;
             double alamda = 0.001;
             double ochisq;
-            final double[] atry = new double[ma];
-            final double[] beta = new double[ma];
-            final double[] da = new double[ma];
+            final var atry = new double[ma];
+            final var beta = new double[ma];
+            final var da = new double[ma];
 
             // number of parameters to be fitted
             mfit = 0;
@@ -475,8 +468,8 @@ public class LevenbergMarquardtSingleDimensionFitter
                 }
             }
 
-            final Matrix oneda = new Matrix(mfit, 1);
-            final Matrix temp = new Matrix(mfit, mfit);
+            final var oneda = new Matrix(mfit, 1);
+            final var temp = new Matrix(mfit, mfit);
 
             // initialization
             mrqcof(a, alpha, beta);
@@ -612,13 +605,13 @@ public class LevenbergMarquardtSingleDimensionFitter
      */
     private void adjustCovariance() throws AlgebraException, EvaluationException {
 
-        final Matrix invCov = new Matrix(a.length, a.length);
-        final Matrix tmp1 = new Matrix(a.length, 1);
-        final Matrix tmp2 = new Matrix(1, a.length);
-        final Matrix tmpInvCov = new Matrix(a.length, a.length);
-        final double[] derivatives = new double[a.length];
-        final int chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
-        for (int i = 0; i < ndat; i++) {
+        final var invCov = new Matrix(a.length, a.length);
+        final var tmp1 = new Matrix(a.length, 1);
+        final var tmp2 = new Matrix(1, a.length);
+        final var tmpInvCov = new Matrix(a.length, a.length);
+        final var derivatives = new double[a.length];
+        final var chiSqrDegreesOfFreedom = getChisqDegreesOfFreedom();
+        for (var i = 0; i < ndat; i++) {
             evaluator.evaluate(i, x[i], a, derivatives);
 
             tmp1.fromArray(derivatives);
@@ -626,7 +619,7 @@ public class LevenbergMarquardtSingleDimensionFitter
 
             tmp1.multiply(tmp2, tmpInvCov);
 
-            final double w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
+            final var w = 1.0 / ((chiSqrDegreesOfFreedom + 1) * sig[i] * sig[i]);
             tmpInvCov.multiplyByScalar(w);
             invCov.add(tmpInvCov);
         }
@@ -641,8 +634,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param evaluator function evaluator
      * @throws FittingException if evaluation fails
      */
-    private void internalSetFunctionEvaluator(
-            LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
+    private void internalSetFunctionEvaluator(LevenbergMarquardtSingleDimensionFunctionEvaluator evaluator)
             throws FittingException {
 
         try {
@@ -683,7 +675,7 @@ public class LevenbergMarquardtSingleDimensionFitter
         double wt;
         double sig2i;
         double dy;
-        final double[] dyda = new double[ma];
+        final var dyda = new double[ma];
 
         // initialize (symmetric) alpha, beta
         for (j = 0; j < mfit; j++) {
@@ -695,7 +687,7 @@ public class LevenbergMarquardtSingleDimensionFitter
 
         chisq = 0.0;
         mse = 0.0;
-        final int degreesOfFreedom = getChisqDegreesOfFreedom();
+        final var degreesOfFreedom = getChisqDegreesOfFreedom();
         for (i = 0; i < ndat; i++) {
             // summation loop over all data
             ymod = evaluator.evaluate(i, x[i], a, dyda);
@@ -705,10 +697,10 @@ public class LevenbergMarquardtSingleDimensionFitter
             for (j = 0, l = 0; l < ma; l++) {
                 if (ia[l]) {
                     wt = dyda[l] * sig2i;
-                    final double[] alphaBuffer = alpha.getBuffer();
+                    final var alphaBuffer = alpha.getBuffer();
                     for (k = 0, m = 0; m < l + 1; m++) {
                         if (ia[m]) {
-                            final int index = alpha.getIndex(j, k++);
+                            final var index = alpha.getIndex(j, k++);
                             alphaBuffer[index] += wt * dyda[m];
                         }
                     }
@@ -738,7 +730,7 @@ public class LevenbergMarquardtSingleDimensionFitter
      *
      * @param covar covariance matrix.
      */
-    private void covsrt(Matrix covar) {
+    private void covsrt(final Matrix covar) {
         int i;
         int j;
         int k;
@@ -752,16 +744,16 @@ public class LevenbergMarquardtSingleDimensionFitter
         k = mfit - 1;
         for (j = ma - 1; j >= 0; j--) {
             if (ia[j]) {
-                final double[] buffer = covar.getBuffer();
+                final var buffer = covar.getBuffer();
                 for (i = 0; i < ma; i++) {
-                    final int pos1 = covar.getIndex(i, k);
-                    final int pos2 = covar.getIndex(i, j);
+                    final var pos1 = covar.getIndex(i, k);
+                    final var pos2 = covar.getIndex(i, j);
                     swap(buffer, buffer, pos1, pos2);
                 }
 
                 for (i = 0; i < ma; i++) {
-                    final int pos1 = covar.getIndex(k, i);
-                    final int pos2 = covar.getIndex(j, i);
+                    final var pos1 = covar.getIndex(k, i);
+                    final var pos2 = covar.getIndex(j, i);
                     swap(buffer, buffer, pos1, pos2);
                 }
 
@@ -778,9 +770,9 @@ public class LevenbergMarquardtSingleDimensionFitter
      * @param pos1   1st position.
      * @param pos2   2nd position.
      */
-    private void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
-        final double value1 = array1[pos1];
-        final double value2 = array2[pos2];
+    private static void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
+        final var value1 = array1[pos1];
+        final var value2 = array2[pos2];
         array1[pos1] = value2;
         array2[pos2] = value1;
     }

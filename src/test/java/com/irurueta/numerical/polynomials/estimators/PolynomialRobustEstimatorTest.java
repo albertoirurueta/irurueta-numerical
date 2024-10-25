@@ -16,37 +16,30 @@
 package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.irurueta.numerical.polynomials.estimators.PolynomialRobustEstimator.DEFAULT_PROGRESS_DELTA;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PolynomialRobustEstimatorTest implements
-        PolynomialRobustEstimatorListener {
+class PolynomialRobustEstimatorTest implements PolynomialRobustEstimatorListener {
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         // test empty creator
-        PolynomialRobustEstimator estimator =
-                PolynomialRobustEstimator.create();
+        var estimator = PolynomialRobustEstimator.create();
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -56,86 +49,61 @@ public class PolynomialRobustEstimatorTest implements
         estimator = PolynomialRobustEstimator.create(2);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0));
 
         // test creator with evaluations
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
         estimator = PolynomialRobustEstimator.create(evaluations);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var wrongEvaluations = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations));
 
         // test creator with listener
         estimator = PolynomialRobustEstimator.create(this);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -146,250 +114,174 @@ public class PolynomialRobustEstimatorTest implements
         estimator = PolynomialRobustEstimator.create(2, evaluations);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2,
+                wrongEvaluations));
 
         // test creator with degree and listener
         estimator = PolynomialRobustEstimator.create(2, this);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, this));
 
         // test creator with evaluations and listener
         estimator = PolynomialRobustEstimator.create(evaluations, this);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                this));
 
         // test creator with degree, evaluations and listener
         estimator = PolynomialRobustEstimator.create(2, evaluations, this);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations, this);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                this));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                this));
     }
 
     @Test
-    public void testCreteRANSAC() {
+    void testCreteRANSAC() {
         // test creator with method
-        PolynomialRobustEstimator estimator =
-                PolynomialRobustEstimator.create(RobustEstimatorMethod.RANSAC);
+        var estimator = PolynomialRobustEstimator.create(RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // test creator with degree and method
-        estimator = PolynomialRobustEstimator.create(2,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(2, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0,
+                RobustEstimatorMethod.RANSAC));
 
         // test creator with evaluations and method
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(evaluations,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(evaluations, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvals,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var wrongEvals = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvals,
+                RobustEstimatorMethod.RANSAC));
 
         // test creator with listener and method
-        estimator = PolynomialRobustEstimator.create(this,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(this, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -397,263 +289,179 @@ public class PolynomialRobustEstimatorTest implements
 
         // test creator with degree, evaluations and method
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(2, evaluations,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvals,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                RobustEstimatorMethod.RANSAC));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvals,
+                RobustEstimatorMethod.RANSAC));
 
         // test creator with degree, listener and method
-        estimator = PolynomialRobustEstimator.create(2, this,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(2, this, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, this,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, this,
+                RobustEstimatorMethod.RANSAC));
 
         // test creator with evaluations and listener
-        estimator = PolynomialRobustEstimator.create(evaluations, this,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(evaluations, this, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(1, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvals, this,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvals, this,
+                RobustEstimatorMethod.RANSAC));
 
         // test creator with degree, evaluations, listener and method
-        estimator = PolynomialRobustEstimator.create(2, evaluations, this,
-                RobustEstimatorMethod.RANSAC);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, this, RobustEstimatorMethod.RANSAC);
 
         // check
-        assertTrue(estimator instanceof RANSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(RANSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations, this,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
-                    RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                this, RobustEstimatorMethod.RANSAC));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvals,
+                this, RobustEstimatorMethod.RANSAC));
     }
 
     @Test
-    public void testCreateLMedS() {
+    void testCreateLMedS() {
         // test creator with method
-        PolynomialRobustEstimator estimator =
-                PolynomialRobustEstimator.create(RobustEstimatorMethod.LMEDS);
+        var estimator = PolynomialRobustEstimator.create(RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // test creator with degree and method
-        estimator = PolynomialRobustEstimator.create(2,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(2, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0,
+                RobustEstimatorMethod.LMEDS));
 
         // test creator with evaluations and method
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(evaluations,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(evaluations, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvals = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvals,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var wrongEvals = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvals,
+                RobustEstimatorMethod.LMEDS));
 
         // test creator with listener and method
-        estimator = PolynomialRobustEstimator.create(this,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(this, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -661,978 +469,656 @@ public class PolynomialRobustEstimatorTest implements
 
         // test creator with degree, evaluations and method
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(2, evaluations,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvals,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                RobustEstimatorMethod.LMEDS));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvals,
+                RobustEstimatorMethod.LMEDS));
 
         // test creator with degree, listener and method
-        estimator = PolynomialRobustEstimator.create(2, this,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(2, this, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, this,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, this,
+                RobustEstimatorMethod.LMEDS));
 
         // test creator with evaluations and listener
-        estimator = PolynomialRobustEstimator.create(evaluations, this,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(evaluations, this, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(1, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvals, this,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvals, this,
+                RobustEstimatorMethod.LMEDS));
 
         // test creator with degree, evaluations, listener and method
-        estimator = PolynomialRobustEstimator.create(2, evaluations, this,
-                RobustEstimatorMethod.LMEDS);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, this, RobustEstimatorMethod.LMEDS);
 
         // check
-        assertTrue(estimator instanceof LMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(LMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations, this,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvals, this,
-                    RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                this, RobustEstimatorMethod.LMEDS));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvals,
+                this, RobustEstimatorMethod.LMEDS));
     }
 
     @Test
-    public void testCreateMSAC() {
+    void testCreateMSAC() {
         // test creator with method
-        PolynomialRobustEstimator estimator =
-                PolynomialRobustEstimator.create(RobustEstimatorMethod.MSAC);
+        var estimator = PolynomialRobustEstimator.create(RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
-
         // test creator with degree and method
-        estimator = PolynomialRobustEstimator.create(2,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(2, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0,
+                RobustEstimatorMethod.MSAC));
 
         // test creator with evaluations and method
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(evaluations,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(evaluations, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        final var wrongEvaluations = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                RobustEstimatorMethod.MSAC));
 
         // test creator with listener and method
-        estimator = PolynomialRobustEstimator.create(this,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(this, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
-
 
         // test creator with degree, evaluations and method
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(2, evaluations,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                RobustEstimatorMethod.MSAC));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                RobustEstimatorMethod.MSAC));
 
         // test creator with degree, listener and method
-        estimator = PolynomialRobustEstimator.create(2, this,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(2, this, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, this,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, this,
+                RobustEstimatorMethod.MSAC));
 
         // test creator with evaluations and listener
-        estimator = PolynomialRobustEstimator.create(evaluations, this,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(evaluations, this, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(1, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations, this,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                this, RobustEstimatorMethod.MSAC));
 
         // test creator with degree, evaluations, listener and method
-        estimator = PolynomialRobustEstimator.create(2, evaluations, this,
-                RobustEstimatorMethod.MSAC);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, this, RobustEstimatorMethod.MSAC);
 
         // check
-        assertTrue(estimator instanceof MSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(MSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations, this,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations, this,
-                    RobustEstimatorMethod.MSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                this, RobustEstimatorMethod.MSAC));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                this, RobustEstimatorMethod.MSAC));
     }
 
     @Test
-    public void testCreatePROSAC() {
+    void testCreatePROSAC() {
         // test empty creator
-        PolynomialRobustEstimator estimator =
-                PolynomialRobustEstimator.create(RobustEstimatorMethod.PROSAC);
+        var estimator = PolynomialRobustEstimator.create(RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
-
 
         // test creator with degree
-        estimator = PolynomialRobustEstimator.create(2,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(2, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0,
+                RobustEstimatorMethod.PROSAC));
 
         // test creator with evaluations
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(evaluations,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(evaluations, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        final var wrongEvaluations = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                RobustEstimatorMethod.PROSAC));
 
         // test creator with listener
-        estimator = PolynomialRobustEstimator.create(this,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(this, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
-
 
         // test creator with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(2, evaluations,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                RobustEstimatorMethod.PROSAC));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                RobustEstimatorMethod.PROSAC));
 
         // test creator with degree and listener
-        estimator = PolynomialRobustEstimator.create(2, this,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(2, this, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, this,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, this,
+                RobustEstimatorMethod.PROSAC));
 
         // test creator with evaluations and listener
-        estimator = PolynomialRobustEstimator.create(evaluations, this,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(evaluations, this, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations, this,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                this, RobustEstimatorMethod.PROSAC));
 
         // test creator with degree, evaluations and listener
-        estimator = PolynomialRobustEstimator.create(2, evaluations, this,
-                RobustEstimatorMethod.PROSAC);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, this, RobustEstimatorMethod.PROSAC);
 
         // check
-        assertTrue(estimator instanceof PROSACPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROSACPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations, this,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations, this,
-                    RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                this, RobustEstimatorMethod.PROSAC));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                this, RobustEstimatorMethod.PROSAC));
     }
 
     @Test
-    public void testCreatePROMedS() {
+    void testCreatePROMedS() {
         // test empty creator
-        PolynomialRobustEstimator estimator =
-                PolynomialRobustEstimator.create(RobustEstimatorMethod.PROMEDS);
+        var estimator = PolynomialRobustEstimator.create(RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
-
         // test creator with degree
-        estimator = PolynomialRobustEstimator.create(2,
-                RobustEstimatorMethod.PROMEDS);
+        estimator = PolynomialRobustEstimator.create(2, RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0,
+                RobustEstimatorMethod.PROMEDS));
 
         // test creator with evaluations
-        final List<PolynomialEvaluation> evaluations = new ArrayList<>();
+        final var evaluations = new ArrayList<PolynomialEvaluation>();
         evaluations.add(new DirectPolynomialEvaluation());
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(evaluations,
-                RobustEstimatorMethod.PROMEDS);
+        estimator = PolynomialRobustEstimator.create(evaluations, RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
         assertSame(estimator.getEvaluations(), evaluations);
         assertEquals(2, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        final List<PolynomialEvaluation> wrongEvaluations = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        final var wrongEvaluations = new ArrayList<PolynomialEvaluation>();
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                RobustEstimatorMethod.PROMEDS));
 
         // test creator with listener
-        estimator = PolynomialRobustEstimator.create(this,
-                RobustEstimatorMethod.PROMEDS);
+        estimator = PolynomialRobustEstimator.create(this, RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(PolynomialEstimator.MIN_DEGREE, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
-
 
         // test creator with degree and evaluations
         evaluations.add(new DirectPolynomialEvaluation());
-        estimator = PolynomialRobustEstimator.create(2, evaluations,
-                RobustEstimatorMethod.PROMEDS);
+        estimator = PolynomialRobustEstimator.create(2, evaluations, RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
         assertNull(estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                RobustEstimatorMethod.PROMEDS));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                RobustEstimatorMethod.PROMEDS));
 
         // test creator with degree and listener
-        estimator = PolynomialRobustEstimator.create(2, this,
-                RobustEstimatorMethod.PROMEDS);
+        estimator = PolynomialRobustEstimator.create(2, this, RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
         assertNull(estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, this,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, this,
+                RobustEstimatorMethod.PROMEDS));
 
         // test creator with evaluations and listener
-        estimator = PolynomialRobustEstimator.create(evaluations, this,
-                RobustEstimatorMethod.PROMEDS);
+        estimator = PolynomialRobustEstimator.create(evaluations, this, RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(2, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(1, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(wrongEvaluations, this,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(wrongEvaluations,
+                this, RobustEstimatorMethod.PROMEDS));
 
         // test creator with degree, evaluations and listener
         estimator = PolynomialRobustEstimator.create(2, evaluations, this,
                 RobustEstimatorMethod.PROMEDS);
 
         // check
-        assertTrue(estimator instanceof PROMedSPolynomialRobustEstimator);
-        assertSame(estimator.getEvaluations(), evaluations);
+        assertInstanceOf(PROMedSPolynomialRobustEstimator.class, estimator);
+        assertSame(evaluations, estimator.getEvaluations());
         assertEquals(3, estimator.getMinNumberOfEvaluations());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertFalse(estimator.isLocked());
-        assertEquals(DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE,
-                estimator.isGeometricDistanceUsed());
+        assertEquals(DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PolynomialRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
+        assertEquals(PolynomialRobustEstimator.DEFAULT_USE_GEOMETRIC_DISTANCE, estimator.isGeometricDistanceUsed());
         assertEquals(2, estimator.getDegree());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PolynomialRobustEstimator.create(0, evaluations, this,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PolynomialRobustEstimator.create(2, wrongEvaluations, this,
-                    RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(0, evaluations,
+                this, RobustEstimatorMethod.PROMEDS));
+        assertThrows(IllegalArgumentException.class, () -> PolynomialRobustEstimator.create(2, wrongEvaluations,
+                this, RobustEstimatorMethod.PROMEDS));
     }
 
     @Override
     public void onEstimateStart(final PolynomialRobustEstimator estimator) {
+        // no action needed
     }
 
     @Override
     public void onEstimateEnd(final PolynomialRobustEstimator estimator) {
+        // no action needed
     }
 
     @Override
-    public void onEstimateNextIteration(final PolynomialRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final PolynomialRobustEstimator estimator, final int iteration) {
+        // no action needed
     }
 
     @Override
-    public void onEstimateProgressChange(final PolynomialRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final PolynomialRobustEstimator estimator, final float progress) {
+        // no action needed
     }
 }

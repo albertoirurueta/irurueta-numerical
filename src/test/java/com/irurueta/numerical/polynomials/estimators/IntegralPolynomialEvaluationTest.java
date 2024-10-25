@@ -17,14 +17,13 @@ package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class IntegralPolynomialEvaluationTest {
+class IntegralPolynomialEvaluationTest {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -33,163 +32,145 @@ public class IntegralPolynomialEvaluationTest {
     private static final int MAX_ORDER = 5;
 
     @Test
-    public void testConstructor() {
-        IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
+    void testConstructor() {
+        var eval = new IntegralPolynomialEvaluation();
 
         // check default values
         assertEquals(0.0, eval.getEvaluation(), 0.0);
         assertEquals(0.0, eval.getX(), 0.0);
         assertNull(eval.getConstants());
         assertEquals(1, eval.getIntegralOrder());
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval.getType());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval.getType());
 
         // test constructor with values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double[] constants = new double[1];
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var constants = new double[1];
         randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+        final var order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
 
-        eval = new IntegralPolynomialEvaluation(x, evaluation, constants,
-                order);
+        eval = new IntegralPolynomialEvaluation(x, evaluation, constants, order);
 
         // check default values
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval.getX(), x, 0.0);
-        assertSame(eval.getConstants(), constants);
-        assertEquals(eval.getIntegralOrder(), order);
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval.getType());
-
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
+        assertEquals(x, eval.getX(), 0.0);
+        assertSame(constants, eval.getConstants());
+        assertEquals(order, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval.getType());
 
         eval = new IntegralPolynomialEvaluation(x, evaluation, constants);
 
         // check default values
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval.getX(), x, 0.0);
-        assertSame(eval.getConstants(), constants);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
+        assertEquals(x, eval.getX(), 0.0);
+        assertSame(constants, eval.getConstants());
         assertEquals(1, eval.getIntegralOrder());
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval.getType());
-
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval.getType());
 
         eval = new IntegralPolynomialEvaluation(x, evaluation, order);
 
         // check default values
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval.getX(), x, 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
+        assertEquals(x, eval.getX(), 0.0);
         assertNull(eval.getConstants());
-        assertEquals(eval.getIntegralOrder(), order);
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval.getType());
-
+        assertEquals(order, eval.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval.getType());
 
         eval = new IntegralPolynomialEvaluation(x, evaluation);
 
         // check default values
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval.getX(), x, 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
+        assertEquals(x, eval.getX(), 0.0);
         assertNull(eval.getConstants());
         assertEquals(1, eval.getIntegralOrder());
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval.getType());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval.getType());
     }
 
     @Test
-    public void testGetSetX() {
-        final IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
+    void testGetSetX() {
+        final var eval = new IntegralPolynomialEvaluation();
 
         // check default value
         assertEquals(0.0, eval.getX(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setX(x);
 
         // check correctness
-        assertEquals(eval.getX(), x, 0.0);
+        assertEquals(x, eval.getX(), 0.0);
     }
 
     @Test
-    public void testGetSetConstants() {
-        final IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
+    void testGetSetConstants() {
+        final var eval = new IntegralPolynomialEvaluation();
 
         // check default value
         assertNull(eval.getConstants());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double[] constants = new double[1];
+        final var constants = new double[1];
         randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setConstant(constants);
 
         // check correctness
-        assertSame(eval.getConstants(), constants);
+        assertSame(constants, eval.getConstants());
     }
 
     @Test
-    public void testGetSetIntegralOrder() {
-        final IntegralPolynomialEvaluation eval = new IntegralPolynomialEvaluation();
+    void testGetSetIntegralOrder() {
+        final var eval = new IntegralPolynomialEvaluation();
 
         // check default value
         assertEquals(1, eval.getIntegralOrder());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+        final var order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
         eval.setIntegralOrder(order);
 
         // check correctness
-        assertEquals(eval.getIntegralOrder(), order);
+        assertEquals(order, eval.getIntegralOrder());
 
         // Force IllegalArgumentException
-        try {
-            eval.setIntegralOrder(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> eval.setIntegralOrder(0));
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double[] constants = new double[1];
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var constants = new double[1];
         randomizer.fill(constants, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+        final var order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
 
-        final IntegralPolynomialEvaluation eval1 = new IntegralPolynomialEvaluation(x, evaluation, constants,
-                order);
+        final var eval1 = new IntegralPolynomialEvaluation(x, evaluation, constants, order);
 
         // check default values
-        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval1.getX(), x, 0.0);
-        assertSame(eval1.getConstants(), constants);
-        assertEquals(eval1.getIntegralOrder(), order);
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval1.getType());
+        assertEquals(evaluation, eval1.getEvaluation(), 0.0);
+        assertEquals(x, eval1.getX(), 0.0);
+        assertSame(constants, eval1.getConstants());
+        assertEquals(order, eval1.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval1.getType());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(eval1);
-        final IntegralPolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(eval1);
+        final var eval2 = SerializationHelper.<IntegralPolynomialEvaluation>deserialize(bytes);
 
         // check correctness
-        assertEquals(eval2.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval2.getX(), x, 0.0);
-        assertArrayEquals(eval2.getConstants(), constants, 0.0);
-        assertEquals(eval2.getIntegralOrder(), order);
-        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION,
-                eval2.getType());
+        assertEquals(evaluation, eval2.getEvaluation(), 0.0);
+        assertEquals(x, eval2.getX(), 0.0);
+        assertArrayEquals(constants, eval2.getConstants(), 0.0);
+        assertEquals(order, eval2.getIntegralOrder());
+        assertEquals(PolynomialEvaluationType.INTEGRAL_EVALUATION, eval2.getType());
     }
 }

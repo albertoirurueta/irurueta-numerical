@@ -15,14 +15,14 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AccurateInterpolatingPolynomialEstimatorTest {
+class AccurateInterpolatingPolynomialEstimatorTest {
 
     private static final double MIN_VALUE = -1.0;
 
@@ -31,114 +31,112 @@ public class AccurateInterpolatingPolynomialEstimatorTest {
     private static final double ABSOLUTE_ERROR = 1e-8;
 
     @Test
-    public void estimate_whenFirstDegree_returnsExpectedResult() throws InterpolationException {
+    void estimate_whenFirstDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimation(1);
     }
 
     @Test
-    public void estimate_whenSecondDegree_returnsExpectedResult() throws InterpolationException {
+    void estimate_whenSecondDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimation(2);
     }
 
     @Test
-    public void estimate_whenThirdDegree_returnsExpectedResult() throws InterpolationException {
+    void estimate_whenThirdDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimation(3);
     }
 
     @Test
-    public void estimate_whenFourthDegree_returnsExpectedResult() throws InterpolationException {
+    void estimate_whenFourthDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimation(4);
     }
 
     @Test
-    public void estimate_whenFifthDegree_returnsExpectedResult() throws InterpolationException {
+    void estimate_whenFifthDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimation(5);
     }
 
     @Test
-    public void estimate_whenSixthDegree_returnsExpectedResult() throws InterpolationException {
+    void estimate_whenSixthDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimation(6);
     }
 
     @Test
-    public void estimateCoefficients_whenFirstDegree_returnsExpectedResult() throws InterpolationException {
+    void estimateCoefficients_whenFirstDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimationCoefficients(1);
     }
 
     @Test
-    public void estimateCoefficients_whenSecondDegree_returnsExpectedResult() throws InterpolationException {
+    void estimateCoefficients_whenSecondDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimationCoefficients(2);
     }
 
     @Test
-    public void estimateCoefficients_whenThirdDegree_returnsExpectedResult() throws InterpolationException {
+    void estimateCoefficients_whenThirdDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimationCoefficients(3);
     }
 
     @Test
-    public void estimateCoefficients_whenFourthDegree_returnsExpectedResult() throws InterpolationException {
+    void estimateCoefficients_whenFourthDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimationCoefficients(4);
     }
 
     @Test
-    public void estimateCoefficients_whenFifthDegree_returnsExpectedResult() throws InterpolationException {
+    void estimateCoefficients_whenFifthDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimationCoefficients(5);
     }
 
     @Test
-    public void estimateCoefficients_whenSixthDegree_returnsExpectedResult() throws InterpolationException {
+    void estimateCoefficients_whenSixthDegree_returnsExpectedResult() throws InterpolationException {
         assertEstimationCoefficients(6);
     }
 
     private static void assertEstimation(final int degree) throws InterpolationException {
-        final Polynomial polynomial = buildPolynomial(degree);
+        final var polynomial = buildPolynomial(degree);
 
-        final int samples = degree + 1;
-        final double[] x = new double[samples];
-        final double[] y = new double[samples];
+        final var samples = degree + 1;
+        final var x = new double[samples];
+        final var y = new double[samples];
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        for (int i = 0; i < samples; i++) {
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < samples; i++) {
             x[i] = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             y[i] = polynomial.evaluate(x[i]);
         }
 
-        final AccurateInterpolatingPolynomialEstimator estimator =
-                new AccurateInterpolatingPolynomialEstimator();
+        final var estimator = new AccurateInterpolatingPolynomialEstimator();
 
-        final double[] result = new double[samples];
+        final var result = new double[samples];
         estimator.estimate(x, y, result);
 
         assertArrayEquals(polynomial.getPolyParams(), result, ABSOLUTE_ERROR);
     }
 
     private static void assertEstimationCoefficients(final int degree) throws InterpolationException {
-        final Polynomial polynomial = buildPolynomial(degree);
+        final var polynomial = buildPolynomial(degree);
 
-        final int samples = degree + 1;
-        final double[] x = new double[samples];
-        final double[] y = new double[samples];
+        final var samples = degree + 1;
+        final var x = new double[samples];
+        final var y = new double[samples];
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        for (int i = 0; i < samples; i++) {
+        final var randomizer = new UniformRandomizer();
+        for (var i = 0; i < samples; i++) {
             x[i] = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             y[i] = polynomial.evaluate(x[i]);
         }
 
-        final AccurateInterpolatingPolynomialEstimator estimator =
-                new AccurateInterpolatingPolynomialEstimator();
+        final var estimator = new AccurateInterpolatingPolynomialEstimator();
 
-        final double[] result = estimator.estimateCoefficients(x, y);
+        final var result = estimator.estimateCoefficients(x, y);
 
         assertArrayEquals(polynomial.getPolyParams(), result, ABSOLUTE_ERROR);
     }
 
     private static Polynomial buildPolynomial(final int degree) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
         }
 

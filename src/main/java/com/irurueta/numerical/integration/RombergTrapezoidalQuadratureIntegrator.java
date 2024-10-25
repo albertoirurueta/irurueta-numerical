@@ -23,8 +23,7 @@ import com.irurueta.numerical.interpolation.PolynomialInterpolator;
 /**
  * Computes function integration by using Romberg integration.
  */
-public class RombergTrapezoidalQuadratureIntegrator
-        extends RombergIntegrator<TrapezoidalQuadrature> {
+public class RombergTrapezoidalQuadratureIntegrator extends RombergIntegrator<TrapezoidalQuadrature> {
 
     /**
      * Default accuracy.
@@ -70,9 +69,7 @@ public class RombergTrapezoidalQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public RombergTrapezoidalQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new TrapezoidalQuadrature(a, b, listener), eps);
     }
 
@@ -84,8 +81,7 @@ public class RombergTrapezoidalQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public RombergTrapezoidalQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 
@@ -100,10 +96,10 @@ public class RombergTrapezoidalQuadratureIntegrator
     public double integrate() throws IntegrationException {
         try {
             h[0] = 1.0;
-            for (int j = 1; j <= JMAX; j++) {
+            for (var j = 1; j <= JMAX; j++) {
                 s[j - 1] = q.next();
                 if (j >= K) {
-                    double ss = interpolator.rawinterp(j - K, 0.0);
+                    final var ss = interpolator.rawinterp(j - K, 0.0);
                     if (Math.abs(interpolator.getDy()) <= eps * Math.abs(ss)) {
                         return ss;
                     }

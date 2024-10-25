@@ -50,6 +50,6 @@ public interface LevenbergMarquardtSingleDimensionFunctionEvaluator {
      * parameters
      * @throws EvaluationException raised if something failed during the evaluation
      */
-    double evaluate(final int i, final double point, final double[] params,
-                    final double[] derivatives) throws EvaluationException;
+    double evaluate(final int i, final double point, final double[] params, final double[] derivatives)
+            throws EvaluationException;
 }

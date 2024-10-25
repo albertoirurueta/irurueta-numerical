@@ -15,18 +15,17 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.Gamma;
 import com.irurueta.statistics.NormalDist;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RombergUpperSquareRootMidPointQuadratureIntegratorTest {
+class RombergUpperSquareRootMidPointQuadratureIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -53,170 +52,126 @@ public class RombergUpperSquareRootMidPointQuadratureIntegratorTest {
     private static final double ALMOST_INFINITY = 1e99;
 
     @Test
-    public void integrate_whenFirstDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFirstDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(1, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenSecondDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenSecondDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(2, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenThirdDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenThirdDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(3, ABSOLUTE_ERROR_1);
     }
 
     @Test
-    public void integrate_whenFourthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFourthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(4, ABSOLUTE_ERROR_4);
     }
 
     @Test
-    public void integrate_whenFifthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFifthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(5, ABSOLUTE_ERROR_5);
     }
 
     @Test
-    public void integrate_whenSixthDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenSixthDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration(6, ABSOLUTE_ERROR_5);
     }
 
     @Test
-    public void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double mu = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double sigma = ABSOLUTE_ERROR_GAUSSIAN
-                + Math.abs(randomizer.nextDouble(a, MAX_VALUE));
+    void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var mu = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var sigma = ABSOLUTE_ERROR_GAUSSIAN + Math.abs(randomizer.nextDouble(a, MAX_VALUE));
 
-        final double expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
+        final var expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
 
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return NormalDist.p(point, mu, sigma);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b,
+                point -> NormalDist.p(point, mu, sigma));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_GAUSSIAN);
     }
 
     @Test
-    public void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
+    void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
 
-        final double expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
+        final var expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
 
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.exp(lambda * point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b,
+                point -> Math.exp(lambda * point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_EXPONENTIAL);
     }
 
     @Test
-    public void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult()
-            throws IntegrationException {
-        final double expected = 2.0 - Math.PI * Math.PI / 6.0;
+    void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult() throws IntegrationException {
+        final var expected = 2.0 - Math.PI * Math.PI / 6.0;
 
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, 1.0,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.log(point) * Math.log(1 - point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, 1.0,
+                point -> Math.log(point) * Math.log(1 - point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_1);
     }
 
     @Test
-    public void integrate_whenImproperIntegralFromZeroToInfinity3_returnsWrongResult()
-            throws IntegrationException {
-        final double expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
+    void integrate_whenImproperIntegralFromZeroToInfinity3_returnsWrongResult() throws IntegrationException {
+        final var expected = 0.5 * Math.exp(Gamma.gammln(5.0 / 14.0));
         assertEquals(1.24663, expected, ABSOLUTE_ERROR_IMPROPER_3);
 
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, ALMOST_INFINITY,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, ALMOST_INFINITY,
+                point -> Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
+        final var result = integrator.integrate();
 
         assertNotEquals(expected, result, ABSOLUTE_ERROR_IMPROPER_3);
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() {
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
+    void getIntegratorType_returnsExpectedValue() {
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() {
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
+    void getQuadratureType_returnsExpectedValue() {
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
     }
 
-    private static void assertPolynomialIntegration(final int degree, final double error)
-            throws IntegrationException {
-        final Polynomial polynomial = buildPolynomial(degree);
-        final Polynomial integrationPolynomial = polynomial.integrationAndReturnNew();
+    private static void assertPolynomialIntegration(final int degree, final double error) throws IntegrationException {
+        final var polynomial = buildPolynomial(degree);
+        final var integrationPolynomial = polynomial.integrationAndReturnNew();
 
         // set integration interval
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final double expected = integrationPolynomial.evaluate(b)
-                - integrationPolynomial.evaluate(a);
+        final var expected = integrationPolynomial.evaluate(b) - integrationPolynomial.evaluate(a);
 
-        final RombergUpperSquareRootMidPointQuadratureIntegrator integrator =
-                new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(final double point) {
-                                return polynomial.evaluate(point);
-                            }
-                        });
-        final double result = integrator.integrate();
+        final var integrator = new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, polynomial::evaluate);
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, error);
     }
 
     private static Polynomial buildPolynomial(final int degree) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
         }
 

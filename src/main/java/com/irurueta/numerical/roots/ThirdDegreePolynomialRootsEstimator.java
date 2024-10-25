@@ -30,8 +30,7 @@ import com.irurueta.numerical.NotReadyException;
  * <a href="http://en.wikipedia.org/wiki/Cubic_function">http://en.wikipedia.org/wiki/Cubic_function</a>
  */
 @SuppressWarnings("DuplicatedCode")
-public class ThirdDegreePolynomialRootsEstimator
-        extends PolynomialRootsEstimator {
+public class ThirdDegreePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
     /**
      * Constant defining machine precision.
@@ -89,8 +88,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException Raised if the length of the provided
      *                                  array is not valid.
      */
-    public void setPolynomialParameters(final double[] polyParams)
-            throws LockedException {
+    public void setPolynomialParameters(final double[] polyParams) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -171,8 +169,7 @@ public class ThirdDegreePolynomialRootsEstimator
      *                                 some reason.
      */
     @Override
-    public void estimate() throws LockedException, NotReadyException,
-            RootEstimationException {
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -184,19 +181,18 @@ public class ThirdDegreePolynomialRootsEstimator
 
         roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];
 
-        final double d = realPolyParams[0];
-        final double c = realPolyParams[1];
-        final double b = realPolyParams[2];
-        final double a = realPolyParams[3];
+        final var d = realPolyParams[0];
+        final var c = realPolyParams[1];
+        final var b = realPolyParams[2];
+        final var a = realPolyParams[3];
 
-        final Complex x1 = new Complex();
-        final Complex x2 = new Complex();
-        final Complex x3 = new Complex();
+        final var x1 = new Complex();
+        final var x2 = new Complex();
+        final var x3 = new Complex();
         solveCubic(a, b, c, d, x1, x2, x3);
 
-        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) ||
-                Double.isNaN(x2.getReal()) || Double.isNaN(x2.getImaginary()) ||
-                Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())) {
+        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) || Double.isNaN(x2.getReal())
+                || Double.isNaN(x2.getImaginary()) || Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())) {
 
             locked = false;
             throw new RootEstimationException();
@@ -254,10 +250,9 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return True if is a third degree polynomial, false otherwise
      */
     public static boolean isThirdDegree(final double[] polyParams) {
-        final int length = polyParams.length;
-        if (length >= VALID_POLY_PARAMS_LENGTH &&
-                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
-            for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+        final var length = polyParams.length;
+        if (length >= VALID_POLY_PARAMS_LENGTH && Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+            for (var i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
                 if (Math.abs(polyParams[i]) > EPS) {
                     return false;
                 }
@@ -361,8 +356,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return True if polynomial has 1 real root and 2 complex conjugate roots,
      * false otherwise
      */
-    public static boolean hasOneRealRootAndTwoComplexConjugateRoots(
-            final double[] polyParams) {
+    public static boolean hasOneRealRootAndTwoComplexConjugateRoots(final double[] polyParams) {
         if (polyParams.length >= VALID_POLY_PARAMS_LENGTH) {
             return getDiscriminant(polyParams) < -EPS;
         }
@@ -378,8 +372,7 @@ public class ThirdDegreePolynomialRootsEstimator
      * @throws NotReadyException Raised if polynomial parameters haven't yet
      *                           been provided
      */
-    public boolean hasOneRealRootAndTwoComplexConjugateRoots()
-            throws NotReadyException {
+    public boolean hasOneRealRootAndTwoComplexConjugateRoots() throws NotReadyException {
         if (!isReady()) {
             throw new NotReadyException();
         }
@@ -407,10 +400,10 @@ public class ThirdDegreePolynomialRootsEstimator
      * @return Value of discriminant
      */
     private static double getDiscriminant(final double[] polyParams) {
-        final double d = polyParams[0];
-        final double c = polyParams[1];
-        final double b = polyParams[2];
-        final double a = polyParams[3];
+        final var d = polyParams[0];
+        final var c = polyParams[1];
+        final var b = polyParams[2];
+        final var a = polyParams[3];
 
         return 18.0 * a * b * c * d
                 - 4.0 * b * b * b * d
@@ -448,19 +441,19 @@ public class ThirdDegreePolynomialRootsEstimator
                             final Complex x1, final Complex x2, final Complex x3) {
 
         // find the discriminant
-        final double f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;
-        final double g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c /
-                Math.pow(a, 2.0) + 27.0 * d / a) / 27.0;
-        final double h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;
-        final double absF = Math.abs(f);
-        final double absG = Math.abs(g);
-        final double absH = Math.abs(h);
+        final var f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;
+        final var g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c
+                / Math.pow(a, 2.0) + 27.0 * d / a) / 27.0;
+        final var h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;
+        final var absF = Math.abs(f);
+        final var absG = Math.abs(g);
+        final var absH = Math.abs(h);
         // evaluate discriminant
         if (absF <= EPS && absG <= EPS && absH <= EPS) {
             // 3 equal roots
-            final double x;
+
             // when f, g, and h all equal 0 the roots can be found by the following line
-            x = -cubeRoot(d / a);
+            final double x = -cubeRoot(d / a);
             x1.setRealAndImaginary(x, 0.0);
             x2.setRealAndImaginary(x, 0.0);
             x3.setRealAndImaginary(x, 0.0);
@@ -468,12 +461,12 @@ public class ThirdDegreePolynomialRootsEstimator
             // 3 real roots
 
             // complicated maths making use of the method
-            final double i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);
-            final double j = cubeRoot(i);
-            final double k = Math.acos(-(g / (2.0 * i)));
-            final double m = Math.cos(k / 3.0);
-            final double n = ROOT_THREE * Math.sin(k / 3.0);
-            final double p = -(b / (3.0 * a));
+            final var i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);
+            final var j = cubeRoot(i);
+            final var k = Math.acos(-(g / (2.0 * i)));
+            final var m = Math.cos(k / 3.0);
+            final var n = ROOT_THREE * Math.sin(k / 3.0);
+            final var p = -(b / (3.0 * a));
 
             // print solutions
             x1.setRealAndImaginary(2.0 * j * m + p, 0.0);
@@ -483,18 +476,18 @@ public class ThirdDegreePolynomialRootsEstimator
             // 1 real root and 2 complex roots
 
             // complicated maths making use of the method
-            final double r = -(g / 2) + Math.pow(h, 0.5);
-            final double s = cubeRoot(r);
-            final double t = -(g / 2) - Math.pow(h, 0.5);
-            final double u = cubeRoot(t);
-            final double p = -(b / (3 * a));
+            final var r = -(g / 2) + Math.pow(h, 0.5);
+            final var s = cubeRoot(r);
+            final var t = -(g / 2) - Math.pow(h, 0.5);
+            final var u = cubeRoot(t);
+            final var p = -(b / (3 * a));
 
             // print solutions
             x1.setRealAndImaginary((s + u) + p, 0.0);
-            final double real = -(s + u) / 2 + p;
+            final var real = -(s + u) / 2 + p;
             x2.setReal(real);
             x3.setReal(real);
-            final double imag = (s - u) * ROOT_THREE / 2;
+            final var imag = (s - u) * ROOT_THREE / 2;
             x2.setImaginary(imag);
             x3.setImaginary(imag);
         }

@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class EvaluationExceptionTest {
+class EvaluationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        EvaluationException ex = new EvaluationException();
+    void testConstructor() {
+        var ex = new EvaluationException();
         assertNotNull(ex);
 
         ex = new EvaluationException("message");

@@ -20,14 +20,11 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class QuasiNewtonMultiOptimizerTest implements
-        OnIterationCompletedListener {
+class QuasiNewtonMultiOptimizerTest implements OnIterationCompletedListener {
 
     private static final int MIN_DIMS = 2;
     private static final int MAX_DIMS = 4;
@@ -53,60 +50,43 @@ public class QuasiNewtonMultiOptimizerTest implements
 
     private int iterations = 0;
 
-    private final MultiDimensionFunctionEvaluatorListener listener;
-    private final GradientFunctionEvaluatorListener gradientListener;
+    private final MultiDimensionFunctionEvaluatorListener listener = point -> {
+        final var dims = Math.min(Math.min(point.length, minimum.length), width.length);
 
-    public QuasiNewtonMultiOptimizerTest() {
-        listener = new MultiDimensionFunctionEvaluatorListener() {
+        var value = 1.0;
+        for (var i = 0; i < dims; i++) {
+            value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
+        }
 
-            @Override
-            public double evaluate(final double[] point) {
-                final int dims = Math.min(Math.min(point.length, minimum.length),
-                        width.length);
+        value += offset;
+        return value;
+    };
 
-                double value = 1.0;
-                for (int i = 0; i < dims; i++) {
-                    value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
-                }
+    private final GradientFunctionEvaluatorListener gradientListener = (params, result) -> {
+        final var dims = Math.min(Math.min(params.length, minimum.length), width.length);
 
-                value += offset;
-                return value;
-            }
-        };
-
-        gradientListener = new GradientFunctionEvaluatorListener() {
-
-            @Override
-            public void evaluateGradient(final double[] params, final double[] result) {
-                final int dims = Math.min(Math.min(params.length, minimum.length),
-                        width.length);
-
-                double value;
-                for (int j = 0; j < dims; j++) {
-                    value = 1.0;
-                    for (int i = 0; i < dims; i++) {
-                        if (i != j) {
-                            value *= Math.pow(params[i] - minimum[i], 2.0) /
-                                    width[i];
-                        } else {
-                            value *= 2.0 * (params[i] - minimum[i]) / width[i];
-                        }
-                    }
-
-                    result[j] = value;
+        for (var j = 0; j < dims; j++) {
+            var value = 1.0;
+            for (var i = 0; i < dims; i++) {
+                if (i != j) {
+                    value *= Math.pow(params[i] - minimum[i], 2.0) / width[i];
+                } else {
+                    value *= 2.0 * (params[i] - minimum[i]) / width[i];
                 }
             }
-        };
-    }
+
+            result[j] = value;
+        }
+    };
 
     @Test
-    public void testConstructor() throws NotAvailableException {
+    void testConstructor() throws NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final double[] startPoint = new double[ndims];
+        final var startPoint = new double[ndims];
         minimum = new double[ndims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
         randomizer.fill(minimum, MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -120,133 +100,76 @@ public class QuasiNewtonMultiOptimizerTest implements
         optimizer = new QuasiNewtonMultiOptimizer();
         assertNotNull(optimizer);
 
-        assertEquals(QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isStartPointAvailable());
         assertEquals(0, optimizer.getIterations());
-        try {
-            optimizer.getStartPoint();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getGradientListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+
+        assertThrows(NotAvailableException.class, optimizer::getStartPoint);
+        assertThrows(NotAvailableException.class, optimizer::getGradientListener);
         assertFalse(optimizer.isGradientListenerAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isReady());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
-
         // Test 2nd constructor
-        optimizer = new QuasiNewtonMultiOptimizer(listener, gradientListener,
-                tolerance);
+        optimizer = new QuasiNewtonMultiOptimizer(listener, gradientListener, tolerance);
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isStartPointAvailable());
         assertEquals(0, optimizer.getIterations());
-        try {
-            optimizer.getStartPoint();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(optimizer.getGradientListener(), gradientListener);
+        assertThrows(NotAvailableException.class, optimizer::getStartPoint);
+        assertEquals(gradientListener, optimizer.getGradientListener());
         assertTrue(optimizer.isGradientListenerAvailable());
-        assertEquals(optimizer.getListener(), listener);
+        assertEquals(listener, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isReady());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force IllegalArgumentException
-        optimizer = null;
-        try {
-            optimizer = new QuasiNewtonMultiOptimizer(listener,
-                    gradientListener, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
-
+        assertThrows(IllegalArgumentException.class, () -> new QuasiNewtonMultiOptimizer(listener, gradientListener,
+                -tolerance));
 
         // Test 3rd constructor
-        optimizer = new QuasiNewtonMultiOptimizer(listener, gradientListener,
-                startPoint, tolerance);
+        optimizer = new QuasiNewtonMultiOptimizer(listener, gradientListener, startPoint, tolerance);
         assertNotNull(optimizer);
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertTrue(optimizer.isStartPointAvailable());
-        assertArrayEquals(optimizer.getStartPoint(), startPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(optimizer.getGradientListener(), gradientListener);
+        assertArrayEquals(startPoint, optimizer.getStartPoint(), ABSOLUTE_ERROR);
+        assertEquals(gradientListener, optimizer.getGradientListener());
         assertTrue(optimizer.isGradientListenerAvailable());
-        assertEquals(optimizer.getListener(), listener);
+        assertEquals(listener, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertTrue(optimizer.isReady());
         assertFalse(optimizer.isResultAvailable());
         assertEquals(0, optimizer.getIterations());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force IllegalArgumentException
-        optimizer = null;
-        try {
-            optimizer = new QuasiNewtonMultiOptimizer(listener,
-                    gradientListener, startPoint, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new QuasiNewtonMultiOptimizer(listener, gradientListener,
+                startPoint, -tolerance));
     }
 
     @Test
-    public void testIsReady() throws LockedException {
+    void testIsReady() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
+        final var randomizer = new UniformRandomizer();
+        final var nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[nDims];
+        final var startPoint = new double[nDims];
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         // optimizer will be ready when listener, gradient listener and start
         // point are provided
@@ -272,73 +195,60 @@ public class QuasiNewtonMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
+    void testGetSetTolerance() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         // get default tolerance
-        assertEquals(QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
 
         // check correctness
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
     }
 
     @Test
-    public void testGetSetStartPointAndAvailability() throws LockedException,
-            NotAvailableException {
+    void testGetSetStartPointAndAvailability() throws LockedException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
+        final var randomizer = new UniformRandomizer();
+        final var nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[nDims];
+        final var startPoint = new double[nDims];
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         // initially start point is not available
         assertFalse(optimizer.isStartPointAvailable());
-        try {
-            optimizer.getStartPoint();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getStartPoint);
 
         // set start point
         optimizer.setStartPoint(startPoint);
 
         // check correctness
         assertTrue(optimizer.isStartPointAvailable());
-        assertArrayEquals(optimizer.getStartPoint(), startPoint,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(optimizer.getStartPoint(), startPoint, ABSOLUTE_ERROR);
 
         // set start point
         optimizer.setStartPoint(startPoint);
 
         // check correctness
         assertTrue(optimizer.isStartPointAvailable());
-        assertArrayEquals(optimizer.getStartPoint(), startPoint,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(optimizer.getStartPoint(), startPoint, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSetGradientListenerAndAvailability()
-            throws LockedException, NotAvailableException {
+    void testGetSetGradientListenerAndAvailability() throws LockedException, NotAvailableException {
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         // initially gradient listener is not available
         assertFalse(optimizer.isGradientListenerAvailable());
-        try {
-            optimizer.getGradientListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getGradientListener);
 
         // set new listener
         optimizer.setGradientListener(gradientListener);
@@ -349,18 +259,13 @@ public class QuasiNewtonMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetListenerAndAvailability() throws LockedException,
-            NotAvailableException {
+    void testGetSetListenerAndAvailability() throws LockedException, NotAvailableException {
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         // initially listener is not available
         assertFalse(optimizer.isListenerAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
 
         // set new listener
         optimizer.setListener(listener);
@@ -371,16 +276,16 @@ public class QuasiNewtonMultiOptimizerTest implements
     }
 
     @Test
-    public void testIsLocked() {
+    void testIsLocked() {
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         assertFalse(optimizer.isLocked());
     }
 
     @Test
-    public void testGetSetOnIterationCompletedListener() throws LockedException {
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer();
+    void testGetSetOnIterationCompletedListener() throws LockedException {
+        final var optimizer = new QuasiNewtonMultiOptimizer();
 
         assertNull(optimizer.getOnIterationCompletedListener());
 
@@ -392,12 +297,12 @@ public class QuasiNewtonMultiOptimizerTest implements
     }
 
     @Test
-    public void testMinimize() throws Throwable {
+    void testMinimize() throws Throwable {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[ndims];
+        final var startPoint = new double[ndims];
         minimum = new double[ndims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
         randomizer.fill(minimum, MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -406,8 +311,7 @@ public class QuasiNewtonMultiOptimizerTest implements
         randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
 
-        final QuasiNewtonMultiOptimizer optimizer = new QuasiNewtonMultiOptimizer(
-                listener, gradientListener, startPoint,
+        final var optimizer = new QuasiNewtonMultiOptimizer(listener, gradientListener, startPoint,
                 QuasiNewtonMultiOptimizer.DEFAULT_TOLERANCE);
         optimizer.setOnIterationCompletedListener(this);
 
@@ -415,16 +319,8 @@ public class QuasiNewtonMultiOptimizerTest implements
         assertTrue(optimizer.isReady());
         assertFalse(optimizer.isLocked());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
 
         reset();
         assertEquals(0, iterations);
@@ -440,13 +336,13 @@ public class QuasiNewtonMultiOptimizerTest implements
         assertTrue(iterations >= 0);
 
         // pick result
-        final double[] result = optimizer.getResult();
-        final double valueAtResult = optimizer.getEvaluationAtResult();
+        final var result = optimizer.getResult();
+        final var valueAtResult = optimizer.getEvaluationAtResult();
 
         // check correctness of result
 
         // compute function value at true minimum
-        final double valueAtMinimum = listener.evaluate(minimum);
+        final var valueAtMinimum = listener.evaluate(minimum);
 
         // compare values
         assertNotNull(result);
@@ -454,8 +350,7 @@ public class QuasiNewtonMultiOptimizerTest implements
     }
 
     @Override
-    public void onIterationCompleted(
-            final Optimizer optimizer, final int iteration, final Integer maxIterations) {
+    public void onIterationCompleted(final Optimizer optimizer, final int iteration, final Integer maxIterations) {
         assertNotNull(optimizer);
         assertTrue(optimizer.isLocked());
         assertTrue(iteration >= 0);

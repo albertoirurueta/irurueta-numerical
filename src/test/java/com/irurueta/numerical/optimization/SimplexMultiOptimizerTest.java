@@ -21,16 +21,13 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SimplexMultiOptimizerTest implements
-        MultiDimensionFunctionEvaluatorListener,
-        OnIterationCompletedListener {
+class SimplexMultiOptimizerTest implements MultiDimensionFunctionEvaluatorListener, OnIterationCompletedListener {
 
     private static final int MIN_DIMS = 2;
     private static final int MAX_DIMS = 4;
@@ -62,25 +59,24 @@ public class SimplexMultiOptimizerTest implements
     private int iterations = 0;
 
     @Test
-    public void testConstructor() throws NotAvailableException,
-            WrongSizeException {
+    void testConstructor() throws NotAvailableException, WrongSizeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[ndims];
+        final var startPoint = new double[ndims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
-        final double delta = randomizer.nextDouble(MIN_DELTA, MAX_DELTA);
+        final var delta = randomizer.nextDouble(MIN_DELTA, MAX_DELTA);
 
-        final double[] deltas = new double[ndims];
+        final var deltas = new double[ndims];
         randomizer.fill(deltas, MIN_DELTA, MAX_DELTA);
 
-        final double[] badDeltas = new double[ndims + 1];
+        final var badDeltas = new double[ndims + 1];
 
-        final Matrix simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims,
-                MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims, MIN_EVAL_POINT,
+                MAX_EVAL_POINT);
 
         SimplexMultiOptimizer optimizer;
 
@@ -88,128 +84,65 @@ public class SimplexMultiOptimizerTest implements
         optimizer = new SimplexMultiOptimizer();
         assertNotNull(optimizer);
 
-        try {
-            optimizer.getSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getSimplex);
         assertFalse(optimizer.isSimplexAvailable());
-        try {
-            optimizer.getEvaluationsAtSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationsAtSimplex);
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
-        assertEquals(SimplexMultiOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(SimplexMultiOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
         assertFalse(optimizer.isReady());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Test 2nd constructor
-        optimizer = new SimplexMultiOptimizer(this, startPoint, delta,
-                tolerance);
+        optimizer = new SimplexMultiOptimizer(this, startPoint, delta, tolerance);
         assertNotNull(optimizer);
 
         assertNotNull(optimizer.getSimplex());
         assertTrue(optimizer.isSimplexAvailable());
-        try {
-            optimizer.getEvaluationsAtSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationsAtSimplex);
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertTrue(optimizer.isReady());
-        assertEquals(optimizer.getListener(), this);
+        assertEquals(this, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force IllegalArgumentException
-        optimizer = null;
-        try {
-            optimizer = new SimplexMultiOptimizer(this, startPoint, delta,
-                    -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new SimplexMultiOptimizer(this, startPoint, delta,
+                -tolerance));
 
         // Test 3rd constructor
-        optimizer = new SimplexMultiOptimizer(this, startPoint, deltas,
-                tolerance);
+        optimizer = new SimplexMultiOptimizer(this, startPoint, deltas, tolerance);
         assertNotNull(optimizer);
 
         assertNotNull(optimizer.getSimplex());
         assertTrue(optimizer.isSimplexAvailable());
-        try {
-            optimizer.getEvaluationsAtSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationsAtSimplex);
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertTrue(optimizer.isReady());
-        assertEquals(optimizer.getListener(), this);
+        assertEquals(this, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force IllegalArgumentException
-        optimizer = null;
-        try {
-            optimizer = new SimplexMultiOptimizer(this, startPoint, deltas,
-                    -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            optimizer = new SimplexMultiOptimizer(this, startPoint, badDeltas,
-                    tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new SimplexMultiOptimizer(this, startPoint, deltas,
+                -tolerance));
+        assertThrows(IllegalArgumentException.class, () ->new SimplexMultiOptimizer(this, startPoint, badDeltas,
+                tolerance) );
 
         // Test 4th constructor
         optimizer = new SimplexMultiOptimizer(this, simplex, tolerance);
@@ -217,66 +150,43 @@ public class SimplexMultiOptimizerTest implements
 
         assertEquals(optimizer.getSimplex(), simplex);
         assertTrue(optimizer.isSimplexAvailable());
-        try {
-            optimizer.getEvaluationsAtSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationsAtSimplex);
         assertFalse(optimizer.areFunctionEvaluationsAvailable());
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
         assertTrue(optimizer.isReady());
-        assertEquals(optimizer.getListener(), this);
+        assertEquals(this, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertFalse(optimizer.isLocked());
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force IllegalArgumentException
-        optimizer = null;
-        try {
-            optimizer = new SimplexMultiOptimizer(this, simplex, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new SimplexMultiOptimizer(this, simplex,
+                -tolerance));
     }
 
     @Test
-    public void testGetSetSimplexAndAvailability() throws LockedException,
-            NotAvailableException, WrongSizeException {
+    void testGetSetSimplexAndAvailability() throws LockedException, NotAvailableException, WrongSizeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[ndims];
+        final var startPoint = new double[ndims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
-        final double delta = randomizer.nextDouble(MIN_DELTA, MAX_DELTA);
+        final var delta = randomizer.nextDouble(MIN_DELTA, MAX_DELTA);
 
-        final double[] deltas = new double[ndims];
+        final var deltas = new double[ndims];
         randomizer.fill(deltas, MIN_DELTA, MAX_DELTA);
 
-        final double[] badDeltas = new double[ndims + 1];
+        final var badDeltas = new double[ndims + 1];
 
-        final Matrix simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims,
-                MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims, MIN_EVAL_POINT,
+                MAX_EVAL_POINT);
 
-        SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer();
-
-        try {
-            optimizer.getSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        var optimizer = new SimplexMultiOptimizer();
+        assertThrows(NotAvailableException.class, optimizer::getSimplex);
         assertFalse(optimizer.isSimplexAvailable());
 
         // set simplex using start point and delta
@@ -286,13 +196,8 @@ public class SimplexMultiOptimizerTest implements
         assertNotNull(optimizer.getSimplex());
         assertTrue(optimizer.isSimplexAvailable());
 
-
         optimizer = new SimplexMultiOptimizer();
-        try {
-            optimizer.getSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getSimplex);
         assertFalse(optimizer.isSimplexAvailable());
 
         // set simplex using start point and deltas
@@ -303,58 +208,45 @@ public class SimplexMultiOptimizerTest implements
         assertTrue(optimizer.isSimplexAvailable());
 
         // Force IllegalArgumentException
-        try {
-            optimizer.setSimplex(startPoint, badDeltas);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        final var finalOptimizer = optimizer;
+        assertThrows(IllegalArgumentException.class, () -> finalOptimizer.setSimplex(startPoint, badDeltas));
 
         optimizer = new SimplexMultiOptimizer();
-        try {
-            optimizer.getSimplex();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getSimplex);
         assertFalse(optimizer.isSimplexAvailable());
 
         // set simplex
         optimizer.setSimplex(simplex);
 
         // check correctness
-        assertEquals(optimizer.getSimplex(), simplex);
+        assertEquals(simplex, optimizer.getSimplex());
         assertTrue(optimizer.isSimplexAvailable());
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
+    void testGetSetTolerance() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer();
+        final var optimizer = new SimplexMultiOptimizer();
 
-        assertEquals(SimplexMultiOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(), 0.0);
+        assertEquals(SimplexMultiOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
 
         // set tolerance
         optimizer.setTolerance(tolerance);
 
         // check correctness
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            optimizer.setTolerance(-tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> optimizer.setTolerance(-tolerance));
     }
 
     @Test
-    public void testIsReady() throws LockedException, WrongSizeException {
+    void testIsReady() throws LockedException, WrongSizeException {
 
-        final SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer();
+        final var optimizer = new SimplexMultiOptimizer();
 
         assertFalse(optimizer.isReady());
 
@@ -362,11 +254,11 @@ public class SimplexMultiOptimizerTest implements
         optimizer.setListener(this);
         assertFalse(optimizer.isReady());
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final Matrix simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims,
-                MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var simplex = Matrix.createWithUniformRandomValues(ndims + 1, ndims, MIN_EVAL_POINT,
+                MAX_EVAL_POINT);
 
         // set simplex
         optimizer.setSimplex(simplex);
@@ -376,8 +268,8 @@ public class SimplexMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetOnIterationCompletedListener() throws LockedException {
-        final SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer();
+    void testGetSetOnIterationCompletedListener() throws LockedException {
+        final var optimizer = new SimplexMultiOptimizer();
 
         assertNull(optimizer.getOnIterationCompletedListener());
 
@@ -389,15 +281,11 @@ public class SimplexMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetListenerAndAvailability() throws LockedException {
+    void testGetSetListenerAndAvailability() throws LockedException {
 
-        final SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer();
+        final var optimizer = new SimplexMultiOptimizer();
 
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
 
         // set listener
@@ -406,10 +294,10 @@ public class SimplexMultiOptimizerTest implements
     }
 
     @Test
-    public void testMinimize() throws Throwable {
+    void testMinimize() throws Throwable {
 
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
             ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
             minimum = new double[ndims];
@@ -418,18 +306,16 @@ public class SimplexMultiOptimizerTest implements
             randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
             offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
 
-            final double[] startPoint = Arrays.copyOf(minimum, ndims);
+            final var startPoint = Arrays.copyOf(minimum, ndims);
             // add some noise to start point
-            for (int i = 0; i < ndims; i++) {
+            for (var i = 0; i < ndims; i++) {
                 startPoint[i] += randomizer.nextDouble(MIN_DELTA, MAX_DELTA);
             }
 
-            final double delta = randomizer.nextDouble(2.0 * MIN_DELTA,
-                    2.0 * MAX_DELTA);
+            final var delta = randomizer.nextDouble(2.0 * MIN_DELTA, 2.0 * MAX_DELTA);
 
-
-            final SimplexMultiOptimizer optimizer = new SimplexMultiOptimizer(this,
-                    startPoint, delta, SimplexMultiOptimizer.DEFAULT_TOLERANCE);
+            final var optimizer = new SimplexMultiOptimizer(this, startPoint, delta,
+                    SimplexMultiOptimizer.DEFAULT_TOLERANCE);
             optimizer.setOnIterationCompletedListener(this);
 
             assertFalse(optimizer.isLocked());
@@ -438,16 +324,8 @@ public class SimplexMultiOptimizerTest implements
             assertTrue(optimizer.isListenerAvailable());
             assertTrue(optimizer.isSimplexAvailable());
             assertFalse(optimizer.areFunctionEvaluationsAvailable());
-            try {
-                optimizer.getEvaluationAtResult();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
-            try {
-                optimizer.getResult();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
+            assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
+            assertThrows(NotAvailableException.class, optimizer::getResult);
 
             reset();
             assertEquals(0, iterations);
@@ -464,19 +342,18 @@ public class SimplexMultiOptimizerTest implements
             assertTrue(optimizer.areFunctionEvaluationsAvailable());
             assertTrue(iterations >= 0);
 
-            final double[] evaluationsAtSimplex = optimizer.getEvaluationsAtSimplex();
-            final double evaluationAtResult = optimizer.getEvaluationAtResult();
+            final var evaluationsAtSimplex = optimizer.getEvaluationsAtSimplex();
+            final var evaluationAtResult = optimizer.getEvaluationAtResult();
 
-            final double[] result = optimizer.getResult();
+            final var result = optimizer.getResult();
 
             // check correctness
 
             // check that obtained function value is close to that on the true
             // minimum
-            final double evaluationAtMinimum = evaluate(minimum);
+            final var evaluationAtMinimum = evaluate(minimum);
 
-            assertEquals(evaluationAtResult, evaluationAtMinimum,
-                    ABSOLUTE_ERROR);
+            assertEquals(evaluationAtResult, evaluationAtMinimum, ABSOLUTE_ERROR);
 
             assertNotNull(evaluationsAtSimplex);
             assertNotNull(result);
@@ -485,11 +362,10 @@ public class SimplexMultiOptimizerTest implements
 
     @Override
     public double evaluate(final double[] point) {
-        final int dims = Math.min(Math.min(point.length, minimum.length),
-                width.length);
+        final var dims = Math.min(Math.min(point.length, minimum.length), width.length);
 
-        double value = 1.0;
-        for (int i = 0; i < dims; i++) {
+        var value = 1.0;
+        for (var i = 0; i < dims; i++) {
             value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
         }
 
@@ -498,8 +374,7 @@ public class SimplexMultiOptimizerTest implements
     }
 
     @Override
-    public void onIterationCompleted(
-            final Optimizer optimizer, final int iteration, final Integer maxIterations) {
+    public void onIterationCompleted(final Optimizer optimizer, final int iteration, final Integer maxIterations) {
         assertNotNull(optimizer);
         assertTrue(optimizer.isLocked());
         assertTrue(iteration >= 0);

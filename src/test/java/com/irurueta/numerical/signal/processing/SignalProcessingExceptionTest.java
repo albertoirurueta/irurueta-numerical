@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.signal.processing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class SignalProcessingExceptionTest {
+class SignalProcessingExceptionTest {
 
     @Test
-    public void testConstructor() {
-        SignalProcessingException ex = new SignalProcessingException();
+    void testConstructor() {
+        var ex = new SignalProcessingException();
         assertNotNull(ex);
 
         ex = new SignalProcessingException("message");

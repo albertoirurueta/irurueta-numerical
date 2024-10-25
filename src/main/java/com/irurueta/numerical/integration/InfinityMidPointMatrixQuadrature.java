@@ -37,8 +37,7 @@ public class InfinityMidPointMatrixQuadrature extends MidPointMatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public InfinityMidPointMatrixQuadrature(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         super(1.0 / b, 1.0 / a, listener);
     }

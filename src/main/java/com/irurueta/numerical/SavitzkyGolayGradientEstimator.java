@@ -47,8 +47,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
      *
      * @param listener Listener to evaluate a multidimensional function.
      */
-    public SavitzkyGolayGradientEstimator(
-            final MultiDimensionFunctionEvaluatorListener listener) {
+    public SavitzkyGolayGradientEstimator(final MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
 
@@ -67,17 +66,16 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public void gradient(final double[] point, final double[] result)
-            throws EvaluationException {
-        final int n = point.length;
+    public void gradient(final double[] point, final double[] result) throws EvaluationException {
+        final var n = point.length;
         if (result.length != n) {
             throw new IllegalArgumentException();
         }
 
-        final double[] xh1 = new double[n];
-        final double[] xh2 = new double[n];
+        final var xh1 = new double[n];
+        final var xh2 = new double[n];
 
-        final double f = listener.evaluate(point);
+        final var f = listener.evaluate(point);
         System.arraycopy(point, 0, xh1, 0, n);
         System.arraycopy(point, 0, xh2, 0, n);
 
@@ -88,23 +86,23 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             throw new EvaluationException(e);
         }
 
-        final double[] b = new double[N_POINTS];
+        final var b = new double[N_POINTS];
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+        final var decomposer = new SingularValueDecomposer(a);
 
-        for (int j = 0; j < n; j++) {
-            final double temp = point[j];
-            double h = EPS * Math.abs(temp);
+        for (var j = 0; j < n; j++) {
+            final var temp = point[j];
+            var h = EPS * Math.abs(temp);
             if (h == 0.0) {
                 // Trick to reduce finite-precision error
                 h = EPS;
             }
 
-            final double p1 = xh1[j] = temp + h;
-            final double p2 = xh2[j] = temp - h;
+            final var p1 = xh1[j] = temp + h;
+            final var p2 = xh2[j] = temp - h;
 
-            final double fh1 = listener.evaluate(xh1);
-            final double fh2 = listener.evaluate(xh2);
+            final var fh1 = listener.evaluate(xh1);
+            final var fh2 = listener.evaluate(xh2);
 
             xh1[j] = temp;
             xh2[j] = temp;
@@ -122,7 +120,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
             a.setElementAt(2, 2, 1.0);
 
             // normalize to increase accuracy
-            final double normA = Utils.normF(a);
+            final var normA = Utils.normF(a);
             a.multiplyByScalar(1.0 / normA);
 
             b[0] = f;
@@ -141,7 +139,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
                 // now solve the system of equations in Least Mean Squared Error
                 // because SVD allows the system of equations to be solved using
                 // the pseudo-inverse
-                final double[] params = decomposer.solve(b);
+                final var params = decomposer.solve(b);
                 aParam = params[0];
                 bParam = params[1];
                 // and c = params[2], but we don't need it

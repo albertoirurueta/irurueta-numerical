@@ -21,13 +21,11 @@ import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class NewtonRaphsonSingleRootEstimatorTest {
+class NewtonRaphsonSingleRootEstimatorTest {
 
     private static final double MIN_EVAL_POINT = 0.0;
     private static final double MAX_EVAL_POINT = 1.0;
@@ -40,215 +38,62 @@ public class NewtonRaphsonSingleRootEstimatorTest {
     private double root2;
     private double root3;
 
-    private final SingleDimensionFunctionEvaluatorListener constantPolynomial;
-    private final SingleDimensionFunctionEvaluatorListener derivativeConstantPolynomial;
+    private final SingleDimensionFunctionEvaluatorListener constantPolynomial = point -> constant;
+    private final SingleDimensionFunctionEvaluatorListener derivativeConstantPolynomial = point -> 0.0;
 
-    private final SingleDimensionFunctionEvaluatorListener firstDegreePolynomial;
-    private final SingleDimensionFunctionEvaluatorListener derivativeFirstDegreePolynomial;
+    private final SingleDimensionFunctionEvaluatorListener firstDegreePolynomial = point -> (point - root1);
+    private final SingleDimensionFunctionEvaluatorListener derivativeFirstDegreePolynomial = point -> 1.0;
 
-    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomial;
-    private final SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomial;
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomial =
+            point -> (point - root1) * (point - root2);
+    private final SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomial =
+            point -> 2.0 * point - root1 - root2;
 
-    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithDoubleRoot;
-    private final SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomialWithDoubleRoot;
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithDoubleRoot =
+            point -> (point - root1) * (point - root1);
+    private final SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomialWithDoubleRoot =
+            point -> 2.0 * (point - root1);
 
-    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots;
-    private final SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomialWithTwoComplexConjugateRoots;
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots =
+            point -> (point * point + Math.abs(root1));
+    private final SingleDimensionFunctionEvaluatorListener derivativeSecondDegreePolynomialWithTwoComplexConjugateRoots =
+            point -> 2.0 * point;
 
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial;
-    private final SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomial;
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial =
+            point -> (point - root1) * (point - root2) * (point - root3);
+    private final SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomial =
+            point -> (point - root2) * (point - root3) + (point - root1) * (2.0 * point - root2 - root3);
 
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithDoubleRoot;
-    private final SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithDoubleRoot;
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithDoubleRoot =
+            point -> (point - root1) * (point - root1) * (point - root2);
+    private final SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithDoubleRoot =
+            point -> 2.0 * (point - root1) * (point - root2) + (point - root1) * (point - root1);
 
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots;
-    private final SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots;
-
-
-    public NewtonRaphsonSingleRootEstimatorTest() {
-
-        constantPolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return constant;
-            }
-        };
-
-        derivativeConstantPolynomial =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return 0.0;
-                    }
-                };
-
-        firstDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1);
-            }
-        };
-
-        derivativeFirstDegreePolynomial =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return 1.0;
-                    }
-                };
-
-        secondDegreePolynomial =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root1) * (point - root2);
-                    }
-                };
-
-        derivativeSecondDegreePolynomial =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return 2.0 * point - root1 - root2;
-                    }
-                };
-
-        secondDegreePolynomialWithDoubleRoot =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root1) * (point - root1);
-                    }
-                };
-
-        derivativeSecondDegreePolynomialWithDoubleRoot =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return 2.0 * (point - root1);
-                    }
-                };
-
-        secondDegreePolynomialWithTwoComplexConjugateRoots =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point * point + Math.abs(root1));
-                    }
-                };
-
-        derivativeSecondDegreePolynomialWithTwoComplexConjugateRoots =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return 2.0 * point;
-                    }
-                };
-
-        thirdDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1) * (point - root2) * (point - root3);
-            }
-        };
-
-        derivativeThirdDegreePolynomial =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root2) * (point - root3) +
-                                (point - root1) * (2.0 * point - root2 - root3);
-                    }
-                };
-
-        thirdDegreePolynomialWithDoubleRoot =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root1) * (point - root1) * (point - root2);
-                    }
-                };
-
-        derivativeThirdDegreePolynomialWithDoubleRoot =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return 2.0 * (point - root1) * (point - root2) +
-                                (point - root1) * (point - root1);
-                    }
-                };
-
-        thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root1) * (point * point + Math.abs(root2));
-                    }
-                };
-
-        derivativeThirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point * point + Math.abs(root2)) +
-                                2.0 * point * (point - root1);
-                    }
-                };
-    }
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
+            point -> (point - root1) * (point * point + Math.abs(root2));
+    private final SingleDimensionFunctionEvaluatorListener derivativeThirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
+            point -> (point * point + Math.abs(root2)) + 2.0 * point * (point - root1);
 
     @Test
-    public void testConstructor() throws NotAvailableException, InvalidBracketRangeException {
+    void testConstructor() throws NotAvailableException, InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
-
-        NewtonRaphsonSingleRootEstimator estimator;
+        final var randomizer = new UniformRandomizer();
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
         // testing 1st constructor
-        estimator = new NewtonRaphsonSingleRootEstimator();
+        var estimator = new NewtonRaphsonSingleRootEstimator();
         assertNotNull(estimator);
 
-        try {
-            estimator.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            estimator.getDerivativeListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
-                estimator.getMaxEvaluationPoint(), 0.0);
-        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
-                estimator.getMinEvaluationPoint(), 0.0);
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE,
-                estimator.getTolerance(), 0.0);
+        assertThrows(NotAvailableException.class, estimator::getListener);
+        assertThrows(NotAvailableException.class, estimator::getDerivativeListener);
+        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, estimator.getMaxEvaluationPoint(),
+                0.0);
+        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, estimator.getMinEvaluationPoint(),
+                0.0);
+        assertThrows(NotAvailableException.class, estimator::getRoot);
+        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE, estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isDerivativeListenerAvailable());
@@ -256,26 +101,16 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         assertFalse(estimator.isReady());
         assertFalse(estimator.isRootAvailable());
 
-
         // Test 2nd constructor
-        estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                minEvalPoint, maxEvalPoint, tolerance);
+        estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial, minEvalPoint, maxEvalPoint, tolerance);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getListener(), constantPolynomial);
-        try {
-            estimator.getDerivativeListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(constantPolynomial, estimator.getListener());
+        assertThrows(NotAvailableException.class, estimator::getDerivativeListener);
         assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
         assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(estimator.getTolerance(), tolerance, 0.0);
+        assertThrows(NotAvailableException.class, estimator::getRoot);
+        assertEquals(tolerance, estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isDerivativeListenerAvailable());
@@ -284,40 +119,24 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         assertFalse(estimator.isRootAvailable());
 
         // Force InvalidBracketRangeException
-        estimator = null;
-        try {
-            estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                    maxEvalPoint, minEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        // Force IllegalArgumentException
-        try {
-            estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                    minEvalPoint, maxEvalPoint, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(InvalidBracketRangeException.class, () -> new NewtonRaphsonSingleRootEstimator(constantPolynomial,
+                maxEvalPoint, minEvalPoint, tolerance));
 
+        // Force IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> new NewtonRaphsonSingleRootEstimator(constantPolynomial,
+                minEvalPoint, maxEvalPoint, -tolerance));
 
         // test 3rd constructor
-        estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                derivativeConstantPolynomial, minEvalPoint, maxEvalPoint,
-                tolerance);
+        estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial, derivativeConstantPolynomial, minEvalPoint,
+                maxEvalPoint, tolerance);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getListener(), constantPolynomial);
-        assertEquals(estimator.getDerivativeListener(),
-                derivativeConstantPolynomial);
-        assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
-        assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(estimator.getTolerance(), tolerance, 0.0);
+        assertEquals(constantPolynomial, estimator.getListener());
+        assertEquals(derivativeConstantPolynomial, estimator.getDerivativeListener());
+        assertEquals(maxEvalPoint, estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(minEvalPoint, estimator.getMinEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, estimator::getRoot);
+        assertEquals(tolerance, estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isDerivativeListenerAvailable());
@@ -326,134 +145,95 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         assertFalse(estimator.isRootAvailable());
 
         // Force InvalidBracketRangeException
-        estimator = null;
-        try {
-            estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                    derivativeConstantPolynomial, maxEvalPoint, minEvalPoint,
-                    tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
-        // Force IllegalArgumentException
-        try {
-            estimator = new NewtonRaphsonSingleRootEstimator(constantPolynomial,
-                    derivativeConstantPolynomial, minEvalPoint, maxEvalPoint,
-                    -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(InvalidBracketRangeException.class, () -> new NewtonRaphsonSingleRootEstimator(constantPolynomial,
+                derivativeConstantPolynomial, maxEvalPoint, minEvalPoint, tolerance));
 
+        // Force IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> new NewtonRaphsonSingleRootEstimator(constantPolynomial,
+                derivativeConstantPolynomial, minEvalPoint, maxEvalPoint, -tolerance));
     }
 
     @Test
-    public void testGetSetListenerAndDerivativeListenerAvailabilityAndIsReady()
-            throws LockedException, NotAvailableException {
+    void testGetSetListenerAndDerivativeListenerAvailabilityAndIsReady() throws LockedException, NotAvailableException {
 
-        final NewtonRaphsonSingleRootEstimator estimator =
-                new NewtonRaphsonSingleRootEstimator();
+        final var estimator = new NewtonRaphsonSingleRootEstimator();
 
         // check default values
-        try {
-            estimator.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getListener);
         assertFalse(estimator.isListenerAvailable());
-        try {
-            estimator.getDerivativeListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getDerivativeListener);
         assertFalse(estimator.isDerivativeListenerAvailable());
         assertFalse(estimator.isReady());
-
 
         // set listener
         estimator.setListener(constantPolynomial);
         // check correctness
-        assertEquals(estimator.getListener(), constantPolynomial);
+        assertEquals(constantPolynomial, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
 
         // set derivative listener
         estimator.setDerivativeListener(derivativeConstantPolynomial);
         // check correctness
-        assertEquals(estimator.getDerivativeListener(),
-                derivativeConstantPolynomial);
+        assertEquals(derivativeConstantPolynomial, estimator.getDerivativeListener());
         assertTrue(estimator.isDerivativeListenerAvailable());
         // because both delegate are available...
         assertTrue(estimator.isReady());
     }
 
     @Test
-    public void testSetBracketGetEvaluationPointsAndAvailability()
-            throws NotAvailableException, LockedException,
+    void testSetBracketGetEvaluationPointsAndAvailability() throws NotAvailableException, LockedException,
             InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
+        final var randomizer = new UniformRandomizer();
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
 
-        final NewtonRaphsonSingleRootEstimator estimator =
-                new NewtonRaphsonSingleRootEstimator();
+        final var estimator = new NewtonRaphsonSingleRootEstimator();
 
         // check default values
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
-                estimator.getMinEvaluationPoint(), 0.0);
-        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
-                estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, estimator.getMinEvaluationPoint(),
+                0.0);
+        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, estimator.getMaxEvaluationPoint(),
+                0.0);
 
         // set new values
         estimator.setBracket(minEvalPoint, maxEvalPoint);
         // check correctness
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
+        assertEquals(minEvalPoint, estimator.getMinEvaluationPoint(), 0.0);
+        assertEquals(maxEvalPoint, estimator.getMaxEvaluationPoint(), 0.0);
 
         // Force InvalidBracketRangeException
-        try {
-            estimator.setBracket(maxEvalPoint, minEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
+        assertThrows(InvalidBracketRangeException.class, () -> estimator.setBracket(maxEvalPoint, minEvalPoint));
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
+    void testGetSetTolerance() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final NewtonRaphsonSingleRootEstimator estimator =
-                new NewtonRaphsonSingleRootEstimator();
+        final var estimator = new NewtonRaphsonSingleRootEstimator();
 
         // check default values
-        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE,
-                estimator.getTolerance(), 0.0);
+        assertEquals(NewtonRaphsonSingleRootEstimator.DEFAULT_TOLERANCE, estimator.getTolerance(), 0.0);
 
         // set new value
         estimator.setTolerance(tolerance);
         // Check correctness
-        assertEquals(estimator.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, estimator.getTolerance(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setTolerance(-tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setTolerance(-tolerance));
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            InvalidBracketRangeException, RootEstimationException,
-            NotAvailableException {
+    void testEstimate() throws LockedException, NotReadyException, InvalidBracketRangeException,
+            RootEstimationException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
         root1 = randomizer.nextDouble(MIN_EVAL_POINT, 0.2 * MAX_EVAL_POINT);
         root2 = randomizer.nextDouble(0.4 * MAX_EVAL_POINT, 0.6 * MAX_EVAL_POINT);
@@ -461,31 +241,18 @@ public class NewtonRaphsonSingleRootEstimatorTest {
 
         // instantiate estimator with brackets for accuracy (otherwise estimation
         // might fail)
-        final NewtonRaphsonSingleRootEstimator estimator =
-                new NewtonRaphsonSingleRootEstimator();
+        final var estimator = new NewtonRaphsonSingleRootEstimator();
 
         // test constant polynomial
         estimator.setListener(constantPolynomial);
         estimator.setDerivativeListener(derivativeConstantPolynomial);
         assertFalse(estimator.isLocked());
-        try {
-            estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
+        assertThrows(RootEstimationException.class, () -> estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT));
         assertFalse(estimator.isLocked());
-        try {
-            estimator.estimate();
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
+        assertThrows(RootEstimationException.class, estimator::estimate);
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getRoot);
 
         // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -533,11 +300,7 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         estimator.setListener(secondDegreePolynomialWithDoubleRoot);
         estimator.setDerivativeListener(derivativeSecondDegreePolynomialWithDoubleRoot);
         assertFalse(estimator.isLocked());
-        try {
-            estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
+        assertThrows(RootEstimationException.class, () -> estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT));
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
         assertFalse(estimator.isLocked());
         estimator.estimate();
@@ -548,29 +311,19 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-
         // test 2nd degree with two complex conjugate roots
         estimator.setListener(secondDegreePolynomialWithTwoComplexConjugateRoots);
         estimator.setDerivativeListener(derivativeSecondDegreePolynomialWithTwoComplexConjugateRoots);
         assertFalse(estimator.isLocked());
-        try {
-            estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
+        assertThrows(RootEstimationException.class, () -> estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT));
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
         assertFalse(estimator.isLocked());
-        try {
-            estimator.estimate();
-            fail("RootEstimationException expected but not thrown");
-        } catch (final RootEstimationException ignore) {
-        }
+        assertThrows(RootEstimationException.class, estimator::estimate);
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isRootAvailable());
 
         // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
 
         // test 3rd degree polynomial
         // we need to properly set bracketing for each root and then refine the
@@ -605,7 +358,6 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-
         // test 3rd degree polynomial with double root
         // we need to properly set bracketing for each root and then refine the
         // result using estimate method
@@ -622,7 +374,6 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-
         // test 3rd degree polynomial with triple root
         estimator.setListener(thirdDegreePolynomial);
         estimator.setDerivativeListener(derivativeThirdDegreePolynomial);
@@ -637,16 +388,12 @@ public class NewtonRaphsonSingleRootEstimatorTest {
         // reset bracket
         estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-
         // test third degree polynomial with 1 real root and 2 conjugate complex
         // roots
-        estimator.setListener(
-                thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
-        estimator.setDerivativeListener(
-                derivativeThirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
+        estimator.setListener(thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
+        estimator.setDerivativeListener(derivativeThirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
         assertFalse(estimator.isLocked());
-        estimator.computeBracket(MIN_EVAL_POINT,
-                0.5 * (MIN_EVAL_POINT + root2));
+        estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (MIN_EVAL_POINT + root2));
         assertFalse(estimator.isLocked());
         estimator.estimate();
         assertFalse(estimator.isLocked());

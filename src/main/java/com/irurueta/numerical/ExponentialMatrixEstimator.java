@@ -106,7 +106,7 @@ public class ExponentialMatrixEstimator {
      * @throws AlgebraException if there are numerical errors.
      */
     public Matrix exponential(final Matrix a, final double tolerance) throws AlgebraException {
-        final Matrix result = new Matrix(a.getRows(), a.getColumns());
+        final var result = new Matrix(a.getRows(), a.getColumns());
         exponential(a, result, tolerance);
         return result;
     }
@@ -134,9 +134,8 @@ public class ExponentialMatrixEstimator {
      * @param tolerance maximum allowed absolute error tolerance element-wise.
      * @throws AlgebraException if there are numerical errors.
      */
-    public void exponential(final Matrix a, final Matrix result, final double tolerance)
-            throws AlgebraException {
-        final int aRows = a.getRows();
+    public void exponential(final Matrix a, final Matrix result, final double tolerance) throws AlgebraException {
+        final var aRows = a.getRows();
 
         if (aRows != a.getColumns()) {
             throw new IllegalArgumentException("Matrix must be squared");
@@ -149,8 +148,8 @@ public class ExponentialMatrixEstimator {
             throw new IllegalArgumentException("Tolerance must be zero or greater");
         }
 
-        final double normMax = normmax(a);
-        final int j = Math.max(0, 1 + (int) Math.floor(Math.log(normMax) / Math.log(2.0)));
+        final var normMax = normmax(a);
+        final var j = Math.max(0, 1 + (int) Math.floor(Math.log(normMax) / Math.log(2.0)));
 
         initialize(aRows);
 
@@ -159,10 +158,10 @@ public class ExponentialMatrixEstimator {
         as.multiplyByScalar(1.0 / Math.pow(2.0, j));
 
         // find order for required tolerance
-        final int q = findQForTolerance(tolerance, normMax);
+        final var q = findQForTolerance(tolerance, normMax);
 
-        double c = 1.0;
-        for (int k = 1; k <= q; k++) {
+        var c = 1.0;
+        for (var k = 1; k <= q; k++) {
             c = c * (q - k + 1) / ((2 * q - k + 1) * k);
 
             // X = As * X
@@ -189,7 +188,7 @@ public class ExponentialMatrixEstimator {
         Utils.solve(d, n, f);
 
         // now square j times
-        for (int k = 0; k < j; k++) {
+        for (var k = 0; k < j; k++) {
             // F = F^2 = F * F
             tmp.copyFrom(f);
             tmp.multiply(f);
@@ -240,10 +239,10 @@ public class ExponentialMatrixEstimator {
      * @return estimated relative error.
      */
     private double relativeError(final int p, final int q) {
-        final double pFact = factorialEstimator.factorial(p);
-        final double qFact = factorialEstimator.factorial(q);
-        final double pPlusQFact = factorialEstimator.factorial(p + q);
-        final double pPlusQPlusOneFact = factorialEstimator.factorial(p + q + 1);
+        final var pFact = factorialEstimator.factorial(p);
+        final var qFact = factorialEstimator.factorial(q);
+        final var pPlusQFact = factorialEstimator.factorial(p + q);
+        final var pPlusQPlusOneFact = factorialEstimator.factorial(p + q + 1);
 
         return Math.pow(2.0, 3.0 - (p + q)) * pFact / pPlusQFact * qFact / pPlusQPlusOneFact;
     }
@@ -256,8 +255,8 @@ public class ExponentialMatrixEstimator {
      * @return Padé approximant order.
      */
     private int findQForRelativeError(final double maxRelativeError) {
-        for (int q = 0; ; q++) {
-            final double relativeError = relativeError(q, q);
+        for (var q = 0; ; q++) {
+            final var relativeError = relativeError(q, q);
             if (relativeError <= maxRelativeError) {
                 return q;
             }
@@ -284,10 +283,10 @@ public class ExponentialMatrixEstimator {
      * @return estimated infinite norm.
      */
     private static double normmax(final Matrix a) {
-        double max = 0.0;
-        double[] buffer = a.getBuffer();
-        for (double v : buffer) {
-            double value = Math.abs(v);
+        var max = 0.0;
+        var buffer = a.getBuffer();
+        for (var v : buffer) {
+            var value = Math.abs(v);
             if (value > max) {
                 max = value;
             }

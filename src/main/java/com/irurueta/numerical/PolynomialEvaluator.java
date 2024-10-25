@@ -46,11 +46,11 @@ public class PolynomialEvaluator {
             throw new IllegalArgumentException();
         }
 
-        final int length = polyParams.length;
+        final var length = polyParams.length;
 
-        double result = 0.0;
-        double powX = 1.0;
-        for (int i = length - 1; i >= 0; i--) {
+        var result = 0.0;
+        var powX = 1.0;
+        for (var i = length - 1; i >= 0; i--) {
             result += polyParams[i] * powX;
             powX *= x;
         }
@@ -75,12 +75,12 @@ public class PolynomialEvaluator {
             throw new IllegalArgumentException();
         }
 
-        final int length = polyParams.length;
+        final var length = polyParams.length;
 
-        final Complex result = new Complex();
-        final Complex powX = new Complex(1.0, 0.0);
-        final Complex tmp = new Complex();
-        for (int i = length - 1; i >= 0; i--) {
+        final var result = new Complex();
+        final var powX = new Complex(1.0, 0.0);
+        final var tmp = new Complex();
+        for (var i = length - 1; i >= 0; i--) {
 
             polyParams[i].multiply(powX, tmp);
             result.add(tmp);

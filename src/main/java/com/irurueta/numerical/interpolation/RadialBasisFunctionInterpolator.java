@@ -54,8 +54,8 @@ public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInte
      *                                  points (rows) in provided matrix.
      */
     public RadialBasisFunctionInterpolator(
-            final Matrix ptss, final double[] valss, final RadialBasisFunction func,
-            final boolean nrbf) throws InterpolationException {
+            final Matrix ptss, final double[] valss, final RadialBasisFunction func, final boolean nrbf)
+            throws InterpolationException {
         super(ptss);
 
         if (valss.length != n) {
@@ -67,21 +67,21 @@ public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInte
             fn = func;
             norm = nrbf;
 
-            final double[] pj = new double[dim];
+            final var pj = new double[dim];
 
             int i;
             int j;
             double sum;
-            final Matrix rbf = new Matrix(n, n);
-            final Matrix rhs = new Matrix(n, 1);
+            final var rbf = new Matrix(n, n);
+            final var rhs = new Matrix(n, 1);
             for (i = 0; i < n; i++) {
                 // Fill the matrix phi(|ri - rj|) and the right hand sisde (rhs) vector
                 sum = 0.;
                 for (j = 0; j < n; j++) {
-                    final int endCol = dim - 1;
+                    final var endCol = dim - 1;
                     pts.getSubmatrixAsArray(i, 0, i, endCol, pi);
                     pts.getSubmatrixAsArray(j, 0, j, endCol, pj);
-                    final double value = fn.evaluate(rad(pi, pj));
+                    final var value = fn.evaluate(rad(pi, pj));
                     rbf.setElementAt(i, j, value);
                     sum += value;
                 }
@@ -94,7 +94,7 @@ public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInte
             }
 
             // Solve the set of linear equations
-            final LUDecomposer lu = new LUDecomposer(rbf);
+            final var lu = new LUDecomposer(rbf);
             lu.decompose();
             lu.solve(rhs, w);
         } catch (final AlgebraException e) {
@@ -116,8 +116,7 @@ public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInte
      *                                  points (rows) in provided matrix.
      */
     public RadialBasisFunctionInterpolator(
-            final Matrix ptss, final double[] valss, final RadialBasisFunction func)
-            throws InterpolationException {
+            final Matrix ptss, final double[] valss, final RadialBasisFunction func) throws InterpolationException {
         this(ptss, valss, func, false);
     }
 
@@ -135,12 +134,12 @@ public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInte
         }
 
         double fval;
-        double sum = 0.0;
-        double sumw = 0.0;
+        var sum = 0.0;
+        var sumw = 0.0;
 
         try {
-            for (int i = 0; i < n; i++) {
-                final int endCol = dim - 1;
+            for (var i = 0; i < n; i++) {
+                final var endCol = dim - 1;
                 pts.getSubmatrixAsArray(i, 0, i, endCol, pi);
                 fval = fn.evaluate(rad(pt, pi));
                 sumw += w.getElementAtIndex(i) * fval;

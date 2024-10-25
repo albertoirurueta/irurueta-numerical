@@ -20,14 +20,11 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class DerivativeConjugateGradientMultiOptimizerTest implements
-        OnIterationCompletedListener {
+class DerivativeConjugateGradientMultiOptimizerTest implements OnIterationCompletedListener {
 
     private static final int MIN_DIMS = 2;
     private static final int MAX_DIMS = 4;
@@ -58,65 +55,49 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
 
     private int iterations = 0;
 
-    private final MultiDimensionFunctionEvaluatorListener listener;
-    private final GradientFunctionEvaluatorListener gradientListener;
+    private final MultiDimensionFunctionEvaluatorListener listener = point -> {
+        final var dims = Math.min(Math.min(point.length, minimum.length),
+                width.length);
 
-    public DerivativeConjugateGradientMultiOptimizerTest() {
-        listener = new MultiDimensionFunctionEvaluatorListener() {
+        var value = 1.0;
+        for (var i = 0; i < dims; i++) {
+            value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
+        }
 
-            @Override
-            public double evaluate(final double[] point) {
-                final int dims = Math.min(Math.min(point.length, minimum.length),
-                        width.length);
+        value += offset;
+        return value;
+    };
 
-                double value = 1.0;
-                for (int i = 0; i < dims; i++) {
-                    value *= Math.pow(point[i] - minimum[i], 2.0) / width[i];
-                }
+    private final GradientFunctionEvaluatorListener gradientListener = (params, result) -> {
+        final var dims = Math.min(Math.min(params.length, minimum.length), width.length);
 
-                value += offset;
-                return value;
-            }
-        };
-
-        gradientListener = new GradientFunctionEvaluatorListener() {
-
-            @Override
-            public void evaluateGradient(final double[] params, final double[] result) {
-                final int dims = Math.min(Math.min(params.length, minimum.length),
-                        width.length);
-
-                double value;
-                for (int j = 0; j < dims; j++) {
-                    value = 1.0;
-                    for (int i = 0; i < dims; i++) {
-                        if (i != j) {
-                            value *= Math.pow(params[i] - minimum[i], 2.0) /
-                                    width[i];
-                        } else {
-                            value *= 2.0 * (params[i] - minimum[i]) / width[i];
-                        }
-                    }
-
-                    result[j] = value;
+        for (var j = 0; j < dims; j++) {
+            var value = 1.0;
+            for (var i = 0; i < dims; i++) {
+                if (i != j) {
+                    value *= Math.pow(params[i] - minimum[i], 2.0) / width[i];
+                } else {
+                    value *= 2.0 * (params[i] - minimum[i]) / width[i];
                 }
             }
-        };
-    }
+
+            result[j] = value;
+        }
+    };
 
     @Test
-    public void testConstructor() throws NotAvailableException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testConstructor() throws NotAvailableException {
+        final var randomizer = new UniformRandomizer();
 
-        final boolean usePolakRibiere = randomizer.nextBoolean();
+        final var usePolakRibiere = randomizer.nextBoolean();
 
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final double[] startPoint = new double[ndims];
+        final var startPoint = new double[ndims];
         minimum = new double[ndims];
         width = new double[ndims];
-        final double[] direction = new double[ndims];
+        final var direction = new double[ndims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
         randomizer.fill(minimum, MIN_EVAL_POINT, MAX_EVAL_POINT);
         randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
@@ -129,96 +110,53 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
         optimizer = new DerivativeConjugateGradientMultiOptimizer();
         assertNotNull(optimizer);
         assertFalse(optimizer.isReady());
-        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(),
-                0.0);
-        try {
-            optimizer.getGradientListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
+        assertThrows(NotAvailableException.class, optimizer::getGradientListener);
         assertFalse(optimizer.isGradientListenerAvailable());
         assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE,
                 optimizer.isPolakRibiereEnabled());
         assertFalse(optimizer.isStartPointAvailable());
-        try {
-            optimizer.getStartPoint();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getStartPoint);
         assertFalse(optimizer.isDirectionAvailable());
-        try {
-            optimizer.getDirection();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getDirection);
+        assertThrows(NotAvailableException.class, optimizer::getListener);
         assertFalse(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertNull(optimizer.getOnIterationCompletedListener());
 
-
         //test 2nd constructor
-        optimizer = new DerivativeConjugateGradientMultiOptimizer(listener,
-                gradientListener, startPoint, direction, tolerance,
-                usePolakRibiere);
+        optimizer = new DerivativeConjugateGradientMultiOptimizer(listener, gradientListener, startPoint, direction,
+                tolerance, usePolakRibiere);
         assertNotNull(optimizer);
         assertTrue(optimizer.isReady());
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
-        assertEquals(optimizer.getGradientListener(), gradientListener);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
+        assertEquals(gradientListener, optimizer.getGradientListener());
         assertTrue(optimizer.isGradientListenerAvailable());
-        assertEquals(optimizer.isPolakRibiereEnabled(), usePolakRibiere);
+        assertEquals(usePolakRibiere, optimizer.isPolakRibiereEnabled());
         assertTrue(optimizer.isStartPointAvailable());
-        assertArrayEquals(optimizer.getStartPoint(), startPoint, 0.0);
+        assertArrayEquals(startPoint, optimizer.getStartPoint(), 0.0);
         assertTrue(optimizer.isDirectionAvailable());
-        assertArrayEquals(optimizer.getDirection(), direction, 0.0);
-        assertEquals(optimizer.getListener(), listener);
+        assertArrayEquals(direction, optimizer.getDirection(), 0.0);
+        assertEquals(listener, optimizer.getListener());
         assertTrue(optimizer.isListenerAvailable());
         assertFalse(optimizer.isResultAvailable());
-        try {
-            optimizer.getResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getEvaluationAtResult();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getResult);
+        assertThrows(NotAvailableException.class, optimizer::getEvaluationAtResult);
         assertNull(optimizer.getOnIterationCompletedListener());
 
         // Force IllegalArgumentException
-        optimizer = null;
-        try {
-            optimizer = new DerivativeConjugateGradientMultiOptimizer(listener,
-                    gradientListener, startPoint, direction, -tolerance,
-                    usePolakRibiere);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(optimizer);
+        assertThrows(IllegalArgumentException.class, () -> new DerivativeConjugateGradientMultiOptimizer(listener,
+                gradientListener, startPoint, direction, -tolerance, usePolakRibiere));
     }
 
     @Test
-    public void testIsReady() throws LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testIsReady() throws LockedException {
+        final var randomizer = new UniformRandomizer();
         ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[ndims];
+        final var startPoint = new double[ndims];
         minimum = new double[ndims];
         width = new double[ndims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -226,8 +164,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
         randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
 
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         assertFalse(optimizer.isReady());
 
@@ -250,9 +187,8 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetOnIterationCompletedListener() throws LockedException {
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+    void testGetSetOnIterationCompletedListener() throws LockedException {
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         assertNull(optimizer.getOnIterationCompletedListener());
 
@@ -264,45 +200,32 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+    void testGetSetTolerance() throws LockedException {
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         // get tolerance
-        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE,
-                optimizer.getTolerance(),
-                0.0);
+        assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_TOLERANCE, optimizer.getTolerance(), 0.0);
 
         // set new tolerance
         optimizer.setTolerance(tolerance);
 
         // check correctness
-        assertEquals(optimizer.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, optimizer.getTolerance(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            optimizer.setTolerance(-tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> optimizer.setTolerance(-tolerance));
     }
 
     @Test
-    public void testGetSetGradientListenerAndAvailability()
-            throws LockedException, NotAvailableException {
+    void testGetSetGradientListenerAndAvailability() throws LockedException, NotAvailableException {
 
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         // Get gradient listener
-        try {
-            optimizer.getGradientListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getGradientListener);
         assertFalse(optimizer.isGradientListenerAvailable());
 
         // set gradient listener
@@ -314,9 +237,8 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetUsePolakRibiere() throws LockedException {
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+    void testGetSetUsePolakRibiere() throws LockedException {
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         // get initial status
         assertEquals(DerivativeConjugateGradientMultiOptimizer.DEFAULT_USE_POLAK_RIBIERE,
@@ -336,61 +258,45 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
     }
 
     @Test
-    public void testGetSetStartPointAndAvailability() throws LockedException,
-            NotAvailableException {
+    void testGetSetStartPointAndAvailability() throws LockedException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
+        final var randomizer = new UniformRandomizer();
+        final var nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[nDims];
+        final var startPoint = new double[nDims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         // get start point
         assertFalse(optimizer.isStartPointAvailable());
-        try {
-            optimizer.getStartPoint();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getStartPoint);
 
         // set start point
         optimizer.setStartPoint(startPoint);
 
         // check correctness
         assertTrue(optimizer.isStartPointAvailable());
-        assertArrayEquals(optimizer.getStartPoint(), startPoint, 0.0);
+        assertArrayEquals(startPoint, optimizer.getStartPoint(), 0.0);
     }
 
     @Test
-    public void testGetSetStartPointAndDirectionAndAvailability()
-            throws LockedException, NotAvailableException {
+    void testGetSetStartPointAndDirectionAndAvailability() throws LockedException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
+        final var randomizer = new UniformRandomizer();
+        final var nDims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-        final double[] startPoint = new double[nDims];
+        final var startPoint = new double[nDims];
         randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
-        final double[] direction = new double[nDims];
+        final var direction = new double[nDims];
         randomizer.fill(direction, MIN_DIRECTION, MAX_DIRECTION);
 
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         assertFalse(optimizer.isStartPointAvailable());
         assertFalse(optimizer.isDirectionAvailable());
-        try {
-            optimizer.getStartPoint();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            optimizer.getDirection();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getStartPoint);
+        assertThrows(NotAvailableException.class, optimizer::getDirection);
 
         // set start point and direction
         optimizer.setStartPointAndDirection(startPoint, direction);
@@ -398,32 +304,23 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
         // check correctness
         assertTrue(optimizer.isStartPointAvailable());
         assertTrue(optimizer.isDirectionAvailable());
-        assertArrayEquals(optimizer.getStartPoint(), startPoint, 0.0);
-        assertArrayEquals(optimizer.getDirection(), direction, 0.0);
+        assertArrayEquals(startPoint, optimizer.getStartPoint(), 0.0);
+        assertArrayEquals(direction, optimizer.getDirection(), 0.0);
 
         // Force IllegalArgumentException
-        final double[] wrongStartPoint = new double[nDims + 1];
-        try {
-            optimizer.setStartPointAndDirection(wrongStartPoint, direction);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrongStartPoint = new double[nDims + 1];
+        assertThrows(IllegalArgumentException.class,
+                () -> optimizer.setStartPointAndDirection(wrongStartPoint, direction));
     }
 
     @Test
-    public void testGetSetListenerAndAvailability() throws LockedException,
-            NotAvailableException {
+    void testGetSetListenerAndAvailability() throws LockedException, NotAvailableException {
 
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         // check initial status
         assertFalse(optimizer.isListenerAvailable());
-        try {
-            optimizer.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, optimizer::getListener);
 
         // set listener
         optimizer.setListener(listener);
@@ -434,23 +331,22 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
     }
 
     @Test
-    public void testIsLocked() {
-        final DerivativeConjugateGradientMultiOptimizer optimizer =
-                new DerivativeConjugateGradientMultiOptimizer();
+    void testIsLocked() {
+        final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
 
         assertFalse(optimizer.isLocked());
     }
 
     @Test
-    public void testMinimize() throws Throwable {
+    void testMinimize() throws Throwable {
 
         // we repeat the process because depending on the start point this
         // algorithm is not very accurate
-        for (int i = 0; i < TIMES; i++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        for (var i = 0; i < TIMES; i++) {
+            final var randomizer = new UniformRandomizer();
             ndims = randomizer.nextInt(MIN_DIMS, MAX_DIMS);
 
-            final double[] startPoint = new double[ndims];
+            final var startPoint = new double[ndims];
             minimum = new double[ndims];
             width = new double[ndims];
             randomizer.fill(startPoint, MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -458,8 +354,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
             randomizer.fill(width, MIN_WIDTH, MAX_WIDTH);
             offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
 
-            final DerivativeConjugateGradientMultiOptimizer optimizer =
-                    new DerivativeConjugateGradientMultiOptimizer();
+            final var optimizer = new DerivativeConjugateGradientMultiOptimizer();
             optimizer.setListener(listener);
             optimizer.setGradientListener(gradientListener);
             optimizer.setStartPoint(startPoint);
@@ -468,11 +363,7 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
             assertFalse(optimizer.isLocked());
             assertTrue(optimizer.isReady());
             assertFalse(optimizer.isResultAvailable());
-            try {
-                optimizer.getResult();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
+            assertThrows(NotAvailableException.class, optimizer::getResult);
 
             reset();
             assertEquals(0, iterations);
@@ -486,12 +377,12 @@ public class DerivativeConjugateGradientMultiOptimizerTest implements
             assertTrue(optimizer.isResultAvailable());
             assertTrue(iterations > 0);
 
-            final double[] result = optimizer.getResult();
+            final var result = optimizer.getResult();
 
             // check that function at estimated result and at tue minimum have
             // almost the same value
-            final double valueMin = listener.evaluate(minimum);
-            final double valueResult = listener.evaluate(result);
+            final var valueMin = listener.evaluate(minimum);
+            final var valueResult = listener.evaluate(result);
 
             assertEquals(valueMin, valueResult, ABSOLUTE_ERROR);
         }

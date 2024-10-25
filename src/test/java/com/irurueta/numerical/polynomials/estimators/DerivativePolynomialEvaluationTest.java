@@ -17,15 +17,13 @@ package com.irurueta.numerical.polynomials.estimators;
 
 import com.irurueta.numerical.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DerivativePolynomialEvaluationTest {
+class DerivativePolynomialEvaluationTest {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -33,133 +31,118 @@ public class DerivativePolynomialEvaluationTest {
     private static final int MAX_ORDER = 4;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor
-        DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation();
+        var eval = new DerivativePolynomialEvaluation();
 
         // check initial values
         assertEquals(1, eval.getDerivativeOrder());
         assertEquals(0.0, eval.getX(), 0.0);
         assertEquals(0.0, eval.getEvaluation(), 0.0);
-        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION,
-                eval.getType());
+        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION, eval.getType());
 
         // test constructor with values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
 
         eval = new DerivativePolynomialEvaluation(x, evaluation, order);
 
         // check correctness
-        assertEquals(eval.getDerivativeOrder(), order);
-        assertEquals(eval.getX(), x, 0.0);
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION,
-                eval.getType());
+        assertEquals(order, eval.getDerivativeOrder());
+        assertEquals(x, eval.getX(), 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
+        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION, eval.getType());
 
         // test constructor with values (without order)
         eval = new DerivativePolynomialEvaluation(x, evaluation);
 
         // check correctness
         assertEquals(1, eval.getDerivativeOrder());
-        assertEquals(eval.getX(), x, 0.0);
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
-        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION,
-                eval.getType());
+        assertEquals(x, eval.getX(), 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
+        assertEquals(PolynomialEvaluationType.DERIVATIVE_EVALUATION, eval.getType());
     }
 
     @Test
-    public void testGetSetEvaluation() {
-        final DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation();
+    void testGetSetEvaluation() {
+        final var eval = new DerivativePolynomialEvaluation();
 
         // check default value
         assertEquals(0.0, eval.getEvaluation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setEvaluation(evaluation);
 
         // check correctness
-        assertEquals(eval.getEvaluation(), evaluation, 0.0);
+        assertEquals(evaluation, eval.getEvaluation(), 0.0);
     }
 
     @Test
-    public void testGetSetX() {
-        final DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation();
+    void testGetSetX() {
+        final var eval = new DerivativePolynomialEvaluation();
 
         // check default value
         assertEquals(0.0, eval.getX(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         eval.setX(x);
 
         // check correctness
-        assertEquals(eval.getX(), x, 0.0);
+        assertEquals(x, eval.getX(), 0.0);
     }
 
     @Test
-    public void testGetSetDerivativeOrder() {
-        final DerivativePolynomialEvaluation eval =
-                new DerivativePolynomialEvaluation();
+    void testGetSetDerivativeOrder() {
+        final var eval = new DerivativePolynomialEvaluation();
 
         // check default value
         assertEquals(1, eval.getDerivativeOrder());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+        final var randomizer = new UniformRandomizer();
+        final var order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
         eval.setDerivativeOrder(order);
 
         // check correctness
-        assertEquals(eval.getDerivativeOrder(), order);
+        assertEquals(order, eval.getDerivativeOrder());
 
         // Force IllegalArgumentException
-        try {
-            eval.setDerivativeOrder(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> eval.setDerivativeOrder(0));
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final DerivativePolynomialEvaluation eval1 =
-                new DerivativePolynomialEvaluation();
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var eval1 = new DerivativePolynomialEvaluation();
 
         // set new values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final int order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
+        final var randomizer = new UniformRandomizer();
+        final var evaluation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var order = randomizer.nextInt(MIN_ORDER, MAX_ORDER);
 
         eval1.setEvaluation(evaluation);
         eval1.setX(x);
         eval1.setDerivativeOrder(order);
 
         // check correctness
-        assertEquals(eval1.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval1.getX(), x, 0.0);
-        assertEquals(eval1.getDerivativeOrder(), order);
+        assertEquals(evaluation, eval1.getEvaluation(), 0.0);
+        assertEquals(x, eval1.getX(), 0.0);
+        assertEquals(order, eval1.getDerivativeOrder());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(eval1);
-        final DerivativePolynomialEvaluation eval2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(eval1);
+        final var eval2 = SerializationHelper.<DerivativePolynomialEvaluation>deserialize(bytes);
 
         // check correctness
-        assertEquals(eval2.getEvaluation(), evaluation, 0.0);
-        assertEquals(eval2.getX(), x, 0.0);
-        assertEquals(eval2.getDerivativeOrder(), order);
+        assertEquals(evaluation, eval2.getEvaluation(), 0.0);
+        assertEquals(x, eval2.getX(), 0.0);
+        assertEquals(order, eval2.getDerivativeOrder());
     }
 }

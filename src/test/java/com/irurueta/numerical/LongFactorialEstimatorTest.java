@@ -15,64 +15,63 @@
  */
 package com.irurueta.numerical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LongFactorialEstimatorTest {
+class LongFactorialEstimatorTest {
 
     @Test
-    public void defaultConstructor_setsExpectedCache() {
-        final LongFactorialEstimator estimator = new LongFactorialEstimator();
+    void defaultConstructor_setsExpectedCache() {
+        final var estimator = new LongFactorialEstimator();
 
         assertEquals(21, estimator.getCacheSize());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_whenSmallValue_throwsException() {
-        new LongFactorialEstimator(0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_whenLargeValue_throwsException() {
-        new LongFactorialEstimator(22);
+    @Test
+    void constructor_whenSmallValue_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> new LongFactorialEstimator(0));
     }
 
     @Test
-    public void factorial_returnsExpectedValue() {
-        final LongFactorialEstimator estimator = new LongFactorialEstimator();
+    void constructor_whenLargeValue_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> new LongFactorialEstimator(22));
+    }
 
-        final int cacheSize = estimator.getCacheSize();
-        long previous = 0L;
-        for (int i = 0; i < cacheSize; i++) {
-            final long factorial = estimator.factorial(i);
-            final long expected = fact(i);
+    @Test
+    void factorial_returnsExpectedValue() {
+        final var estimator = new LongFactorialEstimator();
+
+        final var cacheSize = estimator.getCacheSize();
+        var previous = 0L;
+        for (var i = 0; i < cacheSize; i++) {
+            final var factorial = estimator.factorial(i);
+            final var expected = fact(i);
             assertEquals(expected, factorial, 0.0);
             assertTrue(factorial >= previous);
             previous = factorial;
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void factorial_whenSmallValue_throwsException() {
-        final LongFactorialEstimator estimator = new LongFactorialEstimator();
+    @Test
+    void factorial_whenSmallValue_throwsException() {
+        final var estimator = new LongFactorialEstimator();
 
-        estimator.factorial(-1);
+        assertThrows(IllegalArgumentException.class, () -> estimator.factorial(-1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void factorial_whenLargeValue_throwsException() {
-        final LongFactorialEstimator estimator = new LongFactorialEstimator();
+    @Test
+    void factorial_whenLargeValue_throwsException() {
+        final var estimator = new LongFactorialEstimator();
 
-        final int cacheSize = estimator.getCacheSize();
-        estimator.factorial(cacheSize);
+        final var cacheSize = estimator.getCacheSize();
+        assertThrows(IllegalArgumentException.class, () -> estimator.factorial(cacheSize));
     }
 
     private static long fact(long value) {
-        long result = 1L;
+        var result = 1L;
         if (value > 0) {
-            for (int i = 1; i <= value; i++) {
+            for (var i = 1; i <= value; i++) {
                 result *= i;
             }
         }

@@ -54,24 +54,23 @@ public class CurveInterpolator {
      *              an open one.
      * @throws InterpolationException if a numerical exception occurs.
      */
-    public CurveInterpolator(final Matrix ptsin, final boolean close)
-            throws InterpolationException {
+    public CurveInterpolator(final Matrix ptsin, final boolean close) throws InterpolationException {
         try {
-            final int n = ptsin.getRows();
+            final var n = ptsin.getRows();
             dim = ptsin.getColumns();
             // The trick for closed curves is to duplicate half a period at the beginning and end,
             // and then use the middle half of the resulting spline
-            final int in = close ? 2 * n : n;
+            final var in = close ? 2 * n : n;
             cls = close;
-            final Matrix pts = new Matrix(dim, in);
-            final double[] s = new double[in];
+            final var pts = new Matrix(dim, in);
+            final var s = new double[in];
             ans = new double[dim];
             srp = new CubicSplineInterpolator[dim];
 
-            final double[] p1 = new double[dim];
-            final double[] p2 = new double[dim];
-            final double[] p = new double[in];
-            final int end = dim - 1;
+            final var p1 = new double[dim];
+            final var p2 = new double[dim];
+            final var p = new double[in];
+            final var end = dim - 1;
 
             int i;
             int ii;
@@ -113,7 +112,7 @@ public class CurveInterpolator {
             }
 
             // Construct the splines using endpoint derivatives
-            final int endPts = in - 1;
+            final var endPts = in - 1;
             for (j = 0; j < dim; j++) {
                 if (in < 4) {
                     db = 1.e99;
@@ -157,7 +156,7 @@ public class CurveInterpolator {
             t = t - Math.floor(t);
         }
 
-        for (int j = 0; j < dim; j++) {
+        for (var j = 0; j < dim; j++) {
             ans[j] = srp[j].interpolate(t);
         }
         return ans;
@@ -174,18 +173,15 @@ public class CurveInterpolator {
      * @param xoff offset of x.
      * @param yoff offset of y.
      */
-    private double fprime(final double[] x, final double[] y, final int pm, final int xoff,
-                          final int yoff) {
-        final double s1 = x[xoff] - x[xoff + pm];
-        final double s2 = x[xoff] - x[xoff + pm * 2];
-        final double s3 = x[xoff] - x[xoff + pm * 3];
-        final double s12 = s1 - s2;
-        final double s13 = s1 - s3;
-        final double s23 = s2 - s3;
-        return -(s1 * s2 / (s13 * s23 * s3)) * y[yoff + pm * 3]
-                + (s1 * s3 / (s12 * s2 * s23)) * y[yoff + pm * 2]
-                - (s2 * s3 / (s1 * s12 * s13)) * y[yoff + pm]
-                + (1.0 / s1 + 1.0 / s2 + 1.0 / s3) * y[yoff];
+    private double fprime(final double[] x, final double[] y, final int pm, final int xoff, final int yoff) {
+        final var s1 = x[xoff] - x[xoff + pm];
+        final var s2 = x[xoff] - x[xoff + pm * 2];
+        final var s3 = x[xoff] - x[xoff + pm * 3];
+        final var s12 = s1 - s2;
+        final var s13 = s1 - s3;
+        final var s23 = s2 - s3;
+        return -(s1 * s2 / (s13 * s23 * s3)) * y[yoff + pm * 3] + (s1 * s3 / (s12 * s2 * s23)) * y[yoff + pm * 2]
+                - (s2 * s3 / (s1 * s12 * s13)) * y[yoff + pm] + (1.0 / s1 + 1.0 / s2 + 1.0 / s3) * y[yoff];
     }
 
     /**
@@ -196,9 +192,9 @@ public class CurveInterpolator {
      * @return euclidean distance.
      */
     private double rad(final double[] p1, final double[] p2) {
-        double sum = 0.0;
-        for (int i = 0; i < dim; i++) {
-            final double value = p1[i] - p2[i];
+        var sum = 0.0;
+        for (var i = 0; i < dim; i++) {
+            final var value = p1[i] - p2[i];
             sum += value * value;
         }
         return Math.sqrt(sum);

@@ -16,11 +16,11 @@
 package com.irurueta.numerical;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PadeApproximantEstimatorTest {
+class PadeApproximantEstimatorTest {
 
     private static final double[] TAYLOR_COEFFICIENTS = {
             2.0, 1.0 / 9.0, 1.0 / 81.0, -49.0 / 8748.0, 175.0 / 78732
@@ -35,98 +35,92 @@ public class PadeApproximantEstimatorTest {
 
     private static final int EXPONENTIAL_TAYLOR_ORDER = 14;
 
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_whenInvalidNumberOfTimes_throwsIllegalArgumentException() {
-        new PadeApproximantEstimator(-1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void estimatePadeCoefficients_whenInvalidTaylorSeries_throwsIllegalArgumentException()
-            throws NumericalException {
-        final PadeApproximantEstimator estimator = new PadeApproximantEstimator();
-        estimator.estimatePadeCoefficients(new double[1]);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void estimatePadeCoefficients_whenInvalidNumeratorCoefficients_throwsException()
-            throws NumericalException {
-        final PadeApproximantEstimator estimator = new PadeApproximantEstimator();
-        estimator.estimatePadeCoefficients(TAYLOR_COEFFICIENTS, new double[1], new double[3]);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void estimatePadeCoefficients_whenInvalidDenominatorCoefficients_throwsException()
-            throws NumericalException {
-        final PadeApproximantEstimator estimator = new PadeApproximantEstimator();
-        estimator.estimatePadeCoefficients(TAYLOR_COEFFICIENTS, new double[3], new double[1]);
+    @Test
+    void constructor_whenInvalidNumberOfTimes_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new PadeApproximantEstimator(-1));
     }
 
     @Test
-    public void estimatePadeCoefficients_whenTestFunction_returnsExpectedValue()
-            throws NumericalException {
-        final PadeApproximantEstimator estimator = new PadeApproximantEstimator();
-        final PadeApproximantEstimator.Result result = estimator.estimatePadeCoefficients(
-                TAYLOR_COEFFICIENTS);
-        final double[] numerators = new double[3];
-        final double[] denominators = new double[3];
+    void estimatePadeCoefficients_whenInvalidTaylorSeries_throwsIllegalArgumentException() {
+        final var estimator = new PadeApproximantEstimator();
+        assertThrows(IllegalArgumentException.class, () -> estimator.estimatePadeCoefficients(new double[1]));
+    }
+
+    @Test
+    void estimatePadeCoefficients_whenInvalidNumeratorCoefficients_throwsException() {
+        final var estimator = new PadeApproximantEstimator();
+        assertThrows(IllegalArgumentException.class,
+                () -> estimator.estimatePadeCoefficients(TAYLOR_COEFFICIENTS, new double[1], new double[3]));
+    }
+
+    @Test
+    void estimatePadeCoefficients_whenInvalidDenominatorCoefficients_throwsException() {
+        final var estimator = new PadeApproximantEstimator();
+        assertThrows(IllegalArgumentException.class,
+                () -> estimator.estimatePadeCoefficients(TAYLOR_COEFFICIENTS, new double[3], new double[1]));
+    }
+
+    @Test
+    void estimatePadeCoefficients_whenTestFunction_returnsExpectedValue() throws NumericalException {
+        final var estimator = new PadeApproximantEstimator();
+        final var result = estimator.estimatePadeCoefficients(TAYLOR_COEFFICIENTS);
+        final var numerators = new double[3];
+        final var denominators = new double[3];
         estimator.estimatePadeCoefficients(TAYLOR_COEFFICIENTS, numerators, denominators);
 
         assertArrayEquals(numerators, result.getNumerators(), 0.0);
         assertArrayEquals(denominators, result.getDenominators(), 0.0);
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double exactValue = testFunction(x);
-        final double taylorValue = testTaylorApproximation(x, TAYLOR_COEFFICIENTS);
-        final double padeValue = padeApproximation(x, numerators, denominators);
+        final var randomizer = new UniformRandomizer();
+        final var x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var exactValue = testFunction(x);
+        final var taylorValue = testTaylorApproximation(x, TAYLOR_COEFFICIENTS);
+        final var padeValue = padeApproximation(x, numerators, denominators);
 
-        final double taylorError = Math.abs(taylorValue - exactValue);
-        final double padeError = Math.abs(padeValue - exactValue);
+        final var taylorError = Math.abs(taylorValue - exactValue);
+        final var padeError = Math.abs(padeValue - exactValue);
 
         assertTrue(padeError < taylorError);
     }
 
     @Test
-    public void estimatePadeCoefficients_whenExponentialFunction_returnsExpectedValue()
-            throws NumericalException {
-        final double[] taylorCoefficients = exponentialTaylorCoefficients();
+    void estimatePadeCoefficients_whenExponentialFunction_returnsExpectedValue() throws NumericalException {
+        final var taylorCoefficients = exponentialTaylorCoefficients();
 
-        final PadeApproximantEstimator estimator = new PadeApproximantEstimator();
-        final PadeApproximantEstimator.Result result = estimator.estimatePadeCoefficients(
-                taylorCoefficients);
+        final var estimator = new PadeApproximantEstimator();
+        final var result = estimator.estimatePadeCoefficients(taylorCoefficients);
 
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double x = randomizer.nextDouble(MIN_EXP_VALUE, MAX_EXP_VALUE);
-        final double exactValue = Math.exp(x);
-        final double taylorValue = testTaylorApproximation(x, taylorCoefficients);
-        final double padeValue = padeApproximation(x,
-                result.getNumerators(), result.getDenominators());
+        final var randomizer = new UniformRandomizer();
+        final var x = randomizer.nextDouble(MIN_EXP_VALUE, MAX_EXP_VALUE);
+        final var exactValue = Math.exp(x);
+        final var taylorValue = testTaylorApproximation(x, taylorCoefficients);
+        final var padeValue = padeApproximation(x, result.getNumerators(), result.getDenominators());
 
-        final double taylorError = Math.abs(taylorValue - exactValue);
-        final double padeError = Math.abs(padeValue - exactValue);
+        final var taylorError = Math.abs(taylorValue - exactValue);
+        final var padeError = Math.abs(padeValue - exactValue);
 
         assertTrue(taylorError >= 0.0);
         assertTrue(padeError >= 0.0);
     }
 
-    private double[] exponentialTaylorCoefficients() {
-        final DoubleFactorialEstimator factorialEstimator = new DoubleFactorialEstimator();
-        final double[] result = new double[EXPONENTIAL_TAYLOR_ORDER];
-        for (int i = 0; i < EXPONENTIAL_TAYLOR_ORDER; i++) {
+    private static double[] exponentialTaylorCoefficients() {
+        final var factorialEstimator = new DoubleFactorialEstimator();
+        final var result = new double[EXPONENTIAL_TAYLOR_ORDER];
+        for (var i = 0; i < EXPONENTIAL_TAYLOR_ORDER; i++) {
             result[i] = 1.0 / factorialEstimator.factorial(i);
         }
 
         return result;
     }
 
-    private double testFunction(final double x) {
+    private static double testFunction(final double x) {
         return Math.pow(7.0 + Math.pow(1 + x, 4.0 / 3.0), 1.0 / 3.0);
     }
 
-    private double testTaylorApproximation(final double x, final double[] taylorCoefficients) {
-        double result = 0.0;
-        double prevX = 1.0;
-        for (final double taylorCoefficient : taylorCoefficients) {
+    private static double testTaylorApproximation(final double x, final double[] taylorCoefficients) {
+        var result = 0.0;
+        var prevX = 1.0;
+        for (final var taylorCoefficient : taylorCoefficients) {
             result += taylorCoefficient * prevX;
             prevX *= x;
         }
@@ -134,18 +128,18 @@ public class PadeApproximantEstimatorTest {
         return result;
     }
 
-    private double padeApproximation(
+    private static double padeApproximation(
             final double x, double[] numeratorCoefficients, double[] denominatorCoefficients) {
-        double numerator = 0.0;
-        double prevXNumerator = 1.0;
-        for (final double numeratorCoefficient : numeratorCoefficients) {
+        var numerator = 0.0;
+        var prevXNumerator = 1.0;
+        for (final var numeratorCoefficient : numeratorCoefficients) {
             numerator += numeratorCoefficient * prevXNumerator;
             prevXNumerator *= x;
         }
 
-        double denominator = 0.0;
-        double prevXDenominator = 1.0;
-        for (final double denominatorCoefficient : denominatorCoefficients) {
+        var denominator = 0.0;
+        var prevXDenominator = 1.0;
+        for (final var denominatorCoefficient : denominatorCoefficients) {
             denominator += denominatorCoefficient * prevXDenominator;
             prevXDenominator *= x;
         }

@@ -79,8 +79,7 @@ public abstract class SingleOptimizer extends Optimizer {
      * @throws NotAvailableException Raised if a listener has not yet been
      *                               provided.
      */
-    public SingleDimensionFunctionEvaluatorListener getListener()
-            throws NotAvailableException {
+    public SingleDimensionFunctionEvaluatorListener getListener() throws NotAvailableException {
         if (!isListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -94,8 +93,7 @@ public abstract class SingleOptimizer extends Optimizer {
      * @param listener Listener to evaluate a single dimension function.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setListener(final SingleDimensionFunctionEvaluatorListener listener)
-            throws LockedException {
+    public void setListener(final SingleDimensionFunctionEvaluatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

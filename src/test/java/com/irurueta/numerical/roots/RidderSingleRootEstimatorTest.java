@@ -17,13 +17,11 @@ package com.irurueta.numerical.roots;
 
 import com.irurueta.numerical.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class RidderSingleRootEstimatorTest {
+class RidderSingleRootEstimatorTest {
 
     private static final double MIN_EVAL_POINT = 0.0;
     private static final double MAX_EVAL_POINT = 1.0;
@@ -38,116 +36,38 @@ public class RidderSingleRootEstimatorTest {
     private double root2;
     private double root3;
 
-    private final SingleDimensionFunctionEvaluatorListener constantPolynomial;
-    private final SingleDimensionFunctionEvaluatorListener firstDegreePolynomial;
-    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomial;
-    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots;
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial;
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithDoubleRoot;
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithTripleRoot;
-    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots;
-
-    public RidderSingleRootEstimatorTest() {
-
-        constantPolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return constant;
-            }
-        };
-
-        firstDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1);
-            }
-        };
-
-        secondDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1) * (point - root2);
-            }
-        };
-
-        secondDegreePolynomialWithTwoComplexConjugateRoots = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point * point + Math.abs(root1));
-            }
-        };
-
-        thirdDegreePolynomial = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1) * (point - root2) * (point - root3);
-            }
-        };
-
-        thirdDegreePolynomialWithDoubleRoot = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1) * (point - root1) * (point - root2);
-            }
-        };
-
-        thirdDegreePolynomialWithTripleRoot = new SingleDimensionFunctionEvaluatorListener() {
-
-            @Override
-            public double evaluate(final double point) {
-                return (point - root1) * (point - root1) * (point - root1);
-            }
-        };
-
-        thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
-                new SingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public double evaluate(final double point) {
-                        return (point - root1) * (point * point + Math.abs(root2));
-                    }
-                };
-    }
+    private final SingleDimensionFunctionEvaluatorListener constantPolynomial = point -> constant;
+    private final SingleDimensionFunctionEvaluatorListener firstDegreePolynomial = point -> (point - root1);
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomial =
+            point -> (point - root1) * (point - root2);
+    private final SingleDimensionFunctionEvaluatorListener secondDegreePolynomialWithTwoComplexConjugateRoots =
+            point -> (point * point + Math.abs(root1));
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomial =
+            point -> (point - root1) * (point - root2) * (point - root3);
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithDoubleRoot =
+            point -> (point - root1) * (point - root1) * (point - root2);
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithTripleRoot =
+            point -> (point - root1) * (point - root1) * (point - root1);
+    private final SingleDimensionFunctionEvaluatorListener thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots =
+            point -> (point - root1) * (point * point + Math.abs(root2));
 
     @Test
-    public void testConstructor() throws NotAvailableException,
-            InvalidBracketRangeException {
+    void testConstructor() throws NotAvailableException, InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
-
-        RidderSingleRootEstimator estimator;
+        final var randomizer = new UniformRandomizer();
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
         // Test 1st constructor
-        estimator = new RidderSingleRootEstimator();
+        var estimator = new RidderSingleRootEstimator();
         assertNotNull(estimator);
 
-        try {
-            estimator.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(RidderSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
-                estimator.getMaxEvaluationPoint(), 0.0);
-        assertEquals(RidderSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
-                estimator.getMinEvaluationPoint(), 0.0);
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(RidderSingleRootEstimator.DEFAULT_TOLERANCE,
-                estimator.getTolerance(), 0.0);
+        assertThrows(NotAvailableException.class, estimator::getListener);
+        assertEquals(RidderSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(RidderSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, estimator.getMinEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, estimator::getRoot);
+        assertEquals(RidderSingleRootEstimator.DEFAULT_TOLERANCE, estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -155,19 +75,14 @@ public class RidderSingleRootEstimatorTest {
         assertFalse(estimator.isRootAvailable());
 
         // Test 2nd constructor
-        estimator = new RidderSingleRootEstimator(constantPolynomial,
-                minEvalPoint, maxEvalPoint, tolerance);
+        estimator = new RidderSingleRootEstimator(constantPolynomial, minEvalPoint, maxEvalPoint, tolerance);
         assertNotNull(estimator);
 
-        assertEquals(estimator.getListener(), constantPolynomial);
-        assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
-        assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        try {
-            estimator.getRoot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        assertEquals(estimator.getTolerance(), tolerance, 0.0);
+        assertEquals(constantPolynomial, estimator.getListener());
+        assertEquals(maxEvalPoint, estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(minEvalPoint, estimator.getMinEvaluationPoint(), 0.0);
+        assertThrows(NotAvailableException.class, estimator::getRoot);
+        assertEquals(tolerance, estimator.getTolerance(), 0.0);
         assertTrue(estimator.isBracketAvailable());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
@@ -175,146 +90,103 @@ public class RidderSingleRootEstimatorTest {
         assertFalse(estimator.isRootAvailable());
 
         // Force InvalidBracketRangeException
-        estimator = null;
-        try {
-            estimator = new RidderSingleRootEstimator(constantPolynomial,
-                    maxEvalPoint, minEvalPoint, tolerance);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
+        assertThrows(InvalidBracketRangeException.class, () -> new RidderSingleRootEstimator(constantPolynomial,
+                maxEvalPoint, minEvalPoint, tolerance));
 
         // Force IllegalArgumentException
-        try {
-            estimator = new RidderSingleRootEstimator(constantPolynomial,
-                    minEvalPoint, maxEvalPoint, -tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new RidderSingleRootEstimator(constantPolynomial,
+                minEvalPoint, maxEvalPoint, -tolerance));
     }
 
     @Test
-    public void testGetSetListenerAvailabilityAndIsReady()
-            throws LockedException, NotAvailableException {
+    void testGetSetListenerAvailabilityAndIsReady() throws LockedException, NotAvailableException {
 
-        final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
+        final var estimator = new RidderSingleRootEstimator();
 
         // check default values
-        try {
-            estimator.getListener();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, estimator::getListener);
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isReady());
 
         // set listener
         estimator.setListener(constantPolynomial);
         // check correctness
-        assertEquals(estimator.getListener(), constantPolynomial);
+        assertEquals(constantPolynomial, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isReady());
     }
 
     @Test
-    public void testSetBracketGetEvaluationPointAndAvailability()
-            throws NotAvailableException, LockedException,
+    void testSetBracketGetEvaluationPointAndAvailability() throws NotAvailableException, LockedException,
             InvalidBracketRangeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT,
-                MAX_EVAL_POINT);
-        final double maxEvalPoint = randomizer.nextDouble(minEvalPoint,
-                MAX_EVAL_POINT);
+        final var randomizer = new UniformRandomizer();
+        final var minEvalPoint = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var maxEvalPoint = randomizer.nextDouble(minEvalPoint, MAX_EVAL_POINT);
 
-        final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
+        final var estimator = new RidderSingleRootEstimator();
 
         // check default values
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(RidderSingleRootEstimator.DEFAULT_MIN_EVAL_POINT,
-                estimator.getMinEvaluationPoint(), 0.0);
-        assertEquals(RidderSingleRootEstimator.DEFAULT_MAX_EVAL_POINT,
-                estimator.getMaxEvaluationPoint(), 0.0);
+        assertEquals(RidderSingleRootEstimator.DEFAULT_MIN_EVAL_POINT, estimator.getMinEvaluationPoint(), 0.0);
+        assertEquals(RidderSingleRootEstimator.DEFAULT_MAX_EVAL_POINT, estimator.getMaxEvaluationPoint(), 0.0);
 
         // set new values
         estimator.setBracket(minEvalPoint, maxEvalPoint);
         // check correctness
         assertTrue(estimator.isBracketAvailable());
-        assertEquals(estimator.getMinEvaluationPoint(), minEvalPoint, 0.0);
-        assertEquals(estimator.getMaxEvaluationPoint(), maxEvalPoint, 0.0);
+        assertEquals(minEvalPoint, estimator.getMinEvaluationPoint(), 0.0);
+        assertEquals(maxEvalPoint, estimator.getMaxEvaluationPoint(), 0.0);
 
         // Force InvalidBracketRangeException
-        try {
-            estimator.setBracket(maxEvalPoint, minEvalPoint);
-            fail("InvalidBracketRangeException expected but not thrown");
-        } catch (final InvalidBracketRangeException ignore) {
-        }
+        assertThrows(InvalidBracketRangeException.class, () -> estimator.setBracket(maxEvalPoint, minEvalPoint));
     }
 
     @Test
-    public void testGetSetTolerance() throws LockedException {
+    void testGetSetTolerance() throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
+        final var randomizer = new UniformRandomizer();
+        final var tolerance = randomizer.nextDouble(MIN_TOLERANCE, MAX_TOLERANCE);
 
-        final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
+        final var estimator = new RidderSingleRootEstimator();
 
         // check default values
-        assertEquals(RidderSingleRootEstimator.DEFAULT_TOLERANCE,
-                estimator.getTolerance(), 0.0);
+        assertEquals(RidderSingleRootEstimator.DEFAULT_TOLERANCE, estimator.getTolerance(), 0.0);
 
         // set new value
         estimator.setTolerance(tolerance);
         // check correctness
-        assertEquals(estimator.getTolerance(), tolerance, 0.0);
+        assertEquals(tolerance, estimator.getTolerance(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setTolerance(-tolerance);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setTolerance(-tolerance));
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            InvalidBracketRangeException, RootEstimationException,
-            NotAvailableException {
+    void testEstimate() throws LockedException, NotReadyException, InvalidBracketRangeException,
+            RootEstimationException, NotAvailableException {
 
-        int numValid = 0;
-        for(int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        var numValid = 0;
+        for(var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
             constant = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
             root1 = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT / 3.0);
-            root2 = randomizer.nextDouble(MAX_EVAL_POINT / 3.0,
-                    2.0 / 3.0 * MAX_EVAL_POINT);
+            root2 = randomizer.nextDouble(MAX_EVAL_POINT / 3.0, 2.0 / 3.0 * MAX_EVAL_POINT);
             root3 = randomizer.nextDouble(2.0 / 3.0 * MAX_EVAL_POINT, MAX_EVAL_POINT);
 
             // instantiate estimator with brackets for accuracy (otherwise estimation
             // might fail)
-            final RidderSingleRootEstimator estimator = new RidderSingleRootEstimator();
+            final var estimator = new RidderSingleRootEstimator();
 
             // test constant polynomial
             estimator.setListener(constantPolynomial);
             assertFalse(estimator.isLocked());
-            try {
-                estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-                fail("RootEstimationException expected but not thrown");
-            } catch (final RootEstimationException ignore) {
-            }
+            assertThrows(RootEstimationException.class, () -> estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT));
             assertFalse(estimator.isLocked());
-            try {
-                estimator.estimate();
-                fail("RootEstimationException expected but not thrown");
-            } catch (final RootEstimationException ignore) {
-            }
+            assertThrows(RootEstimationException.class, estimator::estimate);
             assertFalse(estimator.isLocked());
             assertFalse(estimator.isRootAvailable());
-            try {
-                estimator.getRoot();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
+            assertThrows(NotAvailableException.class, estimator::getRoot);
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
@@ -327,12 +199,10 @@ public class RidderSingleRootEstimatorTest {
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root1,
-                    2.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root1, 2.0 * estimator.getTolerance());
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
 
             // test 2nd degree polynomial
             // we need to properly set bracketing for each root and then refine the
@@ -352,32 +222,21 @@ public class RidderSingleRootEstimatorTest {
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root2,
-                    2.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root2, 2.0 * estimator.getTolerance());
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
             // test 2nd degree polynomial with two complex conjugate roots
-            estimator.setListener(
-                    secondDegreePolynomialWithTwoComplexConjugateRoots);
+            estimator.setListener(secondDegreePolynomialWithTwoComplexConjugateRoots);
             assertFalse(estimator.isLocked());
-            try {
-                estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-                fail("RootEstimationException expected but not thrown");
-            } catch (final RootEstimationException ignore) {
-            }
+            assertThrows(RootEstimationException.class, () -> estimator.computeBracket(MIN_EVAL_POINT, MAX_EVAL_POINT));
             assertFalse(estimator.isLocked());
-            try {
-                estimator.estimate();
-                fail("RootEstimationException expected but not thrown");
-            } catch (final RootEstimationException ignore) {
-            }
+            assertThrows(RootEstimationException.class, estimator::estimate);
             assertFalse(estimator.isLocked());
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
 
             // test 3rd degree polynomial
             // we need to properly set bracketing for each root and then refine the
@@ -389,8 +248,7 @@ public class RidderSingleRootEstimatorTest {
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root1,
-                    4.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root1, 4.0 * estimator.getTolerance());
             assertFalse(estimator.isLocked());
 
             estimator.computeBracket(0.5 * (root1 + root2), 0.5 * (root2 + root3));
@@ -398,22 +256,18 @@ public class RidderSingleRootEstimatorTest {
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root2,
-                    4.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root2, 4.0 * estimator.getTolerance());
             assertFalse(estimator.isLocked());
 
-            estimator.computeBracket(0.5 * (root2 + root3),
-                    MAX_EVAL_POINT);
+            estimator.computeBracket(0.5 * (root2 + root3), MAX_EVAL_POINT);
             assertFalse(estimator.isLocked());
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root3,
-                    4.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root3, 4.0 * estimator.getTolerance());
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
 
             // test 3rd degree polynomial with double root
             // we need to properly set bracketing for each root and then refine the
@@ -425,12 +279,10 @@ public class RidderSingleRootEstimatorTest {
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root2,
-                    4.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root2, 4.0 * estimator.getTolerance());
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
-
 
             // test 3rd degree polynomial with triple root
             estimator.setListener(thirdDegreePolynomialWithTripleRoot);
@@ -443,26 +295,21 @@ public class RidderSingleRootEstimatorTest {
             if (Math.abs(estimator.getRoot() - root1) > 10.0 * estimator.getTolerance()) {
                 continue;
             }
-            assertEquals(estimator.getRoot(), root1,
-                    10.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root1, 10.0 * estimator.getTolerance());
 
             // reset bracket
             estimator.setBracket(MIN_EVAL_POINT, MAX_EVAL_POINT);
 
-
             // test third degree polynomial with 1 real root and 2 conjugate complex
             // roots
-            estimator.setListener(
-                    thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
+            estimator.setListener(thirdDegreePolynomialWithOneRealRootAndTwoComplexConjugateRoots);
             assertFalse(estimator.isLocked());
-            estimator.computeBracket(MIN_EVAL_POINT,
-                    0.5 * (MIN_EVAL_POINT + root2));
+            estimator.computeBracket(MIN_EVAL_POINT, 0.5 * (MIN_EVAL_POINT + root2));
             assertFalse(estimator.isLocked());
             estimator.estimate();
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isRootAvailable());
-            assertEquals(estimator.getRoot(), root1,
-                    4.0 * estimator.getTolerance());
+            assertEquals(estimator.getRoot(), root1, 4.0 * estimator.getTolerance());
 
             numValid++;
             break;

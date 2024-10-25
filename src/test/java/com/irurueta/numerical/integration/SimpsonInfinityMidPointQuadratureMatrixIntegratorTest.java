@@ -15,107 +15,102 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.NormalDist;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimpsonInfinityMidPointQuadratureMatrixIntegratorTest {
+class SimpsonInfinityMidPointQuadratureMatrixIntegratorTest {
 
     private static final double ABSOLUTE_ERROR_GAUSSIAN = 1e-3;
 
     @Test
-    public void integrate_whenGaussian_returnsExpectedResult()
-            throws IntegrationException, WrongSizeException {
-        final double a = 10.0;
-        final double b = 1.0;
-        final double mu = 5.0;
-        final double sigma = 0.1;
+    void integrate_whenGaussian_returnsExpectedResult() throws IntegrationException, WrongSizeException {
+        final var a = 10.0;
+        final var b = 1.0;
+        final var mu = 5.0;
+        final var sigma = 0.1;
 
-        final double expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
+        final var expected = NormalDist.cdf(b, mu, sigma) - NormalDist.cdf(a, mu, sigma);
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                        result.setElementAtIndex(0, NormalDist.p(point, mu, sigma));
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                result.setElementAtIndex(0, NormalDist.p(point, mu, sigma));
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final SimpsonInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener);
+        final var integrator = new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener);
 
-        final Matrix integrationResult = new Matrix(1, 1);
+        final var integrationResult = new Matrix(1, 1);
         integrator.integrate(integrationResult);
 
         // check
-        final Matrix expectedResult = new Matrix(1, 1);
+        final var expectedResult = new Matrix(1, 1);
         expectedResult.setElementAtIndex(0, expected);
         assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_GAUSSIAN));
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final SimpsonInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new SimpsonInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final SimpsonInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new SimpsonInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
     }
 }

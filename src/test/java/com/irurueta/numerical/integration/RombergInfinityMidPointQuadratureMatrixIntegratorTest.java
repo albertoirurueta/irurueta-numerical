@@ -15,125 +15,117 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RombergInfinityMidPointQuadratureMatrixIntegratorTest {
+class RombergInfinityMidPointQuadratureMatrixIntegratorTest {
 
     private static final double ALMOST_INFINITY = 1e99;
 
-    @Test(expected = IntegrationException.class)
-    public void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult()
-            throws IntegrationException, WrongSizeException {
+    @Test
+    void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult() throws WrongSizeException {
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                        result.setElementAtIndex(0, Math.log(point) * Math.log(1.0 - point));
-                    }
+            @Override
+            public void evaluate(final double point, final Matrix result) {
+                result.setElementAtIndex(0, Math.log(point) * Math.log(1.0 - point));
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final RombergInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
 
-        final Matrix integrationResult = new Matrix(1, 1);
-        integrator.integrate(integrationResult);
-    }
-
-    @Test(expected = IntegrationException.class)
-    public void integrate_whenImproperIntegralFromZeroToInfinity3_returnsWrongResult()
-            throws IntegrationException, WrongSizeException {
-
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
-
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                        result.setElementAtIndex(0,
-                                Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
-                    }
-
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
-
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
-
-        final RombergInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, ALMOST_INFINITY, listener);
-
-        final Matrix integrationResult = new Matrix(1, 1);
-        integrator.integrate(integrationResult);
+        final var integrationResult = new Matrix(1, 1);
+        assertThrows(IntegrationException.class, () -> integrator.integrate(integrationResult));
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void integrate_whenImproperIntegralFromZeroToInfinity3_returnsWrongResult() throws WrongSizeException {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public void evaluate(final double point, final Matrix result) {
+                result.setElementAtIndex(0, Math.pow(point, -2.0 / 7.0) * Math.exp(-point * point));
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-        final RombergInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
+
+        final var integrator = new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, ALMOST_INFINITY, listener);
+
+        final var integrationResult = new Matrix(1, 1);
+        assertThrows(IntegrationException.class, () -> integrator.integrate(integrationResult));
+    }
+
+    @Test
+    void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
+
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
+
+            @Override
+            public int getRows() {
+                return 1;
+            }
+
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
+
+        final var integrator = new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(IntegratorType.ROMBERG, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final RombergInfinityMidPointQuadratureMatrixIntegrator integrator =
-                new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new RombergInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
     }
 }

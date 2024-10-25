@@ -31,9 +31,7 @@ public class MidPointQuadratureIntegrator extends QuadratureIntegrator<MidPointQ
      * @param eps      required accuracy.
      */
     public MidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new MidPointQuadrature(a, b, listener), eps);
     }
 
@@ -45,8 +43,7 @@ public class MidPointQuadratureIntegrator extends QuadratureIntegrator<MidPointQ
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public MidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

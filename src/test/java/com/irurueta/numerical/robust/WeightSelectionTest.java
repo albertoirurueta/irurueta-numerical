@@ -17,13 +17,11 @@ package com.irurueta.numerical.robust;
 
 import com.irurueta.sorting.SortingException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class WeightSelectionTest {
+class WeightSelectionTest {
 
     private static final int MIN_LENGTH = 6;
     private static final int MAX_LENGTH = 50;
@@ -32,45 +30,42 @@ public class WeightSelectionTest {
     private static final double MAX_RANDOM_VALUE = 1.0;
 
     @Test
-    public void testSelectWeights() throws SortingException {
+    void testSelectWeights() throws SortingException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
 
-        final double[] weights = new double[length];
+        final var weights = new double[length];
         randomizer.fill(weights, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // test with sorting disabled and num selected lower than length
-        int maxPoints = length - 1;
-        WeightSelection selection = WeightSelection.selectWeights(weights,
-                false, maxPoints);
+        var maxPoints = length - 1;
+        var selection = WeightSelection.selectWeights(weights, false, maxPoints);
         assertEquals(selection.getNumSelected(), maxPoints);
         // check first maxPoints values are true
-        for (int i = 0; i < maxPoints; i++) {
+        for (var i = 0; i < maxPoints; i++) {
             assertTrue(selection.getSelected()[i]);
         }
-        for (int i = maxPoints; i < length; i++) {
+        for (var i = maxPoints; i < length; i++) {
             assertFalse(selection.getSelected()[i]);
         }
 
         // test with sorting disabled and num selected greater than length
         maxPoints = length + 1;
-        selection = WeightSelection.selectWeights(weights, false,
-                maxPoints);
+        selection = WeightSelection.selectWeights(weights, false, maxPoints);
         assertEquals(selection.getNumSelected(), length);
         // check all values are true
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             assertTrue(selection.getSelected()[i]);
         }
 
         // test with sorting enabled
         maxPoints = length - 1;
-        selection = WeightSelection.selectWeights(weights, true,
-                maxPoints);
+        selection = WeightSelection.selectWeights(weights, true, maxPoints);
         assertEquals(selection.getNumSelected(), maxPoints);
         // check all values are true
-        int counter = 0;
-        for (int i = 0; i < length; i++) {
+        var counter = 0;
+        for (var i = 0; i < length; i++) {
             if (selection.getSelected()[i]) {
                 counter++;
             }

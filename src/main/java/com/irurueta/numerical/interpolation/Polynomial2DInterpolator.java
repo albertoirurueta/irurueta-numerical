@@ -73,8 +73,8 @@ public class Polynomial2DInterpolator {
      * @param mp  defines number of rows of sub-block of ym values to be processed.
      * @param np  defined number of columns of sub-block of ym values to be processed.
      */
-    public Polynomial2DInterpolator(
-            final double[] x1v, final double[] x2v, final Matrix ym, final int mp, final int np) {
+    public Polynomial2DInterpolator(final double[] x1v, final double[] x2v, final Matrix ym, final int mp,
+                                    final int np) {
         m = x1v.length;
         n = x2v.length;
         mm = mp;
@@ -143,8 +143,8 @@ public class Polynomial2DInterpolator {
      */
     public double interpolate(final double x1p, final double x2p) throws InterpolationException {
         try {
-            final int i = x1terp.cor != 0 ? x1terp.hunt(x1p) : x1terp.locate(x1p);
-            final int j = x2terp.cor != 0 ? x2terp.hunt(x2p) : x2terp.locate(x2p);
+            final var i = x1terp.cor != 0 ? x1terp.hunt(x1p) : x1terp.locate(x1p);
+            final var j = x2terp.cor != 0 ? x2terp.hunt(x2p) : x2terp.locate(x2p);
             int k;
 
             // Find grid block

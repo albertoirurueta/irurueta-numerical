@@ -21,7 +21,6 @@ import com.irurueta.sorting.Sorter;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 
 /**
  * This class implements MSAC (Median SAmple Consensus) algorithm to robustly
@@ -80,14 +79,14 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    private double mConfidence;
+    private double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    private int mMaxIterations;
+    private int maxIterations;
 
     /**
      * Instance in charge of picking random subsets of samples.
@@ -97,7 +96,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Number of iterations to be done to obtain required confidence.
      */
-    private int nIters;
+    private int iters;
 
     /**
      * Best solution that has been found so far during an estimation.
@@ -107,23 +106,23 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Data related to inliers found for best result.
      */
-    private MSACInliersData mBestResultInliersData;
+    private MSACInliersData bestResultInliersData;
 
     /**
      * Data related to solution producing the largest number of inliers.
      */
-    private MSACInliersData mBestNumberInliersData;
+    private MSACInliersData bestNumberInliersData;
 
     /**
      * Constructor.
      */
     public MSACRobustEstimator() {
         super();
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        iters = maxIterations;
         bestResult = null;
-        mBestResultInliersData = mBestNumberInliersData = null;
+        bestResultInliersData = bestNumberInliersData = null;
     }
 
     /**
@@ -133,11 +132,11 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     public MSACRobustEstimator(final MSACRobustEstimatorListener<T> listener) {
         super(listener);
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        iters = maxIterations;
         bestResult = null;
-        mBestResultInliersData = mBestNumberInliersData = null;
+        bestResultInliersData = bestNumberInliersData = null;
     }
 
     /**
@@ -149,7 +148,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -171,7 +170,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -182,7 +181,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -202,7 +201,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -211,7 +210,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return number of iterations to be done to obtain required confidence.
      */
     public int getNIters() {
-        return nIters;
+        return iters;
     }
 
     /**
@@ -229,7 +228,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return data related to inliers found for best result.
      */
     public MSACInliersData getBestResultInliersData() {
-        return mBestResultInliersData;
+        return bestResultInliersData;
     }
 
     /**
@@ -238,7 +237,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return data related to solution producing the largest number of inliers.
      */
     public MSACInliersData getBestNumberInliersData() {
-        return mBestNumberInliersData;
+        return bestNumberInliersData;
     }
 
     /**
@@ -251,7 +250,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (mListener instanceof MSACRobustEstimatorListener);
+        return (listener instanceof MSACRobustEstimatorListener);
     }
 
     /**
@@ -266,8 +265,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public T estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public T estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -276,38 +274,37 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         try {
-            final MSACRobustEstimatorListener<T> listener =
-                    (MSACRobustEstimatorListener<T>) mListener;
+            final var listener = (MSACRobustEstimatorListener<T>) this.listener;
 
-            mLocked = true;
+            locked = true;
 
             listener.onEstimateStart(this);
 
-            final int totalSamples = listener.getTotalSamples();
-            final int subsetSize = listener.getSubsetSize();
-            final double threshold = listener.getThreshold();
+            final var totalSamples = listener.getTotalSamples();
+            final var subsetSize = listener.getSubsetSize();
+            final var threshold = listener.getThreshold();
             // only positive thresholds are allowed
             if (threshold < MIN_THRESHOLD) {
                 throw new RobustEstimatorException();
             }
 
-            int bestNumInliers = 0;
-            double bestMedianResidual = Double.MAX_VALUE;
-            nIters = Integer.MAX_VALUE;
+            var bestNumInliers = 0;
+            var bestMedianResidual = Double.MAX_VALUE;
+            iters = Integer.MAX_VALUE;
             int newNIters;
-            int currentIter = 0;
+            var currentIter = 0;
             // reusable list that will contain preliminary solutions on each
             // iteration
-            final List<T> iterResults = new ArrayList<>();
+            final var iterResults = new ArrayList<T>();
             bestResult = null; // best result found so far
             int currentInliers;
             // progress and previous progress to determine when progress
             // notification must occur
-            float previousProgress = 0.0f;
+            var previousProgress = 0.0f;
             float progress;
             // indices of subset picked in one iteration
-            final int[] subsetIndices = new int[subsetSize];
-            final double[] residualsTemp = new double[totalSamples];
+            final var subsetIndices = new int[subsetSize];
+            final var residualsTemp = new double[totalSamples];
 
             if (subsetSelector == null) {
                 // create new subset selector
@@ -318,25 +315,23 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
             }
 
             // data related to inliers
-            MSACInliersData inliersData = new MSACInliersData(totalSamples);
+            var inliersData = new MSACInliersData(totalSamples);
             // sorter to compute medians
-            Sorter<Double> sorter = Sorter.create();
+            final var sorter = Sorter.<Double>create();
 
-            while ((nIters > currentIter) && (currentIter < mMaxIterations)) {
+            while ((iters > currentIter) && (currentIter < maxIterations)) {
                 // generate a random subset of samples
                 subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);
 
                 // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
-                listener.estimatePreliminarSolutions(subsetIndices,
-                        iterResults);
+                listener.estimatePreliminarSolutions(subsetIndices, iterResults);
 
                 // iterate over all solutions that have been found
-                for (final T iterResult : iterResults) {
+                for (final var iterResult : iterResults) {
                     // compute inliers
-                    computeInliers(iterResult, threshold, residualsTemp,
-                            listener, sorter, inliersData);
+                    computeInliers(iterResult, threshold, residualsTemp, listener, sorter, inliersData);
 
                     // save solution that  minimizes the median residual
                     if (inliersData.isMedianResidualImproved()) {
@@ -345,7 +340,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
 
                         // keep the best inliers data corresponding to best solution
                         // in case it can be useful along with the result
-                        mBestResultInliersData = inliersData;
+                        bestResultInliersData = inliersData;
                         bestMedianResidual = inliersData.getBestMedianResidual();
                     }
 
@@ -358,63 +353,51 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
 
                         // keep inliers data corresponding to best number of
                         // inliers
-                        mBestNumberInliersData = inliersData;
+                        bestNumberInliersData = inliersData;
 
                         // recompute number of times the algorithm needs to be
                         // executed depending on current number of inliers to
                         // achieve with probability mConfidence that we have
                         // inliers and probability 1 - mConfidence that we have
                         // outliers
-                        final double probSubsetAllInliers = Math.pow(
-                                (double) bestNumInliers / (double) totalSamples,
+                        final var probSubsetAllInliers = Math.pow((double) bestNumInliers / (double) totalSamples,
                                 subsetSize);
 
-                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                                Double.isNaN(probSubsetAllInliers)) {
+                        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE || Double.isNaN(probSubsetAllInliers)) {
                             newNIters = Integer.MAX_VALUE;
                         } else {
-                            final double logProbSomeOutliers =
-                                    Math.log(1.0 - probSubsetAllInliers);
-                            if (Math.abs(logProbSomeOutliers) <
-                                    Double.MIN_VALUE ||
-                                    Double.isNaN(logProbSomeOutliers)) {
+                            final var logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
+                            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE || Double.isNaN(logProbSomeOutliers)) {
                                 newNIters = Integer.MAX_VALUE;
                             } else {
-                                newNIters = (int) Math.ceil(Math.abs(
-                                        Math.log(1.0 - mConfidence) /
-                                                logProbSomeOutliers));
+                                newNIters = (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) / logProbSomeOutliers));
                             }
                         }
-                        if (newNIters < nIters) {
-                            nIters = newNIters;
+                        if (newNIters < iters) {
+                            iters = newNIters;
                         }
                     }
 
                     // reset inliers data if either residual or number of inliers
                     // improved
-                    if (inliersData.isMedianResidualImproved() ||
-                            currentInliers > bestNumInliers) {
+                    if (inliersData.isMedianResidualImproved()) {
                         // create new inliers data instance until a new best solution
                         // is found
                         inliersData = new MSACInliersData(totalSamples);
                         // update the best median residual on new instance so that
                         // only better solutions that are found later can update
                         // inliers data
-                        inliersData.update(bestMedianResidual,
-                                inliersData.getInliers(),
-                                inliersData.getResiduals(),
-                                inliersData.getNumInliers(),
-                                false);
+                        inliersData.update(bestMedianResidual, inliersData.getInliers(), inliersData.getResiduals(),
+                                inliersData.getNumInliers(), false);
                     }
                 }
 
-                if (nIters > 0) {
-                    progress = Math.min((float) currentIter / (float) nIters,
-                            1.0f);
+                if (iters > 0) {
+                    progress = Math.min((float) currentIter / (float) iters, 1.0f);
                 } else {
                     progress = 1.0f;
                 }
-                if (progress - previousProgress > mProgressDelta) {
+                if (progress - previousProgress > progressDelta) {
                     previousProgress = progress;
                     listener.onEstimateProgressChange(this, progress);
                 }
@@ -434,7 +417,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         } catch (final SubsetSelectorException e) {
             throw new RobustEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -473,19 +456,19 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     private static <T> void computeInliers(
             final T iterResult, final double threshold, final double[] residualsTemp,
-            final LMedSRobustEstimatorListener<T> listener,
-            final Sorter<Double> sorter, final MSACInliersData inliersData) {
+            final LMedSRobustEstimatorListener<T> listener, final Sorter<Double> sorter,
+            final MSACInliersData inliersData) {
 
-        final double[] residuals = inliersData.getResiduals();
-        final BitSet inliers = inliersData.getInliers();
-        double bestMedianResidual = inliersData.getBestMedianResidual();
-        boolean medianResidualImproved = false;
+        final var residuals = inliersData.getResiduals();
+        final var inliers = inliersData.getInliers();
+        var bestMedianResidual = inliersData.getBestMedianResidual();
+        var medianResidualImproved = false;
 
-        final int totalSamples = residuals.length;
+        final var totalSamples = residuals.length;
         double residual;
-        int numInliers = 0;
+        var numInliers = 0;
         // find residuals and inliers
-        for (int i = 0; i < totalSamples; i++) {
+        for (var i = 0; i < totalSamples; i++) {
             residual = Math.abs(listener.computeResidual(iterResult, i));
             if (residual < threshold) {
                 residuals[i] = residual;
@@ -499,7 +482,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
 
         // compute median of residuals
         System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);
-        final double medianResidual = sorter.median(residualsTemp);
+        final var medianResidual = sorter.median(residualsTemp);
         if (medianResidual < bestMedianResidual) {
             bestMedianResidual = medianResidual;
             medianResidualImproved = true;
@@ -508,8 +491,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
 
         // store values in inliers data, only if residuals improve
         if (medianResidualImproved) {
-            inliersData.update(bestMedianResidual, inliers, residuals,
-                    numInliers, true);
+            inliersData.update(bestMedianResidual, inliers, residuals, numInliers, true);
         }
     }
 
@@ -521,19 +503,19 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          * Best median of error found so far taking into account all provided
          * samples.
          */
-        private double mBestMedianResidual;
+        private double bestMedianResidual;
 
         /**
          * Efficiently stores which samples are considered inliers and which
          * ones aren't.
          */
-        private BitSet mInliers;
+        private BitSet inliers;
 
         /**
          * Indicates whether median residual computed in current iteration has
          * improved respect to previous iterations.
          */
-        private boolean mMedianResidualImproved;
+        private boolean medianResidualImproved;
 
         /**
          * Constructor.
@@ -541,11 +523,11 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          * @param totalSamples total number of samples.
          */
         protected MSACInliersData(final int totalSamples) {
-            mBestMedianResidual = Double.MAX_VALUE;
-            mInliers = new BitSet(totalSamples);
-            mResiduals = new double[totalSamples];
-            mNumInliers = 0;
-            mMedianResidualImproved = false;
+            bestMedianResidual = Double.MAX_VALUE;
+            inliers = new BitSet(totalSamples);
+            residuals = new double[totalSamples];
+            numInliers = 0;
+            medianResidualImproved = false;
         }
 
         /**
@@ -556,7 +538,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          * provided samples.
          */
         public double getBestMedianResidual() {
-            return mBestMedianResidual;
+            return bestMedianResidual;
         }
 
         /**
@@ -568,7 +550,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          */
         @Override
         public BitSet getInliers() {
-            return mInliers;
+            return inliers;
         }
 
         /**
@@ -578,7 +560,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          * @return true if median residual improved, false otherwise.
          */
         public boolean isMedianResidualImproved() {
-            return mMedianResidualImproved;
+            return medianResidualImproved;
         }
 
         /**
@@ -595,13 +577,12 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
          *                               iteration.
          */
         protected void update(final double bestMedianResidual, final BitSet inliers,
-                              final double[] residuals, final int numInliers,
-                              final boolean medianResidualImproved) {
-            mBestMedianResidual = bestMedianResidual;
-            mInliers = inliers;
-            mResiduals = residuals;
-            mNumInliers = numInliers;
-            mMedianResidualImproved = medianResidualImproved;
+                              final double[] residuals, final int numInliers, final boolean medianResidualImproved) {
+            this.bestMedianResidual = bestMedianResidual;
+            this.inliers = inliers;
+            this.residuals = residuals;
+            this.numInliers = numInliers;
+            this.medianResidualImproved = medianResidualImproved;
         }
     }
 }

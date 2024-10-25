@@ -23,8 +23,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  *
  * @see MidPointQuadrature
  */
-public class RombergMidPointQuadratureIntegrator
-        extends RombergIntegrator<MidPointQuadrature> {
+public class RombergMidPointQuadratureIntegrator extends RombergIntegrator<MidPointQuadrature> {
 
     /**
      * Constructor.
@@ -35,9 +34,7 @@ public class RombergMidPointQuadratureIntegrator
      * @param eps      required accuracy.
      */
     public RombergMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double eps) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
         super(new MidPointQuadrature(a, b, listener), eps);
     }
 
@@ -49,8 +46,7 @@ public class RombergMidPointQuadratureIntegrator
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public RombergMidPointQuadratureIntegrator(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         this(a, b, listener, EPS);
     }
 

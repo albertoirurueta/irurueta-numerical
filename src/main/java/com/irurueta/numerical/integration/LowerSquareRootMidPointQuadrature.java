@@ -37,8 +37,7 @@ public class LowerSquareRootMidPointQuadrature extends MidPointQuadrature {
      * @param listener listener to evaluate a single dimension function at required points.
      */
     public LowerSquareRootMidPointQuadrature(
-            final double a, final double b,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
         super(0.0, Math.sqrt(b - a), listener);
         aOrig = a;
     }

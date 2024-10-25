@@ -32,8 +32,7 @@ import com.irurueta.numerical.NotReadyException;
  * The implementation of this class is based on Numerical Recipes 3rd ed.
  * Section 10.8 page 518.
  */
-public class DerivativeConjugateGradientMultiOptimizer
-        extends DerivativeLineMultiOptimizer {
+public class DerivativeConjugateGradientMultiOptimizer extends DerivativeLineMultiOptimizer {
 
     /**
      * Constant defining default tolerance or accuracy to be achieved on the
@@ -123,9 +122,8 @@ public class DerivativeConjugateGradientMultiOptimizer
      */
     public DerivativeConjugateGradientMultiOptimizer(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener,
-            final double[] point, final double[] direction, final double tolerance,
-            final boolean usePolakRibiere) {
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double[] direction,
+            final double tolerance, final boolean usePolakRibiere) {
         super(listener, gradientListener, point, direction);
         internalSetTolerance(tolerance);
         this.usePolakRibiere = usePolakRibiere;
@@ -152,8 +150,7 @@ public class DerivativeConjugateGradientMultiOptimizer
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -163,7 +160,7 @@ public class DerivativeConjugateGradientMultiOptimizer
 
         locked = true;
 
-        final int n = p.length;
+        final var n = p.length;
 
         // set vector of directions
         if (!isDirectionAvailable()) {
@@ -174,23 +171,23 @@ public class DerivativeConjugateGradientMultiOptimizer
             }
         }
 
-        boolean validResult = false;
+        var validResult = false;
         try {
             double gg;
             double dgg;
 
-            final double[] g = new double[n];
-            final double[] h = new double[n];
+            final var g = new double[n];
+            final var h = new double[n];
 
-            double fp = listener.evaluate(p);
+            var fp = listener.evaluate(p);
             gradientListener.evaluateGradient(p, xi);
 
-            for (int j = 0; j < n; j++) {
+            for (var j = 0; j < n; j++) {
                 g[j] = -xi[j];
                 h[j] = g[j];
                 xi[j] = h[j];
             }
-            for (int its = 0; its < ITMAX; its++) {
+            for (var its = 0; its < ITMAX; its++) {
                 iter = its;
                 fret = linmin();
                 if (2.0 * Math.abs(fret - fp) <= tolerance * (Math.abs(fret) + Math.abs(fp) + EPS)) {
@@ -207,11 +204,10 @@ public class DerivativeConjugateGradientMultiOptimizer
 
                 gradientListener.evaluateGradient(p, xi);
 
-                double test = 0.0;
-                final double den = Math.max(Math.abs(fp), 1.0);
-                for (int j = 0; j < n; j++) {
-                    final double temp = Math.abs(xi[j]) *
-                            Math.max(Math.abs(p[j]), 1.0) / den;
+                var test = 0.0;
+                final var den = Math.max(Math.abs(fp), 1.0);
+                for (var j = 0; j < n; j++) {
+                    final var temp = Math.abs(xi[j]) * Math.max(Math.abs(p[j]), 1.0) / den;
 
                     if (temp > test) {
                         test = temp;
@@ -228,7 +224,7 @@ public class DerivativeConjugateGradientMultiOptimizer
                 }
 
                 dgg = gg = 0.0;
-                for (int j = 0; j < n; j++) {
+                for (var j = 0; j < n; j++) {
                     gg += g[j] * g[j];
 
                     if (isPolakRibiereEnabled()) {
@@ -250,8 +246,8 @@ public class DerivativeConjugateGradientMultiOptimizer
                     break;
                 }
 
-                final double gam = dgg / gg;
-                for (int j = 0; j < n; j++) {
+                final var gam = dgg / gg;
+                for (var j = 0; j < n; j++) {
                     g[j] = -xi[j];
                     h[j] = g[j] + gam * h[j];
                     xi[j] = h[j];
@@ -289,8 +285,7 @@ public class DerivativeConjugateGradientMultiOptimizer
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isGradientListenerAvailable() &&
-                isStartPointAvailable();
+        return isListenerAvailable() && isGradientListenerAvailable() && isStartPointAvailable();
     }
 
     /**
@@ -351,8 +346,7 @@ public class DerivativeConjugateGradientMultiOptimizer
      * @param point Start point to search for a local minimum.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setStartPoint(final double[] point)
-            throws LockedException {
+    public void setStartPoint(final double[] point) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

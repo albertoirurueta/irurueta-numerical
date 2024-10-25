@@ -54,7 +54,7 @@ public class GradientEstimator {
      * @throws EvaluationException Raised if function cannot be evaluated.
      */
     public double[] gradient(final double[] point) throws EvaluationException {
-        final double[] result = new double[point.length];
+        final var result = new double[point.length];
         gradient(point, result);
         return result;
     }
@@ -72,9 +72,8 @@ public class GradientEstimator {
      * @throws IllegalArgumentException Raised if length of result and point are
      *                                  not equal.
      */
-    public void gradient(final double[] point, final double[] result)
-            throws EvaluationException {
-        final int length = point.length;
+    public void gradient(final double[] point, final double[] result) throws EvaluationException {
+        final var length = point.length;
         if (result.length != length) {
             throw new IllegalArgumentException();
         }
@@ -87,8 +86,8 @@ public class GradientEstimator {
         double temp;
         double h;
         double fh;
-        final double fold = listener.evaluate(point);
-        for (int j = 0; j < length; j++) {
+        final var fold = listener.evaluate(point);
+        for (var j = 0; j < length; j++) {
             temp = point[j];
             h = EPS * Math.abs(temp);
             if (h == 0.0) {

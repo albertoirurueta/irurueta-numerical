@@ -102,8 +102,8 @@ public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public DoubleExponentialRuleMatrixQuadrature(
-            final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b, final double hmax) throws WrongSizeException {
+            final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double a,
+            final double b, final double hmax) throws WrongSizeException {
         this.listener = listener;
         this.a = a;
         this.b = b;
@@ -129,8 +129,8 @@ public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public DoubleExponentialRuleMatrixQuadrature(
-            final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b) throws WrongSizeException {
+            final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double a,
+            final double b) throws WrongSizeException {
         this(listener, a, b, DEFAULT_HMAX);
     }
 
@@ -145,8 +145,8 @@ public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public DoubleExponentialRuleMatrixQuadrature(
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b, final double hmax) throws WrongSizeException {
+            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double a, final double b,
+            final double hmax) throws WrongSizeException {
         this(new DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener() {
             @Override
             public void evaluate(double x, double delta, Matrix result) throws EvaluationException {
@@ -174,8 +174,8 @@ public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public DoubleExponentialRuleMatrixQuadrature(
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
-            final double a, final double b) throws WrongSizeException {
+            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double a, final double b)
+            throws WrongSizeException {
         this(listener, a, b, DEFAULT_HMAX);
     }
 
@@ -221,7 +221,7 @@ public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
                 for (j = 0; j < it; j++) {
                     q = Math.exp(-2.0 * Math.sinh(t));
                     del = (b - a) * q / (1.0 + q);
-                    final double value = 1.0 + q;
+                    final var value = 1.0 + q;
                     fact = q / (value * value) * Math.cosh(t);
                     listener.evaluate(a + del, del, tmpA);
                     listener.evaluate(b - del, del, tmpB);
@@ -233,7 +233,7 @@ public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
                 }
 
                 // Replace s by its refined value and return.
-                // s = 0.5 * s + (b - a) * twoh * sum;
+                // s = 0.5 * s + (b - a) * twoh * sum
                 sum.multiplyByScalar((b - a) * twoh);
                 s.multiplyByScalar(0.5);
                 s.add(sum);

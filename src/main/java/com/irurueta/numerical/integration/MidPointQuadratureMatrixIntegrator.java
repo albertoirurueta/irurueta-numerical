@@ -21,8 +21,7 @@ import com.irurueta.algebra.WrongSizeException;
  * Computes single dimension matrix (multivariate) function integration by using Mid-Point
  * quadrature up to desired accuracy.
  */
-public class MidPointQuadratureMatrixIntegrator
-        extends QuadratureMatrixIntegrator<MidPointMatrixQuadrature> {
+public class MidPointQuadratureMatrixIntegrator extends QuadratureMatrixIntegrator<MidPointMatrixQuadrature> {
 
     /**
      * Constructor.
@@ -35,8 +34,7 @@ public class MidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public MidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final double eps) throws WrongSizeException {
         super(new MidPointMatrixQuadrature(a, b, listener), eps);
     }
@@ -50,8 +48,7 @@ public class MidPointQuadratureMatrixIntegrator
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public MidPointQuadratureMatrixIntegrator(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this(a, b, listener, EPS);
     }

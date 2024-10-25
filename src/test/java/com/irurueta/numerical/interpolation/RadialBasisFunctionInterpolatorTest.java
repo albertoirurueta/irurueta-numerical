@@ -15,16 +15,16 @@
  */
 package com.irurueta.numerical.interpolation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RadialBasisFunctionInterpolatorTest {
+class RadialBasisFunctionInterpolatorTest {
 
     private static final double MIN_VALUE = -1.0;
 
@@ -57,137 +57,123 @@ public class RadialBasisFunctionInterpolatorTest {
     private static final double ABSOLUTE_ERROR_GAUSS_3 = 1e-1;
 
     @Test
-    public void interpolate_dim1AndMultiQuadricRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim1AndMultiQuadricRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(1, new MultiQuadricRadialBasisFunction(), ABSOLUTE_ERROR_MQ_1);
     }
 
     @Test
-    public void interpolate_dim1AndInverseMultiQuadricRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
-        assertInterpolation(1, new InverseMultiQuadricRadialBasisFunction(),
-                ABSOLUTE_ERROR_INVMQ_1);
+    void interpolate_dim1AndInverseMultiQuadricRbf_returnsExpectedResult() throws InterpolationException,
+            WrongSizeException {
+        assertInterpolation(1, new InverseMultiQuadricRadialBasisFunction(), ABSOLUTE_ERROR_INVMQ_1);
     }
 
     @Test
-    public void interpolate_dim1AndThinPlateRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim1AndThinPlateRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(1, new ThinPlateRadialBasisFunction(), ABSOLUTE_ERROR_THINPLATE_1);
     }
 
     @Test
-    public void interpolate_dim1AndGaussianRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim1AndGaussianRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(1, new GaussianRadialBasisFunction(), ABSOLUTE_ERROR_GAUSS_1);
     }
 
     @Test
-    public void interpolate_dim2AndMultiQuadricRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim2AndMultiQuadricRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(2, new MultiQuadricRadialBasisFunction(), ABSOLUTE_ERROR_MQ_2);
     }
 
     @Test
-    public void interpolate_dim2AndInverseMultiQuadricRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
-        assertInterpolation(2, new InverseMultiQuadricRadialBasisFunction(),
-                ABSOLUTE_ERROR_INVMQ_2);
+    void interpolate_dim2AndInverseMultiQuadricRbf_returnsExpectedResult() throws InterpolationException,
+            WrongSizeException {
+        assertInterpolation(2, new InverseMultiQuadricRadialBasisFunction(), ABSOLUTE_ERROR_INVMQ_2);
     }
 
     @Test
-    public void interpolate_dim2AndThinPlateRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim2AndThinPlateRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(2, new ThinPlateRadialBasisFunction(), ABSOLUTE_ERROR_THINPLATE_2);
     }
 
     @Test
-    public void interpolate_dim2AndGaussianRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim2AndGaussianRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(2, new GaussianRadialBasisFunction(), ABSOLUTE_ERROR_GAUSS_2);
     }
 
     @Test
-    public void interpolate_dim3AndMultiQuadricRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim3AndMultiQuadricRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(3, new MultiQuadricRadialBasisFunction(), ABSOLUTE_ERROR_MQ_3);
     }
 
     @Test
-    public void interpolate_dim3AndInverseMultiQuadricRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
-        assertInterpolation(3, new InverseMultiQuadricRadialBasisFunction(),
-                ABSOLUTE_ERROR_INVMQ_3);
+    void interpolate_dim3AndInverseMultiQuadricRbf_returnsExpectedResult() throws InterpolationException,
+            WrongSizeException {
+        assertInterpolation(3, new InverseMultiQuadricRadialBasisFunction(), ABSOLUTE_ERROR_INVMQ_3);
     }
 
     @Test
-    public void interpolate_dim3AndThinPlateRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim3AndThinPlateRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(3, new ThinPlateRadialBasisFunction(), ABSOLUTE_ERROR_THINPLATE_3);
     }
 
     @Test
-    public void interpolate_dim3AndGaussianRbf_returnsExpectedResult()
-            throws InterpolationException, WrongSizeException {
+    void interpolate_dim3AndGaussianRbf_returnsExpectedResult() throws InterpolationException, WrongSizeException {
         assertInterpolation(3, new GaussianRadialBasisFunction(), ABSOLUTE_ERROR_GAUSS_3);
     }
 
-    private static void assertInterpolation(
-            final int dim, final RadialBasisFunction rbf, final double error)
+    private static void assertInterpolation(final int dim, final RadialBasisFunction rbf, final double error)
             throws WrongSizeException, InterpolationException {
-        final double[] roots = new double[dim];
-        final Polynomial[] polynomials = buildPolynomials(dim, roots);
+        final var roots = new double[dim];
+        final var polynomials = buildPolynomials(dim, roots);
 
-        for (int i = 0; i < dim; i++) {
+        for (var i = 0; i < dim; i++) {
             assertEquals(0.0, polynomials[i].evaluate(roots[i]), 0.0);
         }
         assertEquals(0.0, evaluate(polynomials, roots), 0.0);
 
         // create multiple samples and evaluations
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double[] point = new double[dim];
-        final Matrix pts = new Matrix(SAMPLES, dim);
-        final double[] values = new double[SAMPLES];
-        for (int i = 0; i < SAMPLES; i++) {
+        final var randomizer = new UniformRandomizer();
+        final var point = new double[dim];
+        final var pts = new Matrix(SAMPLES, dim);
+        final var values = new double[SAMPLES];
+        for (var i = 0; i < SAMPLES; i++) {
             randomizer.fill(point, MIN_VALUE, MAX_VALUE);
             pts.setSubmatrix(i, 0, i, dim -1, point);
             values[i] = evaluate(polynomials, point);
         }
 
         // check data
-        for (int i = 0; i < SAMPLES; i++) {
+        for (var i = 0; i < SAMPLES; i++) {
             pts.getSubmatrixAsArray(i, 0, i, dim - 1, point);
             assertEquals(values[i], evaluate(polynomials, point), 0.0);
         }
 
-        final RadialBasisFunctionInterpolator interpolator =
-                new RadialBasisFunctionInterpolator(pts, values, rbf);
+        final var interpolator = new RadialBasisFunctionInterpolator(pts, values, rbf);
 
         // check that interpolator at provided points
-        for (int i = 0; i < RadialBasisFunctionInterpolatorTest.SAMPLES; i++) {
+        for (var i = 0; i < RadialBasisFunctionInterpolatorTest.SAMPLES; i++) {
             pts.getSubmatrixAsArray(i, 0, i, dim - 1, point);
             assertEquals(values[i], interpolator.interpolate(point), error);
         }
 
         // check random values
-        for (int i = 0; i < SAMPLES; i++) {
+        for (var i = 0; i < SAMPLES; i++) {
             randomizer.fill(point, MIN_VALUE, MAX_VALUE);
             assertEquals(evaluate(polynomials, point), interpolator.interpolate(point), error);
         }
     }
 
     private static double evaluate(final Polynomial[] polynomials, double[] point) {
-        final int dim = polynomials.length;
-        double result = 1.0;
-        for(int i = 0; i < dim; i++) {
+        final var dim = polynomials.length;
+        var result = 1.0;
+        for(var i = 0; i < dim; i++) {
             result *= polynomials[i].evaluate(point[i]);
         }
         return result;
     }
 
     private static Polynomial[] buildPolynomials(int dim, final double[] roots) {
-        final double[] r = new double[1];
-        final Polynomial[] result = new Polynomial[dim];
-        for (int i = 0; i < dim; i++) {
+        final var r = new double[1];
+        final var result = new Polynomial[dim];
+        for (var i = 0; i < dim; i++) {
             result[i] = buildPolynomial(r);
             roots[i] = r[0];
         }
@@ -195,9 +181,9 @@ public class RadialBasisFunctionInterpolatorTest {
     }
 
     private static Polynomial buildPolynomial(final double[] roots) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final Polynomial result = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var result = new Polynomial(-root, 1.0);
         roots[0] = root;
 
         return result;

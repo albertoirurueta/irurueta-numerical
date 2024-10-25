@@ -89,8 +89,8 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      *                                      not met: minEvalPoint &lt;= middleEvalPoint &lt;= maxEvalPoint.
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
-    public BrentSingleOptimizer(final double minEvalPoint, final double middleEvalPoint,
-                                final double maxEvalPoint, final double tolerance)
+    public BrentSingleOptimizer(
+            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint, final double tolerance)
             throws InvalidBracketRangeException {
         super(minEvalPoint, middleEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
@@ -111,9 +111,9 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      * @throws IllegalArgumentException     Raised if tolerance is negative.
      */
     public BrentSingleOptimizer(
-            final SingleDimensionFunctionEvaluatorListener listener,
-            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint,
-            final double tolerance) throws InvalidBracketRangeException {
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double middleEvalPoint, final double maxEvalPoint, final double tolerance)
+            throws InvalidBracketRangeException {
         super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);
         internalSetTolerance(tolerance);
     }
@@ -144,8 +144,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      *                                  parameter while being locked will raise this exception.
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
-    public void setTolerance(final double tolerance)
-            throws LockedException {
+    public void setTolerance(final double tolerance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -171,8 +170,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
      */
     @Override
     @SuppressWarnings("Duplicates")
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -181,14 +179,14 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
         }
 
         locked = true;
-        final double[] v1 = new double[1];
-        final double[] v2 = new double[2];
-        final double[] v3 = new double[3];
+        final var v1 = new double[1];
+        final var v2 = new double[2];
+        final var v3 = new double[3];
 
         try {
             double a;
             double b;
-            double d = 0.0;
+            var d = 0.0;
             double etemp;
             double fu;
             double fv;
@@ -205,7 +203,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
             double x;
             double xm;
             //This will be the distance moved on the step before last.
-            double e = 0.0;
+            var e = 0.0;
 
             //a and b must be in ascending order, but input abscissas need not
             //be.
@@ -215,7 +213,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
             x = w = v = bx;
             fw = fv = fx = listener.evaluate(x);
 
-            for (int iter = 0; iter < ITMAX; iter++) {
+            for (var iter = 0; iter < ITMAX; iter++) {
                 //Main program loop
                 xm = 0.5 * (a + b);
                 tol1 = tolerance * Math.abs(x) + ZEPS;

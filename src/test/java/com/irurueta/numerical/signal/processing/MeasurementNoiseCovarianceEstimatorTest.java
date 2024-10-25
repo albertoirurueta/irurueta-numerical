@@ -17,15 +17,14 @@ package com.irurueta.numerical.signal.processing;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.numerical.signal.processing.AccelerationFileLoader.Data;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MeasurementNoiseCovarianceEstimatorTest {
+class MeasurementNoiseCovarianceEstimatorTest {
 
     private static final String ACCELERATION_NO_MOTION =
             "./src/test/java/com/irurueta/numerical/signal/processing/acceleration-no-motion.dat";
@@ -35,10 +34,9 @@ public class MeasurementNoiseCovarianceEstimatorTest {
     private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
 
     @Test
-    public void testConstructor() throws SignalProcessingException {
+    void testConstructor() throws SignalProcessingException {
 
-        MeasurementNoiseCovarianceEstimator estimator =
-                new MeasurementNoiseCovarianceEstimator(3);
+        var estimator = new MeasurementNoiseCovarianceEstimator(3);
 
         // check correctness
         assertEquals(3, estimator.getMeasureParams());
@@ -48,28 +46,20 @@ public class MeasurementNoiseCovarianceEstimatorTest {
         assertEquals(0, estimator.getSampleCount());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new MeasurementNoiseCovarianceEstimator(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new MeasurementNoiseCovarianceEstimator(0));
     }
 
     @Test
-    public void testUpdate() throws SignalProcessingException, IOException,
-            WrongSizeException {
+    void testUpdate() throws SignalProcessingException, IOException, WrongSizeException {
 
-        final MeasurementNoiseCovarianceEstimator estimator =
-                new MeasurementNoiseCovarianceEstimator(3);
+        final var estimator = new MeasurementNoiseCovarianceEstimator(3);
 
-        final File f = new File(ACCELERATION_NO_MOTION);
-        final Data data = AccelerationFileLoader.load(f);
+        final var f = new File(ACCELERATION_NO_MOTION);
+        final var data = AccelerationFileLoader.load(f);
 
-        final double[] sample = new double[3];
+        final var sample = new double[3];
 
-        for (int i = 0; i < data.numSamples; i++) {
+        for (var i = 0; i < data.numSamples; i++) {
             sample[0] = data.accelerationX[i];
             sample[1] = data.accelerationY[i];
             sample[2] = data.accelerationZ[i];
@@ -77,14 +67,14 @@ public class MeasurementNoiseCovarianceEstimatorTest {
             estimator.update(sample);
         }
 
-        final Matrix measurementNoiseCov = estimator.getMeasurementNoiseCov();
-        final double[] sampleAverage = estimator.getSampleAverage();
+        final var measurementNoiseCov = estimator.getMeasurementNoiseCov();
+        final var sampleAverage = estimator.getSampleAverage();
 
         assertEquals(data.numSamples, estimator.getSampleCount());
 
         // compute sample average
-        final double[] sampleAverage2 = new double[3];
-        for (int i = 0; i < data.numSamples; i++) {
+        final var sampleAverage2 = new double[3];
+        for (var i = 0; i < data.numSamples; i++) {
             sampleAverage2[0] += data.accelerationX[i] / data.numSamples;
             sampleAverage2[1] += data.accelerationY[i] / data.numSamples;
             sampleAverage2[2] += data.accelerationZ[i] / data.numSamples;
@@ -97,23 +87,22 @@ public class MeasurementNoiseCovarianceEstimatorTest {
 
         // copy all acceleration samples into a matrix (each column contains a
         // sample)
-        final Matrix samples = new Matrix(3, data.numSamples);
-        for (int i = 0; i < data.numSamples; i++) {
+        final var samples = new Matrix(3, data.numSamples);
+        for (var i = 0; i < data.numSamples; i++) {
             samples.setElementAt(0, i, data.accelerationX[i]);
             samples.setElementAt(1, i, data.accelerationY[i]);
             samples.setElementAt(2, i, data.accelerationZ[i]);
         }
 
-        final Matrix transSamples = samples.transposeAndReturnNew();
+        final var transSamples = samples.transposeAndReturnNew();
 
-        final Matrix cov = samples.multiplyAndReturnNew(transSamples);
+        final var cov = samples.multiplyAndReturnNew(transSamples);
         cov.multiplyByScalar(1.0 / data.numSamples);
 
         // compare matrices
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                assertEquals(measurementNoiseCov.getElementAt(i, j),
-                        cov.getElementAt(i, j), LARGE_ABSOLUTE_ERROR);
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                assertEquals(measurementNoiseCov.getElementAt(i, j), cov.getElementAt(i, j), LARGE_ABSOLUTE_ERROR);
             }
         }
     }

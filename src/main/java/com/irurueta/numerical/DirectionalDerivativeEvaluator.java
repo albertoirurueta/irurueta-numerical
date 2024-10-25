@@ -48,8 +48,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      */
     public DirectionalDerivativeEvaluator(
             final MultiDimensionFunctionEvaluatorListener listener,
-            final GradientFunctionEvaluatorListener gradientListener, final double[] point,
-            final double[] direction) {
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double[] direction) {
         super(listener, point, direction);
 
         this.gradientListener = gradientListener;
@@ -78,8 +77,7 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      *
      * @param gradientListener Gradient listener
      */
-    public void setGradientListener(
-            final GradientFunctionEvaluatorListener gradientListener) {
+    public void setGradientListener(final GradientFunctionEvaluatorListener gradientListener) {
         this.gradientListener = gradientListener;
     }
 
@@ -93,9 +91,9 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
      * @throws EvaluationException Thrown if function evaluation fails.
      */
     public double differentiateAt(final double x) throws EvaluationException {
-        final int length = point.length;
+        final var length = point.length;
 
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             p[i] = point[i] + x * direction[i];
         }
 
@@ -103,8 +101,8 @@ public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
         gradientListener.evaluateGradient(p, dft);
 
         // Obtain 1D derivative on corresponding direction
-        double df1 = 0.0;
-        for (int i = 0; i < length; i++) {
+        var df1 = 0.0;
+        for (var i = 0; i < length; i++) {
             df1 += dft[i] * direction[i];
         }
         return df1;

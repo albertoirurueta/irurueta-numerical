@@ -16,15 +16,12 @@
 package com.irurueta.numerical;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class DerivativeEstimatorTest
-        implements SingleDimensionFunctionEvaluatorListener {
+class DerivativeEstimatorTest implements SingleDimensionFunctionEvaluatorListener {
 
     public static final double MIN_EVAL_POINT = -1e3;
     public static final double MAX_EVAL_POINT = 1e3;
@@ -42,27 +39,27 @@ public class DerivativeEstimatorTest
     private double offset;
 
     @Test
-    public void testConstructor() {
-        final DerivativeEstimator estimator = new DerivativeEstimator(this);
+    void testConstructor() {
+        final var estimator = new DerivativeEstimator(this);
         assertNotNull(estimator);
     }
 
     @Test
-    public void testDerivative() throws EvaluationException {
+    void testDerivative() throws EvaluationException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         minimum = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
-        final double x = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
+        final var x = randomizer.nextDouble(MIN_EVAL_POINT, MAX_EVAL_POINT);
         offset = randomizer.nextDouble(MIN_OFFSET, MAX_OFFSET);
         width = randomizer.nextDouble(MIN_WIDTH, MAX_WIDTH);
 
-        final DerivativeEstimator estimator = new DerivativeEstimator(this);
+        final var estimator = new DerivativeEstimator(this);
 
         // estimate derivative
-        final double estDerivative = estimator.derivative(x);
+        final var estDerivative = estimator.derivative(x);
 
         // real derivative
-        final double realDerivative = derivative(x);
+        final var realDerivative = derivative(x);
 
         // compare both results
         assertEquals(estDerivative, realDerivative, ABSOLUTE_ERROR);

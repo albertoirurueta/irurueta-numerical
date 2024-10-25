@@ -43,14 +43,14 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * exceeding evaluations are ignored, and only the first minimum required
      * are used.
      */
-    private boolean mAllowLMSESolution;
+    private boolean allowLMSESolution;
 
     /**
      * Constructor.
      */
     public LMSEPolynomialEstimator() {
         super();
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -61,7 +61,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     public LMSEPolynomialEstimator(final int degree) {
         super(degree);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -71,7 +71,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     public LMSEPolynomialEstimator(final List<PolynomialEvaluation> evaluations) {
         super(evaluations);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -81,7 +81,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     public LMSEPolynomialEstimator(final PolynomialEstimatorListener listener) {
         super(listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -91,10 +91,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @param evaluations collection of polynomial evaluations.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(
-            final int degree, final List<PolynomialEvaluation> evaluations) {
+    public LMSEPolynomialEstimator(final int degree, final List<PolynomialEvaluation> evaluations) {
         super(degree, evaluations);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -104,10 +103,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @param listener listener to be notified of events.
      * @throws IllegalArgumentException if provided degree is less than 1.
      */
-    public LMSEPolynomialEstimator(
-            final int degree, final PolynomialEstimatorListener listener) {
+    public LMSEPolynomialEstimator(final int degree, final PolynomialEstimatorListener listener) {
         super(degree, listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -117,10 +115,9 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @param listener    listener to be notified of events.
      */
     public LMSEPolynomialEstimator(
-            final List<PolynomialEvaluation> evaluations,
-            final PolynomialEstimatorListener listener) {
+            final List<PolynomialEvaluation> evaluations, final PolynomialEstimatorListener listener) {
         super(evaluations, listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -135,7 +132,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
             final int degree, final List<PolynomialEvaluation> evaluations,
             final PolynomialEstimatorListener listener) {
         super(degree, evaluations, listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -147,7 +144,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      * @return true if LMSE solution is allowed, false otherwise.
      */
     public boolean isLMSESolutionAllowed() {
-        return mAllowLMSESolution;
+        return allowLMSESolution;
     }
 
     /**
@@ -163,7 +160,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mAllowLMSESolution = allowed;
+        allowLMSESolution = allowed;
     }
 
     /**
@@ -176,8 +173,7 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public Polynomial estimate() throws LockedException, NotReadyException,
-            PolynomialEstimationException {
+    public Polynomial estimate() throws LockedException, NotReadyException, PolynomialEstimationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -186,38 +182,31 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
         }
 
         try {
-            mLocked = true;
-            if (mListener != null) {
-                mListener.onEstimateStart(this);
+            locked = true;
+            if (listener != null) {
+                listener.onEstimateStart(this);
             }
 
-            final int minNumberOfEvaluations = getMinNumberOfEvaluations();
+            final var minNumberOfEvaluations = getMinNumberOfEvaluations();
 
-            final Matrix a = new Matrix(mEvaluations.size(), mDegree + 1);
-            final Matrix b = new Matrix(mEvaluations.size(), 1);
+            final var a = new Matrix(evaluations.size(), degree + 1);
+            final var b = new Matrix(evaluations.size(), 1);
 
-            int counter = 0;
-            for (PolynomialEvaluation evaluation : mEvaluations) {
+            var counter = 0;
+            for (var evaluation : evaluations) {
                 switch (evaluation.getType()) {
                     case DIRECT_EVALUATION:
-                        fillDirectEvaluation(
-                                (DirectPolynomialEvaluation) evaluation, a, b,
-                                counter);
+                        fillDirectEvaluation((DirectPolynomialEvaluation) evaluation, a, b, counter);
                         break;
                     case DERIVATIVE_EVALUATION:
-                        fillDerivativeEvaluation(
-                                (DerivativePolynomialEvaluation) evaluation, a,
-                                b, counter);
+                        fillDerivativeEvaluation((DerivativePolynomialEvaluation) evaluation, a, b, counter);
                         break;
                     case INTEGRAL_EVALUATION:
-                        fillIntegralEvaluation(
-                                (IntegralPolynomialEvaluation) evaluation, a, b,
-                                counter);
+                        fillIntegralEvaluation((IntegralPolynomialEvaluation) evaluation, a, b, counter);
                         break;
                     case INTEGRAL_INTERVAL:
-                        fillIntegralIntervalEvaluation(
-                                (IntegralIntervalPolynomialEvaluation) evaluation,
-                                a, b, counter);
+                        fillIntegralIntervalEvaluation((IntegralIntervalPolynomialEvaluation) evaluation, a, b,
+                                counter);
                         break;
                     default:
                         continue;
@@ -226,25 +215,24 @@ public class LMSEPolynomialEstimator extends PolynomialEstimator {
                 normalize(a, b, counter);
                 counter++;
 
-                if (!isLMSESolutionAllowed() &&
-                        counter >= minNumberOfEvaluations) {
+                if (!isLMSESolutionAllowed() && counter >= minNumberOfEvaluations) {
                     break;
                 }
             }
 
-            final Matrix params = Utils.solve(a, b);
+            final var params = Utils.solve(a, b);
 
-            final Polynomial result = new Polynomial(params.toArray());
+            final var result = new Polynomial(params.toArray());
 
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
+            if (listener != null) {
+                listener.onEstimateEnd(this);
             }
 
             return result;
         } catch (final AlgebraException e) {
             throw new PolynomialEstimationException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

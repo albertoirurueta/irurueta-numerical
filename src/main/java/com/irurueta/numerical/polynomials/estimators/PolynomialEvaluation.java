@@ -25,7 +25,7 @@ public abstract class PolynomialEvaluation implements Serializable {
     /**
      * Evaluation of polynomial at point x.
      */
-    private double mEvaluation;
+    private double evaluation;
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ public abstract class PolynomialEvaluation implements Serializable {
      * @param evaluation evaluation of polynomial at a point x.
      */
     protected PolynomialEvaluation(final double evaluation) {
-        mEvaluation = evaluation;
+        this.evaluation = evaluation;
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class PolynomialEvaluation implements Serializable {
      * @return evaluation of polynomial at point x.
      */
     public double getEvaluation() {
-        return mEvaluation;
+        return evaluation;
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class PolynomialEvaluation implements Serializable {
      * @param evaluation evaluation of polynomial at point x.
      */
     public void setEvaluation(final double evaluation) {
-        mEvaluation = evaluation;
+        this.evaluation = evaluation;
     }
 
     /**

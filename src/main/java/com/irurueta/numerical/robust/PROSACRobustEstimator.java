@@ -23,7 +23,6 @@ import com.irurueta.sorting.SortingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.List;
 
 /**
  * This class implements PROSAC (PROgressive random SAmple Consensus) algorithm
@@ -157,14 +156,14 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    private double mConfidence;
+    private double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    private int mMaxIterations;
+    private int maxIterations;
 
     /**
      * In this implementation, PROSAC won't stop before having reached the
@@ -172,14 +171,14 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * Maximum allowed outliers proportion in the input data: used to compute
      * nIters (can be as high as 0.95).
      */
-    private double mMaxOutliersProportion;
+    private double maxOutliersProportion;
 
     /**
      * eta0 is the maximum probability that a solution with more than
      * inliersNStar inliers in U_nStar exists and was not found after k
      * samples (typically set to 5%).
      */
-    private double mEta0;
+    private double eta0;
 
     /**
      * beta is the probability that a match is declared inlier by mistake,
@@ -189,7 +188,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * the detection noise), and the total surface is the surface of the image
      * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!
      */
-    private double mBeta;
+    private double beta;
 
     /**
      * Instance in charge of picking random subsets of samples.
@@ -209,17 +208,17 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
     /**
      * Data related to inliers found for best result.
      */
-    private PROSACInliersData mBestInliersData;
+    private PROSACInliersData bestInliersData;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
 
     /**
@@ -227,16 +226,16 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     public PROSACRobustEstimator() {
         super();
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mMaxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
-        mEta0 = DEFAULT_ETA0;
-        mBeta = DEFAULT_BETA;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        maxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
+        eta0 = DEFAULT_ETA0;
+        beta = DEFAULT_BETA;
+        nIters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        bestInliersData = null;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -248,16 +247,16 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     public PROSACRobustEstimator(final PROSACRobustEstimatorListener<T> listener) {
         super(listener);
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mMaxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
-        mEta0 = DEFAULT_ETA0;
-        mBeta = DEFAULT_BETA;
-        nIters = mMaxIterations;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        maxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;
+        eta0 = DEFAULT_ETA0;
+        beta = DEFAULT_BETA;
+        nIters = maxIterations;
         bestResult = null;
-        mBestInliersData = null;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        bestInliersData = null;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -269,7 +268,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -291,7 +290,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -302,7 +301,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -322,7 +321,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -336,7 +335,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return maximum allowed outliers proportion in the input data.
      */
     public double getMaxOutliersProportion() {
-        return mMaxOutliersProportion;
+        return maxOutliersProportion;
     }
 
     /**
@@ -353,17 +352,16 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setMaxOutliersProportion(final double maxOutliersProportion)
-            throws LockedException {
+    public void setMaxOutliersProportion(final double maxOutliersProportion) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (maxOutliersProportion < MIN_MAX_OUTLIERS_PROPORTION ||
-                maxOutliersProportion > MAX_MAX_OUTLIERS_PROPORTION) {
+        if (maxOutliersProportion < MIN_MAX_OUTLIERS_PROPORTION
+                || maxOutliersProportion > MAX_MAX_OUTLIERS_PROPORTION) {
             throw new IllegalArgumentException();
         }
 
-        mMaxOutliersProportion = maxOutliersProportion;
+        this.maxOutliersProportion = maxOutliersProportion;
     }
 
     /**
@@ -374,7 +372,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return eta0 value.
      */
     public double getEta0() {
-        return mEta0;
+        return eta0;
     }
 
     /**
@@ -396,7 +394,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             throw new IllegalArgumentException();
         }
 
-        mEta0 = eta0;
+        this.eta0 = eta0;
     }
 
     /**
@@ -410,7 +408,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return beta value.
      */
     public double getBeta() {
-        return mBeta;
+        return beta;
     }
 
     /**
@@ -435,7 +433,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             throw new IllegalArgumentException();
         }
 
-        mBeta = beta;
+        this.beta = beta;
     }
 
     /**
@@ -464,7 +462,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return data related to inliers found for best result.
      */
     public PROSACInliersData getBestInliersData() {
-        return mBestInliersData;
+        return bestInliersData;
     }
 
     /**
@@ -474,7 +472,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -484,12 +482,11 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -499,7 +496,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -509,12 +506,11 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -527,7 +523,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (mListener instanceof PROSACRobustEstimatorListener);
+        return (listener instanceof PROSACRobustEstimatorListener);
     }
 
     /**
@@ -541,8 +537,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public T estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public T estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -551,86 +546,82 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         }
 
         try {
-            final PROSACRobustEstimatorListener<T> listener =
-                    (PROSACRobustEstimatorListener<T>) mListener;
+            final var listener = (PROSACRobustEstimatorListener<T>) this.listener;
 
-            mLocked = true;
+            locked = true;
 
             listener.onEstimateStart(this);
 
             // N = CORRESPONDENCES
-            final int totalSamples = listener.getTotalSamples();
-            final int subsetSize = listener.getSubsetSize();
-            final double threshold = listener.getThreshold();
+            final var totalSamples = listener.getTotalSamples();
+            final var subsetSize = listener.getSubsetSize();
+            final var threshold = listener.getThreshold();
             // only positive thresholds are allowed
             if (threshold < MIN_THRESHOLD) {
                 throw new RobustEstimatorException();
             }
 
-            final double[] qualityScores = listener.getQualityScores();
+            final var qualityScores = listener.getQualityScores();
             // check for invalid quality scores length
             if (qualityScores.length != totalSamples) {
                 throw new RobustEstimatorException();
             }
             // obtain indices referring to original samples position after sorting
             // quality scores in descending order
-            final int[] sortedIndices = computeSortedQualityIndices(
-                    listener.getQualityScores());
+            final var sortedIndices = computeSortedQualityIndices(listener.getQualityScores());
 
             // reusable list that will contain preliminary solutions on each
             // iteration
-            final List<T> iterResults = new ArrayList<>();
+            final var iterResults = new ArrayList<T>();
             bestResult = null;
-            float previousProgress = 0.0f;
+            var previousProgress = 0.0f;
             float progress;
             // subset indices obtained from a subset selector
-            final int[] subsetIndices = new int[subsetSize];
+            final var subsetIndices = new int[subsetSize];
             // subset indices referred to the real samples positions after taking
             // into account the sorted indices obtained from quality scores
-            final int[] transformedSubsetIndices = new int[subsetSize];
+            final var transformedSubsetIndices = new int[subsetSize];
             // array containing inliers efficiently
-            final BitSet inliers = new BitSet(totalSamples);
+            final var inliers = new BitSet(totalSamples);
 
             // T_N
-            nIters = Math.min(computeIterations(
-                    1.0 - mMaxOutliersProportion, subsetSize, mConfidence),
-                    mMaxIterations);
+            nIters = Math.min(computeIterations(1.0 - maxOutliersProportion, subsetSize, confidence),
+                    maxIterations);
 
             // termination length
-            int sampleSizeStar = totalSamples;
+            var sampleSizeStar = totalSamples;
             // number of inliers found within the first
             // nStar data points
-            int inliersNStar = 0;
+            var inliersNStar = 0;
             // best number of inliers found so far
             // (store the model that goes with it)
-            int inliersBest = 0;
-            final int inliersMin = (int) ((1.0 - mMaxOutliersProportion) * totalSamples);
+            var inliersBest = 0;
+            final var inliersMin = (int) ((1.0 - maxOutliersProportion) * totalSamples);
             // iteration number (t)
-            int currentIter = 0;
+            var currentIter = 0;
             // (n) we draw samples from the set U_n
             // of the top n (sampleSize) data points
-            int sampleSize = subsetSize;
-            // average number of samples {M_i}_{i=1}^{tn}
+            var sampleSize = subsetSize;
+            // average number of samples "{M_i}_{i=1}^{tn}"
             // that contains samples from U_n only
             double tn = nIters;
             // integer version of tn
-            int tnPrime = 1;
+            var tnPrime = 1;
             // number of samples to draw to reach the
             // maximality constraint
-            int kNStar = nIters;
+            var kNStar = nIters;
 
             double[] residuals = null;
-            if (mComputeAndKeepInliers || mComputeAndKeepResiduals) {
-                mBestInliersData = new PROSACInliersData(totalSamples,
-                        mComputeAndKeepInliers, mComputeAndKeepResiduals);
+            if (computeAndKeepInliers || computeAndKeepResiduals) {
+                bestInliersData = new PROSACInliersData(totalSamples, computeAndKeepInliers, computeAndKeepResiduals);
 
-                if (mComputeAndKeepResiduals) {
+                if (computeAndKeepResiduals) {
                     residuals = new double[totalSamples];
                 }
             }
 
             // initialize tn
-            for (int i = 0; i < subsetSize; i++) {
+            for (var i = 0; i < subsetSize; i++) {
                 tn *= (double) (sampleSize - i) / (double) (totalSamples - i);
             }
 
@@ -642,15 +633,14 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 subsetSelector.setNumSamples(totalSamples);
             }
 
-            while (((inliersBest < inliersMin) || (currentIter < kNStar)) &&
-                    (nIters > currentIter) && (currentIter < mMaxIterations)) {
+            while (((inliersBest < inliersMin) || (currentIter < kNStar)) && (nIters > currentIter)
+                    && (currentIter < maxIterations)) {
                 if (kNStar > 0) {
-                    progress = Math.min((float) currentIter / (float) kNStar,
-                            1.0f);
+                    progress = Math.min((float) currentIter / (float) kNStar, 1.0f);
                 } else {
                     progress = 1.0f;
                 }
-                if (progress - previousProgress > mProgressDelta) {
+                if (progress - previousProgress > progressDelta) {
                     previousProgress = progress;
                     listener.onEstimateProgressChange(this, progress);
                 }
@@ -662,7 +652,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 // g(t) = min{n : tnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > tnPrime
                 if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
-                    double tnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
+                    var tnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
                     sampleSize++;
                     tnPrime += (int) Math.ceil(tnPlus1 - tn);
                     tn = tnPlus1;
@@ -674,32 +664,28 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                     // currentIter > tnPrime), draw a standard RANSAC sample
                     // The sample contains subsetSize points selected from U_n at
                     // random
-                    subsetSelector.computeRandomSubsets(subsetSize,
-                            subsetIndices);
+                    subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);
                 } else {
                     // The sample contains subsetSize-1 points selected from
                     // U_sampleSize_1 at random and u_sampleSize
 
-                    subsetSelector.computeRandomSubsetsInRange(0, sampleSize,
-                            subsetSize, true, subsetIndices);
+                    subsetSelector.computeRandomSubsetsInRange(0, sampleSize, subsetSize, true,
+                            subsetIndices);
                 }
 
-                transformIndices(subsetIndices, sortedIndices,
-                        transformedSubsetIndices);
+                transformIndices(subsetIndices, sortedIndices, transformedSubsetIndices);
 
                 // clear list of preliminary solutions before calling listener
                 iterResults.clear();
                 // compute solution for current iteration
-                listener.estimatePreliminarSolutions(transformedSubsetIndices,
-                        iterResults);
+                listener.estimatePreliminarSolutions(transformedSubsetIndices, iterResults);
 
                 // total number of inliers for a
                 // given result
                 int inliersCurrent;
-                for (final T iterResult : iterResults) {
+                for (final var iterResult : iterResults) {
                     // compute inliers
-                    inliersCurrent = computeInliers(iterResult, threshold,
-                            inliers, totalSamples, listener, residuals);
+                    inliersCurrent = computeInliers(iterResult, threshold, inliers, totalSamples, listener, residuals);
 
                     if (inliersCurrent > inliersBest) {
                         // update best number of inliers
@@ -708,9 +694,8 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                         bestResult = iterResult;
 
                         // update best inlier data
-                        if (mBestInliersData != null) {
-                            mBestInliersData.update(inliers, residuals,
-                                    inliersBest);
+                        if (bestInliersData != null) {
+                            bestInliersData.update(inliers, residuals, inliersBest);
                         }
 
                         // select new termination length sampleSizeStar if possible
@@ -718,19 +703,16 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                         // so far
 
                         // best value found so far in terms of inliers ration
-                        int sampleSizeBest = totalSamples;
-                        int inliersSampleSizeBest = inliersCurrent;
+                        var sampleSizeBest = totalSamples;
+                        var inliersSampleSizeBest = inliersCurrent;
 
                         // test value for the termination length
                         int sampleSizeTest;
                         // number of inliers for that test value
                         int inliersSampleSizeTest;
-                        double epsilonSampleSizeBest =
-                                (double) inliersSampleSizeBest /
-                                        (double) sampleSizeBest;
+                        var epsilonSampleSizeBest = (double) inliersSampleSizeBest / (double) sampleSizeBest;
 
-                        for (sampleSizeTest = totalSamples,
-                                     inliersSampleSizeTest = inliersCurrent;
+                        for (sampleSizeTest = totalSamples, inliersSampleSizeTest = inliersCurrent;
                              sampleSizeTest > subsetSize; sampleSizeTest--) {
                             // Loop invariants:
                             // - inliersSampleSizeTest is the number of inliers
@@ -768,43 +750,35 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                             //   provided)
                             //   We do the cheap test first, and the expensive test
                             //   only if the cheap one passes
-                            if ((inliersSampleSizeTest * sampleSizeBest >
-                                    inliersSampleSizeBest * sampleSizeTest) &&
-                                    (inliersSampleSizeTest >
-                                            epsilonSampleSizeBest * sampleSizeTest +
-                                                    Math.sqrt(sampleSizeTest * epsilonSampleSizeBest *
-                                                            (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
+                            if ((inliersSampleSizeTest * sampleSizeBest > inliersSampleSizeBest * sampleSizeTest)
+                                    && (inliersSampleSizeTest > epsilonSampleSizeBest * sampleSizeTest
+                                    + Math.sqrt(sampleSizeTest * epsilonSampleSizeBest * (1.0 - epsilonSampleSizeBest)
+                                    * CHI_SQUARED))) {
 
-                                if (inliersSampleSizeTest <
-                                        imin(subsetSize, sampleSizeTest, mBeta)) {
+                                if (inliersSampleSizeTest < imin(subsetSize, sampleSizeTest, beta)) {
                                     // equation not satisfied, no need to test for
                                     // smaller sampleSizeTest values anyway
 
-                                    // jump out of the for(sampleSizeTest) loop
+                                    // jump out of the for sampleSizeTest loop
                                     break;
                                 }
                                 sampleSizeBest = sampleSizeTest;
                                 inliersSampleSizeBest = inliersSampleSizeTest;
-                                epsilonSampleSizeBest =
-                                        (double) inliersSampleSizeBest /
-                                                (double) sampleSizeBest;
+                                epsilonSampleSizeBest = (double) inliersSampleSizeBest / (double) sampleSizeBest;
                             }
 
                             // prepare for next loop iteration
-                            inliersSampleSizeTest -=
-                                    inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
+                            inliersSampleSizeTest -= inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;
                         }
 
                         // is the best one we found even better than sampleSizeStar?
-                        if (inliersSampleSizeBest * sampleSizeStar >
-                                inliersNStar * sampleSizeBest) {
+                        if (inliersSampleSizeBest * sampleSizeStar > inliersNStar * sampleSizeBest) {
 
                             // update all values
                             sampleSizeStar = sampleSizeBest;
                             inliersNStar = inliersSampleSizeBest;
-                            kNStar = computeIterations((double) inliersNStar /
-                                            (double) sampleSizeStar, subsetSize,
-                                    1.0 - mEta0);
+                            kNStar = computeIterations((double) inliersNStar / (double) sampleSizeStar,
+                                    subsetSize, 1.0 - eta0);
                         }
                     }
                 }
@@ -823,7 +797,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         } catch (final SubsetSelectorException | SortingException e) {
             throw new RobustEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
 
     }
@@ -863,8 +837,8 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      */
     private static void transformIndices(
             final int[] subsetIndices, final int[] sortedIndices, final int[] transformedSubsetIndices) {
-        final int length = transformedSubsetIndices.length;
-        for (int i = 0; i < length; i++) {
+        final var length = transformedSubsetIndices.length;
+        for (var i = 0; i < length; i++) {
             transformedSubsetIndices[i] = sortedIndices[subsetIndices[i]];
         }
     }
@@ -888,9 +862,9 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
             final T iterResult, final double threshold, final BitSet inliers, final int totalSamples,
             final PROSACRobustEstimatorListener<T> listener, final double[] residuals) {
 
-        int numInliers = 0;
+        var numInliers = 0;
         double residual;
-        for (int i = 0; i < totalSamples; i++) {
+        for (var i = 0; i < totalSamples; i++) {
             residual = Math.abs(listener.computeResidual(iterResult, i));
             if (residual < threshold) {
                 numInliers++;
@@ -916,15 +890,13 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return indices to sort samples in descending order of quality values.
      * @throws SortingException if sorting fails.
      */
-    private static int[] computeSortedQualityIndices(final double[] qualityScores)
-            throws SortingException {
-        final Sorter<Double> sorter = Sorter.create();
-        final double[] qualityScoresCopy = Arrays.copyOf(qualityScores,
-                qualityScores.length);
+    private static int[] computeSortedQualityIndices(final double[] qualityScores) throws SortingException {
+        final var sorter = Sorter.<Double>create();
+        final var qualityScoresCopy = Arrays.copyOf(qualityScores, qualityScores.length);
         // this method modifies quality scores copy array because it gets sorted
         // in ascending order. Indices contains indices of samples corresponding
         // to quality scores ordered in ascending order
-        final int[] indices = sorter.sortWithIndices(qualityScoresCopy);
+        final var indices = sorter.sortWithIndices(qualityScoresCopy);
 
         // reverse indices so we have indices of samples ordered in descending
         // order of quality
@@ -938,10 +910,10 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @param array array to be reversed.
      */
     private static void reverse(final int[] array) {
-        final int length = array.length;
-        for (int i = 0; i < length / 2; i++) {
-            int temp = array[i];
-            int pos = length - 1 - i;
+        final var length = array.length;
+        for (var i = 0; i < length / 2; i++) {
+            var temp = array[i];
+            var pos = length - 1 - i;
             array[i] = array[pos];
             array[pos] = temp;
         }
@@ -956,25 +928,21 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @param confidence required confidence of result.
      * @return number of required iterations.
      */
-    private static int computeIterations(
-            final double probInlier, final int subsetSize, final double confidence) {
+    private static int computeIterations(final double probInlier, final int subsetSize, final double confidence) {
 
         // compute number of times the algorithm needs to be executed depending
         // on number of inliers respect total points to achieve with probability
         // confidence that we have all inliers and probability 1 - confidence
         // that we have some outliers
-        final double probSubsetAllInliers = Math.pow(probInlier, subsetSize);
-        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE ||
-                Double.isNaN(probSubsetAllInliers)) {
+        final var probSubsetAllInliers = Math.pow(probInlier, subsetSize);
+        if (Math.abs(probSubsetAllInliers) < Double.MIN_VALUE || Double.isNaN(probSubsetAllInliers)) {
             return Integer.MAX_VALUE;
         } else {
-            final double logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
-            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE ||
-                    Double.isNaN(logProbSomeOutliers)) {
+            final var logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);
+            if (Math.abs(logProbSomeOutliers) < Double.MIN_VALUE || Double.isNaN(logProbSomeOutliers)) {
                 return Integer.MAX_VALUE;
             } else {
-                return (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) /
-                        logProbSomeOutliers));
+                return (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) / logProbSomeOutliers));
             }
         }
     }
@@ -996,8 +964,8 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
      * @return i-m.
      */
     private static int imin(final int subsetSize, final int sampleSize, final double beta) {
-        final double mu = sampleSize * beta;
-        final double sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
+        final var mu = sampleSize * beta;
+        final var sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));
 
         return (int) Math.ceil(subsetSize + mu + sigma * Math.sqrt(CHI_SQUARED));
     }
@@ -1011,17 +979,16 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
          * Efficiently stores which samples are considered inliers and which
          * ones aren't.
          */
-        private BitSet mInliers;
+        private BitSet inliers;
 
-        public PROSACInliersData(final int totalSamples, final boolean keepInliers,
-                                 final boolean keepResiduals) {
+        public PROSACInliersData(final int totalSamples, final boolean keepInliers, final boolean keepResiduals) {
             if (keepInliers) {
-                mInliers = new BitSet(totalSamples);
+                inliers = new BitSet(totalSamples);
             }
             if (keepResiduals) {
-                mResiduals = new double[totalSamples];
+                residuals = new double[totalSamples];
             }
-            mNumInliers = 0;
+            numInliers = 0;
         }
 
         /**
@@ -1033,7 +1000,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
          */
         @Override
         public BitSet getInliers() {
-            return mInliers;
+            return inliers;
         }
 
         /**
@@ -1044,8 +1011,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
          * @param residuals  residuals obtained for each sample of data.
          * @param numInliers number of inliers found on current iteration.
          */
-        protected void update(final BitSet inliers, final double[] residuals,
-                              final int numInliers) {
+        protected void update(final BitSet inliers, final double[] residuals, final int numInliers) {
             int totalSamples = 0;
             if (inliers != null) {
                 totalSamples = inliers.length();
@@ -1054,24 +1020,22 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 totalSamples = residuals.length;
             }
 
-            if (mInliers != null && inliers != null && mResiduals != null &&
-                    residuals != null) {
+            if (this.inliers != null && inliers != null && this.residuals != null && residuals != null) {
                 // update inliers and residuals
                 for (int i = 0; i < totalSamples; i++) {
-                    mInliers.set(i, inliers.get(i));
-                    mResiduals[i] = residuals[i];
+                    this.inliers.set(i, inliers.get(i));
+                    this.residuals[i] = residuals[i];
                 }
-            } else if (mInliers != null && inliers != null) {
+            } else if (this.inliers != null && inliers != null) {
                 // update inliers but not the residuals
                 for (int i = 0; i < totalSamples; i++) {
-                    mInliers.set(i, inliers.get(i));
+                    this.inliers.set(i, inliers.get(i));
                 }
-            } else if (mResiduals != null && residuals != null) {
+            } else if (this.residuals != null && residuals != null) {
                 // update residuals but not inliers
-                System.arraycopy(residuals, 0, mResiduals,
-                        0, totalSamples);
+                System.arraycopy(residuals, 0, this.residuals, 0, totalSamples);
             }
-            mNumInliers = numInliers;
+            this.numInliers = numInliers;
         }
     }
 }

@@ -29,9 +29,7 @@ public class ExponentialMidPointQuadrature extends MidPointQuadrature {
      * @param a        Lower limit of integration.
      * @param listener listener to evaluate a single dimension function at required points.
      */
-    public ExponentialMidPointQuadrature(
-            final double a,
-            final SingleDimensionFunctionEvaluatorListener listener) {
+    public ExponentialMidPointQuadrature(final double a, final SingleDimensionFunctionEvaluatorListener listener) {
         super(0.0, Math.exp(-a), listener);
     }
 

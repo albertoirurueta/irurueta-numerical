@@ -30,8 +30,7 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      *
      * @param listener listener to evaluate a single dimension function.
      */
-    public SymmetricDerivativeEstimator(
-            final SingleDimensionFunctionEvaluatorListener listener) {
+    public SymmetricDerivativeEstimator(final SingleDimensionFunctionEvaluatorListener listener) {
         super(listener);
     }
 
@@ -45,23 +44,23 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      */
     @Override
     public double derivative(final double x) throws EvaluationException {
-        double h = EPS * Math.abs(x);
+        var h = EPS * Math.abs(x);
         if (h == 0.0) {
             // Trick to reduce finite-precision error
             h = EPS;
         }
 
-        final double xh1 = x + h;
-        final double xh2 = x - h;
+        final var xh1 = x + h;
+        final var xh2 = x - h;
         // because of machine precision h could be different in both cases
-        final double h1 = xh1 - x;
-        final double h2 = x - xh2;
+        final var h1 = xh1 - x;
+        final var h2 = x - xh2;
 
         // this is more or less equal to 2.0 * h
-        final double hh = h1 + h2;
+        final var hh = h1 + h2;
 
-        final double fh1 = listener.evaluate(xh1);
-        final double fh2 = listener.evaluate(xh2);
+        final var fh1 = listener.evaluate(xh1);
+        final var fh2 = listener.evaluate(xh2);
 
         return (fh1 - fh2) / hh;
     }

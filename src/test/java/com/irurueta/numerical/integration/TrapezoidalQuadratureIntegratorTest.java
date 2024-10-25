@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TrapezoidalQuadratureIntegratorTest {
+class TrapezoidalQuadratureIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -38,93 +38,69 @@ public class TrapezoidalQuadratureIntegratorTest {
     private static final double ABSOLUTE_ERROR_EXPONENTIAL = 1e-6;
 
     @Test
-    public void integrate_whenFirstDegreePolynomial_returnsExpectedResult()
-            throws IntegrationException {
+    void integrate_whenFirstDegreePolynomial_returnsExpectedResult() throws IntegrationException {
         assertPolynomialIntegration();
     }
 
     @Test
-    public void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
-        final double lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
+    void integrate_whenExponential_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_LAMBDA, MAX_LAMBDA);
 
-        final double expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
+        final var expected = 1.0 / lambda * (Math.exp(lambda * b) - Math.exp(lambda * a));
 
-        final TrapezoidalQuadratureIntegrator integrator = new TrapezoidalQuadratureIntegrator(a, b,
-                new SingleDimensionFunctionEvaluatorListener() {
-            @Override
-            public double evaluate(double point) {
-                return Math.exp(lambda * point);
-            }
-        });
-        final double result = integrator.integrate();
+        final var integrator = new TrapezoidalQuadratureIntegrator(a, b, point -> Math.exp(lambda * point));
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_EXPONENTIAL);
     }
 
-    @Test(expected = IntegrationException.class)
-    public void integrate_whenImproperIntegrandWithSingularities_throwsIntegrationException()
-            throws IntegrationException {
+    @Test
+    void integrate_whenImproperIntegrandWithSingularities_throwsIntegrationException() {
 
-        final TrapezoidalQuadratureIntegrator integrator =
-                new TrapezoidalQuadratureIntegrator(0.0, 1.0,
-                        new SingleDimensionFunctionEvaluatorListener() {
-                            @Override
-                            public double evaluate(double point) {
-                                return Math.log(point) * Math.log(1.0 - point);
-                            }
-                        });
-        integrator.integrate();
+        final var integrator = new TrapezoidalQuadratureIntegrator(0.0, 1.0,
+                point -> Math.log(point) * Math.log(1.0 - point));
+        assertThrows(IntegrationException.class, integrator::integrate);
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() {
-        final TrapezoidalQuadratureIntegrator integrator =
-                new TrapezoidalQuadratureIntegrator(0.0, 1.0, null);
+    void getIntegratorType_returnsExpectedValue() {
+        final var integrator = new TrapezoidalQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(IntegratorType.QUADRATURE, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() {
-        final TrapezoidalQuadratureIntegrator integrator =
-                new TrapezoidalQuadratureIntegrator(0.0, 1.0, null);
+    void getQuadratureType_returnsExpectedValue() {
+        final var integrator = new TrapezoidalQuadratureIntegrator(0.0, 1.0, null);
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
 
-    private static void assertPolynomialIntegration()
-            throws IntegrationException {
-        final Polynomial polynomial = buildPolynomial(1);
-        final Polynomial integrationPolynomial = polynomial.integrationAndReturnNew();
+    private static void assertPolynomialIntegration() throws IntegrationException {
+        final var polynomial = buildPolynomial(1);
+        final var integrationPolynomial = polynomial.integrationAndReturnNew();
 
         // set integration interval
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
-        final double expected = integrationPolynomial.evaluate(b)
-                - integrationPolynomial.evaluate(a);
+        final var expected = integrationPolynomial.evaluate(b) - integrationPolynomial.evaluate(a);
 
-        final TrapezoidalQuadratureIntegrator integrator = new TrapezoidalQuadratureIntegrator(a, b,
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(final double point) {
-                        return polynomial.evaluate(point);
-                    }
-                });
-        final double result = integrator.integrate();
+        final var integrator = new TrapezoidalQuadratureIntegrator(a, b, polynomial::evaluate);
+        final var result = integrator.integrate();
 
         assertEquals(expected, result, TrapezoidalQuadratureIntegratorTest.ABSOLUTE_ERROR_1);
     }
 
     @SuppressWarnings("SameParameterValue")
     private static Polynomial buildPolynomial(final int degree) {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final Polynomial result = new Polynomial(1.0);
-        for (int i = 0; i < degree; i++) {
-            final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final Polynomial poly = new Polynomial(-root, 1.0);
+        final var randomizer = new UniformRandomizer();
+        final var result = new Polynomial(1.0);
+        for (var i = 0; i < degree; i++) {
+            final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var poly = new Polynomial(-root, 1.0);
             result.multiply(poly);
         }
 

@@ -21,7 +21,6 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.NotAvailableException;
 import com.irurueta.numerical.NumericalException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 
 /**
  * Abstract class to search for a local minimum on a multidimensional function
@@ -75,8 +74,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      *
      * @param listener Listener to evaluate a multi-dimension function.
      */
-    protected LineMultiOptimizer(
-            final MultiDimensionFunctionEvaluatorListener listener) {
+    protected LineMultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener) {
         super(listener);
         p = xi = null;
         n = 0;
@@ -100,8 +98,8 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    protected LineMultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener,
-                                 final double[] point, final double[] direction) {
+    protected LineMultiOptimizer(
+            final MultiDimensionFunctionEvaluatorListener listener, final double[] point, final double[] direction) {
         super(listener);
         internalSetStartPointAndDirection(point, direction);
         n = 0;
@@ -178,8 +176,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    public void setStartPointAndDirection(final double[] point, final double[] direction)
-            throws LockedException {
+    public void setStartPointAndDirection(final double[] point, final double[] direction) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -196,8 +193,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      */
     @Override
     public boolean isReady() {
-        return isListenerAvailable() && isStartPointAvailable() &&
-                isDirectionAvailable();
+        return isListenerAvailable() && isStartPointAvailable() && isDirectionAvailable();
     }
 
     /**
@@ -232,15 +228,10 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
             if (brent == null) {
                 // attempt to reuse brent single optimizer
                 brent = new BrentSingleOptimizer(
-                        new SingleDimensionFunctionEvaluatorListener() {
-
-                            @Override
-                            public double evaluate(double point) throws EvaluationException {
-                                return evaluator.evaluateAt(point);
-                            }
-                        }, BrentSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
-                        BrentSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
-                        BrentSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                        point -> evaluator.evaluateAt(point),
+                        BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
                         BrentSingleOptimizer.DEFAULT_TOLERANCE);
             }
 
@@ -248,7 +239,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
             brent.minimize();
             linxmin = brent.getResult();
 
-            for (int j = 0; j < n; j++) {
+            for (var j = 0; j < n; j++) {
                 xi[j] *= linxmin;
                 p[j] += xi[j];
             }
@@ -283,8 +274,7 @@ public abstract class LineMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if provided point and direction
      *                                  don't have the same length.
      */
-    private void internalSetStartPointAndDirection(final double[] point,
-                                                   final double[] direction) {
+    private void internalSetStartPointAndDirection(final double[] point, final double[] direction) {
         if (point.length != direction.length) {
             throw new IllegalArgumentException();
         }

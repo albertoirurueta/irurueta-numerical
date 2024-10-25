@@ -15,50 +15,42 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.irurueta.numerical.EvaluationException;
-import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ExponentialMidPointQuadratureTest {
+class ExponentialMidPointQuadratureTest {
 
     private static final double MIN_VALUE = -10.0;
 
     private static final double MAX_VALUE = 10.0;
 
     @Test
-    public void next_returnsNotZeroValue() throws EvaluationException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+    void next_returnsNotZeroValue() throws EvaluationException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
 
-        final Polynomial polynomial = buildPolynomial();
+        final var polynomial = buildPolynomial();
 
-        final ExponentialMidPointQuadrature quadrature = new ExponentialMidPointQuadrature(a,
-                new SingleDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(final double point) {
-                        return polynomial.evaluate(point);
-                    }
-                });
+        final var quadrature = new ExponentialMidPointQuadrature(a, polynomial::evaluate);
 
         assertNotEquals(0.0, quadrature.next());
     }
 
     @Test
-    public void getType_returnsExpectedValue() {
-        final ExponentialMidPointQuadrature quadrature =
-                new ExponentialMidPointQuadrature(0.0, null);
+    void getType_returnsExpectedValue() {
+        final var quadrature = new ExponentialMidPointQuadrature(0.0, null);
         assertEquals(QuadratureType.EXPONENTIAL_MID_POINT, quadrature.getType());
     }
 
     private static Polynomial buildPolynomial() {
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
         return new Polynomial(-root, 1.0);
     }
 }

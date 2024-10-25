@@ -86,8 +86,7 @@ public class TrapezoidalMatrixQuadrature extends MatrixQuadrature {
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public TrapezoidalMatrixQuadrature(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         this.n = 0;
         this.a = a;
@@ -169,7 +168,7 @@ public class TrapezoidalMatrixQuadrature extends MatrixQuadrature {
                     sum.add(tmpX);
                 }
                 // This replaces s by its refined value
-                // s = 0.5 * (s + (b-a) * sum / tnm);
+                // s = 0.5 * (s + (b-a) * sum / tnm)
                 sum.multiplyByScalar((b - a) / tnm);
                 s.add(sum);
                 s.multiplyByScalar(0.5);

@@ -15,16 +15,16 @@
  */
 package com.irurueta.numerical.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
+class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
 
     private static final double MIN_VALUE = -10.0;
 
@@ -35,14 +35,13 @@ public class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
     private static final double ABSOLUTE_ERROR_IMPROPER_1 = 1e-5;
 
     @Test
-    public void integrate_whenExponential2_returnsExpectedResult()
-            throws WrongSizeException, IntegrationException {
+    void integrate_whenExponential2_returnsExpectedResult() throws WrongSizeException, IntegrationException {
         // for single dimension functions, integral of f(t) = e^(a*t) is f(t) = 1/a*e^(a*t)
         // Consequently, for matrix function f(t) = e^(A*t) where A is a matrix, should be:
         // f(t) = A^-1 * e^(A*t)
-        final UniformRandomizer randomizer = new UniformRandomizer();
-        final double a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final double b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+        final var b = randomizer.nextDouble(a, MAX_VALUE);
 
         // for matrix A = [0    1]
         //                [-1   0]
@@ -65,47 +64,45 @@ public class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
         // F(b) - F(a) = [sin(b) - sin(a)       -cos(b) + cos(a)]
         //               [cos(b) - cos(a)        sin(b) - sin(a)]
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double t, Matrix result) {
-                        // f(t) = e^(A*t) = [cost(t)  sin(t)]
-                        //                  [-sin(t)  cos(t)]
-                        final double c = Math.cos(t);
-                        final double s = Math.sin(t);
-                        result.setElementAtIndex(0, c);
-                        result.setElementAtIndex(1, -s);
-                        result.setElementAtIndex(2, s);
-                        result.setElementAtIndex(3, c);
-                    }
+            @Override
+            public void evaluate(double t, Matrix result) {
+                // f(t) = e^(A*t) = [cost(t)  sin(t)]
+                //                  [-sin(t)  cos(t)]
+                final var c = Math.cos(t);
+                final var s = Math.sin(t);
+                result.setElementAtIndex(0, c);
+                result.setElementAtIndex(1, -s);
+                result.setElementAtIndex(2, s);
+                result.setElementAtIndex(3, c);
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 2;
-                    }
+            @Override
+            public int getRows() {
+                return 2;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 2;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 2;
+            }
+        };
 
         // F(b) - F(a) = [sin(b) - sin(a)       -cos(b) + cos(a)]
         //               [cos(b) - cos(a)        sin(b) - sin(a)]
-        final Matrix expectedResult = new Matrix(2, 2);
-        final double sinDiff = Math.sin(b) - Math.sin(a);
-        final double cosDiff = Math.cos(b) - Math.cos(a);
+        final var expectedResult = new Matrix(2, 2);
+        final var sinDiff = Math.sin(b) - Math.sin(a);
+        final var cosDiff = Math.cos(b) - Math.cos(a);
         expectedResult.setElementAtIndex(0, sinDiff);
         expectedResult.setElementAtIndex(1, cosDiff);
         expectedResult.setElementAtIndex(2, -cosDiff);
         expectedResult.setElementAtIndex(3, sinDiff);
 
-        final SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
-                        ABSOLUTE_ERROR_EXPONENTIAL);
+        final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
+                ABSOLUTE_ERROR_EXPONENTIAL);
 
-        final Matrix integrationResult = new Matrix(2, 2);
+        final var integrationResult = new Matrix(2, 2);
         integrator.integrate(integrationResult);
 
         // check
@@ -113,88 +110,84 @@ public class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
     }
 
     @Test
-    public void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult()
-            throws IntegrationException, WrongSizeException {
+    void integrate_whenImproperIntegrandWithSingularities_returnsExpectedResult() throws IntegrationException,
+            WrongSizeException {
 
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                        result.setElementAtIndex(0, Math.log(point) * Math.log(1 - point));
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                result.setElementAtIndex(0, Math.log(point) * Math.log(1 - point));
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
 
-        final Matrix integrationResult = new Matrix(1, 1);
+        final var integrationResult = new Matrix(1, 1);
         integrator.integrate(integrationResult);
 
         // check
-        final double expected = 2.0 - Math.PI * Math.PI / 6.0;
-        final Matrix expectedResult = new Matrix(1, 1);
+        final var expected = 2.0 - Math.PI * Math.PI / 6.0;
+        final var expectedResult = new Matrix(1, 1);
         expectedResult.setElementAtIndex(0, expected);
         assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_IMPROPER_1));
     }
 
     @Test
-    public void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getIntegratorType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
     }
 
     @Test
-    public void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
-        final MatrixSingleDimensionFunctionEvaluatorListener listener =
-                new MatrixSingleDimensionFunctionEvaluatorListener() {
+    void getQuadratureType_returnsExpectedValue() throws WrongSizeException {
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
 
-                    @Override
-                    public void evaluate(double point, Matrix result) {
-                    }
+            @Override
+            public void evaluate(double point, Matrix result) {
+                // no action needed
+            }
 
-                    @Override
-                    public int getRows() {
-                        return 1;
-                    }
+            @Override
+            public int getRows() {
+                return 1;
+            }
 
-                    @Override
-                    public int getColumns() {
-                        return 1;
-                    }
-                };
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
 
-        final SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator integrator =
-                new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
+        final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
     }
 }

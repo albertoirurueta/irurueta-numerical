@@ -27,8 +27,7 @@ import com.irurueta.numerical.NotReadyException;
  * hence the polynomial can be simply be defined by an array of length 2 [b, a].
  */
 @SuppressWarnings("DuplicatedCode")
-public class FirstDegreePolynomialRootsEstimator
-        extends PolynomialRootsEstimator {
+public class FirstDegreePolynomialRootsEstimator extends PolynomialRootsEstimator {
 
     /**
      * Constant defining machine precision.
@@ -76,8 +75,7 @@ public class FirstDegreePolynomialRootsEstimator
      * @throws IllegalArgumentException Raised if the length of the provided
      *                                  array is not valid.
      */
-    public void setPolynomialParameters(final double[] polyParams)
-            throws LockedException {
+    public void setPolynomialParameters(final double[] polyParams) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -179,10 +177,10 @@ public class FirstDegreePolynomialRootsEstimator
 
         roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];
 
-        final double b = realPolyParams[0];
-        final double a = realPolyParams[1];
+        final var b = realPolyParams[0];
+        final var a = realPolyParams[1];
 
-        final double x = solveLinear(a, b);
+        final var x = solveLinear(a, b);
 
         roots[0] = new Complex(x, 0.0);
 
@@ -200,10 +198,9 @@ public class FirstDegreePolynomialRootsEstimator
      * @return True if is a first degree polynomial, false otherwise
      */
     public static boolean isFirstDegree(final double[] polyParams) {
-        final int length = polyParams.length;
-        if (length >= VALID_POLY_PARAMS_LENGTH &&
-                Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
-            for (int i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
+        final var length = polyParams.length;
+        if (length >= VALID_POLY_PARAMS_LENGTH && Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) > EPS) {
+            for (var i = VALID_POLY_PARAMS_LENGTH; i < length; i++) {
                 if (Math.abs(polyParams[i]) > EPS) {
                     return false;
                 }

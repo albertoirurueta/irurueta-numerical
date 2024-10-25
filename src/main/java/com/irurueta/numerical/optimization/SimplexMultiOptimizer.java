@@ -111,8 +111,8 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public SimplexMultiOptimizer(
-            final MultiDimensionFunctionEvaluatorListener listener,
-            final double[] startPoint, final double delta, final double tolerance) {
+            final MultiDimensionFunctionEvaluatorListener listener, final double[] startPoint, final double delta,
+            final double tolerance) {
         super(listener);
         nfunc = mpts = ndim = 0;
         y = null;
@@ -134,8 +134,8 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      *                                  deltas don't have the same length as provided start point.
      */
     public SimplexMultiOptimizer(
-            final MultiDimensionFunctionEvaluatorListener listener,
-            final double[] startPoint, final double[] deltas, final double tolerance) {
+            final MultiDimensionFunctionEvaluatorListener listener, final double[] startPoint, final double[] deltas,
+            final double tolerance) {
         super(listener);
         nfunc = mpts = ndim = 0;
         y = null;
@@ -155,8 +155,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if tolerance is negative.
      */
     public SimplexMultiOptimizer(
-            final MultiDimensionFunctionEvaluatorListener listener, final Matrix simplex,
-            final double tolerance) {
+            final MultiDimensionFunctionEvaluatorListener listener, final Matrix simplex, final double tolerance) {
         super(listener);
         nfunc = mpts = ndim = 0;
         y = null;
@@ -194,8 +193,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param delta      Distance of surrounding points.
      * @throws LockedException Raised if this instance is locked.
      */
-    public void setSimplex(final double[] startPoint, final double delta)
-            throws LockedException {
+    public void setSimplex(final double[] startPoint, final double delta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -212,7 +210,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param delta      Distance of surrounding points.
      */
     private void internalSetSimplex(final double[] startPoint, final double delta) {
-        final double[] deltas = new double[startPoint.length];
+        final var deltas = new double[startPoint.length];
         Arrays.fill(deltas, delta);
         internalSetSimplex(startPoint, deltas);
     }
@@ -232,8 +230,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @throws IllegalArgumentException Raised if startPoint and deltas don't
      *                                  have the same length.
      */
-    public void setSimplex(final double[] startPoint, final double[] deltas)
-            throws LockedException {
+    public void setSimplex(final double[] startPoint, final double[] deltas) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -255,7 +252,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      *                                  have the same length.
      */
     private void internalSetSimplex(final double[] startPoint, final double[] deltas) {
-        final int localndim = startPoint.length;
+        final var localndim = startPoint.length;
 
         if (deltas.length != localndim) {
             throw new IllegalArgumentException();
@@ -267,13 +264,12 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
         } catch (final WrongSizeException e) {
             throw new IllegalArgumentException(e);
         }
-        for (int i = 0; i < localndim + 1; i++) {
-            for (int j = 0; j < localndim; j++) {
+        for (var i = 0; i < localndim + 1; i++) {
+            for (var j = 0; j < localndim; j++) {
                 pp.setElementAt(i, j, startPoint[j]);
             }
             if (i != 0) {
-                pp.setElementAt(i, i - 1,
-                        pp.getElementAt(i, i - 1) + deltas[i - 1]);
+                pp.setElementAt(i, i - 1, pp.getElementAt(i, i - 1) + deltas[i - 1]);
             }
         }
 
@@ -405,8 +401,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      *                               lack of convergence or because function couldn't be evaluated.
      */
     @Override
-    public void minimize() throws LockedException, NotReadyException,
-            OptimizationException {
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -424,17 +419,17 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
             mpts = p.getRows();
             ndim = p.getColumns();
 
-            final double[] psum = new double[ndim];
-            final double[] pmin = new double[ndim];
-            final double[] x = new double[ndim];
-            final double[] v1 = new double[1];
-            final double[] v2 = new double[1];
+            final var psum = new double[ndim];
+            final var pmin = new double[ndim];
+            final var x = new double[ndim];
+            final var v1 = new double[1];
+            final var v2 = new double[1];
 
             // instantiate new function evaluations
             y = new double[mpts];
 
-            for (int i = 0; i < mpts; i++) {
-                for (int j = 0; j < ndim; j++) {
+            for (var i = 0; i < mpts; i++) {
+                for (var j = 0; j < ndim; j++) {
                     x[j] = p.getElementAt(i, j);
                 }
                 y[i] = listener.evaluate(x);
@@ -452,7 +447,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                     ihi = 1;
                     inhi = 0;
                 }
-                for (int i = 0; i < mpts; i++) {
+                for (var i = 0; i < mpts; i++) {
                     if (y[i] <= y[ilo]) {
                         ilo = i;
                     }
@@ -463,8 +458,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                         inhi = i;
                     }
                 }
-                final double rtol = 2.0 * Math.abs(y[ihi] - y[ilo]) /
-                        (Math.abs(y[ihi]) + Math.abs(y[ilo]) + TINY);
+                final var rtol = 2.0 * Math.abs(y[ihi] - y[ilo]) / (Math.abs(y[ihi]) + Math.abs(y[ilo]) + TINY);
 
                 if (rtol < ftol) {
                     v1[0] = y[0];
@@ -472,7 +466,7 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                     swap(v1, v2);
                     y[0] = v1[0];
                     y[ilo] = v2[0];
-                    for (int i = 0; i < ndim; i++) {
+                    for (var i = 0; i < ndim; i++) {
                         v1[0] = p.getElementAt(0, i);
                         v2[0] = p.getElementAt(ilo, i);
                         swap(v1, v2);
@@ -493,19 +487,18 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
                 }
 
                 nfunc += 2;
-                double ytry = amotry(p, y, psum, ihi, -1.0, listener);
+                var ytry = amotry(p, y, psum, ihi, -1.0, listener);
 
                 if (ytry <= y[ilo]) {
                     amotry(p, y, psum, ihi, 2.0, listener);
                 } else if (ytry >= y[inhi]) {
-                    double ysave = y[ihi];
+                    var ysave = y[ihi];
                     ytry = amotry(p, y, psum, ihi, 0.5, listener);
                     if (ytry >= ysave) {
-                        for (int i = 0; i < mpts; i++) {
+                        for (var i = 0; i < mpts; i++) {
                             if (i != ilo) {
-                                for (int j = 0; j < ndim; j++) {
-                                    psum[j] = 0.5 * (p.getElementAt(i, j) +
-                                            p.getElementAt(ilo, j));
+                                for (var j = 0; j < ndim; j++) {
+                                    psum[j] = 0.5 * (p.getElementAt(i, j) + p.getElementAt(ilo, j));
                                     p.setElementAt(i, j, psum[j]);
                                 }
                                 y[i] = listener.evaluate(psum);
@@ -550,8 +543,8 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      *             parameter.
      */
     private void getPsum(final Matrix p, final double[] psum) {
-        for (int j = 0; j < ndim; j++) {
-            double sum = 0.0;
+        for (var j = 0; j < ndim; j++) {
+            var sum = 0.0;
             for (int i = 0; i < mpts; i++) {
                 sum += p.getElementAt(i, j);
             }
@@ -571,19 +564,18 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @return a value returned by the evaluated function.
      * @throws EvaluationException Raised if function evaluation fails.
      */
-    private double amotry(final Matrix p, final double[] y, final double[] psum, final int ihi,
-                          final double fac, final MultiDimensionFunctionEvaluatorListener listener)
-            throws EvaluationException {
-        final double[] ptry = new double[ndim];
-        final double fac1 = (1.0 - fac) / ndim;
-        final double fac2 = fac1 - fac;
-        for (int j = 0; j < ndim; j++) {
+    private double amotry(final Matrix p, final double[] y, final double[] psum, final int ihi, final double fac,
+                          final MultiDimensionFunctionEvaluatorListener listener) throws EvaluationException {
+        final var ptry = new double[ndim];
+        final var fac1 = (1.0 - fac) / ndim;
+        final var fac2 = fac1 - fac;
+        for (var j = 0; j < ndim; j++) {
             ptry[j] = psum[j] * fac1 - p.getElementAt(ihi, j) * fac2;
         }
-        final double ytry = listener.evaluate(ptry);
+        final var ytry = listener.evaluate(ptry);
         if (ytry < y[ihi]) {
             y[ihi] = ytry;
-            for (int j = 0; j < ndim; j++) {
+            for (var j = 0; j < ndim; j++) {
                 psum[j] += ptry[j] - p.getElementAt(ihi, j);
                 p.setElementAt(ihi, j, ptry[j]);
             }
@@ -598,8 +590,8 @@ public class SimplexMultiOptimizer extends MultiOptimizer {
      * @param a value.
      * @param b value.
      */
-    private void swap(final double[] a, final double[] b) {
-        final double tmp = a[0];
+    private static void swap(final double[] a, final double[] b) {
+        final var tmp = a[0];
         a[0] = b[0];
         b[0] = tmp;
     }

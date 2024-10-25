@@ -38,8 +38,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     * @param eps      required accuracy.
     */
    public DoubleExponentialRuleQuadratureIntegrator(
-           final double a, final double b, final double hmax,
-           final SingleDimensionFunctionEvaluatorListener listener,
+           final double a, final double b, final double hmax, final SingleDimensionFunctionEvaluatorListener listener,
            final double eps) {
       super(new DoubleExponentialRuleQuadrature(listener, a, b, hmax), eps);
    }
@@ -53,8 +52,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     * @param eps      required accuracy.
     */
    public DoubleExponentialRuleQuadratureIntegrator(
-           final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
-           final double eps) {
+           final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
       super(new DoubleExponentialRuleQuadrature(listener, a, b), eps);
    }
 
@@ -68,8 +66,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     * @param listener listener to evaluate a single dimension function at required points.
     */
    public DoubleExponentialRuleQuadratureIntegrator(
-           final double a, final double b, final double hmax,
-           final SingleDimensionFunctionEvaluatorListener listener) {
+           final double a, final double b, final double hmax, final SingleDimensionFunctionEvaluatorListener listener) {
       this(a, b, hmax, listener, EPS);
    }
 
@@ -81,8 +78,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     * @param listener listener to evaluate a single dimension function at required points.
     */
    public DoubleExponentialRuleQuadratureIntegrator(
-           final double a, final double b,
-           final SingleDimensionFunctionEvaluatorListener listener) {
+           final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
       this(a, b, listener, EPS);
    }
 
@@ -100,8 +96,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     */
    public DoubleExponentialRuleQuadratureIntegrator(
            final double a, final double b, final double hmax,
-           final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
-           final double eps) {
+           final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener, final double eps) {
       super(new DoubleExponentialRuleQuadrature(listener, a, b, hmax), eps);
    }
 
@@ -116,8 +111,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     * @param eps      required accuracy.
     */
    public DoubleExponentialRuleQuadratureIntegrator(
-           final double a, final double b,
-           final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
+           final double a, final double b, final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener,
            final double eps) {
       super(new DoubleExponentialRuleQuadrature(listener, a, b), eps);
    }
@@ -149,8 +143,7 @@ public class DoubleExponentialRuleQuadratureIntegrator
     *                 singularities.
     */
    public DoubleExponentialRuleQuadratureIntegrator(
-           final double a, final double b,
-           final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener) {
+           final double a, final double b, final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener) {
       this(a, b, listener, EPS);
    }
 

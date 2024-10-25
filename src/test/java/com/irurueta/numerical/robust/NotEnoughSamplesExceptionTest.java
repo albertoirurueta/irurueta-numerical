@@ -15,15 +15,15 @@
  */
 package com.irurueta.numerical.robust;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NotEnoughSamplesExceptionTest {
+class NotEnoughSamplesExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NotEnoughSamplesException ex = new NotEnoughSamplesException();
+    void testConstructor() {
+        var ex = new NotEnoughSamplesException();
         assertNotNull(ex);
 
         ex = new NotEnoughSamplesException("message");
@@ -32,8 +32,7 @@ public class NotEnoughSamplesExceptionTest {
         ex = new NotEnoughSamplesException(new Exception());
         assertNotNull(ex);
 
-        ex = new NotEnoughSamplesException("message",
-                new Exception());
+        ex = new NotEnoughSamplesException("message", new Exception());
         assertNotNull(ex);
     }
 }

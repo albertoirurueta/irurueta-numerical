@@ -81,9 +81,7 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
      * @param q   Quadrature used for integration.
      * @param eps Required accuracy.
      */
-    protected RombergMatrixIntegrator(
-            final T q,
-            final double eps) {
+    protected RombergMatrixIntegrator(final T q, final double eps) {
         this.q = q;
         this.eps = eps;
     }
@@ -98,15 +96,15 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
     @Override
     public void integrate(final Matrix result) throws IntegrationException {
         try {
-            final int rows = q.getRows();
-            final int columns = q.getColumns();
-            final int elems = rows * columns;
-            for (int i = 0; i < JMAX; i++) {
+            final var rows = q.getRows();
+            final var columns = q.getColumns();
+            final var elems = rows * columns;
+            for (var i = 0; i < JMAX; i++) {
                 s[i] = new Matrix(rows, columns);
             }
 
-            final PolynomialInterpolator[] interpolators = new PolynomialInterpolator[elems];
-            final double[][] sInterp = new double[elems][JMAX];
+            final var interpolators = new PolynomialInterpolator[elems];
+            final var sInterp = new double[elems][JMAX];
             for (int i = 0; i < elems; i++) {
                 sInterp[i] = new double[JMAX];
                 interpolators[i] = new PolynomialInterpolator(h, sInterp[i], K, false);
@@ -116,13 +114,13 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
             for (int j = 1; j <= JMAX; j++) {
                 q.next(s[j - 1]);
                 // update sInterp
-                for (int i = 0; i < elems; i++) {
+                for (var i = 0; i < elems; i++) {
                     sInterp[i][j - 1] = s[j - 1].getElementAtIndex(i);
                 }
                 if (j >= K) {
-                    boolean finished = true;
-                    for (int i = 0; i < elems; i++) {
-                        final double ss = interpolators[i].rawinterp(j - K, 0.0);
+                    var finished = true;
+                    for (var i = 0; i < elems; i++) {
+                        final var ss = interpolators[i].rawinterp(j - K, 0.0);
                         if (Double.isNaN(ss)) {
                             throw new IntegrationException("NaN was found");
                         }
@@ -171,26 +169,21 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException       if size notified by provided listener is invalid.
      */
     public static RombergMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps,
-            final QuadratureType quadratureType) throws WrongSizeException {
-        switch (quadratureType) {
-            case MID_POINT:
-                return cast(new RombergMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case INFINITY_MID_POINT:
-                return cast(new RombergInfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
-            case EXPONENTIAL_MID_POINT:
-                return cast(new RombergExponentialMidPointQuadratureMatrixIntegrator(a, listener, eps));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new RombergDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));
-            case TRAPEZOIDAL:
-            default:
-                return cast(new RombergTrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));
-        }
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps, final QuadratureType quadratureType) throws WrongSizeException {
+        return switch (quadratureType) {
+            case MID_POINT -> cast(new RombergMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case INFINITY_MID_POINT -> cast(new RombergInfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));
+            case EXPONENTIAL_MID_POINT ->
+                    cast(new RombergExponentialMidPointQuadratureMatrixIntegrator(a, listener, eps));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new RombergDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));
+            default -> cast(new RombergTrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));
+        };
     }
 
     /**
@@ -207,26 +200,20 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException       if size notified by provided listener is invalid.
      */
     public static RombergMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
             final QuadratureType quadratureType) throws WrongSizeException {
-        switch (quadratureType) {
-            case MID_POINT:
-                return cast(new RombergMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case INFINITY_MID_POINT:
-                return cast(new RombergInfinityMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case LOWER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case UPPER_SQUARE_ROOT_MID_POINT:
-                return cast(new RombergUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
-            case EXPONENTIAL_MID_POINT:
-                return cast(new RombergExponentialMidPointQuadratureMatrixIntegrator(a, listener));
-            case DOUBLE_EXPONENTIAL_RULE:
-                return cast(new RombergDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));
-            case TRAPEZOIDAL:
-            default:
-                return cast(new RombergTrapezoidalQuadratureMatrixIntegrator(a, b, listener));
-        }
+        return switch (quadratureType) {
+            case MID_POINT -> cast(new RombergMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case INFINITY_MID_POINT -> cast(new RombergInfinityMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case LOWER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case UPPER_SQUARE_ROOT_MID_POINT ->
+                    cast(new RombergUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));
+            case EXPONENTIAL_MID_POINT -> cast(new RombergExponentialMidPointQuadratureMatrixIntegrator(a, listener));
+            case DOUBLE_EXPONENTIAL_RULE ->
+                    cast(new RombergDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));
+            default -> cast(new RombergTrapezoidalQuadratureMatrixIntegrator(a, b, listener));
+        };
     }
 
     /**
@@ -242,9 +229,8 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public static RombergMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
-            throws WrongSizeException {
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps) throws WrongSizeException {
         return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);
     }
 
@@ -260,8 +246,7 @@ public abstract class RombergMatrixIntegrator<T extends MatrixQuadrature> extend
      * @throws WrongSizeException if size notified by provided listener is invalid.
      */
     public static RombergMatrixIntegrator<MatrixQuadrature> create(
-            final double a, final double b,
-            final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
             throws WrongSizeException {
         return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);
     }
