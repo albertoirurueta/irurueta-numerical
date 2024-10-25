@@ -30,7 +30,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.1.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -40,7 +40,7 @@ Latest snapshot:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.4.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
