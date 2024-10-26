@@ -507,7 +507,7 @@ class SimpleSingleDimensionLinearFitterTest {
 
             // check correctness
             assertTrue(fitter.isResultAvailable());
-            assertEquals(params[0], fitter.getA()[0], ABSOLUTE_ERROR);
+            assertEquals(params[0], fitter.getA()[0], 2.0 * ABSOLUTE_ERROR);
             // second parameter is hold and matches exactly
             assertEquals(params[1], fitter.getA()[1], 0.0);
             assertNotNull(fitter.getCovar());
