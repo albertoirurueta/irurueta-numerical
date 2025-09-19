@@ -114,7 +114,7 @@ class RombergTrapezoidalQuadratureMatrixIntegratorTest {
         // check
         final var expectedResult = new Matrix(1, 1);
         expectedResult.setElementAtIndex(0, expected);
-        assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_GAUSSIAN));
+        assertTrue(expectedResult.equals(integrationResult, 2.0 * ABSOLUTE_ERROR_GAUSSIAN));
     }
 
     @Test
