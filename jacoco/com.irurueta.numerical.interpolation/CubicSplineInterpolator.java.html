@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CubicSplineInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">CubicSplineInterpolator.java</span></div><h1>CubicSplineInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+/**
+ * Computes cubic spline interpolation.
+ * Accuracy of this interpolator worsens as the polynomial degree to interpolate increases.
+ * Typically, up to degree 3 results are reasonable.
+ */
+public class CubicSplineInterpolator extends BaseInterpolator {
+
+    /**
+     * Length of x's and y's to take into account.
+     */
+    private static final int M = 2;
+
+    private static final double YP1 = 1.e99;
+
+    private static final double YPN = 1.e99;
+
+    private final double[] y2;
+
+    /**
+     * Constructor with x and y vectors, and values of the first derivative at the endpoints.
+     *
+     * @param x x values to interpolate to. Values in x must be monotonic (either increasing or
+     *          decreasing)
+     * @param y y values to interpolate to.
+     * @param yp1 1st derivative at lowest endpoint.
+     * @param ypn 1st derivative at highest endpoint
+     */
+    public CubicSplineInterpolator(final double[] x, final double[] y, final double yp1, final double ypn) {
+<span class="fc" id="L46">        super(x, y, M);</span>
+<span class="fc" id="L47">        y2 = new double[x.length];</span>
+<span class="fc" id="L48">        setY2(x, y, yp1, ypn);</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Constructor with x and y vectors and default values for first derivative at the endpoints.
+     *
+     * @param x x values to interpolate to. Values in x must be monotonic (either increasing or
+     *          decreasing)
+     * @param y y values to interpolate to.
+     */
+    public CubicSplineInterpolator(final double[] x, final double[] y) {
+<span class="fc" id="L59">        this(x, y, YP1, YPN);</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Actual interpolation method.
+     *
+     * @param jl index where value x to be interpolated in located in the array of xx.
+     * @param x  value to obtain interpolation for.
+     * @return interpolated value.
+     * @throws InterpolationException if interpolation fails.
+     */
+    @Override
+    public double rawinterp(int jl, double x) throws InterpolationException {
+        // Given a value x, and using pointers to data xx and yy, and the stored vector of second
+        // derivatives y2, this routine this cubic spline interpolated value y
+<span class="fc" id="L74">        final var khi = jl + 1;</span>
+
+<span class="fc" id="L76">        final var h = xx[khi] - xx[jl];</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (h == 0.0) {</span>
+            // The xa's must be distinct
+<span class="nc" id="L79">            throw new InterpolationException();</span>
+        }
+
+        // Cubic spline polynomial is now evaluated
+<span class="fc" id="L83">        final var a = (xx[khi] - x) / h;</span>
+<span class="fc" id="L84">        final var b = (x - xx[jl]) / h;</span>
+<span class="fc" id="L85">        return a * yy[jl] + b * yy[khi] + ((a * a * a - a) * y2[jl] + (b * b * b - b) * y2[khi]) * (h * h) / 6.0;</span>
+    }
+
+    /**
+     * This method stores an array y2[0..n-1] with second derivatives of the interpolating function
+     * at the tabulated points pointed to by xv, using function values pointed to by yv. If yp1
+     * and/or ypn are equal to 1e99 or larger, the routine is signaled to set the corresponding
+     * boundary condition for a natural spline, with zero second derivative on that boundary;
+     * otherwise, they are the values of the first derivatives at the endpoints.
+     *
+     * @param xv x values to interpolate to. Values in x must be monotonic (either increasing or
+     *           decreasing)
+     * @param yv y values to interpolate to.
+     * @param yp1 1st derivative at lowest endpoint.
+     * @param ypn 1st derivative at highest endpoint
+     */
+    private void setY2(final double[] xv, final double[] yv, final double yp1, final double ypn) {
+        int i;
+        int k;
+        double p;
+        final double qn;
+        double sig;
+        final double un;
+<span class="fc" id="L108">        final var n = y2.length;</span>
+<span class="fc" id="L109">        final var u = new double[n - 1];</span>
+
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (yp1 &gt; 0.99e99) {</span>
+            // The lower boundary condition is set either to be &quot;natural&quot;
+<span class="fc" id="L113">            y2[0] = u[0] = 0.0;</span>
+        } else {
+            // or else to have a specified first derivative
+<span class="fc" id="L116">            y2[0] = -0.5;</span>
+<span class="fc" id="L117">            u[0] = (3.0 / (xv[1] - xv[0])) * ((yv[1] - yv[0]) / (xv[1] - xv[0]) - yp1);</span>
+        }
+
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        for (i = 1; i &lt; n - 1; i++) {</span>
+            // This is the decomposition loop of the tri-diagonal algorithm. y2 and &quot;u&quot; are used for
+            // temporary storage of the decomposed factors
+<span class="fc" id="L123">            sig = (xv[i] - xv[i - 1]) / (xv[i + 1] - xv[i - 1]);</span>
+<span class="fc" id="L124">            p = sig * y2[i - 1] + 2.0;</span>
+<span class="fc" id="L125">            y2[i] = (sig - 1.0) / p;</span>
+<span class="fc" id="L126">            u[i] = (yv[i + 1] - yv[i]) / (xv[i + 1] - xv[i]) - (yv[i] - yv[i - 1]) / (xv[i] - xv[i - 1]);</span>
+<span class="fc" id="L127">            u[i] = (6.0 * u[i] / (xv[i + 1] - xv[i - 1]) - sig * u[i - 1]) / p;</span>
+        }
+
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (ypn &gt; 0.99e99) {</span>
+            // The upper boundary condition is set either to be &quot;natural&quot;
+<span class="fc" id="L132">            qn = un = 0.0;</span>
+        } else {
+            // or else to have a specified first derivative
+<span class="fc" id="L135">            qn = 0.5;</span>
+<span class="fc" id="L136">            un = (3.0 / (xv[n - 1] - xv[n - 2])) * (ypn - (yv[n - 1] - yv[n - 2]) / (xv[n - 1] - xv[n - 2]));</span>
+        }
+<span class="fc" id="L138">        y2[n - 1] = (un - qn * u[n - 2]) / (qn * y2[n - 2] + 1.0);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (k = n - 2; k &gt;= 0; k--) {</span>
+            // This is the back-substitution loop of the tri-diagonal algorithm
+<span class="fc" id="L141">            y2[k] = y2[k] * y2[k + 1] + u[k];</span>
+        }
+<span class="fc" id="L143">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

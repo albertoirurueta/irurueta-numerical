@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">BaseInterpolator.java</span></div><h1>BaseInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+/**
+ * Abstract base class used by all interpolation implementations.
+ */
+public abstract class BaseInterpolator {
+    /**
+     * Length of x and y values to be interpolated.
+     */
+    protected final int n;
+
+    /**
+     * Length of data to be taken into account on x's and y's.
+     */
+    protected final int mm;
+
+<span class="fc" id="L32">    protected int cor = 0;</span>
+
+<span class="fc" id="L34">    private int jsav = 0;</span>
+
+    private final int dj;
+
+    /**
+     * X values to be used for interpolation estimation. Must be monotonic (either increasing or
+     * decreasing).
+     */
+    protected final double[] xx;
+
+    /**
+     * Y values to be used for interpolation estimation.
+     */
+    protected final double[] yy;
+
+    /**
+     * Constructor.
+     *
+     * @param x x values to interpolate to. Values in x must be monotonic (either increasing or
+     *          decreasing)
+     * @param y y values to interpolate to.
+     * @param m length of x's and y's to take into account. Must be less or equal than x or y
+     *          length.
+     * @param check true to make validations, false otherwise.
+     * @throws IllegalArgumentException if x or y have invalid length or m exceeds length of x or y.
+     */
+<span class="fc" id="L60">    BaseInterpolator(final double[] x, final double[] y, final int m, final boolean check) {</span>
+<span class="fc" id="L61">        n = x.length;</span>
+<span class="fc" id="L62">        mm = m;</span>
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (check) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (n != y.length) {</span>
+<span class="fc" id="L66">                throw new IllegalArgumentException(&quot;mismatched x and y length&quot;);</span>
+            }
+<span class="fc bfc" id="L68" title="All 4 branches covered.">            if (n &lt; 2 || mm &lt; 2) {</span>
+<span class="fc" id="L69">                throw new IllegalArgumentException(&quot;x length is too small&quot;);</span>
+            }
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (mm &gt; n) {</span>
+<span class="fc" id="L72">                throw new IllegalArgumentException(&quot;m exceeds length of x or y&quot;);</span>
+            }
+        }
+
+<span class="fc" id="L76">        xx = x;</span>
+<span class="fc" id="L77">        yy = y;</span>
+
+<span class="fc" id="L79">        dj = Math.min(1, (int) Math.pow(n, 0.25));</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x x values to interpolate to. Values in x must be monotonic (either increasing or
+     *          decreasing)
+     * @param y y values to interpolate to.
+     * @param m length of x's and y's to take into account. Must be less or equal than x or y
+     *          length.
+     * @throws IllegalArgumentException if x or y have invalid length or m exceeds length of x or y.
+     */
+    BaseInterpolator(final double[] x, final double[] y, final int m) {
+<span class="fc" id="L93">        this(x, y, m, true);</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Given a value x, returns an interpolated value, using data pointed to by {@link #xx} and
+     * {@link #yy}.
+     *
+     * @param x value to obtain interpolation for.
+     * @return interpolated value.
+     * @throws InterpolationException if interpolation fails.
+     */
+    public double interpolate(final double x) throws InterpolationException {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        final var jlo = cor != 0 ? hunt(x) : locate(x);</span>
+<span class="fc" id="L106">        return rawinterp(jlo, x);</span>
+    }
+
+    /**
+     * Actual interpolation method to be implemented by subclasses.
+     *
+     * @param jlo index where value x to be interpolated in located in the array of xx.
+     * @param x value to obtain interpolation for.
+     * @return interpolated value.
+     * @throws InterpolationException if interpolation fails.
+     */
+    public abstract double rawinterp(final int jlo, final double x) throws InterpolationException;
+
+    /**
+     * Given a value x, returns a value j such that x is (insofar as possible) centered in the
+     * subrange xx[j..j+mm-1], where xx is the stored array. The value in xx must be monotonic,
+     * either increasing or decreasing. The returned value is not less than 0, nor greater than
+     * n - 1.
+     * @param x value to obtain interpolation for.
+     * @return position where value to obtain interpolation lies in the array of {@link #xx}.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    protected int locate(final double x) {
+        int ju;
+        int jm;
+        int jl;
+        // True if ascending order of table, false otherwise.
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        final var ascend = (xx[n - 1] &gt;= xx[0]);</span>
+
+        // Initialize lower and upper limits.
+<span class="fc" id="L136">        jl = 0;</span>
+<span class="fc" id="L137">        ju = n - 1;</span>
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        while (ju - jl &gt; 1) {</span>
+            // If we are not yet done, compute a midpoint
+<span class="fc" id="L141">            jm = (ju + jl) &gt;&gt; 1;</span>
+<span class="fc bfc" id="L142" title="All 4 branches covered.">            if (x &gt;= xx[jm] == ascend) {</span>
+                // and replace either the lower limit
+<span class="fc" id="L144">                jl = jm;</span>
+            } else {
+                // or the upper limit, as appropriate
+<span class="fc" id="L147">                ju = jm;</span>
+            }
+
+            // Repeat until the test condition is satisfied
+        }
+
+        // Decide whether to use hunt or locate next time
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        cor = Math.abs(jl - jsav) &gt; dj ? 0 : 1;</span>
+<span class="fc" id="L155">        jsav = jl;</span>
+<span class="fc" id="L156">        return Math.max(0, Math.min(n - mm, jl - ((mm - 2) &gt;&gt; 1)));</span>
+    }
+
+    /**
+     * Given a value x, returns a value j such that x is (insofar as possible) centered in the
+     * subrange xx[j..j+mm-1], where xx is the stored array. The value in xx must be monotonic,
+     * either increasing or decreasing. The returned value is not less than 0, nor greater than
+     * n - 1.
+     * This method starts with a guessed position in the table. It first &quot;hunts&quot; either up or own,
+     * in increments of 1, then 2, then 3, etc. until the desired value is bracketed. It then
+     * bisects in the bracketed interval. At worst, this routine is about a factor of 2 slower than
+     * {@link #locate(double)} (if the hunt phase expands to include the whole table). At best, it
+     * can be a factor of log(n)/log(2) faster than {@link #locate(double)} if the desired point is
+     * usually quite close to the input guess.
+     *
+     * @param x value to obtain interpolation for.
+     * @return position where value to obtain interpolation lies in the array of {@link #xx}.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    protected int hunt(final double x) {
+<span class="fc" id="L176">        var jl = jsav;</span>
+        int jm;
+        int ju;
+<span class="fc" id="L179">        var inc = 1;</span>
+
+        // Ture if ascending order of table, false otherwise
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        final var ascnd = (xx[n - 1] &gt;= xx[0]);</span>
+<span class="pc bpc" id="L183" title="2 of 4 branches missed.">        if (jl &lt; 0 || jl &gt; n - 1) {</span>
+            // Input guess not useful. Go immediately to bisection
+<span class="nc" id="L185">            jl = 0;</span>
+<span class="nc" id="L186">            ju = n - 1;</span>
+        } else {
+<span class="fc bfc" id="L188" title="All 4 branches covered.">            if (x &gt;= xx[jl] == ascnd) {</span>
+                // Hunt up
+                for (; ; ) {
+<span class="fc" id="L191">                    ju = jl + inc;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                    if (ju &gt;= n - 1) {</span>
+                        // Off end of table
+<span class="fc" id="L194">                        ju = n - 1;</span>
+<span class="fc" id="L195">                        break;</span>
+<span class="fc bfc" id="L196" title="All 4 branches covered.">                    } else if (x &lt; xx[ju] == ascnd) {</span>
+                        // Found bracket
+<span class="fc" id="L198">                        break;</span>
+                    } else {
+                        // Not done, so double the increment and try again
+<span class="fc" id="L201">                        jl = ju;</span>
+<span class="fc" id="L202">                        inc += inc;</span>
+                    }
+                }
+            } else {
+                // Hunt down
+<span class="fc" id="L207">                ju = jl;</span>
+                for (; ; ) {
+<span class="fc" id="L209">                    jl = jl - inc;</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                    if (jl &lt;= 0) {</span>
+                        // Off end of table
+<span class="fc" id="L212">                        jl = 0;</span>
+<span class="fc" id="L213">                        break;</span>
+<span class="fc bfc" id="L214" title="All 4 branches covered.">                    } else if (x &gt;= xx[jl] == ascnd) {</span>
+                        // Found bracket
+<span class="fc" id="L216">                        break;</span>
+                    } else {
+                        // Not done, so double the increment and try again
+<span class="fc" id="L219">                        ju = jl;</span>
+<span class="fc" id="L220">                        inc += inc;</span>
+                    }
+                }
+            }
+        }
+
+        // Hunt is done, so begin the final bisection phase
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        while (ju - jl &gt; 1) {</span>
+<span class="fc" id="L228">            jm = (ju + jl) &gt;&gt; 1;</span>
+<span class="fc bfc" id="L229" title="All 4 branches covered.">            if (x &gt;= xx[jm] == ascnd) {</span>
+<span class="fc" id="L230">                jl = jm;</span>
+            } else {
+<span class="fc" id="L232">                ju = jm;</span>
+            }
+        }
+
+        // Decide whether to use hunt or locate next time
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        cor = Math.abs(jl - jsav) &gt; dj ? 0 : 1;</span>
+<span class="fc" id="L238">        jsav = jl;</span>
+<span class="fc" id="L239">        return Math.max(0, Math.min(n - mm, jl - ((mm - 2) &gt;&gt; 1)));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

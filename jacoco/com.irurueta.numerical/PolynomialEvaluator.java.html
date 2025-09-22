@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PolynomialEvaluator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">PolynomialEvaluator.java</span></div><h1>PolynomialEvaluator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.algebra.Complex;
+
+/**
+ * Utility class to evaluate polynomials having either real or complex
+ * coefficients.
+ */
+public class PolynomialEvaluator {
+
+    /**
+     * Empty constructor.
+     */
+<span class="fc" id="L29">    protected PolynomialEvaluator() {</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * Evaluates polynomial formed by provided polynomial parameters at provided
+     * point x. The polynomial of degree n is defined as:
+     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+     * hence, the array of parameters is [a0, a1, ... a(n-1), an].
+     *
+     * @param polyParams array of polynomial parameters.
+     * @param x          point where polynomial is evaluated.
+     * @return result of evaluation.
+     * @throws IllegalArgumentException if provided array is null or has length
+     *                                  0.
+     */
+    public static double evaluate(final double[] polyParams, final double x) {
+<span class="fc bfc" id="L45" title="All 4 branches covered.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="fc" id="L46">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L49">        final var length = polyParams.length;</span>
+
+<span class="fc" id="L51">        var result = 0.0;</span>
+<span class="fc" id="L52">        var powX = 1.0;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (var i = length - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L54">            result += polyParams[i] * powX;</span>
+<span class="fc" id="L55">            powX *= x;</span>
+        }
+
+<span class="fc" id="L58">        return result;</span>
+    }
+
+    /**
+     * Evaluates polynomial formed by provided polynomial parameters at provided
+     * point x. The polynomial of degree n is defined as:
+     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+     * hence, the array of parameters is [a0, a1, ... a(n-1), an].
+     *
+     * @param polyParams array of polynomial parameters.
+     * @param x          point where polynomial is evaluated.
+     * @return result of evaluation.
+     * @throws IllegalArgumentException if provided array is null or has length
+     *                                  0.
+     */
+    public static Complex evaluate(final Complex[] polyParams, final Complex x) {
+<span class="fc bfc" id="L74" title="All 4 branches covered.">        if (polyParams == null || polyParams.length == 0) {</span>
+<span class="fc" id="L75">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L78">        final var length = polyParams.length;</span>
+
+<span class="fc" id="L80">        final var result = new Complex();</span>
+<span class="fc" id="L81">        final var powX = new Complex(1.0, 0.0);</span>
+<span class="fc" id="L82">        final var tmp = new Complex();</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (var i = length - 1; i &gt;= 0; i--) {</span>
+
+<span class="fc" id="L85">            polyParams[i].multiply(powX, tmp);</span>
+<span class="fc" id="L86">            result.add(tmp);</span>
+
+<span class="fc" id="L88">            powX.multiply(x);</span>
+        }
+
+<span class="fc" id="L91">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

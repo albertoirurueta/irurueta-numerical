@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LaguerrePolynomialRootsEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.roots</a> &gt; <span class="el_source">LaguerrePolynomialRootsEstimator.java</span></div><h1>LaguerrePolynomialRootsEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.algebra.Complex;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+
+import java.util.Arrays;
+
+/**
+ * This class estimates the roots of a polynomial of degree n.
+ * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+ * then the array of parameters is [an, a(n-1), ... a1, a0]
+ * This class supports polynomials having either real or complex parameters.
+ */
+public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
+
+    // In this implementation we have increased MR and MT to increase accuracy
+    // by iterating a larger but finite number of times
+
+    /**
+     * Constant that affects the number of iterations.
+     */
+    public static final int MR = 80;
+
+    /**
+     * Constant that affects the number of iterations.
+     */
+    public static final int MT = 100;
+
+    /**
+     * Maximum number of iterations.
+     */
+    public static final int MAXIT = MT * MR;
+
+    /**
+     * Constant considered as machine precision for Laguerre method.
+     */
+    public static final double LAGUER_EPS = 1e-10;
+
+    /**
+     * Constant considered as machine precision.
+     */
+    public static final double EPS = 1e-14;
+
+    /**
+     * Constant indicating whether roots will be refined.
+     */
+    public static final boolean DEFAULT_POLISH_ROOTS = true;
+
+    /**
+     * Minimum allowed length in polynomial parameters.
+     */
+    public static final int MIN_VALID_POLY_PARAMS_LENGTH = 2;
+
+    /**
+     * Array containing values for Laguerre method.
+     */
+<span class="fc" id="L73">    private static final double[] frac =</span>
+            {0.0, 0.5, 0.25, 0.75, 0.13, 0.38, 0.62, 0.88, 1.0};
+
+
+    /**
+     * Indicates if roots should be refined.
+     */
+    private boolean polishRoots;
+
+    /**
+     * Constructor.
+     *
+     * @param polishRoots Boolean to determine whether roots should be refined.
+     */
+    public LaguerrePolynomialRootsEstimator(final boolean polishRoots) {
+<span class="fc" id="L88">        super();</span>
+<span class="fc" id="L89">        this.polishRoots = polishRoots;</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Empty constructor.
+     */
+    public LaguerrePolynomialRootsEstimator() {
+<span class="fc" id="L96">        super();</span>
+<span class="fc" id="L97">        this.polishRoots = DEFAULT_POLISH_ROOTS;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param polyParams  Array containing polynomial parameters.
+     * @param polishRoots Boolean indicating whether roots will be refined.
+     * @throws IllegalArgumentException Raised if length of provided parameters
+     *                                  is not valid. It has to be greater or equal than 2.
+     */
+    public LaguerrePolynomialRootsEstimator(final Complex[] polyParams, final boolean polishRoots) {
+<span class="fc" id="L109">        super();</span>
+<span class="fc" id="L110">        this.polishRoots = polishRoots;</span>
+<span class="fc" id="L111">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L112">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param polyParams Array containing polynomial parameters.
+     * @throws IllegalArgumentException Raised if length of provided parameters
+     *                                  is not valid. It has to be greater or equal than 2.
+     */
+    public LaguerrePolynomialRootsEstimator(final Complex[] polyParams) {
+<span class="fc" id="L122">        super();</span>
+<span class="fc" id="L123">        this.polishRoots = DEFAULT_POLISH_ROOTS;</span>
+<span class="fc" id="L124">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Estimates the roots of provided polynomial.
+     *
+     * @throws LockedException         Raised if this instance is locked estimating a
+     *                                 root.
+     * @throws NotReadyException       Raised if this instance is not ready because
+     *                                 polynomial parameters have not been provided.
+     * @throws RootEstimationException Raised if roots cannot be estimated for
+     *                                 some reason (lack of convergence, etc.).
+     */
+    @Override
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
+
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L141">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L144">            throw new NotReadyException();</span>
+        }
+
+        // polynomial must be at least degree 1
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="nc" id="L149">            throw new RootEstimationException();</span>
+        }
+
+<span class="fc" id="L152">        locked = true;</span>
+
+<span class="fc" id="L154">        final var a = polyParams;</span>
+<span class="fc" id="L155">        roots = new Complex[a.length - 1];</span>
+
+        int i;
+<span class="fc" id="L158">        final var its = new int[1];</span>
+<span class="fc" id="L159">        var x = new Complex();</span>
+        Complex b;
+        Complex c;
+<span class="fc" id="L162">        final var m = a.length - 1;</span>
+
+<span class="fc" id="L164">        final var ad = Arrays.copyOf(a, a.length);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        for (var j = m - 1; j &gt;= 0; j--) {</span>
+<span class="fc" id="L166">            x.setRealAndImaginary(0.0, 0.0);</span>
+<span class="fc" id="L167">            final var adV = Arrays.copyOf(ad, j + 2);</span>
+<span class="fc" id="L168">            internalLaguer(adV, x, its);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            if (Math.abs(x.getImaginary()) &lt;= 2.0 * EPS * Math.abs(x.getReal())) {</span>
+<span class="fc" id="L170">                x = new Complex(x.getReal(), 0.0);</span>
+            }
+<span class="fc" id="L172">            roots[j] = new Complex(x);</span>
+<span class="fc" id="L173">            b = new Complex(ad[j + 1]);</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            for (var jj = j; jj &gt;= 0; jj--) {</span>
+<span class="fc" id="L175">                c = new Complex(ad[jj]);</span>
+<span class="fc" id="L176">                ad[jj] = new Complex(b);</span>
+<span class="fc" id="L177">                b.multiply(x);</span>
+<span class="fc" id="L178">                b.add(c);</span>
+            }
+        }
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (polishRoots) {</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">            for (var j = 0; j &lt; m; j++) {</span>
+<span class="fc" id="L183">                internalLaguer(a, roots[j], its);</span>
+            }
+        }
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        for (var j = 1; j &lt; m; j++) {</span>
+<span class="fc" id="L187">            x = new Complex(roots[j]);</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            for (i = j - 1; i &gt;= 0; i--) {</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">                if (roots[i].getReal() &lt;= x.getReal()) {</span>
+<span class="fc" id="L190">                    break;</span>
+                }
+<span class="fc" id="L192">                roots[i + 1] = new Complex(roots[i]);</span>
+            }
+<span class="fc" id="L194">            roots[i + 1] = new Complex(x);</span>
+        }
+
+<span class="fc" id="L197">        locked = false;</span>
+<span class="fc" id="L198">    }</span>
+
+    /**
+     * Returns boolean indicating whether roots are refined after an initial
+     * estimation.
+     *
+     * @return True if roots are refined, false otherwise.
+     */
+    public boolean areRootsPolished() {
+<span class="fc" id="L207">        return polishRoots;</span>
+    }
+
+    /**
+     * Sets boolean indicating whether roots will be refined after an initial
+     * estimation.
+     *
+     * @param enable True if roots will be refined, false otherwise.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setPolishRootsEnabled(final boolean enable) throws LockedException {
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L219">            throw new LockedException();</span>
+        }
+<span class="fc" id="L221">        polishRoots = enable;</span>
+<span class="fc" id="L222">    }</span>
+
+    /**
+     * Internal method to set parameters of a polynomial, taking into account
+     * that a polynomial of degree n is defined as:
+     * p(x) = a0 * x^n + a1 * x^(n - 1) + ... a(n-1) * x + an
+     * then the array of parameters is [an, a(n - 1), ... a1, a0]
+     * Polynomial parameters can be either real or complex values
+     * This method does not check if this class is locked.
+     *
+     * @param polyParams Polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the array is not
+     *                                  valid.
+     */
+    @Override
+    protected final void internalSetPolynomialParameters(final Complex[] polyParams) {
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L239">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L241">        this.polyParams = polyParams;</span>
+<span class="fc" id="L242">    }</span>
+
+    /**
+     * Internal method to compute a root after decomposing and decreasing the
+     * degree of the polynomial.
+     *
+     * @param a   Remaining polynomial parameters (on 1st iteration, the whole
+     *            polynomial is provided, on subsequent iterations, the polynomial is
+     *            deflated and the degree is reduced).
+     * @param x   Estimated root.
+     * @param its number of iterations needed to achieve the estimation.
+     * @throws RootEstimationException Raised if root couldn't be estimated
+     *                                 because of lack of convergence.
+     */
+    private void internalLaguer(final Complex[] a, final Complex x, final int[] its) throws RootEstimationException {
+
+        Complex x1;
+        Complex b;
+        Complex g;
+        Complex g2;
+<span class="fc" id="L262">        final var dx = new Complex();</span>
+<span class="fc" id="L263">        final var d = new Complex();</span>
+<span class="fc" id="L264">        final var f = new Complex();</span>
+<span class="fc" id="L265">        final var h = new Complex();</span>
+<span class="fc" id="L266">        final var sq = new Complex();</span>
+<span class="fc" id="L267">        var gp = new Complex();</span>
+<span class="fc" id="L268">        final var gm = new Complex();</span>
+<span class="fc" id="L269">        final var m = a.length - 1;</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        for (var iter = 1; iter &lt;= MAXIT; iter++) {</span>
+<span class="fc" id="L271">            its[0] = iter;</span>
+<span class="fc" id="L272">            b = new Complex(a[m]);</span>
+<span class="fc" id="L273">            var err = b.getModulus();</span>
+<span class="fc" id="L274">            d.setRealAndImaginary(0.0, 0.0);</span>
+<span class="fc" id="L275">            f.setRealAndImaginary(0.0, 0.0);</span>
+<span class="fc" id="L276">            final var abx = x.getModulus();</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">            for (var j = m - 1; j &gt;= 0; j--) {</span>
+<span class="fc" id="L278">                f.multiply(x);</span>
+<span class="fc" id="L279">                f.add(d);</span>
+
+<span class="fc" id="L281">                d.multiply(x);</span>
+<span class="fc" id="L282">                d.add(b);</span>
+
+<span class="fc" id="L284">                b.multiply(x);</span>
+<span class="fc" id="L285">                b.add(a[j]);</span>
+
+<span class="fc" id="L287">                err = b.getModulus() + abx * err;</span>
+            }
+<span class="fc" id="L289">            err *= LAGUER_EPS;</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">            if (b.getModulus() &lt;= err) {</span>
+<span class="fc" id="L291">                return;</span>
+            }
+<span class="fc" id="L293">            g = d.divideAndReturnNew(b);</span>
+<span class="fc" id="L294">            g2 = g.powAndReturnNew(2.0);</span>
+<span class="fc" id="L295">            f.divide(b, h);</span>
+<span class="fc" id="L296">            h.multiplyByScalar(-2.0);</span>
+<span class="fc" id="L297">            h.add(g2);</span>
+
+<span class="fc" id="L299">            h.multiplyByScalar(m, sq);</span>
+<span class="fc" id="L300">            sq.subtract(g2);</span>
+<span class="fc" id="L301">            sq.multiplyByScalar(m - 1.0);</span>
+<span class="fc" id="L302">            sq.sqrt();</span>
+
+<span class="fc" id="L304">            g.add(sq, gp);</span>
+<span class="fc" id="L305">            g.subtract(sq, gm);</span>
+
+<span class="fc" id="L307">            final var abp = gp.getModulus();</span>
+<span class="fc" id="L308">            final var abm = gm.getModulus();</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">            if (abp &lt; abm) {</span>
+<span class="fc" id="L310">                gp = gm;</span>
+            }
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">            if (Math.max(abp, abm) &gt; 0.0) {</span>
+<span class="fc" id="L313">                dx.setRealAndImaginary(m, 0.0);</span>
+<span class="fc" id="L314">                dx.divide(gp);</span>
+            } else {
+<span class="nc" id="L316">                dx.setModulusAndPhase(1.0 + abx, iter);</span>
+            }
+<span class="fc" id="L318">            x1 = x.subtractAndReturnNew(dx);</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">            if (x.equals(x1)) {</span>
+<span class="nc" id="L320">                return;</span>
+            }
+<span class="fc bfc" id="L322" title="All 2 branches covered.">            if (iter % MT != 0) {</span>
+<span class="fc" id="L323">                x.copyFrom(x1);</span>
+            } else {
+<span class="fc" id="L325">                int pos = Math.min(iter / MT, frac.length - 1);</span>
+<span class="fc" id="L326">                x.subtract(dx.multiplyByScalarAndReturnNew(frac[pos]));</span>
+            }
+        }
+        // too many iterations in Laguerre
+<span class="nc" id="L330">        locked = false;</span>
+<span class="nc" id="L331">        throw new RootEstimationException();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RANSACPolynomialRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">RANSACPolynomialRobustEstimator.java</span></div><h1>RANSACPolynomialRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.RANSACRobustEstimator;
+import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best polynomial using RANSAC algorithm.
+ */
+public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether polynomials are
+     * inliers or not.
+     * Threshold will be used to compare either algebraic or geometric distance
+     * of estimated polynomial respect each provided evaluation.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-6;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether polynomial evaluations are inliers or not
+     * when testing possible estimation solutions
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public RANSACPolynomialRobustEstimator() {
+<span class="fc" id="L59">        super();</span>
+<span class="fc" id="L60">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public RANSACPolynomialRobustEstimator(final int degree) {
+<span class="fc" id="L70">        super(degree);</span>
+<span class="fc" id="L71">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    public RANSACPolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L82">        super(evaluations);</span>
+<span class="fc" id="L83">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public RANSACPolynomialRobustEstimator(final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L93">        super(listener);</span>
+<span class="fc" id="L94">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    public RANSACPolynomialRobustEstimator(final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L107">        super(degree, evaluations);</span>
+<span class="fc" id="L108">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public RANSACPolynomialRobustEstimator(final int degree, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L120">        super(degree, listener);</span>
+<span class="fc" id="L121">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    public RANSACPolynomialRobustEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L135">        super(evaluations, listener);</span>
+<span class="fc" id="L136">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    public RANSACPolynomialRobustEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L153">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L154">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * Returns threshold to determine whether polynomials are inliers or not
+     * when testing possible estimation solutions.
+     *
+     * @return threshold to determine whether polynomials are inliers or not
+     * when testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L165">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether polynomials are inliers or not when
+     * testing possible estimation solutions.
+     *
+     * @param threshold threshold to determine whether polynomials are inliers
+     *                  or not when testing possible estimation solutions.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L180">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L183">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L185">        this.threshold = threshold;</span>
+<span class="fc" id="L186">    }</span>
+
+
+    /**
+     * Estimates polynomial.
+     *
+     * @return estimated polynomial.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any other reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Polynomial estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L203">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L206">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L209">        final RANSACRobustEstimator&lt;Polynomial&gt; innerEstimator = new RANSACRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L210">                new RANSACRobustEstimatorListener&lt;&gt;() {</span>
+
+                    // subset of evaluations picked on each iteration
+<span class="fc" id="L213">                    private final List&lt;PolynomialEvaluation&gt; subsetEvaluations = new ArrayList&lt;&gt;();</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L217">                        return threshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L222">                        return evaluations.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L227">                        return polynomialEstimator.getMinNumberOfEvaluations();</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;Polynomial&gt; solutions) {
+<span class="fc" id="L233">                        subsetEvaluations.clear();</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">                        for (var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L235">                            subsetEvaluations.add(evaluations.get(samplesIndex));</span>
+                        }
+
+                        try {
+<span class="fc" id="L239">                            polynomialEstimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L240">                            polynomialEstimator.setEvaluations(subsetEvaluations);</span>
+
+<span class="fc" id="L242">                            final var polynomial = polynomialEstimator.estimate();</span>
+<span class="fc" id="L243">                            solutions.add(polynomial);</span>
+<span class="fc" id="L244">                        } catch (Exception e) {</span>
+                            // if anything fails, no solution is added
+<span class="fc" id="L246">                        }</span>
+<span class="fc" id="L247">                    }</span>
+
+                    @Override
+                    public double computeResidual(final Polynomial currentEstimation, final int i) {
+<span class="fc" id="L251">                        final var eval = evaluations.get(i);</span>
+<span class="fc" id="L252">                        return getDistance(eval, currentEstimation);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L257">                        return RANSACPolynomialRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L263">                            listener.onEstimateStart(RANSACPolynomialRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L265">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L270">                            listener.onEstimateEnd(RANSACPolynomialRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L272">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;Polynomial&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L278">                            listener.onEstimateNextIteration(RANSACPolynomialRobustEstimator.this, iteration);</span>
+                        }
+<span class="fc" id="L280">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;Polynomial&gt; estimator, final float progress) {
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L286">                            listener.onEstimateProgressChange(RANSACPolynomialRobustEstimator.this, progress);</span>
+                        }
+<span class="fc" id="L288">                    }</span>
+                });
+
+        try {
+<span class="fc" id="L292">            locked = true;</span>
+<span class="fc" id="L293">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L294">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L295">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L296">            return innerEstimator.estimate();</span>
+        } finally {
+<span class="fc" id="L298">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L309">        return RobustEstimatorMethod.RANSAC;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

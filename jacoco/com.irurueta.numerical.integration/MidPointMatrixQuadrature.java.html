@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MidPointMatrixQuadrature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">MidPointMatrixQuadrature.java</span></div><h1>MidPointMatrixQuadrature.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.numerical.EvaluationException;
+
+/**
+ * Implementation of matrix quadrature using mid-point algorithm.
+ * Mid-point algorithm is suitable for improper integrations, which consists of the following
+ * situations:
+ * - integrand goes to a finite limiting value at finite upper and lower limits, but cannot be
+ * evaluated right on one of those limits (e.g. sin(x)/x at x = 0)
+ * - the upper limit is positive infinity, or the lower limit is negative infinity.
+ * - integrand has an integrable singularity at either limit (e.g. x^-0.5 at x = 0)
+ * - integrand has an integrable singularity at a known place between its upper and lower limits.
+ * - integrand has an integrable singularity at an unknown place between its upper and lower limits.
+ * &lt;p&gt;
+ * Impossible integrals, such as those being infinite (e.g. integral from 1 to infinity of x^-1) or
+ * those that have no limiting sense (e.g. integral from -infinity to infinity of cos(x)) cannot
+ * be handled by this implementation.
+ */
+public class MidPointMatrixQuadrature extends MatrixQuadrature {
+    /**
+     * Lower limit of integration.
+     */
+    private final double a;
+
+    /**
+     * Upper limit of integration.
+     */
+    private final double b;
+
+    /**
+     * Number of rows of quadrature result.
+     */
+    private final int rows;
+
+    /**
+     * Number of columns of quadrature result.
+     */
+    private final int columns;
+
+    /**
+     * Current value of integral.
+     */
+    private final Matrix s;
+
+    /**
+     * Listener to evaluate single dimension matrix functions at required points.
+     */
+    protected final MatrixSingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Temporary value storing evaluation at mid-point.
+     */
+    private final Matrix tmpMid;
+
+    /**
+     * Temporary value storing summation of evaluations.
+     */
+    private final Matrix sum;
+
+    /**
+     * Temporary value storing evaluation at point x.
+     */
+    private final Matrix tmpX;
+
+    /**
+     * Constructor.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension matrix function at required points.
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public MidPointMatrixQuadrature(
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
+<span class="fc" id="L93">            throws WrongSizeException {</span>
+<span class="fc" id="L94">        this.n = 0;</span>
+<span class="fc" id="L95">        this.a = a;</span>
+<span class="fc" id="L96">        this.b = b;</span>
+
+<span class="fc" id="L98">        rows = listener.getRows();</span>
+<span class="fc" id="L99">        columns = listener.getColumns();</span>
+<span class="fc" id="L100">        s = new Matrix(rows, columns);</span>
+<span class="fc" id="L101">        tmpMid = new Matrix(rows, columns);</span>
+<span class="fc" id="L102">        sum = new Matrix(rows, columns);</span>
+<span class="fc" id="L103">        tmpX = new Matrix(rows, columns);</span>
+
+<span class="fc" id="L105">        this.listener = listener;</span>
+<span class="fc" id="L106">    }</span>
+
+    /**
+     * Gets lower limit of integration.
+     *
+     * @return lower limit of integration.
+     */
+    public double getA() {
+<span class="nc" id="L114">        return a;</span>
+    }
+
+    /**
+     * Gets upper limit of integration.
+     *
+     * @return upper limit of integration.
+     */
+    public double getB() {
+<span class="nc" id="L123">        return b;</span>
+    }
+
+    /**
+     * Gets current value of integral.
+     *
+     * @return current value of integral.
+     */
+    public Matrix getS() {
+<span class="nc" id="L132">        return s;</span>
+    }
+
+    /**
+     * Returns the value of the integral at the nth stage of refinement.
+     *
+     * @param result instance where the value of the integral at the nth stage of refinement will
+     *               be stored.
+     * @throws EvaluationException Raised if something failed during the evaluation.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    @Override
+    public void next(Matrix result) throws EvaluationException {
+        try {
+            int it;
+            int j;
+            double x;
+            double tnm;
+            double del;
+            double ddel;
+<span class="fc" id="L152">            n++;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">            if (n == 1) {</span>
+                // (s = (b - a) * func(0.5 * (a + b)))
+<span class="fc" id="L155">                func(0.5 * (a + b), tmpMid);</span>
+<span class="fc" id="L156">                s.copyFrom(tmpMid);</span>
+<span class="fc" id="L157">                s.multiplyByScalar(b - a);</span>
+<span class="fc" id="L158">                result.copyFrom(s);</span>
+            } else {
+<span class="fc bfc" id="L160" title="All 2 branches covered.">                for (it = 1, j = 1; j &lt; n - 1; j++) {</span>
+<span class="fc" id="L161">                    it *= 3;</span>
+                }
+<span class="fc" id="L163">                tnm = it;</span>
+<span class="fc" id="L164">                del = (b - a) / (3.0 * tnm);</span>
+                // The added points alternate in spacing between del and ddel
+<span class="fc" id="L166">                ddel = del + del;</span>
+<span class="fc" id="L167">                x = a + 0.5 * del;</span>
+<span class="fc" id="L168">                sum.initialize(0.0);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">                for (j = 0; j &lt; it; j++) {</span>
+<span class="fc" id="L170">                    func(x, tmpX);</span>
+<span class="fc" id="L171">                    sum.add(tmpX);</span>
+
+<span class="fc" id="L173">                    x += ddel;</span>
+<span class="fc" id="L174">                    func(x, tmpX);</span>
+<span class="fc" id="L175">                    sum.add(tmpX);</span>
+<span class="fc" id="L176">                    x += del;</span>
+                }
+                // The new sum is combined with the old integral to give a refined integral
+                // s = (s + (b - a) * sum / tnm) / 3.0
+<span class="fc" id="L180">                sum.multiplyByScalar((b - a) / tnm);</span>
+<span class="fc" id="L181">                s.add(sum);</span>
+<span class="fc" id="L182">                s.multiplyByScalar(1.0 / 3.0);</span>
+<span class="fc" id="L183">                result.copyFrom(s);</span>
+            }
+<span class="nc" id="L185">        } catch (final WrongSizeException ex) {</span>
+<span class="nc" id="L186">            throw new EvaluationException(ex);</span>
+<span class="fc" id="L187">        }</span>
+<span class="fc" id="L188">    }</span>
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    @Override
+    public QuadratureType getType() {
+<span class="nc" id="L197">        return QuadratureType.MID_POINT;</span>
+    }
+
+    /**
+     * Gets number of rows of quadrature result.
+     *
+     * @return number of rows of quadrature result.
+     */
+    @Override
+    protected int getRows() {
+<span class="fc" id="L207">        return rows;</span>
+    }
+
+    /**
+     * Gets number of columns of quadrature result.
+     *
+     * @return number of columns of quadrature result.
+     */
+    @Override
+    protected int getColumns() {
+<span class="fc" id="L217">        return columns;</span>
+    }
+
+    /**
+     * Evaluates matrix function at x.
+     *
+     * @param x      point where function is evaluated.
+     * @param result instance where result of evaluation is stored.
+     * @throws EvaluationException if evaluation fails.
+     */
+    protected void func(final double x, final Matrix result) throws EvaluationException {
+<span class="fc" id="L228">        listener.evaluate(x, result);</span>
+<span class="fc" id="L229">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

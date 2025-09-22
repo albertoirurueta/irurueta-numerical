@@ -1,0 +1,1192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Polynomial.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials</a> &gt; <span class="el_source">Polynomial.java</span></div><h1>Polynomial.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials;
+
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Complex;
+import com.irurueta.numerical.NumericalException;
+import com.irurueta.numerical.roots.FirstDegreePolynomialRootsEstimator;
+import com.irurueta.numerical.roots.LaguerrePolynomialRootsEstimator;
+import com.irurueta.numerical.roots.PolynomialRootsEstimator;
+import com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator;
+import com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator;
+import com.irurueta.numerical.signal.processing.Convolver1D;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+/**
+ * Contains a polynomial and common operations done with polynomials.
+ * This implementation only supports polynomials with real parameters.
+ */
+public class Polynomial implements Serializable {
+
+    /**
+     * Minimum derivative / integration order.
+     */
+    private static final int MIN_ORDER = 1;
+
+    /**
+     * Minimum allowed length in polynomial parameters.
+     */
+    public static final int MIN_VALID_POLY_PARAMS_LENGTH = 1;
+
+    /**
+     * Constant defining machine precision
+     */
+    public static final double EPS = 1e-10;
+
+    /**
+     * Array containing parameters defining a polynomial.
+     * For a polynomial having the expression p(x) = a + b*x + c*x^2 + ...
+     * provided array must be [a, b, c, ...]
+     */
+    private double[] polyParams;
+
+    /**
+     * Constructor.
+     * Creates a polynomial initialized to zero.
+     */
+<span class="fc" id="L63">    public Polynomial() {</span>
+<span class="fc" id="L64">        polyParams = new double[MIN_VALID_POLY_PARAMS_LENGTH];</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param numberOfParameters number of parameters of polynomial to create.
+     * @throws IllegalArgumentException if number of parameters is less than 1.
+     */
+<span class="fc" id="L73">    public Polynomial(final int numberOfParameters) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (numberOfParameters &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L75">            throw new IllegalArgumentException(&quot;at least 1 parameter is required&quot;);</span>
+        }
+<span class="fc" id="L77">        polyParams = new double[numberOfParameters];</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Constructor.
+     * For a polynomial having the expression p(x) = a + b*x + c*x^2 + ...
+     * provided array must be [a, b, c, ...]
+     *
+     * @param polyParams parameters defining a polynomial.
+     * @throws IllegalArgumentException if provided array does not have at least
+     *                                  length 2.
+     */
+<span class="fc" id="L89">    public Polynomial(final double... polyParams) {</span>
+<span class="fc" id="L90">        setPolyParams(polyParams);</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Gets array defining parameters of polynomial.
+     * A polynomial having the expression p(x) = a + b*x + c*x^2 + ...
+     * has an array of the form [a, b, c, ...].
+     *
+     * @return parameters defining a polynomial.
+     */
+    public double[] getPolyParams() {
+<span class="fc" id="L101">        return polyParams;</span>
+    }
+
+    /**
+     * Sets array defining parameters of polynomial.
+     * A polynomial having the expression p(x) = a + b*x + c*x^2 + ...
+     * has an array of the form [a, b, c, ...].
+     *
+     * @param polyParams array defining parameters of polynomial. Must have at
+     *                   least length 2.
+     * @throws IllegalArgumentException if provided array does not have at least
+     *                                  length 2.
+     */
+    public final void setPolyParams(final double... polyParams) {
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (polyParams.length &lt; MIN_VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L116">            throw new IllegalArgumentException(&quot;must have at least length 1&quot;);</span>
+        }
+
+<span class="fc" id="L119">        this.polyParams = polyParams;</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Gets degree of polynomial.
+     *
+     * @return degree of polynomial.
+     */
+    public int getDegree() {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (var i = polyParams.length - 1; i &gt;= 1; i--) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            if (Math.abs(polyParams[i]) &gt; EPS) {</span>
+<span class="fc" id="L130">                return i;</span>
+            }
+        }
+
+<span class="fc" id="L134">        return 0;</span>
+    }
+
+    /**
+     * Adds this polynomial to another one and stores the result into provided
+     * instance.
+     *
+     * @param other  other polynomial to be added.
+     * @param result instance where result will be stored.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void add(final Polynomial other, final Polynomial result) {
+<span class="fc" id="L146">        final var maxLength = Math.max(polyParams.length, other.polyParams.length);</span>
+<span class="fc" id="L147">        final var minLength = Math.min(polyParams.length, other.polyParams.length);</span>
+
+<span class="fc" id="L149">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (resultPolyParams.length != maxLength) {</span>
+<span class="fc" id="L151">            resultPolyParams = new double[maxLength];</span>
+        }
+
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for (var i = 0; i &lt; minLength; i++) {</span>
+<span class="fc" id="L155">            resultPolyParams[i] = polyParams[i] + other.polyParams[i];</span>
+        }
+
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (polyParams.length &gt; other.polyParams.length) {</span>
+            // this is longer than other
+<span class="fc" id="L160">            System.arraycopy(polyParams, minLength, resultPolyParams, minLength, maxLength - minLength);</span>
+        } else {
+            // other is longer than this
+<span class="fc" id="L163">            System.arraycopy(other.polyParams, minLength, resultPolyParams, minLength, maxLength - minLength);</span>
+        }
+
+<span class="fc" id="L166">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Adds another polynomial to this polynomial.
+     *
+     * @param other other polynomial to be added.
+     */
+    public void add(final Polynomial other) {
+<span class="fc" id="L175">        add(other, this);</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Adds this polynomial to another one and returns a new polynomial as a
+     * result.
+     *
+     * @param other other polynomial to be added.
+     * @return a new polynomial containing the sum.
+     */
+    public Polynomial addAndReturnNew(final Polynomial other) {
+<span class="fc" id="L186">        final var length = Math.max(polyParams.length, other.polyParams.length);</span>
+<span class="fc" id="L187">        final var result = new Polynomial(length);</span>
+<span class="fc" id="L188">        add(other, result);</span>
+
+<span class="fc" id="L190">        return result;</span>
+    }
+
+    /**
+     * Subtract other polynomial from this one and stores the result into
+     * provided instance.
+     *
+     * @param other  other polynomial to be subtracted from this one.
+     * @param result instance where result will be stored.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void subtract(final Polynomial other, final Polynomial result) {
+<span class="fc" id="L202">        final var maxLength = Math.max(polyParams.length, other.polyParams.length);</span>
+<span class="fc" id="L203">        final var minLength = Math.min(polyParams.length, other.polyParams.length);</span>
+
+<span class="fc" id="L205">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (resultPolyParams.length != maxLength) {</span>
+<span class="fc" id="L207">            resultPolyParams = new double[maxLength];</span>
+        }
+
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        for (var i = 0; i &lt; minLength; i++) {</span>
+<span class="fc" id="L211">            resultPolyParams[i] = polyParams[i] - other.polyParams[i];</span>
+        }
+
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (polyParams.length &gt; other.polyParams.length) {</span>
+            // this is longer than other
+<span class="fc" id="L216">            System.arraycopy(polyParams, minLength, resultPolyParams, minLength, maxLength - minLength);</span>
+        } else {
+            // other is longer than this
+<span class="fc bfc" id="L219" title="All 2 branches covered.">            for (var i = minLength; i &lt; maxLength; i++) {</span>
+<span class="fc" id="L220">                resultPolyParams[i] = -other.polyParams[i];</span>
+            }
+        }
+
+<span class="fc" id="L224">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L225">    }</span>
+
+    /**
+     * Subtracts another polynomial form this one.
+     *
+     * @param other other polynomial to be subtracted from this one.
+     */
+    public void subtract(final Polynomial other) {
+<span class="fc" id="L233">        subtract(other, this);</span>
+<span class="fc" id="L234">    }</span>
+
+    /**
+     * Subtract other polynomial from this one and returns a new polynomial as a
+     * result.
+     *
+     * @param other other polynomial to be subtracted from this one.
+     * @return a new polynomial containing result of subtraction.
+     */
+    public Polynomial subtractAndReturnNew(final Polynomial other) {
+<span class="fc" id="L244">        final var length = Math.max(polyParams.length, other.polyParams.length);</span>
+<span class="fc" id="L245">        final var result = new Polynomial(length);</span>
+<span class="fc" id="L246">        subtract(other, result);</span>
+
+<span class="fc" id="L248">        return result;</span>
+    }
+
+    /**
+     * Multiplies two polynomials.
+     *
+     * @param other  other polynomial to multiply with.
+     * @param result instance where resulting polynomial will be stored.
+     */
+    public void multiply(final Polynomial other, final Polynomial result) {
+<span class="fc" id="L258">        final var thisLength = polyParams.length;</span>
+<span class="fc" id="L259">        final var otherLength = other.polyParams.length;</span>
+<span class="fc" id="L260">        final var resultLength = thisLength + otherLength - 1;</span>
+<span class="pc bpc" id="L261" title="1 of 4 branches missed.">        if (result.polyParams.length != resultLength || result == this) {</span>
+            // if length does not match or result is stored in this polynomial,
+            // create new polynomial array of parameters
+<span class="fc" id="L264">            result.polyParams = Convolver1D.convolve(polyParams, other.polyParams);</span>
+        } else {
+            // if length is the same, overwrite values
+<span class="nc" id="L267">            Convolver1D.convolve(polyParams, other.polyParams, result.polyParams);</span>
+        }
+<span class="fc" id="L269">    }</span>
+
+    /**
+     * Multiplies this polynomial with another one.
+     *
+     * @param other other polynomial to multiply with.
+     */
+    public void multiply(final Polynomial other) {
+<span class="fc" id="L277">        multiply(other, this);</span>
+<span class="fc" id="L278">    }</span>
+
+    /**
+     * Multiplies two polynomials and returns a new instance containing result.
+     *
+     * @param other other polynomial to multiply with.
+     * @return a new polynomial containing result of multiplication.
+     */
+    public Polynomial multiplyAndReturnNew(final Polynomial other) {
+<span class="fc" id="L287">        final var thisLength = polyParams.length;</span>
+<span class="fc" id="L288">        final var otherLength = other.polyParams.length;</span>
+<span class="fc" id="L289">        final var resultLength = thisLength + otherLength - 1;</span>
+<span class="fc" id="L290">        final var result = new Polynomial(resultLength);</span>
+<span class="fc" id="L291">        Convolver1D.convolve(polyParams, other.polyParams, result.polyParams);</span>
+
+<span class="fc" id="L293">        return result;</span>
+    }
+
+    /**
+     * Multiplies all parameters of this polynomial by a scalar and stores the
+     * result into provided polynomial instance.
+     *
+     * @param scalar scalar to multiply parameters with.
+     * @param result instance where result will be stored.
+     */
+    public void multiplyByScalar(final double scalar, final Polynomial result) {
+<span class="fc" id="L304">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L305" title="All 4 branches covered.">        if (resultPolyParams.length != polyParams.length || result == this) {</span>
+<span class="fc" id="L306">            resultPolyParams = new double[polyParams.length];</span>
+        }
+<span class="fc" id="L308">        ArrayUtils.multiplyByScalar(polyParams, scalar, resultPolyParams);</span>
+<span class="fc" id="L309">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L310">    }</span>
+
+    /**
+     * Multiplies all parameters of this polynomial by provided scalar.
+     *
+     * @param scalar scalar to multiply parameters with.
+     */
+    public void multiplyByScalar(final double scalar) {
+<span class="fc" id="L318">        multiplyByScalar(scalar, this);</span>
+<span class="fc" id="L319">    }</span>
+
+    /**
+     * Multiplies all parameters of this polynomial by a scalar and returns a
+     * new polynomial containing the result.
+     *
+     * @param scalar scalar to multiply parameters with.
+     * @return a new polynomial containing the result of the operation.
+     */
+    public Polynomial multiplyByScalarAndReturnNew(final double scalar) {
+<span class="fc" id="L329">        final var result = new Polynomial(polyParams.length);</span>
+<span class="fc" id="L330">        multiplyByScalar(scalar, result);</span>
+<span class="fc" id="L331">        return result;</span>
+    }
+
+    /**
+     * Gets roots of polynomial.
+     *
+     * @return estimated roots of this polynomial
+     * @throws NumericalException if roots estimation fails.
+     */
+    public Complex[] getRoots() throws NumericalException {
+<span class="fc" id="L341">        final var degree = getDegree();</span>
+
+        final PolynomialRootsEstimator estimator;
+<span class="fc bfc" id="L344" title="All 5 branches covered.">        switch (degree) {</span>
+            case 0:
+                // no roots
+<span class="fc" id="L347">                return null;</span>
+            case 1:
+                // first degree
+<span class="fc" id="L350">                estimator = new FirstDegreePolynomialRootsEstimator(polyParams);</span>
+<span class="fc" id="L351">                break;</span>
+            case 2:
+                // second degree
+<span class="fc" id="L354">                estimator = new SecondDegreePolynomialRootsEstimator(polyParams);</span>
+<span class="fc" id="L355">                break;</span>
+            case 3:
+                // third degree
+<span class="fc" id="L358">                estimator = new ThirdDegreePolynomialRootsEstimator(polyParams);</span>
+<span class="fc" id="L359">                break;</span>
+            default:
+                // greater degree
+
+                // copy real parameters into complex values
+<span class="fc" id="L364">                final var params = new Complex[this.polyParams.length];</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                for (int i = 0; i &lt; this.polyParams.length; i++) {</span>
+<span class="fc" id="L366">                    params[i] = new Complex(this.polyParams[i]);</span>
+                }
+<span class="fc" id="L368">                estimator = new LaguerrePolynomialRootsEstimator(params);</span>
+                break;
+        }
+
+<span class="fc" id="L372">        estimator.estimate();</span>
+<span class="fc" id="L373">        return estimator.getRoots();</span>
+    }
+
+    /**
+     * Evaluates polynomial at provided value.
+     *
+     * @param x value to evaluate polynomial at.
+     * @return result of polynomial evaluation.
+     */
+    public double evaluate(final double x) {
+<span class="fc" id="L383">        var result = 0.0;</span>
+<span class="fc" id="L384">        var powX = 1.0;</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        for (var polyParam : polyParams) {</span>
+<span class="fc" id="L386">            result += polyParam * powX;</span>
+<span class="fc" id="L387">            powX *= x;</span>
+        }
+
+<span class="fc" id="L390">        return result;</span>
+    }
+
+    /**
+     * Computes derivative of polynomial.
+     *
+     * @param result instance where derivative will be stored.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void derivative(final Polynomial result) {
+<span class="fc" id="L400">        final var resultLength = polyParams.length - 1;</span>
+<span class="fc" id="L401">        final var resultLength2 = Math.max(resultLength, 1);</span>
+
+<span class="fc" id="L403">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L404" title="All 4 branches covered.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
+<span class="fc" id="L405">            resultPolyParams = new double[resultLength2];</span>
+        }
+<span class="fc bfc" id="L407" title="All 2 branches covered.">        if (resultLength == 0) {</span>
+<span class="fc" id="L408">            resultPolyParams[0] = 0.0;</span>
+        }
+
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; resultLength; i++, j++) {</span>
+<span class="fc" id="L412">            resultPolyParams[i] = j * polyParams[j];</span>
+        }
+
+<span class="fc" id="L415">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L416">    }</span>
+
+    /**
+     * Replaces this instance by its derivative.
+     */
+    public void derivative() {
+<span class="fc" id="L422">        derivative(this);</span>
+<span class="fc" id="L423">    }</span>
+
+    /**
+     * Computes derivative of polynomial.
+     *
+     * @return a new instance containing derivative.
+     */
+    public Polynomial derivativeAndReturnNew() {
+<span class="fc" id="L431">        final var resultLength = Math.max(polyParams.length - 1, 1);</span>
+<span class="fc" id="L432">        final var result = new Polynomial(resultLength);</span>
+<span class="fc" id="L433">        derivative(result);</span>
+<span class="fc" id="L434">        return result;</span>
+    }
+
+    /**
+     * Evaluates derivative of polynomial at provided value.
+     *
+     * @param x value to evaluate derivative of polynomial at.
+     * @return result of evaluation of derivative.
+     */
+    public double evaluateDerivative(final double x) {
+<span class="fc" id="L444">        var result = 0.0;</span>
+<span class="fc" id="L445">        var powX = 1.0;</span>
+<span class="fc bfc" id="L446" title="All 2 branches covered.">        for (var j = 1; j &lt; polyParams.length; j++) {</span>
+<span class="fc" id="L447">            result += j * polyParams[j] * powX;</span>
+<span class="fc" id="L448">            powX *= x;</span>
+        }
+
+<span class="fc" id="L451">        return result;</span>
+    }
+
+    /**
+     * Computes second derivative of polynomial.
+     *
+     * @param result instance where second derivative will be stored.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void secondDerivative(final Polynomial result) {
+<span class="fc" id="L461">        final var resultLength = polyParams.length - 2;</span>
+<span class="fc" id="L462">        final var resultLength2 = Math.max(resultLength, 1);</span>
+
+<span class="fc" id="L464">        var resultPolyParams = result.polyParams;</span>
+<span class="pc bpc" id="L465" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
+<span class="fc" id="L466">            resultPolyParams = new double[resultLength2];</span>
+        }
+<span class="fc bfc" id="L468" title="All 2 branches covered.">        if (resultLength == 0) {</span>
+<span class="fc" id="L469">            resultPolyParams[0] = 0.0;</span>
+        }
+
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        for (int i = 0, j = 2, k = 1; i &lt; resultLength; i++, j++, k++) {</span>
+<span class="fc" id="L473">            resultPolyParams[i] = j * k * polyParams[j];</span>
+        }
+
+<span class="fc" id="L476">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L477">    }</span>
+
+    /**
+     * Replaces this instance by its second derivative.
+     */
+    public void secondDerivative() {
+<span class="fc" id="L483">        secondDerivative(this);</span>
+<span class="fc" id="L484">    }</span>
+
+    /**
+     * Computes second derivative of polynomial.
+     *
+     * @return a new instance containing second derivative.
+     */
+    public Polynomial secondDerivativeAndReturnNew() {
+<span class="fc" id="L492">        final var resultLength = Math.max(polyParams.length - 2, 1);</span>
+<span class="fc" id="L493">        final var result = new Polynomial(resultLength);</span>
+<span class="fc" id="L494">        secondDerivative(result);</span>
+<span class="fc" id="L495">        return result;</span>
+    }
+
+    /**
+     * Evaluates second derivative of polynomial at provided value.
+     *
+     * @param x value to evaluate second derivative of polynomial at.
+     * @return result of evaluation of second derivative.
+     */
+    public double evaluateSecondDerivative(final double x) {
+<span class="fc" id="L505">        var result = 0.0;</span>
+<span class="fc" id="L506">        var powX = 1.0;</span>
+<span class="fc bfc" id="L507" title="All 2 branches covered.">        for (int j = 2, k = 1; j &lt; polyParams.length; j++, k++) {</span>
+<span class="fc" id="L508">            result += j * k * polyParams[j] * powX;</span>
+<span class="fc" id="L509">            powX *= x;</span>
+        }
+
+<span class="fc" id="L512">        return result;</span>
+    }
+
+    /**
+     * Computes nth-order derivative of polynomial.
+     *
+     * @param order  order of derivative to compute. Must be at least 1.
+     * @param result instance where nth-order derivative will be stored.
+     * @throws IllegalArgumentException if provided order is less than 1.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void nthDerivative(final int order, final Polynomial result) {
+<span class="fc bfc" id="L524" title="All 2 branches covered.">        if (order &lt; MIN_ORDER) {</span>
+<span class="fc" id="L525">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L528">        final var resultLength = polyParams.length - order;</span>
+<span class="fc" id="L529">        final var resultLength2 = Math.max(resultLength, 1);</span>
+
+<span class="fc" id="L531">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L532" title="All 4 branches covered.">        if (resultPolyParams.length != resultLength2 || result == this) {</span>
+<span class="fc" id="L533">            resultPolyParams = new double[resultLength2];</span>
+        }
+<span class="fc bfc" id="L535" title="All 2 branches covered.">        if (resultLength == 0) {</span>
+<span class="fc" id="L536">            resultPolyParams[0] = 0.0;</span>
+        }
+
+<span class="fc bfc" id="L539" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; resultLength; i++, j++) {</span>
+<span class="fc" id="L540">            var param = j;</span>
+<span class="fc bfc" id="L541" title="All 2 branches covered.">            for (var k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L542">                param *= j - k;</span>
+            }
+<span class="fc" id="L544">            resultPolyParams[i] = param * polyParams[j];</span>
+        }
+
+<span class="fc" id="L547">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L548">    }</span>
+
+    /**
+     * Replaces this instance by its nth-order derivative.
+     *
+     * @param order order of derivative to compute. Must be at least 1.
+     * @throws IllegalArgumentException if provided order is less than 1.
+     */
+    public void nthDerivative(final int order) {
+<span class="fc" id="L557">        nthDerivative(order, this);</span>
+<span class="fc" id="L558">    }</span>
+
+    /**
+     * Computes nth-order derivative of polynomial.
+     *
+     * @param order order of derivative to compute. Must be at least 1.
+     * @return a new instance containing nth-order derivative.
+     * @throws IllegalArgumentException if provided order is less than 1.
+     */
+    public Polynomial nthDerivativeAndReturnNew(final int order) {
+<span class="fc" id="L568">        final var resultLength = Math.max(polyParams.length - order, 1);</span>
+<span class="fc" id="L569">        final var result = new Polynomial(resultLength);</span>
+<span class="fc" id="L570">        nthDerivative(order, result);</span>
+<span class="fc" id="L571">        return result;</span>
+    }
+
+    /**
+     * Evaluates nth-derivative of polynomial at provided value.
+     *
+     * @param x     value to evaluate nth-derivative of polynomial at.
+     * @param order order of derivative to evaluate. Must be at least 1.
+     * @return result of evaluation of nth-derivative.
+     * @throws IllegalArgumentException if provided order is less than 1.
+     */
+    public double evaluateNthDerivative(final double x, final int order) {
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
+<span class="nc" id="L584">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
+        }
+
+<span class="fc" id="L587">        var result = 0.0;</span>
+<span class="fc" id="L588">        var powX = 1.0;</span>
+<span class="fc bfc" id="L589" title="All 2 branches covered.">        for (var i = order; i &lt; polyParams.length; i++) {</span>
+<span class="fc" id="L590">            var param = i;</span>
+<span class="fc bfc" id="L591" title="All 2 branches covered.">            for (var j = 1; j &lt; order; j++) {</span>
+<span class="fc" id="L592">                param *= i - j;</span>
+            }
+<span class="fc" id="L594">            result += param * polyParams[i] * powX;</span>
+<span class="fc" id="L595">            powX *= x;</span>
+        }
+
+<span class="fc" id="L598">        return result;</span>
+    }
+
+    /**
+     * Computes polynomial containing the integration of current one.
+     * Because infinite polynomials exist with different constant values,
+     * constant term can be provided as well.
+     *
+     * @param result   instance where resulting polynomial will be stored.
+     * @param constant constant term.
+     */
+    public void integration(final Polynomial result, final double constant) {
+<span class="fc" id="L610">        final var resultLength = polyParams.length + 1;</span>
+<span class="fc" id="L611">        var resultPolyParams = result.polyParams;</span>
+<span class="pc bpc" id="L612" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength || result == this) {</span>
+<span class="fc" id="L613">            resultPolyParams = new double[resultLength];</span>
+        }
+
+<span class="fc" id="L616">        resultPolyParams[0] = constant;</span>
+<span class="fc bfc" id="L617" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; polyParams.length; i++, j++) {</span>
+<span class="fc" id="L618">            resultPolyParams[j] = polyParams[i] / j;</span>
+        }
+
+<span class="fc" id="L621">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L622">    }</span>
+
+    /**
+     * Computes polynomial containing the integration of current one and
+     * assuming a zero constant term.
+     *
+     * @param result instance where resulting polynomial will be stored.
+     */
+    public void integration(final Polynomial result) {
+<span class="fc" id="L631">        integration(result, 0.0);</span>
+<span class="fc" id="L632">    }</span>
+
+    /**
+     * Updates this instance to contain its integration.
+     *
+     * @param constant constant term.
+     */
+    public void integration(final double constant) {
+<span class="fc" id="L640">        integration(this, constant);</span>
+<span class="fc" id="L641">    }</span>
+
+    /**
+     * Updates this instance to contain its integration using a zero constant
+     * term.
+     */
+    public void integration() {
+<span class="fc" id="L648">        integration(this);</span>
+<span class="fc" id="L649">    }</span>
+
+    /**
+     * Computes polynomial containing the integration of current one.
+     * Because infinite polynomials exist with different constant values,
+     * constant term can be provided as well.
+     *
+     * @param constant constant term.
+     * @return a new instance containing integration polynomial.
+     */
+    public Polynomial integrationAndReturnNew(final double constant) {
+<span class="fc" id="L660">        final var result = new Polynomial(polyParams.length + 1);</span>
+<span class="fc" id="L661">        integration(result, constant);</span>
+<span class="fc" id="L662">        return result;</span>
+    }
+
+    /**
+     * Computes polynomial containing the integration of current one and
+     * assuming a zero constant term.
+     *
+     * @return a new instance containing integration polynomial.
+     */
+    public Polynomial integrationAndReturnNew() {
+<span class="fc" id="L672">        return integrationAndReturnNew(0.0);</span>
+    }
+
+    /**
+     * Integrate polynomial within provided interval.
+     *
+     * @param startX start of integration interval.
+     * @param endX   end of integration interval.
+     * @return result of integration.
+     */
+    public double integrateInterval(final double startX, final double endX) {
+
+<span class="fc" id="L684">        var resultStart = 0.0;</span>
+<span class="fc" id="L685">        var resultEnd = 0.0;</span>
+<span class="fc" id="L686">        var powStartX = startX;</span>
+<span class="fc" id="L687">        var powEndX = endX;</span>
+        double polyParam;
+<span class="fc bfc" id="L689" title="All 2 branches covered.">        for (int i = 0, j = 1; i &lt; polyParams.length; i++, j++) {</span>
+<span class="fc" id="L690">            polyParam = polyParams[i] / j;</span>
+<span class="fc" id="L691">            resultStart += polyParam * powStartX;</span>
+<span class="fc" id="L692">            powStartX *= startX;</span>
+
+<span class="fc" id="L694">            resultEnd += polyParam * powEndX;</span>
+<span class="fc" id="L695">            powEndX *= endX;</span>
+        }
+
+<span class="fc" id="L698">        return resultEnd - resultStart;</span>
+    }
+
+    /**
+     * Computes polynomial containing the nth-order integration of current one.
+     * Because infinite polynomials exist with different constant values,
+     * constant terms for each integration order can be provided as well.
+     *
+     * @param order     order of integration to compute. Must be at least 1.
+     * @param result    instance where resulting polynomial will be stored.
+     * @param constants constant terms for each integration order. Must have a
+     *                  length equal to order if provided.
+     * @throws IllegalArgumentException if provided order is less than 1 or if
+     *                                  constants does not have length equal to order.
+     */
+    public void nthIntegration(final int order, final Polynomial result, final double[] constants) {
+<span class="pc bpc" id="L714" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
+<span class="nc" id="L715">            throw new IllegalArgumentException(&quot;order must be at least 1&quot;);</span>
+        }
+<span class="pc bpc" id="L717" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
+<span class="nc" id="L718">            throw new IllegalArgumentException(&quot;length of constants must be order&quot;);</span>
+        }
+<span class="fc" id="L720">        final var resultLength = polyParams.length + order;</span>
+<span class="fc" id="L721">        var resultPolyParams = result.polyParams;</span>
+<span class="pc bpc" id="L722" title="1 of 4 branches missed.">        if (resultPolyParams.length != resultLength || result == this) {</span>
+<span class="fc" id="L723">            resultPolyParams = new double[resultLength];</span>
+        }
+
+<span class="fc bfc" id="L726" title="All 2 branches covered.">        for (var i = 0; i &lt; order; i++) {</span>
+<span class="fc bfc" id="L727" title="All 2 branches covered.">            if (constants != null) {</span>
+<span class="fc" id="L728">                var param = 1;</span>
+<span class="fc bfc" id="L729" title="All 2 branches covered.">                for (var k = 1; k &lt;= i; k++) {</span>
+<span class="fc" id="L730">                    param *= k;</span>
+                }
+<span class="fc" id="L732">                resultPolyParams[i] = constants[i] / param;</span>
+<span class="fc" id="L733">            } else {</span>
+<span class="fc" id="L734">                resultPolyParams[i] = 0.0;</span>
+            }
+        }
+<span class="fc bfc" id="L737" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; polyParams.length; i++, j++) {</span>
+<span class="fc" id="L738">            var param = j;</span>
+<span class="fc bfc" id="L739" title="All 2 branches covered.">            for (var k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L740">                param *= j - k;</span>
+            }
+<span class="fc" id="L742">            resultPolyParams[j] = polyParams[i] / param;</span>
+        }
+
+<span class="fc" id="L745">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L746">    }</span>
+
+    /**
+     * Computes polynomial containing the nth-order integration of current one.
+     *
+     * @param order  order of integration to compute. Must be at least 1.
+     * @param result instance where resulting polynomial will be stored.
+     * @throws IllegalArgumentException if provided order is less than 1.
+     */
+    public void nthIntegration(final int order, final Polynomial result) {
+<span class="fc" id="L756">        nthIntegration(order, result, null);</span>
+<span class="fc" id="L757">    }</span>
+
+    /**
+     * Computes polynomial containing the nth-order integration of current one.
+     * Because infinite polynomials exist with different constant values,
+     * constant terms for each integration order can be provided as well.
+     *
+     * @param order     order of integration to compute. Must be at least 1.
+     * @param constants constant terms for each integration order. Must have a
+     *                  length equal to order if provided.
+     * @throws IllegalArgumentException if provided order is less than 1 or if
+     *                                  constants does not have length equal to order.
+     */
+    public void nthIntegration(final int order, final double[] constants) {
+<span class="fc" id="L771">        nthIntegration(order, this, constants);</span>
+<span class="fc" id="L772">    }</span>
+
+    /**
+     * Computes polynomial containing the nth-order integration of current one.
+     *
+     * @param order order of integration to compute. Must be at least 1.
+     */
+    public void nthIntegration(final int order) {
+<span class="fc" id="L780">        nthIntegration(order, (double[]) null);</span>
+<span class="fc" id="L781">    }</span>
+
+    /**
+     * Computes polynomial containing the nth-order integration of current one.
+     * Because infinite polynomials exist with different constant values,
+     * constant terms for each integration order can be provided as well.
+     *
+     * @param order     order of integration to compute. Must be at least 1.
+     * @param constants constant terms for each integration order. Must have a
+     *                  length equal to order if provided.
+     * @return a new polynomial containing the nth-order integration.
+     * @throws IllegalArgumentException if provided order is less than 1 or if
+     *                                  constants does not have length equal to order.
+     */
+    public Polynomial nthIntegrationAndReturnNew(final int order, final double[] constants) {
+<span class="fc" id="L796">        final var result = new Polynomial();</span>
+<span class="fc" id="L797">        nthIntegration(order, result, constants);</span>
+<span class="fc" id="L798">        return result;</span>
+    }
+
+    /**
+     * Computes polynomial containing the nth-order integration of current one.
+     *
+     * @param order order of integration to compute. Must be at least 1.
+     * @return a new polynomial containing the nth-order integration.
+     * @throws IllegalArgumentException if provided order is less than 1 or if
+     *                                  constants does not have length equal to order.
+     */
+    public Polynomial nthIntegrationAndReturnNew(final int order) {
+<span class="fc" id="L810">        return nthIntegrationAndReturnNew(order, null);</span>
+    }
+
+    /**
+     * Computes nth-integration over provided interval.
+     *
+     * @param startX    start of integration interval.
+     * @param endX      end of integration interval.
+     * @param order     order of integration. Must be at least 1.
+     * @param constants constant terms for each integration order. Must have a
+     *                  length equal to order if provided.
+     * @return result of integration.
+     * @throws IllegalArgumentException if provided order is less than 1 or if
+     *                                  constants does not have length equal to order.
+     */
+    public double nthOrderIntegrateInterval(
+            final double startX, final double endX, final int order, final double[] constants) {
+<span class="pc bpc" id="L827" title="1 of 2 branches missed.">        if (order &lt; MIN_ORDER) {</span>
+<span class="nc" id="L828">            throw new IllegalArgumentException();</span>
+        }
+<span class="pc bpc" id="L830" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
+<span class="nc" id="L831">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L834">        var resultStart = 0.0;</span>
+<span class="fc" id="L835">        var resultEnd = 0.0;</span>
+<span class="fc" id="L836">        var powStartX = 1.0;</span>
+<span class="fc" id="L837">        var powEndX = 1.0;</span>
+        double polyParam;
+<span class="fc bfc" id="L839" title="All 2 branches covered.">        for (var i = 0; i &lt; order; i++) {</span>
+<span class="fc bfc" id="L840" title="All 2 branches covered.">            if (constants != null) {</span>
+<span class="fc" id="L841">                var param = 1;</span>
+<span class="fc bfc" id="L842" title="All 2 branches covered.">                for (var k = 1; k &lt;= i; k++) {</span>
+<span class="fc" id="L843">                    param *= k;</span>
+                }
+<span class="fc" id="L845">                polyParam = constants[i] / param;</span>
+<span class="fc" id="L846">                resultStart += polyParam * powStartX;</span>
+<span class="fc" id="L847">                resultEnd += polyParam * powEndX;</span>
+            }
+<span class="fc" id="L849">            powStartX *= startX;</span>
+<span class="fc" id="L850">            powEndX *= endX;</span>
+        }
+
+<span class="fc bfc" id="L853" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; polyParams.length; i++, j++) {</span>
+<span class="fc" id="L854">            var param = j;</span>
+<span class="fc bfc" id="L855" title="All 2 branches covered.">            for (var k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L856">                param *= j - k;</span>
+            }
+<span class="fc" id="L858">            polyParam = polyParams[i] / param;</span>
+<span class="fc" id="L859">            resultStart += polyParam * powStartX;</span>
+<span class="fc" id="L860">            powStartX *= startX;</span>
+
+<span class="fc" id="L862">            resultEnd += polyParam * powEndX;</span>
+<span class="fc" id="L863">            powEndX *= endX;</span>
+        }
+
+<span class="fc" id="L866">        return resultEnd - resultStart;</span>
+    }
+
+    /**
+     * Computes nth-integration over provided interval.
+     *
+     * @param startX start of integration interval.
+     * @param endX   end of integration interval.
+     * @param order  order of integration. Must be at least 1.
+     * @return result of integration.
+     * @throws IllegalArgumentException if provided order is less than 1.
+     */
+    public double nthOrderIntegrateInterval(final double startX, final double endX, final int order) {
+<span class="fc" id="L879">        return nthOrderIntegrateInterval(startX, endX, order, null);</span>
+    }
+
+    /**
+     * Trims polynomial to remove all terms above degree that can be neglected.
+     *
+     * @param result instance where result will be stored.
+     */
+    public void trim(final Polynomial result) {
+<span class="fc" id="L888">        final var degree = getDegree();</span>
+<span class="fc" id="L889">        final var resultLength = degree + 1;</span>
+
+        final double[] resultPolyParams;
+<span class="fc bfc" id="L892" title="All 2 branches covered.">        if (result.polyParams.length != resultLength) {</span>
+<span class="fc" id="L893">            resultPolyParams = new double[resultLength];</span>
+        } else {
+<span class="fc" id="L895">            resultPolyParams = result.polyParams;</span>
+        }
+<span class="fc" id="L897">        System.arraycopy(polyParams, 0, resultPolyParams, 0, resultLength);</span>
+
+<span class="fc" id="L899">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L900">    }</span>
+
+    /**
+     * Trims this polynomial to remove all terms above degree that can be
+     * neglected.
+     */
+    public void trim() {
+<span class="fc" id="L907">        trim(this);</span>
+<span class="fc" id="L908">    }</span>
+
+    /**
+     * Trims this polynomial to remove all terms above degree that can be
+     * neglected and returns the result as a new polynomial.
+     *
+     * @return a new trimmed polynomial.
+     */
+    public Polynomial trimAndReturnNew() {
+<span class="fc" id="L917">        final var result = new Polynomial();</span>
+<span class="fc" id="L918">        trim(result);</span>
+<span class="fc" id="L919">        return result;</span>
+    }
+
+    /**
+     * Normalizes parameters of this polynomial so that the array of parameters
+     * has unitary norm and stores result into provided instance.
+     * Normalization keeps location of real roots, but other roots or
+     * properties of polynomials might change.
+     *
+     * @param result instance where normalized polynomial will be stored.
+     */
+    public void normalize(final Polynomial result) {
+<span class="fc" id="L931">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L932" title="All 2 branches covered.">        if (resultPolyParams.length != polyParams.length) {</span>
+<span class="fc" id="L933">            resultPolyParams = new double[polyParams.length];</span>
+        }
+<span class="fc" id="L935">        ArrayUtils.normalize(polyParams, resultPolyParams);</span>
+<span class="fc" id="L936">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L937">    }</span>
+
+    /**
+     * Normalizes this polynomial so that the array of parameters has unitary
+     * norm.
+     * Normalization keeps location of real roots, but other roots or
+     * properties of polynomials might change.
+     */
+    public void normalize() {
+<span class="fc" id="L946">        normalize(this);</span>
+<span class="fc" id="L947">    }</span>
+
+    /**
+     * Normalizes parameters of this polynomial so that the array of parameters
+     * has unitary norm and returns result as a new polynomial instance.
+     * Normalization keeps location of real roots, but other roots or
+     * properties of polynomials might change.
+     *
+     * @return a new normalized polynomial instance.
+     */
+    public Polynomial normalizeAndReturnNew() {
+<span class="fc" id="L958">        final var result = new Polynomial(polyParams.length);</span>
+<span class="fc" id="L959">        normalize(result);</span>
+<span class="fc" id="L960">        return result;</span>
+    }
+
+    /**
+     * Normalizes parameters of this polynomial so that the highest degree term
+     * becomes 1.0 and stores result into provided instance.
+     *
+     * @param result instance where result of normalization will be stored.
+     */
+    public void normalizeHighestDegreeTerm(final Polynomial result) {
+<span class="fc" id="L970">        final var degree = getDegree();</span>
+<span class="fc" id="L971">        final var term = polyParams[degree];</span>
+<span class="fc" id="L972">        var resultPolyParams = result.polyParams;</span>
+<span class="fc bfc" id="L973" title="All 2 branches covered.">        if (resultPolyParams.length != polyParams.length) {</span>
+<span class="fc" id="L974">            resultPolyParams = new double[polyParams.length];</span>
+        }
+<span class="fc" id="L976">        ArrayUtils.multiplyByScalar(polyParams, 1.0 / term, resultPolyParams);</span>
+<span class="fc" id="L977">        result.polyParams = resultPolyParams;</span>
+<span class="fc" id="L978">    }</span>
+
+    /**
+     * Normalizes parameters of this polynomial so that the highest degree term
+     * becomes 1.0.
+     */
+    public void normalizeHighestDegreeTerm() {
+<span class="fc" id="L985">        normalizeHighestDegreeTerm(this);</span>
+<span class="fc" id="L986">    }</span>
+
+    /**
+     * Normalizes parameters of this polynomial so that the highest degree term
+     * becomes 1.0 and returns the result as a new instance.
+     *
+     * @return a new normalized polynomial.
+     */
+    public Polynomial normalizeHighestDegreeTermAndReturnNew() {
+<span class="fc" id="L995">        final var result = new Polynomial(polyParams.length);</span>
+<span class="fc" id="L996">        normalizeHighestDegreeTerm(result);</span>
+<span class="fc" id="L997">        return result;</span>
+    }
+
+    /**
+     * Gets location of maxima in this polynomial.
+     *
+     * @return location of maxima or null if polynomial has no maxima.
+     * @throws NumericalException if maxima cannot be determined due to
+     *                            numerical instabilities.
+     */
+    public double[] getMaxima() throws NumericalException {
+<span class="fc" id="L1008">        return getMaxima(EPS);</span>
+    }
+
+    /**
+     * Gets location of maxima in this polynomial.
+     *
+     * @param threshold threshold to allow possible small deviations in first
+     *                  derivative respect to pure real roots. This should be a very small
+     *                  positive value.
+     * @return location of maxima or null if polynomial has no maxima.
+     * @throws NumericalException       if maxima cannot be determined due to
+     *                                  numerical instabilities.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public double[] getMaxima(final double threshold) throws NumericalException {
+<span class="fc bfc" id="L1024" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
+<span class="fc" id="L1025">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L1028">        final var derivative = derivativeAndReturnNew();</span>
+
+        // roots of derivative contains either minima or maxima.
+<span class="fc" id="L1031">        final var derivativeRoots = derivative.getRoots();</span>
+<span class="fc" id="L1032">        final var maxima = new ArrayList&lt;Complex&gt;();</span>
+<span class="fc bfc" id="L1033" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
+<span class="fc bfc" id="L1034" title="All 2 branches covered.">            for (var derivativeRoot : derivativeRoots) {</span>
+<span class="pc bpc" id="L1035" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
+                    // root is imaginary (not allowed)
+<span class="nc" id="L1037">                    continue;</span>
+                }
+
+<span class="fc" id="L1040">                final var x = derivativeRoot.getReal();</span>
+<span class="fc" id="L1041">                final var secondDerivativeEval = evaluateSecondDerivative(x);</span>
+<span class="fc bfc" id="L1042" title="All 2 branches covered.">                if (secondDerivativeEval &lt; 0.0) {</span>
+                    // is maxima
+<span class="fc" id="L1044">                    maxima.add(derivativeRoot);</span>
+                }
+            }
+        }
+
+        // return real parts of maxima, since we only allow real roots of first
+        // derivative
+<span class="fc bfc" id="L1051" title="All 2 branches covered.">        if (maxima.isEmpty()) {</span>
+<span class="fc" id="L1052">            return null;</span>
+        }
+
+<span class="fc" id="L1055">        final var result = new double[maxima.size()];</span>
+<span class="fc" id="L1056">        int i = 0;</span>
+<span class="fc bfc" id="L1057" title="All 2 branches covered.">        for (final var m : maxima) {</span>
+<span class="fc" id="L1058">            result[i] = m.getReal();</span>
+<span class="fc" id="L1059">            i++;</span>
+<span class="fc" id="L1060">        }</span>
+
+<span class="fc" id="L1062">        return result;</span>
+    }
+
+    /**
+     * Gets location of minima in this polynomial.
+     *
+     * @return location of minima or null if polynomial has no minima.
+     * @throws NumericalException if minima cannot be determined due to
+     *                            numerical instabilities.
+     */
+    public double[] getMinima() throws NumericalException {
+<span class="fc" id="L1073">        return getMinima(EPS);</span>
+    }
+
+    /**
+     * Gets location of minima in this polynomial.
+     *
+     * @param threshold threshold to allow possible small deviations in first
+     *                  derivative respect to pure real roots. This should be a very small
+     *                  positive value.
+     * @return location of minima or null if polynomial has no minima.
+     * @throws NumericalException       if minima cannot be determined due to
+     *                                  numerical instabilities.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public double[] getMinima(double threshold) throws NumericalException {
+<span class="pc bpc" id="L1089" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
+<span class="nc" id="L1090">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L1093">        final var derivative = derivativeAndReturnNew();</span>
+
+        // roots of derivative contains either minima or maxima.
+<span class="fc" id="L1096">        final var derivativeRoots = derivative.getRoots();</span>
+<span class="fc" id="L1097">        final var minima = new ArrayList&lt;Complex&gt;();</span>
+<span class="fc bfc" id="L1098" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
+<span class="fc bfc" id="L1099" title="All 2 branches covered.">            for (final var derivativeRoot : derivativeRoots) {</span>
+<span class="pc bpc" id="L1100" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
+                    //root is imaginary (not allowed)
+<span class="nc" id="L1102">                    continue;</span>
+                }
+
+<span class="fc" id="L1105">                final var x = derivativeRoot.getReal();</span>
+<span class="fc" id="L1106">                final var secondDerivativeEval = evaluateSecondDerivative(x);</span>
+<span class="fc bfc" id="L1107" title="All 2 branches covered.">                if (secondDerivativeEval &gt;= 0.0) {</span>
+                    // is minima
+<span class="fc" id="L1109">                    minima.add(derivativeRoot);</span>
+                }
+            }
+        }
+
+        // return real parts of minima, since we only allow real roots of first
+        // derivative
+<span class="fc bfc" id="L1116" title="All 2 branches covered.">        if (minima.isEmpty()) {</span>
+<span class="fc" id="L1117">            return null;</span>
+        }
+
+<span class="fc" id="L1120">        final var result = new double[minima.size()];</span>
+<span class="fc" id="L1121">        var i = 0;</span>
+<span class="fc bfc" id="L1122" title="All 2 branches covered.">        for (final var m : minima) {</span>
+<span class="fc" id="L1123">            result[i] = m.getReal();</span>
+<span class="fc" id="L1124">            i++;</span>
+<span class="fc" id="L1125">        }</span>
+
+<span class="fc" id="L1127">        return result;</span>
+    }
+
+    /**
+     * Gets location of minima or maxima (i.e. extrema) in this polynomial.
+     *
+     * @return location of minima or maxima, or null if polynomial has no
+     * minima or maxima.
+     * @throws NumericalException if minima or maxima cannot be determined due
+     *                            to numerical instabilities.
+     */
+    public double[] getExtrema() throws NumericalException {
+<span class="fc" id="L1139">        return getExtrema(EPS);</span>
+    }
+
+    /**
+     * Gets location of minima or maxima (i.e. extrema) in this polynomial.
+     *
+     * @param threshold threshold to allow possible small deviations in first
+     *                  derivative respect to pure real roots. This should be a very small
+     *                  positive value.
+     * @return location of minima or maxima, or null if polynomial has no minima
+     * or maxima.
+     * @throws NumericalException       if minima or maxima cannot be determined due
+     *                                  to numerical instabilities.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    public double[] getExtrema(final double threshold) throws NumericalException {
+<span class="pc bpc" id="L1156" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
+<span class="nc" id="L1157">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
+        }
+
+<span class="fc" id="L1160">        final var derivative = derivativeAndReturnNew();</span>
+
+        // roots of derivative contains either minima or maxima.
+<span class="fc" id="L1163">        final var derivativeRoots = derivative.getRoots();</span>
+<span class="fc" id="L1164">        final var minimaOrMaxima = new ArrayList&lt;Complex&gt;();</span>
+<span class="fc bfc" id="L1165" title="All 2 branches covered.">        if (derivativeRoots != null) {</span>
+<span class="fc bfc" id="L1166" title="All 2 branches covered.">            for (final var derivativeRoot : derivativeRoots) {</span>
+<span class="pc bpc" id="L1167" title="1 of 2 branches missed.">                if (Math.abs(derivativeRoot.getImaginary()) &gt; threshold) {</span>
+                    // root is imaginary (not allowed)
+<span class="nc" id="L1169">                    continue;</span>
+                }
+
+<span class="fc" id="L1172">                minimaOrMaxima.add(derivativeRoot);</span>
+            }
+        }
+
+        // return real parts of roots, since we only allow real roots of first
+        // derivative
+<span class="fc bfc" id="L1178" title="All 2 branches covered.">        if (minimaOrMaxima.isEmpty()) {</span>
+<span class="fc" id="L1179">            return null;</span>
+        }
+
+<span class="fc" id="L1182">        final var result = new double[minimaOrMaxima.size()];</span>
+<span class="fc" id="L1183">        int i = 0;</span>
+<span class="fc bfc" id="L1184" title="All 2 branches covered.">        for (final var m : minimaOrMaxima) {</span>
+<span class="fc" id="L1185">            result[i] = m.getReal();</span>
+<span class="fc" id="L1186">            i++;</span>
+<span class="fc" id="L1187">        }</span>
+
+<span class="fc" id="L1189">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

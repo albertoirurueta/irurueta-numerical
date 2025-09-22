@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">SingleOptimizer.java</span></div><h1>SingleOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Abstract class to find minima on single dimension functions.
+ * Single dimension functions are functions having a single parameter and
+ * returning a single scalar value, such as f(x).
+ * &lt;p&gt;
+ * Subclasses of this class will implement specific methods to find function
+ * minima.
+ */
+public abstract class SingleOptimizer extends Optimizer {
+
+    /**
+     * Listener to evaluate single dimension functions.
+     */
+    protected SingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Value where minimum has been found.
+     */
+    protected double xmin;
+
+    /**
+     * Function evaluation at minimum that has been found.
+     */
+    protected double fmin;
+
+    /**
+     * Boolean indicating whether a minimum has been found and is available for
+     * retrieval.
+     */
+    protected boolean resultAvailable;
+
+    /**
+     * Empty constructor.
+     */
+    protected SingleOptimizer() {
+<span class="fc" id="L57">        super();</span>
+<span class="fc" id="L58">        xmin = fmin = 0.0;</span>
+<span class="fc" id="L59">        resultAvailable = false;</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener Listener to evaluate a single dimension function where
+     *                 minima is meant to be found.
+     */
+    protected SingleOptimizer(final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L69">        super();</span>
+<span class="fc" id="L70">        this.listener = listener;</span>
+<span class="fc" id="L71">        xmin = fmin = 0.0;</span>
+<span class="fc" id="L72">        resultAvailable = false;</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Returns listener to evaluate a single dimension function.
+     *
+     * @return Listener to evaluate a single dimension function.
+     * @throws NotAvailableException Raised if a listener has not yet been
+     *                               provided.
+     */
+    public SingleDimensionFunctionEvaluatorListener getListener() throws NotAvailableException {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (!isListenerAvailable()) {</span>
+<span class="fc" id="L84">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L87">        return listener;</span>
+    }
+
+    /**
+     * Sets listener.
+     *
+     * @param listener Listener to evaluate a single dimension function.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setListener(final SingleDimensionFunctionEvaluatorListener listener) throws LockedException {
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L98">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L101">        this.listener = listener;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Returns boolean indicating whether a listener has been provided and is
+     * available for retrieval.
+     *
+     * @return True if listener is available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Returns true if this instance is ready to start the minimum estimation,
+     * false otherwise.
+     *
+     * @return Boolean indicating whether this instance is ready to start the
+     * minimum estimation.
+     */
+    @Override
+    public boolean isReady() {
+<span class="nc" id="L123">        return isListenerAvailable();</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the estimated minimum is available for
+     * retrieval.
+     *
+     * @return True if result is available, false otherwise.
+     */
+    public boolean isResultAvailable() {
+<span class="fc" id="L133">        return resultAvailable;</span>
+    }
+
+    /**
+     * Returns value of the minimum that has been found.
+     *
+     * @return Value of the minimum that has been found.
+     * @throws NotAvailableException Raised if minimum is not yet available for
+     *                               retrieval.
+     */
+    public double getResult() throws NotAvailableException {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (!isResultAvailable()) {</span>
+<span class="fc" id="L145">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L148">        return xmin;</span>
+    }
+
+    /**
+     * Returns function evaluation at minimum that has been found.
+     *
+     * @return Function evaluation at minimum that has been found.
+     * @throws NotAvailableException raised if result is not yet available for retrieval.
+     */
+    public double getEvaluationAtResult() throws NotAvailableException {
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (!isResultAvailable()) {</span>
+<span class="fc" id="L159">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L162">        return fmin;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

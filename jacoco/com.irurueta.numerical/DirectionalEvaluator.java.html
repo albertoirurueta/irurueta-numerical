@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DirectionalEvaluator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">DirectionalEvaluator.java</span></div><h1>DirectionalEvaluator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+/**
+ * This class evaluates a multidimensional function along a line, such line is
+ * defined by an input point and a given direction.
+ * Using provided input point and direction, the multidimensional function's
+ * input parameters are determined, so they all lay on a line.
+ */
+public class DirectionalEvaluator {
+
+    /**
+     * Listener to evaluate a multidimensional function.
+     */
+    protected MultiDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Point used as a reference to determine the function's input parameters
+     * along a line.
+     */
+    protected double[] point;
+
+    /**
+     * Vector indicating the direction of the line where the function is
+     * evaluated.
+     */
+    protected double[] direction;
+
+    /**
+     * Point currently being evaluated in the multidimensional function.
+     * This is used internally.
+     */
+    protected final double[] p;
+
+    /**
+     * Constructor.
+     *
+     * @param listener  Listener to evaluate a multidimensional function.
+     * @param point     Point used as a reference to determine the function's input
+     *                  parameters along a line.
+     * @param direction Vector indicating the direction of the line where the
+     *                  function is evaluated.
+     * @throws IllegalArgumentException Raised if point and direction don't have
+     *                                  the same length.
+     */
+    public DirectionalEvaluator(
+<span class="fc" id="L61">            final MultiDimensionFunctionEvaluatorListener listener, final double[] point, final double[] direction) {</span>
+
+<span class="fc" id="L63">        setPointAndDirection(point, direction);</span>
+<span class="fc" id="L64">        this.listener = listener;</span>
+<span class="fc" id="L65">        p = new double[point.length];</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Returns listener to evaluate a multidimensional function.
+     *
+     * @return Listener to evaluate a multidimensional function.
+     */
+    public MultiDimensionFunctionEvaluatorListener getListener() {
+<span class="fc" id="L74">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to evaluate a multidimensional function.
+     *
+     * @param listener Listener to evaluate a multidimensional function.
+     */
+    public void setListener(final MultiDimensionFunctionEvaluatorListener listener) {
+<span class="nc" id="L83">        this.listener = listener;</span>
+<span class="nc" id="L84">    }</span>
+
+    /**
+     * Returns point used as a reference to determine the function's input
+     * parameters along a line.
+     *
+     * @return Point used as a reference to determine the function's input
+     * parameters along a line
+     */
+    public double[] getPoint() {
+<span class="fc" id="L94">        return point;</span>
+    }
+
+    /**
+     * Returns array indicating the direction of the line where the function is
+     * evaluated.
+     *
+     * @return Array indicating the direction of the line where the function is
+     * evaluated.
+     */
+    public double[] getDirection() {
+<span class="fc" id="L105">        return direction;</span>
+    }
+
+    /**
+     * Sets point used as a reference to determine the function's input
+     * parameters along a line and the direction of the line where the
+     * function is evaluated.
+     *
+     * @param point     Point used as a reference to determine the function's input
+     *                  parameters along a line.
+     * @param direction Array indicating the direction of the line where the
+     *                  function is evaluated.
+     * @throws IllegalArgumentException Raised if point and direction don't have
+     *                                  the same length.
+     */
+    public final void setPointAndDirection(final double[] point, final double[] direction) {
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (point.length != direction.length) {</span>
+<span class="nc" id="L122">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L125">        this.point = point;</span>
+<span class="fc" id="L126">        this.direction = direction;</span>
+<span class="fc" id="L127">    }</span>
+
+    /**
+     * Evaluates a function using current listener at a distance x from current
+     * point using current direction
+     *
+     * @param x Distance from provided point using provided direction where
+     *          function is being evaluated
+     * @return Result of evaluating the function
+     * @throws EvaluationException Thrown if function evaluation fails
+     */
+    public double evaluateAt(final double x) throws EvaluationException {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (var i = 0; i &lt; point.length; i++) {</span>
+<span class="fc" id="L140">            p[i] = point[i] + x * direction[i];</span>
+        }
+<span class="fc" id="L142">        return listener.evaluate(p);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

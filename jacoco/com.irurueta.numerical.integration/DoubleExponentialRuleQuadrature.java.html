@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DoubleExponentialRuleQuadrature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">DoubleExponentialRuleQuadrature.java</span></div><h1>DoubleExponentialRuleQuadrature.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Implementation of quadrature using double exponential, which allows integration with a variable
+ * transformation.
+ * This implementation is suitable for improper integrands containing singularities.
+ */
+public class DoubleExponentialRuleQuadrature extends Quadrature {
+
+    /**
+     * Default transformation of range of integration.
+     */
+    public static final double DEFAULT_HMAX = 3.7;
+
+    /**
+     * Lower limit of integration.
+     */
+    private final double a;
+
+    /**
+     * Upper limit of integration.
+     */
+    private final double b;
+
+    /**
+     * Maximum step size. Determines transformation of range of integration.
+     */
+    private final double hmax;
+
+    /**
+     * Value of the next stage of refinement.
+     */
+    private double s;
+
+    /**
+     * Listener to evaluate single dimension functions at required points.
+     */
+    private final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate function and handle singularities.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+     *                 [-hmax, hmax].
+     */
+    public DoubleExponentialRuleQuadrature(
+            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener, final double a, final double b,
+<span class="fc" id="L69">            final double hmax) {</span>
+<span class="fc" id="L70">        this.listener = listener;</span>
+<span class="fc" id="L71">        this.a = a;</span>
+<span class="fc" id="L72">        this.b = b;</span>
+<span class="fc" id="L73">        this.hmax = hmax;</span>
+<span class="fc" id="L74">        n = 0;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Constructor with default maximum step size.
+     *
+     * @param listener listener to evaluate function and handle singularities.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     */
+    public DoubleExponentialRuleQuadrature(
+            final DoubleExponentialSingleDimensionFunctionEvaluatorListener listener, final double a, final double b) {
+<span class="fc" id="L86">        this(listener, a, b, DEFAULT_HMAX);</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate function if function has mild singularities.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+     *                 [-hmax, hmax].
+     */
+    public DoubleExponentialRuleQuadrature(
+            final SingleDimensionFunctionEvaluatorListener listener, final double a, final double b,
+            final double hmax) {
+<span class="fc" id="L101">        this((x, delta) -&gt; listener.evaluate(x), a, b, hmax);</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Constructor with default maximum step size.
+     *
+     * @param listener listener to evaluate function if function has mild singularities.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     */
+    public DoubleExponentialRuleQuadrature(
+            final SingleDimensionFunctionEvaluatorListener listener, final double a, final double b) {
+<span class="fc" id="L113">        this(listener, a, b, DEFAULT_HMAX);</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Returns the value of the integral at the nth stage of refinement.
+     *
+     * @return the value of the integral at the nth stage of refinement.
+     * @throws EvaluationException Raised if something failed during the evaluation.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    @Override
+    public double next() throws EvaluationException {
+        // On the first call to the function next (n = 1), the routine returns the crudest estimate
+        // of integral between a and b of f(x). Subsequent calls to next (n = 2, 3, ...) will
+        // improve the accuracy by adding 2^(n-1) additional interior points.
+        double del;
+        double fact;
+        double q;
+        double sum;
+        double t;
+        final double twoh;
+        int it;
+        int j;
+<span class="fc" id="L136">        n++;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (n == 1) {</span>
+<span class="fc" id="L138">            fact = 0.25;</span>
+<span class="fc" id="L139">            s = hmax * 2.0 * (b - a) * fact * listener.evaluate(0.5 * (b + a), 0.5 * (b - a));</span>
+        } else {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            for (it = 1, j = 1; j &lt; n - 1; j++) {</span>
+<span class="fc" id="L142">                it &lt;&lt;= 1;</span>
+            }
+
+            // Twice the spacing of the points to be added
+<span class="fc" id="L146">            twoh = hmax / it;</span>
+<span class="fc" id="L147">            t = 0.5 * twoh;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            for (sum = 0.0, j = 0; j &lt; it; j++) {</span>
+<span class="fc" id="L149">                q = Math.exp(-2.0 * Math.sinh(t));</span>
+<span class="fc" id="L150">                del = (b - a) * q / (1.0 + q);</span>
+<span class="fc" id="L151">                final var value = 1.0 + q;</span>
+<span class="fc" id="L152">                fact = q / (value * value) * Math.cosh(t);</span>
+<span class="fc" id="L153">                sum += fact * (listener.evaluate(a + del, del) + listener.evaluate(b - del, del));</span>
+<span class="fc" id="L154">                t += twoh;</span>
+            }
+
+            // Replace s by its refined value and return.
+<span class="fc" id="L158">            s = 0.5 * s + (b - a) * twoh * sum;</span>
+        }
+<span class="fc" id="L160">        return s;</span>
+    }
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    @Override
+    public QuadratureType getType() {
+<span class="fc" id="L170">        return QuadratureType.DOUBLE_EXPONENTIAL_RULE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

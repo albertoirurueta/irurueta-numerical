@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MidPointQuadrature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">MidPointQuadrature.java</span></div><h1>MidPointQuadrature.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Implementation of quadrature using mid-point algorithm.
+ * Mid-point algorithm is suitable for improper integrations, which consists of the following
+ * situations:
+ * - integrand goes to a finite limiting value at finite upper and lower limits, but cannot be
+ * evaluated right on one of those limits (e.g. sin(x)/x at x = 0)
+ * - the upper limit is positive infinity, or the lower limit is negative infinity.
+ * - integrand has an integrable singularity at either limit (e.g. x^-0.5 at x = 0)
+ * - integrand has an integrable singularity at a known place between its upper and lower limits.
+ * - integrand has an integrable singularity at an unknown place between its upper and lower limits.
+ * &lt;p&gt;
+ * Impossible integrals, such as those being infinite (e.g. integral from 1 to infinity of x^-1) or
+ * those that have no limiting sense (e.g. integral from -infinity to infinity of cos(x)) cannot
+ * be handled by this implementation.
+ */
+public class MidPointQuadrature extends Quadrature {
+
+    /**
+     * Lower limit of integration.
+     */
+    private final double a;
+
+    /**
+     * Upper limit of integration.
+     */
+    private final double b;
+
+    /**
+     * Current value of integral.
+     */
+    private double s;
+
+    /**
+     * Listener to evaluate single dimension functions at required points.
+     */
+    protected final SingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Constructor.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     */
+    public MidPointQuadrature(
+<span class="fc" id="L66">            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L67">        this.n = 0;</span>
+<span class="fc" id="L68">        this.a = a;</span>
+<span class="fc" id="L69">        this.b = b;</span>
+<span class="fc" id="L70">        this.s = 0;</span>
+<span class="fc" id="L71">        this.listener = listener;</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Gets lower limit of integration.
+     *
+     * @return lower limit of integration.
+     */
+    public double getA() {
+<span class="nc" id="L80">        return a;</span>
+    }
+
+    /**
+     * Gets upper limit of integration.
+     *
+     * @return upper limit of integration.
+     */
+    public double getB() {
+<span class="nc" id="L89">        return b;</span>
+    }
+
+    /**
+     * Gets current value of integral.
+     *
+     * @return current value of integral.
+     */
+    public double getS() {
+<span class="nc" id="L98">        return s;</span>
+    }
+
+    /**
+     * Returns the value of the integral at the nth stage of refinement.
+     *
+     * @return the value of the integral at the nth stage of refinement.
+     * @throws EvaluationException Raised if something failed during the evaluation.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    @Override
+    public double next() throws EvaluationException {
+        int it;
+        int j;
+        double x;
+        double tnm;
+        double sum;
+        double del;
+        double ddel;
+<span class="fc" id="L117">        n++;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (n == 1) {</span>
+<span class="fc" id="L119">            s = (b - a) * func(0.5 * (a + b));</span>
+<span class="fc" id="L120">            return s;</span>
+        } else {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            for (it = 1, j = 1; j &lt; n - 1; j++) {</span>
+<span class="fc" id="L123">                it *= 3;</span>
+            }
+<span class="fc" id="L125">            tnm = it;</span>
+<span class="fc" id="L126">            del = (b - a) / (3.0 * tnm);</span>
+            // The added points alternate in spacing between del and ddel
+<span class="fc" id="L128">            ddel = del + del;</span>
+<span class="fc" id="L129">            x = a + 0.5 * del;</span>
+<span class="fc" id="L130">            sum = 0.0;</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            for (j = 0; j &lt; it; j++) {</span>
+<span class="fc" id="L132">                sum += func(x);</span>
+<span class="fc" id="L133">                x += ddel;</span>
+<span class="fc" id="L134">                sum += func(x);</span>
+<span class="fc" id="L135">                x += del;</span>
+            }
+            // The new sum is combined with the old integral to give a refined integral
+<span class="fc" id="L138">            s = (s + (b - a) * sum / tnm) / 3.0;</span>
+<span class="fc" id="L139">            return s;</span>
+        }
+    }
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    @Override
+    public QuadratureType getType() {
+<span class="fc" id="L150">        return QuadratureType.MID_POINT;</span>
+    }
+
+    /**
+     * Evaluates function at x.
+     *
+     * @param x point where function is evaluated.
+     * @return result of evaluation.
+     * @throws EvaluationException if evaluation fails.
+     */
+    protected double func(final double x) throws EvaluationException {
+<span class="fc" id="L161">        return listener.evaluate(x);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

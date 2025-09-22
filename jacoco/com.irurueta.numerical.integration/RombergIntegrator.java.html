@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RombergIntegrator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">RombergIntegrator.java</span></div><h1>RombergIntegrator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.interpolation.InterpolationException;
+import com.irurueta.numerical.interpolation.PolynomialInterpolator;
+
+/**
+ * Base integrator for implementations based on Romberg's method.
+ * Romberg's method is a generalization of Simpson's method for higher order integration schemes.
+ * This can be used to computed integration with less function evaluations for the same level of
+ * accuracy when more assumptions of function &quot;smoothness&quot; can be made.
+ * Implementations of Romberg's method are quite powerful for sufficiently smooth (e.g., analytic)
+ * integrands, integrated over intervals that contain no singularities, and where the endpoints are
+ * also non-singular. In such circumstances, Romberg's method, takes many, many fewer function
+ * evaluations than other method's such as Simpson's.
+ *
+ * @param &lt;T&gt; instance of a quadrature to be used for Romber'gs method integration.
+ */
+public abstract class RombergIntegrator&lt;T extends Quadrature&gt; extends Integrator {
+
+    /**
+     * Default accuracy.
+     */
+    public static final double EPS = 3.0e-9;
+
+    /**
+     * Maximum number of allowed steps.
+     */
+    private static final int JMAX = 14;
+
+    /**
+     * Maximum number of allowed steps + 1.
+     */
+    private static final int JMAXP = JMAX + 1;
+
+    /**
+     * Minimum required number of steps.
+     */
+    private static final int K = 5;
+
+    /**
+     * Quadrature used for integration.
+     */
+    protected final T q;
+
+    /**
+     * Required accuracy.
+     */
+    protected final double eps;
+
+    /**
+     * Successive trapezoidal approximations.
+     */
+<span class="fc" id="L70">    private final double[] s = new double[JMAX];</span>
+
+    /**
+     * Successive trapezoidal step sizes.
+     */
+<span class="fc" id="L75">    private final double[] h = new double[JMAXP];</span>
+
+    /**
+     * Polynomial interpolator.
+     */
+<span class="fc" id="L80">    private final PolynomialInterpolator interpolator = new PolynomialInterpolator(h, s, K, false);</span>
+
+    /**
+     * Constructor.
+     *
+     * @param q   Quadrature used for integration.
+     * @param eps Required accuracy.
+     */
+<span class="fc" id="L88">    protected RombergIntegrator(final T q, final double eps) {</span>
+<span class="fc" id="L89">        this.q = q;</span>
+<span class="fc" id="L90">        this.eps = eps;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Integrates function between lower and upper limits defined by provided quadrature.
+     * This implementation is suitable for open intervals.
+     *
+     * @return result of integration.
+     * @throws IntegrationException if integration fails for numerical reasons.
+     */
+    @Override
+    public double integrate() throws IntegrationException {
+        try {
+<span class="fc" id="L103">            h[0] = 1.0;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            for (var j = 1; j &lt;= JMAX; j++) {</span>
+<span class="fc" id="L105">                s[j - 1] = q.next();</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">                if (j &gt;= K) {</span>
+<span class="fc" id="L107">                    final var ss = interpolator.rawinterp(j - K, 0.0);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">                    if (Math.abs(interpolator.getDy()) &lt;= eps * Math.abs(ss)) {</span>
+<span class="fc" id="L109">                        return ss;</span>
+                    }
+                }
+<span class="fc" id="L112">                h[j] = h[j - 1] / 9.0;</span>
+            }
+<span class="nc" id="L114">        } catch (final EvaluationException | InterpolationException e) {</span>
+<span class="nc" id="L115">            throw new IntegrationException(e);</span>
+<span class="fc" id="L116">        }</span>
+
+        // Too many steps
+<span class="fc" id="L119">        throw new IntegrationException();</span>
+    }
+
+    /**
+     * Gets type of integrator.
+     *
+     * @return type of integrator.
+     */
+    @Override
+    public IntegratorType getIntegratorType() {
+<span class="fc" id="L129">        return IntegratorType.ROMBERG;</span>
+    }
+
+    /**
+     * Creates an integrator using Romberg's method.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param eps            required accuracy.
+     * @param quadratureType quadrature type.
+     * @return created integrator.
+     */
+    public static RombergIntegrator&lt;Quadrature&gt; create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final QuadratureType quadratureType) {
+<span class="fc bfc" id="L147" title="All 7 branches covered.">        return switch (quadratureType) {</span>
+<span class="fc" id="L148">            case MID_POINT -&gt; cast(new RombergMidPointQuadratureIntegrator(a, b, listener, eps));</span>
+<span class="fc" id="L149">            case INFINITY_MID_POINT -&gt; cast(new RombergInfinityMidPointQuadratureIntegrator(a, b, listener, eps));</span>
+            case LOWER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L151">                    cast(new RombergLowerSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));</span>
+            case UPPER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L153">                    cast(new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, listener, eps));</span>
+<span class="fc" id="L154">            case EXPONENTIAL_MID_POINT -&gt; cast(new RombergExponentialMidPointQuadratureIntegrator(a, listener, eps));</span>
+            case DOUBLE_EXPONENTIAL_RULE -&gt;
+<span class="fc" id="L156">                    cast(new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, listener, eps));</span>
+<span class="fc" id="L157">            default -&gt; cast(new RombergTrapezoidalQuadratureIntegrator(a, b, listener, eps));</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using Romberg's method and having default accuracy.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param quadratureType quadrature type.
+     * @return created integrator.
+     */
+    public static RombergIntegrator&lt;Quadrature&gt; create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
+            final QuadratureType quadratureType) {
+<span class="fc bfc" id="L175" title="All 7 branches covered.">        return switch (quadratureType) {</span>
+<span class="fc" id="L176">            case MID_POINT -&gt; cast(new RombergMidPointQuadratureIntegrator(a, b, listener));</span>
+<span class="fc" id="L177">            case INFINITY_MID_POINT -&gt; cast(new RombergInfinityMidPointQuadratureIntegrator(a, b, listener));</span>
+            case LOWER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L179">                    cast(new RombergLowerSquareRootMidPointQuadratureIntegrator(a, b, listener));</span>
+            case UPPER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L181">                    cast(new RombergUpperSquareRootMidPointQuadratureIntegrator(a, b, listener));</span>
+<span class="fc" id="L182">            case EXPONENTIAL_MID_POINT -&gt; cast(new RombergExponentialMidPointQuadratureIntegrator(a, listener));</span>
+<span class="fc" id="L183">            case DOUBLE_EXPONENTIAL_RULE -&gt; cast(new RombergDoubleExponentialRuleQuadratureIntegrator(a, b, listener));</span>
+<span class="fc" id="L184">            default -&gt; cast(new RombergTrapezoidalQuadratureIntegrator(a, b, listener));</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using Romberg's method and default quadrature type.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     * @param eps      required accuracy.
+     * @return created integrator.
+     */
+    public static RombergIntegrator&lt;Quadrature&gt; create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+<span class="fc" id="L201">        return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);</span>
+    }
+
+    /**
+     * Creates an integrator using Romberg's method and having default accuracy and quadrature type.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     * @return created integrator.
+     */
+    public static RombergIntegrator&lt;Quadrature&gt; create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L216">        return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);</span>
+    }
+
+    /**
+     * Casts integrator to a quadrature integrator without wildcard parameter.
+     * .
+     * @param integrator integrator to be cast.
+     * @return cast integrator.
+     */
+    private static RombergIntegrator&lt;Quadrature&gt; cast(final RombergIntegrator&lt;?&gt; integrator) {
+        //noinspection unchecked
+<span class="fc" id="L227">        return (RombergIntegrator&lt;Quadrature&gt;) integrator;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

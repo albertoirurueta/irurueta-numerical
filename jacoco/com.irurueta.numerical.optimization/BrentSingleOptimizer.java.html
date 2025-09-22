@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BrentSingleOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">BrentSingleOptimizer.java</span></div><h1>BrentSingleOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * This class uses Brent algorithm to determine a local function minimum for
+ * single dimension functions.
+ * Brent's algorithm will search for a local minimum inside the provided or
+ * computed bracket of values.
+ * Brent's algorithm is not the fastest among all optimization algorithms, but
+ * it is usually one that provides good convergence for most continuous
+ * functions.
+ * It 's recommended to always set or compute a bracket of values, as the search
+ * range is reduced and results usually become more accurate.
+ * The implementation of this class is based on Numerical Recipes 3rd ed.
+ * Section 10.3. Page 496.
+ */
+public class BrentSingleOptimizer extends BracketedSingleOptimizer {
+
+    /**
+     * Is the maximum allowed number of iterations.
+     */
+    public static final int ITMAX = 100;
+
+    /**
+     * Is the golden ratio.
+     */
+    public static final double CGOLD = 0.3819660;
+
+    /**
+     * Small number that protects against trying to achieve fractional accuracy
+     * for a minimum that happens to be exactly zero.
+     */
+    public static final double ZEPS = 1e-10;
+
+    /**
+     * Constant defining the default accuracy of the estimated minimum.
+     */
+    public static final double DEFAULT_TOLERANCE = 3e-8;
+
+    /**
+     * Minimum allowed tolerance.
+     */
+    public static final double MIN_TOLERANCE = 0.0;
+
+    /**
+     * Tolerance value. The algorithm will iterate until the result converges
+     * below this value of accuracy or until the maximum number of iterations is
+     * achieved (and in such case, convergence will be assumed to have failed).
+     */
+    private double tolerance;
+
+    /**
+     * Empty constructor.
+     */
+    public BrentSingleOptimizer() {
+<span class="fc" id="L76">        super();</span>
+<span class="fc" id="L77">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Constructor. Creates an instance with provided bracket of values.
+     *
+     * @param minEvalPoint    Minimum bracket evaluation point.
+     * @param middleEvalPoint Middle bracket evaluation point.
+     * @param maxEvalPoint    Maximum bracket evaluation point.
+     * @param tolerance       Tolerance or accuracy to be obtained in estimated
+     *                        minimum.
+     * @throws InvalidBracketRangeException Raised if the following condition is
+     *                                      not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
+     */
+    public BrentSingleOptimizer(
+            final double minEvalPoint, final double middleEvalPoint, final double maxEvalPoint, final double tolerance)
+            throws InvalidBracketRangeException {
+<span class="fc" id="L95">        super(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L96">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Constructor. Creates an instance with provided bracket of values and a
+     * listener to get single dimension function evaluations.
+     *
+     * @param listener        Listener to evaluate a function.
+     * @param minEvalPoint    Minimum bracket evaluation point.
+     * @param middleEvalPoint Middle bracket evaluation point.
+     * @param maxEvalPoint    Maximum bracket evaluation point.
+     * @param tolerance       Tolerance or accuracy to be obtained in estimated
+     *                        minimum.
+     * @throws InvalidBracketRangeException Raised if the following condition is
+     *                                      not met: minEvalPoint &amp;lt;= middleEvalPoint &amp;lt;= maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if tolerance is negative.
+     */
+    public BrentSingleOptimizer(
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double middleEvalPoint, final double maxEvalPoint, final double tolerance)
+            throws InvalidBracketRangeException {
+<span class="fc" id="L117">        super(listener, minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L118">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * Returns tolerance value, which is the accuracy to be obtained when a
+     * minimum is estimated.
+     * The algorithm will iterate until the result converges below this value of
+     * accuracy or until the maximum number of iterations is achieved (and in
+     * such case, convergence will be assumed to have failed).
+     *
+     * @return Tolerance value.
+     */
+    public double getTolerance() {
+<span class="fc" id="L131">        return tolerance;</span>
+    }
+
+    /**
+     * Sets algorithm's tolerance.
+     * The algorithm will iterate until the result converges below this value of
+     * accuracy or until the maximum number of iterations is achieved (an in
+     * such case, convergence will be assumed to have failed).
+     *
+     * @param tolerance Tolerance or accuracy to be obtained in estimated
+     *                  minimum.
+     * @throws LockedException          Raised if this instance is locked. This instance
+     *                                  will be locked while doing some operations. Attempting to change any
+     *                                  parameter while being locked will raise this exception.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public void setTolerance(final double tolerance) throws LockedException {
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L149">            throw new LockedException();</span>
+        }
+<span class="fc" id="L151">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * This function estimates a function minimum within provided or computed
+     * bracket of values.
+     * Given a function f, and given a bracketing triplet of abscissas &quot;ax&quot;, &quot;bx&quot;,
+     * &quot;cx&quot; (such that bx is between ax and cx, and f(bx) is less than both f(ax)
+     * and f(cx), this routine isolates the minimum to a fractional prevision of
+     * about tolerance using Brent's method. The abscissa of the minimum is
+     * returned as &quot;xmin&quot;, and the function value of the minimum is returned as
+     * &quot;fmin&quot;, the returned function value.
+     *
+     * @throws LockedException       Raised if this instance is locked, because
+     *                               estimation is being computed.
+     * @throws NotReadyException     Raised if this instance is not ready because
+     *                               either a listener or a bracket has not yet been provided or computed.
+     * @throws OptimizationException Raised if the algorithm failed because of
+     *                               lack of convergence or because function couldn't be evaluated.
+     */
+    @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L175">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L178">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L181">        locked = true;</span>
+<span class="fc" id="L182">        final var v1 = new double[1];</span>
+<span class="fc" id="L183">        final var v2 = new double[2];</span>
+<span class="fc" id="L184">        final var v3 = new double[3];</span>
+
+        try {
+            double a;
+            double b;
+<span class="fc" id="L189">            var d = 0.0;</span>
+            double etemp;
+            double fu;
+            double fv;
+            double fw;
+            double fx;
+            double p;
+            double q;
+            double r;
+            double tol1;
+            double tol2;
+            double u;
+            double v;
+            double w;
+            double x;
+            double xm;
+            //This will be the distance moved on the step before last.
+<span class="fc" id="L206">            var e = 0.0;</span>
+
+            //a and b must be in ascending order, but input abscissas need not
+            //be.
+<span class="fc" id="L210">            a = Math.min(ax, cx);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">            b = (bx &gt; cx ? ax : cx);</span>
+            //Initializations...
+<span class="fc" id="L213">            x = w = v = bx;</span>
+<span class="fc" id="L214">            fw = fv = fx = listener.evaluate(x);</span>
+
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">            for (var iter = 0; iter &lt; ITMAX; iter++) {</span>
+                //Main program loop
+<span class="fc" id="L218">                xm = 0.5 * (a + b);</span>
+<span class="fc" id="L219">                tol1 = tolerance * Math.abs(x) + ZEPS;</span>
+<span class="fc" id="L220">                tol2 = 2.0 * tol1;</span>
+
+<span class="fc bfc" id="L222" title="All 2 branches covered.">                if (Math.abs(x - xm) &lt;= (tol2 - 0.5 * (b - a))) {</span>
+                    //Test for done here.
+<span class="fc" id="L224">                    fmin = fx;</span>
+<span class="fc" id="L225">                    xmin = x;</span>
+
+<span class="fc" id="L227">                    resultAvailable = true;</span>
+<span class="fc" id="L228">                    locked = false;</span>
+<span class="fc" id="L229">                    return;</span>
+                }
+<span class="fc bfc" id="L231" title="All 2 branches covered.">                if (Math.abs(e) &gt; tol1) {</span>
+                    //Construct a trial parabolic fit.
+<span class="fc" id="L233">                    r = (x - w) * (fx - fv);</span>
+<span class="fc" id="L234">                    q = (x - v) * (fx - fw);</span>
+<span class="fc" id="L235">                    p = (x - v) * q - (x - w) * r;</span>
+<span class="fc" id="L236">                    q = 2.0 * (q - r);</span>
+
+<span class="fc bfc" id="L238" title="All 2 branches covered.">                    if (q &gt; 0.0) {</span>
+<span class="fc" id="L239">                        p = -p;</span>
+                    }
+<span class="fc" id="L241">                    q = Math.abs(q);</span>
+<span class="fc" id="L242">                    etemp = e;</span>
+<span class="fc" id="L243">                    e = d;</span>
+
+<span class="fc bfc" id="L245" title="All 6 branches covered.">                    if (Math.abs(p) &gt;= Math.abs(0.5 * q * etemp) ||</span>
+                            p &lt;= q * (a - x) || p &gt;= q * (b - x)) {
+                        //noinspection all
+<span class="fc bfc" id="L248" title="All 2 branches covered.">                        e = x &gt;= xm ? a - x : b - x;</span>
+<span class="fc" id="L249">                        d = CGOLD * (e);</span>
+                        //The above conditions determine the acceptability of
+                        //the parabolic fit. Here we take the golden section 
+                        //step into the larger of the two segments.
+                    } else {
+                        //Take the parabolic step
+<span class="fc" id="L255">                        d = p / q;</span>
+<span class="fc" id="L256">                        u = x + d;</span>
+
+<span class="fc bfc" id="L258" title="All 4 branches covered.">                        if (u - a &lt; tol2 || b - u &lt; tol2) {</span>
+<span class="fc" id="L259">                            d = sign(tol1, xm - x);</span>
+                        }
+                    }
+                } else {
+                    //noinspection all
+<span class="fc bfc" id="L264" title="All 2 branches covered.">                    e = x &gt;= xm ? a - x : b - x;</span>
+<span class="fc" id="L265">                    d = CGOLD * (e);</span>
+                }
+
+<span class="fc bfc" id="L268" title="All 2 branches covered.">                u = Math.abs(d) &gt;= tol1 ? x + d : x + sign(tol1, d);</span>
+<span class="fc" id="L269">                fu = listener.evaluate(u);</span>
+
+                //This is the one function evaluation per iteration
+<span class="fc bfc" id="L272" title="All 2 branches covered.">                if (fu &lt;= fx) {</span>
+                    //No decide what to do with function evaluation
+<span class="fc bfc" id="L274" title="All 2 branches covered.">                    if (u &gt;= x) {</span>
+<span class="fc" id="L275">                        a = x;</span>
+                    } else {
+<span class="fc" id="L277">                        b = x;</span>
+                    }
+                    //Housekeeping follows
+<span class="fc" id="L280">                    v1[0] = v;</span>
+<span class="fc" id="L281">                    v2[0] = w;</span>
+<span class="fc" id="L282">                    v3[0] = x;</span>
+<span class="fc" id="L283">                    shift3(v1, v2, v3, u);</span>
+<span class="fc" id="L284">                    v = v1[0];</span>
+<span class="fc" id="L285">                    w = v2[0];</span>
+<span class="fc" id="L286">                    x = v3[0];</span>
+
+<span class="fc" id="L288">                    v1[0] = fv;</span>
+<span class="fc" id="L289">                    v2[0] = fw;</span>
+<span class="fc" id="L290">                    v3[0] = fx;</span>
+<span class="fc" id="L291">                    shift3(v1, v2, v3, fu);</span>
+<span class="fc" id="L292">                    fv = v1[0];</span>
+<span class="fc" id="L293">                    fw = v2[0];</span>
+<span class="fc" id="L294">                    fx = v3[0];</span>
+                } else {
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                    if (u &lt; x) {</span>
+<span class="fc" id="L297">                        a = u;</span>
+                    } else {
+<span class="fc" id="L299">                        b = u;</span>
+                    }
+<span class="fc bfc" id="L301" title="All 4 branches covered.">                    if (fu &lt;= fw || w == x) {</span>
+<span class="fc" id="L302">                        v = w;</span>
+<span class="fc" id="L303">                        w = u;</span>
+<span class="fc" id="L304">                        fv = fw;</span>
+<span class="fc" id="L305">                        fw = fu;</span>
+<span class="fc bfc" id="L306" title="All 6 branches covered.">                    } else if (fu &lt;= fv || v == x || v == w) {</span>
+<span class="fc" id="L307">                        v = u;</span>
+<span class="fc" id="L308">                        fv = fu;</span>
+                    }
+                }
+
+                //Done with housekeeping. Back for another iteration.
+<span class="fc bfc" id="L313" title="All 2 branches covered.">                if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L314">                    iterationCompletedListener.onIterationCompleted(this, iter, ITMAX);</span>
+                }
+            }
+<span class="nc" id="L317">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L318">            throw new OptimizationException(e);</span>
+        } finally {
+<span class="fc" id="L320">            locked = false;</span>
+        }
+
+        //Too many iterations in Brent!
+<span class="nc" id="L324">        throw new OptimizationException();</span>
+    }
+
+    /**
+     * Returns boolean indicating whether this instance is ready to start the
+     * estimation of a minimum or not.
+     * The instance is ready when both the listener and the bracket are
+     * available.
+     *
+     * @return True if this instance is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L337" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+    }
+
+    /**
+     * Internal method to set algorithm tolerance. This method does not check
+     * whether this instance is locked or not.
+     * The algorithm will iterate until the result converges below this value of
+     * accuracy or until the maximum number of iterations is achieved (and in
+     * such case, convergence will be assumed to have failed).
+     *
+     * @param tolerance Tolerance or accuracy to be obtained in estimated
+     *                  minimum.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    private void internalSetTolerance(final double tolerance) {
+<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L353">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L355">        this.tolerance = tolerance;</span>
+<span class="fc" id="L356">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
