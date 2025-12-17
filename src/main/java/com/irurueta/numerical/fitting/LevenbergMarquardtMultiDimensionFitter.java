@@ -339,6 +339,18 @@ public class LevenbergMarquardtMultiDimensionFitter extends MultiDimensionFitter
     }
 
     /**
+     * Gets reduced chi square value. This is equal to estimated chi square value divided by its degrees of
+     * freedom. Ideally this value should be close to 1.0, indicating that fit is optimal.
+     * A value larger than 1.0 indicates that fit is not good or noise has been underestimated, and a value smaller than
+     * 1.0 indicates that there is overfitting or noise has been overestimated.
+     *
+     * @return chi square value.
+     */
+    public double getReducedChisq() {
+        return getChisq() / getChisqDegreesOfFreedom();
+    }
+
+    /**
      * Gets mean square error produced by estimated parameters respect to
      * provided sample data.
      *
@@ -362,6 +374,10 @@ public class LevenbergMarquardtMultiDimensionFitter extends MultiDimensionFitter
      *                                        usually for numerically unstable input values.
      */
     public double getP() throws MaxIterationsExceededException {
+        final var chisqDegreesOfFreedom = getChisqDegreesOfFreedom();
+        if (chisqDegreesOfFreedom <= 0) {
+            return 1.0;
+        }
         return ChiSqDist.cdf(getChisq(), getChisqDegreesOfFreedom());
     }
 
