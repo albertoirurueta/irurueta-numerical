@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExponentialMatrixEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">ExponentialMatrixEstimator.java</span></div><h1>ExponentialMatrixEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+
+/**
+ * Estimates exponential of a square matrix.
+ * This is based on Gene H. Golub and Charles F. Van Loan. Matrix Computations. 3rd ed. 1996. p. 572
+ */
+<span class="fc" id="L26">public class ExponentialMatrixEstimator {</span>
+
+    /**
+     * Default error tolerance of estimated result element-wise.
+     * When this tolerance is used, algorithm achieves an error close to machine precision, but
+     * might be slightly larger than this value (which is about 1.1e-16).
+     */
+<span class="fc" id="L33">    public static final double TOLERANCE = Math.pow(2.0, -53.0);</span>
+
+    /**
+     * Estimates factorial values.
+     */
+<span class="fc" id="L38">    private final DoubleFactorialEstimator factorialEstimator = new DoubleFactorialEstimator();</span>
+
+    /**
+     * Number of rows of matrix to be estimated. Every time the number of rows change, reused
+     * matrices are re-instantiated for computational efficiency.
+     */
+<span class="fc" id="L44">    private int rows = 0;</span>
+
+    /**
+     * Scaled version of provided input matrix. This instance is reused as long as provided input
+     * matrices keep the same size.
+     */
+    private Matrix as;
+
+    /**
+     * Denominator of Padé approximant. This is reused for efficiency while provided input matrices
+     * keep the same size.
+     */
+    private Matrix d;
+
+    /**
+     * Numerator of Padé approximant. This is reused for efficiency while provided input matrices
+     * keep the same size.
+     */
+    private Matrix n;
+
+    /**
+     * Internal matrix reused for efficiency while provided input matrices keep the same size.
+     */
+    private Matrix x;
+
+    /**
+     * Internal matrix reused for efficiency while provided input matrices keep the same size.
+     */
+    private Matrix tmp;
+
+    /**
+     * Internal matrix reused for efficiency while provided input matrices keep the same size.
+     */
+    private Matrix cX;
+
+    /**
+     * Contains copy of estimated result. This is reused for efficiency while provided input
+     * matrices keep the same size.
+     */
+    private Matrix f;
+
+    /**
+     * Estimates exponential of provided matrix with default error tolerance.
+     * When this tolerance is used, algorithm achieves an error close to machine precision, but
+     * might be slightly larger than this value (which is about 1.1e-6).
+     *
+     * @param a matrix to be used for exponential estimation.
+     * @return estimated exponential matrix.
+     * @throws AlgebraException if there are numerical errors.
+     */
+    public Matrix exponential(final Matrix a) throws AlgebraException {
+<span class="fc" id="L95">        return exponential(a, TOLERANCE);</span>
+    }
+
+    /**
+     * Estimates exponential of provided matrix.
+     * Larger tolerance than default one can be used to reduce computational complexity if less
+     * accuracy is required.
+     *
+     * @param a         matrix to be used for exponential estimation.
+     * @param tolerance maximum allowed absolute error tolerance element-wise.
+     * @return estimated exponential matrix.
+     * @throws AlgebraException if there are numerical errors.
+     */
+    public Matrix exponential(final Matrix a, final double tolerance) throws AlgebraException {
+<span class="fc" id="L109">        final var result = new Matrix(a.getRows(), a.getColumns());</span>
+<span class="fc" id="L110">        exponential(a, result, tolerance);</span>
+<span class="fc" id="L111">        return result;</span>
+    }
+
+    /**
+     * Estimates exponential of provided matrix with default error tolerance.
+     * When this tolerance is used, algorithm achieves an error close to machine precision, but
+     * might be slightly larger than this value (which is about 1.1e-6).
+     *
+     * @param a      matrix to be used for exponential estimation.
+     * @param result instance where result will be stored.
+     * @throws AlgebraException if there are numerical errors.
+     */
+    public void exponential(final Matrix a, final Matrix result) throws AlgebraException {
+<span class="fc" id="L124">        exponential(a, result, TOLERANCE);</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Estimates exponential of provided matrix.
+     * Larger tolerance than default one can be used to reduce computational complexity if less
+     * accuracy is required.
+     *
+     * @param a         matrix to be used for exponential estimation.
+     * @param result    instance where result will be stored.
+     * @param tolerance maximum allowed absolute error tolerance element-wise.
+     * @throws AlgebraException if there are numerical errors.
+     */
+    public void exponential(final Matrix a, final Matrix result, final double tolerance) throws AlgebraException {
+<span class="fc" id="L138">        final var aRows = a.getRows();</span>
+
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (aRows != a.getColumns()) {</span>
+<span class="fc" id="L141">            throw new IllegalArgumentException(&quot;Matrix must be squared&quot;);</span>
+        }
+<span class="fc bfc" id="L143" title="All 4 branches covered.">        if (result.getRows() != aRows || result.getColumns() != aRows) {</span>
+<span class="fc" id="L144">            throw new IllegalArgumentException(</span>
+                    &quot;Result and provided matrix must have the same size&quot;);
+        }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (tolerance &lt; 0.0) {</span>
+<span class="fc" id="L148">            throw new IllegalArgumentException(&quot;Tolerance must be zero or greater&quot;);</span>
+        }
+
+<span class="fc" id="L151">        final var normMax = normmax(a);</span>
+<span class="fc" id="L152">        final var j = Math.max(0, 1 + (int) Math.floor(Math.log(normMax) / Math.log(2.0)));</span>
+
+<span class="fc" id="L154">        initialize(aRows);</span>
+
+        // scaled version of A
+<span class="fc" id="L157">        as.copyFrom(a);</span>
+<span class="fc" id="L158">        as.multiplyByScalar(1.0 / Math.pow(2.0, j));</span>
+
+        // find order for required tolerance
+<span class="fc" id="L161">        final var q = findQForTolerance(tolerance, normMax);</span>
+
+<span class="fc" id="L163">        var c = 1.0;</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for (var k = 1; k &lt;= q; k++) {</span>
+<span class="fc" id="L165">            c = c * (q - k + 1) / ((2 * q - k + 1) * k);</span>
+
+            // X = As * X
+<span class="fc" id="L168">            tmp.copyFrom(x);</span>
+<span class="fc" id="L169">            as.multiply(tmp, x);</span>
+
+            // c * X
+<span class="fc" id="L172">            cX.copyFrom(x);</span>
+<span class="fc" id="L173">            cX.multiplyByScalar(c);</span>
+
+            // N = N + c * X
+<span class="fc" id="L176">            n.add(cX);</span>
+
+            // D = D + (-1)^k * cX
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (k % 2 != 0) {</span>
+                // k is odd --&gt; (-1)^k = -1
+<span class="fc" id="L181">                cX.multiplyByScalar(-1.0);</span>
+            }
+            // when k is even --&gt; (-1)^k = 1 and there is no sign multiplication needed
+<span class="fc" id="L184">            d.add(cX);</span>
+        }
+
+        // Solve DF = N for F using Gaussian elimination.
+<span class="fc" id="L188">        Utils.solve(d, n, f);</span>
+
+        // now square j times
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        for (var k = 0; k &lt; j; k++) {</span>
+            // F = F^2 = F * F
+<span class="fc" id="L193">            tmp.copyFrom(f);</span>
+<span class="fc" id="L194">            tmp.multiply(f);</span>
+<span class="fc" id="L195">            f.copyFrom(tmp);</span>
+        }
+
+<span class="fc" id="L198">        result.copyFrom(f);</span>
+<span class="fc" id="L199">    }</span>
+
+    /**
+     * Initializes matrices being reused as long as number of rows is preserved for multiple
+     * provided input matrices for efficiency purposes.
+     *
+     * @param rows number of rows.
+     * @throws AlgebraException if an error occurs during instantiation.
+     */
+    private void initialize(final int rows) throws AlgebraException {
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (rows != this.rows) {</span>
+<span class="fc" id="L210">            as = new Matrix(rows, rows);</span>
+<span class="fc" id="L211">            d = Matrix.identity(rows, rows);</span>
+<span class="fc" id="L212">            n = Matrix.identity(rows, rows);</span>
+<span class="fc" id="L213">            x = Matrix.identity(rows, rows);</span>
+
+<span class="fc" id="L215">            tmp = new Matrix(rows, rows);</span>
+<span class="fc" id="L216">            cX = new Matrix(rows, rows);</span>
+
+<span class="fc" id="L218">            f = new Matrix(rows, rows);</span>
+
+<span class="fc" id="L220">            this.rows = rows;</span>
+        } else {
+<span class="fc" id="L222">            as.initialize(0.0);</span>
+<span class="fc" id="L223">            Matrix.identity(d);</span>
+<span class="fc" id="L224">            Matrix.identity(n);</span>
+<span class="fc" id="L225">            Matrix.identity(x);</span>
+
+<span class="fc" id="L227">            tmp.initialize(0.0);</span>
+<span class="fc" id="L228">            cX.initialize(0.0);</span>
+
+<span class="fc" id="L230">            f.initialize(0.0);</span>
+        }
+<span class="fc" id="L232">    }</span>
+
+    /**
+     * Estimates relative error achieved by this algorithm for provided input values.
+     *
+     * @param p Padé approximant order of numerator.
+     * @param q Padé approximant order of denominator.
+     * @return estimated relative error.
+     */
+    private double relativeError(final int p, final int q) {
+<span class="fc" id="L242">        final var pFact = factorialEstimator.factorial(p);</span>
+<span class="fc" id="L243">        final var qFact = factorialEstimator.factorial(q);</span>
+<span class="fc" id="L244">        final var pPlusQFact = factorialEstimator.factorial(p + q);</span>
+<span class="fc" id="L245">        final var pPlusQPlusOneFact = factorialEstimator.factorial(p + q + 1);</span>
+
+<span class="fc" id="L247">        return Math.pow(2.0, 3.0 - (p + q)) * pFact / pPlusQFact * qFact / pPlusQPlusOneFact;</span>
+    }
+
+    /**
+     * Finds required order of Padé approximant for provided maximum allowed relative error to be
+     * achieved.
+     *
+     * @param maxRelativeError maximum allowed relative error.
+     * @return Padé approximant order.
+     */
+    private int findQForRelativeError(final double maxRelativeError) {
+<span class="fc" id="L258">        for (var q = 0; ; q++) {</span>
+<span class="fc" id="L259">            final var relativeError = relativeError(q, q);</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            if (relativeError &lt;= maxRelativeError) {</span>
+<span class="fc" id="L261">                return q;</span>
+            }
+        }
+    }
+
+    /**
+     * Finds required order of Padé approximant for provided absolute error tolerance to be
+     * achieved.
+     *
+     * @param tolerance maximum allowed absolute error tolerance.
+     * @param normA     infinite norm (maximum absolute value) of provided matrix.
+     * @return Padé approximant order.
+     */
+    private int findQForTolerance(final double tolerance, final double normA) {
+<span class="fc" id="L275">        return findQForRelativeError(tolerance / normA);</span>
+    }
+
+    /**
+     * Estimates infinite norm of provided matrix.
+     * Infinite norm is equivalent to the maximum absolute value of all matrix elements.
+     *
+     * @param a matrix to compute infinite norm for.
+     * @return estimated infinite norm.
+     */
+    private static double normmax(final Matrix a) {
+<span class="fc" id="L286">        var max = 0.0;</span>
+<span class="fc" id="L287">        var buffer = a.getBuffer();</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        for (var v : buffer) {</span>
+<span class="fc" id="L289">            var value = Math.abs(v);</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">            if (value &gt; max) {</span>
+<span class="fc" id="L291">                max = value;</span>
+            }
+        }
+<span class="fc" id="L294">        return max;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

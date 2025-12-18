@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BicubicSpline2DInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">BicubicSpline2DInterpolator.java</span></div><h1>BicubicSpline2DInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+import com.irurueta.algebra.Matrix;
+
+/**
+ * Computes bicubic spline interpolation in two dimensions.
+ */
+public class BicubicSpline2DInterpolator {
+
+    /**
+     * Length of x1v array.
+     */
+    private final int m;
+
+    /**
+     * Length of x2v array.
+     */
+    private final int n;
+
+    /**
+     * Array of x1v.
+     */
+    private final double[] x1;
+
+    /**
+     * Array of x2v.
+     */
+    private final double[] yv;
+
+    /**
+     * Array of one dimensional cubic spline interpolators.
+     */
+    private final CubicSplineInterpolator[] srp;
+
+    /**
+     * Constructor.
+     *
+     * @param x1v array of x1v.
+     * @param x2v array of x2v.
+     * @param ym  matrix of tabulated function values yij.
+     */
+<span class="fc" id="L57">    public BicubicSpline2DInterpolator(final double[] x1v, final double[] x2v, final Matrix ym) {</span>
+<span class="fc" id="L58">        m = x1v.length;</span>
+<span class="fc" id="L59">        n = x2v.length;</span>
+<span class="fc" id="L60">        yv = new double[m];</span>
+<span class="fc" id="L61">        x1 = x1v;</span>
+<span class="fc" id="L62">        srp = new CubicSplineInterpolator[m];</span>
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (var i = 0; i &lt; m; i++) {</span>
+            // get i-th row of y
+<span class="fc" id="L66">            final var yi = ym.getSubmatrixAsArray(i, 0, i, ym.getColumns() - 1);</span>
+<span class="fc" id="L67">            srp[i] = new CubicSplineInterpolator(x2v, yi);</span>
+        }
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Gets length of x1v array.
+     *
+     * @return length of x1v array.
+     */
+    public int getM() {
+<span class="fc" id="L77">        return m;</span>
+    }
+
+    /**
+     * Gets length of x2v array.
+     *
+     * @return length of x2v array.
+     */
+    public int getN() {
+<span class="fc" id="L86">        return n;</span>
+    }
+
+    /**
+     * Given values x1p an x2p, returns an interpolated value.
+     *
+     * @param x1p x1p value where interpolation is estimated.
+     * @param x2p x2p value where interpolation is estimated.
+     * @return interpolated value.
+     * @throws InterpolationException if interpolation fails.
+     */
+    public double interpolate(final double x1p, final double x2p) throws InterpolationException {
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (int i = 0; i &lt; m; i++) {</span>
+<span class="fc" id="L99">            yv[i] = srp[i].interpolate(x2p);</span>
+        }
+
+<span class="fc" id="L102">        final var scol = new CubicSplineInterpolator(x1, yv);</span>
+<span class="fc" id="L103">        return scol.interpolate(x1p);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

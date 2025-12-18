@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccurateInterpolatingPolynomialEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">AccurateInterpolatingPolynomialEstimator.java</span></div><h1>AccurateInterpolatingPolynomialEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+/**
+ * Estimates coefficients of a polynomial passing through provided set of x and y points.
+ * This implementation is more accurate than other implementations such as implementations of
+ * {@link com.irurueta.numerical.polynomials.estimators.PolynomialEstimator}.
+ * Those implementations are based on curve fitting a polynomial of a given degree based on a number
+ * of points that can be much larger than the number of points, which results in a polynomial that
+ * does not exactly pass through provided points, but provides a minimum square error result.
+ * On the other hand, this implementation builds a polynomial of order equal to the length of
+ * provided x and y points.
+ * Ths implementation is more accurate than {@link SimpleInterpolatingPolynomialEstimator}, at the
+ * expense of greater computational cost (N^3 of this method vs N^2 of the simple one).
+ */
+<span class="fc" id="L30">public class AccurateInterpolatingPolynomialEstimator extends InterpolatingPolynomialEstimator {</span>
+
+    /**
+     * Estimates polynomial coefficients from provided x and y points.
+     *
+     * @param xa  x points the estimated polynomial passes through.
+     * @param ya  y points the estimated polynomial passes through.
+     * @param cof instance where coefficients of estimated polynomial will be stored.
+     * @throws IllegalArgumentException if any of the provided values doesn't have the same length.
+     * @throws InterpolationException   if interpolation fails for numerical reasons.
+     */
+    @Override
+    public void estimate(final double[] xa, final double[] ya, final double[] cof) throws InterpolationException {
+        int k;
+        int j;
+        int i;
+        double xmin;
+<span class="fc" id="L47">        final var n = xa.length;</span>
+<span class="fc" id="L48">        final var x = new double[n];</span>
+<span class="fc" id="L49">        final var y = new double[n];</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L52">            x[j] = xa[j];</span>
+<span class="fc" id="L53">            y[j] = ya[j];</span>
+        }
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L56">            final var interp = new PolynomialInterpolator(x, y, n - j, false);</span>
+            // extrapolate to x = 0
+<span class="fc" id="L58">            cof[j] = interp.rawinterp(0, 0.);</span>
+<span class="fc" id="L59">            xmin = 1.0e99;</span>
+<span class="fc" id="L60">            k = -1;</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            for (i = 0; i &lt; n - j; i++) {</span>
+                // Find the remaining xi of smallest absolute value
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                if (Math.abs(x[i]) &lt; xmin) {</span>
+<span class="fc" id="L64">                    xmin = Math.abs(x[i]);</span>
+<span class="fc" id="L65">                    k = i;</span>
+                }
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                if (x[i] != 0.0) {</span>
+                    // (meanwhile reducing all the terms)
+<span class="fc" id="L69">                    y[i] = (y[i] - cof[j]) / x[i];</span>
+                }
+            }
+            // and eliminate it
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            for (i = k + 1; i &lt; n - j; i++) {</span>
+<span class="fc" id="L74">                y[i - 1] = y[i];</span>
+<span class="fc" id="L75">                x[i - 1] = x[i];</span>
+            }
+        }
+<span class="fc" id="L78">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

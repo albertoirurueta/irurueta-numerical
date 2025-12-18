@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeightedPolynomialEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">WeightedPolynomialEstimator.java</span></div><h1>WeightedPolynomialEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.WeightSelection;
+import com.irurueta.sorting.SortingException;
+
+import java.util.List;
+
+/**
+ * This class implements a polynomial estimator using weighted evaluations.
+ * Weights can be used so that evaluations assumed to have a better quality
+ * (i.e. more precisely estimated) are considered to be more relevant.
+ * It is discouraged to use a large number of evaluations, even if they are
+ * correctly weighted, since as the number of evaluations increase so do the
+ * rounding errors.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class WeightedPolynomialEstimator extends PolynomialEstimator {
+
+    /**
+     * Default number of evaluations to be weighted and taken into account.
+     */
+    public static final int DEFAULT_MAX_EVALUATIONS = 50;
+
+    /**
+     * Indicates if weights are sorted by default so that largest weighted
+     * evaluations are used first.
+     */
+    public static final boolean DEFAULT_SORT_WEIGHTS = true;
+
+    /**
+     * Maximum number of evaluations to be weighted and taken into account.
+     */
+<span class="fc" id="L54">    private int maxEvaluations = DEFAULT_MAX_EVALUATIONS;</span>
+
+    /**
+     * Indicates if weights are sorted by default so that largest weighted
+     * evaluations are used first.
+     */
+<span class="fc" id="L60">    private boolean sortWeights = DEFAULT_SORT_WEIGHTS;</span>
+
+    /**
+     * Array containing weights for all evaluations.
+     */
+    private double[] weights;
+
+    /**
+     * Constructor.
+     */
+    public WeightedPolynomialEstimator() {
+<span class="fc" id="L71">        super();</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public WeightedPolynomialEstimator(final int degree) {
+<span class="fc" id="L81">        super(degree);</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
+     * @throws IllegalArgumentException if evaluations or weights are null or
+     *                                  don't have the same size.
+     */
+    public WeightedPolynomialEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights) {
+<span class="fc" id="L96">        super();</span>
+<span class="fc" id="L97">        internalSetEvaluationsAndWeights(evaluations, weights);</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events.
+     */
+    public WeightedPolynomialEstimator(final PolynomialEstimatorListener listener) {
+<span class="fc" id="L106">        super(listener);</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
+     * @throws IllegalArgumentException if evaluations or weights are null or
+     *                                  don't have the same size, or if provided degree is less than 1.
+     */
+    public WeightedPolynomialEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights) {
+<span class="fc" id="L122">        super(degree);</span>
+<span class="fc" id="L123">        internalSetEvaluationsAndWeights(evaluations, weights);</span>
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public WeightedPolynomialEstimator(final int degree, final PolynomialEstimatorListener listener) {
+<span class="fc" id="L134">        super(degree, listener);</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
+     * @param listener    listener to be notified of events.
+     * @throws IllegalArgumentException if evaluations or weights are null or
+     *                                  don't have the same size.
+     */
+    public WeightedPolynomialEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights,
+            final PolynomialEstimatorListener listener) {
+<span class="fc" id="L151">        super(listener);</span>
+<span class="fc" id="L152">        internalSetEvaluationsAndWeights(evaluations, weights);</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param weights     array containing a weight amount for each evaluation. The
+     *                    larger the value of a weight, the most significant the correspondence
+     *                    will be.
+     * @param listener    listener to be notified of events.
+     * @throws IllegalArgumentException if evaluations or weights are null or
+     *                                  don't have the same size, or if provided degree is less than 1.
+     */
+    public WeightedPolynomialEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights,
+            final PolynomialEstimatorListener listener) {
+<span class="fc" id="L170">        super(degree, listener);</span>
+<span class="fc" id="L171">        internalSetEvaluationsAndWeights(evaluations, weights);</span>
+<span class="fc" id="L172">    }</span>
+
+    /**
+     * Sets collection of polynomial evaluations and their corresponding point
+     * of evaluation used to determine a polynomial of required degree.
+     * This method override always throws an IllegalArgumentException because it
+     * is expected to provide both evaluations and their weights.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException always thrown.
+     */
+    @Override
+    public void setEvaluations(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L185">        throw new IllegalArgumentException(&quot;evaluations and weights must be provided at once&quot;);</span>
+    }
+
+    /**
+     * Sets collection of polynomial evaluations along with their corresponding
+     * weights.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param weights     array containing a weight amount for each polynomial
+     *                    evaluation. The larger the value of a weight, the most significant the
+     *                    evaluation will be.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if evaluations or weights are null or
+     *                                  don't have the same size.
+     */
+    public void setEvaluationsAndWeights(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights) throws LockedException {
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L203">            throw new LockedException();</span>
+        }
+<span class="fc" id="L205">        internalSetEvaluationsAndWeights(evaluations, weights);</span>
+<span class="fc" id="L206">    }</span>
+
+    /**
+     * Sets degree of polynomial to be estimated and collection of polynomial
+     * evaluations and their corresponding point of evaluation used to determine
+     * a polynomial of specified degree.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param weights     array containing a weight amount for each polynomial
+     *                    evaluation. The larger the value of a weight, the most significant the
+     *                    evaluation will be.
+     * @throws IllegalArgumentException if provided degree is less than 1 or
+     *                                  if evaluations or weights are null or don't have the same size.
+     * @throws LockedException          if this instance is locked.
+     */
+    public void setDegreeEvaluationsAndWeights(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights)
+            throws LockedException {
+<span class="fc" id="L225">        setDegree(degree);</span>
+<span class="fc" id="L226">        setEvaluationsAndWeights(evaluations, weights);</span>
+<span class="fc" id="L227">    }</span>
+
+
+    /**
+     * Returns array containing a weight amount for each polynomial evaluation.
+     * The larger the value of a weight, the most significant the correspondence
+     * will be.
+     *
+     * @return array containing weights for each correspondence.
+     */
+    public double[] getWeights() {
+<span class="fc" id="L238">        return weights;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether weights have been provided and are
+     * available for retrieval.
+     *
+     * @return true if weights are available, false otherwise.
+     */
+    public boolean areWeightsAvailable() {
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        return weights != null;</span>
+    }
+
+    /**
+     * Returns maximum number of evaluations to be weighted and taken into
+     * account.
+     *
+     * @return maximum number of evaluations to be weighted.
+     */
+    public int getMaxEvaluations() {
+<span class="fc" id="L258">        return maxEvaluations;</span>
+    }
+
+    /**
+     * Sets maximum number of evaluations to be weighted and taken into account.
+     * This method must be called after setting degree, because the minimum
+     * number of required evaluations will be checked based on degree of
+     * polynomial to be estimated.
+     *
+     * @param maxEvaluations maximum number of evaluations to be weighted.
+     * @throws IllegalArgumentException if provided value is less than the
+     *                                  minimum number of required evaluations.
+     * @throws LockedException          if this instance is locked.
+     */
+    public void setMaxEvaluations(final int maxEvaluations) throws LockedException {
+<span class="fc bfc" id="L273" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L274">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (maxEvaluations &lt; getMinNumberOfEvaluations()) {</span>
+<span class="fc" id="L277">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L279">        this.maxEvaluations = maxEvaluations;</span>
+<span class="fc" id="L280">    }</span>
+
+    /**
+     * Indicates if weights are sorted by so that largest weighted evaluations
+     * are used first.
+     *
+     * @return true if weights are sorted, false otherwise.
+     */
+    public boolean isSortWeightsEnabled() {
+<span class="fc" id="L289">        return sortWeights;</span>
+    }
+
+    /**
+     * Specifies whether weights are sorted by so that largest weighted
+     * evaluations are used first.
+     *
+     * @param sortWeights true if weights are sorted, false otherwise.
+     * @throws LockedException if this instance is locked.
+     */
+    public void setSortWeightsEnabled(final boolean sortWeights) throws LockedException {
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L301">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L304">        this.sortWeights = sortWeights;</span>
+<span class="fc" id="L305">    }</span>
+
+    /**
+     * Indicates if this estimator is ready to start the estimation.
+     * Estimator will be ready once enough evaluations and weights are provided.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L315" title="2 of 6 branches missed.">        return super.isReady() &amp;&amp; areWeightsAvailable() &amp;&amp; evaluations.size() == weights.length;</span>
+    }
+
+    /**
+     * Estimates a polynomial based on provided evaluations.
+     *
+     * @return estimated polynomial.
+     * @throws LockedException               if estimator is locked.
+     * @throws NotReadyException             if estimator is not ready.
+     * @throws PolynomialEstimationException if polynomial estimation fails.
+     */
+    @Override
+    public Polynomial estimate() throws LockedException, NotReadyException, PolynomialEstimationException {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L329">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L332">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L336">            locked = true;</span>
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L338">                listener.onEstimateStart(this);</span>
+            }
+
+<span class="fc" id="L341">            final var selection = WeightSelection.selectWeights(weights, sortWeights, maxEvaluations);</span>
+<span class="fc" id="L342">            final var selected = selection.getSelected();</span>
+<span class="fc" id="L343">            final var nEvaluations = selection.getNumSelected();</span>
+
+
+<span class="fc" id="L346">            final var a = new Matrix(nEvaluations, degree + 1);</span>
+<span class="fc" id="L347">            final var b = new Matrix(nEvaluations, 1);</span>
+
+<span class="fc" id="L349">            var index = 0;</span>
+<span class="fc" id="L350">            var counter = 0;</span>
+            double weight;
+<span class="fc bfc" id="L352" title="All 2 branches covered.">            for (final var evaluation : evaluations) {</span>
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">                if (selected[index]) {</span>
+<span class="fc" id="L354">                    weight = weights[index];</span>
+
+<span class="pc bpc" id="L356" title="1 of 5 branches missed.">                    switch (evaluation.getType()) {</span>
+                        case DIRECT_EVALUATION:
+<span class="fc" id="L358">                            fillDirectEvaluation((DirectPolynomialEvaluation) evaluation, a, b, counter);</span>
+<span class="fc" id="L359">                            break;</span>
+                        case DERIVATIVE_EVALUATION:
+<span class="fc" id="L361">                            fillDerivativeEvaluation((DerivativePolynomialEvaluation) evaluation, a, b, counter);</span>
+<span class="fc" id="L362">                            break;</span>
+                        case INTEGRAL_EVALUATION:
+<span class="fc" id="L364">                            fillIntegralEvaluation((IntegralPolynomialEvaluation) evaluation, a, b, counter);</span>
+<span class="fc" id="L365">                            break;</span>
+                        case INTEGRAL_INTERVAL:
+<span class="fc" id="L367">                            fillIntegralIntervalEvaluation((IntegralIntervalPolynomialEvaluation) evaluation, a, b,</span>
+                                    counter);
+<span class="fc" id="L369">                            break;</span>
+                        default:
+<span class="nc" id="L371">                            continue;</span>
+                    }
+
+<span class="fc" id="L374">                    normalize(a, b, counter, weight);</span>
+<span class="fc" id="L375">                    counter++;</span>
+                }
+
+<span class="fc" id="L378">                index++;</span>
+<span class="fc" id="L379">            }</span>
+
+<span class="fc" id="L381">            final var params = Utils.solve(a, b);</span>
+
+<span class="fc" id="L383">            final var result = new Polynomial(params.toArray());</span>
+
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L386">                listener.onEstimateEnd(this);</span>
+            }
+
+<span class="fc" id="L389">            return result;</span>
+<span class="nc" id="L390">        } catch (final AlgebraException | SortingException e) {</span>
+<span class="nc" id="L391">            throw new PolynomialEstimationException(e);</span>
+        } finally {
+<span class="fc" id="L393">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns type of polynomial estimator.
+     *
+     * @return type of polynomial estimator.
+     */
+    @Override
+    public PolynomialEstimatorType getType() {
+<span class="fc" id="L404">        return PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR;</span>
+    }
+
+    /**
+     * Normalizes rows of system matrix and values matrix to increase accuracy
+     * of linear system of equations to be solved.
+     *
+     * @param a      system matrix.
+     * @param b      values matrix.
+     * @param row    row to normalize.
+     * @param weight weight.
+     */
+    private static void normalize(final Matrix a, final Matrix b, final int row, final double weight) {
+<span class="fc" id="L417">        var sqrNorm = 0.0;</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">        for (var i = 0; i &lt; a.getColumns(); i++) {</span>
+<span class="fc" id="L419">            sqrNorm += Math.pow(a.getElementAt(row, i), 2.0);</span>
+        }
+<span class="fc" id="L421">        sqrNorm += Math.pow(b.getElementAtIndex(row), 2.0);</span>
+
+<span class="fc" id="L423">        final var norm = Math.sqrt(sqrNorm);</span>
+<span class="fc" id="L424">        final var factor = weight / norm;</span>
+
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        for (var i = 0; i &lt; a.getColumns(); i++) {</span>
+<span class="fc" id="L427">            a.setElementAt(row, i, a.getElementAt(row, i) * factor);</span>
+        }
+<span class="fc" id="L429">        b.setElementAtIndex(row, b.getElementAtIndex(row) * factor);</span>
+<span class="fc" id="L430">    }</span>
+
+    /**
+     * Internal method to set evaluations and weights.
+     *
+     * @param evaluations evaluations.
+     * @param weights     weights.
+     * @throws IllegalArgumentException if evaluations or weights are null or
+     *                                  don't have the same size.
+     */
+    private void internalSetEvaluationsAndWeights(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final double[] weights) {
+<span class="fc bfc" id="L442" title="All 6 branches covered.">        if (weights == null || evaluations == null || weights.length != evaluations.size()) {</span>
+<span class="fc" id="L443">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L445">        this.evaluations = evaluations;</span>
+<span class="fc" id="L446">        this.weights = weights;</span>
+<span class="fc" id="L447">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

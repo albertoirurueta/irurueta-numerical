@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DerivativeSingleRootEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.roots</a> &gt; <span class="el_source">DerivativeSingleRootEstimator.java</span></div><h1>DerivativeSingleRootEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Abstract class to find function roots of a single dimension function using
+ * also its derivative information.
+ * This class is meant to be extended by final implementations.
+ */
+public abstract class DerivativeSingleRootEstimator extends BracketedSingleRootEstimator {
+
+    /**
+     * Listener to evaluate a function's derivative. If the function's
+     * derivative is not known (e.g. a closed expression is not available), then
+     * a DerivativeEstimator can be used inside the derivative listener
+     * implementation.
+     */
+    protected SingleDimensionFunctionEvaluatorListener derivativeListener;
+
+    /**
+     * Empty constructor.
+     */
+    protected DerivativeSingleRootEstimator() {
+<span class="fc" id="L42">        super();</span>
+<span class="fc" id="L43">        derivativeListener = null;</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     *                     root will be searched.
+     * @param maxEvalPoint Largest value inside the bracket of values where the
+     *                     root will be searched.
+     * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
+     *                                      maxEvalPoint.
+     */
+    protected DerivativeSingleRootEstimator(
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint) throws InvalidBracketRangeException {
+<span class="fc" id="L61">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L62">        derivativeListener = null;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Constructor
+     *
+     * @param listener           Listener to evaluate a single dimension function f(x)
+     *                           to find its roots.
+     * @param derivativeListener Listener to evaluate the function's derivative
+     * @param minEvalPoint       Smallest value inside the bracket of values where the
+     *                           root will be searched.
+     * @param maxEvalPoint       Largest value inside the bracket of values where the
+     *                           root will be searched.
+     * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
+     *                                      maxEvalPoint.
+     */
+    protected DerivativeSingleRootEstimator(
+            final SingleDimensionFunctionEvaluatorListener listener,
+            final SingleDimensionFunctionEvaluatorListener derivativeListener, final double minEvalPoint,
+            final double maxEvalPoint) throws InvalidBracketRangeException {
+<span class="fc" id="L82">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L83">        this.derivativeListener = derivativeListener;</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Returns derivative listener to evaluate a function's derivative.
+     * If the function's derivative is not known (e.g. a closed expression is
+     * not available), then a DerivativeEstimator can be used inside the
+     * derivative listener implementation.
+     *
+     * @return Derivative listener.
+     * @throws NotAvailableException if listener is not available for retrieval.
+     */
+    public SingleDimensionFunctionEvaluatorListener getDerivativeListener() throws NotAvailableException {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (!isDerivativeListenerAvailable()) {</span>
+<span class="fc" id="L97">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L99">        return derivativeListener;</span>
+    }
+
+    /**
+     * Sets derivative listener to evaluate a function's derivative.
+     * If the function's derivative is not known (e.g. a closed expression is
+     * not available), then a DerivativeEstimator can be used inside the
+     * derivative listener implementation.
+     *
+     * @param derivativeListener Derivative listener to be set.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setDerivativeListener(final SingleDimensionFunctionEvaluatorListener derivativeListener)
+            throws LockedException {
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L114">            throw new LockedException();</span>
+        }
+<span class="fc" id="L116">        this.derivativeListener = derivativeListener;</span>
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Returns boolean indicating whether the derivative listener has been
+     * provided and is available for retrieval.
+     *
+     * @return true if derivative listener is available, false otherwise
+     */
+    public boolean isDerivativeListenerAvailable() {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        return derivativeListener != null;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether enough parameters have been provided
+     * in order to start the estimation of the roots of a function.
+     * An instance of this class is assumed to be ready when a listener, a
+     * derivative listener and a bracket have been provided or computed.
+     *
+     * @return True if this instance is ready to start the root estimation,
+     * false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L140" title="1 of 6 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable() &amp;&amp; isDerivativeListenerAvailable();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

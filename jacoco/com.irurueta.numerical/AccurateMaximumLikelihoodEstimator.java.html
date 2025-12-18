@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccurateMaximumLikelihoodEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">AccurateMaximumLikelihoodEstimator.java</span></div><h1>AccurateMaximumLikelihoodEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.numerical.optimization.BracketedSingleOptimizer;
+import com.irurueta.numerical.optimization.BrentSingleOptimizer;
+
+/**
+ * Class to estimate the most likely value from a series of samples assumed to
+ * be normally distributed.
+ * This implementation will first use an internal HistogramMaximumLikelihood
+ * to estimate the most likely value using a histogram, and then it will
+ * refine the solution by using a BrentSingleOptimizer in order to find the
+ * maximum of the probability distribution function assuming that such function
+ * is computed by aggregating small Gaussians (of size gaussianSigma) centered
+ * at the location of each sample.
+ */
+public class AccurateMaximumLikelihoodEstimator extends MaximumLikelihoodEstimator {
+
+    /**
+     * Boolean indicating if an initial solution should be obtained first by
+     * using the Histogram method. It is suggested to always enable this option.
+     */
+    public static final boolean DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION = true;
+
+    /**
+     * Value to be considered as the machine precision.
+     */
+    public static final double EPS = 1e-9;
+
+    /**
+     * Boolean that indicates that an initial coarse solution will be computed
+     * first by using an internal HistogramMaximumLikelihoodEstimator in order
+     * to initialize the internal BrentSingleOptimizer to obtain a more accurate
+     * solution.
+     */
+    private boolean useHistogramInitialSolution;
+
+    /**
+     * Internal maximum likelihood estimator based on the Histogram method.
+     */
+    private HistogramMaximumLikelihoodEstimator internalEstimator;
+
+    /**
+     * Internal optimizer to find the true maximum of the probability
+     * distribution function. Because a BrentSingleOptimizer is only guaranteed
+     * to obtain local minima/maxima, it is preferred to start the optimizer
+     * near the true solution to be found, for that reason it is suggested to
+     * always use the Histogram initial solution as coarse approximation to
+     * start the optimizer and get a more accurate solution.
+     */
+    private BrentSingleOptimizer optimizer;
+
+    /**
+     * Constructor.
+     *
+     * @param gaussianSigma               Gaussian sigma to be used on each sample.
+     * @param useHistogramInitialSolution Boolean indicating whether an internal
+     *                                    HistogramMaximumLikelihoodEstimator will be used to obtain a coarse
+     *                                    initial solution to initialize the BrentSingleOptimizer. It is suggested
+     *                                    to set this value always to true.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero.
+     */
+    public AccurateMaximumLikelihoodEstimator(final double gaussianSigma, final boolean useHistogramInitialSolution) {
+<span class="fc" id="L79">        super(gaussianSigma);</span>
+<span class="fc" id="L80">        this.useHistogramInitialSolution = useHistogramInitialSolution;</span>
+<span class="fc" id="L81">        internalEstimator = null;</span>
+<span class="fc" id="L82">        optimizer = null;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Empty constructor.
+     */
+    public AccurateMaximumLikelihoodEstimator() {
+<span class="fc" id="L89">        super();</span>
+<span class="fc" id="L90">        this.useHistogramInitialSolution = DEFAULT_USE_HISTOGRAM_INITIAL_SOLUTION;</span>
+<span class="fc" id="L91">        internalEstimator = null;</span>
+<span class="fc" id="L92">        optimizer = null;</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Constructor
+     *
+     * @param inputData                   Array containing input data where most likely value must
+     *                                    be estimated from.
+     * @param gaussianSigma               Gaussian sigma to be used on each sample.
+     * @param useHistogramInitialSolution Boolean indicating whether an internal
+     *                                    HistogramMaximumLikelihoodEstimator will be used to obtain a coarse
+     *                                    initial solution to initialize the BrentSingleOptimizer. It is suggested
+     *                                    to set this value always to true.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero.
+     */
+    public AccurateMaximumLikelihoodEstimator(
+            final double[] inputData, final double gaussianSigma, final boolean useHistogramInitialSolution) {
+<span class="fc" id="L110">        super(inputData, gaussianSigma);</span>
+<span class="fc" id="L111">        this.useHistogramInitialSolution = useHistogramInitialSolution;</span>
+<span class="fc" id="L112">        internalEstimator = null;</span>
+<span class="fc" id="L113">        optimizer = null;</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param minValue                    Minimum value assumed to be contained within input data
+     *                                    array.
+     * @param maxValue                    Maximum value assumed to be contained within input data
+     *                                    array.
+     * @param inputData                   Array containing input data where most likely value must
+     *                                    be estimated from.
+     * @param gaussianSigma               Gaussian sigma to be used on each sample.
+     * @param useHistogramInitialSolution Boolean indicating whether an internal
+     *                                    HistogramMaximumLikelihoodEstimator will be used to obtain a coarse
+     *                                    initial solution to initialize the BrentSingleOptimizer. It is suggested
+     *                                    to set this value always to true.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero, or if minValue &amp;lt; maxValue.
+     */
+    public AccurateMaximumLikelihoodEstimator(
+            final double minValue, final double maxValue, final double[] inputData, final double gaussianSigma,
+            final boolean useHistogramInitialSolution) {
+<span class="fc" id="L136">        super(minValue, maxValue, inputData, gaussianSigma);</span>
+<span class="fc" id="L137">        this.useHistogramInitialSolution = useHistogramInitialSolution;</span>
+<span class="fc" id="L138">        internalEstimator = null;</span>
+<span class="fc" id="L139">        optimizer = null;</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Returns method to be used for maximum likelihood estimation, which for
+     * this class is MaximumLikelihoodEstimatorMethod.
+     * ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR.
+     *
+     * @return Method for maximum likelihood estimation.
+     */
+    @Override
+    public MaximumLikelihoodEstimatorMethod getMethod() {
+<span class="fc" id="L151">        return MaximumLikelihoodEstimatorMethod.ACCURATE_MAXIMUM_LIKELIHOOD_ESTIMATOR;</span>
+    }
+
+    /**
+     * Returns boolean that indicates that an initial coarse solution will be
+     * computed first by using an internal HistogramMaximumLikelihoodEstimator
+     * in order to initialize the internal BrentSingleOptimizer to obtain a more
+     * accurate solution.
+     *
+     * @return True if an initial coarse solution if found by the Histogram
+     * method, false otherwise.
+     */
+    public boolean isHistogramInitialSolutionUsed() {
+<span class="fc" id="L164">        return useHistogramInitialSolution;</span>
+    }
+
+    /**
+     * Sets boolean that indicates that an initial coarse solution will be
+     * computed first by using an internal HistogramMaximumLikelihoodEstimator
+     * in order to initialize the internal BrentSingleOptimizer to obtain a more
+     * accurate solution.
+     *
+     * @param used True if an initial coarse solution will be found by the
+     *             Histogram method, false otherwise.
+     * @throws LockedException Exception raised if this instance is locked.
+     *                         This method can only be executed when computations finish and this
+     *                         instance becomes unlocked.
+     */
+    public void setHistogramInitialSolutionUsed(final boolean used) throws LockedException {
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L181">            throw new LockedException();</span>
+        }
+<span class="fc" id="L183">        useHistogramInitialSolution = used;</span>
+<span class="fc" id="L184">    }</span>
+
+    /**
+     * Starts the estimation of the most likely value contained within provided
+     * input data array.
+     *
+     * @return The most likely value.
+     * @throws LockedException   Exception raised if this instance is locked.
+     *                           This method can only be executed when computations finish and this
+     *                           instance becomes unlocked.
+     * @throws NotReadyException Exception raised if this instance is not yet
+     *                           ready.
+     * @see #isReady()
+     */
+    @Override
+    public double estimate() throws LockedException, NotReadyException {
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L201">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L204">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L207">        locked = true;</span>
+
+        final double minEvalPoint;
+        final double middleEvalPoint;
+        final double maxEvalPoint;
+
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        if (useHistogramInitialSolution) {</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">            if (internalEstimator == null) {</span>
+<span class="fc" id="L215">                internalEstimator = new HistogramMaximumLikelihoodEstimator();</span>
+            }
+<span class="fc" id="L217">            internalEstimator.setInputData(inputData);</span>
+<span class="fc" id="L218">            internalEstimator.setGaussianSigma(gaussianSigma);</span>
+<span class="fc" id="L219">            internalEstimator.computeMinMaxValues();</span>
+
+<span class="fc" id="L221">            middleEvalPoint = internalEstimator.estimate();</span>
+
+<span class="fc" id="L223">            var localMinValue = 0.0;</span>
+<span class="fc" id="L224">            var localMaxValue = 0.0;</span>
+
+            try {
+<span class="fc" id="L227">                localMinValue = internalEstimator.getMinValue();</span>
+<span class="fc" id="L228">                localMaxValue = internalEstimator.getMaxValue();</span>
+<span class="nc" id="L229">            } catch (final NotAvailableException ignore) {</span>
+                // never happens
+<span class="fc" id="L231">            }</span>
+
+<span class="fc" id="L233">            final var numberOfBins = internalEstimator.getNumberOfBins();</span>
+
+<span class="fc" id="L235">            final var delta = (localMaxValue - localMinValue) / (numberOfBins - 1);</span>
+
+            // pick two values around initial coarse solution
+<span class="fc" id="L238">            minEvalPoint = middleEvalPoint - delta;</span>
+<span class="fc" id="L239">            maxEvalPoint = middleEvalPoint + delta;</span>
+
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">            if (!areMinMaxAvailable) {</span>
+<span class="fc" id="L242">                this.minValue = localMinValue;</span>
+<span class="fc" id="L243">                this.maxValue = localMaxValue;</span>
+<span class="fc" id="L244">                areMinMaxAvailable = true;</span>
+            }
+<span class="fc" id="L246">        } else {</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            if (!areMinMaxAvailable) {</span>
+<span class="nc" id="L248">                computeMinMaxValues();</span>
+            }
+
+            // use min/max values as a bracket to obtain optimal solution
+<span class="nc" id="L252">            minEvalPoint = minValue;</span>
+<span class="nc" id="L253">            maxEvalPoint = maxValue;</span>
+<span class="nc" id="L254">            middleEvalPoint = (minValue + maxValue) * 0.5;</span>
+        }
+
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if ((maxValue - minValue) &lt; EPS) {</span>
+            // min-max limits are almost equal, so we return it as the solution
+<span class="nc" id="L259">            locked = false;</span>
+<span class="nc" id="L260">            return middleEvalPoint;</span>
+        }
+
+        double solution;
+        try {
+            // Use an optimizer to find maximum value on histogram (PDF)
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">            if (optimizer == null) {</span>
+<span class="fc" id="L267">                optimizer = new BrentSingleOptimizer(new EvaluatorListener(),</span>
+                        BracketedSingleOptimizer.DEFAULT_MIN_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MIDDLE_EVAL_POINT,
+                        BracketedSingleOptimizer.DEFAULT_MAX_EVAL_POINT,
+                        BrentSingleOptimizer.DEFAULT_TOLERANCE);
+            }
+
+<span class="fc" id="L274">            optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L275">            optimizer.minimize();</span>
+<span class="fc" id="L276">            solution = optimizer.getResult();</span>
+<span class="nc" id="L277">        } catch (final Exception ignore) {</span>
+            // if optimization fails, pick coarse solution if available
+<span class="nc bnc" id="L279" title="All 2 branches missed.">            if (useHistogramInitialSolution) {</span>
+<span class="nc" id="L280">                solution = middleEvalPoint;</span>
+            } else {
+                // if coarse solution is not available, then compute it
+<span class="nc" id="L283">                internalEstimator.setInputData(inputData);</span>
+<span class="nc" id="L284">                internalEstimator.setGaussianSigma(gaussianSigma);</span>
+<span class="nc" id="L285">                internalEstimator.computeMinMaxValues();</span>
+<span class="nc" id="L286">                solution = internalEstimator.estimate();</span>
+            }
+<span class="fc" id="L288">        }</span>
+
+<span class="fc" id="L290">        locked = false;</span>
+<span class="fc" id="L291">        return solution;</span>
+    }
+
+    /**
+     * Internal class used by the BrentSingleOptimizer in order to evaluate
+     * the aggregation of Gaussians for all the samples in input data array with
+     * a high degree of precision.
+     */
+<span class="fc" id="L299">    private class EvaluatorListener implements SingleDimensionFunctionEvaluatorListener {</span>
+
+
+        /**
+         * Evaluates the aggregation of Gaussians for all the samples in input
+         * data array, by assuming that each sample has an associated small
+         * Gaussian centered at the sample value and with a small sigma value.
+         * The aggregation of Gaussians will generate the averaged PDF function
+         * of all the input values.
+         *
+         * @param point Point where the aggregation of Gaussians will be
+         *              evaluated
+         * @return The value of the aggregation of samples at provided point.
+         */
+        @Override
+        public double evaluate(final double point) {
+<span class="fc" id="L315">            double out = 0.0;</span>
+            double x;
+<span class="fc bfc" id="L317" title="All 2 branches covered.">            for (final var data : inputData) {</span>
+<span class="fc" id="L318">                x = point - data;</span>
+<span class="fc" id="L319">                out += Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma))</span>
+<span class="fc" id="L320">                        / (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>
+            }
+
+            // negate value because optimizers always attempt to
+            // minimize function
+<span class="fc" id="L325">            return -out;</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThirdDegreePolynomialRootsEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.roots</a> &gt; <span class="el_source">ThirdDegreePolynomialRootsEstimator.java</span></div><h1>ThirdDegreePolynomialRootsEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.algebra.Complex;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.NotReadyException;
+
+/**
+ * Class to estimate the roots of a third degree polynomial along with other
+ * polynomial properties.
+ * A second degree polynomial is defined by its parameters as p(x) = a * x^3 +
+ * b * x^2 + c * x + d, hence the polynomial can be simply be defined by an
+ * array of length 4 [d, c, b, a]
+ * This class is based on:
+ * &lt;a href=&quot;http://en.wikipedia.org/wiki/Cubic_function&quot;&gt;http://en.wikipedia.org/wiki/Cubic_function&lt;/a&gt;
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class ThirdDegreePolynomialRootsEstimator extends PolynomialRootsEstimator {
+
+    /**
+     * Constant defining machine precision.
+     */
+    public static final double EPS = 1e-10;
+
+    /**
+     * Constant defining one third.
+     */
+    public static final double THIRD = 1.0 / 3.0;
+
+    /**
+     * Constant defining the squared root of three.
+     */
+<span class="fc" id="L48">    public static final double ROOT_THREE = Math.sqrt(3.0);</span>
+
+    /**
+     * Number of parameters valid for a third degree polynomial.
+     */
+    public static final int VALID_POLY_PARAMS_LENGTH = 4;
+
+    /**
+     * Array containing parameters of a second degree polynomial.
+     */
+    private double[] realPolyParams;
+
+    /**
+     * Empty constructor.
+     */
+    public ThirdDegreePolynomialRootsEstimator() {
+<span class="fc" id="L64">        super();</span>
+<span class="fc" id="L65">        realPolyParams = null;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param polyParams Array containing polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the provided
+     *                                  array is not valid.
+     */
+    public ThirdDegreePolynomialRootsEstimator(final double[] polyParams) {
+<span class="fc" id="L76">        super();</span>
+<span class="fc" id="L77">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Set array of third degree polynomial parameters.
+     * A third degree polynomial is defined by p(x) = a * x^3 + b * x^2 + c * x
+     * + d, and the array must be provided as [d, c, b, a].
+     * Note: This class only supports real polynomial parameters
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @throws LockedException          Raised if this instance is locked
+     * @throws IllegalArgumentException Raised if the length of the provided
+     *                                  array is not valid.
+     */
+    public void setPolynomialParameters(final double[] polyParams) throws LockedException {
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L93">            throw new LockedException();</span>
+        }
+<span class="fc" id="L95">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Internal method to set array of third degree polynomial parameters.
+     * A third degree polynomial is defined by p(x) = a * x^3 + b * x^2 + c * d
+     * + d, and the array must be provided as [d, c, b, a].
+     * Note: This class only supports real polynomial parameters
+     * This method does not check if this instance is locked.
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @throws IllegalArgumentException Raised if the length of the provided
+     *                                  array is not valid.
+     */
+    private void internalSetPolynomialParameters(final double[] polyParams) {
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (polyParams.length &lt; VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L111">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (!isThirdDegree(polyParams)) {</span>
+<span class="fc" id="L114">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L117">        this.realPolyParams = polyParams;</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Returns array of third degree polynomial parameters.
+     * A third degree polynomial is defined by p(x) = a * x^3 + b * x^2 + c * x
+     * + d, and the array is returned as [d, c, b, a].
+     * Note: This class only supports real polynomial parameters.
+     *
+     * @return Array of first degree polynomial parameters.
+     * @throws NotAvailableException Raised if polynomial parameter have not yet
+     *                               been provided.
+     */
+    public double[] getRealPolynomialParameters() throws NotAvailableException {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (!arePolynomialParametersAvailable()) {</span>
+<span class="fc" id="L132">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L134">        return realPolyParams;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether REAL polynomial parameters have been
+     * provided and is available for retrieval.
+     * Note: This class only supports real polynomial parameters.
+     *
+     * @return True if available, false otherwise.
+     */
+    @Override
+    public boolean arePolynomialParametersAvailable() {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        return realPolyParams != null;</span>
+    }
+
+    /**
+     * This method will always raise a NotAvailableException because this class
+     * only supports REAL polynomial parameters.
+     *
+     * @return this method always throws an exception.
+     * @throws com.irurueta.numerical.NotAvailableException always thrown
+     */
+    @Override
+    public Complex[] getPolynomialParameters() throws NotAvailableException {
+<span class="fc" id="L158">        throw new NotAvailableException();</span>
+    }
+
+    /**
+     * Estimates the roots of provided polynomial.
+     *
+     * @throws LockedException         Raised if this instance is locked estimating
+     *                                 roots.
+     * @throws NotReadyException       Raised if this instance is not ready because
+     *                                 polynomial parameters have not been provided.
+     * @throws RootEstimationException Raised if roots cannot be estimated for
+     *                                 some reason.
+     */
+    @Override
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L174">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L177">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L180">        locked = true;</span>
+
+<span class="fc" id="L182">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
+
+<span class="fc" id="L184">        final var d = realPolyParams[0];</span>
+<span class="fc" id="L185">        final var c = realPolyParams[1];</span>
+<span class="fc" id="L186">        final var b = realPolyParams[2];</span>
+<span class="fc" id="L187">        final var a = realPolyParams[3];</span>
+
+<span class="fc" id="L189">        final var x1 = new Complex();</span>
+<span class="fc" id="L190">        final var x2 = new Complex();</span>
+<span class="fc" id="L191">        final var x3 = new Complex();</span>
+<span class="fc" id="L192">        solveCubic(a, b, c, d, x1, x2, x3);</span>
+
+<span class="pc bpc" id="L194" title="3 of 6 branches missed.">        if (Double.isNaN(x1.getReal()) || Double.isNaN(x1.getImaginary()) || Double.isNaN(x2.getReal())</span>
+<span class="pc bpc" id="L195" title="3 of 6 branches missed.">                || Double.isNaN(x2.getImaginary()) || Double.isNaN(x3.getReal()) || Double.isNaN(x3.getImaginary())) {</span>
+
+<span class="nc" id="L197">            locked = false;</span>
+<span class="nc" id="L198">            throw new RootEstimationException();</span>
+        }
+
+<span class="pc bpc" id="L201" title="1 of 4 branches missed.">        if (x1.getReal() &lt; x2.getReal() &amp;&amp; x1.getReal() &lt; x3.getReal()) {</span>
+            // x1 goes first
+<span class="fc" id="L203">            roots[0] = x1;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            if (x2.getReal() &lt; x3.getReal()) {</span>
+                // x2 goes second and x3 goes third
+<span class="nc" id="L206">                roots[1] = x2;</span>
+<span class="nc" id="L207">                roots[2] = x3;</span>
+            } else {
+                // x3 goes second and x2 goes third
+<span class="fc" id="L210">                roots[1] = x3;</span>
+<span class="fc" id="L211">                roots[2] = x2;</span>
+            }
+<span class="pc bpc" id="L213" title="1 of 4 branches missed.">        } else if (x2.getReal() &lt; x1.getReal() &amp;&amp; x2.getReal() &lt; x3.getReal()) {</span>
+            // x2 goes first
+<span class="fc" id="L215">            roots[0] = x2;</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">            if (x1.getReal() &lt; x3.getReal()) {</span>
+                // x1 goes second and x3 goes third
+<span class="nc" id="L218">                roots[1] = x1;</span>
+<span class="nc" id="L219">                roots[2] = x3;</span>
+            } else {
+                // x3 goes second and x1 goes third
+<span class="fc" id="L222">                roots[1] = x3;</span>
+<span class="fc" id="L223">                roots[2] = x1;</span>
+            }
+        } else {
+            // x3 goes first
+<span class="fc" id="L227">            roots[0] = x3;</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">            if (x1.getReal() &lt; x2.getReal()) {</span>
+                // x1 goes second and x2 goes third
+<span class="nc" id="L230">                roots[1] = x1;</span>
+<span class="nc" id="L231">                roots[2] = x2;</span>
+            } else {
+                // x2 goes second and x1 goes second
+<span class="fc" id="L234">                roots[1] = x2;</span>
+<span class="fc" id="L235">                roots[2] = x1;</span>
+            }
+        }
+
+<span class="fc" id="L239">        locked = false;</span>
+<span class="fc" id="L240">    }</span>
+
+    /**
+     * Returns boolean indicating whether provided array of polynomial
+     * parameters correspond to a valid third degree polynomial.
+     * A third degree polynomial is defined by p(x) = a * x^3 + b * x^2 + c *x +
+     * d, and the array is returned as [d, c, b, a].
+     * Note: This class only supports real polynomial parameters
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @return True if is a third degree polynomial, false otherwise
+     */
+    public static boolean isThirdDegree(final double[] polyParams) {
+<span class="fc" id="L253">        final var length = polyParams.length;</span>
+<span class="fc bfc" id="L254" title="All 4 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp; Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            for (var i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
+<span class="nc" id="L257">                    return false;</span>
+                }
+            }
+<span class="fc" id="L260">            return true;</span>
+        }
+<span class="fc" id="L262">        return false;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether polynomial parameters provided to this
+     * instance correspond to a valid third degree polynomial.
+     * A third degree polynomial is defined by p(x) = a * x^3 + b * x^2 + c * x
+     * + d, and the array is returned as [d, c, b, a].
+     * Note: This class only supports real polynomial parameters
+     *
+     * @return True if is a second degree polynomial, false otherwise
+     * @throws NotReadyException Raised if this instance is not ready because
+     *                           an array of polynomial parameters has not yet been provided.
+     */
+    public boolean isThirdDegree() throws NotReadyException {
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L278">            throw new NotReadyException();</span>
+        }
+<span class="fc" id="L280">        return isThirdDegree(realPolyParams);</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the roots of the polynomial are three
+     * distinct and real roots or not.
+     * Because this class only supports polynomials with real parameters, we
+     * know that for third degree polynomials that have three distinct roots,
+     * they must be either real or one real and 2 complex conjugate.
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @return True if roots are distinct and real, false otherwise
+     */
+    public static boolean hasThreeDistinctRealRoots(final double[] polyParams) {
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">            return getDiscriminant(polyParams) &gt; EPS;</span>
+        }
+<span class="nc" id="L297">        return false;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the roots of the polynomial are three
+     * distinct and real roots or not.
+     * Because this class only supports polynomials with real parameters, we
+     * know that for third degree polynomials that have three distinct roots,
+     * they must be either real or one real and 2 complex conjugate.
+     *
+     * @return True if roots are distinct and real, false otherwise
+     * @throws NotReadyException Raised if polynomial parameters haven't yet
+     *                           been provided
+     */
+    public boolean hasThreeDistinctRealRoots() throws NotReadyException {
+<span class="fc bfc" id="L312" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L313">            throw new NotReadyException();</span>
+        }
+<span class="fc" id="L315">        return hasThreeDistinctRealRoots(realPolyParams);</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the polynomial has two real and equal
+     * roots and a third different one (multiplicity 2), or all three roots are
+     * real and equal (multiplicity 3).
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @return True if there are roots with multiplicity greater than one, false
+     * otherwise
+     */
+    public static boolean hasMultipleRealRoot(final double[] polyParams) {
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">            return Math.abs(getDiscriminant(polyParams)) &lt;= EPS;</span>
+        }
+<span class="nc" id="L331">        return false;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the polynomial has two real and equal
+     * roots and a third different one (multiplicity 2), or all three roots are
+     * real and equal (multiplicity 3).
+     *
+     * @return True if there are roots with multiplicity greater than one, false
+     * otherwise
+     * @throws NotReadyException Raised if polynomial parameters haven't yet
+     *                           been provided
+     */
+    public boolean hasMultipleRealRoot() throws NotReadyException {
+<span class="fc bfc" id="L345" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L346">            throw new NotReadyException();</span>
+        }
+<span class="fc" id="L348">        return hasMultipleRealRoot(realPolyParams);</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the polynomial has one real root and
+     * two complex conjugate roots.
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @return True if polynomial has 1 real root and 2 complex conjugate roots,
+     * false otherwise
+     */
+    public static boolean hasOneRealRootAndTwoComplexConjugateRoots(final double[] polyParams) {
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">        if (polyParams.length &gt;= VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">            return getDiscriminant(polyParams) &lt; -EPS;</span>
+        }
+<span class="nc" id="L363">        return false;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether the polynomial has one real root and
+     * two complex conjugate roots.
+     *
+     * @return True if polynomial has 1 real root and 2 complex conjugate roots,
+     * false otherwise
+     * @throws NotReadyException Raised if polynomial parameters haven't yet
+     *                           been provided
+     */
+    public boolean hasOneRealRootAndTwoComplexConjugateRoots() throws NotReadyException {
+<span class="fc bfc" id="L376" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L377">            throw new NotReadyException();</span>
+        }
+<span class="fc" id="L379">        return hasOneRealRootAndTwoComplexConjugateRoots(realPolyParams);</span>
+    }
+
+    /**
+     * This method will always raise an IllegalArgumentException because this
+     * class only supports REAL polynomial parameters.
+     *
+     * @throws IllegalArgumentException always thrown.
+     */
+    @Override
+    protected void internalSetPolynomialParameters(final Complex[] polyParams) {
+        // complex values are not supported
+<span class="fc" id="L391">        throw new IllegalArgumentException();</span>
+    }
+
+    /**
+     * Internal method to compute the discriminant of a 3rd degree polynomial.
+     * Discriminants are helpful to determine properties of a 3rd degree
+     * polynomial
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @return Value of discriminant
+     */
+    private static double getDiscriminant(final double[] polyParams) {
+<span class="fc" id="L403">        final var d = polyParams[0];</span>
+<span class="fc" id="L404">        final var c = polyParams[1];</span>
+<span class="fc" id="L405">        final var b = polyParams[2];</span>
+<span class="fc" id="L406">        final var a = polyParams[3];</span>
+
+<span class="fc" id="L408">        return 18.0 * a * b * c * d</span>
+                - 4.0 * b * b * b * d
+                + b * b * c * c
+                - 4.0 * a * c * c * c
+                - 27.0 * a * a * d * d;
+    }
+
+    /**
+     * Computes the cube root or x^(1/3) of provided value x
+     *
+     * @param x Provided value
+     * @return Cube root
+     */
+    private double cubeRoot(final double x) {
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        if (x &lt; 0.0) {</span>
+<span class="fc" id="L423">            return -Math.pow(-x, THIRD);</span>
+        } else {
+<span class="fc" id="L425">            return Math.pow(x, THIRD);</span>
+        }
+    }
+
+    /**
+     * Finds 3rd degree polynomial roots
+     *
+     * @param a  1st parameter
+     * @param b  2nd parameter
+     * @param c  3rd parameter
+     * @param d  4th parameter
+     * @param x1 1st root (output parameter)
+     * @param x2 2nd root (output parameter)
+     * @param x3 3rd root (output parameter)
+     */
+    private void solveCubic(final double a, final double b, final double c, final double d,
+                            final Complex x1, final Complex x2, final Complex x3) {
+
+        // find the discriminant
+<span class="fc" id="L444">        final var f = (3.0 * c / a - Math.pow(b, 2.0) / Math.pow(a, 2.0)) / 3.0;</span>
+<span class="fc" id="L445">        final var g = (2.0 * Math.pow(b, 3.0) / Math.pow(a, 3.0) - 9.0 * b * c</span>
+<span class="fc" id="L446">                / Math.pow(a, 2.0) + 27.0 * d / a) / 27.0;</span>
+<span class="fc" id="L447">        final var h = Math.pow(g, 2.0) / 4.0 + Math.pow(f, 3.0) / 27.0;</span>
+<span class="fc" id="L448">        final var absF = Math.abs(f);</span>
+<span class="fc" id="L449">        final var absG = Math.abs(g);</span>
+<span class="fc" id="L450">        final var absH = Math.abs(h);</span>
+        // evaluate discriminant
+<span class="pc bpc" id="L452" title="2 of 6 branches missed.">        if (absF &lt;= EPS &amp;&amp; absG &lt;= EPS &amp;&amp; absH &lt;= EPS) {</span>
+            // 3 equal roots
+
+            // when f, g, and h all equal 0 the roots can be found by the following line
+<span class="fc" id="L456">            final double x = -cubeRoot(d / a);</span>
+<span class="fc" id="L457">            x1.setRealAndImaginary(x, 0.0);</span>
+<span class="fc" id="L458">            x2.setRealAndImaginary(x, 0.0);</span>
+<span class="fc" id="L459">            x3.setRealAndImaginary(x, 0.0);</span>
+<span class="fc bfc" id="L460" title="All 2 branches covered.">        } else if (h &lt;= 0.0) {</span>
+            // 3 real roots
+
+            // complicated maths making use of the method
+<span class="fc" id="L464">            final var i = Math.pow(Math.pow(g, 2.0) / 4 - h, 0.5);</span>
+<span class="fc" id="L465">            final var j = cubeRoot(i);</span>
+<span class="fc" id="L466">            final var k = Math.acos(-(g / (2.0 * i)));</span>
+<span class="fc" id="L467">            final var m = Math.cos(k / 3.0);</span>
+<span class="fc" id="L468">            final var n = ROOT_THREE * Math.sin(k / 3.0);</span>
+<span class="fc" id="L469">            final var p = -(b / (3.0 * a));</span>
+
+            // print solutions
+<span class="fc" id="L472">            x1.setRealAndImaginary(2.0 * j * m + p, 0.0);</span>
+<span class="fc" id="L473">            x2.setRealAndImaginary(-j * (m + n) + p, 0.0);</span>
+<span class="fc" id="L474">            x3.setRealAndImaginary(-j * (m - n) + p, 0.0);</span>
+<span class="pc bpc" id="L475" title="1 of 2 branches missed.">        } else if (h &gt; 0) {</span>
+            // 1 real root and 2 complex roots
+
+            // complicated maths making use of the method
+<span class="fc" id="L479">            final var r = -(g / 2) + Math.pow(h, 0.5);</span>
+<span class="fc" id="L480">            final var s = cubeRoot(r);</span>
+<span class="fc" id="L481">            final var t = -(g / 2) - Math.pow(h, 0.5);</span>
+<span class="fc" id="L482">            final var u = cubeRoot(t);</span>
+<span class="fc" id="L483">            final var p = -(b / (3 * a));</span>
+
+            // print solutions
+<span class="fc" id="L486">            x1.setRealAndImaginary((s + u) + p, 0.0);</span>
+<span class="fc" id="L487">            final var real = -(s + u) / 2 + p;</span>
+<span class="fc" id="L488">            x2.setReal(real);</span>
+<span class="fc" id="L489">            x3.setReal(real);</span>
+<span class="fc" id="L490">            final var imag = (s - u) * ROOT_THREE / 2;</span>
+<span class="fc" id="L491">            x2.setImaginary(imag);</span>
+<span class="fc" id="L492">            x3.setImaginary(imag);</span>
+        }
+<span class="fc" id="L494">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

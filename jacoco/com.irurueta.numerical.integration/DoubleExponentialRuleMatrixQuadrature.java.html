@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DoubleExponentialRuleMatrixQuadrature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">DoubleExponentialRuleMatrixQuadrature.java</span></div><h1>DoubleExponentialRuleMatrixQuadrature.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.numerical.EvaluationException;
+
+/**
+ * Implementation of quadrature using double exponential, which allows integration with a variable
+ * transformation.
+ * This implementation is suitable for improper integrands containing singularities.
+ */
+public class DoubleExponentialRuleMatrixQuadrature extends MatrixQuadrature {
+
+    /**
+     * Default transformation of range of integration.
+     */
+    public static final double DEFAULT_HMAX = 3.7;
+
+    /**
+     * Lower limit of integration.
+     */
+    private final double a;
+
+    /**
+     * Upper limit of integration.
+     */
+    private final double b;
+
+    /**
+     * Maximum step size. Determines transformation of range of integration.
+     */
+    private final double hmax;
+
+    /**
+     * Number of rows of quadrature result.
+     */
+    private final int rows;
+
+    /**
+     * Number of columns of quadrature result.
+     */
+    private final int columns;
+
+    /**
+     * Value of the next stage of refinement.
+     */
+    private final Matrix s;
+
+    /**
+     * Temporary value storing summation of evaluations.
+     */
+    private final Matrix sum;
+
+    /**
+     * Temporary value storing evaluation at mid-point.
+     */
+    private final Matrix tmpMid;
+
+    /**
+     * Temporary value storing evaluation at lower bound.
+     */
+    private final Matrix tmpA;
+
+    /**
+     * Temporary value storing evaluation at upper bound.
+     */
+    private final Matrix tmpB;
+
+    /**
+     * Temporary value storing evaluation at point x.
+     */
+    private final Matrix tmpX;
+
+    /**
+     * Listener to evaluate single dimension functions at required points.
+     */
+    private final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate a single dimension matrix function at required points.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+     *                 [-hmax, hmax].
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public DoubleExponentialRuleMatrixQuadrature(
+            final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double a,
+<span class="fc" id="L106">            final double b, final double hmax) throws WrongSizeException {</span>
+<span class="fc" id="L107">        this.listener = listener;</span>
+<span class="fc" id="L108">        this.a = a;</span>
+<span class="fc" id="L109">        this.b = b;</span>
+<span class="fc" id="L110">        this.hmax = hmax;</span>
+<span class="fc" id="L111">        n = 0;</span>
+
+<span class="fc" id="L113">        rows = listener.getRows();</span>
+<span class="fc" id="L114">        columns = listener.getColumns();</span>
+<span class="fc" id="L115">        s = new Matrix(rows, columns);</span>
+<span class="fc" id="L116">        sum = new Matrix(rows, columns);</span>
+<span class="fc" id="L117">        tmpMid = new Matrix(rows, columns);</span>
+<span class="fc" id="L118">        tmpA = new Matrix(rows, columns);</span>
+<span class="fc" id="L119">        tmpB = new Matrix(rows, columns);</span>
+<span class="fc" id="L120">        tmpX = new Matrix(rows, columns);</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate a single dimension matrix function at required points.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public DoubleExponentialRuleMatrixQuadrature(
+            final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double a,
+            final double b) throws WrongSizeException {
+<span class="fc" id="L134">        this(listener, a, b, DEFAULT_HMAX);</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate a single dimension matrix function at required points.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+     *                 [-hmax, hmax].
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public DoubleExponentialRuleMatrixQuadrature(
+            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double a, final double b,
+            final double hmax) throws WrongSizeException {
+<span class="fc" id="L150">        this(new DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener() {</span>
+            @Override
+            public void evaluate(double x, double delta, Matrix result) throws EvaluationException {
+<span class="fc" id="L153">                listener.evaluate(x, result);</span>
+<span class="fc" id="L154">            }</span>
+
+            @Override
+            public int getRows() {
+<span class="fc" id="L158">                return listener.getRows();</span>
+            }
+
+            @Override
+            public int getColumns() {
+<span class="fc" id="L163">                return listener.getColumns();</span>
+            }
+        }, a, b, hmax);
+<span class="fc" id="L166">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate a single dimension matrix function at required points.
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public DoubleExponentialRuleMatrixQuadrature(
+            final MatrixSingleDimensionFunctionEvaluatorListener listener, final double a, final double b)
+            throws WrongSizeException {
+<span class="fc" id="L179">        this(listener, a, b, DEFAULT_HMAX);</span>
+<span class="fc" id="L180">    }</span>
+
+
+    /**
+     * Returns the value of the integral at the nth stage of refinement.
+     *
+     * @param result instance where the value of the integral at the nth stage of refinement will
+     *               be stored.
+     * @throws EvaluationException Raised if something failed during the evaluation.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    @Override
+    public void next(Matrix result) throws EvaluationException {
+        try {
+            // On the first call to the function next (n = 1), the routine returns the crudest estimate
+            // of integral between a and b of f(x). Subsequent calls to next (n = 2, 3, ...) will
+            // improve the accuracy by adding 2^(n-1) additional interior points.
+            double del;
+            double fact;
+            double q;
+            double t;
+            final double twoh;
+            int it;
+            int j;
+<span class="fc" id="L204">            n++;</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">            if (n == 1) {</span>
+<span class="fc" id="L206">                fact = 0.25;</span>
+                // s = hmax * 2.0 * (b - a) * fact * listener.evaluate(0.5 * (b + a), 0.5 * (b - a))
+<span class="fc" id="L208">                listener.evaluate(0.5 * (b + a), 0.5 * (b - a), tmpMid);</span>
+<span class="fc" id="L209">                s.copyFrom(tmpMid);</span>
+<span class="fc" id="L210">                s.multiplyByScalar(hmax * 2.0 * (b - a) * fact);</span>
+<span class="fc" id="L211">                result.copyFrom(s);</span>
+            } else {
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                for (it = 1, j = 1; j &lt; n - 1; j++) {</span>
+<span class="fc" id="L214">                    it &lt;&lt;= 1;</span>
+                }
+
+                // Twice the spacing of the points to be added
+<span class="fc" id="L218">                twoh = hmax / it;</span>
+<span class="fc" id="L219">                t = 0.5 * twoh;</span>
+<span class="fc" id="L220">                sum.initialize(0.0);</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">                for (j = 0; j &lt; it; j++) {</span>
+<span class="fc" id="L222">                    q = Math.exp(-2.0 * Math.sinh(t));</span>
+<span class="fc" id="L223">                    del = (b - a) * q / (1.0 + q);</span>
+<span class="fc" id="L224">                    final var value = 1.0 + q;</span>
+<span class="fc" id="L225">                    fact = q / (value * value) * Math.cosh(t);</span>
+<span class="fc" id="L226">                    listener.evaluate(a + del, del, tmpA);</span>
+<span class="fc" id="L227">                    listener.evaluate(b - del, del, tmpB);</span>
+<span class="fc" id="L228">                    tmpX.copyFrom(tmpA);</span>
+<span class="fc" id="L229">                    tmpX.add(tmpB);</span>
+<span class="fc" id="L230">                    tmpX.multiplyByScalar(fact);</span>
+<span class="fc" id="L231">                    sum.add(tmpX);</span>
+<span class="fc" id="L232">                    t += twoh;</span>
+                }
+
+                // Replace s by its refined value and return.
+                // s = 0.5 * s + (b - a) * twoh * sum
+<span class="fc" id="L237">                sum.multiplyByScalar((b - a) * twoh);</span>
+<span class="fc" id="L238">                s.multiplyByScalar(0.5);</span>
+<span class="fc" id="L239">                s.add(sum);</span>
+<span class="fc" id="L240">                result.copyFrom(s);</span>
+            }
+<span class="nc" id="L242">        } catch (final WrongSizeException ex) {</span>
+<span class="nc" id="L243">            throw new EvaluationException(ex);</span>
+<span class="fc" id="L244">        }</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    @Override
+    public QuadratureType getType() {
+<span class="nc" id="L254">        return QuadratureType.DOUBLE_EXPONENTIAL_RULE;</span>
+    }
+
+    /**
+     * Gets number of rows of quadrature result.
+     *
+     * @return number of rows of quadrature result.
+     */
+    @Override
+    protected int getRows() {
+<span class="fc" id="L264">        return rows;</span>
+    }
+
+    /**
+     * Gets number of columns of quadrature result.
+     *
+     * @return number of columns of quadrature result.
+     */
+    @Override
+    protected int getColumns() {
+<span class="fc" id="L274">        return columns;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

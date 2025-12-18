@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator.java</span></div><h1>SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Computes function integration by using Simpson's method and double exponential quadrature.
+ * Double exponential quadrature allows improper integrands containing singularities to be
+ * integrated.
+ *
+ * @see DoubleExponentialRuleMatrixQuadrature
+ */
+public class SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator
+        extends SimpsonMatrixIntegrator&lt;DoubleExponentialRuleMatrixQuadrature&gt; {
+
+   /**
+    * Constructor.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+    *                 [-hmax, hmax].
+    * @param listener listener to evaluate a single dimension matrix (multivariate) function at
+    *                 required points.
+    * @param eps      required accuracy.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b, final double hmax,
+           final MatrixSingleDimensionFunctionEvaluatorListener listener, final double eps) throws WrongSizeException {
+<span class="fc" id="L45">      super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b, hmax), eps);</span>
+<span class="fc" id="L46">   }</span>
+
+   /**
+    * Constructor.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param listener listener to evaluate a single dimension matrix (multivariate) function at
+    *                 required points.
+    * @param eps      required accuracy.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+           final double eps) throws WrongSizeException {
+<span class="fc" id="L61">      super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b), eps);</span>
+<span class="fc" id="L62">   }</span>
+
+   /**
+    * Constructor with default accuracy.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+    *                 [-hmax, hmax].
+    * @param listener listener to evaluate a single dimension matrix (multivariate) function at
+    *                 required points.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b, final double hmax,
+           final MatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
+<span class="fc" id="L78">      this(a, b, hmax, listener, EPS);</span>
+<span class="fc" id="L79">   }</span>
+
+   /**
+    * Constructor with default accuracy and default maximum step size.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param listener listener to evaluate a single dimension matrix (multivariate) function at
+    *                 required points.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
+           throws WrongSizeException {
+<span class="fc" id="L93">      this(a, b, listener, EPS);</span>
+<span class="fc" id="L94">   }</span>
+
+   /**
+    * Constructor.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+    *                 [-hmax, hmax].
+    * @param listener listener to evaluate a single dimension function at required points for
+    *                 double exponential quadrature to take into account any non-mild
+    *                 singularities.
+    * @param eps      required accuracy.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b, final double hmax,
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
+           throws WrongSizeException {
+<span class="fc" id="L113">      super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b, hmax), eps);</span>
+<span class="fc" id="L114">   }</span>
+
+   /**
+    * Constructor with default maximum step size.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param listener listener to evaluate a single dimension function at required points for
+    *                 double exponential quadrature to take into account any non-mild
+    *                 singularities.
+    * @param eps      required accuracy.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b,
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener, final double eps)
+           throws WrongSizeException {
+<span class="fc" id="L131">      super(new DoubleExponentialRuleMatrixQuadrature(listener, a, b), eps);</span>
+<span class="fc" id="L132">   }</span>
+
+   /**
+    * Constructor with default accuracy.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param hmax     Maximum step size. This quadrature transforms the range of integration to
+    *                 [-hmax, hmax].
+    * @param listener listener to evaluate a single dimension function at required points for
+    *                 double exponential quadrature to take into account any non-mild
+    *                 singularities.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b, final double hmax,
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
+<span class="fc" id="L149">      this(a, b, hmax, listener, EPS);</span>
+<span class="fc" id="L150">   }</span>
+
+   /**
+    * Constructor with default accuracy and default maximum step size.
+    *
+    * @param a        Lower limit of integration.
+    * @param b        Upper limit of integration.
+    * @param listener listener to evaluate a single dimension function at required points for
+    *                 double exponential quadrature to take into account any non-mild
+    *                 singularities.
+    * @throws WrongSizeException if size notified by provided listener is invalid.
+    */
+   public SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(
+           final double a, final double b,
+           final DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener listener) throws WrongSizeException {
+<span class="fc" id="L165">      this(a, b, listener, EPS);</span>
+<span class="fc" id="L166">   }</span>
+
+   /**
+    * Gets type of quadrature.
+    *
+    * @return type of quadrature.
+    */
+   @Override
+   public QuadratureType getQuadratureType() {
+<span class="fc" id="L175">      return QuadratureType.DOUBLE_EXPONENTIAL_RULE;</span>
+   }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FirstDegreePolynomialRootsEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.roots</a> &gt; <span class="el_source">FirstDegreePolynomialRootsEstimator.java</span></div><h1>FirstDegreePolynomialRootsEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.algebra.Complex;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.NotReadyException;
+
+/**
+ * Class to estimate the root of a first degree polynomial along with other
+ * polynomial properties.
+ * A first degree polynomial is defined by its parameters as p(x) = a * x + b,
+ * hence the polynomial can be simply be defined by an array of length 2 [b, a].
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class FirstDegreePolynomialRootsEstimator extends PolynomialRootsEstimator {
+
+    /**
+     * Constant defining machine precision.
+     */
+    public static final double EPS = 1e-10;
+
+    /**
+     * Number of parameters valid for a first degree polynomial.
+     */
+    public static final int VALID_POLY_PARAMS_LENGTH = 2;
+
+    /**
+     * Array containing parameters of a first degree polynomial.
+     */
+    private double[] realPolyParams;
+
+    /**
+     * Empty constructor.
+     */
+    public FirstDegreePolynomialRootsEstimator() {
+<span class="fc" id="L51">        super();</span>
+<span class="fc" id="L52">        realPolyParams = null;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param polyParams Array containing polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the provided
+     *                                  array is not valid.
+     */
+    public FirstDegreePolynomialRootsEstimator(final double[] polyParams) {
+<span class="fc" id="L63">        super();</span>
+<span class="fc" id="L64">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Set array of first degree polynomial parameters.
+     * A first degree polynomial is defined by p(x) = a * x + b, and the array
+     * must be provided as [b, a].
+     * Note: This class only supports real polynomial parameters.
+     *
+     * @param polyParams Array containing polynomial parameters.
+     * @throws LockedException          Raised if this instance is locked.
+     * @throws IllegalArgumentException Raised if the length of the provided
+     *                                  array is not valid.
+     */
+    public void setPolynomialParameters(final double[] polyParams) throws LockedException {
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L80">            throw new LockedException();</span>
+        }
+<span class="fc" id="L82">        internalSetPolynomialParameters(polyParams);</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Internal method to set array of first degree polynomial parameters.
+     * A first degree polynomial is defined by p(x) = a * x + b, and the array
+     * must be provided as [b, a].
+     * Note: This class only supports real polynomial parameters.
+     * This method does not check if this instance is locked.
+     *
+     * @param polyParams Array containing polynomial parameters.
+     * @throws IllegalArgumentException Raised if the length of the provided
+     *                                  array is not valid.
+     */
+    private void internalSetPolynomialParameters(final double[] polyParams) {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (polyParams.length &lt; VALID_POLY_PARAMS_LENGTH) {</span>
+<span class="fc" id="L98">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (!isFirstDegree(polyParams)) {</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L104">        this.realPolyParams = polyParams;</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Returns array of first degree polynomial parameters.
+     * A first degree polynomial is defined by p(x) = a * x + b, and the array
+     * is returned as [b, a].
+     * Note: This class only supports real polynomial parameters.
+     *
+     * @return Array of first degree polynomial parameters.
+     * @throws NotAvailableException if parameters are not available for retrieval.
+     */
+    public double[] getRealPolynomialParameters() throws NotAvailableException {
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (!arePolynomialParametersAvailable()) {</span>
+<span class="fc" id="L118">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L120">        return realPolyParams;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether REAL polynomial parameters have been
+     * provided and is available for retrieval.
+     * Note: This class only supports real polynomial parameters.
+     *
+     * @return True if available, false otherwise.
+     */
+    @Override
+    public boolean arePolynomialParametersAvailable() {
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        return realPolyParams != null;</span>
+    }
+
+    /**
+     * This method will always raise a NotAvailableException because this class
+     * only supports REAL polynomial parameters.
+     *
+     * @return throws NotAvailableException.
+     * @throws NotAvailableException always throws this exception.
+     */
+    @Override
+    public Complex[] getPolynomialParameters() throws NotAvailableException {
+<span class="fc" id="L144">        throw new NotAvailableException();</span>
+    }
+
+
+    /**
+     * This method will always raise an IllegalArgumentException because this
+     * class only supports REAL polynomial parameters.
+     */
+    @Override
+    protected void internalSetPolynomialParameters(final Complex[] polyParams) {
+        // complex values are not supported
+<span class="fc" id="L155">        throw new IllegalArgumentException();</span>
+    }
+
+    /**
+     * Estimates the root of provided polynomial.
+     *
+     * @throws LockedException   Raised if this instance is locked estimating a
+     *                           root.
+     * @throws NotReadyException Raised if this instance is not ready because
+     *                           polynomial parameters have not been provided.
+     */
+    @Override
+    public void estimate() throws LockedException, NotReadyException {
+
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L170">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L173">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L176">        locked = true;</span>
+
+<span class="fc" id="L178">        roots = new Complex[VALID_POLY_PARAMS_LENGTH - 1];</span>
+
+<span class="fc" id="L180">        final var b = realPolyParams[0];</span>
+<span class="fc" id="L181">        final var a = realPolyParams[1];</span>
+
+<span class="fc" id="L183">        final var x = solveLinear(a, b);</span>
+
+<span class="fc" id="L185">        roots[0] = new Complex(x, 0.0);</span>
+
+<span class="fc" id="L187">        locked = false;</span>
+<span class="fc" id="L188">    }</span>
+
+    /**
+     * Returns boolean indicating whether provided array of polynomial
+     * parameters correspond to a valid first degree polynomial.
+     * A first degree polynomial is defined by p(x) = a * x + b, and the array
+     * is returned as [b, a].
+     * Note: This class only supports real polynomial parameters
+     *
+     * @param polyParams Array containing polynomial parameters
+     * @return True if is a first degree polynomial, false otherwise
+     */
+    public static boolean isFirstDegree(final double[] polyParams) {
+<span class="fc" id="L201">        final var length = polyParams.length;</span>
+<span class="fc bfc" id="L202" title="All 4 branches covered.">        if (length &gt;= VALID_POLY_PARAMS_LENGTH &amp;&amp; Math.abs(polyParams[VALID_POLY_PARAMS_LENGTH - 1]) &gt; EPS) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            for (var i = VALID_POLY_PARAMS_LENGTH; i &lt; length; i++) {</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">                if (Math.abs(polyParams[i]) &gt; EPS) {</span>
+<span class="nc" id="L205">                    return false;</span>
+                }
+            }
+<span class="fc" id="L208">            return true;</span>
+        }
+<span class="fc" id="L210">        return false;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether polynomial parameters provided to this
+     * instance correspond to a valid first degree polynomial.
+     * A first degree polynomial is defined by p(x) = a * x + b, and the array
+     * is returned as [b, a].
+     * Note: This class only supports real polynomial parameters.
+     *
+     * @return True if is a first degree polynomial, false otherwise.
+     * @throws NotReadyException Raised if this instance is not ready because
+     *                           an array of polynomial parameters has not yet been provided.
+     */
+    public boolean isFirstDegree() throws NotReadyException {
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L226">            throw new NotReadyException();</span>
+        }
+<span class="fc" id="L228">        return isFirstDegree(realPolyParams);</span>
+    }
+
+    /**
+     * Returns boolean indicating whether estimated root is real.
+     * Because this class only accepts real polynomial parameters, then the
+     * estimated root will always be real, and consequently this method always
+     * returns true.
+     *
+     * @return True if estimated root is real, false otherwise.
+     */
+    public boolean isRealSolution() {
+<span class="fc" id="L240">        return true;</span>
+    }
+
+    /**
+     * Internal method to estimate a root on a first degree polynomial.
+     *
+     * @param a A parameter.
+     * @param b B parameter.
+     * @return Root.
+     */
+    private double solveLinear(final double a, final double b) {
+        //a * x + b = 0
+<span class="fc" id="L252">        return -b / a;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

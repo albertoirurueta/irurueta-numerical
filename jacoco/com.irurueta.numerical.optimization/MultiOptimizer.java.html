@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">MultiOptimizer.java</span></div><h1>MultiOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.NotAvailableException;
+
+/**
+ * Abstract class to search for minima on multidimensional classes.
+ * A multidimensional class is one having several input parameters (usually
+ * provided as an array of values), and returning a single scalar value.
+ */
+public abstract class MultiOptimizer extends Optimizer {
+    /**
+     * Listener to evaluate a multidimensional function.
+     */
+    protected MultiDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Minimum that was estimated.
+     */
+    protected double[] xmin;
+
+    /**
+     * Function value at estimated minimum.
+     */
+    protected double fmin;
+
+    /**
+     * Boolean indicating whether a minimum has already been found or not.
+     */
+    protected boolean resultAvailable;
+
+    /**
+     * Empty constructor.
+     */
+    protected MultiOptimizer() {
+<span class="fc" id="L52">        super();</span>
+<span class="fc" id="L53">        listener = null;</span>
+<span class="fc" id="L54">        xmin = null;</span>
+<span class="fc" id="L55">        fmin = 0.0;</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener Listener to evaluate a multidimensional function.
+     */
+    protected MultiOptimizer(final MultiDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L64">        super();</span>
+<span class="fc" id="L65">        this.listener = listener;</span>
+<span class="fc" id="L66">        xmin = null;</span>
+<span class="fc" id="L67">        fmin = 0.0;</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Returns listener to evaluate a multidimensional function
+     *
+     * @return Listener to evaluate a multidimensional function.
+     * @throws NotAvailableException Raised if listener has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public MultiDimensionFunctionEvaluatorListener getListener() throws NotAvailableException {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (!isListenerAvailable()) {</span>
+<span class="fc" id="L79">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L81">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to evaluate a multidimensional function.
+     *
+     * @param listener Listener to evaluate a multidimensional function.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setListener(final MultiDimensionFunctionEvaluatorListener listener) throws LockedException {
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L92">            throw new LockedException();</span>
+        }
+<span class="fc" id="L94">        this.listener = listener;</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Returns boolean indicating whether listener has been provided and is
+     * available for retrieval.
+     *
+     * @return True if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether this instance is ready to start the
+     * estimation of a minimum.
+     * Because this class is abstract, this method is meant to be overridden,
+     * otherwise false will always be returned.
+     *
+     * @return Boolean indicating whether this instance is ready.
+     */
+    @Override
+    public boolean isReady() {
+<span class="nc" id="L117">        return false;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether a minimum has been estimated and is
+     * available for retrieval.
+     *
+     * @return True if result is available, false otherwise.
+     */
+    public boolean isResultAvailable() {
+<span class="fc" id="L127">        return resultAvailable;</span>
+    }
+
+    /**
+     * Returns minimum point that was found.
+     *
+     * @return Minimum point
+     * @throws NotAvailableException Raised if a minimum is not yet available
+     *                               for retrieval.
+     */
+    public double[] getResult() throws NotAvailableException {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (!isResultAvailable()) {</span>
+<span class="fc" id="L139">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L141">        return xmin;</span>
+    }
+
+    /**
+     * Returns function evaluation at estimated minimum point.
+     *
+     * @return Function evaluation at minimum.
+     * @throws NotAvailableException Raised if a minimum is not yet available
+     *                               for retrieval.
+     */
+    public double getEvaluationAtResult() throws NotAvailableException {
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (!isResultAvailable()) {</span>
+<span class="fc" id="L153">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L155">        return fmin;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

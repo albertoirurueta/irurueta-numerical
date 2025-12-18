@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PolynomialEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">PolynomialEstimator.java</span></div><h1>PolynomialEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * This class defines the interface for an estimator of a polynomial of a given
+ * degree using points where polynomials are evaluated.
+ */
+@SuppressWarnings(&quot;Duplicates&quot;)
+public abstract class PolynomialEstimator {
+
+    /**
+     * Minimum allowed degree to be estimated
+     */
+    public static final int MIN_DEGREE = 1;
+
+    /**
+     * Default estimator type.
+     */
+<span class="fc" id="L41">    public static final PolynomialEstimatorType DEFAULT_ESTIMATOR_TYPE =</span>
+            PolynomialEstimatorType.LMSE_POLYNOMIAL_ESTIMATOR;
+
+    /**
+     * Degree of polynomial to be estimated.
+     */
+    protected int degree;
+
+    /**
+     * Collection of polynomial evaluations and their corresponding point of
+     * evaluation used to determine a polynomial of required degree.
+     */
+    protected List&lt;PolynomialEvaluation&gt; evaluations;
+
+    /**
+     * True when estimator is estimating radial distortion.
+     */
+    protected boolean locked;
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends or
+     * estimation progress changes.
+     */
+    protected PolynomialEstimatorListener listener;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L69">    protected PolynomialEstimator() {</span>
+<span class="fc" id="L70">        degree = MIN_DEGREE;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+<span class="fc" id="L79">    protected PolynomialEstimator(final int degree) {</span>
+<span class="fc" id="L80">        internalSetDegree(degree);</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     */
+    protected PolynomialEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L89">        this();</span>
+<span class="fc" id="L90">        this.evaluations = evaluations;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events.
+     */
+    protected PolynomialEstimator(final PolynomialEstimatorListener listener) {
+<span class="fc" id="L99">        this();</span>
+<span class="fc" id="L100">        this.listener = listener;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    protected PolynomialEstimator(final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L111">        this(degree);</span>
+<span class="fc" id="L112">        this.evaluations = evaluations;</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    protected PolynomialEstimator(final int degree, final PolynomialEstimatorListener listener) {
+<span class="fc" id="L123">        this(degree);</span>
+<span class="fc" id="L124">        this.listener = listener;</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     */
+    protected PolynomialEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialEstimatorListener listener) {
+<span class="fc" id="L135">        this(evaluations);</span>
+<span class="fc" id="L136">        this.listener = listener;</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    protected PolynomialEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialEstimatorListener listener) {
+<span class="fc" id="L150">        this(degree, evaluations);</span>
+<span class="fc" id="L151">        this.listener = listener;</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Gets degree of polynomial to be estimated.
+     *
+     * @return degree of polynomial to be estimated.
+     */
+    public int getDegree() {
+<span class="fc" id="L160">        return degree;</span>
+    }
+
+    /**
+     * Sets degree of polynomial to be estimated.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     * @throws LockedException          if this instance is locked.
+     */
+    public void setDegree(final int degree) throws LockedException {
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L172">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L175">        internalSetDegree(degree);</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Gets collection of polynomial evaluations and their corresponding point
+     * of evaluation used to determine a polynomial of required degree.
+     *
+     * @return collection of polynomial evaluations.
+     */
+    public List&lt;PolynomialEvaluation&gt; getEvaluations() {
+<span class="fc" id="L185">        return evaluations;</span>
+    }
+
+    /**
+     * Sets collection of polynomial evaluations and their corresponding point
+     * of evaluation used to determine a polynomial of required degree.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws LockedException if this instance is locked.
+     */
+    public void setEvaluations(final List&lt;PolynomialEvaluation&gt; evaluations) throws LockedException {
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L197">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L200">        this.evaluations = evaluations;</span>
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * Sets degree of polynomial to be estimated and collection of polynomial
+     * evaluations and their corresponding point of evaluation used to determine
+     * a polynomial of specified degree.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     * @throws LockedException          if this instance is locked.
+     */
+    public void setDegreeAndEvaluations(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) throws LockedException {
+<span class="fc" id="L215">        setDegree(degree);</span>
+<span class="fc" id="L216">        setEvaluations(evaluations);</span>
+<span class="fc" id="L217">    }</span>
+
+    /**
+     * Determines whether estimation is ready to start with the given data
+     * and required degree of polynomial to be estimated
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+
+<span class="fc" id="L227">        final var nParams = degree + 1;</span>
+<span class="fc bfc" id="L228" title="All 4 branches covered.">        if (evaluations == null || evaluations.size() &lt; nParams) {</span>
+<span class="fc" id="L229">            return false;</span>
+        }
+
+        // also ensure that at least a direct or integral evaluation exists
+<span class="fc" id="L233">        var count = 0;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        for (final var eval : evaluations) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">            if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                    || eval.getType() == PolynomialEvaluationType.INTEGRAL_EVALUATION</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                    || eval.getType() == PolynomialEvaluationType.INTEGRAL_INTERVAL) {</span>
+<span class="fc" id="L238">                count++;</span>
+            }
+<span class="fc" id="L240">        }</span>
+
+<span class="pc bpc" id="L242" title="1 of 4 branches missed.">        return count &gt;= 1 &amp;&amp; evaluations.size() &gt;= nParams;</span>
+    }
+
+    /**
+     * Gets minimum number of evaluations required to estimate a polynomial of
+     * the specified degree.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @return number of required evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static int getMinNumberOfEvaluations(final int degree) {
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (degree &lt; MIN_DEGREE) {</span>
+<span class="fc" id="L255">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L258">        return degree + 1;</span>
+    }
+
+    /**
+     * Gets minimum number of evaluations required to estimate a polynomial of
+     * the specified degree.
+     *
+     * @return number of required evaluations.
+     */
+    public int getMinNumberOfEvaluations() {
+<span class="fc" id="L268">        return getMinNumberOfEvaluations(degree);</span>
+    }
+
+    /**
+     * Indicates whether this instance is locked.
+     *
+     * @return true if this estimator is busy estimating a polynomial, false
+     * otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L278">        return locked;</span>
+    }
+
+    /**
+     * Gets listener to be notified of events such as when estimation starts,
+     * ends or estimation progress changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public PolynomialEstimatorListener getListener() {
+<span class="fc" id="L288">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or estimation progress changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setListener(final PolynomialEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L300">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L303">        this.listener = listener;</span>
+<span class="fc" id="L304">    }</span>
+
+    /**
+     * Estimates a polynomial based on provided evaluations.
+     *
+     * @return estimated polynomial.
+     * @throws LockedException               if estimator is locked.
+     * @throws NotReadyException             if estimator is not ready.
+     * @throws PolynomialEstimationException if polynomial estimation fails.
+     */
+    public abstract Polynomial estimate() throws LockedException, NotReadyException, PolynomialEstimationException;
+
+    /**
+     * Returns type of polynomial estimator.
+     *
+     * @return type of polynomial estimator.
+     */
+    public abstract PolynomialEstimatorType getType();
+
+    /**
+     * Creates an instance of a polynomial estimator using default
+     * type.
+     *
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create() {
+<span class="fc" id="L330">        return create(DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree and
+     * default type.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(final int degree) {
+<span class="fc" id="L342">        return create(degree, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided evaluations,
+     * and default type and degree.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L353">        return create(evaluations, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided listener
+     * and default type and degree.
+     *
+     * @param listener listener to be notified of events.
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(final PolynomialEstimatorListener listener) {
+<span class="fc" id="L364">        return create(listener, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree,
+     * polynomial evaluations and default type.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L377">        return create(degree, evaluations, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree,
+     * listener and default type.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(final int degree, final PolynomialEstimatorListener listener) {
+<span class="fc" id="L390">        return create(degree, listener, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided evaluations,
+     * listener and default type.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialEstimatorListener listener) {
+<span class="fc" id="L403">        return create(evaluations, listener, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree,
+     * evaluations, listener and default type.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialEstimatorListener listener) {
+<span class="fc" id="L419">        return create(degree, evaluations, listener, DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided type and
+     * default degree.
+     *
+     * @param type type of polynomial estimator
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L430" title="All 2 branches covered.">        if (type == PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR) {</span>
+<span class="fc" id="L431">            return new WeightedPolynomialEstimator();</span>
+        } else {
+<span class="fc" id="L433">            return new LMSEPolynomialEstimator();</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree and
+     * type.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @param type   type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(final int degree, final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        if (type == PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR) {</span>
+<span class="fc" id="L448">            return new WeightedPolynomialEstimator(degree);</span>
+        } else {
+<span class="fc" id="L450">            return new LMSEPolynomialEstimator(degree);</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided evaluations
+     * and type.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param type        type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        switch (type) {</span>
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
+<span class="fc" id="L466">                final var weights = new double[evaluations.size()];</span>
+<span class="fc" id="L467">                Arrays.fill(weights, 1.0);</span>
+<span class="fc" id="L468">                return new WeightedPolynomialEstimator(evaluations, weights);</span>
+            case LMSE_POLYNOMIAL_ESTIMATOR:
+            default:
+<span class="fc" id="L471">                return new LMSEPolynomialEstimator(evaluations);</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided listener
+     * and type.
+     *
+     * @param listener listener to be notified of events.
+     * @param type     type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(
+            final PolynomialEstimatorListener listener, final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L485" title="All 2 branches covered.">        if (type == PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR) {</span>
+<span class="fc" id="L486">            return new WeightedPolynomialEstimator(listener);</span>
+        } else {
+<span class="fc" id="L488">            return new LMSEPolynomialEstimator(listener);</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree,
+     * evaluations and type.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param type        type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L504" title="All 2 branches covered.">        switch (type) {</span>
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
+<span class="fc" id="L506">                final var weights = new double[evaluations.size()];</span>
+<span class="fc" id="L507">                Arrays.fill(weights, 1.0);</span>
+<span class="fc" id="L508">                return new WeightedPolynomialEstimator(degree, evaluations, weights);</span>
+            case LMSE_POLYNOMIAL_ESTIMATOR:
+            default:
+<span class="fc" id="L511">                return new LMSEPolynomialEstimator(degree, evaluations);</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree,
+     * listener and type.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events.
+     * @param type     type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(
+            final int degree, final PolynomialEstimatorListener listener, final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        if (type == PolynomialEstimatorType.WEIGHTED_POLYNOMIAL_ESTIMATOR) {</span>
+<span class="fc" id="L528">            return new WeightedPolynomialEstimator(degree, listener);</span>
+        } else {
+<span class="fc" id="L530">            return new LMSEPolynomialEstimator(degree, listener);</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided evaluations,
+     * listener and type.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     * @param type        type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     */
+    public static PolynomialEstimator create(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialEstimatorListener listener,
+            final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L546" title="All 2 branches covered.">        switch (type) {</span>
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
+<span class="fc" id="L548">                final var weights = new double[evaluations.size()];</span>
+<span class="fc" id="L549">                Arrays.fill(weights, 1.0);</span>
+<span class="fc" id="L550">                return new WeightedPolynomialEstimator(evaluations, weights, listener);</span>
+            case LMSE_POLYNOMIAL_ESTIMATOR:
+            default:
+<span class="fc" id="L553">                return new LMSEPolynomialEstimator(evaluations, listener);</span>
+        }
+    }
+
+    /**
+     * Creates an instance of a polynomial estimator using provided degree,
+     * evaluations, listener and type.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     * @param type        type of polynomial estimator.
+     * @return an instance of a polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialEstimator create(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialEstimatorListener listener,
+            final PolynomialEstimatorType type) {
+<span class="fc bfc" id="L571" title="All 2 branches covered.">        switch (type) {</span>
+            case WEIGHTED_POLYNOMIAL_ESTIMATOR:
+<span class="fc" id="L573">                final var weights = new double[evaluations.size()];</span>
+<span class="fc" id="L574">                Arrays.fill(weights, 1.0);</span>
+<span class="fc" id="L575">                return new WeightedPolynomialEstimator(degree, evaluations, weights, listener);</span>
+            case LMSE_POLYNOMIAL_ESTIMATOR:
+            default:
+<span class="fc" id="L578">                return new LMSEPolynomialEstimator(degree, evaluations, listener);</span>
+        }
+    }
+
+    /**
+     * Fills row of system of equations for a direct polynomial evaluation.
+     *
+     * @param evaluation a direct polynomial evaluation.
+     * @param a          system matrix.
+     * @param b          values matrix.
+     * @param row        row to be filled.
+     */
+    protected void fillDirectEvaluation(
+            final DirectPolynomialEvaluation evaluation, final Matrix a, final Matrix b, final int row) {
+
+<span class="fc" id="L593">        var powX = 1.0;</span>
+<span class="fc" id="L594">        final var x = evaluation.getX();</span>
+<span class="fc bfc" id="L595" title="All 2 branches covered.">        for (var i = 0; i &lt; a.getColumns(); i++) {</span>
+<span class="fc" id="L596">            a.setElementAt(row, i, powX);</span>
+<span class="fc" id="L597">            powX *= x;</span>
+        }
+
+<span class="fc" id="L600">        b.setElementAtIndex(row, evaluation.getEvaluation());</span>
+<span class="fc" id="L601">    }</span>
+
+    /**
+     * Fills row of system of equations for a derivative polynomial evaluation.
+     *
+     * @param evaluation a derivative polynomial evaluation.
+     * @param a          system matrix.
+     * @param b          values matrix.
+     * @param row        row to be filled.
+     */
+    protected void fillDerivativeEvaluation(
+            final DerivativePolynomialEvaluation evaluation, final Matrix a, final Matrix b, final int row) {
+
+<span class="fc" id="L614">        final var order = evaluation.getDerivativeOrder();</span>
+
+<span class="fc bfc" id="L616" title="All 2 branches covered.">        for (var i = 0; i &lt; order; i++) {</span>
+<span class="fc" id="L617">            a.setElementAt(row, i, 0.0);</span>
+        }
+
+<span class="fc" id="L620">        var powX = 1.0;</span>
+<span class="fc" id="L621">        final var x = evaluation.getX();</span>
+<span class="fc bfc" id="L622" title="All 2 branches covered.">        for (var i = order; i &lt; a.getColumns(); i++) {</span>
+<span class="fc" id="L623">            var param = i;</span>
+<span class="fc bfc" id="L624" title="All 2 branches covered.">            for (var j = 1; j &lt; order; j++) {</span>
+<span class="fc" id="L625">                param *= i - j;</span>
+            }
+<span class="fc" id="L627">            a.setElementAt(row, i, param * powX);</span>
+<span class="fc" id="L628">            powX *= x;</span>
+        }
+
+<span class="fc" id="L631">        b.setElementAtIndex(row, evaluation.getEvaluation());</span>
+<span class="fc" id="L632">    }</span>
+
+    /**
+     * Fills row of system of equations for an integral polynomial evaluation.
+     *
+     * @param evaluation an integral polynomial evaluation.
+     * @param a          system matrix.
+     * @param b          values matrix.
+     * @param row        row to be filled.
+     * @throws PolynomialEstimationException if constant terms does not have
+     *                                       proper size (it must be null or have order length).
+     */
+    protected void fillIntegralEvaluation(
+            final IntegralPolynomialEvaluation evaluation, final Matrix a, final Matrix b, final int row)
+            throws PolynomialEstimationException {
+
+<span class="fc" id="L648">        final var order = evaluation.getIntegralOrder();</span>
+<span class="fc" id="L649">        final var constants = evaluation.getConstants();</span>
+<span class="pc bpc" id="L650" title="2 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
+<span class="nc" id="L651">            throw new PolynomialEstimationException();</span>
+        }
+
+<span class="fc" id="L654">        var accum = 0.0;</span>
+<span class="fc" id="L655">        var powX = 1.0;</span>
+<span class="fc" id="L656">        final var x = evaluation.getX();</span>
+<span class="fc bfc" id="L657" title="All 2 branches covered.">        for (var i = 0; i &lt; order; i++) {</span>
+<span class="pc bpc" id="L658" title="1 of 2 branches missed.">            if (constants != null) {</span>
+<span class="fc" id="L659">                var param = 1;</span>
+<span class="fc bfc" id="L660" title="All 2 branches covered.">                for (var k = 1; k &lt;= i; k++) {</span>
+<span class="fc" id="L661">                    param *= k;</span>
+                }
+<span class="fc" id="L663">                accum += constants[i] / param * powX;</span>
+            }
+<span class="fc" id="L665">            powX *= x;</span>
+        }
+
+<span class="fc bfc" id="L668" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; a.getColumns(); i++, j++) {</span>
+<span class="fc" id="L669">            var param = j;</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">            for (var k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L671">                param *= j - k;</span>
+            }
+<span class="fc" id="L673">            a.setElementAt(row, i, powX / param);</span>
+<span class="fc" id="L674">            powX *= x;</span>
+        }
+
+<span class="fc" id="L677">        b.setElementAtIndex(row, evaluation.getEvaluation() - accum);</span>
+<span class="fc" id="L678">    }</span>
+
+    /**
+     * Fills row of system of equations for a polynomial evaluation of an
+     * interval integration.
+     *
+     * @param evaluation an interval integration of a polynomial evaluation.
+     * @param a          system matrix.
+     * @param b          values matrix.
+     * @param row        row to be filled.
+     * @throws PolynomialEstimationException if constant terms does not have
+     *                                       proper size (it must be null or have order length).
+     */
+    protected void fillIntegralIntervalEvaluation(
+            final IntegralIntervalPolynomialEvaluation evaluation, final Matrix a, final Matrix b, final int row)
+            throws PolynomialEstimationException {
+
+<span class="fc" id="L695">        final var order = evaluation.getIntegralOrder();</span>
+<span class="fc" id="L696">        final var constants = evaluation.getConstants();</span>
+<span class="pc bpc" id="L697" title="1 of 4 branches missed.">        if (constants != null &amp;&amp; constants.length != order) {</span>
+<span class="nc" id="L698">            throw new PolynomialEstimationException();</span>
+        }
+
+<span class="fc" id="L701">        var accum = 0.0;</span>
+<span class="fc" id="L702">        var powStartX = 1.0;</span>
+<span class="fc" id="L703">        var powEndX = 1.0;</span>
+<span class="fc" id="L704">        final var startX = evaluation.getStartX();</span>
+<span class="fc" id="L705">        final var endX = evaluation.getEndX();</span>
+<span class="fc bfc" id="L706" title="All 2 branches covered.">        for (var i = 0; i &lt; order; i++) {</span>
+<span class="fc bfc" id="L707" title="All 2 branches covered.">            if (constants != null) {</span>
+<span class="fc" id="L708">                var param = 1;</span>
+<span class="fc bfc" id="L709" title="All 2 branches covered.">                for (var k = 1; k &lt;= i; k++) {</span>
+<span class="fc" id="L710">                    param *= k;</span>
+                }
+<span class="fc" id="L712">                accum += constants[i] / param * (powEndX - powStartX);</span>
+            }
+<span class="fc" id="L714">            powStartX *= startX;</span>
+<span class="fc" id="L715">            powEndX *= endX;</span>
+        }
+
+<span class="fc bfc" id="L718" title="All 2 branches covered.">        for (int i = 0, j = order; i &lt; a.getColumns(); i++, j++) {</span>
+<span class="fc" id="L719">            var param = j;</span>
+<span class="fc bfc" id="L720" title="All 2 branches covered.">            for (var k = 1; k &lt; order; k++) {</span>
+<span class="fc" id="L721">                param *= j - k;</span>
+            }
+<span class="fc" id="L723">            a.setElementAt(row, i, (powEndX - powStartX) / param);</span>
+<span class="fc" id="L724">            powStartX *= startX;</span>
+<span class="fc" id="L725">            powEndX *= endX;</span>
+        }
+
+<span class="fc" id="L728">        b.setElementAtIndex(row, evaluation.getEvaluation() - accum);</span>
+<span class="fc" id="L729">    }</span>
+
+    /**
+     * Normalizes rows of system matrix and values matrix to increase accuracy
+     * of linear system of equations to be solved.
+     *
+     * @param a   system matrix.
+     * @param b   values matrix.
+     * @param row row to normalize.
+     */
+    protected void normalize(final Matrix a, final Matrix b, final int row) {
+<span class="fc" id="L740">        var sqrNorm = 0.0;</span>
+<span class="fc bfc" id="L741" title="All 2 branches covered.">        for (var i = 0; i &lt; a.getColumns(); i++) {</span>
+<span class="fc" id="L742">            sqrNorm += Math.pow(a.getElementAt(row, i), 2.0);</span>
+        }
+<span class="fc" id="L744">        sqrNorm += Math.pow(b.getElementAtIndex(row), 2.0);</span>
+
+<span class="fc" id="L746">        final var norm = Math.sqrt(sqrNorm);</span>
+
+<span class="fc bfc" id="L748" title="All 2 branches covered.">        for (var i = 0; i &lt; a.getColumns(); i++) {</span>
+<span class="fc" id="L749">            a.setElementAt(row, i, a.getElementAt(row, i) / norm);</span>
+        }
+<span class="fc" id="L751">        b.setElementAtIndex(row, b.getElementAtIndex(row) / norm);</span>
+<span class="fc" id="L752">    }</span>
+
+    /**
+     * Internal method to set degree of polynomial to be estimated.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    private void internalSetDegree(final int degree) {
+<span class="fc bfc" id="L761" title="All 2 branches covered.">        if (degree &lt; MIN_DEGREE) {</span>
+<span class="fc" id="L762">            throw new IllegalArgumentException(&quot;degree must be at least 1&quot;);</span>
+        }
+<span class="fc" id="L764">        this.degree = degree;</span>
+<span class="fc" id="L765">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

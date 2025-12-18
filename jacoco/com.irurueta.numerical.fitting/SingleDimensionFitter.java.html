@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleDimensionFitter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.fitting</a> &gt; <span class="el_source">SingleDimensionFitter.java</span></div><h1>SingleDimensionFitter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.fitting;
+
+import com.irurueta.algebra.Matrix;
+
+import java.util.Arrays;
+
+/**
+ * Base class to fit a single dimension function y = f(x) by using provided
+ * data (x, y)
+ */
+public abstract class SingleDimensionFitter extends Fitter {
+    /**
+     * Input points x where function f(x) is evaluated.
+     */
+    protected double[] x;
+
+    /**
+     * Result of evaluation of linear single dimensional function f(x) at
+     * provided x points. This is provided as input data along with x array.
+     */
+    protected double[] y;
+
+    /**
+     * Standard deviations of each pair of points (x,y).
+     */
+    protected double[] sig;
+
+    /**
+     * Number of samples (x, y) in provided input data.
+     */
+    protected int ndat;
+
+    /**
+     * Estimated parameters of single dimensional function.
+     */
+    protected double[] a;
+
+    /**
+     * Covariance of estimated parameters of single dimensional function.
+     */
+    protected Matrix covar;
+
+    /**
+     * Estimated chi square value of input data.
+     */
+    protected double chisq;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L66">    protected SingleDimensionFitter() {</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where function f(x) is evaluated.
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+<span class="fc" id="L79">    protected SingleDimensionFitter(final double[] x, final double[] y, final double[] sig) {</span>
+<span class="fc" id="L80">        setInputData(x, y, sig);</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where function f(x) is evaluated.
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+<span class="fc" id="L94">    protected SingleDimensionFitter(final double[] x, final double[] y, final double sig) {</span>
+<span class="fc" id="L95">        setInputData(x, y, sig);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Returns input points x where function f(x) is evaluated.
+     *
+     * @return input points x.
+     */
+    public double[] getX() {
+<span class="fc" id="L104">        return x;</span>
+    }
+
+    /**
+     * Returns result of evaluation of linear single dimensional function f(x)
+     * at provided x points. This is provided as input data along with x array.
+     *
+     * @return sampled function evaluations.
+     */
+    public double[] getY() {
+<span class="fc" id="L114">        return y;</span>
+    }
+
+    /**
+     * Returns standard deviations of each pair of points (x,y).
+     *
+     * @return standard deviations of each pair of points (x,y).
+     */
+    public double[] getSig() {
+<span class="fc" id="L123">        return sig;</span>
+    }
+
+    /**
+     * Sets required input data to start function fitting.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points. This is provided as input data along with x array.
+     * @param sig standard deviations of each pair of points (x,y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  size.
+     */
+    public final void setInputData(final double[] x, final double[] y, final double[] sig) {
+<span class="fc bfc" id="L138" title="All 4 branches covered.">        if (x.length != y.length || sig.length != x.length) {</span>
+<span class="fc" id="L139">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L142">        this.x = x;</span>
+<span class="fc" id="L143">        this.y = y;</span>
+<span class="fc" id="L144">        this.sig = sig;</span>
+
+<span class="fc" id="L146">        ndat = x.length;</span>
+<span class="fc" id="L147">    }</span>
+
+    /**
+     * Sets required input data to start function fitting and assuming constant
+     * standard deviation errors in input data.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  size.
+     */
+    public final void setInputData(final double[] x, final double[] y, final double sig) {
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (x.length != y.length) {</span>
+<span class="fc" id="L164">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L167">        this.x = x;</span>
+<span class="fc" id="L168">        this.y = y;</span>
+
+<span class="fc" id="L170">        this.sig = new double[x.length];</span>
+<span class="fc" id="L171">        Arrays.fill(this.sig, sig);</span>
+
+<span class="fc" id="L173">        ndat = x.length;</span>
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Returns estimated parameters of linear single dimensional function.
+     *
+     * @return estimated parameters.
+     */
+    public double[] getA() {
+<span class="fc" id="L182">        return a;</span>
+    }
+
+    /**
+     * Returns covariance of estimated parameters of linear single dimensional
+     * function.
+     *
+     * @return covariance of estimated parameters.
+     */
+    public Matrix getCovar() {
+<span class="fc" id="L192">        return covar;</span>
+    }
+
+    /**
+     * Returns estimated chi square value of input data.
+     *
+     * @return estimated chi square value of input data.
+     */
+    public double getChisq() {
+<span class="fc" id="L201">        return chisq;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

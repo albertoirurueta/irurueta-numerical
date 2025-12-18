@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FalsePositionSingleRootEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.roots</a> &gt; <span class="el_source">FalsePositionSingleRootEstimator.java</span></div><h1>FalsePositionSingleRootEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.InvalidBracketRangeException;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Computes a root for a single dimension function inside a given bracket of
+ * values, in other words, root will only be searched within provided minimum
+ * and maximum evaluation points.
+ * This class is based on the false position algorithm.
+ * This implementation is based on Numerical Recipes 3rd ed. Section 9.2
+ * page 451.
+ */
+public class FalsePositionSingleRootEstimator extends BracketedSingleRootEstimator {
+
+    /**
+     * Maximum allowed number of iterations.
+     */
+    public static final int MAXIT = 30;
+
+    /**
+     * Constant defining default tolerance to find a root.
+     */
+    public static final double DEFAULT_TOLERANCE = 1e-6;
+
+    /**
+     * Minimum allowed tolerance that can be set.
+     */
+    public static final double MIN_TOLERANCE = 0.0;
+
+    /**
+     * Tolerance to find a root. Whenever the variation of the estimated root is
+     * smaller than the provided tolerance, then the algorithm is assumed to be
+     * converged.
+     */
+    private double tolerance;
+
+    /**
+     * Empty constructor.
+     */
+    public FalsePositionSingleRootEstimator() {
+<span class="fc" id="L60">        super();</span>
+<span class="fc" id="L61">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     Listener to evaluate a single dimension function f(x)
+     *                     to find its roots.
+     * @param minEvalPoint Smallest value inside the bracket of values where the
+     *                     root will be searched.
+     * @param maxEvalPoint Largest value inside the bracket of values where the
+     *                     root will be searched.
+     * @param tolerance    Tolerance to find a root. During the estimation of a
+     *                     root, if the variation of the estimated root is smaller than the provided
+     *                     tolerance, then the algorithm is assumed to be converged, and the root
+     *                     is ensured to have an accuracy that equals tolerance.
+     * @throws InvalidBracketRangeException Raised if minEvalPoint &amp;lt;
+     *                                      maxEvalPoint.
+     * @throws IllegalArgumentException     Raised if provided tolerance is negative.
+     */
+    public FalsePositionSingleRootEstimator(
+            final SingleDimensionFunctionEvaluatorListener listener, final double minEvalPoint,
+            final double maxEvalPoint, final double tolerance) throws InvalidBracketRangeException {
+<span class="fc" id="L84">        super(listener, minEvalPoint, maxEvalPoint);</span>
+<span class="fc" id="L85">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Returns tolerance to find a root. Whenever the variation of the estimated
+     * root is smaller than returned tolerance, then the algorithm is assumed to
+     * be converged, and the estimated root is ensured to have an accuracy that
+     * equals the returned tolerance.
+     *
+     * @return Tolerance to find a root.
+     */
+    public double getTolerance() {
+<span class="fc" id="L97">        return tolerance;</span>
+    }
+
+    /**
+     * Sets tolerance to find a root. Whenever the variation of the estimated
+     * root is smaller than provided tolerance, then the algorithm is assumed to
+     * be converged, and the estimated root is ensured to have an accuracy that
+     * equals provided tolerance.
+     *
+     * @param tolerance Tolerance to find a root.
+     * @throws LockedException          Raised if this instance is locked while doing
+     *                                  some computations.
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
+     */
+    public void setTolerance(final double tolerance) throws LockedException {
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L113">            throw new LockedException();</span>
+        }
+<span class="fc" id="L115">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * Estimates a single root of the provided single dimension function
+     * contained within a given bracket of values.
+     *
+     * @throws LockedException         Exception raised if this instance is already
+     *                                 locked.
+     * @throws NotReadyException       Exception raised if not enough parameters have
+     *                                 been provided in order to start the estimation.
+     * @throws RootEstimationException Raised if the root estimation failed for
+     *                                 some other reason (usually inability to evaluate the function,
+     *                                 numerical instability or convergence problems, or no roots are found).
+     */
+    @Override
+    public void estimate() throws LockedException, NotReadyException, RootEstimationException {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L133">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L136">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L139">        locked = true;</span>
+<span class="fc" id="L140">        rootAvailable = false;</span>
+
+        try {
+<span class="fc" id="L143">            final var v1 = new double[1];</span>
+<span class="fc" id="L144">            final var v2 = new double[1];</span>
+
+<span class="fc" id="L146">            final var x1 = minEvalPoint;</span>
+<span class="fc" id="L147">            final var x2 = maxEvalPoint;</span>
+<span class="fc" id="L148">            final var xacc = tolerance;</span>
+            double xl;
+            double xh;
+            double del;
+<span class="fc" id="L152">            var fl = listener.evaluate(x1);</span>
+<span class="fc" id="L153">            var fh = listener.evaluate(x2);</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (fl * fh &gt; 0.0) {</span>
+                // root must be bracketed
+<span class="fc" id="L156">                locked = false;</span>
+<span class="fc" id="L157">                throw new RootEstimationException();</span>
+            }
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (fl &lt; 0.0) {</span>
+<span class="fc" id="L160">                xl = x1;</span>
+<span class="fc" id="L161">                xh = x2;</span>
+            } else {
+<span class="fc" id="L163">                xl = x2;</span>
+<span class="fc" id="L164">                xh = x1;</span>
+
+<span class="fc" id="L166">                v1[0] = fl;</span>
+<span class="fc" id="L167">                v2[0] = fh;</span>
+<span class="fc" id="L168">                swap(v1, v2);</span>
+<span class="fc" id="L169">                fl = v1[0];</span>
+<span class="fc" id="L170">                fh = v2[0];</span>
+            }
+<span class="fc" id="L172">            var dx = xh - xl;</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">            for (var j = 0; j &lt; MAXIT; j++) {</span>
+<span class="fc" id="L174">                final var rtf = xl + dx * fl / (fl - fh);</span>
+<span class="fc" id="L175">                final var f = listener.evaluate(rtf);</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">                if (f &lt; 0.0) {</span>
+<span class="fc" id="L177">                    del = xl - rtf;</span>
+<span class="fc" id="L178">                    xl = rtf;</span>
+<span class="fc" id="L179">                    fl = f;</span>
+                } else {
+<span class="fc" id="L181">                    del = xh - rtf;</span>
+<span class="fc" id="L182">                    xh = rtf;</span>
+<span class="fc" id="L183">                    fh = f;</span>
+                }
+<span class="fc" id="L185">                dx = xh - xl;</span>
+<span class="fc bfc" id="L186" title="All 4 branches covered.">                if (Math.abs(del) &lt; xacc || f == 0.0) {</span>
+                    // result obtained
+<span class="fc" id="L188">                    root = rtf;</span>
+<span class="fc" id="L189">                    rootAvailable = true;</span>
+<span class="fc" id="L190">                    locked = false;</span>
+<span class="fc" id="L191">                    return;</span>
+                }
+            }
+<span class="nc" id="L194">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L195">            throw new RootEstimationException(e);</span>
+<span class="nc" id="L196">        }</span>
+        // too many iterations and error exceeds desired tolerance
+<span class="nc" id="L198">        locked = false;</span>
+<span class="nc" id="L199">        throw new RootEstimationException();</span>
+    }
+
+    /**
+     * Returns boolean indicating whether this instance is ready to compute a
+     * root.
+     * This instance is ready as soon as a listener is provided and a bracket
+     * is provided or computed.
+     *
+     * @return True if instance is ready, false otherwise
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L212" title="1 of 4 branches missed.">        return isListenerAvailable() &amp;&amp; isBracketAvailable();</span>
+    }
+
+    /**
+     * Internal method to set tolerance to find a root. This method does not
+     * check whether this instance is locked.
+     * Whenever the variation of the estimated root is smaller than provided
+     * tolerance, then the algorithm is assumed to be converged, and the
+     * estimated root is ensured to have an accuracy that equals provided
+     * tolerance.
+     *
+     * @param tolerance Tolerance to find a root.
+     * @throws IllegalArgumentException Raised if provided tolerance is negative.
+     */
+    private void internalSetTolerance(final double tolerance) {
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L228">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L230">        this.tolerance = tolerance;</span>
+<span class="fc" id="L231">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
