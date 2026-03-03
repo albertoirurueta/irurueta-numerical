@@ -326,7 +326,7 @@ public class KalmanFilter implements Serializable {
             transitionMatrix.transpose(temp7);
             temp1.multiply(temp7);
             temp1.add(processNoiseCov);
-            errorCovPre = temp1;
+            errorCovPre.copyFrom(temp1);
 
             return statePre;
         } catch (final AlgebraException e) {
@@ -375,7 +375,7 @@ public class KalmanFilter implements Serializable {
 
             // K(k)
             temp4.transpose();
-            gain = temp4;
+            gain.copyFrom(temp4);
 
             // (2) Update estimate with measurement z(k)
             //temp5 = z(k) - H*x'(k)

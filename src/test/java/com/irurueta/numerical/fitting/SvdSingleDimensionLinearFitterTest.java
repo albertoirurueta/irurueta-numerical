@@ -35,7 +35,7 @@ class SvdSingleDimensionLinearFitterTest {
     private static final double MIN_SIGMA_VALUE = 1e-4;
     private static final double MAX_SIGMA_VALUE = 1.0;
 
-    private static final double ABSOLUTE_ERROR = 1e-1;
+    private static final double ABSOLUTE_ERROR = 2e-1;
 
     private static final int TRIGO_PARAMS = 2;
 

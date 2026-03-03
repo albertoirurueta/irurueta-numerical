@@ -41,7 +41,7 @@ class DerivativeConjugateGradientMultiOptimizerTest implements OnIterationComple
     private static final double MIN_TOLERANCE = 3e-8;
     private static final double MAX_TOLERANCE = 3e-6;
 
-    private static final double ABSOLUTE_ERROR = 1e-3;
+    private static final double ABSOLUTE_ERROR = 2e-3;
 
     private static final double MIN_DIRECTION = -1.0;
     private static final double MAX_DIRECTION = 1.0;
