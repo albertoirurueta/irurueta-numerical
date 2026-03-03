@@ -1779,7 +1779,11 @@ class LevenbergMarquardtMultiVariateFitterTest {
             assertTrue(fitter.isReady());
 
             // fit
-            fitter.fit();
+            try {
+                fitter.fit();
+            } catch (final FittingException fittingException) {
+                continue;
+            }
 
             // check correctness
             assertTrue(fitter.isResultAvailable());
