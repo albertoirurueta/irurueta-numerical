@@ -49,5 +49,6 @@ flowchart TD
 == Where to go next
 
 * xref:installation.adoc[] — add the library as a dependency.
+* xref:algorithms.adoc[] — catalog of every algorithm the library implements, grouped by problem domain.
 * xref:reference.adoc[] — generated reports (Javadoc, coverage, static analysis, quality dashboards) produced by
   the build.

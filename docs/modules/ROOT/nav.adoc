@@ -1,3 +1,15 @@
 * xref:index.adoc[]
 * xref:installation.adoc[]
+* xref:algorithms.adoc[]
+** Fitting
+*** xref:algorithms/straight-line-fitting.adoc[]
+*** xref:algorithms/linear-least-squares.adoc[]
+*** xref:algorithms/svd-linear-fitting.adoc[]
+*** xref:algorithms/levenberg-marquardt.adoc[]
+** Integration
+*** xref:algorithms/trapezoidal-integration.adoc[]
+*** xref:algorithms/simpson-integration.adoc[]
+*** xref:algorithms/romberg-integration.adoc[]
+*** xref:algorithms/midpoint-integration.adoc[]
+*** xref:algorithms/double-exponential-integration.adoc[]
 * xref:reference.adoc[]

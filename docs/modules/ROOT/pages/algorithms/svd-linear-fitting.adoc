@@ -1,0 +1,162 @@
+= Linear Fitting by Singular Value Decomposition
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+This algorithm solves the same problem as xref:algorithms/linear-least-squares.adoc[linear least-squares
+fitting by the normal equations] — fitting a linear combination of arbitrary basis functions to data — but via
+singular value decomposition (SVD) instead. It trades a little extra memory and CPU time for a solution that
+remains numerically reliable even when the basis functions are (nearly) degenerate. It is the algorithm behind
+`SvdSingleDimensionLinearFitter` and `SvdMultiDimensionLinearFitter` in the `com.irurueta.numerical.fitting`
+package, and is described in xref:reference.adoc#press2007[Press et al., 2007], Section 15.4.2 (page 794).
+
+== Why the normal equations can fail
+
+xref:algorithms/linear-least-squares.adoc[] solves for the parameters stem:[\mathbf{a}] via the normal
+equations stem:[\alpha\,\mathbf{a} = \beta] with stem:[\alpha = A^\top A]. This works well when the basis
+functions are clearly distinguishable, but two problems commonly arise in practice:
+
+* The condition number of stem:[\alpha = A^\top A] is the *square* of the condition number of the design
+  matrix stem:[A] itself, so the normal equations amplify roundoff error far more than the original,
+  overdetermined system does.
+* If the data cannot clearly distinguish between two (or two combinations of) basis functions — a very common
+  occurrence — stem:[\alpha] becomes singular or nearly so, producing a zero or near-zero pivot during
+  elimination: either no solution at all, or wildly large parameter values that delicately cancel out.
+
+SVD sidesteps both problems by working directly with the design matrix stem:[A], never forming
+stem:[A^\top A], and by producing the minimum-norm solution whenever the system is degenerate rather than an
+unstable, unbounded one.
+
+== Problem restated using the design matrix
+
+Reusing the same design matrix and data vector from xref:algorithms/linear-least-squares.adoc[]:
+
+[stem]
+++++
+A_{ij} = \frac{X_j(x_i)}{\sigma_i}, \qquad b_i = \frac{y_i}{\sigma_i}
+++++
+
+minimizing stem:[\chi^2] is exactly the overdetermined least-squares problem:
+
+[stem]
+++++
+\text{find } \mathbf{a} \text{ that minimizes } \chi^2 = |A\,\mathbf{a} - \mathbf{b}|^2
+++++
+
+== Solution via SVD
+
+Decomposing stem:[A = U\,W\,V^\top], where stem:[U^{(i)}] and stem:[V^{(i)}] denote the stem:[i]-th columns of
+stem:[U] and stem:[V] and stem:[w_i] are the singular values (the diagonal of stem:[W]), the least-squares
+solution is:
+
+[stem]
+++++
+\mathbf{a} = \sum_{i=0}^{M-1} \left[\frac{U^{(i)} \cdot \mathbf{b}}{w_i}\right] V^{(i)}
+++++
+
+The fitted parameters are a linear combination of the columns of stem:[V], with coefficients built from the
+dot products of the columns of stem:[U] with the weighted data. The variance and covariance of the fitted
+parameters follow the same pattern:
+
+[stem]
+++++
+\sigma^2(a_j) = \sum_{i=0}^{M-1} \left(\frac{V_{ji}}{w_i}\right)^2, \qquad
+\mathrm{Cov}(a_j, a_k) = \sum_{i=0}^{M-1} \frac{V_{ji}\,V_{ki}}{w_i^2}
+++++
+
+== Singular value thresholding — why SVD cannot fail
+
+If a singular value stem:[w_i] is exactly zero, its reciprocal stem:[1/w_i] is defined as zero rather than
+infinity: this simply drops any combination of basis functions that the data cannot distinguish, adding a zero
+multiple of it to stem:[\mathbf{a}] instead of an arbitrarily large one.
+
+The same treatment is applied to singular values that are *nonzero but very small*, since their apparent value
+is more likely a roundoff artifact than meaningful information. A singular value is considered negligible, and
+its reciprocal set to zero, whenever its ratio to the largest singular value falls below a chosen tolerance:
+
+[stem]
+++++
+\frac{w_i}{w_{\max}} < \text{tol}
+++++
+
+This is exactly what makes SVD unable to fail outright the way the normal equations can — at worst it discards
+a combination of basis functions that the data genuinely cannot constrain.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["Data + basis functions"] --> B["Build design matrix A_ij = X_j(x_i)/sigma_i,\nvector b_i = y_i/sigma_i"]
+    B --> C["Decompose A = U * W * V^T (singular values w_i)"]
+    C --> D["Threshold: treat w_i as 0 when w_i / w_max < tol"]
+    D --> E["a = sum_i (U^(i) . b / w_i) * V^(i), skipping thresholded terms"]
+    E --> F["chi-square = |A * a - b|^2"]
+    F --> G["Cov(a_j, a_k) = sum_i V_ji * V_ki / w_i^2, skipping thresholded terms"]
+....
+
+== Library implementation
+
+Both classes share the evaluator contract already used by the plain linear fitters — only the basis functions'
+values are needed, no derivatives, since the model is linear in its parameters:
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Model
+|Evaluator interface
+
+|`SvdSingleDimensionLinearFitter`
+|stem:[y = y(x \mid \mathbf{a})], scalar stem:[x]
+|`LinearFitterSingleDimensionFunctionEvaluator`
+
+|`SvdMultiDimensionLinearFitter`
+|stem:[y = y(\mathbf{x} \mid \mathbf{a})], vector-valued stem:[\mathbf{x}]
+|`LinearFitterMultiDimensionFunctionEvaluator`
+|===
+
+Both extend the same `SingleDimensionLinearFitter` / `MultiDimensionLinearFitter` base classes as their
+normal-equations counterparts, and expose the same `getA()`, `getCovar()`, and `getChisq()` getters after
+`fit()` completes. The only addition is:
+
+* `getTol()` / `setTol(double)` — the threshold stem:[\text{tol}], relative to the largest singular value,
+  below which a singular value is treated as negligible; defaults to `1e-12`. Passing a non-positive value
+  falls back to the singular value decomposer's own default threshold.
+
+TIP: Because SVD works directly with stem:[A] instead of stem:[A^\top A], xref:reference.adoc#press2007[Press
+et al., 2007] recommends using it in preference to the normal equations for essentially all but the simplest,
+best-conditioned problems. The trade-off is extra storage for the design matrix and its decomposition, and
+generally slower execution than solving the normal equations directly — reserve
+`SimpleSingleDimensionLinearFitter` / `MultiDimensionLinearFitter`'s own normal-equations fitter for
+well-conditioned basis sets where that cost matters. If a fit looks degenerate, it can also help to fit once,
+then repeatedly raise `tol` and call `fit()` again, watching how much `getChisq()` increases each time.
+
+== Example
+
+Fitting the same cubic polynomial stem:[y(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3] as in
+xref:algorithms/linear-least-squares.adoc[], but via SVD:
+
+[source,java]
+----
+final var evaluator = new LinearFitterSingleDimensionFunctionEvaluator() {
+    @Override
+    public double[] createResultArray() {
+        return new double[4];
+    }
+
+    @Override
+    public void evaluate(final double point, final double[] result) {
+        result[0] = 1.0;
+        for (var i = 1; i < 4; i++) {
+            result[i] = point * result[i - 1];
+        }
+    }
+};
+
+final var fitter = new SvdSingleDimensionLinearFitter(evaluator, x, y, sigma);
+fitter.fit();
+
+final var params = fitter.getA();          // fitted [a0, a1, a2, a3]
+final var covariance = fitter.getCovar();  // covariance matrix of the parameters
+final var chiSq = fitter.getChisq();       // goodness-of-fit statistic
+----

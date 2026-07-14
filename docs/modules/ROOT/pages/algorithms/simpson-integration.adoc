@@ -1,0 +1,123 @@
+= Simpson's Rule Integration
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Simpson's rule is Richardson extrapolation applied to a quadrature rule with an error series that contains
+only even powers of the step size — obtained here for the cost of essentially one extra combination step per
+refinement, with no additional function evaluations. It is described in
+xref:reference.adoc#press2007[Press et al., 2007], Sections 4.1 and 4.2 (pages 158, 160, 164–165), and
+implemented as the generic `SimpsonIntegrator` base class (and `SimpsonMatrixIntegrator`), specialized to each
+quadrature rule in the package.
+
+== Problem statement
+
+The classical three-point Simpson's rule integrates over a pair of intervals:
+
+[stem]
+++++
+\int_{x_0}^{x_2} f(x)\,dx = h\left[\frac{1}{3}f_0 + \frac{4}{3}f_1 + \frac{1}{3}f_2\right] + O(h^5 f^{(4)})
+++++
+
+and, applied repeatedly, gives the extended Simpson's rule with its characteristic alternating stem:[4/3],
+stem:[2/3] interior weights:
+
+[stem]
+++++
+\int_{x_0}^{x_{N-1}} f(x)\,dx = h\left[\frac{1}{3}f_0 + \frac{4}{3}f_1 + \frac{2}{3}f_2 + \frac{4}{3}f_3 +
+\cdots + \frac{4}{3}f_{N-2} + \frac{1}{3}f_{N-1}\right] + O\!\left(\frac{1}{N^4}\right)
+++++
+
+== The "deep fact" that makes this cheap
+
+xref:algorithms/trapezoidal-integration.adoc[] noted that the extended trapezoidal rule's error series contains
+only even powers of stem:[h]. Suppose the trapezoidal rule is evaluated with stem:[N] steps, giving
+stem:[S_N], and again with stem:[2N] steps, giving stem:[S_{2N}]. Since doubling the steps quarters the
+leading (stem:[O(1/N^2)]) error term, the combination:
+
+[stem]
+++++
+S = \frac{4}{3}S_{2N} - \frac{1}{3}S_N
+++++
+
+cancels that leading term exactly — and because there is no odd-order term to leave behind, the next surviving
+error term is stem:[O(1/N^4)]. This combination is *exactly* Simpson's rule; it is also the numerically
+preferred way to evaluate it, since it reuses two successive trapezoidal-style refinements instead of
+recomputing the alternating weights from scratch.
+
+This argument only depends on the underlying rule's error series being even in the step size — a property
+shared by every quadrature rule in this package (each one is derived from either the extended trapezoidal rule
+or the extended midpoint rule, both of which have this property). That is why `SimpsonIntegrator<T extends
+Quadrature>` in the library is generic over *any* `Quadrature`, not hardwired to the trapezoidal rule.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["st_n = quadrature.next() (stage n estimate from the underlying rule)"] --> B["s_n = (4 * st_n - st_(n-1)) / 3"]
+    B --> C{"|s_n - s_(n-1)| < eps * |s_(n-1)| ?\n(checked after 5 stages, up to 20)"}
+    C -->|No| A
+    C -->|Yes| D["Return s_n"]
+....
+
+== Library implementation
+
+`SimpsonIntegrator<T extends Quadrature>` wraps any of the package's quadrature rules and applies the
+stem:[(4 \cdot s_n - s_{n-1})/3] combination every stage, checking convergence after a minimum of 5 stages and
+up to a maximum of 20, to a relative tolerance `eps` (default `1e-10`). `SimpsonMatrixIntegrator` does the same
+for matrix-valued integrands. Six concrete classes pair this method with each applicable quadrature rule:
+
+[cols="1,2", options="header"]
+|===
+|Class
+|Quadrature rule
+
+|`SimpsonTrapezoidalQuadratureIntegrator`
+|xref:algorithms/trapezoidal-integration.adoc[] — finite, non-singular intervals.
+
+|`SimpsonMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — open formula for improper integrals.
+
+|`SimpsonInfinityMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — semi-infinite or infinite ranges.
+
+|`SimpsonLowerSquareRootMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — inverse square-root singularity at the lower bound.
+
+|`SimpsonUpperSquareRootMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — inverse square-root singularity at the upper bound.
+
+|`SimpsonDoubleExponentialRuleQuadratureIntegrator`
+|xref:algorithms/double-exponential-integration.adoc[] — arbitrary endpoint singularities.
+|===
+
+Each has a `Matrix`-valued counterpart. Any of them can also be obtained through the package's factory methods:
+
+[source,java]
+----
+final var integrator = Integrator.create(
+        a, b, listener, IntegratorType.SIMPSON, QuadratureType.TRAPEZOIDAL);
+final var result = integrator.integrate();
+----
+
+TIP: `IntegratorType.SIMPSON` is generally more efficient than plain `IntegratorType.QUADRATURE` (fewer function
+evaluations for the same accuracy) whenever the integrand has a finite fourth derivative — i.e. a continuous
+third derivative. For light-duty work on reasonably smooth functions, Simpson's method paired with the
+trapezoidal rule is a good default; for very smooth (e.g. analytic) integrands,
+xref:algorithms/romberg-integration.adoc[] typically does even better.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return Math.sin(point);
+    }
+};
+
+final var integrator = new SimpsonTrapezoidalQuadratureIntegrator(0.0, Math.PI, listener);
+final var result = integrator.integrate(); // approximately 2.0, in fewer stages than the plain quadrature integrator
+----

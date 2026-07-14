@@ -55,3 +55,16 @@ Antora documentation.
 |https://github.com/albertoirurueta/irurueta-numerical[GitHub repository]
 |Source code, issue tracker, and releases.
 |===
+
+[#bibliography]
+== Bibliography
+
+Books and papers that the algorithms in xref:algorithms.adoc[] are adapted from or that describe the theory
+behind them.
+
+[[press2007]]Press, W.H., Teukolsky, S.A., Vetterling, W.T., and Flannery, B.P. (2007)::
+_Numerical Recipes: The Art of Scientific Computing_, 3rd ed. New York: Cambridge University Press.
+ISBN 978-0-521-88068-8. Source of the classical root-finding, optimization, integration, interpolation, and
+least-squares algorithms (linear and nonlinear, including the Levenberg-Marquardt method of
+xref:algorithms/levenberg-marquardt.adoc[]) that several estimators and fitters in this library are adapted
+from.

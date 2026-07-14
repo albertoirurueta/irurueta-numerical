@@ -1,0 +1,127 @@
+= Romberg Integration
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Romberg integration generalizes xref:algorithms/simpson-integration.adoc[Simpson's rule] from a single
+Richardson-extrapolation step to a full polynomial extrapolation of several successive refinements to the
+continuum limit of zero step size. It is described in xref:reference.adoc#press2007[Press et al., 2007],
+Section 4.3 (page 166), generalized to open-interval quadrature rules in Section 4.4 (pages 168–169), and
+implemented as the generic `RombergIntegrator` base class (and `RombergMatrixIntegrator`), specialized to each
+quadrature rule in the package.
+
+== From Simpson's rule to Romberg's method
+
+xref:algorithms/simpson-integration.adoc[] combines two successive trapezoidal estimates to cancel the leading
+error term, using a single fixed formula. Romberg's method is the natural generalization: use the results of
+stem:[K] successive refinements of the underlying quadrature rule and remove *all* the error terms up to (but
+not including) the one of order stem:[O(1/N^{2K})]. Simpson's rule is exactly the stem:[K = 2] case.
+
+This is an instance of a general technique called *Richardson's deferred approach to the limit*: run a
+numerical algorithm for several values of a step-size parameter stem:[h], then extrapolate the sequence of
+results to the limit stem:[h \to 0]. The stem:[4/3, -1/3] combination used by Simpson's rule is a special case
+of *polynomial extrapolation* with only two points; Romberg's method instead fits a polynomial of degree
+stem:[K-1] through the last stem:[K] points stem:[(h_i, s_i)] — using Neville's algorithm — and evaluates that
+polynomial at stem:[h = 0] to estimate the value in the continuum limit, along with an error estimate for the
+extrapolation itself.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["h[0] = 1"] --> B["s[j] = quadrature.next() (stage j+1 estimate)"]
+    B --> C{"j >= K (5 points collected) ?"}
+    C -->|No| D["h[j] = h[j-1] * decay factor"] --> B
+    C -->|Yes| E["Fit a degree-(K-1) polynomial through\nthe last K points (h_i, s_i) via Neville's algorithm"]
+    E --> F["Extrapolate the polynomial to h = 0"]
+    F --> G{"extrapolation error <= eps * |estimate| ?"}
+    G -->|No| D
+    G -->|Yes| H["Return extrapolated estimate"]
+....
+
+The step-size sequence stem:[h_j] is *relative*, not absolute — what matters is its ratio between stages, which
+must match how the underlying quadrature rule actually refines itself from one stage to the next, so that the
+polynomial extrapolation is fit against the correct powers of the true step size:
+
+* Quadrature rules that *double* their number of evaluations each stage (like
+  xref:algorithms/trapezoidal-integration.adoc[]) use a decay factor of stem:[1/4] per stage — this is what
+  `RombergTrapezoidalQuadratureIntegrator` overrides the base class to do.
+* Every other quadrature rule in this package uses `RombergIntegrator`'s default decay factor of stem:[1/9] per
+  stage, matching the step-*tripling* refinement of xref:algorithms/midpoint-integration.adoc[] and its
+  variants.
+
+== Library implementation
+
+`RombergIntegrator<T extends Quadrature>` drives any of the package's quadrature rules through this
+extrapolation loop, reusing the library's own `PolynomialInterpolator` (from the `interpolation` package) to
+perform the Neville-algorithm extrapolation, rather than reimplementing it inline. Convergence is checked from
+the 5th stage onward, up to a maximum of 14 stages (`RombergTrapezoidalQuadratureIntegrator` uses its own,
+larger maximum of 20 stages, matching its different decay factor), with a default relative tolerance `eps` of
+`3.0e-9` (`1e-10` for the trapezoidal-based variant). `RombergMatrixIntegrator` provides the same algorithm for
+matrix-valued integrands, running one `PolynomialInterpolator` per matrix element and requiring all of them to
+converge together.
+
+[cols="1,2", options="header"]
+|===
+|Class
+|Quadrature rule
+
+|`RombergTrapezoidalQuadratureIntegrator`
+|xref:algorithms/trapezoidal-integration.adoc[] — finite, non-singular intervals. The library's default
+integrator + quadrature combination.
+
+|`RombergMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — open formula for improper integrals.
+
+|`RombergInfinityMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — semi-infinite or infinite ranges.
+
+|`RombergLowerSquareRootMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — inverse square-root singularity at the lower bound.
+
+|`RombergUpperSquareRootMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — inverse square-root singularity at the upper bound.
+
+|`RombergExponentialMidPointQuadratureIntegrator`
+|xref:algorithms/midpoint-integration.adoc[] — exponentially decaying integrand up to infinity. Its constructor
+takes only the lower limit; the upper limit is always treated as infinite.
+
+|`RombergDoubleExponentialRuleQuadratureIntegrator`
+|xref:algorithms/double-exponential-integration.adoc[] — arbitrary endpoint singularities.
+|===
+
+Each has a `Matrix`-valued counterpart. `IntegratorType.ROMBERG` paired with `QuadratureType.TRAPEZOIDAL` is
+this package's default integrator/quadrature combination (`Integrator.DEFAULT_INTEGRATOR_TYPE` /
+`Integrator.DEFAULT_QUADRATURE_TYPE`), used whenever a caller does not specify one explicitly:
+
+[source,java]
+----
+final var integrator = Integrator.create(a, b, listener); // Romberg + trapezoidal, default eps
+final var result = integrator.integrate();
+----
+
+TIP: Romberg integration is the most efficient method in this package for sufficiently smooth (e.g. analytic)
+integrands over intervals with no singularities, including at the endpoints — in such cases it can take many,
+many fewer function evaluations than xref:algorithms/simpson-integration.adoc[] or the plain quadrature
+integrator. It is, correspondingly, the *least* forgiving option: it tends to converge poorly, or not at all,
+when the integrand is not smooth or contains a singularity that the chosen quadrature rule was not designed to
+handle. Pick a quadrature rule from xref:algorithms/midpoint-integration.adoc[] or
+xref:algorithms/double-exponential-integration.adoc[] that matches the integrand's actual singularities before
+reaching for Romberg's method.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        final var x2 = point * point;
+        return Math.pow(point, 4.0) * Math.log(point + Math.sqrt(x2 + 1.0));
+    }
+};
+
+final var integrator = new RombergTrapezoidalQuadratureIntegrator(0.0, 2.0, listener);
+final var result = integrator.integrate();
+----

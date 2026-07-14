@@ -1,0 +1,145 @@
+= Algorithms
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`irurueta-numerical` packages a broad set of classical numerical-analysis algorithms behind consistent,
+listener-based APIs. This page groups them by problem domain (mirroring the library's package structure) and
+gives a one-line summary of what each one does. Some algorithms with more elaborate theory have a dedicated,
+detailed page — linked where available.
+
+== Root finding (`roots`)
+
+Bracketed single-variable root finders:
+
+* `BisectionSingleRootEstimator` — slowest but most reliable, halves the bracket every iteration.
+* `FalsePositionSingleRootEstimator` — linear interpolation between bracket endpoints.
+* `SecantSingleRootEstimator` — secant method, unbracketed linear interpolation between the last two iterates.
+* `NewtonRaphsonSingleRootEstimator` — quadratically convergent, requires the function's derivative.
+* `SafeNewtonRaphsonSingleRootEstimator` — Newton-Raphson with a bisection fallback to guarantee convergence.
+* `BrentSingleRootEstimator` — combines bisection, secant, and inverse quadratic interpolation for reliability and speed.
+* `RidderSingleRootEstimator` — Ridder's method, exponential interpolation for fast, robust convergence.
+
+Closed-form and iterative polynomial root finders:
+
+* `FirstDegreePolynomialRootsEstimator`, `SecondDegreePolynomialRootsEstimator`,
+  `ThirdDegreePolynomialRootsEstimator` — closed-form solutions for degree 1–3 polynomials.
+* `LaguerrePolynomialRootsEstimator` — Laguerre's method, finds all (real and complex) roots of a polynomial of
+  arbitrary degree.
+
+== Optimization (`optimization`)
+
+Single-variable bracketing optimizers:
+
+* `GoldenSingleOptimizer` — golden section search, slow but does not need derivatives or smoothness.
+* `BrentSingleOptimizer` — parabolic interpolation with a golden-section fallback.
+* `DerivativeBrentSingleOptimizer` — Brent's method augmented with derivative information.
+
+Multi-variable optimizers:
+
+* `PowellMultiOptimizer` — direction-set method, does not require derivatives.
+* `ConjugateGradientMultiOptimizer` — conjugate gradient method using numerically estimated gradients.
+* `DerivativeConjugateGradientMultiOptimizer` — conjugate gradient method using user-supplied gradients.
+* `QuasiNewtonMultiOptimizer` — BFGS-style quasi-Newton method, builds up an approximate inverse Hessian.
+* `SimplexMultiOptimizer` — Nelder-Mead downhill simplex, derivative-free and robust to noisy functions.
+
+== Fitting algorithms (`fitting`)
+
+* *Straight line fitting* — closed-form fit of `y = a + b*x`, with parameter variances, covariance, and a
+  goodness-of-fit probability. See xref:algorithms/straight-line-fitting.adoc[] for a detailed description.
+** `StraightLineFitter`.
+* *Linear least-squares fitters* — fit a linear combination of user-supplied basis functions by solving the
+  normal equations directly (no iteration required). See xref:algorithms/linear-least-squares.adoc[] for a
+  detailed description.
+** `SimpleSingleDimensionLinearFitter` / `MultiDimensionLinearFitter` — solved via Gauss-Jordan elimination.
+* *Linear fitting by singular value decomposition* — the same linear least-squares problem, solved via SVD
+  instead of the normal equations for robustness to (near-)degenerate basis sets. See
+  xref:algorithms/svd-linear-fitting.adoc[] for a detailed description.
+** `SvdSingleDimensionLinearFitter` / `SvdMultiDimensionLinearFitter`.
+* *Levenberg-Marquardt fitters* — iterative nonlinear least-squares fitting. See
+  xref:algorithms/levenberg-marquardt.adoc[] for a detailed description.
+** `LevenbergMarquardtSingleDimensionFitter` — model `y = f(x | a)`.
+** `LevenbergMarquardtMultiDimensionFitter` — model `y = f(x | a)` with vector-valued `x`.
+** `LevenbergMarquardtMultiVariateFitter` — model `y = f(x | a)` with vector-valued `x` and `y`.
+
+== Integration algorithms (`integration`)
+
+Every algorithm below pairs a *quadrature rule* (a strategy for sampling the integrand) with an *integration
+method* (a strategy for combining successive samplings into an increasingly accurate estimate). Any rule can be
+paired with any applicable method, either by instantiating a concrete
+`\{Method}\{Rule}\{Scalar|Matrix}Integrator` class directly, or via the `Integrator.create(...)` /
+`MatrixIntegrator.create(...)` factory methods using the `IntegratorType` / `QuadratureType` enums. Every
+combination has both a scalar and a `Matrix`-valued variant.
+
+* *Trapezoidal rule* — the simplest quadrature rule, sampling the integrand at evenly spaced points over a
+  finite, non-singular interval; the basic building block that the other integration methods refine. See
+  xref:algorithms/trapezoidal-integration.adoc[] for a detailed description.
+* *Simpson's rule* — combines two successive trapezoidal-rule refinements with a fixed Richardson-extrapolation
+  weighting, converging faster on smooth integrands at essentially no extra cost. See
+  xref:algorithms/simpson-integration.adoc[] for a detailed description.
+* *Romberg integration* — generalizes Simpson's rule to a full polynomial extrapolation of several successive
+  refinements to the continuum limit; typically the fastest-converging option for sufficiently smooth,
+  non-singular integrands. See xref:algorithms/romberg-integration.adoc[] for a detailed description.
+* *Midpoint rule* — an open quadrature formula (never evaluates the integrand at the interval's endpoints),
+  with four variants that handle improper integrals: semi-infinite/infinite ranges, an inverse square-root
+  singularity at either bound, and exponential decay to infinity. See
+  xref:algorithms/midpoint-integration.adoc[] for a detailed description.
+* *Double exponential rule* — a variable transformation that suppresses arbitrary endpoint singularities and
+  converges exponentially fast, without needing to tailor the substitution to the specific singularity. See
+  xref:algorithms/double-exponential-integration.adoc[] for a detailed description.
+
+== Interpolation (`interpolation`)
+
+1D interpolators:
+
+* `LinearInterpolator` — piecewise-linear interpolation.
+* `PolynomialInterpolator` — Neville's algorithm; accuracy degrades at high polynomial degree (Runge's
+  phenomenon).
+* `CubicSplineInterpolator` — piecewise cubic spline with continuous first and second derivatives.
+* `RationalInterpolator` / `BarycentricRationalInterpolator` — rational-function interpolation, well suited to
+  functions with poles or steep gradients.
+* `InterpolatingPolynomialEstimator`, `AccurateInterpolatingPolynomialEstimator`,
+  `SimpleInterpolatingPolynomialEstimator` — estimate the coefficients of the interpolating polynomial itself.
+
+2D interpolators:
+
+* `BilinearInterpolator` — simplest 2D interpolation on a regular grid.
+* `BicubicSpline2DInterpolator` — 2D cubic-spline interpolation with smooth cross-derivatives.
+* `Polynomial2DInterpolator` — 2D polynomial interpolation.
+
+Scattered-data interpolation:
+
+* `ShepardInterpolator` — inverse-distance weighting, a cheap approximation to a radial basis function.
+* `KrigingInterpolator` — geostatistical (Gaussian-process) interpolation.
+* `RadialBasisFunctionInterpolator` — general radial basis function interpolation, pluggable with
+  `GaussianRadialBasisFunction`, `MultiQuadricRadialBasisFunction`, `InverseMultiQuadricRadialBasisFunction`, or
+  `ThinPlateRadialBasisFunction`.
+
+== Polynomials (`polynomials`, `polynomials.estimators`)
+
+* `Polynomial` — core value type: arithmetic, evaluation, roots, derivatives, and integrals.
+* `LMSEPolynomialEstimator` / `WeightedPolynomialEstimator` — least mean square error fit of a polynomial to
+  (possibly weighted) value/derivative/integral evaluations.
+* Robust polynomial fitting, built on the `robust` framework below: `RANSACPolynomialRobustEstimator`,
+  `LMedSPolynomialRobustEstimator`, `MSACPolynomialRobustEstimator`, `PROSACPolynomialRobustEstimator`,
+  `PROMedSPolynomialRobustEstimator`.
+
+== Robust estimation (`robust`)
+
+A generic, domain-agnostic outlier-resilient estimation framework, specialized by other packages
+(e.g. `polynomials.estimators`) rather than reimplemented:
+
+* `RANSACRobustEstimator` — random sampling and consensus, requires an inlier threshold.
+* `LMedSRobustEstimator` — least median of squares, no threshold required.
+* `MSACRobustEstimator` — M-estimator sample consensus, a soft-threshold variant of RANSAC.
+* `PROSACRobustEstimator` — progressive sample consensus, exploits a quality ordering of the samples.
+* `PROMedSRobustEstimator` — progressive variant of LMedS.
+* `FastRandomSubsetSelector` (and the `SubsetSelector` framework) — minimal-subset sampling shared by all of
+  the above.
+
+== Signal processing (`signal.processing`)
+
+* `KalmanFilter` — recursive linear state estimator (predict/correct) for discrete-time linear systems.
+* `Convolver1D` — 1D signal/kernel convolution with configurable edge-handling (zero, constant, mirror,
+  reflect, wrap).
+* `MeasurementNoiseCovarianceEstimator` — running estimate of a sensor's measurement noise covariance from
+  samples taken while the underlying state is constant.

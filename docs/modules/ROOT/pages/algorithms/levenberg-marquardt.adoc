@@ -1,0 +1,236 @@
+= Levenberg-Marquardt Fitting Algorithm
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The Levenberg-Marquardt method is an iterative algorithm for fitting a model that depends *nonlinearly* on its
+parameters to a set of data points, in the least-squares sense. It is the algorithm behind
+`LevenbergMarquardtSingleDimensionFitter`, `LevenbergMarquardtMultiDimensionFitter`, and
+`LevenbergMarquardtMultiVariateFitter` in the `com.irurueta.numerical.fitting` package, and is described in
+xref:reference.adoc#press2007[Press et al., 2007], Section 15.5.2 (page 801).
+
+== Problem statement
+
+Given a model stem:[y = y(x \mid \mathbf{a})] with stem:[M] unknown parameters
+stem:[\mathbf{a} = (a_0, a_1, \ldots, a_{M-1})], and stem:[N] measured data points
+stem:[(x_i, y_i)] with standard deviations stem:[\sigma_i], the goal is to find the parameters
+stem:[\mathbf{a}] that minimize the chi-square merit function:
+
+[stem]
+++++
+\chi^2(\mathbf{a}) = \sum_{i=0}^{N-1} \left[ \frac{y_i - y(x_i \mid \mathbf{a})}{\sigma_i} \right]^2
+++++
+
+Unlike the xref:algorithms.adoc[linear least-squares fitters], this cannot be solved in one step: the model's
+dependence on stem:[\mathbf{a}] is nonlinear, so the minimization has to proceed iteratively from an initial
+guess.
+
+== Gradient, curvature, and two extreme strategies
+
+Close enough to the minimum, stem:[\chi^2] is well approximated by a quadratic form, and the parameters that
+minimize it can be reached in a single Newton step using the gradient and the Hessian (the *curvature
+matrix*) of stem:[\chi^2]. Following the conventional definitions:
+
+[stem]
+++++
+\beta_k \equiv -\frac{1}{2}\frac{\partial \chi^2}{\partial a_k}, \qquad
+\alpha_{kl} \equiv \frac{1}{2}\frac{\partial^2 \chi^2}{\partial a_k \, \partial a_l}
+++++
+
+Expanding these from the definition of stem:[\chi^2] gives:
+
+[stem]
+++++
+\beta_k = \sum_{i=0}^{N-1} \frac{y_i - y(x_i \mid \mathbf{a})}{\sigma_i^2}\,
+          \frac{\partial y(x_i \mid \mathbf{a})}{\partial a_k}
+++++
+
+[stem]
+++++
+\alpha_{kl} = \sum_{i=0}^{N-1} \frac{1}{\sigma_i^2}\,
+              \frac{\partial y(x_i \mid \mathbf{a})}{\partial a_k}\,
+              \frac{\partial y(x_i \mid \mathbf{a})}{\partial a_l}
+++++
+
+(a second-derivative term is dropped from stem:[\alpha_{kl}] — it tends to cancel out over well-behaved
+residuals and including it can destabilize the fit in the presence of outliers or a poor model).
+
+The Newton step is the solution stem:[\delta \mathbf{a}] of the linear system:
+
+[stem]
+++++
+\sum_{l=0}^{M-1} \alpha_{kl}\, \delta a_l = \beta_k
+++++
+
+This works well *near* the minimum, but can badly overshoot far from it. Far from the minimum, a small step
+down the gradient (steepest descent) is safer:
+
+[stem]
+++++
+\delta a_l = \text{constant} \times \beta_l
+++++
+
+but there is no good way to know what "constant" should be.
+
+== Marquardt's two insights
+
+Marquardt's contribution was a way to interpolate smoothly between these two strategies:
+
+1. The diagonal element stem:[1/\alpha_{ll}] has exactly the right dimensions to set the scale of the
+   steepest-descent step, giving stem:[\delta a_l = \beta_l / (\lambda \alpha_{ll})] for a dimensionless
+   damping factor stem:[\lambda].
+2. Both strategies can be expressed as a *single* linear system by defining an augmented curvature matrix
+   stem:[\alpha']:
+
+[stem]
+++++
+\alpha'_{jj} = \alpha_{jj}\,(1 + \lambda), \qquad \alpha'_{jk} = \alpha_{jk} \; (j \neq k)
+++++
+
+[stem]
+++++
+\sum_{l=0}^{M-1} \alpha'_{kl}\, \delta a_l = \beta_k
+++++
+
+When stem:[\lambda] is large, stem:[\alpha'] is diagonally dominant and the system reduces to the
+steepest-descent step; as stem:[\lambda \to 0] it reduces to the Newton (inverse-Hessian) step. Every
+iteration solves the same augmented system — only stem:[\lambda] changes.
+
+== Algorithm
+
+Given an initial guess for stem:[\mathbf{a}]:
+
+[mermaid]
+....
+flowchart TD
+    A["Initial guess a; lambda = 0.001"] --> B["Compute chi-square(a) and curvature matrix alpha, beta"]
+    B --> C["Augment diagonal: alpha'_jj = alpha_jj * (1 + lambda)"]
+    C --> D["Solve alpha' * delta_a = beta for delta_a"]
+    D --> E["Evaluate chi-square(a + delta_a)"]
+    E --> F{"chi-square(a + delta_a) less than chi-square(a) ?"}
+    F -->|No: reject| G["Increase lambda by 10x, keep a"]
+    G --> C
+    F -->|Yes: accept| H["a = a + delta_a; decrease lambda by 10x"]
+    H --> I{"chi-square decreased negligibly for\nseveral consecutive iterations?"}
+    I -->|No| C
+    I -->|Yes| J["Set lambda = 0; recompute alpha, beta once more"]
+    J --> K["Covariance C = alpha^-1; return a, C, chi-square"]
+....
+
+Stated as a recipe:
+
+1. Compute stem:[\chi^2(\mathbf{a})].
+2. Pick a modest value for stem:[\lambda] (e.g. stem:[0.001]).
+3. Solve the augmented linear system for stem:[\delta \mathbf{a}] and evaluate
+   stem:[\chi^2(\mathbf{a} + \delta \mathbf{a})].
+4. If the trial is worse (stem:[\chi^2(\mathbf{a} + \delta \mathbf{a}) \geq \chi^2(\mathbf{a})]), increase
+   stem:[\lambda] by a factor of 10 and go back to step 3.
+5. If the trial is better, decrease stem:[\lambda] by a factor of 10, accept
+   stem:[\mathbf{a} \leftarrow \mathbf{a} + \delta \mathbf{a}], and go back to step 3.
+6. Stop once stem:[\chi^2] has decreased by a negligible amount for a few consecutive successful iterations
+   (iterating to machine precision is wasteful, since the minimum is only a statistical estimate). Do one
+   final pass with stem:[\lambda = 0] and compute the covariance matrix of the fitted parameters:
+
+[stem]
+++++
+C \equiv \alpha^{-1}
+++++
+
+== Library implementation
+
+The three fitter classes share this structure; they differ only in the shape of the input/output data and of
+the evaluator listener they require:
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Model
+|Evaluator interface
+
+|`LevenbergMarquardtSingleDimensionFitter`
+|stem:[y = y(x \mid \mathbf{a})], scalar stem:[x]
+|`LevenbergMarquardtSingleDimensionFunctionEvaluator`
+
+|`LevenbergMarquardtMultiDimensionFitter`
+|stem:[y = y(\mathbf{x} \mid \mathbf{a})], vector-valued stem:[\mathbf{x}]
+|`LevenbergMarquardtMultiDimensionFunctionEvaluator`
+
+|`LevenbergMarquardtMultiVariateFitter`
+|stem:[\mathbf{y} = \mathbf{y}(\mathbf{x} \mid \mathbf{a})], vector-valued stem:[\mathbf{x}] and stem:[\mathbf{y}]
+|`LevenbergMarquardtMultiVariateFunctionEvaluator`
+|===
+
+Each evaluator is responsible for two things, mirroring `Fitmrq`'s `funks` callback in
+xref:reference.adoc#press2007[Press et al., 2007]: supplying the initial parameter guess
+(`createInitialParametersArray()`), and evaluating both the model and its derivatives/Jacobian with respect to
+stem:[\mathbf{a}] at a given sample (`evaluate(...)`).
+
+After `fit()` completes, each fitter exposes:
+
+* `getA()` — the fitted parameters stem:[\mathbf{a}].
+* `getCovar()` — the covariance matrix stem:[C] of the fitted parameters.
+* `getAlpha()` — the curvature matrix stem:[\alpha] at the solution.
+* `getChisq()` — the final stem:[\chi^2] value; `getChisqDegreesOfFreedom()`, `getP()`, and `getQ()` turn it
+  into a goodness-of-fit probability via the chi-square distribution.
+* `getMse()` — mean square error of the residuals.
+
+`hold(i, val)` / `free(i)` let selected parameters be fixed at a known value during fitting (they are excluded
+from stem:[\delta \mathbf{a}] but still appear in the model), matching `Fitmrq`'s `hold`/`free` methods.
+Convergence is tuned via `setNdone(int)` (consecutive negligible-improvement iterations before stopping,
+default 4), `setItmax(int)` (maximum iterations, default 5000), and `setTol(double)` (the "negligible" threshold
+on stem:[\chi^2], default 1e-3).
+
+TIP: By default (`setCovarianceAdjusted(true)`) the fitters additionally rescale the raw stem:[\alpha^{-1}]
+covariance using the input samples' Jacobians and standard deviations
+(stem:[\mathrm{Cov} = (J^\top W J)^{-1}]) to produce a covariance on the true scale of the problem, as discussed
+in xref:reference.adoc#press2007[Press et al., 2007], Section 15.6 (page 812).
+
+== Example
+
+Fitting a single Gaussian stem:[y(x) = B \exp\left(-\left(\frac{x - E}{G}\right)^2\right)] — the same example
+model used in xref:reference.adoc#press2007[Press et al., 2007], Section 15.5.3 — to data `x`, `y`, `sigma`:
+
+[source,java]
+----
+final var evaluator = new LevenbergMarquardtSingleDimensionFunctionEvaluator() {
+    @Override
+    public double[] createInitialParametersArray() {
+        // initial guess: amplitude, center, width
+        return new double[]{1.0, 0.0, 1.0};
+    }
+
+    @Override
+    public double evaluate(final int i, final double point, final double[] params,
+                            final double[] derivatives) {
+        final var amplitude = params[0];
+        final var center = params[1];
+        final var width = params[2];
+        final var arg = (point - center) / width;
+        final var exponential = Math.exp(-arg * arg);
+        final var factor = 2.0 * amplitude * exponential * arg;
+
+        derivatives[0] = exponential;
+        derivatives[1] = factor / width;
+        derivatives[2] = factor * arg / width;
+
+        return amplitude * exponential;
+    }
+};
+
+final var fitter = new LevenbergMarquardtSingleDimensionFitter(evaluator, x, y, sigma);
+fitter.fit();
+
+final var params = fitter.getA();          // fitted [amplitude, center, width]
+final var covariance = fitter.getCovar();   // covariance matrix of the parameters
+final var chiSq = fitter.getChisq();        // goodness-of-fit statistic
+----
+
+== When to use it
+
+Levenberg-Marquardt requires a plausible initial guess and only finds a *local* minimum of stem:[\chi^2] — it
+has no special ability to locate the global minimum among several local ones. It works very well in practice
+once a reasonable starting point is available, which is why it is normally used as the "endgame" refinement
+step, possibly preceded by a cruder, problem-specific method to get into the right basin of convergence. See
+xref:reference.adoc#press2007[Press et al., 2007], Section 15.5.4, for pointers to more advanced alternatives
+(e.g. full-Newton or trust-region variants) when Levenberg-Marquardt converges too slowly or to the wrong
+minimum.
