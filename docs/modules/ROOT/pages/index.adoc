@@ -1,0 +1,53 @@
+= Irurueta Numerical
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`irurueta-numerical` is a Java library of numerical utilities: root finding, single/multi-variable optimization,
+quadrature integration, interpolation, polynomial fitting and estimation, robust (RANSAC-family) estimation, curve
+fitting, and Kalman-filter based signal processing. It is part of the `com.irurueta` family of libraries and
+builds on top of `irurueta-algebra`, `irurueta-statistics`, and `irurueta-sorting`.
+
+== Why this library exists
+
+Numerical algorithms such as root finders, optimizers, and curve fitters are easy to get subtly wrong: convergence
+criteria, bracketing, and failure modes vary a lot between methods. This library packages well-known, tested
+implementations of these algorithms behind a small set of consistent conventions, so callers can swap one
+algorithm for another (e.g. a `BrentSingleRootEstimator` for a `NewtonRaphsonSingleRootEstimator`) without
+relearning a new API shape each time.
+
+== Core concepts
+
+Function evaluation:: Algorithms don't take lambdas; they take a listener instance (e.g.
+`SingleDimensionFunctionEvaluatorListener`, `MultiDimensionFunctionEvaluatorListener`) whose `evaluate(...)` method
+may throw a checked `EvaluationException`. Implement one of these interfaces to plug your own function into any
+root finder, optimizer, integrator, or fitter.
+
+Estimator/fitter lifecycle:: Most estimators and fitters share a `NotReadyException` / `LockedException` protocol:
+they refuse to run until required inputs are set (`isReady()`), and refuse to mutate their configuration while an
+estimation is in progress (`isLocked()`).
+
+Robust estimation:: The `robust` package provides a reusable RANSAC/LMedS/MSAC/PROSAC/PROMedS framework, used both
+directly and specialized by other packages (e.g. `polynomials.estimators`) to make an estimator resilient to
+outliers in the input samples.
+
+[mermaid]
+....
+flowchart TD
+    A["Start: candidate samples"] --> B["Randomly select a minimal subset"]
+    B --> C["Fit a candidate model to the subset"]
+    C --> D["Evaluate all samples against the candidate model"]
+    D --> E{"Better consensus than best so far?"}
+    E -->|Yes| F["Keep as best model and inliers"]
+    E -->|No| G["Discard candidate"]
+    F --> H{"Stopping criterion met? (iterations or confidence)"}
+    G --> H
+    H -->|No| B
+    H -->|Yes| I["Refine best model using its inliers"]
+    I --> J["Return final model"]
+....
+
+== Where to go next
+
+* xref:installation.adoc[] — add the library as a dependency.
+* xref:reference.adoc[] — generated reports (Javadoc, coverage, static analysis, quality dashboards) produced by
+  the build.
