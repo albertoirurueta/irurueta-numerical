@@ -27,8 +27,8 @@ Numerical utilities
 | --- | --- |
 | Language | Java 17 |
 | Build tool | Maven |
-| Current development version | `1.6.0-SNAPSHOT` |
-| Latest release | `1.5.0` |
+| Current development version | `1.7.0-SNAPSHOT` |
+| Latest release | `1.6.0` |
 | License | [Apache License 2.0](LICENSE.txt) |
 | CI | GitHub Actions — build and test on every push to `develop`, and again when a release is published from `master` |
 | Quality | SonarCloud, JaCoCo coverage, Checkstyle, SpotBugs, PMD |
@@ -49,7 +49,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -59,7 +59,7 @@ Latest snapshot:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
