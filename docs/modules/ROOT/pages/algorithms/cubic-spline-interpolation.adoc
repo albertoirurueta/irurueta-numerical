@@ -1,0 +1,99 @@
+= Cubic Spline Interpolation
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Local, low-order xref:algorithms/polynomial-interpolation.adoc[polynomial interpolation] gives a function
+whose first and higher derivatives are discontinuous wherever the interpolation switches which tabulated
+points it uses. A cubic spline avoids this by fitting a cubic polynomial between every pair of tabulated
+points whose coefficients are chosen — using information slightly beyond just that interval — so that the
+resulting function is continuous through its *second* derivative everywhere, including at the tabulated
+points themselves. It is described in xref:reference.adoc#press2007[Press et al., 2007], Section 3.3 (page
+120), and implemented as `CubicSplineInterpolator` in the `com.irurueta.numerical.interpolation` package.
+
+== From linear interpolation to a spline
+
+Linear interpolation within an interval stem:[[x_j, x_{j+1}\]] is:
+
+[stem]
+++++
+y = Ay_j + By_{j+1}, \qquad A \equiv \frac{x_{j+1} - x}{x_{j+1} - x_j}, \qquad B \equiv 1 - A = \frac{x -
+x_j}{x_{j+1} - x_j}
+++++
+
+This has zero second derivative inside each interval and an undefined one at the tabulated points. Suppose,
+in addition to the stem:[y_i], the second derivatives stem:[y_i''] were also known at every tabulated point.
+Adding a cubic term to the formula above — built to vanish at both endpoints of the interval, and whose second
+derivative varies linearly from stem:[y_j''] to stem:[y_{j+1}''] — gives a continuous second derivative without
+disturbing the values at the endpoints:
+
+[stem]
+++++
+y = Ay_j + By_{j+1} + Cy_j'' + Dy_{j+1}'', \qquad
+C \equiv \frac{1}{6}(A^3 - A)(x_{j+1} - x_j)^2, \qquad D \equiv \frac{1}{6}(B^3 - B)(x_{j+1} - x_j)^2
+++++
+
+== Solving for the second derivatives
+
+The stem:[y_i''] are not actually known in advance — they are exactly what the spline needs to solve for.
+Requiring the *first* derivative (obtained by differentiating the formula above) to also be continuous across
+every interior tabulated point gives, for stem:[j = 1, \ldots, N-2]:
+
+[stem]
+++++
+\frac{x_j - x_{j-1}}{6}\,y_{j-1}'' + \frac{x_{j+1} - x_{j-1}}{3}\,y_j'' + \frac{x_{j+1} - x_j}{6}\,y_{j+1}'' =
+\frac{y_{j+1} - y_j}{x_{j+1} - x_j} - \frac{y_j - y_{j-1}}{x_j - x_{j-1}}
+++++
+
+This is stem:[N-2] linear equations in the stem:[N] unknown stem:[y_i''], so two more conditions — typically
+boundary conditions at stem:[x_0] and stem:[x_{N-1}] — are needed for a unique solution. The two common
+choices, both supported by this library's implementation, are:
+
+* Set stem:[y_0''] and/or stem:[y_{N-1}''] to zero, giving the *natural cubic spline*.
+* Set them to whatever value makes the *first* derivative of the interpolating function match a known,
+  specified value at that boundary.
+
+Crucially, each stem:[y_i''] is coupled only to its immediate neighbors, so this system is *tridiagonal* and can
+be solved in stem:[O(N)] operations, rather than the stem:[O(N^3)] a generic linear solver would need.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["Boundary conditions: natural (y''=0) or\nspecified first derivative at each end"] --> B["Tridiagonal decomposition:\nforward elimination over N-2 interior equations"]
+    B --> C["Back-substitution: solve for all y_i''"]
+    C --> D["Store y'' array once, at construction time"]
+    D --> E["interpolate(x): locate interval [x_j, x_j+1],\nevaluate y = A*y_j + B*y_j+1 + C*y_j'' + D*y_j+1''"]
+....
+
+The tridiagonal solve happens once, at construction time, and its result — the array of second derivatives —
+is stored for the lifetime of the interpolator. Each subsequent call to `interpolate(x)` is then cheap: locate
+the bracketing interval (via the same `locate`/`hunt` search described in
+xref:algorithms/polynomial-interpolation.adoc[]) and evaluate the closed-form cubic formula above.
+
+== Library implementation
+
+`CubicSplineInterpolator` extends `BaseInterpolator` with a fixed order of `M = 2` (it always brackets stem:[x]
+between two adjacent tabulated points, unlike the higher-order polynomial interpolators):
+
+* `CubicSplineInterpolator(double[] x, double[] y)` — natural spline (zero second derivative at both ends).
+* `CubicSplineInterpolator(double[] x, double[] y, double yp1, double ypn)` — clamped spline, with the first
+  derivative at the lower and upper endpoints specified explicitly.
+
+Unlike `PolynomialInterpolator`, this class has no error estimate — but it guarantees the interpolated curve
+passes exactly through every tabulated point, and is smoother across interval boundaries than piecewise
+low-order polynomial interpolation.
+
+TIP: A natural spline is the right choice when nothing is known about the true first derivative at the
+endpoints. If the derivative *is* known there — analytically, or accurately enough by numerical
+differencing — supplying it via `yp1`/`ypn` produces a more accurate spline near the boundaries.
+
+== Example
+
+[source,java]
+----
+// natural cubic spline
+final var interpolator = new CubicSplineInterpolator(x, y);
+final var value = interpolator.interpolate(target);
+----

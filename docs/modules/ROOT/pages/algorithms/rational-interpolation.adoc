@@ -1,0 +1,129 @@
+= Rational Function Interpolation
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Some functions are poorly approximated by polynomials but well approximated by *rational* functions —
+quotients of polynomials — because rational functions can model poles that would otherwise force a polynomial
+approximation to oscillate wildly. This package implements two rational interpolators covering two different
+trade-offs, described in xref:reference.adoc#press2007[Press et al., 2007], Section 3.4 (page 124): the
+classical Bulirsch-Stoer diagonal rational interpolant (`RationalInterpolator`), and the pole-free barycentric
+variant (`BarycentricRationalInterpolator`, Section 3.4.1, page 127).
+
+== Diagonal rational interpolation (Bulirsch-Stoer)
+
+A rational function through stem:[m+1] points stem:[(x_i, y_i), \ldots, (x_{i+m}, y_{i+m})] is:
+
+[stem]
+++++
+R_{i(i+1)\ldots(i+m)}(x) = \frac{P_\mu(x)}{Q_\nu(x)} = \frac{p_0 + p_1 x + \cdots + p_\mu x^\mu}
+{q_0 + q_1 x + \cdots + q_\nu x^\nu}
+++++
+
+with stem:[\mu + \nu + 1 = m + 1] unknown coefficients. Bulirsch and Stoer found a Neville-like recurrence,
+directly analogous to xref:algorithms/polynomial-interpolation.adoc[polynomial interpolation]'s, that builds
+the *diagonal* rational interpolant (numerator and denominator of equal degree, or denominator one degree
+higher) column by column:
+
+[stem]
+++++
+R_{i(i+1)\ldots(i+m)} = R_{(i+1)\ldots(i+m)} + \frac{R_{(i+1)\ldots(i+m)} - R_{i\ldots(i+m-1)}}
+{\dfrac{x - x_i}{x - x_{i+m}}\left(1 - \dfrac{R_{(i+1)\ldots(i+m)} - R_{i\ldots(i+m-1)}}
+{R_{(i+1)\ldots(i+m)} - R_{(i+1)\ldots(i+m-1)}}\right) - 1}
+++++
+
+started from stem:[R_i = y_i] and an initial stem:[R = 0] for the (empty) stem:[m=-1] case. Exactly as with
+Neville's algorithm, this is rewritten in terms of small correction differences
+stem:[C_{m,i} \equiv R_{i\ldots(i+m)} - R_{i\ldots(i+m-1)}] and
+stem:[D_{m,i} \equiv R_{i\ldots(i+m)} - R_{(i+1)\ldots(i+m)}], which is what
+`RationalInterpolator` actually implements — the same tableau-building shape as
+xref:algorithms/polynomial-interpolation.adoc[], but with a different correction formula and, correspondingly,
+an error estimate that comes for free the same way.
+
+Because this method allows poles anywhere on the real axis, an exact pole at the requested stem:[x] is
+detected and reported as a failure, rather than silently returning an infinite or nonsensical value. Plausible
+values for the number of local points stem:[m+1] are 4 to 7.
+
+== Barycentric rational interpolation
+
+Constructing a *global* diagonal rational interpolant across the entire table (letting its order grow to
+stem:[N-1]) risks introducing poles *inside* the interpolation interval, even when the underlying function has
+none. Barycentric rational interpolation avoids this entirely, at a chosen, fixed approximation order
+stem:[d < N], by writing every rational interpolant in barycentric form:
+
+[stem]
+++++
+R(x) = \frac{\displaystyle\sum_{i=0}^{N-1} \frac{w_i}{x - x_i}\,y_i}{\displaystyle\sum_{i=0}^{N-1}
+\frac{w_i}{x - x_i}}
+++++
+
+with weights chosen so the approximation order is stem:[d] (error stem:[O(h^{d+1})] for point spacing
+stem:[O(h)]):
+
+[stem]
+++++
+w_k = \sum_{\substack{i=k-d \\ 0 \le i < N-d}}^{k} (-1)^k \prod_{\substack{j=i \\ j \ne k}}^{i+d}
+\frac{1}{x_k - x_j}
+++++
+
+This formulation has no poles anywhere on the real axis, competes very favorably with
+xref:algorithms/cubic-spline-interpolation.adoc[cubic splines] (often smaller error, and infinitely smooth
+rather than only twice continuously differentiable), and — unusually for the methods in this package — is
+worth experimenting with at higher orders (stem:[d > 6]) rather than being kept deliberately low.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    subgraph Diagonal["RationalInterpolator (diagonal, Bulirsch-Stoer)"]
+        A1["Initialize c[i] = d[i] = y[i] for the m nearest points"] --> B1["For each tableau column,\nupdate c[i], d[i] via the rational-interpolation recurrence"]
+        B1 --> C1{"pole detected\n(zero-over-zero)?"}
+        C1 -->|yes| D1["Report interpolation failure"]
+        C1 -->|no| E1["Pick c or d, add correction to y"]
+        E1 --> F1["Return y; last correction = error estimate dy"]
+    end
+    subgraph Barycentric["BarycentricRationalInterpolator"]
+        A2["Precompute weights w_k for all N nodes (once)"] --> B2["interpolate(x): sum w_i*y_i/(x-x_i)\nover sum w_i/(x-x_i), over ALL N points"]
+    end
+....
+
+== Library implementation
+
+Both extend `BaseInterpolator`, but differ in scope: `RationalInterpolator` is a *local* method like
+xref:algorithms/polynomial-interpolation.adoc[], re-centering on a different subrange of stem:[m] points for
+each call; `BarycentricRationalInterpolator` is *global* — it precomputes weights once over all stem:[N]
+points and overrides `interpolate(x)` to skip the `locate`/`hunt` search entirely, since every call touches the
+whole table anyway.
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Scope
+|Notes
+
+|`RationalInterpolator`
+|Local, `m` nearest points (constructor parameter)
+|`getDy()` returns the error estimate; throws if the interpolant has a pole at the requested `x`.
+
+|`BarycentricRationalInterpolator`
+|Global, fixed order `d` (constructor parameter, must be less than the number of points)
+|No error estimate; cost is `O(N*d)` once to build the weights, `O(N)` per subsequent `interpolate(x)` call
+(more expensive per call than a spline, which is `O(d)`).
+|===
+
+TIP: Start with a small `d` for `BarycentricRationalInterpolator` and increase it only if accuracy demands it —
+the library follows xref:reference.adoc#press2007[Press et al., 2007]'s own advice here.
+
+== Example
+
+[source,java]
+----
+// local diagonal rational interpolation, 5 nearest points
+final var rational = new RationalInterpolator(x, y, 5);
+final var value1 = rational.interpolate(target);
+
+// global barycentric rational interpolation, order 4
+final var barycentric = new BarycentricRationalInterpolator(x, y, 4);
+final var value2 = barycentric.interpolate(target);
+----

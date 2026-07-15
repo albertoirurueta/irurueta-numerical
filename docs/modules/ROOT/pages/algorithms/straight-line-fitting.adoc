@@ -1,0 +1,184 @@
+= Straight Line Fitting Algorithm
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Straight line fitting estimates the two parameters of a linear model stem:[y = a + bx] from a set of measured
+points, in closed form, along with their variances, covariance, and a goodness-of-fit probability. It is the
+algorithm behind `StraightLineFitter` in the `com.irurueta.numerical.fitting` package, and is described in
+xref:reference.adoc#press2007[Press et al., 2007], Section 15.2 (page 781).
+
+== Problem statement
+
+Given stem:[N] data points stem:[(x_i, y_i)] with known measurement errors stem:[\sigma_i] on stem:[y_i] (the
+stem:[x_i] are assumed known exactly), the model is:
+
+[stem]
+++++
+y(x) = y(x \mid a, b) = a + bx
+++++
+
+and, as with every fitter in this package, stem:[a] and stem:[b] are chosen to minimize the chi-square merit
+function:
+
+[stem]
+++++
+\chi^2(a, b) = \sum_{i=0}^{N-1} \left[ \frac{y_i - a - b x_i}{\sigma_i} \right]^2
+++++
+
+This is the simplest possible case of xref:algorithms/linear-least-squares.adoc[general linear least-squares
+fitting] — only two basis functions, stem:[X_0(x) = 1] and stem:[X_1(x) = x] — solved with dedicated closed-form
+formulas rather than the general normal-equations matrix machinery, making it considerably cheaper for this one
+common case.
+
+== Closed-form solution
+
+Setting stem:[\partial \chi^2 / \partial a = 0] and stem:[\partial \chi^2 / \partial b = 0] gives two linear
+equations in stem:[a] and stem:[b]. Defining the weighted sums:
+
+[stem]
+++++
+S \equiv \sum_{i=0}^{N-1} \frac{1}{\sigma_i^2}, \qquad
+S_x \equiv \sum_{i=0}^{N-1} \frac{x_i}{\sigma_i^2}, \qquad
+S_y \equiv \sum_{i=0}^{N-1} \frac{y_i}{\sigma_i^2}, \qquad
+S_{xx} \equiv \sum_{i=0}^{N-1} \frac{x_i^2}{\sigma_i^2}, \qquad
+S_{xy} \equiv \sum_{i=0}^{N-1} \frac{x_i y_i}{\sigma_i^2}
+++++
+
+the minimization condition becomes:
+
+[stem]
+++++
+aS + bS_x = S_y, \qquad aS_x + bS_{xx} = S_{xy}
+++++
+
+whose solution, with stem:[\Delta \equiv SS_{xx} - S_x^2], is:
+
+[stem]
+++++
+a = \frac{S_{xx}S_y - S_x S_{xy}}{\Delta}, \qquad b = \frac{SS_{xy} - S_x S_y}{\Delta}
+++++
+
+== Uncertainties, covariance, and correlation
+
+Propagating the measurement errors stem:[\sigma_i] through stem:[a] and stem:[b] (using
+stem:[\sigma_f^2 = \sum_i \sigma_i^2 (\partial f/\partial y_i)^2]) gives their variances and covariance:
+
+[stem]
+++++
+\sigma_a^2 = \frac{S_{xx}}{\Delta}, \qquad \sigma_b^2 = \frac{S}{\Delta}, \qquad
+\mathrm{Cov}(a, b) = -\frac{S_x}{\Delta}
+++++
+
+and the correlation coefficient between the errors in stem:[a] and stem:[b]:
+
+[stem]
+++++
+r_{ab} = \frac{\mathrm{Cov}(a, b)}{\sqrt{S\,S_{xx}}}
+++++
+
+== Goodness of fit
+
+The probability stem:[Q] that a fit this poor (or worse) could occur by chance, under the assumption of
+normally-distributed errors with stem:[N - 2] degrees of freedom, is:
+
+[stem]
+++++
+Q = 1 - P_{\chi^2}(N - 2,\, \chi^2)
+++++
+
+where stem:[P_{\chi^2}(\nu, \cdot)] is the chi-square cumulative distribution function with stem:[\nu] degrees
+of freedom (computed via the incomplete gamma function). As a rule of thumb: stem:[Q > 0.1] indicates a
+believable fit, stem:[Q > 0.001] may still be acceptable if the errors are non-normal or somewhat
+underestimated, and stem:[Q < 0.001] calls the model — or the assumed measurement errors — into question.
+
+== A numerically stable reformulation
+
+The closed-form expressions above are *susceptible to roundoff error*. `StraightLineFitter` instead uses the
+equivalent, numerically stable formulation from xref:reference.adoc#press2007[Press et al., 2007], built
+around a per-point normalized abscissa stem:[t_i]:
+
+[stem]
+++++
+t_i = \frac{1}{\sigma_i}\left(x_i - \frac{S_x}{S}\right), \qquad
+S_{tt} = \sum_{i=0}^{N-1} t_i^2
+++++
+
+[stem]
+++++
+b = \frac{1}{S_{tt}} \sum_{i=0}^{N-1} \frac{t_i y_i}{\sigma_i}, \qquad a = \frac{S_y - S_x b}{S}
+++++
+
+[stem]
+++++
+\sigma_a^2 = \frac{1}{S}\left(1 + \frac{S_x^2}{S\,S_{tt}}\right), \qquad
+\sigma_b^2 = \frac{1}{S_{tt}}, \qquad
+\mathrm{Cov}(a, b) = -\frac{S_x}{S\,S_{tt}}
+++++
+
+This is algebraically identical to the naive formulas above but avoids the cancellation that makes
+stem:[\Delta] unreliable in floating-point arithmetic.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["Data (x_i, y_i, sigma_i)"] --> B["Accumulate weighted sums S, S_x, S_y"]
+    B --> C["Compute t_i = (x_i - S_x/S) / sigma_i and S_tt = sum(t_i^2)"]
+    C --> D["b = sum(t_i * y_i / sigma_i) / S_tt"]
+    D --> E["a = (S_y - S_x * b) / S"]
+    E --> F["sigma_a^2, sigma_b^2, Cov(a,b) from S, S_x, S_tt"]
+    F --> G["chi-square = sum(((y_i - a - b*x_i) / sigma_i)^2)"]
+    G --> H["Q = goodness-of-fit probability (chi-square distribution, N-2 dof)"]
+....
+
+Unlike the iterative xref:algorithms/levenberg-marquardt.adoc[Levenberg-Marquardt fitter], there is nothing to
+configure and no risk of non-convergence: the fit is exact given the formulas above.
+
+== When measurement errors are unknown
+
+If the stem:[\sigma_i] are not known, `StraightLineFitter` sets stem:[\sigma_i = 1] for every point, solves for
+stem:[a] and stem:[b] using the unweighted sums, and then estimates a common per-point error *after the fact*
+from the residuals:
+
+[stem]
+++++
+\sigma_{\text{dat}} = \sqrt{\frac{\chi^2}{N - 2}}
+++++
+
+rescaling stem:[\sigma_a] and stem:[\sigma_b] by this factor. Since the data itself was used to estimate the
+error bars, this procedure assumes the line is a good fit and provides no independent goodness-of-fit check —
+`getQ()` stays at its default value of stem:[1.0] in this case.
+
+== Library implementation
+
+`StraightLineFitter` extends `Fitter` directly rather than `SingleDimensionFitter` — the model is fixed to
+stem:[y = a + bx], so unlike the other fitters in the package it needs no evaluator listener, just the raw
+`x`/`y` (and optionally `sig`) arrays:
+
+* `StraightLineFitter(double[] x, double[] y)` — standard deviations unknown; estimated from the residuals as
+  described above.
+* `StraightLineFitter(double[] x, double[] y, double[] sig)` — standard deviations known.
+
+After `fit()` completes:
+
+* `getA()` / `getB()` — the fitted parameters stem:[a] and stem:[b].
+* `getSigA()` / `getSigB()` — their estimated standard deviations stem:[\sigma_a] and stem:[\sigma_b].
+* `getChi2()` — the final stem:[\chi^2] value.
+* `getQ()` — the goodness-of-fit probability stem:[Q] (only meaningful when `sig` was provided).
+* `getSigdat()` — the estimated common per-point error stem:[\sigma_{\text{dat}}], set only when `sig` was
+  *not* provided.
+
+== Example
+
+[source,java]
+----
+final var fitter = new StraightLineFitter(x, y, sigma);
+fitter.fit();
+
+final var a = fitter.getA();       // intercept
+final var b = fitter.getB();       // slope
+final var chiSq = fitter.getChi2(); // goodness-of-fit statistic
+final var q = fitter.getQ();        // goodness-of-fit probability
+----

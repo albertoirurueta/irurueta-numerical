@@ -1,0 +1,86 @@
+= Irurueta Numerical
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`irurueta-numerical` is a Java library of numerical utilities: root finding, single/multi-variable optimization,
+quadrature integration, interpolation, polynomial fitting and estimation, robust (RANSAC-family) estimation, curve
+fitting, and Kalman-filter based signal processing. It is part of the `com.irurueta` family of libraries and
+builds on top of `irurueta-algebra`, `irurueta-statistics`, and `irurueta-sorting`.
+
+== Why this library exists
+
+Numerical algorithms such as root finders, optimizers, and curve fitters are easy to get subtly wrong: convergence
+criteria, bracketing, and failure modes vary a lot between methods. This library packages well-known, tested
+implementations of these algorithms behind a small set of consistent conventions, so callers can swap one
+algorithm for another (e.g. a `BrentSingleRootEstimator` for a `NewtonRaphsonSingleRootEstimator`) without
+relearning a new API shape each time.
+
+== Core concepts
+
+Function evaluation:: Algorithms don't take lambdas; they take a listener instance (e.g.
+`SingleDimensionFunctionEvaluatorListener`, `MultiDimensionFunctionEvaluatorListener`) whose `evaluate(...)` method
+may throw a checked `EvaluationException`. Implement one of these interfaces to plug your own function into any
+root finder, optimizer, integrator, or fitter.
+
+Estimator/fitter lifecycle:: Most estimators and fitters share a `NotReadyException` / `LockedException` protocol:
+they refuse to run until required inputs are set (`isReady()`), and refuse to mutate their configuration while an
+estimation is in progress (`isLocked()`).
+
+Robust estimation:: The `robust` package provides a reusable RANSAC/LMedS/MSAC/PROSAC/PROMedS framework, used both
+directly and specialized by other packages (e.g. `polynomials.estimators`) to make an estimator resilient to
+outliers in the input samples.
+
+[mermaid]
+....
+flowchart TD
+    A["Start: candidate samples"] --> B["Randomly select a minimal subset"]
+    B --> C["Fit a candidate model to the subset"]
+    C --> D["Evaluate all samples against the candidate model"]
+    D --> E{"Better consensus than best so far?"}
+    E -->|Yes| F["Keep as best model and inliers"]
+    E -->|No| G["Discard candidate"]
+    F --> H{"Stopping criterion met? (iterations or confidence)"}
+    G --> H
+    H -->|No| B
+    H -->|Yes| I["Refine best model using its inliers"]
+    I --> J["Return final model"]
+....
+
+== Robust algorithms
+
+The `robust` package provides a reusable, outlier-resilient estimation framework, built around repeatedly
+fitting a candidate model to a small random sample and keeping whichever candidate best explains the whole
+dataset. Five variants are available, trading off speed, accuracy, and how much needs to be known in advance
+(e.g. an inlier threshold, or a per-sample quality score):
+
+* xref:algorithms/robust-estimation-framework.adoc[] — the shared hypothesize-and-verify loop, listener
+  hierarchy, and subset selection every algorithm below builds on.
+* xref:algorithms/ransac-robust-estimation.adoc[] — the original algorithm: uniform random sampling, scored by
+  inlier count against a fixed threshold.
+* xref:algorithms/lmeds-robust-estimation.adoc[] — no threshold required; scores candidates by the median of
+  their residuals instead.
+* xref:algorithms/msac-robust-estimation.adoc[] — a bounded-loss, median-based hybrid of RANSAC and LMedS.
+* xref:algorithms/prosac-robust-estimation.adoc[] — samples progressively from the highest-quality data first,
+  often one to two orders of magnitude faster than RANSAC.
+* xref:algorithms/promeds-robust-estimation.adoc[] — combines PROSAC's progressive sampling with LMedS's
+  threshold-free criterion.
+
+== Signal processing algorithms
+
+The `signal.processing` package provides the building blocks for filtering noisy, real-time measurements: a
+1D convolution utility, a discrete Kalman filter, and a running estimator for a sensor's measurement noise —
+the three combine naturally, since noise measured by the third feeds directly into the second.
+
+* xref:algorithms/1d-convolution.adoc[] — discrete convolution of a signal with a kernel, with configurable
+  edge-handling for positions where the kernel extends past the signal's boundaries.
+* xref:algorithms/kalman-filter.adoc[] — recursive predict/correct state estimator for discrete-time linear
+  systems observed through noisy measurements.
+* xref:algorithms/measurement-noise-covariance-estimation.adoc[] — running estimate of a sensor's measurement
+  noise covariance, built up one sample at a time while the sensor's true state is held constant.
+
+== Where to go next
+
+* xref:installation.adoc[] — add the library as a dependency.
+* xref:algorithms.adoc[] — catalog of every algorithm the library implements, grouped by problem domain.
+* xref:reference.adoc[] — generated reports (Javadoc, coverage, static analysis, quality dashboards) produced by
+  the build.

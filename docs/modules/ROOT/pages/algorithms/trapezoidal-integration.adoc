@@ -1,0 +1,121 @@
+= Trapezoidal Rule Integration
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The extended trapezoidal rule is the simplest quadrature rule in the `com.irurueta.numerical.integration`
+package, and the building block that xref:algorithms/simpson-integration.adoc[Simpson's rule] and
+xref:algorithms/romberg-integration.adoc[Romberg integration] refine to get faster convergence. It is
+described in xref:reference.adoc#press2007[Press et al., 2007], Sections 4.1 and 4.2 (pages 156–165), and
+implemented as `TrapezoidalQuadrature` / `TrapezoidalMatrixQuadrature`, consumed directly by
+`TrapezoidalQuadratureIntegrator` / `TrapezoidalQuadratureMatrixIntegrator`.
+
+== Problem statement
+
+Given equally spaced abscissas stem:[x_0, x_1, \ldots, x_N] spaced apart by step stem:[h], with
+stem:[f_i \equiv f(x_i)], the two-point trapezoidal rule approximates the integral over a single interval as:
+
+[stem]
+++++
+\int_{x_0}^{x_1} f(x)\,dx = h\left[\frac{1}{2}f_0 + \frac{1}{2}f_1\right] + O(h^3 f'')
+++++
+
+Applying this repeatedly over stem:[N-1] consecutive intervals and summing gives the *extended trapezoidal
+rule*:
+
+[stem]
+++++
+\int_{x_0}^{x_{N-1}} f(x)\,dx = h\left[\frac{1}{2}f_0 + f_1 + f_2 + \cdots + f_{N-2} + \frac{1}{2}f_{N-1}\right]
++ O\!\left(\frac{(b-a)^3 f''}{N^2}\right)
+++++
+
+This is a *closed* formula — it evaluates the integrand at both endpoints stem:[a] and stem:[b] — and requires
+the integrand to be well-behaved (no singularities) over the whole finite interval stem:[[a, b]].
+
+== Incremental refinement
+
+The key practical property of the extended trapezoidal rule is that doubling the number of intervals reuses
+every previous function evaluation — only the new midpoints need to be computed:
+
+* *Stage 1*: the crudest possible estimate, averaging the two endpoints:
++
+[stem]
+++++
+s_1 = \frac{b-a}{2}\big[f(a) + f(b)\big]
+++++
+* *Stage stem:[n > 1]*: adds the stem:[2^{n-2}] new interior points that lie exactly halfway between the
+  points already used, and combines them with the previous estimate:
++
+[stem]
+++++
+s_n = \frac{1}{2}\left(s_{n-1} + (b-a)\,\frac{\displaystyle\sum \text{new points}}{2^{n-2}}\right)
+++++
+
+Each call to `next()` therefore doubles the resolution at the cost of only the newly added evaluations, not a
+full re-evaluation from scratch.
+
+== Why this rule matters beyond its own accuracy
+
+The extended trapezoidal rule converges slowly (error stem:[O(1/N^2)]) on its own, but it has a "deep" property
+that makes it the ideal starting point for higher-order methods: its error, given by the Euler-Maclaurin
+summation formula, is a series containing *only even powers* of stem:[h] — there is no stem:[O(h^3)] term, only
+stem:[O(h^2), O(h^4), O(h^6), \ldots] terms with coefficients built from Bernoulli numbers. This is exactly the
+property that xref:algorithms/simpson-integration.adoc[] and xref:algorithms/romberg-integration.adoc[]
+exploit via Richardson extrapolation to cancel out the leading error terms and converge much faster than the
+trapezoidal rule itself.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["Stage 1: s = (b-a)/2 * (f(a) + f(b))"] --> B["Stage n: add 2^(n-2) new midpoints\nof the previous stage's intervals"]
+    B --> C["s = 0.5 * (s_prev + (b-a) * sum(new points) / 2^(n-2))"]
+    C --> D{"|s - s_prev| < eps * |s_prev| ?\n(checked after 5 stages, up to 35)"}
+    D -->|No| B
+    D -->|Yes| E["Return s"]
+....
+
+== Library implementation
+
+`TrapezoidalQuadrature` implements `Quadrature.next()` exactly as above; `TrapezoidalQuadratureIntegrator`
+wraps it with a plain convergence loop — no extrapolation — checking, after a minimum of 5 refinement stages
+and up to a maximum of 35, whether successive estimates agree to within a relative tolerance `eps` (default
+`1e-10`). `TrapezoidalMatrixQuadrature` and `TrapezoidalQuadratureMatrixIntegrator` provide the same algorithm
+for matrix-valued integrands, evaluated via `MatrixSingleDimensionFunctionEvaluatorListener`.
+
+This plain, non-extrapolating integration method corresponds to `IntegratorType.QUADRATURE` and
+`QuadratureType.TRAPEZOIDAL`, and can also be obtained through the package's factory method:
+
+[source,java]
+----
+final var integrator = Integrator.create(
+        a, b, listener, IntegratorType.QUADRATURE, QuadratureType.TRAPEZOIDAL);
+final var result = integrator.integrate();
+----
+
+`TrapezoidalQuadrature` is also the rule plugged into `SimpsonTrapezoidalQuadratureIntegrator`
+(xref:algorithms/simpson-integration.adoc[]) and `RombergTrapezoidalQuadratureIntegrator`
+(xref:algorithms/romberg-integration.adoc[]), which reuse the same refinement loop but combine successive
+stages far more efficiently.
+
+TIP: `IntegratorType.QUADRATURE` is a robust fallback for integrands that are not smooth (e.g. a function
+linearly interpolated between measured data points), but it is unsophisticated: if it needs too many stages to
+reach the requested `eps`, accumulated roundoff error can prevent it from ever converging. Prefer
+xref:algorithms/simpson-integration.adoc[] or xref:algorithms/romberg-integration.adoc[] whenever the
+integrand is smooth enough to benefit from extrapolation.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return Math.sin(point);
+    }
+};
+
+final var integrator = new TrapezoidalQuadratureIntegrator(0.0, Math.PI, listener);
+final var result = integrator.integrate(); // approximately 2.0
+----

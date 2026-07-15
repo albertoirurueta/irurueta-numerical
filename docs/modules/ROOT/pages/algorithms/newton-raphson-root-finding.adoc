@@ -1,0 +1,126 @@
+= Newton-Raphson Method
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+When both a function and its derivative can be evaluated, extending the tangent line at the current estimate
+until it crosses zero converges dramatically faster than any of the derivative-free methods described
+elsewhere on this page — but only once the iteration is close enough to the root for that tangent-line
+approximation to hold. This package implements both the classical, unguarded Newton-Raphson iteration and a
+"safe" variant that falls back to bisection whenever the unguarded version would misbehave. Both are described
+in xref:reference.adoc#press2007[Press et al., 2007], Section 9.4 (page 456), and implemented as
+`NewtonRaphsonSingleRootEstimator` and `SafeNewtonRaphsonSingleRootEstimator` in the
+`com.irurueta.numerical.roots` package.
+
+== The tangent-line step
+
+From the Taylor expansion stem:[f(x+\delta) \approx f(x) + f'(x)\delta], setting stem:[f(x+\delta) = 0] gives
+the step:
+
+[stem]
+++++
+\delta = -\frac{f(x)}{f'(x)}, \qquad x_{i+1} = x_i + \delta
+++++
+
+Geometrically: extend the tangent line at stem:[x_i] until it crosses the x-axis, and use that crossing as the
+next estimate. Expressing the deviation from the true root stem:[\epsilon_i \equiv x_i - x_{\text{root}}] in
+terms of this recurrence gives:
+
+[stem]
+++++
+\epsilon_{i+1} = -\epsilon_i^2\,\frac{f''(x)}{2f'(x)}
+++++
+
+— *quadratic* convergence: near the root, the number of correct significant digits roughly doubles with every
+step. This is what makes Newton-Raphson so powerful whenever it applies cleanly, and why even methods that
+reject it for early iterations often still use one or two Newton-Raphson steps at the very end to "polish" a
+root cheaply.
+
+== Why the plain iteration can fail
+
+Far from the root, where the higher-order Taylor terms are no longer negligible, the tangent-line step can be
+badly wrong — most dramatically when a trial point lands near a local extremum, where stem:[f'(x) \approx 0]
+sends the next estimate flying off toward infinity with no hope of recovery. The plain
+`NewtonRaphsonSingleRootEstimator` in this package only rejects a step that would land *outside* the original
+bracket; it does not otherwise protect against this failure mode.
+
+== The safe variant: Newton-Raphson with a bisection fallback
+
+`SafeNewtonRaphsonSingleRootEstimator` fixes this by maintaining an actual bracket alongside the tangent-line
+step, and taking a bisection step instead whenever the Newton-Raphson step would either land outside the
+current bracket, or is not shrinking the bracket fast enough (specifically, when the *previous* step's
+magnitude was more than twice the size of the one before it):
+
+[stem]
+++++
+\text{bisect if} \quad \big[(x_i - x_h)f'(x_i) - f(x_i)\big]\big[(x_i - x_l)f'(x_i) - f(x_i)\big] > 0
+\quad \text{or} \quad |2f(x_i)| > |\delta_{\text{prev}}\,f'(x_i)|
+++++
+
+Whichever step is taken, the bracket stem:[[x_l, x_h\]] is then updated using the sign of the new function
+value, exactly as in xref:algorithms/bisection-root-finding.adoc[]. This guarantees the same unconditional
+convergence as plain bisection, while still taking the fast Newton-Raphson step whenever it is safe to do so.
+
+[mermaid]
+....
+flowchart TD
+    A["Bracket (xl, xh); start at midpoint"] --> B{"would the Newton step leave the bracket,\nor shrink it too slowly?"}
+    B -->|"yes"| C["Bisect: step to the bracket midpoint"]
+    B -->|"no"| D["Take the Newton-Raphson step:\nx -= f(x) / f'(x)"]
+    C --> E["Evaluate f, f' at the new point;\nupdate the bracket by the sign of f"]
+    D --> E
+    E --> F{"step size below tolerance?"}
+    F -->|"no"| B
+    F -->|"yes"| G["Return x as the root"]
+....
+
+== Library implementation
+
+Both classes extend `DerivativeSingleRootEstimator` (itself extending `BracketedSingleRootEstimator`), and
+require a derivative listener in addition to the usual function listener:
+
+[cols="1,2", options="header"]
+|===
+|Class
+|Behavior
+
+|`NewtonRaphsonSingleRootEstimator`
+|Plain tangent-line iteration; only checks that the result stays within the original bracket. Up to
+`JMAX = 20` iterations.
+
+|`SafeNewtonRaphsonSingleRootEstimator`
+|Falls back to bisection whenever the Newton-Raphson step is unsafe, maintaining a true bracket throughout. Up
+to `MAXIT = 100` iterations.
+|===
+
+Both share `getTolerance()` / `setTolerance(double)` (the step-size tolerance to converge to; default `1e-6`)
+and use the automatic bracket search described in xref:algorithms/bisection-root-finding.adoc[]. After
+`estimate()` completes, `getRoot()` returns the estimated root.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] recommends the safe variant (`rtsafe`) as the default
+choice whenever a derivative is available — the plain iteration's poor global convergence properties are
+usually not worth the risk once a safe alternative costs almost nothing extra.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return point * point - 4.0;
+    }
+};
+final var derivativeListener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return 2.0 * point;
+    }
+};
+
+final var estimator = new SafeNewtonRaphsonSingleRootEstimator(
+        listener, derivativeListener, 0.0, 10.0, 1e-9);
+estimator.estimate();
+
+final var root = estimator.getRoot(); // approximately 2.0
+----

@@ -1,4 +1,5 @@
 target
 .idea
+/docs/build/
 
 src/main/resources/com/irurueta/numerical/build-info.properties

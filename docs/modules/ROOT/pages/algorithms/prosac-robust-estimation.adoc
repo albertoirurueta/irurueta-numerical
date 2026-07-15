@@ -1,0 +1,199 @@
+= PROSAC (Progressive Sample Consensus)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC] treats every sample as equally likely to be an inlier and
+draws subsets uniformly at random from the whole dataset. Very often, though, a rough *quality* score is
+already available for each sample — a descriptor-matching similarity, a correlation score — that, while far
+from perfect, is at least somewhat correlated with whether that sample is actually an inlier. PROSAC exploits
+this ordering to draw its random subsets from progressively larger pools of the *best*-scoring samples first,
+converging to plain RANSAC in the worst case but often finding the same answer one to two orders of magnitude
+faster. It is described in xref:reference.adoc#chum2005[Chum and Matas, 2005], and implemented as
+`PROSACRobustEstimator` in the `com.irurueta.numerical.robust` package. This library's implementation is itself
+explicitly modeled on
+https://web.archive.org/web/20210506083754/http://devernay.free.fr/vision/src/prosac.c[a reference C
+implementation by Frédéric Devernay], cited directly in the class's source code.
+
+== Notation
+
+Sort the stem:[N] samples in descending order by quality, so stem:[U_N] denotes the full sorted set and
+stem:[U_n] the subset of its stem:[n] highest-quality samples. A sample (subset) stem:[M] of size stem:[m] has
+quality equal to its *worst* member: stem:[q(M) = \min_{u_i \in M} q(u_i)].
+
+== The growth function
+
+Imagine RANSAC drawing stem:[T_N] uniformly random subsets of size stem:[m], and re-ordering that same
+sequence of subsets by *their* quality, best first. PROSAC's insight is that this re-ordered sequence can be
+generated directly, without ever drawing the "bad" subsets first. Let stem:[T_n] be the expected number of
+subsets in that sequence built entirely from stem:[U_n]:
+
+[stem]
+++++
+T_n = T_N \prod_{i=0}^{m-1} \frac{n-i}{N-i}
+++++
+
+which satisfies the recurrence:
+
+[stem]
+++++
+T_{n+1} = \frac{n+1}{n+1-m}\,T_n
+++++
+
+Since stem:[T_n] is not generally an integer, an integer running counter stem:[T'_n] tracks it (starting from
+stem:[T'_m = 1]):
+
+[stem]
+++++
+T'_{n+1} = T'_n + \lceil T_{n+1} - T_n \rceil
+++++
+
+and the *growth function* stem:[g(t)] — how large a pool stem:[U_n] should be sampled from after stem:[t]
+trials — is defined as the smallest stem:[n] whose stem:[T'_n] has not yet been reached:
+
+[stem]
+++++
+g(t) = \min\{n : T'_n \ge t\}
+++++
+
+At trial stem:[t], the drawn subset stem:[M_t] always includes the sample at the current growth boundary,
+stem:[u_{g(t)}], plus stem:[m-1] other samples drawn at random from *within* stem:[U_{g(t)-1}] — until the
+growth boundary reaches the maximality-based termination length described below, at which point PROSAC falls
+back to drawing all stem:[m] points uniformly from stem:[U_n], exactly like plain RANSAC.
+
+[mermaid]
+....
+flowchart TD
+    A["t = 0, n = m, sample-size-star = N;\ncompute initial T_n, T'_n = 1"] --> B["t = t + 1"]
+    B --> C{"t > T'_n and n has not reached\nsample-size-star yet?"}
+    C -->|"yes"| D["Grow the pool: n = n + 1;\nupdate T_n, T'_n via the recurrence"]
+    C -->|"no"| E{"t > T'_n ?"}
+    D --> E
+    E -->|"yes (finishing stage)"| F["Draw m points uniformly from U_n\n(standard RANSAC sampling)"]
+    E -->|"no"| G["Draw m-1 points from U_(n-1) at random,\nplus the boundary point u_n"]
+    F --> H["Fit candidate model(s); verify against ALL N samples"]
+    G --> H
+    H --> I["Update the termination length n*\nif a better inlier ratio was found (see below)"]
+    I --> J{"stopping criteria satisfied\n(non-randomness and maximality)?"}
+    J -->|"no"| B
+    J -->|"yes"| K["Return the best model found"]
+....
+
+== Stopping criteria
+
+PROSAC stops once the current best solution, found within a pool stem:[U_{n^*}] with stem:[I_{n^*}] inliers,
+satisfies two conditions simultaneously.
+
+=== Non-randomness
+
+The number of "inliers" a *wrong* model could accumulate purely by chance follows a binomial distribution
+stem:[B(n, \beta)], where stem:[\beta] is the (problem-specific) probability that an incorrect model happens
+to be consistent with an arbitrary sample. Approximating this binomial with a normal distribution gives a
+minimum inlier count below which a result cannot be trusted:
+
+[stem]
+++++
+I^{\min}_n = m + n\beta + \sqrt{n\beta(1-\beta)}\cdot\sqrt{\chi^2}
+++++
+
+using a chi-squared value of stem:[\chi^2 = 2.706] (corresponding to a two-tailed significance level of 10%, or
+a one-tailed stem:[\Psi = 5\%] as in the original paper). A solution is only accepted once
+stem:[I_{n^*} \ge I^{\min}_{n^*}].
+
+=== Maximality
+
+Exactly as in xref:algorithms/ransac-robust-estimation.adoc[RANSAC]'s own confidence-based termination, the
+number of samples needed to be reasonably sure (probability stem:[\eta_0], typically 5%) that no better
+solution exists is:
+
+[stem]
+++++
+k_{n^*} = \frac{\log \eta_0}{\log\!\left(1 - (I_{n^*}/n^*)^m\right)}
+++++
+
+At every improvement, PROSAC additionally searches over all possible pool sizes stem:[n] for whichever one
+*minimizes* stem:[k_n] (i.e. maximizes the inlier ratio stem:[I_n/n]) while still satisfying the non-randomness
+test above, and adopts that as the new termination length stem:[n^*] — this is why the algorithm can stop
+having sampled from a *smaller*, higher-quality prefix of the data than the full stem:[N], rather than only
+ever expanding outward.
+
+== Library implementation
+
+`PROSACRobustEstimator<T>` requires a `PROSACRobustEstimatorListener<T>`, which extends
+`RANSACRobustEstimatorListener<T>` (see xref:algorithms/robust-estimation-framework.adoc[]) with one addition:
+
+* `getQualityScores()` — one score per sample, where a *larger* value means higher quality; the estimator
+  sorts samples by this internally.
+
+Beyond the shared `getConfidence()` / `setConfidence(double)` and `getMaxIterations()` / `setMaxIterations(int)`
+described in xref:algorithms/robust-estimation-framework.adoc[], PROSAC-specific tuning is available via:
+
+* `getMaxOutliersProportion()` / `setMaxOutliersProportion(double)` — the assumed worst-case outlier fraction,
+  used to compute stem:[T_N] (the point at which PROSAC's sampling becomes identical to RANSAC's); default
+  `0.8`.
+* `getEta0()` / `setEta0(double)` — the maximality significance level stem:[\eta_0]; default `0.05`.
+* `getBeta()` / `setBeta(double)` — the non-randomness parameter stem:[\beta]; default `0.01`. This is
+  problem-specific and, per xref:reference.adoc#chum2005[Chum and Matas, 2005], should be estimated from
+  geometric considerations about the specific model being fit.
+
+After `estimate()` completes, `getBestResult()` and `getBestInliersData()` (a `PROSACInliersData`) behave the
+same as in xref:algorithms/ransac-robust-estimation.adoc[].
+
+TIP: The quality scores do not need to be an accurate probability of correctness — only "not worse than
+random," i.e. on average, a higher-quality sample should be at least as likely to be an inlier as a
+lower-quality one. xref:reference.adoc#chum2005[Chum and Matas, 2005] found this mild assumption to hold for
+several standard similarity measures across a range of test scenes, with observed speedups over
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC] of up to two orders of magnitude.
+
+== Example
+
+The same line-fitting problem as xref:algorithms/ransac-robust-estimation.adoc[], now with a per-point quality
+score (e.g. a matching score from whatever process produced the candidate points) guiding the sampling:
+
+[source,java]
+----
+final var listener = new PROSACRobustEstimatorListener<double[]>() {
+    @Override
+    public int getTotalSamples() {
+        return xCoords.length;
+    }
+
+    @Override
+    public int getSubsetSize() {
+        return 2;
+    }
+
+    @Override
+    public double getThreshold() {
+        return 1.0;
+    }
+
+    @Override
+    public double[] getQualityScores() {
+        return qualityScores; // higher = better, one entry per sample
+    }
+
+    @Override
+    public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
+        final var x1 = xCoords[samplesIndices[0]];
+        final var y1 = yCoords[samplesIndices[0]];
+        final var x2 = xCoords[samplesIndices[1]];
+        final var y2 = yCoords[samplesIndices[1]];
+
+        final var b = (y2 - y1) / (x2 - x1);
+        final var a = y1 - b * x1;
+        solutions.add(new double[]{a, b});
+    }
+
+    @Override
+    public double computeResidual(final double[] currentEstimation, final int i) {
+        final var a = currentEstimation[0];
+        final var b = currentEstimation[1];
+        return Math.abs(yCoords[i] - (a + b * xCoords[i]));
+    }
+};
+
+final var estimator = new PROSACRobustEstimator<>(listener);
+estimator.setConfidence(0.99);
+final var line = estimator.estimate(); // [a, b], typically found much faster than plain RANSAC
+----

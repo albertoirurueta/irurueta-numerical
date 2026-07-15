@@ -1,0 +1,125 @@
+= Polynomial Interpolation
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Given a table of points stem:[(x_i, y_i)], polynomial interpolation estimates stem:[f(x)] at an arbitrary
+stem:[x] by drawing the unique polynomial of degree stem:[M-1] through the stem:[M] tabulated points nearest
+stem:[x]. It is described in xref:reference.adoc#press2007[Press et al., 2007], Sections 3.1 (page 114,
+searching an ordered table) and 3.2 (page 118, polynomial interpolation), and implemented as
+`LinearInterpolator` and `PolynomialInterpolator` in the `com.irurueta.numerical.interpolation` package, both
+sharing the table-search machinery of the `BaseInterpolator` base class.
+
+== Searching an ordered table
+
+Before interpolating, every 1D interpolator in this package first needs to find *which* stem:[M] consecutive
+tabulated abscissas to center the interpolation on. `BaseInterpolator` provides two strategies for this:
+
+* `locate(x)` — plain bisection search, stem:[O(\log N)].
+* `hunt(x)` — starts from the position found by the *previous* call and hops outward in exponentially growing
+  steps (1, 2, 4, ...) until it brackets stem:[x], then bisects within that bracket.
+
+`interpolate(x)` automatically picks whichever of the two is likely to win, based on whether the two most
+recent calls landed close together in the table:
+
+[mermaid]
+....
+flowchart TD
+    A["interpolate(x)"] --> B{"were recent calls\nat nearby x values?"}
+    B -->|"yes"| C["hunt(x): expand from previous\nposition, then bisect"]
+    B -->|"no"| D["locate(x): plain bisection\nfrom scratch"]
+    C --> E["rawinterp(jlo, x)"]
+    D --> E
+....
+
+`hunt` is faster than `locate` when consecutive calls ask for nearby values of stem:[x] — a common pattern,
+e.g. when the interpolator is called from the right-hand side of an ODE integrator stepping steadily forward —
+but can be up to twice as slow as `locate` in the worst case, if the guess is far from where stem:[x] actually
+falls.
+
+== Linear interpolation
+
+The simplest case, using just the stem:[M = 2] points bracketing stem:[x]:
+
+[stem]
+++++
+y = y_j + \frac{x - x_j}{x_{j+1} - x_j}\,(y_{j+1} - y_j)
+++++
+
+`LinearInterpolator` implements exactly this formula, with no configurable order.
+
+== Polynomial interpolation via Neville's algorithm
+
+For stem:[M > 2] points, the unique interpolating polynomial of degree stem:[M-1] is given explicitly by
+Lagrange's classical formula, but evaluating it directly is both awkward to code and gives no error estimate.
+*Neville's algorithm* builds the same polynomial recursively instead, via a triangular tableau of partial
+polynomials stem:[P_{i(i+1)\ldots(i+m)}] — the value at stem:[x] of the unique polynomial through
+stem:[m+1] consecutive tabulated points. Each entry is built from its two "parents" in the previous column:
+
+[stem]
+++++
+P_{i(i+1)\ldots(i+m)} = \frac{(x - x_{i+m})\,P_{i(i+1)\ldots(i+m-1)} + (x_i - x)\,P_{(i+1)\ldots(i+m)}}
+{x_i - x_{i+m}}
+++++
+
+Tracking only the small *differences* between a column's parents and daughters — rather than the full
+stem:[P] values — gives a numerically better-behaved recurrence for the correction terms
+stem:[C_{m,i} \equiv P_{i\ldots(i+m)} - P_{i\ldots(i+m-1)}] and
+stem:[D_{m,i} \equiv P_{i\ldots(i+m)} - P_{(i+1)\ldots(i+m)}]:
+
+[stem]
+++++
+D_{m+1,i} = \frac{(x_{i+m+1} - x)(C_{m,i+1} - D_{m,i})}{x_i - x_{i+m+1}}, \qquad
+C_{m+1,i} = \frac{(x_i - x)(C_{m,i+1} - D_{m,i})}{x_i - x_{i+m+1}}
+++++
+
+At each stage, the accumulated answer is any starting stem:[y_i] plus a chain of stem:[C]'s and/or stem:[D]'s
+following the "straightest line" path through the tableau toward its apex — which also keeps the partial
+approximations centered on stem:[x]. The size of the *last* correction added is a natural, if informal, error
+estimate for the whole interpolation.
+
+[mermaid]
+....
+flowchart TD
+    A["Initialize: c[i] = d[i] = y[i] for the M nearest points"] --> B["For each tableau column m = 1..M-1:\nupdate c[i], d[i] via the C/D recurrence"]
+    B --> C["Pick c or d — whichever keeps the path\ncentered on x — as the correction for this column"]
+    C --> D["Add the correction to the running estimate y"]
+    D --> E{"more columns?"}
+    E -->|yes| B
+    E -->|no| F["Return y; last correction = error estimate dy"]
+....
+
+== Library implementation
+
+Both classes extend `BaseInterpolator` and expose the same `interpolate(x)` entry point:
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Order
+|Notes
+
+|`LinearInterpolator`
+|Fixed at stem:[M = 2]
+|No error estimate (the model is exact between adjacent points by construction).
+
+|`PolynomialInterpolator`
+|Configurable stem:[M] (constructor parameter, or all points by default)
+|`getDy()` returns the error estimate from the last call to `interpolate(x)`.
+|===
+
+TIP: Increasing stem:[M] does not always improve accuracy — quite the opposite for equally-spaced abscissas,
+where high-order polynomial interpolation is notoriously ill-conditioned and prone to wild oscillation between
+tabulated points. Prefer a small, local stem:[M] (3 or 4 points is often plenty, rarely more than 5 or 6)
+centered on stem:[x], rather than constructing `PolynomialInterpolator` with its default of *all* the points in
+the table.
+
+== Example
+
+[source,java]
+----
+// cubic (4-point) local interpolation
+final var interpolator = new PolynomialInterpolator(x, y, 4);
+final var value = interpolator.interpolate(target);
+final var errorEstimate = interpolator.getDy();
+----

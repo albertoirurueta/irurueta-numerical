@@ -1,0 +1,153 @@
+= Linear Least-Squares Fitting Algorithm
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Linear least-squares fitting estimates the coefficients of a model that is a linear combination of arbitrary,
+fixed basis functions, by directly solving the *normal equations* of the least-squares problem. It is the
+algorithm behind `SimpleSingleDimensionLinearFitter` (and its multi-dimensional counterpart,
+`MultiDimensionLinearFitter`'s own simple implementation) in the `com.irurueta.numerical.fitting` package, and
+is described in xref:reference.adoc#press2007[Press et al., 2007], Section 15.4.1 (page 789).
+
+== Problem statement
+
+Unlike xref:algorithms/levenberg-marquardt.adoc[Levenberg-Marquardt fitting], here the model does not need to
+be a straight line or even a polynomial — only *linear in its parameters*. Given stem:[M] arbitrary, fixed
+basis functions stem:[X_0(x), \ldots, X_{M-1}(x)] (e.g. stem:[1, x, x^2, \ldots] for a polynomial, or sines and
+cosines for a Fourier series), the model is:
+
+[stem]
+++++
+y(x) = \sum_{k=0}^{M-1} a_k X_k(x)
+++++
+
+and the parameters stem:[\mathbf{a} = (a_0, \ldots, a_{M-1})] are chosen to minimize the same chi-square merit
+function used throughout the `fitting` package:
+
+[stem]
+++++
+\chi^2 = \sum_{i=0}^{N-1} \left[ \frac{y_i - \sum_{k=0}^{M-1} a_k X_k(x_i)}{\sigma_i} \right]^2
+++++
+
+where stem:[\sigma_i] is the known (or assumed constant) measurement error of each data point. Because
+stem:[\chi^2] is quadratic in stem:[\mathbf{a}], its minimum can be found directly, in one step, rather than
+iteratively.
+
+== Design matrix and normal equations
+
+Define the stem:[N \times M] *design matrix* stem:[A] and the length-stem:[N] vector stem:[b] from the basis
+functions and the data:
+
+[stem]
+++++
+A_{ij} = \frac{X_j(x_i)}{\sigma_i}, \qquad b_i = \frac{y_i}{\sigma_i}
+++++
+
+Setting stem:[\partial \chi^2 / \partial a_k = 0] for every parameter gives the *normal equations*:
+
+[stem]
+++++
+\sum_{j=0}^{M-1} \alpha_{kj}\, a_j = \beta_k, \qquad \text{i.e.} \qquad \alpha\,\mathbf{a} = \beta
+++++
+
+with
+
+[stem]
+++++
+\alpha_{kj} = \sum_{i=0}^{N-1} \frac{X_j(x_i)\, X_k(x_i)}{\sigma_i^2} = A^\top A, \qquad
+\beta_k = \sum_{i=0}^{N-1} \frac{y_i\, X_k(x_i)}{\sigma_i^2} = A^\top b
+++++
+
+Solving this stem:[M \times M] linear system for stem:[\mathbf{a}] (by Gauss-Jordan elimination, LU
+decomposition, or Cholesky decomposition, since stem:[\alpha] is symmetric positive-definite) gives the
+best-fit parameters directly — no initial guess or iteration required.
+
+== Covariance of the fitted parameters
+
+The same Gauss-Jordan elimination that solves stem:[\alpha\,\mathbf{a} = \beta] can be run in a
+form that also produces stem:[\alpha^{-1}] as a side effect, at essentially no extra cost. This inverse is the
+*covariance matrix* of the fit:
+
+[stem]
+++++
+C \equiv \alpha^{-1}
+++++
+
+Its diagonal elements are the variances of the fitted parameters, stem:[\sigma^2(a_j) = C_{jj}], and its
+off-diagonal elements stem:[C_{jk}] are the covariances between stem:[a_j] and stem:[a_k].
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["Data (x_i, y_i, sigma_i); basis functions X_0..X_{M-1}"] --> B["Accumulate curvature matrix alpha = A^T A\nand vector beta = A^T b over all data points"]
+    B --> C["Solve alpha * a = beta via Gauss-Jordan elimination\n(alpha^-1 obtained as a byproduct)"]
+    C --> D["a = fitted parameters; C = alpha^-1 = covariance matrix"]
+    D --> E["Evaluate chi-square using the fitted a"]
+....
+
+Because the fit is a single linear solve, there is no damping factor, no convergence tolerance, and no
+maximum-iteration count to configure — the closed-form solution is exact up to the numerical stability of the
+linear solver.
+
+== Freezing parameters
+
+As with the Levenberg-Marquardt fitters, individual parameters can be held fixed at a known value instead of
+being estimated (e.g. because they come from theory or from a previous experiment) via `hold(i, val)` /
+`free(i)`, mirroring `Fitlin`'s `hold`/`free` methods. Held parameters are subtracted out of stem:[y_i] before
+the remaining, free parameters are solved for, and they are reported back with zero variance and covariance.
+
+== Library implementation
+
+`SimpleSingleDimensionLinearFitter` extends `SingleDimensionLinearFitter`, which in turn extends
+`SingleDimensionFitter`. The evaluator supplied to it, `LinearFitterSingleDimensionFunctionEvaluator`, has a
+narrower contract than the Levenberg-Marquardt evaluators — it only needs to report the basis functions'
+values, not any derivative:
+
+* `createResultArray()` — allocates the array of length stem:[M] that will hold one evaluation.
+* `evaluate(double point, double[] result)` — fills `result` with stem:[X_0(x), \ldots, X_{M-1}(x)] at `point`.
+
+After `fit()` completes:
+
+* `getA()` — the fitted parameters stem:[\mathbf{a}].
+* `getCovar()` — the covariance matrix stem:[C] of the fitted parameters.
+* `getChisq()` — the final stem:[\chi^2] value.
+
+TIP: Solving the normal equations directly is *susceptible to roundoff error*, because the condition number of
+stem:[\alpha = A^\top A] is the square of the condition number of stem:[A]. When the basis
+functions are close to degenerate — a common occurrence — prefer the SVD-based
+`SvdSingleDimensionLinearFitter` / `SvdMultiDimensionLinearFitter` (xref:reference.adoc#press2007[Press et al.,
+2007], Section 15.4.2, page 794) instead, which solves the same problem in a way that cannot fail even when
+`alpha` is singular. `SimpleSingleDimensionLinearFitter` is best reserved for well-conditioned basis sets, where
+it is cheaper.
+
+== Example
+
+Fitting a cubic polynomial stem:[y(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3] to data `x`, `y`, `sigma` — the same
+`cubicfit` example used in xref:reference.adoc#press2007[Press et al., 2007]:
+
+[source,java]
+----
+final var evaluator = new LinearFitterSingleDimensionFunctionEvaluator() {
+    @Override
+    public double[] createResultArray() {
+        return new double[4];
+    }
+
+    @Override
+    public void evaluate(final double point, final double[] result) {
+        result[0] = 1.0;
+        for (var i = 1; i < 4; i++) {
+            result[i] = point * result[i - 1];
+        }
+    }
+};
+
+final var fitter = new SimpleSingleDimensionLinearFitter(evaluator, x, y, sigma);
+fitter.fit();
+
+final var params = fitter.getA();          // fitted [a0, a1, a2, a3]
+final var covariance = fitter.getCovar();  // covariance matrix of the parameters
+final var chiSq = fitter.getChisq();       // goodness-of-fit statistic
+----

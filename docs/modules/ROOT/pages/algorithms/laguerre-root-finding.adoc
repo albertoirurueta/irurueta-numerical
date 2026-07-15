@@ -1,0 +1,117 @@
+= Laguerre's Method for Polynomial Roots
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Beyond degree three, xref:algorithms/polynomial-roots-closed-form.adoc[no closed-form solution exists] in
+general — a polynomial's roots must be found iteratively. Laguerre's method is the most straightforward
+general-purpose technique that reliably finds *all* the roots of a polynomial of any degree — real, complex,
+single, or multiple — converging to a root from essentially any starting point. It is described in
+xref:reference.adoc#press2007[Press et al., 2007], Section 9.5 (page 463), and implemented as
+`LaguerrePolynomialRootsEstimator` in the `com.irurueta.numerical.roots` package.
+
+== Motivating the formula
+
+Writing a degree-stem:[n] polynomial in terms of its roots, stem:[P_n(x) = (x-x_0)(x-x_1)\cdots(x-x_{n-1})],
+the log-derivative and its derivative give two useful sums over *all* the roots:
+
+[stem]
+++++
+G \equiv \frac{d\ln|P_n(x)|}{dx} = \frac{P_n'}{P_n} = \sum_{i} \frac{1}{x-x_i}, \qquad
+H \equiv -\frac{d^2\ln|P_n(x)|}{dx^2} = \left(\frac{P_n'}{P_n}\right)^2 - \frac{P_n''}{P_n} =
+\sum_{i} \frac{1}{(x-x_i)^2}
+++++
+
+Laguerre's method makes a deliberately drastic simplifying assumption: that the one root being sought,
+stem:[x_0], sits a distance stem:[a] from the current guess stem:[x], while *every other* root sits at the
+same distance stem:[b]. Substituting stem:[x - x_0 = a] and stem:[x - x_i = b] (for all other roots) into
+stem:[G] and stem:[H] gives two equations in stem:[a] and stem:[b], which solve to:
+
+[stem]
+++++
+a = \frac{n}{G \pm \sqrt{(n-1)\big[nH - G^2\big]}}
+++++
+
+where the stem:[\pm] sign is chosen to make the denominator's magnitude as large as possible (for numerical
+stability), and the quantity inside the square root may be negative — so stem:[a], and hence the root
+estimate, is computed using complex arithmetic even when searching for a real root. The method simply iterates
+stem:[x \leftarrow x - a] until stem:[a] becomes negligibly small.
+
+Despite this simplifying assumption looking crude, Laguerre's method behaves remarkably well: for a polynomial
+with entirely real roots, it is *guaranteed* to converge to some root from any starting point. For complex
+roots, convergence is not rigorously proven, but empirically failures are rare — and, when they do happen,
+almost always take the form of a nonconverging limit cycle rather than outright divergence, which this
+package's implementation specifically detects and escapes.
+
+== Breaking limit cycles
+
+Every 10th iteration (`MT`), instead of the normal step, the implementation takes a step scaled by one of a
+fixed sequence of fractions (`0, 0.5, 0.25, 0.75, 0.13, 0.38, 0.62, 0.88, 1.0`) instead of the full Laguerre
+correction. This nudges the iteration out of the rare pathological cycles that would otherwise repeat forever
+— for example, a high-degree polynomial (degree stem:[\gtrsim 20]) whose roots are all just outside the unit
+circle, roughly equally spaced around it.
+
+== Finding all the roots: deflation and polishing
+
+To find every root of a degree-stem:[n] polynomial, Laguerre's method is applied repeatedly, each time to a
+*deflated* polynomial: once a root stem:[r] is found, the polynomial is divided by stem:[(x - r)] (synthetic
+division), producing a polynomial of one lower degree whose remaining roots are exactly the ones still being
+sought. Each Laguerre search starts from stem:[x = 0], which favors converging to whichever remaining root has
+the smallest magnitude.
+
+Because each deflation step introduces a small amount of numerical error that compounds over successive
+deflations, this package — following xref:reference.adoc#press2007[Press et al., 2007] — treats the roots
+found this way as only *tentative*, then optionally *polishes* every one of them by running Laguerre's method
+again, starting from each tentative root, but against the *original*, non-deflated polynomial. This removes
+most of the drift that deflation alone would otherwise leave behind.
+
+[mermaid]
+....
+flowchart TD
+    A["Polynomial of degree n"] --> B["Run Laguerre's method from x=0\non the current (possibly deflated) polynomial"]
+    B --> C{"every 10th iteration:\nuse a fractional step instead,\nto escape limit cycles"}
+    C --> D["Converged: record this root"]
+    D --> E["Deflate: divide the polynomial\nby (x - root)"]
+    E --> F{"any roots remaining?"}
+    F -->|"yes"| B
+    F -->|"no, all n roots found"| G{"polishing enabled?"}
+    G -->|"yes"| H["Re-run Laguerre's method on each\ntentative root against the ORIGINAL polynomial"]
+    G -->|"no"| I["Sort roots by real part; done"]
+    H --> I
+....
+
+== Library implementation
+
+`LaguerrePolynomialRootsEstimator` extends `PolynomialRootsEstimator`, and — unlike
+xref:algorithms/polynomial-roots-closed-form.adoc[] — is the only polynomial root finder in this package that
+accepts *complex* coefficients (a `Complex[]` array, constant term first), matching the fact that Laguerre's
+method itself always uses complex arithmetic internally, even when every root turns out to be real.
+
+* `setPolishRootsEnabled(boolean)` / `areRootsPolished()` — whether to re-run Laguerre's method on the original
+  polynomial after deflation; enabled (`DEFAULT_POLISH_ROOTS = true`) by default.
+
+Up to `MAXIT = MT * MR = 8000` iterations are allowed per root (`MT = 100` steps between fractional-step
+attempts, `MR = 80` distinct fractional values available). After `estimate()` completes, the inherited
+`getRoots()` returns a `Complex[]` of length equal to the polynomial's degree, sorted by real part; any root
+whose imaginary part is negligible relative to its real part is snapped to exactly zero.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] warns that some polynomials are exceedingly
+ill-conditioned — tiny changes in the coefficients can send the roots sprawling across the complex plane
+(Wilkinson's classic example is one such case). This is a property of the polynomial itself, not a limitation
+of Laguerre's method specifically; no root-finding algorithm can be expected to do much better in that
+situation.
+
+== Example
+
+[source,java]
+----
+// x^3 - 6x^2 + 11x - 6 = (x-1)(x-2)(x-3), coefficients [a0, a1, a2, a3]
+final var coefficients = new Complex[]{
+        new Complex(-6.0), new Complex(11.0), new Complex(-6.0), new Complex(1.0)
+};
+
+final var estimator = new LaguerrePolynomialRootsEstimator(coefficients);
+estimator.estimate();
+
+final var roots = estimator.getRoots(); // Complex[]{1+0i, 2+0i, 3+0i}
+----

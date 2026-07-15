@@ -1,0 +1,129 @@
+= RANSAC (Random Sample Consensus)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+RANSAC is the original, foundational algorithm behind the entire
+xref:algorithms/robust-estimation-framework.adoc[robust estimation framework] described on this page: repeatedly
+fit a candidate model to a small random subset of the data, count how many of *all* the samples that candidate
+explains within a fixed tolerance, and keep whichever candidate is supported by the most samples. It is
+described in xref:reference.adoc#fischler1981[Fischler and Bolles, 1981], and implemented as
+`RANSACRobustEstimator` in the `com.irurueta.numerical.robust` package.
+
+== The consensus set
+
+Given stem:[N] data samples, of which an unknown number are outliers, RANSAC's key insight is that a *minimal*
+subset of stem:[m] samples (just enough to determine a candidate model) drawn entirely from the inliers will
+produce a model that essentially every other inlier also agrees with — its *consensus set*. An outlier-
+contaminated subset, by contrast, produces a model that few other samples agree with. So instead of trying to
+identify outliers directly, RANSAC searches for the candidate model with the *largest* consensus set, and
+treats every sample within it as an inlier after the fact:
+
+[stem]
+++++
+\text{inlier}(x_i, \theta) \iff \mathrm{residual}(x_i, \theta) \le \tau
+++++
+
+where stem:[\theta] is a candidate model and stem:[\tau] is a threshold supplied by the caller, since RANSAC
+has no way to determine on its own how large a residual is "too large" for a given problem.
+
+== How many samples are enough?
+
+Each iteration succeeds (draws an all-inlier subset) with a certain probability that depends on the true
+(initially unknown) inlier fraction stem:[w] and the subset size stem:[m]. The number of iterations needed to
+reach a target confidence stem:[p] that *at least one* iteration succeeds is:
+
+[stem]
+++++
+N = \frac{\log(1-p)}{\log\!\left(1 - w^m\right)}
+++++
+
+Since stem:[w] is not known ahead of time, RANSAC estimates it *adaptively*: every time a new best candidate is
+found, stem:[w] is re-estimated as the current best consensus set size divided by stem:[N] total samples, and
+stem:[N] (the *required* number of iterations) is recomputed and only ever revised downward. The loop stops
+once the *actual* iteration count reaches this dynamically shrinking target, or a hard iteration cap is hit.
+
+[mermaid]
+....
+flowchart TD
+    A["Initialize: best inlier count = 0,\nrequired iterations = infinite"] --> B["Draw a random minimal subset of m samples"]
+    B --> C["Fit one or more candidate models to the subset"]
+    C --> D["For each candidate: count samples with\nresidual <= threshold (its consensus set)"]
+    D --> E{"more inliers than the best so far?"}
+    E -->|"yes"| F["Keep as new best model;\nre-estimate required iterations N from the new inlier ratio"]
+    E -->|"no"| G["Discard this candidate"]
+    F --> H{"current iteration >= N,\nor max iterations reached?"}
+    G --> H
+    H -->|"no"| B
+    H -->|"yes"| I["Return the best model and its consensus set"]
+....
+
+== Library implementation
+
+`RANSACRobustEstimator<T>` requires a `RANSACRobustEstimatorListener<T>`, which — beyond the base
+`estimatePreliminarSolutions()` / `computeResidual()` contract described in
+xref:algorithms/robust-estimation-framework.adoc[] — additionally supplies `getThreshold()`.
+
+* `getConfidence()` / `setConfidence(double)` — the target probability stem:[p]; default `0.99`.
+* `getMaxIterations()` / `setMaxIterations(int)` — hard cap on iterations; default `5000`.
+* `getNIters()` — the current, dynamically re-estimated required iteration count stem:[N].
+* `isComputeAndKeepInliersEnabled()` / `isComputeAndKeepResidualsEnabled()` — whether to retain the full inlier
+  flag set / residual array for the winning model (both default to `false`, to avoid the extra memory cost
+  when only the model itself is needed).
+
+After `estimate()` completes, `getBestResult()` returns the winning model and `getBestInliersData()` returns a
+`RANSACInliersData` (inlier `BitSet` and residual array, when enabled).
+
+TIP: RANSAC needs a threshold that is meaningful for the specific problem being solved — too tight, and even
+good inliers get rejected; too loose, and outliers get accepted into the consensus set, biasing the final
+model. If no reasonable threshold can be guessed in advance, consider
+xref:algorithms/lmeds-robust-estimation.adoc[LMedS] instead, which computes one dynamically.
+
+== Example
+
+Robustly fitting a line stem:[y = a + bx] (so `T` is a 2-element `double[]`, and the minimal subset size is 2)
+to a set of points containing outliers:
+
+[source,java]
+----
+final var listener = new RANSACRobustEstimatorListener<double[]>() {
+    @Override
+    public int getTotalSamples() {
+        return xCoords.length;
+    }
+
+    @Override
+    public int getSubsetSize() {
+        return 2;
+    }
+
+    @Override
+    public double getThreshold() {
+        return 1.0; // maximum acceptable distance from the line
+    }
+
+    @Override
+    public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
+        final var x1 = xCoords[samplesIndices[0]];
+        final var y1 = yCoords[samplesIndices[0]];
+        final var x2 = xCoords[samplesIndices[1]];
+        final var y2 = yCoords[samplesIndices[1]];
+
+        final var b = (y2 - y1) / (x2 - x1);
+        final var a = y1 - b * x1;
+        solutions.add(new double[]{a, b});
+    }
+
+    @Override
+    public double computeResidual(final double[] currentEstimation, final int i) {
+        final var a = currentEstimation[0];
+        final var b = currentEstimation[1];
+        return Math.abs(yCoords[i] - (a + b * xCoords[i]));
+    }
+};
+
+final var estimator = new RANSACRobustEstimator<>(listener);
+estimator.setConfidence(0.99);
+final var line = estimator.estimate(); // [a, b]
+final var inliers = estimator.getInliersData();
+----

@@ -1,0 +1,125 @@
+= Golden Section Search
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Golden section search is the simplest reliable method for minimizing a function of one variable: it needs
+only function evaluations (no derivatives), and its worst-case behavior is well understood and guaranteed. It
+is described in xref:reference.adoc#press2007[Press et al., 2007], Sections 10.1 (page 490, bracketing a
+minimum) and 10.2 (page 492, golden section search), and implemented as `GoldenSingleOptimizer` in the
+`com.irurueta.numerical.optimization` package. Bracketing itself is implemented in the `BracketedSingleOptimizer`
+base class shared by every single-variable optimizer in this package (see also
+xref:algorithms/brent-optimization.adoc[] and xref:algorithms/derivative-brent-optimization.adoc[]).
+
+== Bracketing a minimum
+
+A root is bracketed by two points where a function has opposite sign; a *minimum* is bracketed only by a
+*triplet* stem:[a < b < c] such that stem:[f(b)] is less than both stem:[f(a)] and stem:[f(c)] — this
+guarantees (for a smooth function) that a minimum lies somewhere in stem:[(a, c)]. Every optimizer in this
+package treats establishing such a bracket as an essential first step, rather than an optional convenience.
+
+Given two distinct starting points, the shared bracketing routine searches downhill (swapping the two points
+first if needed, so the downhill direction runs from the first toward the second) and keeps stepping further
+in that direction — using parabolic extrapolation through the three most recent points when it helps, and a
+fixed magnification factor (the golden ratio, stem:[1.618034]) otherwise — until it finds a third point where
+the function value has turned back uphill:
+
+[mermaid]
+....
+flowchart TD
+    A["Evaluate f at two starting points; swap them\nif needed so the downhill direction runs a -> b"] --> B["c = b + GOLD * (b - a) (first guess)"]
+    B --> C{"f(b) > f(c) ?"}
+    C -->|"yes: not yet bracketed"| D["Try a parabolic-extrapolation step;\nfall back to a fixed golden-ratio step\nif the parabolic step is unusable or too far"]
+    D --> E["Shift a, b, c forward by one position"]
+    E --> C
+    C -->|"no: f(b) is a local minimum\nrelative to f(a), f(c)"| F["Bracket (a, b, c) found"]
+....
+
+== Golden section search
+
+Once bracketed, golden section search narrows the triplet the same way bisection narrows a root bracket: try a
+new interior point, and keep whichever of the two resulting sub-triplets still brackets a lower center point.
+The only real question is *where*, within the larger of the two segments, to place that next trial point.
+
+Writing the middle point stem:[b] as a fraction stem:[w] of the way from stem:[a] to stem:[c], and the next
+trial point stem:[x] as a further fraction stem:[z] beyond stem:[b]:
+
+[stem]
+++++
+\frac{b-a}{c-a} = w, \qquad \frac{x-b}{c-a} = z
+++++
+
+Minimizing the worst-case new segment length — and requiring the same optimal placement strategy to be
+self-similar from one stage to the next — gives the quadratic equation stem:[w^2 - 3w + 1 = 0], whose relevant
+root is:
+
+[stem]
+++++
+w = \frac{3 - \sqrt{5}}{2} \approx 0.38197
+++++
+
+This is the *golden section*: the optimal bracketing triplet has its middle point a fractional distance
+stem:[0.38197] from one end and stem:[0.61803] from the other, and each new trial point should be placed at
+that same fractional position within the larger of the two current segments. Because this ratio is
+self-replicating, starting from any bracket quickly converges to it regardless of the triplet's initial
+proportions.
+
+Every new function evaluation shrinks the bracket by a fixed factor of stem:[0.61803] — reliable, but only
+*linearly* convergent (each new significant figure costs a comparable number of further evaluations), unlike
+the superlinear convergence of xref:algorithms/brent-optimization.adoc[].
+
+[mermaid]
+....
+flowchart TD
+    A["Bracket (a, b, c); track 4 running points x0..x3"] --> B["Place new trial point at fraction 0.38197\ninto the larger of the two current segments"]
+    B --> C["Evaluate f there"]
+    C --> D{"Is the new point's neighbor\nstill the lower of the pair?"}
+    D -->|"yes"| E["Keep that as the new bracket triplet"]
+    D -->|"no"| F["Keep the other new bracket triplet"]
+    E --> G{"|x3 - x0| <= tolerance * (|x1| + |x2|) ?"}
+    F --> G
+    G -->|"no"| B
+    G -->|"yes"| H["Return whichever of the two center\npoints has the lower function value"]
+....
+
+== Library implementation
+
+`GoldenSingleOptimizer` extends `BracketedSingleOptimizer` and adds a single tunable parameter:
+
+* `getTolerance()` / `setTolerance(double)` — the fractional precision to isolate the minimum to; default
+  `3e-8`.
+
+`BracketedSingleOptimizer` itself provides `computeBracket(minEvalPoint, middleEvalPoint)` (and overloads
+defaulting the middle point, or the whole range) to run the downhill bracketing search described above, plus
+`setBracket(a, b, c)` to supply an already-known bracket directly instead. After `minimize()` completes,
+`getResult()` and `getEvaluationAtResult()` return the minimizing point and the function value there.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] recommends golden section search specifically for
+functions whose second (or lower) derivative is discontinuous — in that case
+xref:algorithms/brent-optimization.adoc[]'s parabolic interpolation offers no real advantage, and the simpler,
+more predictable golden section search is just as good a choice.
+
+TIP: Requesting a tolerance smaller than the square root of the machine's floating-point precision is
+generally pointless: near the minimum stem:[b], the function is well approximated by
+stem:[f(x) \approx f(b) + \tfrac{1}{2}f''(b)(x-b)^2], so the correction term becomes indistinguishable from
+roundoff once stem:[|x - b|] drops below roughly stem:[\sqrt{\varepsilon}\,|b|].
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return (point - 2.0) * (point - 2.0);
+    }
+};
+
+final var optimizer = new GoldenSingleOptimizer();
+optimizer.setListener(listener);
+optimizer.computeBracket(0.0, 1.0);
+optimizer.minimize();
+
+final var xmin = optimizer.getResult();          // approximately 2.0
+final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
+----

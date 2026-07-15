@@ -1,0 +1,125 @@
+= Powell's Method
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Powell's method minimizes a function of several variables using only function evaluations — no gradient
+required — by repeatedly running one-dimensional line minimizations along a cleverly updated set of
+directions. It is described in xref:reference.adoc#press2007[Press et al., 2007], Sections 10.6 (page 507,
+the shared line-minimization machinery) and 10.7 (page 509, Powell's direction-set method), and implemented as
+`PowellMultiOptimizer` in the `com.irurueta.numerical.optimization` package.
+
+== Line minimization as a building block
+
+Given a point stem:[P] and a direction stem:[\mathbf{n}] in stem:[N]-dimensional space, any
+xref:algorithms/brent-optimization.adoc[one-dimensional minimizer] can find the scalar stem:[\lambda] that
+minimizes stem:[f(P + \lambda\mathbf{n})] — reducing a multidimensional problem, along one direction, to a
+problem already solved. Multi-variable methods differ mainly in *how they pick the next direction* to line-
+minimize along. This package implements the shared line-minimization step once, in `LineMultiOptimizer`, and
+both xref:algorithms/powell-optimization.adoc[] (this page) and the non-derivative variant of
+xref:algorithms/conjugate-gradient-optimization.adoc[] build on it: it wraps the target point and direction in
+a 1D "directional evaluator", brackets and minimizes along it using
+xref:algorithms/brent-optimization.adoc[`BrentSingleOptimizer`], then updates the point and stores the actual
+distance moved.
+
+== Why the coordinate directions alone are a bad choice
+
+The naive approach — line-minimize along each of the stem:[N] unit vectors in turn, cycling until the function
+stops decreasing — is workable but can be badly inefficient: for a function whose contours form a long,
+narrow, diagonally-oriented valley, this takes many tiny zig-zag steps to get anywhere, crossing and
+re-crossing the valley's true axis. What is needed instead is a set of *conjugate directions*.
+
+Two directions stem:[\mathbf{u}] and stem:[\mathbf{v}] are conjugate (with respect to the local quadratic
+approximation of stem:[f], with Hessian stem:[A]) when:
+
+[stem]
+++++
+\mathbf{u}^\top A\, \mathbf{v} = 0
+++++
+
+The useful property: after line-minimizing along stem:[\mathbf{u}], minimizing along a direction conjugate to
+it does not spoil the first minimization. A full pass of stem:[N] minimizations along stem:[N] mutually
+conjugate directions lands *exactly* on the minimum of a quadratic form — and, for functions that are only
+approximately quadratic near their minimum, repeated passes converge quadratically.
+
+== Building conjugate directions without knowing the Hessian
+
+Powell's original basic procedure starts from the coordinate directions stem:[\mathbf{u}_i = \mathbf{e}_i] and
+repeats: save the starting point stem:[P_0]; line-minimize in turn along each current direction, arriving at
+stem:[P_N]; then discard the *first* direction, shift every other direction down by one slot, and set the new
+last direction to the net direction moved, stem:[P_N - P_0]. Powell showed that stem:[k] repetitions of this
+procedure produce a set of directions whose last stem:[k] members are mutually conjugate — so, in principle,
+stem:[N] repetitions exactly minimize a quadratic form.
+
+In practice, though, always discarding the *oldest* direction this way tends to make the direction set fold up
+on itself and become linearly dependent — collapsing the search onto a lower-dimensional subspace and quietly
+returning the wrong answer. This library implements the heuristic fix xref:reference.adoc#press2007[Press et
+al., 2007] recommends: discard, instead, whichever direction produced the *largest* decrease during the pass —
+paradoxically, this is also the direction most likely to dominate the new "net movement" direction being
+added, so dropping it best avoids the buildup of linear dependence. Two additional safeguards decide whether
+to replace a direction at all:
+
+* If the function value at a point extrapolated further along the net direction is no better than the
+  starting value, the net direction is "played out" — keep the old direction set unchanged.
+* If most of the pass's decrease came from no single direction in particular, or the function appears to be
+  near the bottom of the average direction's own minimum, also keep the old direction set unchanged.
+
+[mermaid]
+....
+flowchart TD
+    A["Save P0; directions initialized\nto the coordinate axes"] --> B["Line-minimize along each\ncurrent direction in turn, reaching P_N"]
+    B --> C{"decrease this pass below tolerance?"}
+    C -->|"yes"| D["Done: return current point"]
+    C -->|"no"| E["Evaluate f at an extrapolated point\nfurther along P_N - P0"]
+    E --> F{"does replacing the direction of\nlargest decrease look beneficial?"}
+    F -->|"yes"| G["Line-minimize along P_N - P0;\nreplace the largest-decrease direction with it"]
+    F -->|"no"| H["Keep the existing direction set unchanged"]
+    G --> B
+    H --> B
+....
+
+This trades away the strict quadratic-convergence guarantee of the "textbook" algorithm in exchange for
+directions that track long, twisting valleys well in practice — a good trade for exactly the kinds of
+functions where quadratic convergence would not have helped much anyway.
+
+== Library implementation
+
+`PowellMultiOptimizer` extends `LineMultiOptimizer`, reusing its `linmin()` for every 1D sub-problem. The
+direction set can be supplied explicitly or left to default to the coordinate axes:
+
+* `setPointAndDirections(point, directions)` — supply the starting point and an initial stem:[N \times N]
+  matrix of directions (its columns).
+* `setStartPoint(point)` — supply only the starting point; the coordinate axes are used as the initial
+  directions.
+* `getDirections()` — the current direction set, after `minimize()` updates it.
+* `getTolerance()` / `setTolerance(double)` — the fractional tolerance on the function value; default `3e-8`.
+
+Up to `ITMAX = 200` passes (each consisting of stem:[N] line minimizations) are attempted before the optimizer
+reports failure to converge.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] recommends Powell's method whenever the function has
+some smoothness but computing gradients is inconvenient or unavailable — it is much faster than
+xref:algorithms/simplex-optimization.adoc[] in that situation. When gradients *are* available,
+xref:algorithms/conjugate-gradient-optimization.adoc[] or xref:algorithms/quasi-newton-optimization.adoc[] will
+typically do better still.
+
+== Example
+
+[source,java]
+----
+final var listener = new MultiDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double[] point) {
+        final var dx = point[0] - 1.0;
+        final var dy = point[1] + 2.0;
+        return dx * dx + dy * dy;
+    }
+};
+
+final var optimizer = new PowellMultiOptimizer(listener, 3e-8);
+optimizer.setStartPoint(new double[]{0.0, 0.0});
+optimizer.minimize();
+
+final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
+final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
+----

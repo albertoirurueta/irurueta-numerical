@@ -1,0 +1,141 @@
+= Double Exponential Rule Integration
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The double exponential (DE) rule integrates by a change of variables chosen so that the plain trapezoidal rule,
+applied to the transformed integrand, converges *exponentially fast* — even when the original integrand has
+singularities at its endpoints, and without needing to tailor the substitution to the specific kind of
+singularity. It is described in xref:reference.adoc#press2007[Press et al., 2007], Section 4.5 (pages 172–178),
+and implemented as `DoubleExponentialRuleQuadrature` (and `DoubleExponentialRuleMatrixQuadrature`).
+
+== Quadrature by variable transformation
+
+Consider stem:[I = \int_a^b f(x)\,dx] and a change of variables stem:[x = x(t)] mapping
+stem:[x \in [a, b\]] to stem:[t \in [c, d\]]:
+
+[stem]
+++++
+I = \int_c^d f\big(x(t)\big)\,\frac{dx}{dt}\,dt
+++++
+
+If stem:[dx/dt] is chosen to go rapidly to zero at both endpoints of the stem:[t] range, then even a plain,
+uniformly-weighted trapezoidal rule on the transformed integral becomes extremely accurate — because the
+endpoint weights barely matter once the transformed integrand is already close to zero there. This works even
+for an stem:[f(x)] with an integrable singularity at stem:[a] or stem:[b]: the vanishing stem:[dx/dt] factor
+can overwhelm it.
+
+The first transformation of this kind, the *TANH rule*, maps stem:[[a,b\]] to stem:[(-\infty, \infty)] via:
+
+[stem]
+++++
+x = \frac{1}{2}(a+b) + \frac{1}{2}(b-a)\tanh t, \qquad
+\frac{dx}{dt} = \frac{1}{2}(b-a)\,\mathrm{sech}^2 t
+++++
+
+Since stem:[\mathrm{sech}^2 t] decays like stem:[e^{-2|t|}], repeating the same idea one level deeper — applying
+an exponential map to stem:[t] itself — decays even faster. This is the *DE rule*:
+
+[stem]
+++++
+x = \frac{1}{2}(a+b) + \frac{1}{2}(b-a)\tanh(c\sinh t), \qquad
+\frac{dx}{dt} = \frac{1}{2}(b-a)\,\mathrm{sech}^2(c\sinh t)\,c\cosh t \sim \exp(-c\,e^{|t|})
+\text{ as } |t| \to \infty
+++++
+
+where the constant stem:[c] is typically stem:[1] or stem:[\pi/2]. The double-exponential decay of
+stem:[dx/dt] is what gives the rule its name and its markedly faster convergence than the single-exponential
+TANH rule — comparing their respective optimal errors, stem:[e^{-\pi\sqrt{2N}}] for TANH versus
+stem:[e^{-kN/\log N}] for DE, the DE rule wins for any reasonably large number of points stem:[N].
+
+== Implementation details
+
+Evaluating the formula above directly is numerically delicate: stem:[\mathrm{sech}^2(c\sinh t)] can overflow if
+computed as stem:[1/\cosh^2], and forming stem:[a + \delta] or stem:[b - \delta] for tiny stem:[\delta] can lose
+precision right where the integrand is most sensitive (near a singularity). This package follows the same
+approach as xref:reference.adoc#press2007[Press et al., 2007] to avoid both problems. Writing (for
+stem:[c = 1]):
+
+[stem]
+++++
+q = e^{-2\sinh t}, \qquad \delta = (b - a)\frac{q}{1+q}
+++++
+
+the transformed integral is evaluated symmetrically about the interval's midpoint, using stem:[\delta] directly
+instead of computing stem:[a + \delta] or stem:[b - \delta] and subtracting:
+
+[stem]
+++++
+I \approx h\left[f\!\left(\frac{a+b}{2}\right)\frac{dx}{dt}\bigg|_0 +
+\sum_{j=1}^{N} \Big(f(a+\delta_j) + f(b-\delta_j)\Big)\frac{dx}{dt}\bigg|_j\right]
+++++
+
+Because stem:[q] simply underflows harmlessly to zero for large positive stem:[t], only stem:[t \ge 0] needs to
+be evaluated directly; the symmetry of the trapezoidal rule about the interval's midpoint supplies the
+stem:[t < 0] side for free.
+
+To let a singular integrand be coded robustly near stem:[a] or stem:[b], this package's evaluator interface
+passes stem:[\delta] explicitly alongside stem:[x], so that (for example) stem:[x^{-\alpha}(1-x)^{-\beta}] can
+be coded as stem:[\delta^{-\alpha}(1-x)^{-\beta}] near stem:[x = 0] rather than computing the cancellation-prone
+stem:[(x - 0)^{-\alpha}] directly.
+
+== Algorithm
+
+[mermaid]
+....
+flowchart TD
+    A["Stage 1: s = hmax * (b-a)/2 * f(midpoint, halfwidth)"] --> B["Stage n: double the number of t-samples\nwithin (-hmax, hmax)"]
+    B --> C["For each new t: q = exp(-2 sinh t), delta = (b-a)*q/(1+q)"]
+    C --> D["weight = q / (1+q)^2 * cosh(t)"]
+    D --> E["sum += weight * (f(a+delta, delta) + f(b-delta, delta))"]
+    E --> F["s = 0.5*s_prev + (b-a) * (spacing) * sum"]
+    F --> G{"Converged?"}
+    G -->|No| B
+    G -->|Yes| H["Return s"]
+....
+
+== Library implementation
+
+`DoubleExponentialRuleQuadrature` transforms the range stem:[t \in [c, d\]] to the fixed interval
+stem:[[-\text{hmax}, \text{hmax}\]], where `hmax` defaults to `DEFAULT_HMAX = 3.7`. It accepts either:
+
+* a `DoubleExponentialSingleDimensionFunctionEvaluatorListener`, whose `evaluate(x, delta)` receives the
+  singularity-handling offset stem:[\delta] described above, or
+* a plain `SingleDimensionFunctionEvaluatorListener`, for integrands with no singularities or only "mild" ones
+  (no worse than logarithmic), where stem:[\delta] can safely be ignored.
+
+`DoubleExponentialRuleMatrixQuadrature` and `DoubleExponentialMatrixSingleDimensionFunctionEvaluatorListener`
+mirror both for matrix-valued integrands. As with every other quadrature rule in this package, the DE rule can
+be paired with any of the three integration methods — directly via `DoubleExponentialRuleQuadratureIntegrator`,
+or refined further by xref:algorithms/simpson-integration.adoc[] (`SimpsonDoubleExponentialRuleQuadratureIntegrator`)
+or xref:algorithms/romberg-integration.adoc[] (`RombergDoubleExponentialRuleQuadratureIntegrator`) — or through
+the factory with `QuadratureType.DOUBLE_EXPONENTIAL_RULE`:
+
+[source,java]
+----
+final var integrator = Integrator.create(
+        a, b, listener, IntegratorType.ROMBERG, QuadratureType.DOUBLE_EXPONENTIAL_RULE);
+final var result = integrator.integrate();
+----
+
+TIP: `hmax` trades range-of-integration coverage in the transformed variable against how aggressively the
+substitution suppresses the endpoints. The default of `3.7` is adequate for mild (e.g. logarithmic)
+singularities; stronger singularities, such as an inverse square-root, need a larger value (around `4.3`) to
+reach full double-precision accuracy.
+
+== Example
+
+Integrating stem:[\int_0^1 \log(x)\log(1-x)\,dx = 2 - \pi^2/6], singular at both endpoints:
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return Math.log(point) * Math.log(1.0 - point);
+    }
+};
+
+final var integrator = new DoubleExponentialRuleQuadratureIntegrator(0.0, 1.0, listener);
+final var result = integrator.integrate(); // converges to machine precision in a few dozen evaluations
+----

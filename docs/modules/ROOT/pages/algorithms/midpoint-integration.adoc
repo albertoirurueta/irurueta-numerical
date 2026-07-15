@@ -1,0 +1,145 @@
+= Midpoint Rule Integration for Improper Integrals
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The extended midpoint rule is an *open* quadrature formula — it never evaluates the integrand at the endpoints
+of the integration interval — which makes it the right building block for *improper* integrals: endpoints that
+cannot be evaluated exactly, infinite or semi-infinite ranges, and several standard kinds of endpoint
+singularity. It is described in xref:reference.adoc#press2007[Press et al., 2007], Sections 4.1 and 4.4 (pages
+161, 167–172), and implemented as `MidPointQuadrature` (and `MidPointMatrixQuadrature`) plus four derived
+quadratures that each apply a different change of variables.
+
+== What makes an integral "improper"
+
+This package's midpoint-based quadratures handle four situations:
+
+* The integrand approaches a finite limit at a finite endpoint but cannot actually be evaluated there (e.g.
+  stem:[\sin(x)/x] at stem:[x = 0]).
+* The upper limit is stem:[+\infty], or the lower limit is stem:[-\infty].
+* The integrand has an integrable singularity at a *known* endpoint (e.g. stem:[x^{-1/2}] at stem:[x = 0]).
+* The integrand decays exponentially toward stem:[+\infty].
+
+A fifth case — a singularity at an *unknown* location strictly between the limits — is out of scope for these
+quadratures; it needs an adaptive or variable-stepsize method instead. An integral that is actually infinite or
+has no limiting value at all (e.g. stem:[\int_1^\infty x^{-1}\,dx] or stem:[\int_{-\infty}^\infty \cos x\,dx])
+is not improper but *impossible* — no substitution can fix it.
+
+== The extended midpoint rule
+
+[stem]
+++++
+\int_{x_0}^{x_{N-1}} f(x)\,dx = h\left[f_{1/2} + f_{3/2} + f_{5/2} + \cdots + f_{N-5/2} + f_{N-3/2}\right]
++ O\!\left(\frac{1}{N^2}\right)
+++++
+
+Like the extended trapezoidal rule, this formula's error series (the *second* Euler-Maclaurin summation
+formula) contains only even powers of stem:[h], which is what makes it a suitable base rule for
+xref:algorithms/simpson-integration.adoc[] and xref:algorithms/romberg-integration.adoc[] as well. Unlike the
+trapezoidal rule, however, its evaluation points cannot be reused if the number of intervals is only doubled —
+tripling is required instead. This costs a modest, bounded amount of unnecessary work (a factor of about
+stem:[\sqrt{3}] versus stem:[\sqrt{2}] for doubling) in exchange for being an open formula:
+
+* *Stage 1*: stem:[s_1 = (b - a)\,f\!\left(\frac{a+b}{2}\right)]
+* *Stage stem:[n > 1]*: adds stem:[2 \cdot 3^{n-2}] new interior points, alternating spacing between the new
+  points, and combines them with the previous estimate.
+
+== Handling improper integrals by change of variables
+
+Each situation above is handled by substituting a new variable that removes the problem, then applying the
+midpoint rule (still an open formula) to the transformed integrand. This package implements the substitution as
+a `MidPointQuadrature` subclass that overrides only the point at which the (identity) mapping is applied,
+reusing the same refinement loop:
+
+[mermaid]
+....
+flowchart TD
+    Q["Quadrature (abstract): next()"] --> M["MidPointQuadrature: extended midpoint\nrefinement loop, calls func(x)"]
+    M -->|"func(x) = f(x), identity"| M1["MidPointQuadrature itself\n(open formula, no singularity)"]
+    M -->|"func(x) = f(1/x)/x^2"| M2["InfinityMidPointQuadrature\n(semi-infinite / infinite range)"]
+    M -->|"func(x) = f(-log x)/x"| M3["ExponentialMidPointQuadrature\n(exponential decay to infinity)"]
+    M -->|"func(x) = 2x f(a+x^2)"| M4["LowerSquareRootMidPointQuadrature\n(inverse sqrt singularity at a)"]
+    M -->|"func(x) = 2x f(b-x^2)"| M5["UpperSquareRootMidPointQuadrature\n(inverse sqrt singularity at b)"]
+....
+
+[cols="1,2,2", options="header"]
+|===
+|Situation
+|Quadrature class
+|Substitution
+
+|Endpoint unreachable, integrand otherwise well-behaved
+|`MidPointQuadrature`
+|None — the open formula simply avoids the endpoints.
+
+|Upper limit stem:[+\infty] (or lower limit stem:[-\infty]), any sign, integrand decays faster than
+stem:[1/x^2]
+|`InfinityMidPointQuadrature`
+|stem:[x = 1/t], mapping stem:[[a, b\]] to stem:[[1/b, 1/a\]].
+
+|Integrand stem:[\sim (x-a)^{-1/2}] at the lower bound
+|`LowerSquareRootMidPointQuadrature`
+|stem:[x = a + t^2], mapping to stem:[[0, \sqrt{b-a}\]].
+
+|Integrand stem:[\sim (b-x)^{-1/2}] at the upper bound
+|`UpperSquareRootMidPointQuadrature`
+|stem:[x = b - t^2], mapping to stem:[[0, \sqrt{b-a}\]].
+
+|Upper limit stem:[+\infty], integrand decays exponentially
+|`ExponentialMidPointQuadrature`
+|stem:[t = e^{-x}], i.e. stem:[x = -\log t], mapping stem:[[a, \infty)] to stem:[(0, e^{-a}\]].
+|===
+
+The square-root substitutions are the special, frequently occurring stem:[\gamma = 1/2] case of the more
+general power-law substitution stem:[x = a + t^{1/(1-\gamma)}] used for an integrand diverging as
+stem:[(x-a)^{-\gamma}], stem:[0 \le \gamma < 1]; the stem:[2t] (rather than a general power of stem:[t]) factor
+that appears in `func(x)` is exactly what cancels the singularity, leaving a smooth transformed integrand for
+the midpoint rule to integrate.
+
+If a lower bound is stem:[-\infty] with an upper bound that is finite (or vice versa for a doubly-infinite
+range), split the integral at a convenient interior breakpoint and integrate each piece with the quadrature
+that matches it — e.g. `MidPointQuadrature` on the finite piece and `InfinityMidPointQuadrature` on the
+infinite one.
+
+== Library implementation
+
+`MidPointQuadrature` implements the refinement loop and calls a `protected double func(double x)` hook —
+identity by default — that each subclass overrides to apply its substitution; the tripling refinement loop
+itself is inherited unchanged. `MidPointMatrixQuadrature` and its four substitution subclasses mirror this for
+matrix-valued integrands.
+
+Every one of these quadrature rules can be paired with any of the package's three integration methods —
+plain (`IntegratorType.QUADRATURE`), xref:algorithms/simpson-integration.adoc[] (`IntegratorType.SIMPSON`), or
+xref:algorithms/romberg-integration.adoc[] (`IntegratorType.ROMBERG`) — through the corresponding `QuadratureType`
+value (`MID_POINT`, `INFINITY_MID_POINT`, `LOWER_SQUARE_ROOT_MID_POINT`, `UPPER_SQUARE_ROOT_MID_POINT`,
+`EXPONENTIAL_MID_POINT`) and the package's `Integrator.create(...)` factory:
+
+[source,java]
+----
+final var integrator = Integrator.create(
+        0.0, 1.0, listener, IntegratorType.ROMBERG, QuadratureType.LOWER_SQUARE_ROOT_MID_POINT);
+final var result = integrator.integrate();
+----
+
+TIP: `QuadratureType.EXPONENTIAL_MID_POINT` always treats the upper limit as infinite — the corresponding
+constructors (e.g. `ExponentialMidPointQuadratureIntegrator`, `RombergExponentialMidPointQuadratureIntegrator`)
+take only a lower limit, and `Integrator.create(...)` ignores whatever upper limit is passed when this
+quadrature type is selected.
+
+== Example
+
+Integrating stem:[1/\sqrt{x}] from stem:[0] to stem:[1] — an inverse square-root singularity at the lower
+bound:
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return 1.0 / Math.sqrt(point);
+    }
+};
+
+final var integrator = new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0, listener);
+final var result = integrator.integrate(); // approximately 2.0
+----

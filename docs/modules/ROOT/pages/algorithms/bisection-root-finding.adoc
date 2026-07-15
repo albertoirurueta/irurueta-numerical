@@ -1,0 +1,100 @@
+= Bisection Method
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Bisection is the root-finding method that cannot fail: given an interval where a continuous function changes
+sign, it halves that interval on every iteration until the root is isolated to the desired accuracy. It is
+described in xref:reference.adoc#press2007[Press et al., 2007], Section 9.1 (page 445), and implemented as
+`BisectionSingleRootEstimator` in the `com.irurueta.numerical.roots` package.
+
+== Bracketing a root
+
+A root is *bracketed* by two points stem:[a] and stem:[b] when stem:[f(a)] and stem:[f(b)] have opposite signs
+— by the intermediate value theorem, a continuous function must cross zero somewhere in between. Every
+bracketed root finder in this package (see also xref:algorithms/secant-false-position-root-finding.adoc[],
+xref:algorithms/ridder-root-finding.adoc[], and xref:algorithms/brent-root-finding.adoc[]) shares this same
+prerequisite, and the same automatic bracket-search routine: given two starting points, it repeatedly moves
+whichever one has the smaller stem:[|f|] further away (by a factor of `1.6`) until the function changes sign
+or the search gives up after 50 tries.
+
+Bisection additionally tolerates one case the other methods do not handle as gracefully: if the interval
+straddles a singularity rather than a genuine root (e.g. stem:[f(x) = 1/(x-c)]), bisection will still converge
+— to the singularity itself, since that is indistinguishable numerically from a genuine sign change. This is
+rarely a problem in practice, since evaluating stem:[|f(x)|] near a singularity gives a very large, not a very
+small, result.
+
+== The algorithm
+
+Evaluate the function at the interval's midpoint and use its sign to replace whichever endpoint shares that
+sign — halving the bracket on every single iteration, no more and no less:
+
+[stem]
+++++
+\epsilon_{n+1} = \frac{\epsilon_n}{2}
+++++
+
+If the root is known to lie within an interval of size stem:[\epsilon_0], the number of iterations needed to
+reach a target tolerance stem:[\epsilon] is known *in advance*:
+
+[stem]
+++++
+n = \log_2\frac{\epsilon_0}{\epsilon}
+++++
+
+This is *linear* convergence — each additional significant figure costs a comparable, fixed amount of further
+work — slower than the superlinear methods described elsewhere in this package
+(xref:algorithms/secant-false-position-root-finding.adoc[], xref:algorithms/ridder-root-finding.adoc[],
+xref:algorithms/brent-root-finding.adoc[], xref:algorithms/newton-raphson-root-finding.adoc[]), but utterly
+predictable and impossible to derail.
+
+[mermaid]
+....
+flowchart TD
+    A["Bracket (a, b) with f(a), f(b) of opposite sign"] --> B["Evaluate f at the midpoint"]
+    B --> C{"same sign as which endpoint?"}
+    C -->|"a"| D["Replace a with the midpoint"]
+    C -->|"b"| E["Replace b with the midpoint"]
+    D --> F{"interval width below tolerance,\nor f(midpoint) exactly zero?"}
+    E --> F
+    F -->|"no"| B
+    F -->|"yes"| G["Return the midpoint as the root"]
+....
+
+== Library implementation
+
+`BisectionSingleRootEstimator` extends `BracketedSingleRootEstimator`, which provides:
+
+* `computeBracket(...)` (several overloads) — automatically searches for a bracket starting from given point(s).
+* `setBracket(min, max)` — supply an already-known bracket directly.
+
+and adds a single tunable parameter:
+
+* `getTolerance()` / `setTolerance(double)` — the interval width to converge to; default `1e-6`.
+
+Up to `JMAX = 50` iterations are attempted — enough to reach roughly stem:[2^{-50} \approx 10^{-15}] of the
+initial bracket width, close to full double-precision accuracy. After `estimate()` completes, `getRoot()`
+returns the estimated root.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] does not recommend bisection as a first choice for
+well-behaved functions — xref:algorithms/brent-root-finding.adoc[Brent's method] or
+xref:algorithms/ridder-root-finding.adoc[Ridder's method] converge much faster in that case. Reach for
+bisection when a function is choppy, discontinuous, or otherwise badly behaved enough that faster methods
+cannot be trusted, or simply when the guarantee of unconditional convergence matters more than speed.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return point * point - 4.0;
+    }
+};
+
+final var estimator = new BisectionSingleRootEstimator(listener, 0.0, 10.0, 1e-9);
+estimator.estimate();
+
+final var root = estimator.getRoot(); // approximately 2.0
+----

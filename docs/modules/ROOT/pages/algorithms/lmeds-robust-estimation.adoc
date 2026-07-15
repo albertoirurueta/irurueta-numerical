@@ -1,0 +1,124 @@
+= LMedS (Least Median of Squares)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC] and xref:algorithms/msac-robust-estimation.adoc[MSAC] both
+need a threshold to be supplied in advance, to decide how large a residual is "too large." LMedS instead needs
+no threshold at all: it picks whichever candidate model minimizes the *median* of the squared residuals over
+all samples, and derives a threshold for classifying inliers *afterward*, from that same median. It is
+described in xref:reference.adoc#rousseeuw1984[Rousseeuw, 1984], and implemented as `LMedSRobustEstimator` in
+the `com.irurueta.numerical.robust` package.
+
+== Why the median?
+
+The median of the squared residuals is a *robust* measure of how well a candidate model fits the data — unlike
+the mean, it is essentially unaffected by how far away the outliers are, only by how many of them there are.
+As long as fewer than half the samples are outliers, the median residual under the *correct* model reflects
+only the inliers' own noise, regardless of how badly the outliers themselves are contaminated:
+
+[stem]
+++++
+\theta^* = \operatorname*{arg\,min}_\theta \; \operatorname{median}_i\big(r_i(\theta)^2\big)
+++++
+
+This is what gives LMedS its well-known breakdown point of (just under) 50%: it can tolerate almost half the
+data being arbitrarily wrong and still recover the correct model, without ever being told in advance what
+"wrong" looks like.
+
+== Deriving a threshold after the fact
+
+Once the best candidate (with the smallest median residual) has been found, that same median gives an estimate
+of the data's scale, using the bias-correction factor from xref:reference.adoc#rousseeuw1984[Rousseeuw, 1984]:
+
+[stem]
+++++
+\hat{\sigma} = 1.4826 \left(1 + \frac{5}{N - m}\right) \sqrt{\operatorname{median}_i\big(r_i^2\big)}
+++++
+
+where stem:[N] is the total number of samples and stem:[m] is the minimal subset size. The constant `1.4826`
+makes stem:[\hat\sigma] a consistent estimator of the standard deviation for normally-distributed inlier
+residuals; the stem:[(1 + 5/(N-m))] factor corrects for the small-sample bias of using the median from a
+finite, contaminated sample. Multiplying the median residual itself by a configurable *inlier factor* (default
+`1.0`) gives the effective threshold used to classify inliers for reporting purposes — this threshold plays no
+role in choosing the winning candidate, only in labeling its supporters afterward.
+
+[mermaid]
+....
+flowchart TD
+    A["Draw a random minimal subset; fit candidate model(s)"] --> B["Compute residuals for ALL samples"]
+    B --> C["Find the median of the squared residuals"]
+    C --> D{"lower median than the best\ncandidate so far?"}
+    D -->|"yes"| E["Keep as new best model;\nderive threshold = inlierFactor * median residual"]
+    D -->|"no"| F["Discard this candidate"]
+    E --> G{"stopping: enough iterations,\nor threshold small enough?"}
+    F --> G
+    G -->|"no"| A
+    G -->|"yes"| H["Return the best model;\nclassify inliers using the derived threshold"]
+....
+
+== Library implementation
+
+`LMedSRobustEstimator<T>` requires only the base `LMedSRobustEstimatorListener<T>` (see
+xref:algorithms/robust-estimation-framework.adoc[]) — no threshold or quality scores are needed, since every
+other algorithm's listener interface in this package extends this one specifically because they all *add* what
+LMedS alone does not need.
+
+* `getConfidence()` / `setConfidence(double)`, `getMaxIterations()` / `setMaxIterations(int)` — shared with
+  every other algorithm (see xref:algorithms/robust-estimation-framework.adoc[]).
+* `getStopThreshold()` / `setStopThreshold(double)` — the estimator additionally stops early once the derived
+  threshold drops below this value, since further iterations are unlikely to meaningfully sharpen an already
+  very tight fit; default `0.0` (disabled — run until the iteration-based criteria alone decide).
+* `getInlierFactor()` / `setInlierFactor(double)` — scales the derived threshold; default `1.0`.
+
+After `estimate()` completes, `getBestResult()` returns the winning model, and `getBestInliersData()` returns
+an `LMedSInliersData` with `getBestMedianResidual()`, `getStandardDeviation()`, and `getEstimatedThreshold()`.
+
+TIP: xref:reference.adoc#rousseeuw1984[Rousseeuw, 1984]'s own guidance, echoed in this library's javadoc:
+if a good threshold genuinely *is* known in advance, prefer
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC] — LMedS typically produces a somewhat larger error than
+RANSAC at a comparable computational cost, since it must discover the scale of the problem rather than being
+told it directly. LMedS earns its keep specifically when no such threshold can be guessed, or when the inlier
+samples are known to be highly accurate (in which case LMedS converges to a very small, sharply discriminating
+threshold on its own).
+
+== Example
+
+[source,java]
+----
+final var listener = new LMedSRobustEstimatorListener<double[]>() {
+    @Override
+    public int getTotalSamples() {
+        return xCoords.length;
+    }
+
+    @Override
+    public int getSubsetSize() {
+        return 2;
+    }
+
+    @Override
+    public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
+        final var x1 = xCoords[samplesIndices[0]];
+        final var y1 = yCoords[samplesIndices[0]];
+        final var x2 = xCoords[samplesIndices[1]];
+        final var y2 = yCoords[samplesIndices[1]];
+
+        final var b = (y2 - y1) / (x2 - x1);
+        final var a = y1 - b * x1;
+        solutions.add(new double[]{a, b});
+    }
+
+    @Override
+    public double computeResidual(final double[] currentEstimation, final int i) {
+        final var a = currentEstimation[0];
+        final var b = currentEstimation[1];
+        return Math.abs(yCoords[i] - (a + b * xCoords[i]));
+    }
+};
+
+final var estimator = new LMedSRobustEstimator<>(listener);
+estimator.setConfidence(0.99);
+final var line = estimator.estimate(); // [a, b]
+final var threshold = estimator.getBestInliersData().getEstimatedThreshold(); // computed, not supplied
+----
