@@ -1,0 +1,125 @@
+= Downhill Simplex Method (Nelder-Mead)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The downhill simplex method is a self-contained strategy for minimizing a function of several variables using
+only function evaluations — no derivatives, and no one-dimensional line minimization as a building block
+(unlike every other multi-variable optimizer in this package). It is slow compared to those alternatives, but
+geometrically simple and remarkably robust. It is described in xref:reference.adoc#press2007[Press et al.,
+2007], Section 10.5 (page 502), and implemented as `SimplexMultiOptimizer` in the
+`com.irurueta.numerical.optimization` package.
+
+== The simplex
+
+In stem:[N] dimensions, a simplex is the figure formed by stem:[N+1] vertices and all the line segments,
+faces, etc. connecting them — a triangle in 2D, a (not necessarily regular) tetrahedron in 3D. Given a starting
+point stem:[P_0] and a characteristic length scale stem:[\lambda] (or a separate scale per direction), the
+other stem:[N] vertices are:
+
+[stem]
+++++
+P_i = P_0 + \lambda\,\mathbf{e}_i, \qquad i = 1, \ldots, N
+++++
+
+where stem:[\mathbf{e}_i] are the unit vectors. Unlike one-dimensional minimization, there is no way to
+*bracket* a multidimensional minimum — the simplex method instead has to make its own way downhill from this
+initial guess, wherever that leads.
+
+== Reflect, expand, contract, shrink
+
+Each step identifies the simplex's highest (worst), second-highest, and lowest (best) vertices by function
+value, then tries to replace the worst one by reflecting it through the centroid of all the others:
+
+[stem]
+++++
+P_{\text{try}} = (1 + \alpha)\,\bar{P} - \alpha\,P_{\text{high}}, \qquad
+\bar{P} = \frac{1}{N}\sum_{i \ne \text{high}} P_i
+++++
+
+with stem:[\alpha = 1] for a plain reflection. Depending on how that reflected point compares to the rest of
+the simplex, one of four outcomes follows:
+
+* *Reflection improves on the best point* — the simplex is trying something good; push further with an
+  *expansion* (stem:[\alpha = 2]) in the same direction, keeping whichever of the reflected or expanded point
+  is better.
+* *Reflection is worse than the second-highest point* — look for a nearer intermediate point instead via a
+  *one-dimensional contraction* (stem:[\alpha = 0.5]) toward the centroid.
+* *Even the contracted point fails to improve* — the simplex may be trying to "pass through the eye of a
+  needle"; *shrink* it around its best (lowest) vertex, halving the distance from every other vertex to that
+  one.
+* *Otherwise* — the plain reflected point is accepted as-is.
+
+Reflections and expansions conserve the simplex's volume (and hence its nondegeneracy); contractions and
+shrinks reduce it, letting the simplex "ooze" down a valley floor or squeeze through a narrow passage.
+
+[mermaid]
+....
+flowchart TD
+    A["Identify highest, second-highest,\nand lowest vertices by f"] --> B{"|f_high - f_low| relative range\nbelow tolerance?"}
+    B -->|"yes"| C["Done: return lowest vertex"]
+    B -->|"no"| D["Reflect the highest vertex\nthrough the centroid of the rest"]
+    D --> E{"reflected point better\nthan the current best?"}
+    E -->|"yes"| F["Try expanding further in the same\ndirection; keep whichever is better"]
+    E -->|"no"| G{"reflected point still worse than\nthe second-highest vertex?"}
+    G -->|"yes"| H["Contract toward the centroid\nalong this one dimension"]
+    G -->|"no"| I["Accept the plain reflected point"]
+    H --> J{"did contraction help?"}
+    J -->|"no"| K["Shrink the whole simplex\ntoward the best vertex"]
+    F --> B
+    I --> B
+    J -->|"yes"| B
+    K --> B
+....
+
+== Termination and restarts
+
+With no bracket to shrink, convergence is instead judged from one full step (one reflect/expand/contract/shrink
+cycle) to the next: this package stops once the fractional range between the highest and lowest function
+values in the simplex, stem:[2|f_{\text{high}} - f_{\text{low}}| / (|f_{\text{high}}| + |f_{\text{low}}|)],
+drops below the configured tolerance. A single anomalous step that makes no progress can fool this test, so
+xref:reference.adoc#press2007[Press et al., 2007] recommends restarting the method at the point it claims is
+a minimum — reinitializing a fresh simplex there — cheap to do, since it already converged to that point once.
+
+== Library implementation
+
+`SimplexMultiOptimizer` extends `MultiOptimizer` directly (not the line-search-based `LineMultiOptimizer`
+hierarchy used by every other multi-variable optimizer here, since this method needs no 1D line
+minimization). The initial simplex can be supplied three ways:
+
+* `setSimplex(startPoint, delta)` — a single length scale used identically along every coordinate direction.
+* `setSimplex(startPoint, deltas)` — a separate length scale per coordinate direction.
+* `setSimplex(Matrix)` — the full stem:[(N+1) \times N] matrix of vertex coordinates directly.
+
+Convergence is controlled by `getTolerance()` / `setTolerance(double)` (fractional tolerance on the function
+value, default `3e-8`); up to `NMAX = 5000` function evaluations are allowed before the optimizer reports
+failure. After `minimize()`, in addition to the usual `getResult()` / `getEvaluationAtResult()`,
+`getEvaluationsAtSimplex()` returns the function values at every vertex of the final simplex.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] positions this method as the right tool when "get
+something working quickly" matters more than raw efficiency, for a problem cheap enough that many function
+evaluations are not a concern.
+xref:algorithms/powell-optimization.adoc[Powell's method] or
+xref:algorithms/quasi-newton-optimization.adoc[the quasi-Newton method] (with numerically estimated gradients)
+is almost always faster once that efficiency starts to matter.
+
+== Example
+
+[source,java]
+----
+final var listener = new MultiDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double[] point) {
+        final var dx = point[0] - 1.0;
+        final var dy = point[1] + 2.0;
+        return dx * dx + dy * dy;
+    }
+};
+
+final var startPoint = new double[]{0.0, 0.0};
+final var optimizer = new SimplexMultiOptimizer(listener, startPoint, 1.0, 3e-8);
+optimizer.minimize();
+
+final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
+final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
+----

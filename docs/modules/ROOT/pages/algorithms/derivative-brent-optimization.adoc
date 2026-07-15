@@ -1,0 +1,84 @@
+= Brent's Method with Derivatives
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+When a function's first derivative is available, it can help choose better trial points during
+one-dimensional minimization — without abandoning the safety of a rigorous bracket, and without swinging to
+the opposite extreme of fitting high-order interpolating polynomials, which tend to behave wildly for
+functions with sharp features. This variant of xref:algorithms/brent-optimization.adoc[] uses just the *sign*
+of the derivative to decide where to look next. It is described in
+xref:reference.adoc#press2007[Press et al., 2007], Section 10.4 (page 500), and implemented as
+`DerivativeBrentSingleOptimizer` in the `com.irurueta.numerical.optimization` package.
+
+== Why not just find a zero of the derivative?
+
+Searching for a zero of stem:[f'(x)] with a root finder would ignore the function-value information entirely
+— and root finders for stem:[f'] cannot distinguish a minimum from a maximum, nor handle the case where the
+derivative at one or both bracket endpoints points *out* of the bracket. The bracket on the minimum must
+therefore still be maintained and updated using *function* values, exactly as in plain
+xref:algorithms/brent-optimization.adoc[]; the derivative's only role is to help pick better trial points
+within that bracket.
+
+== Using the derivative conservatively
+
+The sign of the derivative at the bracket's central point (the best point so far) says, unambiguously, whether
+the next trial point should fall to its left or to its right. Given that side, the derivatives at the two
+best points found so far are each extrapolated to zero via the secant method (inverse linear interpolation) —
+superlinear of order stem:[1.618], the golden mean again:
+
+[stem]
+++++
+d_1 = \frac{(w - x)\,f'(x)}{f'(x) - f'(w)}, \qquad d_2 = \frac{(v - x)\,f'(x)}{f'(x) - f'(v)}
+++++
+
+A candidate step is only accepted if it falls within the bracket *and* on the side indicated by the sign of
+stem:[f'(x)]. If both stem:[d_1] and stem:[d_2] qualify, the smaller step is taken; if only one qualifies, it
+is taken; if neither is acceptable, the interval is bisected instead of taking a golden-section step. This is
+deliberately more conservative than fitting a cubic through two points' function and derivative values (a
+technique some other methods use): in practice, gains near a smooth minimum rarely make up for how badly
+higher-order polynomials can misbehave early on, especially for functions with sharp or "exponential"
+features — and computed derivatives are themselves not always as trustworthy as they look, due to roundoff or
+truncation error in how they were obtained.
+
+[mermaid]
+....
+flowchart TD
+    A["Track a, b (bracket), x (best), w (2nd best), v (previous w),\nplus f' at each"] --> B{"is x within tolerance\nof the bracket midpoint?"}
+    B -->|"yes"| C["Done: return x, f(x)"]
+    B -->|"no"| D["Sign of f'(x) selects which\nside of the bracket to search"]
+    D --> E["Secant-extrapolate f' through (x,w) and (x,v)\nto estimate two candidate steps"]
+    E --> F{"is at least one candidate in-bracket,\non the correct side, not too large?"}
+    F -->|"yes"| G["Take the smaller acceptable candidate\n(or the only acceptable one)"]
+    F -->|"no"| H["Bisect toward the side\nindicated by the sign of f'(x)"]
+    G --> I["Evaluate f and f' at the new point;\nupdate bracket and bookkeeping"]
+    H --> I
+    I --> B
+....
+
+== Library implementation
+
+`DerivativeBrentSingleOptimizer` extends `BracketedSingleOptimizer` like the other single-variable optimizers,
+and additionally holds a derivative listener:
+
+* `getDerivativeListener()` / `setDerivativeListener(...)` — supplies stem:[f'(x)] alongside the usual
+  `SingleDimensionFunctionEvaluatorListener` for stem:[f(x)].
+* `getTolerance()` / `setTolerance(double)` — the fractional precision to isolate the minimum to; default
+  `3e-8`.
+
+As with xref:algorithms/brent-optimization.adoc[], up to `ITMAX = 100` iterations are attempted, and
+`computeBracket(...)` (or an explicitly supplied bracket) is expected before calling `minimize()`.
+
+Unlike the other single-variable optimizers in this package, both of its constructors are `protected`: this
+class is not meant to be instantiated directly by application code. Instead, it is the line-search subroutine
+that `DerivativeLineMultiOptimizer` builds internally to perform accurate 1D line minimizations along a search
+direction — which in turn is what `DerivativeConjugateGradientMultiOptimizer`
+(see xref:algorithms/conjugate-gradient-optimization.adoc[]) uses to solve each of its 1D sub-problems using
+gradient information. In other words: this page documents the *algorithm*; to exercise it, use
+`DerivativeConjugateGradientMultiOptimizer`, which drives it automatically.
+
+TIP: If evaluating the derivative costs meaningfully more than evaluating the function itself, this method may
+not pay for itself compared to the non-derivative line search that
+xref:algorithms/conjugate-gradient-optimization.adoc[]'s plain `ConjugateGradientMultiOptimizer` variant uses
+instead (built on plain xref:algorithms/brent-optimization.adoc[]). It is worth using when the derivative is
+cheap or already available as a byproduct of computing the function.

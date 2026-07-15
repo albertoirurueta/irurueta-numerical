@@ -1,0 +1,85 @@
+= Ridder's Method
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Ridder's method is a variant of xref:algorithms/secant-false-position-root-finding.adoc[false position] that,
+instead of assuming the function is locally linear, factors out the unique exponential function that turns the
+residual into a straight line — giving quadratic convergence while guaranteeing the root never leaves the
+bracket. It is described in xref:reference.adoc#press2007[Press et al., 2007], Section 9.2.1 (page 452), and
+implemented as `RidderSingleRootEstimator` in the `com.irurueta.numerical.roots` package.
+
+== Factoring out the exponential bend
+
+Given a bracket stem:[[x_1, x_2\]], evaluate the function at the midpoint stem:[x_3 = (x_1+x_2)/2] as well.
+Ridder's method then solves for the factor stem:[e^Q] that makes:
+
+[stem]
+++++
+f(x_1) - 2f(x_3)e^Q + f(x_2)e^{2Q} = 0
+++++
+
+a quadratic equation in stem:[e^Q], whose solution is:
+
+[stem]
+++++
+e^Q = \frac{f(x_3) + \mathrm{sign}[f(x_2)]\sqrt{f(x_3)^2 - f(x_1)f(x_2)}}{f(x_2)}
+++++
+
+Applying false position not to stem:[f(x_1), f(x_3), f(x_2)] directly, but to the values
+stem:[f(x_1), f(x_3)e^Q, f(x_2)e^{2Q}] instead, yields a new root estimate stem:[x_4]. Substituting the
+solution for stem:[e^Q] gives the closed-form updating formula actually used:
+
+[stem]
+++++
+x_4 = x_3 + (x_3 - x_1)\,\frac{\mathrm{sign}[f(x_1) - f(x_2)]\,f(x_3)}{\sqrt{f(x_3)^2 - f(x_1)f(x_2)}}
+++++
+
+This single formula has three attractive properties: stem:[x_4] is *guaranteed* to fall within
+stem:[(x_1, x_2)], so the method can never jump out of its bracket; its convergence is quadratic
+(stem:[\epsilon_{n+1} \propto \epsilon_n^2]); and — since each application costs two function evaluations
+rather than one — its *actual* order per evaluation is stem:[\sqrt{2}], still comfortably superlinear.
+Removing the function's "bend" via an exponential (ratio) factor, rather than a polynomial fit, turns out to
+give an unusually robust algorithm in practice.
+
+[mermaid]
+....
+flowchart TD
+    A["Bracket (x1, x2) with f(x1), f(x2) of opposite sign"] --> B["Evaluate f at midpoint x3"]
+    B --> C["Solve for e^Q; compute x4 via the closed-form update"]
+    C --> D{"x4 within tolerance of\nthe previous estimate?"}
+    D -->|"yes"| E["Return x4 as the root"]
+    D -->|"no"| F["Re-bracket: pick whichever of x1, x3, x2\nstill brackets the root with x4"]
+    F --> B
+....
+
+== Library implementation
+
+`RidderSingleRootEstimator` extends `BracketedSingleRootEstimator`, sharing the automatic bracket search
+described in xref:algorithms/bisection-root-finding.adoc[], and adds:
+
+* `getTolerance()` / `setTolerance(double)` — the accuracy to converge to; default `1e-6`.
+
+Up to `MAXIT = 60` iterations are attempted (two function evaluations each). After `estimate()` completes,
+`getRoot()` returns the estimated root.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] considers Ridder's method a close competitor to
+xref:algorithms/brent-root-finding.adoc[Brent's method] as the default choice for general one-dimensional root
+finding without derivatives — concise, and generally competitive in both speed and reliability.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return point * point - 4.0;
+    }
+};
+
+final var estimator = new RidderSingleRootEstimator(listener, 0.0, 10.0, 1e-9);
+estimator.estimate();
+
+final var root = estimator.getRoot(); // approximately 2.0
+----

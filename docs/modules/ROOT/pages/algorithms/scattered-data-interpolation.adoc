@@ -1,0 +1,200 @@
+= Scattered-Data Interpolation
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+xref:algorithms/2d-grid-interpolation.adoc[] assumes function values are tabulated on a complete rectangular
+grid. When they are instead known only at an arbitrarily *scattered* set of stem:[N] points
+stem:[(\mathbf{x}_i, y_i)] in stem:[n]-dimensional space, a different family of methods is needed. This package
+implements the two most widely used general-purpose approaches — radial basis function (RBF) interpolation and
+kriging — plus Shepard interpolation, a cheap variant of RBF. All three are described in
+xref:reference.adoc#press2007[Press et al., 2007], Section 3.7 (page 139), and implemented as
+`RadialBasisFunctionInterpolator`, `ShepardInterpolator`, and `KrigingInterpolator` in the
+`com.irurueta.numerical.interpolation` package.
+
+Both RBF interpolation and kriging are comparatively expensive: they need stem:[O(N^3)] work to digest the
+data points once, followed by stem:[O(N)] work per interpolated value (kriging can additionally supply an
+error estimate, at a further stem:[O(N^2)] cost per value). This effectively limits their practical use to
+stem:[N \lesssim 10^4]. Shepard interpolation trades accuracy for avoiding the stem:[O(N^3)] setup entirely.
+
+== Radial basis function (RBF) interpolation
+
+The idea: every known point stem:[j] "influences" its surroundings identically in every direction, according
+to some radial basis function stem:[\phi(r)] of the distance stem:[r = \|\mathbf{x} - \mathbf{x}_j\|] from
+that point. Approximate the interpolating function everywhere as a linear combination of these, centered on
+every known point:
+
+[stem]
+++++
+y(\mathbf{x}) = \sum_{i=0}^{N-1} w_i\,\phi(\|\mathbf{x} - \mathbf{x}_i\|)
+++++
+
+The weights stem:[w_i] are found by requiring the interpolation to be *exact* at every known data point — a
+linear system of stem:[N] equations in stem:[N] unknowns, solved once via LU decomposition:
+
+[stem]
+++++
+y_j = \sum_{i=0}^{N-1} w_i\,\phi(\|\mathbf{x}_j - \mathbf{x}_i\|)
+++++
+
+A normalized variant (NRBF) instead requires the basis functions to sum to unity, replacing the two equations
+above with:
+
+[stem]
+++++
+y(\mathbf{x}) = \frac{\sum_i w_i\,\phi(\|\mathbf{x}-\mathbf{x}_i\|)}{\sum_i \phi(\|\mathbf{x}-\mathbf{x}_i\|)}
+++++
+
+There is no consistent evidence that either variant is generally superior; both are available via a
+constructor flag.
+
+=== Choosing a radial basis function
+
+This package provides four pluggable kernels, each with a scale factor stem:[r_0] that should be chosen larger
+than the typical spacing between points but smaller than the "outer scale" of the function being interpolated:
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Formula
+|Notes
+
+|`MultiQuadricRadialBasisFunction`
+|stem:[\phi(r) = \sqrt{r^2 + r_0^2}]
+|The most commonly used choice; comparatively insensitive to the choice of stem:[r_0].
+
+|`InverseMultiQuadricRadialBasisFunction`
+|stem:[\phi(r) = 1/\sqrt{r^2 + r_0^2}]
+|Comparable accuracy to the multiquadric; decays to zero away from the data, useful when that is desired.
+
+|`ThinPlateRadialBasisFunction`
+|stem:[\phi(r) = r^2 \log(r/r_0)], stem:[\phi(0) = 0]
+|Physically motivated by the energy of a warped thin elastic plate.
+
+|`GaussianRadialBasisFunction`
+|stem:[\phi(r) = \exp\!\left(-\tfrac{1}{2}(r/r_0)^2\right)]
+|Can reach very high accuracy for smooth functions with a well-tuned stem:[r_0], but accuracy is correspondingly
+sensitive to that choice; also decays to zero away from the data.
+|===
+
+xref:reference.adoc#press2007[Press et al., 2007] suggests trying these roughly in the order listed above,
+starting with the multiquadric, and always experimenting with the scale parameter — the difference in accuracy
+between a good and a poor choice of stem:[r_0] can span several orders of magnitude.
+
+== Shepard interpolation
+
+Shepard interpolation is the special case of *normalized* RBF interpolation where stem:[\phi(r) \to \infty] as
+stem:[r \to 0] (and is finite, decreasing, for stem:[r > 0]). In that case the weights collapse to simply the
+function values themselves, and no linear system needs solving at all:
+
+[stem]
+++++
+y(\mathbf{x}) = \frac{\sum_{i=0}^{N-1} y_i\,\phi(\|\mathbf{x}-\mathbf{x}_i\|)}{\sum_{i=0}^{N-1}
+\phi(\|\mathbf{x}-\mathbf{x}_i\|)}
+++++
+
+using the power-law kernel stem:[\phi(r) = r^{-p}] (typically stem:[1 < p \lesssim 3]) — a nearness-weighted
+average that favors nearby points over distant ones. `ShepardInterpolator` implements exactly this, with no
+stem:[O(N^3)] setup cost at all, at the price of being generally less accurate than a well-tuned RBF.
+
+== Interpolation by kriging
+
+Kriging — named for mining engineer D.G. Krige — is a form of linear prediction (Gauss-Markov estimation /
+Gaussian process regression) that additionally supplies an error estimate for every interpolated value. It
+requires a *variogram* stem:[v(r)], the expected mean-square variation of the function over a given offset
+distance:
+
+[stem]
+++++
+v(r) \approx \frac{1}{2}\left\langle \big[y(\mathbf{x}+\mathbf{r}) - y(\mathbf{x})\big]^2 \right\rangle
+++++
+
+Writing stem:[v_{ij} \equiv v(\|\mathbf{x}_i - \mathbf{x}_j\|)] and stem:[v^*_j \equiv v(\|\mathbf{x}^* -
+\mathbf{x}_j\|)] for a query point stem:[\mathbf{x}^*], and defining the augmented vectors and matrix:
+
+[stem]
+++++
+Y = (y_0, \ldots, y_{N-1}, 0), \qquad V^* = (v^*_0, \ldots, v^*_{N-1}, 1), \qquad
+V = \begin{bmatrix} v_{00} & \cdots & v_{0,N-1} & 1 \\ \vdots & & \vdots & \vdots \\
+v_{N-1,0} & \cdots & v_{N-1,N-1} & 1 \\ 1 & \cdots & 1 & 0 \end{bmatrix}
+++++
+
+the kriging estimate and its variance are:
+
+[stem]
+++++
+\hat{y}(\mathbf{x}^*) = V^{*\top} V^{-1} Y, \qquad \mathrm{Var}(\hat{y}(\mathbf{x}^*)) = V^{*\top} V^{-1} V^*
+++++
+
+The extra row/column of ones (and the corresponding zero) make this an *unbiased* estimator by automatically
+correcting for a weighted average of the data. Computing the LU decomposition of stem:[V] once makes each
+subsequent interpolated value cost stem:[O(N)]; computing its variance costs a further stem:[O(N^2)].
+
+For interpolation (as opposed to smoothing/fitting with known measurement error), an adequate variogram can
+usually be estimated automatically, without deep domain knowledge, using the simple power-law model that this
+package's nested `KrigingInterpolator.Variogram` class fits by unweighted least squares over all pairs of data
+points:
+
+[stem]
+++++
+v(r) = \alpha r^\beta
+++++
+
+with stem:[\beta] fixed (default stem:[1.5], must satisfy stem:[1 \le \beta < 2]) and stem:[\alpha] fitted from
+the data.
+
+[mermaid]
+....
+flowchart TD
+    A["Scattered points (x_i, y_i)"] --> B{"Which method?"}
+    B -->|"RBF"| C["Solve N x N linear system for weights w_i\n(LU decomposition, once)"]
+    C --> D["interpolate: sum w_i * phi(|x - x_i|)"]
+    B -->|"Shepard"| E["No setup: weights are just y_i"]
+    E --> F["interpolate: weighted average using phi(r) = r^-p"]
+    B -->|"Kriging"| G["Fit variogram v(r) = alpha * r^beta;\nsolve (N+1)x(N+1) system (LU, once)"]
+    G --> H["interpolate: V*^T * V^-1 * Y (+ optional variance)"]
+....
+
+== Library implementation
+
+`RadialBasisFunctionInterpolator` and `ShepardInterpolator` both extend `BaseRadialBasisFunctionInterpolator`,
+which provides the shared Euclidean-distance and dimension bookkeeping; `KrigingInterpolator` is standalone,
+since its variogram-based system has a different shape (the extra unbiasedness row/column).
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Setup cost
+|Notes
+
+|`RadialBasisFunctionInterpolator`
+|stem:[O(N^3)]
+|Constructor takes a `RadialBasisFunction` kernel and a `boolean` flag for the normalized (NRBF) variant.
+
+|`ShepardInterpolator`
+|None
+|Constructor takes the power `p` (default `2.0`).
+
+|`KrigingInterpolator`
+|stem:[O(N^3)]
+|Constructor takes a `Variogram` (or builds a default power-law one automatically); `interpolate(pt, esterr)`
+additionally returns the estimated standard error.
+|===
+
+TIP: Kriging's interpolated values are quite insensitive to the exact variogram model used, but its *error*
+estimates are considerably more sensitive — treat them as order-of-magnitude guidance rather than precise
+figures.
+
+== Example
+
+[source,java]
+----
+final var rbf = new MultiQuadricRadialBasisFunction(scale);
+final var interpolator = new RadialBasisFunctionInterpolator(points, values, rbf);
+final var value = interpolator.interpolate(target);
+
+// Kriging, with an error estimate
+final var kriging = new KrigingInterpolator(points, values);
+final var esterr = new double[1];
+final var krigedValue = kriging.interpolate(target, esterr);
+----

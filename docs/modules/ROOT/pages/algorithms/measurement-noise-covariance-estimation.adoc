@@ -1,0 +1,92 @@
+= Measurement Noise Covariance Estimation
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+A xref:algorithms/kalman-filter.adoc[Kalman filter] needs a measurement noise covariance matrix stem:[R] to
+weigh how much it should trust each incoming measurement. Rather than guessing stem:[R], it can be measured
+directly: hold the system's true state constant (e.g. keep a sensor motionless) and record repeated samples —
+any variation left in the data, once its mean is removed, is pure measurement noise. This class implements that
+idea as a running (incremental) estimate of the sample mean and covariance, updated one sample at a time rather
+than requiring the whole dataset up front. It is implemented as `MeasurementNoiseCovarianceEstimator` in the
+`com.irurueta.numerical.signal.processing` package; the general approach of updating a mean and covariance
+incrementally, one sample at a time, is described in
+xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for calculating variance].
+
+== Running mean and covariance
+
+For each new sample stem:[x_{N+1}] (an `mp`-dimensional vector, with `mp` the number of measurement
+dimensions), the sample count, average, and covariance are all updated in place. The average is updated first:
+
+[stem]
+++++
+\bar{x}_{N+1} = \frac{N \cdot \bar{x}_N + x_{N+1}}{N + 1}
+++++
+
+The covariance update then removes this *just-updated* mean from the new sample and folds its outer product
+into the running covariance, rescaled for the new sample count:
+
+[stem]
+++++
+\Sigma_{N+1} = \frac{N \cdot \Sigma_N + \left(x_{N+1} - \bar{x}_{N+1}\right)\left(x_{N+1} - \bar{x}_{N+1}\right)^T}{N + 1}
+++++
+
+This is the exact recursive relationship implemented by `update(double[])`: `sampleAverage` is updated first,
+`sampleNoMean` is then computed against that already-updated average, and `measurementNoiseCov` is rescaled by
+`sampleCount`, has the new sample's outer product added, and is rescaled again by `1 / nextCount`.
+
+NOTE: Re-centering on the post-update mean stem:[\bar{x}_{N+1}] for *both* factors of the outer product (rather
+than mixing the pre-update mean into one factor, as the classic Welford-style incremental algorithm described
+in xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for calculating variance] does)
+makes this a close, but not exact, running estimate of the batch sample covariance for a given finite stem:[N]:
+it under-weights each new sample's contribution by a factor of stem:[N / (N+1)]. The discrepancy shrinks as
+more samples accumulate, so the estimate is best relied on after collecting a reasonably large number of
+at-rest samples, rather than after only two or three.
+
+[mermaid]
+....
+flowchart TD
+    A["New sample x arrives; N = current sampleCount"] --> B["average = (average * N + x) / (N + 1)"]
+    B --> C["noMean = x - average"]
+    C --> D["singleCov = noMean * noMean^T"]
+    D --> E["cov = (cov * N + singleCov) / (N + 1)"]
+    E --> F["sampleCount = N + 1"]
+    F --> G["Return updated covariance"]
+....
+
+== Library implementation
+
+`MeasurementNoiseCovarianceEstimator(int measureParams)` allocates the running state for a system with
+`measureParams` measurement dimensions (`mp`).
+
+* `update(double[] sample)` — folds one new sample into the running mean and covariance, and returns the
+  updated covariance matrix. `sample` must have length `mp`.
+* `getMeasurementNoiseCov()` — the current running covariance estimate (`mp`×`mp`), suitable for passing
+  directly to `KalmanFilter.setMeasurementNoiseCov(Matrix)`.
+* `getSampleAverage()` — the current running mean (length `mp`); mainly useful as a bias/offset check, since a
+  properly zeroed sensor should show an average close to zero.
+* `getSampleCount()` — the number of samples folded in so far.
+
+TIP: Collect samples with the sensor in a fixed, representative state (e.g. stationary, at the operating
+temperature the sensor will actually run at) before starting a
+xref:algorithms/kalman-filter.adoc[`KalmanFilter`] — noise characteristics measured under different conditions
+than the filter will actually run under can under- or over-state how much the filter should trust each
+measurement.
+
+== Example
+
+Estimating the noise covariance of a 3-axis accelerometer held motionless, then using it to configure a Kalman
+filter's measurement noise:
+
+[source,java]
+----
+final var noiseEstimator = new MeasurementNoiseCovarianceEstimator(3);
+for (final var sample : stationarySamples) { // stationarySamples: List<double[]> of length-3 readings
+    noiseEstimator.update(sample);
+}
+
+final var measurementNoiseCov = noiseEstimator.getMeasurementNoiseCov();
+
+final var filter = new KalmanFilter(6, 3); // e.g. position + velocity per axis, measuring acceleration
+filter.setMeasurementNoiseCov(measurementNoiseCov);
+----

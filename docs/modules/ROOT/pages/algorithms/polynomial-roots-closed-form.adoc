@@ -1,0 +1,144 @@
+= Closed-Form Polynomial Roots
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Polynomials of degree one, two, and three have exact, closed-form solutions for their roots — no iteration, no
+bracket, no convergence tolerance required. This package implements all three as
+`FirstDegreePolynomialRootsEstimator`, `SecondDegreePolynomialRootsEstimator`, and
+`ThirdDegreePolynomialRootsEstimator` in the `com.irurueta.numerical.roots` package. Unlike the general
+one-dimensional root finders elsewhere on this page, these are not grounded in
+xref:reference.adoc#press2007[Press et al., 2007] — their javadoc instead cites the Wikipedia
+xref:reference.adoc#wikipedia-quadratic[Quadratic function] and xref:reference.adoc#wikipedia-cubic[Cubic
+function] articles, since the underlying formulas are standard classical algebra rather than material from
+Numerical Recipes.
+
+== Linear equations
+
+For stem:[ax + b = 0], the root is immediate:
+
+[stem]
+++++
+x = -\frac{b}{a}
+++++
+
+`FirstDegreePolynomialRootsEstimator` implements exactly this.
+
+== Quadratic equations
+
+For stem:[ax^2 + bx + c = 0], the discriminant stem:[\Delta = b^2 - 4ac] both solves the equation and
+classifies its roots:
+
+[stem]
+++++
+x = \frac{-b \pm \sqrt{\Delta}}{2a}
+++++
+
+* stem:[\Delta > 0] — two distinct real roots.
+* stem:[\Delta = 0] (within a small numerical tolerance) — one real double root.
+* stem:[\Delta < 0] — two complex conjugate roots, stem:[-b/(2a) \pm i\sqrt{|\Delta|}/(2a)].
+
+`SecondDegreePolynomialRootsEstimator` implements this directly, and exposes the classification itself via
+`hasTwoDistinctRealRoots()`, `hasDoubleRoot()`, and `hasTwoComplexConjugateRoots()` so callers can inspect the
+root structure before (or instead of) reading the actual root values.
+
+== Cubic equations
+
+For stem:[ax^3 + bx^2 + cx + d = 0], this package uses the same discriminant-driven case analysis as the
+Wikipedia xref:reference.adoc#wikipedia-cubic[cubic equation] article. Three intermediate quantities are
+computed first:
+
+[stem]
+++++
+f = \frac{1}{3}\left(\frac{3c}{a} - \frac{b^2}{a^2}\right), \qquad
+g = \frac{1}{27}\left(\frac{2b^3}{a^3} - \frac{9bc}{a^2} + \frac{27d}{a}\right), \qquad
+h = \frac{g^2}{4} + \frac{f^3}{27}
+++++
+
+and then, depending on their values:
+
+* *stem:[f = g = h = 0]* — a single real root with multiplicity three: stem:[x = -\sqrt[3]{d/a}].
+* *stem:[h \le 0]* — three distinct real roots, found via the trigonometric method:
++
+[stem]
+++++
+i = \sqrt{\frac{g^2}{4} - h}, \quad j = \sqrt[3]{i}, \quad k = \arccos\!\left(-\frac{g}{2i}\right), \quad
+m = \cos\frac{k}{3}, \quad n = \sqrt{3}\sin\frac{k}{3}, \quad p = -\frac{b}{3a}
+++++
++
+[stem]
+++++
+x_1 = 2jm + p, \qquad x_2 = -j(m+n) + p, \qquad x_3 = -j(m-n) + p
+++++
+* *stem:[h > 0]* — one real root and a complex-conjugate pair:
++
+[stem]
+++++
+r = -\frac{g}{2} + \sqrt{h}, \quad s = \sqrt[3]{r}, \quad t = -\frac{g}{2} - \sqrt{h}, \quad u = \sqrt[3]{t},
+\quad p = -\frac{b}{3a}
+++++
++
+[stem]
+++++
+x_1 = (s+u) + p, \qquad x_{2,3} = -\frac{s+u}{2} + p \pm i\,\frac{(s-u)\sqrt{3}}{2}
+++++
+
+`ThirdDegreePolynomialRootsEstimator` implements this case analysis directly, and — mirroring the quadratic
+estimator — exposes `hasThreeDistinctRealRoots()`, `hasMultipleRealRoot()`, and
+`hasOneRealRootAndTwoComplexConjugateRoots()` for inspecting the root structure.
+
+[mermaid]
+....
+flowchart TD
+    A["Coefficients a, b, c, d"] --> B["Compute f, g, h"]
+    B --> C{"f, g, h all ~= 0?"}
+    C -->|"yes"| D["Triple real root: x = -cuberoot(d/a)"]
+    C -->|"no"| E{"h <= 0?"}
+    E -->|"yes"| F["Three distinct real roots\n(trigonometric method)"]
+    E -->|"no"| G["One real root, two complex conjugate roots\n(Cardano's formula)"]
+....
+
+== Library implementation
+
+All three classes extend `PolynomialRootsEstimator`, but — unlike xref:algorithms/laguerre-root-finding.adoc[]
+— accept only *real* polynomial coefficients (as a `double[]` array, constant term first):
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Polynomial
+|Coefficient array
+
+|`FirstDegreePolynomialRootsEstimator`
+|stem:[ax + b]
+|`[b, a]`
+
+|`SecondDegreePolynomialRootsEstimator`
+|stem:[ax^2 + bx + c]
+|`[c, b, a]`
+
+|`ThirdDegreePolynomialRootsEstimator`
+|stem:[ax^3 + bx^2 + cx + d]
+|`[d, c, b, a]`
+|===
+
+Each has a static `isFirstDegree(double[])` / `isSecondDegree(double[])` / `isThirdDegree(double[])` helper to
+validate a coefficient array before constructing the estimator. After `estimate()` completes, the inherited
+`getRoots()` returns a `Complex[]` — always length 1, 2, or 3 respectively, with real roots represented as a
+`Complex` with zero imaginary part, sorted by real part ascending.
+
+TIP: For polynomials of degree four and above, no such closed form exists in general (a well-known result of
+Galois theory for degree five and up); see xref:algorithms/laguerre-root-finding.adoc[] for this package's
+general, iterative alternative.
+
+== Example
+
+[source,java]
+----
+// x^2 - 4 = 0, coefficients [c, b, a] = [-4, 0, 1]
+final var estimator = new SecondDegreePolynomialRootsEstimator(new double[]{-4.0, 0.0, 1.0});
+estimator.estimate();
+
+final var roots = estimator.getRoots(); // Complex[]{-2+0i, 2+0i}
+final var hasTwoRealRoots = estimator.hasTwoDistinctRealRoots(); // true
+----

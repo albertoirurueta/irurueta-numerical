@@ -1,0 +1,132 @@
+= Kalman Filter
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The Kalman filter is a recursive estimator for the state of a discrete-time linear system from a sequence of
+noisy measurements. It was introduced in xref:reference.adoc#kalman1960[Kalman, 1960], and is implemented as
+`KalmanFilter` in the `com.irurueta.numerical.signal.processing` package. The class's own Javadoc states that
+"the source code, notation and formulae... are borrowed from the JKalman tutorial [Welch95]," referencing
+xref:reference.adoc#welch1995[Welch and Bishop, 1995] directly by URL — its notation for the state transition
+matrix stem:[A], control matrix stem:[B], measurement matrix stem:[H], and noise covariances stem:[Q]/stem:[R]
+is exactly the notation this class's API uses.
+
+== System model
+
+The filter assumes the true state evolves linearly, and is observed only through a linear, noisy measurement:
+
+[stem]
+++++
+x_k = A x_{k-1} + B u_k + w_k, \qquad z_k = H x_k + v_k
+++++
+
+where stem:[x_k] is the (unobserved) state at step stem:[k], stem:[u_k] is an optional external control input,
+stem:[z_k] is the measurement actually taken, and stem:[w_k \sim \mathcal{N}(0, Q)] and
+stem:[v_k \sim \mathcal{N}(0, R)] are independent, zero-mean Gaussian process and measurement noise. Neither
+noise term is observed directly — only their covariances stem:[Q] and stem:[R] are assumed known (typically
+stem:[R] is estimated from real sensor data by
+xref:algorithms/measurement-noise-covariance-estimation.adoc[], while stem:[Q] is chosen intuitively to reflect
+how much unmodeled dynamics the filter should tolerate).
+
+== Predict and correct
+
+Each step alternates between two phases. *Predict* (time update) projects the previous state forward using only
+the system model, before any new measurement is available:
+
+[stem]
+++++
+x'_k = A x_{k-1} + B u_k, \qquad P'_k = A P_{k-1} A^T + Q
+++++
+
+*Correct* (measurement update) then folds in the new measurement stem:[z_k], weighted by the *Kalman gain*
+stem:[K_k]:
+
+[stem]
+++++
+K_k = P'_k H^T \left(H P'_k H^T + R\right)^{-1}
+++++
+
+[stem]
+++++
+x_k = x'_k + K_k \left(z_k - H x'_k\right), \qquad P_k = \left(I - K_k H\right) P'_k
+++++
+
+stem:[z_k - H x'_k] is the *innovation* — the discrepancy between the actual measurement and what the model
+predicted it would be. The gain stem:[K_k] balances how much to trust that discrepancy against how much to
+trust the prediction: a large stem:[R] (noisy sensor) shrinks stem:[K_k], leaning on the model; a large
+stem:[P'_k] (uncertain prediction) grows stem:[K_k], leaning on the measurement. `KalmanFilter.correct(Matrix)`
+solves for stem:[K_k^T] via `Utils.solve` on stem:[\left(H P'_k H^T + R\right) K_k^T = H P'_k] rather than
+forming the matrix inverse explicitly, which is the more numerically stable way to reach the same result.
+
+[mermaid]
+....
+flowchart LR
+    subgraph Predict["predict(control)"]
+        A["x'_k = A * x_(k-1) + B * u_k"] --> B["P'_k = A * P_(k-1) * A^T + Q"]
+    end
+    subgraph Correct["correct(measurement)"]
+        C["K_k = P'_k * H^T * inv(H * P'_k * H^T + R)"] --> D["x_k = x'_k + K_k * (z_k - H * x'_k)"]
+        D --> E["P_k = (I - K_k * H) * P'_k"]
+    end
+    Start(["Initial state x_0, P_0"]) --> Predict
+    Predict --> Correct
+    Correct -->|"next time step"| Predict
+....
+
+== Library implementation
+
+`KalmanFilter(dynamParams, measureParams, controlParams)` allocates all matrices for a system with `dynamParams`
+state dimensions (`dp`) and `measureParams` measurement dimensions (`mp`); `controlParams` (`cp`) may be `0`
+(no control input, no `B` matrix) or omitted entirely via the two-argument constructor.
+
+* `predict()` / `predict(Matrix control)` — runs the time update, storing the result in `statePre` /
+  `errorCovPre` and returning `statePre`.
+* `correct(Matrix measurement)` — runs the measurement update, storing the result in `statePost` /
+  `errorCovPost` / `gain` and returning `statePost`.
+* Matrix accessors mirror the equations above directly: `getTransitionMatrix()`/`setTransitionMatrix(Matrix)`
+  (stem:[A], `dp`×`dp`), `getControlMatrix()`/`setControlMatrix(Matrix)` (stem:[B], `dp`×`cp`),
+  `getMeasurementMatrix()`/`setMeasurementMatrix(Matrix)` (stem:[H], `mp`×`dp`),
+  `getProcessNoiseCov()`/`setProcessNoiseCov(Matrix)` (stem:[Q], `dp`×`dp`, must be symmetric),
+  `getMeasurementNoiseCov()`/`setMeasurementNoiseCov(Matrix)` (stem:[R], `mp`×`mp`, must be symmetric),
+  `getErrorCovPre()`/`getErrorCovPost()` (stem:[P'_k]/stem:[P_k]), and `getGain()` (stem:[K_k]).
+* `getStatePre()`/`setStatePre(Matrix)` and `getStatePost()`/`setStatePost(Matrix)` expose the state vectors
+  directly, letting a caller seed the filter's initial state before the first `predict()`/`correct()` call.
+* Defaults: `transitionMatrix` and `errorCovPost` start as identity, `processNoiseCov` as
+  `DEFAULT_PROCESS_NOISE_VARIANCE` (`1e-6`) times identity, and `measurementNoiseCov` as
+  `DEFAULT_MEASUREMENT_NOISE_VARIANCE` (`1e-1`) times identity — all meant to be overridden once the actual
+  system's dynamics and sensor noise are known.
+
+TIP: A lower stem:[Q] makes the filter trust its own model more, producing a smoother but slower-to-react state
+estimate; a higher stem:[Q] lets it follow the true state more quickly at the cost of noisier output — the same
+trade-off applies to stem:[R], in the opposite direction, since a `KalmanFilter` weighs prediction against
+measurement purely through the ratio between the two.
+
+== Example
+
+Estimating a constant scalar value (stem:[dp = mp = 1], stem:[A = H = 1], no control) from repeated noisy
+measurements — the simplest possible instance of the model, and the introductory example used by
+xref:reference.adoc#welch1995[Welch and Bishop, 1995] themselves:
+
+[source,java]
+----
+final var filter = new KalmanFilter(1, 1);
+filter.setStatePost(new Matrix(1, 1)); // initial guess: 0.0
+
+final var processNoise = new Matrix(1, 1);
+processNoise.setElementAtIndex(0, 1e-5); // small: the true value does not change
+filter.setProcessNoiseCov(processNoise);
+
+final var measurementNoise = new Matrix(1, 1);
+measurementNoise.setElementAtIndex(0, 0.01); // from the sensor's known noise variance
+filter.setMeasurementNoiseCov(measurementNoise);
+
+for (final var z : measurements) { // measurements: double[] of noisy readings
+    filter.predict();
+
+    final var measurement = new Matrix(1, 1);
+    measurement.setElementAtIndex(0, z);
+    filter.correct(measurement);
+}
+
+final var estimate = filter.getStatePost().getElementAtIndex(0);
+----

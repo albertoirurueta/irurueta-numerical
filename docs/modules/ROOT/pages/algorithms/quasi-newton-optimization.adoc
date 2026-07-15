@@ -1,0 +1,132 @@
+= Quasi-Newton Method (BFGS)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Quasi-Newton (variable metric) methods share the same goal as
+xref:algorithms/conjugate-gradient-optimization.adoc[conjugate gradient methods] — accumulate information from
+successive line minimizations so that, for a quadratic form, stem:[N] of them reach the exact minimum — but
+store and update that information differently: as a full stem:[N \times N] approximation to the inverse
+Hessian, rather than an stem:[O(N)] set of vectors. This package implements the Broyden-Fletcher-Goldfarb-
+Shanno (BFGS) variant, described in xref:reference.adoc#press2007[Press et al., 2007], Section 10.9 (page
+521), as `QuasiNewtonMultiOptimizer` in the `com.irurueta.numerical.optimization` package.
+
+== From Newton's method to "quasi" Newton
+
+Newton's method for finding a zero of the gradient uses the local quadratic approximation
+stem:[f(\mathbf{x}) \approx f(\mathbf{x}_i) + (\mathbf{x}-\mathbf{x}_i)^\top\nabla f(\mathbf{x}_i) +
+\tfrac{1}{2}(\mathbf{x}-\mathbf{x}_i)^\top A (\mathbf{x}-\mathbf{x}_i)] to jump directly to where the gradient
+should vanish:
+
+[stem]
+++++
+\mathbf{x} - \mathbf{x}_i = -A^{-1}\nabla f(\mathbf{x}_i)
+++++
+
+The true Hessian stem:[A] is not known, so quasi-Newton methods instead build up a sequence of matrices
+stem:[H_i] converging toward stem:[A^{-1}] — ideally within stem:[N] iterations, as for a true quadratic form.
+This turns out to be not just a practical necessity but often genuinely *better* than using the real Hessian:
+far from the minimum, stem:[A] need not be positive-definite, and taking the literal Newton step could move
+uphill. Starting stem:[H_0] as the identity matrix (positive-definite and symmetric) and updating it in a way
+that provably preserves both properties guarantees the method always has a downhill direction available, and
+recovers Newton's quadratic convergence once close enough to the minimum for stem:[H_i] to have converged.
+
+== The BFGS update
+
+Writing stem:[\Delta\mathbf{x}_i \equiv \mathbf{x}_{i+1} - \mathbf{x}_i] and
+stem:[\Delta\mathbf{g}_i \equiv \nabla f(\mathbf{x}_{i+1}) - \nabla f(\mathbf{x}_i)], the update is built to
+satisfy the *secant condition* stem:[\Delta\mathbf{x}_i = H_{i+1}\,\Delta\mathbf{g}_i] — requiring the new
+approximation to behave, along the step just taken, exactly like stem:[A^{-1}] would. The DFP formula
+(Davidon-Fletcher-Powell, an earlier variant) is:
+
+[stem]
+++++
+H_{i+1} = H_i + \frac{\Delta\mathbf{x}_i \otimes \Delta\mathbf{x}_i}{\Delta\mathbf{x}_i^\top \Delta\mathbf{g}_i}
+- \frac{(H_i\Delta\mathbf{g}_i) \otimes (H_i\Delta\mathbf{g}_i)}{\Delta\mathbf{g}_i^\top H_i \Delta\mathbf{g}_i}
+++++
+
+where stem:[\otimes] is the outer product. BFGS — empirically the more robust of the two in practice, and the
+variant this package implements — adds one further rank-one correction term:
+
+[stem]
+++++
++ \left(\Delta\mathbf{g}_i^\top H_i \Delta\mathbf{g}_i\right)\,\mathbf{u} \otimes \mathbf{u}, \qquad
+\mathbf{u} \equiv \frac{\Delta\mathbf{x}_i}{\Delta\mathbf{x}_i^\top\Delta\mathbf{g}_i} -
+\frac{H_i\Delta\mathbf{g}_i}{\Delta\mathbf{g}_i^\top H_i \Delta\mathbf{g}_i}
+++++
+
+The update is skipped on any iteration where stem:[\Delta\mathbf{x}_i^\top \Delta\mathbf{g}_i] is not
+comfortably positive — guarding against roundoff pushing stem:[H_i] toward becoming singular or indefinite.
+
+== An approximate line search
+
+Unlike xref:algorithms/powell-optimization.adoc[Powell's method] and
+xref:algorithms/conjugate-gradient-optimization.adoc[conjugate gradient], the quasi-Newton method does not
+need an accurate 1D line minimization along the Newton direction stem:[-H_i\nabla f(\mathbf{x}_i)] — only
+enough progress to guarantee the function actually decreases. This package's internal line search takes the
+full Newton step whenever it can, and backtracks (via a quadratic/cubic fit to the step already tried) whenever
+that step overshoots, is rejected by an Armijo-style sufficient-decrease condition, or exceeds a maximum
+allowed step length.
+
+[mermaid]
+....
+flowchart TD
+    A["H0 = identity; g = gradient(p)"] --> B["Newton direction: xi = -H * g"]
+    B --> C["Approximate line search along xi:\ntake full step if it decreases f enough, else backtrack"]
+    C --> D{"step size or gradient norm\nbelow tolerance?"}
+    D -->|"yes"| E["Done: return p"]
+    D -->|"no"| F["Compute step s and gradient change dg;\nskip update if s . dg is not safely positive"]
+    F --> G["Apply the BFGS update to H"]
+    G --> B
+....
+
+== Library implementation
+
+`QuasiNewtonMultiOptimizer` extends `MultiOptimizer` directly (its line search is the internal backtracking
+routine above, not the shared `LineMultiOptimizer`/`DerivativeLineMultiOptimizer` machinery used by
+xref:algorithms/powell-optimization.adoc[] and xref:algorithms/conjugate-gradient-optimization.adoc[]):
+
+* `setGradientListener(...)` — supplies stem:[\nabla f]; as with
+  xref:algorithms/conjugate-gradient-optimization.adoc[], wrapping a numerical `GradientEstimator` here works
+  just as well as an analytic gradient.
+* `setStartPoint(double[])` / `getStartPoint()` — the initial point.
+* `getTolerance()` / `setTolerance(double)` — the convergence criterion on the (scaled) gradient norm; default
+  `3e-8`.
+* `getIterations()` — the number of iterations used, after `minimize()` completes.
+
+Up to `ITMAX = 200` iterations are attempted; convergence is additionally checked on the step size between
+iterations (`TOLX`), independent of the gradient-norm test.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] reports that quasi-Newton methods tend to outperform
+xref:algorithms/conjugate-gradient-optimization.adoc[conjugate gradient] whenever the stem:[O(N^2)] storage for
+the inverse-Hessian approximation is affordable — and work well even when the gradient itself is only
+numerically estimated, which is why the authors describe it as an effective first choice whether or not
+computing an analytic gradient is practical.
+
+== Example
+
+[source,java]
+----
+final var listener = new MultiDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double[] point) {
+        final var dx = point[0] - 1.0;
+        final var dy = point[1] + 2.0;
+        return dx * dx + dy * dy;
+    }
+};
+final var gradientListener = new GradientFunctionEvaluatorListener() {
+    @Override
+    public void evaluateGradient(final double[] params, final double[] result) {
+        result[0] = 2.0 * (params[0] - 1.0);
+        result[1] = 2.0 * (params[1] + 2.0);
+    }
+};
+
+final var optimizer = new QuasiNewtonMultiOptimizer(
+        listener, gradientListener, new double[]{0.0, 0.0}, 3e-8);
+optimizer.minimize();
+
+final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
+final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
+----

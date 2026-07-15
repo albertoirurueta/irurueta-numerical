@@ -46,6 +46,38 @@ flowchart TD
     I --> J["Return final model"]
 ....
 
+== Robust algorithms
+
+The `robust` package provides a reusable, outlier-resilient estimation framework, built around repeatedly
+fitting a candidate model to a small random sample and keeping whichever candidate best explains the whole
+dataset. Five variants are available, trading off speed, accuracy, and how much needs to be known in advance
+(e.g. an inlier threshold, or a per-sample quality score):
+
+* xref:algorithms/robust-estimation-framework.adoc[] — the shared hypothesize-and-verify loop, listener
+  hierarchy, and subset selection every algorithm below builds on.
+* xref:algorithms/ransac-robust-estimation.adoc[] — the original algorithm: uniform random sampling, scored by
+  inlier count against a fixed threshold.
+* xref:algorithms/lmeds-robust-estimation.adoc[] — no threshold required; scores candidates by the median of
+  their residuals instead.
+* xref:algorithms/msac-robust-estimation.adoc[] — a bounded-loss, median-based hybrid of RANSAC and LMedS.
+* xref:algorithms/prosac-robust-estimation.adoc[] — samples progressively from the highest-quality data first,
+  often one to two orders of magnitude faster than RANSAC.
+* xref:algorithms/promeds-robust-estimation.adoc[] — combines PROSAC's progressive sampling with LMedS's
+  threshold-free criterion.
+
+== Signal processing algorithms
+
+The `signal.processing` package provides the building blocks for filtering noisy, real-time measurements: a
+1D convolution utility, a discrete Kalman filter, and a running estimator for a sensor's measurement noise —
+the three combine naturally, since noise measured by the third feeds directly into the second.
+
+* xref:algorithms/1d-convolution.adoc[] — discrete convolution of a signal with a kernel, with configurable
+  edge-handling for positions where the kernel extends past the signal's boundaries.
+* xref:algorithms/kalman-filter.adoc[] — recursive predict/correct state estimator for discrete-time linear
+  systems observed through noisy measurements.
+* xref:algorithms/measurement-noise-covariance-estimation.adoc[] — running estimate of a sensor's measurement
+  noise covariance, built up one sample at a time while the sensor's true state is held constant.
+
 == Where to go next
 
 * xref:installation.adoc[] — add the library as a dependency.

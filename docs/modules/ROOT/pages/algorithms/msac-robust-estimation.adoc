@@ -1,0 +1,130 @@
+= MSAC (M-estimator Sample Consensus)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC] scores a candidate model purely by *how many* samples
+fall within its threshold — a model supported by 100 close-fitting inliers scores identically to one supported
+by 100 inliers barely inside the threshold. MSAC replaces that binary count with a *bounded loss function*,
+so that how well a sample fits (up to the threshold) matters, not just whether it fits at all. The bounded-loss
+idea originates in xref:reference.adoc#torr2000[Torr and Zisserman, 2000] (as a stepping stone toward that
+paper's full maximum-likelihood MLESAC estimator), and is implemented — combined with an LMedS-style median
+criterion, described below — as `MSACRobustEstimator` in the `com.irurueta.numerical.robust` package.
+
+== A bounded loss instead of a hard count
+
+For a residual stem:[e_i] and threshold stem:[\tau], RANSAC's implicit scoring rule is the indicator
+stem:[\mathbb{1}[e_i \le \tau]]. MSAC instead caps the residual itself at the threshold:
+
+[stem]
+++++
+\rho(e_i) = \begin{cases} e_i & e_i < \tau \\ \tau & e_i \ge \tau \end{cases}
+++++
+
+Every sample still contributes to a candidate's score, but samples beyond the threshold all contribute the
+*same*, bounded amount — exactly as in RANSAC, an arbitrarily bad outlier can never single-handedly dominate
+the result, but unlike RANSAC, two candidates with the same inlier *count* are no longer indistinguishable if
+one fits its inliers noticeably better than the other.
+
+== This library's criterion: median of the bounded residuals
+
+xref:reference.adoc#torr2000[Torr and Zisserman, 2000]'s own MSAC minimizes the *sum* of stem:[\rho(e_i)] over
+all samples. This library's implementation instead — as its own javadoc puts it, "a mixture between LMedS and
+RANSAC" — picks whichever candidate minimizes the *median* of the bounded residuals:
+
+[stem]
+++++
+\theta^* = \operatorname*{arg\,min}_\theta \; \operatorname{median}_i\big(\rho(e_i(\theta))\big)
+++++
+
+This keeps RANSAC's fixed threshold (needed, as in RANSAC, to dynamically re-estimate how many iterations are
+still required — see xref:algorithms/ransac-robust-estimation.adoc[]), while borrowing
+xref:algorithms/lmeds-robust-estimation.adoc[LMedS]'s median-based selection to prefer the candidate whose
+inliers fit *more tightly*, not merely the one with more of them. In practice, when inlier samples cluster
+tightly around the true model (as is typical), this tends to produce results very close to plain RANSAC, at
+comparable computational cost — but can do noticeably better when the accuracy of individual inliers varies.
+
+[mermaid]
+....
+flowchart TD
+    A["Draw a random minimal subset; fit candidate model(s)"] --> B["For each sample: residual e_i,\ncapped at threshold tau if e_i >= tau"]
+    B --> C["Compute the median of the capped residuals"]
+    C --> D{"lower median than the best\ncandidate so far?"}
+    D -->|"yes"| E["Keep as new best model"]
+    D -->|"no"| F["Discard this candidate"]
+    E --> G["Re-estimate required iterations\n(same formula as RANSAC, from the inlier count)"]
+    F --> H{"stopping criterion met?"}
+    G --> H
+    H -->|"no"| A
+    H -->|"yes"| I["Return the best model found"]
+....
+
+== Library implementation
+
+`MSACRobustEstimator<T>` requires an `MSACRobustEstimatorListener<T>`, which is identical to
+`RANSACRobustEstimatorListener<T>` (see xref:algorithms/robust-estimation-framework.adoc[]) — no additional
+methods are needed, since MSAC reuses the same threshold-based residual capping and the same adaptive
+iteration-count re-estimation as RANSAC.
+
+Shared parameters (`getConfidence()`, `setConfidence(double)`, `getMaxIterations()`, `setMaxIterations(int)`)
+behave as described in xref:algorithms/robust-estimation-framework.adoc[]. After `estimate()` completes:
+
+* `getBestResult()` — the winning model.
+* `getBestResultInliersData()` — an `MSACInliersData` for the model chosen by the median-residual criterion,
+  including `getBestMedianResidual()`.
+* `getBestNumberInliersData()` — the inlier data for whichever candidate had the largest raw inlier *count*
+  along the way (tracked alongside the median-based winner, since it also drives the iteration-count
+  re-estimation).
+
+TIP: MSAC still needs the same problem-specific threshold as
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC]. If the accuracy of inlier samples is known to vary
+significantly (so that "how well" a sample fits is informative, not just "whether" it fits), MSAC is worth
+trying in place of RANSAC at essentially the same cost; if no threshold can be guessed at all, use
+xref:algorithms/lmeds-robust-estimation.adoc[LMedS] or xref:algorithms/promeds-robust-estimation.adoc[PROMedS]
+instead.
+
+== Example
+
+[source,java]
+----
+final var listener = new MSACRobustEstimatorListener<double[]>() {
+    @Override
+    public int getTotalSamples() {
+        return xCoords.length;
+    }
+
+    @Override
+    public int getSubsetSize() {
+        return 2;
+    }
+
+    @Override
+    public double getThreshold() {
+        return 1.0;
+    }
+
+    @Override
+    public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
+        final var x1 = xCoords[samplesIndices[0]];
+        final var y1 = yCoords[samplesIndices[0]];
+        final var x2 = xCoords[samplesIndices[1]];
+        final var y2 = yCoords[samplesIndices[1]];
+
+        final var b = (y2 - y1) / (x2 - x1);
+        final var a = y1 - b * x1;
+        solutions.add(new double[]{a, b});
+    }
+
+    @Override
+    public double computeResidual(final double[] currentEstimation, final int i) {
+        final var a = currentEstimation[0];
+        final var b = currentEstimation[1];
+        return Math.abs(yCoords[i] - (a + b * xCoords[i]));
+    }
+};
+
+final var estimator = new MSACRobustEstimator<>(listener);
+estimator.setConfidence(0.99);
+final var line = estimator.estimate(); // [a, b]
+final var medianResidual = estimator.getBestResultInliersData().getBestMedianResidual();
+----

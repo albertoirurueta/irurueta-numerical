@@ -1,0 +1,103 @@
+= Two-Dimensional Grid Interpolation
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+When a function of two variables stem:[y(x_1, x_2)] is tabulated on a complete rectangular grid — every
+combination of a set of stem:[x_1] values and a set of stem:[x_2] values — its interpolation can be built
+entirely out of the 1D interpolators already described on this page, applied one dimension at a time. This is
+described in xref:reference.adoc#press2007[Press et al., 2007], Section 3.6 (page 132), and implemented as
+`BilinearInterpolator`, `Polynomial2DInterpolator`, and `BicubicSpline2DInterpolator` in the
+`com.irurueta.numerical.interpolation` package.
+
+== The grid square
+
+Given tabulated values stem:[y_{ij} = y(x_{1i}, x_{2j})], any point stem:[(x_1, x_2)] falls inside a *grid
+square* bounded by four tabulated points, numbered counterclockwise from the lower left. Defining the
+normalized local coordinates:
+
+[stem]
+++++
+t \equiv \frac{x_1 - x_{1i}}{x_{1(i+1)} - x_{1i}}, \qquad u \equiv \frac{x_2 - x_{2j}}{x_{2(j+1)} - x_{2j}}
+++++
+
+(both lying in stem:[[0, 1\]]), the simplest possible interpolation — *bilinear* — is:
+
+[stem]
+++++
+y(x_1, x_2) = (1-t)(1-u)\,y_0 + t(1-u)\,y_1 + tu\,y_2 + (1-t)u\,y_3
+++++
+
+This is continuous as the interpolation point crosses from one grid square to the next, but its *gradient*
+changes discontinuously at grid-square boundaries.
+
+== Two directions beyond bilinear
+
+Going beyond bilinear interpolation means picking one of two distinct goals: higher accuracy for sufficiently
+smooth functions, without necessarily fixing up derivative continuity; or explicit smoothness of the gradient
+across grid-square boundaries.
+
+=== Higher order for accuracy: tensor-product polynomial interpolation
+
+To do stem:[m-1] order interpolation in the stem:[x_1] direction and stem:[n-1] order in stem:[x_2]: locate the
+stem:[m \times n] sub-block of the table surrounding the target point, run stem:[m]
+xref:algorithms/polynomial-interpolation.adoc[polynomial interpolations] along the rows (in the stem:[x_2]
+direction) to get stem:[m] values at stem:[(x_{1i}, x_2)], then one final polynomial interpolation across those
+stem:[m] values in the stem:[x_1] direction.
+
+=== Higher order for smoothness: bicubic spline
+
+To get smoothness instead: construct one xref:algorithms/cubic-spline-interpolation.adoc[cubic spline] across
+each row of the table (once, at setup time). For each interpolated value: run all of those row splines at the
+target stem:[x_2] to get a column of values stem:[y(x_{1i}, x_2)], construct *one more* cubic spline through
+that column, and evaluate it at the target stem:[x_1].
+
+[mermaid]
+....
+flowchart TD
+    A["Tabulated grid y_ij, arrays x1, x2"] --> B{"Which 2D interpolator?"}
+    B -->|"Bilinear"| C["Locate grid square (i,j);\nweighted average of 4 corners using t, u"]
+    B -->|"Polynomial2DInterpolator"| D["Locate m x n sub-block;\nm row-wise polynomial interpolations at x2,\nthen 1 column-wise polynomial interpolation at x1"]
+    B -->|"BicubicSpline2DInterpolator"| E["One spline per row (built once);\nevaluate all rows at x2,\nbuild 1 column spline through the results, evaluate at x1"]
+....
+
+Bicubic splines cost more: setup scales with the full table size stem:[M \times N], and each interpolated
+value costs roughly stem:[M \log M + N] — versus a constant plus stem:[\log M + \log N] for local,
+tensor-product polynomial interpolation. That price buys the nonlocal smoothness a spline provides. For modest
+table sizes (a few hundred points per side), the extra cost is usually not a concern.
+
+== Library implementation
+
+[cols="1,2,2", options="header"]
+|===
+|Class
+|Built from
+|Notes
+
+|`BilinearInterpolator`
+|Two `LinearInterpolator` instances (reused only for their `locate`/`hunt` search, not for interpolation itself)
+|Fixed bilinear order; no tunable parameters.
+
+|`Polynomial2DInterpolator`
+|Row/column `PolynomialInterpolator` instances
+|Constructor takes `mp`/`np` — the local order (points used) in each direction; defaults to using every
+point in each array.
+
+|`BicubicSpline2DInterpolator`
+|One `CubicSplineInterpolator` per table row, plus one more built per call for the column
+|No tunable order; natural spline boundary conditions throughout.
+|===
+
+All three share the same constructor shape — an array of stem:[x_1] values, an array of stem:[x_2] values, and
+a `Matrix` of tabulated stem:[y_{ij}] values — and expose `interpolate(x1p, x2p)`.
+
+TIP: `BilinearInterpolator` is the right place to start for two-dimensional interpolation unless a specific
+need for higher accuracy or gradient smoothness is already known — it is by far the cheapest of the three.
+
+== Example
+
+[source,java]
+----
+final var interpolator = new BilinearInterpolator(x1, x2, y);
+final var value = interpolator.interpolate(x1Target, x2Target);
+----

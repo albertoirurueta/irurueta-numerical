@@ -1,0 +1,66 @@
+= Curve Interpolation in Multiple Dimensions
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+A different kind of multidimensional interpolation problem arises when an *ordered* sequence of
+stem:[N] tabulated points stem:[\mathbf{x}_0, \ldots, \mathbf{x}_{N-1}] in stem:[n] dimensions is known to lie
+along a one-dimensional curve, and the goal is to interpolate other points *along that curve* — as opposed to
+xref:algorithms/scattered-data-interpolation.adoc[interpolating a scalar function of scattered coordinates].
+It is described in xref:reference.adoc#press2007[Press et al., 2007], Section 3.7.5 (page 147), and implemented
+as `CurveInterpolator` in the `com.irurueta.numerical.interpolation` package.
+
+== Parameterizing the curve by arc length
+
+The approach is straightforward given the tools already available: approximate the distance traveled along the
+curve by the sum of chord lengths between consecutive tabulated points, then build one
+xref:algorithms/cubic-spline-interpolation.adoc[cubic spline] per coordinate (stem:[x_1, \ldots, x_n]) as a
+function of that arc-length parameter stem:[s], rescaled to lie in stem:[[0, 1\]]. Since no single coordinate's
+derivative with respect to arc length can exceed 1, the resulting splines are guaranteed to behave well, even
+where the curve doubles back on itself in ordinary coordinates.
+
+Two boundary conditions on the curve are supported:
+
+* *Open curve* — stem:[\mathbf{x}_0] and stem:[\mathbf{x}_{N-1}] are genuine endpoints. Interpolating with a
+  parameter outside stem:[[0, 1\]] extrapolates (and, as with any extrapolation, this is best avoided).
+* *Closed curve* — an implied segment connects stem:[\mathbf{x}_{N-1}] back to stem:[\mathbf{x}_0]. The
+  parameter is periodic with period 1. The trick used to build this correctly is to duplicate half a period's
+  worth of points at the beginning and end of the working array before constructing the splines, then use only
+  the middle half of the result — which sidesteps the discontinuity a naive wraparound would otherwise
+  introduce at the seam.
+
+Endpoint derivatives for each per-coordinate spline are estimated (when at least 4 points are available) from
+four consecutive tabulated abscissa/ordinate pairs via a finite-difference formula derived by power-series
+expansion, rather than left to default to a natural-spline boundary condition.
+
+[mermaid]
+....
+flowchart TD
+    A["Ordered points x_0 .. x_N-1 in n dimensions"] --> B["Accumulate chord-length distances\nbetween consecutive points"]
+    B --> C["Rescale accumulated arc length to parameter s in [0, 1]\n(for closed curves: duplicate half a period at each end)"]
+    C --> D["Estimate endpoint derivatives per coordinate\nfrom 4 nearest tabulated points"]
+    D --> E["Build one CubicSplineInterpolator per coordinate,\nparameterized by s"]
+    E --> F["interpolate(t): evaluate every per-coordinate spline at t\n(wrapped into [0,1) first, if closed)"]
+....
+
+== Library implementation
+
+`CurveInterpolator` wraps stem:[n] `CubicSplineInterpolator` instances, one per coordinate, all sharing the
+same arc-length parameterization:
+
+* `CurveInterpolator(Matrix ptsin, boolean close)` — rows are the tabulated points, columns their
+  coordinates; `close` selects an open (`false`) or closed (`true`) curve.
+* `CurveInterpolator(Matrix ptsin)` — shorthand for an open curve.
+* `interpolate(double t)` — returns a coordinate array for the point at parameter `t`. For an open curve,
+  values of `t` outside `[0, 1]` extrapolate; for a closed curve, `t` is treated as periodic with period 1.
+
+TIP: For a closed curve, do not duplicate the first point as the last one in the input — the constructor
+already connects stem:[\mathbf{x}_{N-1}] back to stem:[\mathbf{x}_0] itself.
+
+== Example
+
+[source,java]
+----
+final var interpolator = new CurveInterpolator(points, false);
+final var pointAtHalfway = interpolator.interpolate(0.5); // coordinate array
+----

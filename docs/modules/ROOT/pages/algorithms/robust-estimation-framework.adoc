@@ -1,0 +1,139 @@
+= Robust Estimation Framework
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Ordinary estimators (curve fitters, geometric model fitters, etc.) assume every data sample is trustworthy.
+In practice, samples are often contaminated with *outliers* — matches from feature detectors are sometimes
+wrong, sensor readings sometimes glitch — and a single bad sample can throw off an estimator that averages
+over all of them. The `com.irurueta.numerical.robust` package provides a reusable, domain-agnostic framework
+for *robust* estimation: finding the model that best explains the data despite an unknown fraction of it being
+wrong, without needing to know in advance which samples are the bad ones.
+
+This page describes the shared machinery behind all five algorithms in the package —
+xref:algorithms/ransac-robust-estimation.adoc[RANSAC], xref:algorithms/lmeds-robust-estimation.adoc[LMedS],
+xref:algorithms/msac-robust-estimation.adoc[MSAC], xref:algorithms/prosac-robust-estimation.adoc[PROSAC], and
+xref:algorithms/promeds-robust-estimation.adoc[PROMedS] — each of which has its own detailed page covering what
+makes it different.
+
+== The hypothesize-and-verify loop
+
+Every algorithm in this package is a variation on the same basic strategy: repeatedly guess a candidate model
+from a small random subset of the data, check how well that candidate explains *all* the data, and keep
+whichever candidate does best. The five algorithms differ only in *how* they sample subsets and *how* they
+score a candidate:
+
+[mermaid]
+....
+flowchart TD
+    A["Start: N data samples"] --> B["Select a minimal random subset\n(just enough points to fit one candidate model)"]
+    B --> C["Fit one or more candidate models to the subset"]
+    C --> D["Score each candidate against ALL N samples"]
+    D --> E{"Better than the best candidate so far?"}
+    E -->|"yes"| F["Keep as the new best model"]
+    E -->|"no"| G["Discard this candidate"]
+    F --> H{"Stopping criterion met?"}
+    G --> H
+    H -->|"no"| B
+    H -->|"yes"| I["Return the best model found\n(plus its inlier set / residuals)"]
+....
+
+This generic loop is what makes the package's design reusable across domains: fitting a line, a homography, a
+fundamental matrix, or a polynomial (see xref:algorithms/polynomial-roots-closed-form.adoc[] and
+xref:algorithms/laguerre-root-finding.adoc[]'s neighbors in `polynomials.estimators`, which specialize this
+same framework) are all, from the framework's point of view, just different implementations of "fit a
+candidate to a minimal subset" and "score a candidate against a sample."
+
+== What differs between the five algorithms
+
+[cols="1,2,2,2", options="header"]
+|===
+|Algorithm
+|Sampling strategy
+|Scoring criterion
+|Needs a threshold?
+
+|xref:algorithms/ransac-robust-estimation.adoc[RANSAC]
+|Uniform random
+|Count of inliers (residual below a fixed threshold)
+|Yes
+
+|xref:algorithms/lmeds-robust-estimation.adoc[LMedS]
+|Uniform random
+|Median of squared residuals
+|No — computed dynamically
+
+|xref:algorithms/msac-robust-estimation.adoc[MSAC]
+|Uniform random
+|Median of a *bounded* residual (capped at a fixed threshold)
+|Yes
+
+|xref:algorithms/prosac-robust-estimation.adoc[PROSAC]
+|Progressive, guided by a per-sample quality score
+|Count of inliers (as RANSAC), plus PROSAC-specific stopping tests
+|Yes
+
+|xref:algorithms/promeds-robust-estimation.adoc[PROMedS]
+|Progressive, guided by a per-sample quality score (as PROSAC)
+|Median of residuals (as LMedS), optionally cross-checked against a threshold
+|No (optional)
+|===
+
+== Shared building blocks
+
+=== The listener hierarchy
+
+Every algorithm is generic over the type `T` of the model being estimated (a line's coefficients, a matrix, a
+polynomial's parameters — whatever `T` the caller is fitting), and none of them are handed the data directly.
+Instead, the caller implements a listener that knows how to turn a subset of sample indices into candidate
+models and how to score any candidate against any sample. Each algorithm's listener interface extends the
+previous one, adding exactly the extra information *that* algorithm needs:
+
+[mermaid]
+....
+flowchart TD
+    A["RobustEstimatorListener&lt;T&gt;\n(lifecycle callbacks: start, end, iteration, progress)"] --> B["LMedSRobustEstimatorListener&lt;T&gt;\n+ getTotalSamples(), getSubsetSize()\n+ estimatePreliminarSolutions(), computeResidual()"]
+    B --> C["RANSACRobustEstimatorListener&lt;T&gt;\n+ getThreshold()"]
+    C --> D["MSACRobustEstimatorListener&lt;T&gt;\n(no new methods)"]
+    C --> E["PROSACRobustEstimatorListener&lt;T&gt;\n+ getQualityScores()"]
+    E --> F["PROMedSRobustEstimatorListener&lt;T&gt;\n(no new methods)"]
+....
+
+The two methods every listener must implement are the actual model-fitting logic:
+
+* `estimatePreliminarSolutions(int[] samplesIndices, List<T> solutions)` — given the indices of a randomly (or
+  progressively) selected minimal subset, compute one or more candidate models and add them to `solutions`.
+* `computeResidual(T currentEstimation, int i)` — given a candidate model and a sample index, return how far
+  that sample is from what the model predicts.
+
+=== Subset selection
+
+Every algorithm needs to repeatedly pick a random, non-repeating subset of sample indices — either from the
+whole dataset (RANSAC, LMedS, MSAC) or from a growing prefix of quality-sorted samples (PROSAC, PROMedS). This
+is implemented once, in `SubsetSelector` / `FastRandomSubsetSelector`, using simple rejection sampling: draw a
+random index, and if it has already been picked, draw again, until the requested number of distinct indices
+has been collected. `SubsetSelector.create(numSamples)` is the standard way to obtain one.
+
+== Library implementation
+
+`RobustEstimator<T>` is the abstract base every concrete algorithm extends, providing:
+
+* `setListener(RobustEstimatorListener<T>)` — attach the model-fitting/scoring logic described above.
+* `isReady()` / `isLocked()` — the same readiness/locking protocol used throughout this library (see
+  xref:index.adoc[]'s Core Concepts).
+* `setProgressDelta(float)` — how often (as a fraction of expected work) to invoke the listener's progress
+  callback; default `0.05` (every 5%).
+* `estimate()` — runs the algorithm and returns the best model found.
+* `getInliersData()` — the inlier flags and residuals associated with the best model.
+* `getMethod()` — which `RobustEstimatorMethod` this instance implements.
+
+All five algorithms additionally share a `getConfidence()` / `setConfidence(double)` parameter (default `0.99`)
+and a `getMaxIterations()` / `setMaxIterations(int)` cap (default `5000`) — the target probability of having
+sampled at least one all-inlier subset, and the hard ceiling on how long to keep trying if that confidence is
+never reached.
+
+TIP: If a per-sample quality score is available (e.g. a descriptor-matching similarity), always prefer
+xref:algorithms/prosac-robust-estimation.adoc[PROSAC] or xref:algorithms/promeds-robust-estimation.adoc[PROMedS]
+over their non-progressive counterparts — the speedup can be two orders of magnitude on typical problems. If no
+threshold can be guessed in advance, xref:algorithms/lmeds-robust-estimation.adoc[LMedS] or
+xref:algorithms/promeds-robust-estimation.adoc[PROMedS] avoid needing one.

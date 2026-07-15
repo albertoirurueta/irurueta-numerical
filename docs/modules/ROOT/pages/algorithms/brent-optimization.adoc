@@ -1,0 +1,100 @@
+= Brent's Method
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+xref:algorithms/golden-section-search.adoc[] is designed for the worst possible case — a function that gives
+no cooperation at all. Near a smooth minimum, though, a parabola fitted through three points usually jumps
+straight to the minimum (or very close to it) in a single step. Brent's method combines both ideas: it
+attempts the fast parabolic step whenever the function seems to allow it, and falls back to the slow-but-sure
+golden section step otherwise. It is described in xref:reference.adoc#press2007[Press et al., 2007], Section
+10.3 (page 496), and implemented as `BrentSingleOptimizer` in the `com.irurueta.numerical.optimization`
+package.
+
+== Inverse parabolic interpolation
+
+Given three points and their function values stem:[f(a)], stem:[f(b)], stem:[f(c)], the abscissa of the minimum
+of the parabola passing through them is:
+
+[stem]
+++++
+x = b - \frac{1}{2}\,\frac{(b-a)^2[f(b)-f(c)] - (b-c)^2[f(b)-f(a)]}{(b-a)[f(b)-f(c)] - (b-c)[f(b)-f(a)]}
+++++
+
+This formula fails only when the three points are collinear (zero denominator), and it is just as happy
+jumping to a parabolic *maximum* as to a minimum — so no scheme relying on it alone can be trusted. The task is
+to detect, robustly, when the function is behaving cooperatively enough to make this step worthwhile, and to
+fall back to golden section search otherwise.
+
+== Brent's bookkeeping
+
+At each stage, the method tracks six points (not necessarily distinct): stem:[a] and stem:[b] bracket the
+minimum; stem:[x] is the point with the lowest function value found so far; stem:[w] is the point with the
+second-lowest; stem:[v] is the previous value of stem:[w]; and stem:[u] is the most recently evaluated point.
+A parabolic step, fit through stem:[x], stem:[v], and stem:[w], is accepted only if it:
+
+* falls within the bracket stem:[(a, b)], and
+* moves less than half the distance moved on the step *before last* — this ensures the parabolic steps are
+  actually converging, rather than settling into some non-convergent cycle.
+
+In the worst case where parabolic steps are technically acceptable but useless, the method ends up alternating
+between parabolic and golden-section steps, still converging by virtue of the latter. Neither step type is
+ever allowed to move to a point closer than `tolerance` to an already-evaluated point — there is no usable
+information in doing so, since the function there would differ only by roundoff.
+
+[mermaid]
+....
+flowchart TD
+    A["Track a, b (bracket), x (best), w (2nd best),\nv (previous w), and the step-before-last size"] --> B{"is x within tolerance\nof the bracket midpoint?"}
+    B -->|"yes"| C["Done: return x, f(x)"]
+    B -->|"no"| D{"was the previous step\nlarge enough to try again?"}
+    D -->|"yes"| E["Fit a parabola through x, v, w"]
+    E --> F{"does the parabolic step land in-bracket\nand move less than half the step before last?"}
+    F -->|"yes"| G["Take the parabolic step"]
+    F -->|"no"| H["Take a golden-section step instead"]
+    D -->|"no"| H
+    G --> I["Evaluate f at the new point; update\na, b, x, w, v bookkeeping"]
+    H --> I
+    I --> B
+....
+
+A typical ending configuration has stem:[a] and stem:[b] about stem:[2 \times \text{tolerance}] apart, with
+stem:[x] at their midpoint — accurate to within stem:[\pm\text{tolerance}], fractionally.
+
+== Library implementation
+
+`BrentSingleOptimizer` extends `BracketedSingleOptimizer`, inheriting the same downhill bracketing routine
+described in xref:algorithms/golden-section-search.adoc[]. It adds:
+
+* `getTolerance()` / `setTolerance(double)` — the fractional precision to isolate the minimum to; default
+  `3e-8`.
+
+Internally, up to `ITMAX = 100` iterations are attempted before the optimizer reports failure to converge. As
+with `GoldenSingleOptimizer`, call `computeBracket(...)` (or supply a bracket directly) before `minimize()`,
+then read `getResult()` / `getEvaluationAtResult()`.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] recommends Brent's method as the default choice for
+one-dimensional minimization without derivatives — reach for
+xref:algorithms/golden-section-search.adoc[] instead only when the integrand's low-order derivatives are
+discontinuous, since parabolic interpolation offers no benefit there. When the derivative is available, see
+xref:algorithms/derivative-brent-optimization.adoc[] for a variant of this same method that uses it.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return (point - 2.0) * (point - 2.0);
+    }
+};
+
+final var optimizer = new BrentSingleOptimizer();
+optimizer.setListener(listener);
+optimizer.computeBracket(0.0, 1.0);
+optimizer.minimize();
+
+final var xmin = optimizer.getResult();          // approximately 2.0
+final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
+----

@@ -1,0 +1,99 @@
+= Brent's Method (Root Finding)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+In practice, even seemingly well-behaved functions can be pathological enough that
+xref:algorithms/bisection-root-finding.adoc[bisection] converges *faster* than the superlinear methods that
+formally beat it — a choppy function, or a smooth one whose second derivative changes sharply near the root,
+can fool xref:algorithms/secant-false-position-root-finding.adoc[secant/false position] or even
+xref:algorithms/ridder-root-finding.adoc[Ridder's method]. This variant, known as the van Wijngaarden-Dekker-
+Brent method (Brent's method for short), keeps track of whether a superlinear step is actually paying off and,
+if not, interleaves bisection steps to guarantee at least linear convergence regardless. It is described in
+xref:reference.adoc#press2007[Press et al., 2007], Section 9.3 (page 454), and implemented as
+`BrentSingleRootEstimator` in the `com.irurueta.numerical.roots` package.
+
+NOTE: This is the root-finding form of Brent's method, distinct from the *minimization* form described in
+xref:algorithms/brent-optimization.adoc[]. Both interleave a superlinear technique with a guaranteed-safe
+fallback, but solve different problems — one seeks stem:[f(x) = 0], the other seeks a minimum of stem:[f].
+
+== Inverse quadratic interpolation
+
+xref:algorithms/secant-false-position-root-finding.adoc[] and xref:algorithms/ridder-root-finding.adoc[]
+extrapolate using two or three points, respectively, but neither fits a genuine quadratic through three
+points. Brent's method does exactly that — fitting stem:[x] as a quadratic function *of* stem:[y] (inverse
+quadratic interpolation), so that its value at stem:[y = 0] gives the next root estimate directly, without
+needing to solve a quadratic equation for stem:[x]:
+
+[stem]
+++++
+x = b + \frac{P}{Q}
+++++
+
+where, writing stem:[R \equiv f(b)/f(c)], stem:[S \equiv f(b)/f(a)], stem:[T \equiv f(a)/f(c)]:
+
+[stem]
+++++
+P = S\big[T(R-T)(c-b) - (1-R)(b-a)\big], \qquad Q = (T-1)(R-1)(S-1)
+++++
+
+Here stem:[b] is the current best root estimate, and stem:[a], stem:[c] are two previous points; stem:[P/Q]
+should be a "small" correction. Quadratic methods, however, only behave well when the function itself is
+smooth — a badly-behaved function can produce wild estimates, or an inappropriate division by
+stem:[Q \approx 0].
+
+== Guarding the quadratic step with bisection
+
+Brent's method never applies the correction blindly. Before dividing, it checks whether the resulting point
+would actually fall within the current bracket and represent genuine progress; if not — or if the bracket
+simply is not shrinking fast enough — it takes a bisection step instead. This combination is what
+xref:reference.adoc#press2007[Press et al., 2007] proves is *guaranteed* to converge, so long as the function
+can be evaluated throughout the original bracketing interval: the sureness of bisection whenever the function
+is uncooperative, and the speed of inverse quadratic interpolation whenever it is not.
+
+[mermaid]
+....
+flowchart TD
+    A["Bracket (a, b) with f(a), f(b) of opposite sign;\ntrack current best b, previous points a, c"] --> B{"within tolerance of the root?"}
+    B -->|"yes"| C["Return b as the root"]
+    B -->|"no"| D{"is the bracket shrinking fast enough,\nand |a| > |b|?"}
+    D -->|"yes"| E["Attempt inverse quadratic interpolation\n(or linear interpolation if a == c)"]
+    E --> F{"does the resulting step\nland within bounds?"}
+    F -->|"yes"| G["Accept the interpolated step"]
+    F -->|"no"| H["Fall back to bisection"]
+    D -->|"no"| H
+    G --> I["Evaluate f at the new point;\nupdate a, b, c bookkeeping"]
+    H --> I
+    I --> B
+....
+
+== Library implementation
+
+`BrentSingleRootEstimator` extends `BracketedSingleRootEstimator`, sharing the automatic bracket search
+described in xref:algorithms/bisection-root-finding.adoc[], and adds:
+
+* `getTolerance()` / `setTolerance(double)` — the accuracy to converge to; default `1e-6`.
+
+Up to `ITMAX = 100` iterations are attempted. After `estimate()` completes, `getRoot()` returns the estimated
+root.
+
+TIP: xref:reference.adoc#press2007[Press et al., 2007] recommends this as the method of choice for a bracketed
+root of a general one-dimensional function whenever the derivative is not easily available — reach for
+xref:algorithms/newton-raphson-root-finding.adoc[] instead once a derivative is available and cheap to compute.
+
+== Example
+
+[source,java]
+----
+final var listener = new SingleDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double point) {
+        return point * point - 4.0;
+    }
+};
+
+final var estimator = new BrentSingleRootEstimator(listener, 0.0, 10.0, 1e-9);
+estimator.estimate();
+
+final var root = estimator.getRoot(); // approximately 2.0
+----

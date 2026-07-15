@@ -1,0 +1,95 @@
+= Coefficients of the Interpolating Polynomial
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+xref:algorithms/polynomial-interpolation.adoc[] evaluates the interpolating polynomial at a target point
+without ever forming its coefficients explicitly — which is normally the right approach. Occasionally, though,
+the coefficients themselves are what is needed (e.g. to interpolate a function and several of its derivatives
+simultaneously, or to convolve tabulated data analytically with another function). This package provides two
+estimators for that narrower problem, described in xref:reference.adoc#press2007[Press et al., 2007], Section
+3.5 (page 128).
+
+== Why this is a different, harder problem
+
+Writing the interpolating polynomial as stem:[y = c_0 + c_1 x + c_2 x^2 + \cdots + c_{N-1} x^{N-1}], the
+coefficients stem:[c_i] satisfy the linear system:
+
+[stem]
+++++
+\begin{bmatrix}
+1 & x_0 & x_0^2 & \cdots & x_0^{N-1} \\
+1 & x_1 & x_1^2 & \cdots & x_1^{N-1} \\
+\vdots & & & & \vdots \\
+1 & x_{N-1} & x_{N-1}^2 & \cdots & x_{N-1}^{N-1}
+\end{bmatrix}
+\begin{bmatrix} c_0 \\ c_1 \\ \vdots \\ c_{N-1} \end{bmatrix}
+=
+\begin{bmatrix} y_0 \\ y_1 \\ \vdots \\ y_{N-1} \end{bmatrix}
+++++
+
+This is a *Vandermonde* system, and it can be considerably more ill-conditioned than evaluating the
+interpolating polynomial at a point directly. In other words: finding *interpolated values* by
+xref:algorithms/polynomial-interpolation.adoc[] is a well-behaved problem even when finding the polynomial's
+*coefficients* is numerically difficult. Values recomputed from estimated coefficients also will not, in
+general, pass exactly back through the original tabulated points, unlike direct interpolation. Both estimators
+in this package build a polynomial of degree exactly stem:[N-1] through all stem:[N] given points — this is
+not curve *fitting* (which uses fewer coefficients than data points to smooth over measurement error); see
+xref:algorithms/linear-least-squares.adoc[] for that problem instead.
+
+== Two algorithms, two trade-offs
+
+=== Lagrange formula with synthetic division
+
+`SimpleInterpolatingPolynomialEstimator` builds the "master polynomial"
+stem:[P(x) = \prod_{i=0}^{N-1}(x - x_i)] via a simple recurrence, then for each point stem:[x_j] divides
+stem:[P(x)] synthetically by stem:[(x - x_j)] to extract that point's contribution to the Lagrange formula,
+accumulating the result into the coefficient array. This costs stem:[O(N^2)] operations.
+
+=== Successive reduction via Neville extrapolation
+
+`AccurateInterpolatingPolynomialEstimator` instead reuses
+xref:algorithms/polynomial-interpolation.adoc[`PolynomialInterpolator`]'s own Neville-algorithm machinery:
+extrapolating the current interpolating polynomial to stem:[x = 0] gives exactly the constant coefficient
+stem:[c_0]. Subtracting stem:[c_0] from every stem:[y_i] and dividing by the corresponding stem:[x_i] reduces
+the problem to finding the *next* coefficient of a polynomial one degree lower — so the point closest to zero
+is discarded and the process repeats. This costs stem:[O(N^3)] operations — more expensive than the Lagrange
+approach — but is generally the more numerically stable of the two.
+
+[mermaid]
+....
+flowchart TD
+    A["SimpleInterpolatingPolynomialEstimator: O(N^2)"] --> A1["Build master polynomial P(x) = product of (x - x_i)"]
+    A1 --> A2["For each point x_j: divide P(x) by (x - x_j) synthetically,\naccumulate Lagrange contribution into cof[]"]
+    B["AccurateInterpolatingPolynomialEstimator: O(N^3)"] --> B1["Extrapolate current Neville tableau to x = 0 -> next coefficient"]
+    B1 --> B2["Subtract that coefficient from all y_i, divide by x_i"]
+    B2 --> B3["Discard the point with smallest |x_i|; repeat on the reduced problem"]
+....
+
+Neither method works well for large stem:[N] — both are fundamentally limited by the intrinsic
+ill-conditioning of the Vandermonde problem, not by which algorithm is used. As a rule of thumb, stem:[N] up to
+8–10 is reasonable in single precision, and roughly double that in double precision.
+
+== Library implementation
+
+Both classes extend the abstract `InterpolatingPolynomialEstimator`, which provides the shared, convenient API
+around each subclass's `estimate(x, y, cof)`:
+
+* `estimate(double[] x, double[] y)` — returns a new `Polynomial` (from `com.irurueta.numerical.polynomials`).
+* `estimateCoefficients(double[] x, double[] y)` — returns the raw coefficient array.
+* `estimate(double[] x, double[] y, Polynomial result)` / `estimate(double[] x, double[] y, double[] cof)` —
+  fill an existing instance instead of allocating a new one.
+
+TIP: If stem:[x = 0] is far outside the range of the tabulated abscissas, the coefficients will tend to become
+very large, with the real information content buried in small differences between them — a separate source of
+ill-conditioning on top of the Vandermonde problem itself. If that happens, consider re-centering the problem
+so that stem:[x = 0] falls somewhere sensible within the data range.
+
+== Example
+
+[source,java]
+----
+final var estimator = new SimpleInterpolatingPolynomialEstimator();
+final var polynomial = estimator.estimate(x, y); // Polynomial of degree x.length - 1
+final var value = polynomial.evaluate(target);
+----

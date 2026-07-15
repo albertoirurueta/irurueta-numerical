@@ -1,0 +1,151 @@
+= PROMedS (Progressive Least Median of Squares)
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+PROMedS combines xref:algorithms/prosac-robust-estimation.adoc[PROSAC]'s quality-guided progressive sampling
+(for speed) with xref:algorithms/lmeds-robust-estimation.adoc[LMedS]'s median-of-residuals criterion (for a
+setup that needs no inlier threshold to be guessed in advance). It is described in
+xref:reference.adoc#irurueta2012[Irurueta and Morros, 2012], and implemented as `PROMedSRobustEstimator` in the
+`com.irurueta.numerical.robust` package. This paper is by this library's own author, published at the
+3DTV-Conference in the context of fundamental matrix estimation, and its reference implementation is what this
+class provides.
+
+== Combining two orthogonal ideas
+
+xref:algorithms/prosac-robust-estimation.adoc[PROSAC] and xref:algorithms/lmeds-robust-estimation.adoc[LMedS]
+improve on xref:algorithms/ransac-robust-estimation.adoc[RANSAC] along two independent axes — *how samples are
+drawn* and *how a candidate is scored* — and nothing prevents combining both:
+
+[cols="1,2,2", options="header"]
+|===
+|
+|Sampling
+|Scoring
+
+|xref:algorithms/prosac-robust-estimation.adoc[PROSAC]
+|Progressive (quality-guided) — *this*
+|Inlier count with fixed threshold — kept from RANSAC
+
+|xref:algorithms/lmeds-robust-estimation.adoc[LMedS]
+|Uniform random — kept from RANSAC
+|Median residual, threshold-free — *this*
+
+|PROMedS
+|Progressive (quality-guided)
+|Median residual, threshold-free
+|===
+
+PROMedS reuses xref:algorithms/prosac-robust-estimation.adoc[PROSAC]'s growth function stem:[g(t)], termination
+length stem:[n^*], and non-randomness/maximality stopping tests verbatim (see that page for the full
+derivation), but instead of counting inliers against a fixed threshold to score a candidate, it computes the
+median of the residuals and derives a threshold dynamically — exactly as
+xref:algorithms/lmeds-robust-estimation.adoc[LMedS] does, using the same Rousseeuw scale estimate
+stem:[\hat\sigma = 1.4826(1 + 5/(N-m))\sqrt{\operatorname{median}_i(r_i^2)}].
+
+[mermaid]
+....
+flowchart TD
+    A["Sort samples by quality (as PROSAC);\ninitialize growth function state"] --> B["Draw a progressive sample\n(as PROSAC: grows from top-quality prefix)"]
+    B --> C["Fit candidate model(s); compute residuals for ALL samples"]
+    C --> D["Find median residual (as LMedS);\nderive threshold dynamically"]
+    D --> E{"lower median than the best so far?"}
+    E -->|"yes"| F["Keep as new best model"]
+    E -->|"no"| G["Discard this candidate"]
+    F --> H["Update termination length n*\nusing PROSAC's non-randomness/maximality tests"]
+    G --> H
+    H --> I{"stopping criteria satisfied?"}
+    I -->|"no"| B
+    I -->|"yes"| J["Return the best model found"]
+....
+
+== Optional dual-model check
+
+A caller can additionally supply a fixed inlier threshold — as for
+xref:algorithms/msac-robust-estimation.adoc[MSAC] — without giving up the threshold-free LMedS criterion.
+When enabled, PROMedS tracks *both* an LMedS-style inlier set (derived from the dynamic median-based threshold)
+and an MSAC-style inlier set (derived from the supplied fixed threshold) for each candidate, and keeps whichever
+of the two is *more restrictive* (has fewer inliers) as the operative one — a conservative choice that avoids
+either model silently accepting more outliers than the other would. This is purely optional: with no threshold
+supplied, PROMedS behaves as pure progressive-LMedS.
+
+== Library implementation
+
+`PROMedSRobustEstimator<T>` requires a `PROMedSRobustEstimatorListener<T>`, which extends
+`PROSACRobustEstimatorListener<T>` (see xref:algorithms/robust-estimation-framework.adoc[]) — so both
+`getQualityScores()` (for progressive sampling) and `getThreshold()` (for the optional dual-model check) must
+be implemented, though the latter is only consulted when explicitly enabled.
+
+Shared parameters (`getConfidence()`, `setConfidence(double)`, `getMaxIterations()`, `setMaxIterations(int)`)
+and the PROSAC-specific ones (`getMaxOutliersProportion()`, `getEta0()`, `getBeta()`) behave as described in
+xref:algorithms/prosac-robust-estimation.adoc[] and xref:algorithms/robust-estimation-framework.adoc[].
+PROMedS-specific tuning:
+
+* `getInlierFactor()` / `setInlierFactor(double)` — scales the dynamically derived threshold, as in
+  xref:algorithms/lmeds-robust-estimation.adoc[LMedS]; default `1.0`.
+* `isUseInlierThresholds()` / `setUseInlierThresholds(boolean)` — enables the optional dual-model check against
+  a caller-supplied threshold; default `true`.
+* `isStopThresholdEnabled()` / `setStopThresholdEnabled(boolean)` — when a threshold is supplied, allows early
+  termination once the dynamically derived threshold drops below it; default `true`.
+
+After `estimate()` completes, `getInliersData()` returns a `PROMedSInliersData`, which exposes both
+`getInliersLMedS()` and `getInliersMSAC()` (whichever model is active is also available directly via
+`getInliers()`), plus `getEstimatedThreshold()` and `getBestMedianResidual()`.
+
+TIP: xref:reference.adoc#irurueta2012[Irurueta and Morros, 2012] report that PROMedS combines PROSAC's speed
+(often around two orders of magnitude faster than plain RANSAC or LMedS) with accuracy comparable to LMedS,
+while needing no threshold to be known in advance — making it a reasonable default whenever a quality score is
+available for each sample and the right inlier threshold is not obvious ahead of time.
+
+== Example
+
+The same line-fitting problem as xref:algorithms/prosac-robust-estimation.adoc[], with quality scores guiding
+sampling but no threshold required:
+
+[source,java]
+----
+final var listener = new PROMedSRobustEstimatorListener<double[]>() {
+    @Override
+    public int getTotalSamples() {
+        return xCoords.length;
+    }
+
+    @Override
+    public int getSubsetSize() {
+        return 2;
+    }
+
+    @Override
+    public double getThreshold() {
+        return 1.0; // only consulted if useInlierThresholds is enabled
+    }
+
+    @Override
+    public double[] getQualityScores() {
+        return qualityScores;
+    }
+
+    @Override
+    public void estimatePreliminarSolutions(final int[] samplesIndices, final List<double[]> solutions) {
+        final var x1 = xCoords[samplesIndices[0]];
+        final var y1 = yCoords[samplesIndices[0]];
+        final var x2 = xCoords[samplesIndices[1]];
+        final var y2 = yCoords[samplesIndices[1]];
+
+        final var b = (y2 - y1) / (x2 - x1);
+        final var a = y1 - b * x1;
+        solutions.add(new double[]{a, b});
+    }
+
+    @Override
+    public double computeResidual(final double[] currentEstimation, final int i) {
+        final var a = currentEstimation[0];
+        final var b = currentEstimation[1];
+        return Math.abs(yCoords[i] - (a + b * xCoords[i]));
+    }
+};
+
+final var estimator = new PROMedSRobustEstimator<>(listener);
+estimator.setConfidence(0.99);
+final var line = estimator.estimate(); // [a, b]
+----
