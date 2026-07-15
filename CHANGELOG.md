@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-07-15
+
+### Added
+
+- Added the Antora documentation site, including a full algorithm catalog with one page per algorithm, an
+  architecture overview, and installation instructions.
+- Added Claude Code skills to automate common repository workflows (release management, documentation generation,
+  code review, and more).
+
 ## [1.5.0] - 2026-03-03
 
 ### Fixed
@@ -83,7 +92,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - Curve/surface fitting (Levenberg-Marquardt and linear/SVD-based fitters).
   - Signal processing utilities: `KalmanFilter`, 1D convolution, and measurement noise covariance estimation.
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.5.0...develop
+[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.0...HEAD
+[1.6.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.3.2...1.4.0
 [1.3.2]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.3.1...1.3.2
