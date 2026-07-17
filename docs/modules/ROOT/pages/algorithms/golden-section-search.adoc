@@ -64,6 +64,8 @@ that same fractional position within the larger of the two current segments. Bec
 self-replicating, starting from any bracket quickly converges to it regardless of the triplet's initial
 proportions.
 
+image::algorithms/golden-section-bracketing.svg[alt="Successive bracketing of a minimum: starting from the triplet 1, 3, 2, each new trial point 4, 5, 6 replaces whichever outer point no longer helps, shrinking the bracket until it tightly encloses the minimum",width=640]
+
 Every new function evaluation shrinks the bracket by a fixed factor of stem:[0.61803] — reliable, but only
 *linearly* convergent (each new significant figure costs a comparable number of further evaluations), unlike
 the superlinear convergence of xref:algorithms/brent-optimization.adoc[].

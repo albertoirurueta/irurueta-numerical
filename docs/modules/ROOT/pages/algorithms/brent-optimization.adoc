@@ -13,6 +13,8 @@ package.
 
 == Inverse parabolic interpolation
 
+image::algorithms/brent-parabolic-fit.svg[alt="Successive parabolic interpolation converging to a minimum: a parabola through points 1, 2, 3 lands at 4; a new parabola through 2, 3, 4 lands at 5, closer still to the true minimum",width=640]
+
 Given three points and their function values stem:[f(a)], stem:[f(b)], stem:[f(c)], the abscissa of the minimum
 of the parabola passing through them is:
 

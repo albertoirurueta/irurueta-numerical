@@ -20,6 +20,8 @@ new gradient at any line minimum is, by construction, perpendicular to the direc
 long, narrow valley this forces a sequence of right-angle turns, taking many small steps to reach the valley
 floor instead of running straight down it.
 
+image::algorithms/conjugate-gradient-valley.svg[alt="(a) Steepest descent zigzagging down a long narrow valley, crossing and re-crossing it many times; (b) the underlying reason: exact line search leaves the gradient perpendicular to the direction just traversed, forcing the next step to turn 90 degrees",width=640]
+
 == Constructing conjugate directions from gradients alone
 
 For the local quadratic approximation stem:[f(\mathbf{x}) \approx c - \mathbf{b}^\top\mathbf{x} +

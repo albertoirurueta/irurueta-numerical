@@ -10,6 +10,12 @@ singularity. It is described in xref:reference.adoc#press2007[Press et al., 2007
 161, 167–172), and implemented as `MidPointQuadrature` (and `MidPointMatrixQuadrature`) plus four derived
 quadratures that each apply a different change of variables.
 
+image::algorithms/trapezoidal-quadrature.svg[alt="Panel (a) contrasts closed formulas, which evaluate the integrand at both endpoints, with open formulas such as the midpoint rule, which use only interior points and so never need to evaluate the integrand exactly at a and b",width=640]
+
+Panel (a) above is the key distinction: because the midpoint rule never samples stem:[f] at stem:[x_0] or
+stem:[x_{N-1}], it keeps working even when the integrand is undefined, infinite, or singular exactly at an
+endpoint — the situations this page's five quadrature classes are built to handle.
+
 == What makes an integral "improper"
 
 This package's midpoint-based quadratures handle four situations:

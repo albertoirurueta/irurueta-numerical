@@ -28,6 +28,8 @@ initial guess, wherever that leads.
 
 == Reflect, expand, contract, shrink
 
+image::algorithms/simplex-moves.svg[alt="The four possible outcomes of a downhill simplex step, shown as a 2D triangle simplex: (a) reflection through the opposite face, (b) reflection followed by expansion, (c) contraction back toward the face, (d) multiple contraction shrinking every vertex toward the best one",width=640]
+
 Each step identifies the simplex's highest (worst), second-highest, and lowest (best) vertices by function
 value, then tries to replace the worst one by reflecting it through the centroid of all the others:
 

@@ -10,6 +10,13 @@ single, or multiple — converging to a root from essentially any starting point
 xref:reference.adoc#press2007[Press et al., 2007], Section 9.5 (page 463), and implemented as
 `LaguerrePolynomialRootsEstimator` in the `com.irurueta.numerical.roots` package.
 
+image::algorithms/polynomial-roots-magnification.svg[alt="At normal scale, linear, quadratic, and cubic behavior near a root all look like one clean crossing; only high magnification reveals that the quadratic actually has two nearby roots and the cubic is a flat, ill-conditioned crossing",width=640]
+
+This is why root-finding for polynomials of degree three and up deserves its own method: at the scale a root is
+first located, a close pair of roots or a flattened multiple root is often indistinguishable from a single,
+well-conditioned one. Only after zooming in — exactly what iterative refinement and polishing do — does the
+true structure become visible.
+
 == Motivating the formula
 
 Writing a degree-stem:[n] polynomial in terms of its roots, stem:[P_n(x) = (x-x_0)(x-x_1)\cdots(x-x_{n-1})],

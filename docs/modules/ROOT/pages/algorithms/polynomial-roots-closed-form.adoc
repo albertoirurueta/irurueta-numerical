@@ -26,6 +26,8 @@ x = -\frac{b}{a}
 
 == Quadratic equations
 
+image::algorithms/quadratic-cubic-discriminant.svg[alt="The quadratic discriminant classifies a parabola's roots as two crossings, one tangent point, or none; the cubic's h classifies it as three crossings or one crossing plus an inflection",width=640]
+
 For stem:[ax^2 + bx + c = 0], the discriminant stem:[\Delta = b^2 - 4ac] both solves the equation and
 classifies its roots:
 

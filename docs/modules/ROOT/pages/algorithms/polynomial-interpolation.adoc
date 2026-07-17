@@ -56,6 +56,8 @@ Lagrange's classical formula, but evaluating it directly is both awkward to code
 polynomials stem:[P_{i(i+1)\ldots(i+m)}] — the value at stem:[x] of the unique polynomial through
 stem:[m+1] consecutive tabulated points. Each entry is built from its two "parents" in the previous column:
 
+image::algorithms/neville-tableau.svg[alt="Neville's algorithm tableau for four points: P0..P3 combine pairwise into P01, P12, P23, which combine again into P012, P123, converging to the single interpolated value P0123",width=560]
+
 [stem]
 ++++
 P_{i(i+1)\ldots(i+m)} = \frac{(x - x_{i+m})\,P_{i(i+1)\ldots(i+m-1)} + (x_i - x)\,P_{(i+1)\ldots(i+m)}}

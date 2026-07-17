@@ -43,6 +43,8 @@ functions and the data:
 A_{ij} = \frac{X_j(x_i)}{\sigma_i}, \qquad b_i = \frac{y_i}{\sigma_i}
 ++++
 
+image::algorithms/design-matrix.svg[alt="The design matrix A has one row per data point and one column per basis function, each entry the basis function evaluated at that point and scaled by the point's measurement uncertainty",width=580]
+
 Setting stem:[\partial \chi^2 / \partial a_k = 0] for every parameter gives the *normal equations*:
 
 [stem]

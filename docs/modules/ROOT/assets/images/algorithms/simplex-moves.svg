@@ -1,0 +1,93 @@
+<svg viewBox="0 0 640 720" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow-sx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <style>
+    .panel-card { fill:none; stroke:#e2e8f0; stroke-width:1.5; }
+    .before { fill:#1e293b12; stroke:#1e293b; stroke-width:2.25; }
+    .reflect { fill:#2563eb1a; stroke:#2563eb; stroke-width:2; stroke-dasharray:6 4; }
+    .expand { fill:#f973161a; stroke:#f97316; stroke-width:2; stroke-dasharray:2 3; }
+    .contract { fill:#16a34a1a; stroke:#16a34a; stroke-width:2; stroke-dasharray:6 4; }
+    .shrink { fill:#7c3aed1a; stroke:#7c3aed; stroke-width:2; stroke-dasharray:6 4; }
+    .arrow { stroke:#334155; stroke-width:1.5; fill:none; }
+    .pt { fill:#ffffff; stroke:#1e293b; stroke-width:2; }
+    .lbl { fill:#334155; font-size:12.5px; }
+    .cap { fill:#0f172a; font-size:14px; font-weight:600; }
+    .note { fill:#334155; font-size:11px; }
+  </style>
+
+  <!-- panel (a): reflection -->
+  <g transform="translate(20,20)">
+    <rect class="panel-card" x="0" y="0" width="280" height="340" rx="10"/>
+    <text class="cap" x="12" y="24">(a) reflection</text>
+    <polygon class="before" points="60,210 180,210 120,150"/>
+    <polygon class="reflect" points="60,210 180,210 120,270"/>
+    <line class="arrow" marker-end="url(#arrow-sx)" x1="120" y1="163" x2="120" y2="258"/>
+    <circle class="pt" cx="60" cy="210" r="4"/>
+    <circle class="pt" cx="180" cy="210" r="4"/>
+    <circle class="pt" cx="120" cy="150" r="4" fill="#1e293b"/>
+    <circle class="pt" cx="120" cy="270" r="4" stroke="#2563eb"/>
+    <text class="lbl" x="42" y="228">low</text>
+    <text class="lbl" x="163" y="228">mid</text>
+    <text class="lbl" x="98" y="140">high</text>
+    <text class="lbl" x="90" y="292" fill="#2563eb">reflected</text>
+    <text class="note" x="12" y="316">high point mirrors through the opposite face</text>
+  </g>
+
+  <!-- panel (b): reflection and expansion -->
+  <g transform="translate(340,20)">
+    <rect class="panel-card" x="0" y="0" width="280" height="340" rx="10"/>
+    <text class="cap" x="12" y="24">(b) reflection + expansion</text>
+    <polygon class="before" points="60,210 180,210 120,150"/>
+    <polygon class="reflect" points="60,210 180,210 120,270" opacity="0.55"/>
+    <polygon class="expand" points="60,210 180,210 120,330"/>
+    <line class="arrow" marker-end="url(#arrow-sx)" x1="120" y1="163" x2="120" y2="318"/>
+    <circle class="pt" cx="60" cy="210" r="4"/>
+    <circle class="pt" cx="180" cy="210" r="4"/>
+    <circle class="pt" cx="120" cy="150" r="4" fill="#1e293b"/>
+    <circle class="pt" cx="120" cy="270" r="3.5" stroke="#2563eb"/>
+    <circle class="pt" cx="120" cy="330" r="4" stroke="#f97316"/>
+    <text class="lbl" x="42" y="228">low</text>
+    <text class="lbl" x="163" y="228">mid</text>
+    <text class="lbl" x="98" y="140">high</text>
+    <text class="lbl" x="130" y="265" fill="#2563eb" font-size="10.5">reflected</text>
+    <text class="lbl" x="128" y="332" fill="#f97316">expanded further</text>
+    <text class="note" x="12" y="316">a step that keeps improving is pushed even further</text>
+  </g>
+
+  <!-- panel (c): contraction -->
+  <g transform="translate(20,380)">
+    <rect class="panel-card" x="0" y="0" width="280" height="300" rx="10"/>
+    <text class="cap" x="12" y="24">(c) contraction</text>
+    <polygon class="before" points="60,190 180,190 120,130"/>
+    <polygon class="contract" points="60,190 180,190 120,160"/>
+    <line class="arrow" marker-end="url(#arrow-sx)" x1="120" y1="142" x2="120" y2="154"/>
+    <circle class="pt" cx="60" cy="190" r="4"/>
+    <circle class="pt" cx="180" cy="190" r="4"/>
+    <circle class="pt" cx="120" cy="130" r="4" fill="#1e293b"/>
+    <circle class="pt" cx="120" cy="160" r="4" stroke="#16a34a"/>
+    <text class="lbl" x="42" y="208">low</text>
+    <text class="lbl" x="163" y="208">mid</text>
+    <text class="lbl" x="98" y="120">high</text>
+    <text class="note" x="12" y="240">a worse step retreats halfway back toward the face</text>
+  </g>
+
+  <!-- panel (d): multiple contraction toward the low point -->
+  <g transform="translate(340,380)">
+    <rect class="panel-card" x="0" y="0" width="280" height="300" rx="10"/>
+    <text class="cap" x="12" y="24">(d) multiple contraction</text>
+    <polygon class="before" points="60,190 180,190 120,130"/>
+    <polygon class="shrink" points="60,190 120,190 90,160"/>
+    <circle class="pt" cx="60" cy="190" r="4" stroke="#7c3aed"/>
+    <circle class="pt" cx="180" cy="190" r="4"/>
+    <circle class="pt" cx="120" cy="130" r="4" fill="#1e293b"/>
+    <circle class="pt" cx="120" cy="190" r="4" stroke="#7c3aed"/>
+    <circle class="pt" cx="90" cy="160" r="4" stroke="#7c3aed"/>
+    <text class="lbl" x="20" y="212" fill="#7c3aed">low (fixed)</text>
+    <text class="lbl" x="163" y="208">mid</text>
+    <text class="lbl" x="98" y="120">high</text>
+    <text class="note" x="12" y="240">even contraction fails: shrink toward low on every axis</text>
+  </g>
+</svg>

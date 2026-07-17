@@ -18,6 +18,15 @@ prerequisite, and the same automatic bracket-search routine: given two starting 
 whichever one has the smaller stem:[|f|] further away (by a factor of `1.6`) until the function changes sign
 or the search gives up after 50 tries.
 
+image::algorithms/bisection-brackets.svg[alt="Four scenarios encountered when bracketing a root: an isolated root, a hidden root pair, a choppy function with many roots, and a singularity mistaken for a root",width=640]
+
+A bracket is only as trustworthy as the assumptions behind it. (a) is the well-behaved case bisection is built
+for: a single, cleanly isolated root. (b) shows why a *single* sign change at the endpoints is not the same
+guarantee as "exactly one root inside" — an even number of roots can hide between two same-signed endpoints
+entirely undetected. (c) is the opposite danger: a sufficiently choppy function can pack far more roots into a
+bracket than a naive search expects. (d) is the case called out below — bisection cannot distinguish a genuine
+root from a singularity where the function's sign flips without ever passing through zero.
+
 Bisection additionally tolerates one case the other methods do not handle as gracefully: if the interval
 straddles a singularity rather than a genuine root (e.g. stem:[f(x) = 1/(x-c)]), bisection will still converge
 — to the singularity itself, since that is indistinguishable numerically from a genuine sign change. This is

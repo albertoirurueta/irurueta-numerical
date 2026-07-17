@@ -32,6 +32,13 @@ methods differ only in *which* point is kept:
   an old, "stale" point for many iterations if the function is not well approximated by a straight line over
   the whole bracket.
 
+image::algorithms/secant-false-position.svg[alt="Geometric comparison of the secant method and false position: secant discards the older of the two most recent points on every iteration, while false position keeps point 1 bracketing the root across many iterations",width=640]
+
+Both panels start from the same two points 1 and 2. The secant method (a) always interpolates through the two
+*most recent* estimates, so the working pair slides steadily toward the root. False position (b) instead keeps
+point 1 fixed for as long as it remains on the opposite side of the root from the newest estimate — every new
+line is drawn back to that same anchor, which is why its estimates 3 and 4 creep in from one side only.
+
 [mermaid]
 ....
 flowchart TD

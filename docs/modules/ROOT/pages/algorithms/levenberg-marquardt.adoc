@@ -185,6 +185,13 @@ covariance using the input samples' Jacobians and standard deviations
 (stem:[\mathrm{Cov} = (J^\top W J)^{-1}]) to produce a covariance on the true scale of the problem, as discussed
 in xref:reference.adoc#press2007[Press et al., 2007], Section 15.6 (page 812).
 
+image::algorithms/confidence-ellipses.svg[alt="Nested joint confidence-region ellipses for two fitted parameters at increasing delta chi-squared thresholds; projecting the outer ellipse onto one axis gives that parameter's own individual confidence interval",width=620]
+
+The covariance matrix is what makes this picture possible: its diagonal gives each parameter's own variance,
+directly usable for stem:[\pm 1\sigma]-style intervals, while the full matrix (diagonal *and* off-diagonal
+terms) traces out the joint confidence ellipse shown above for any pair of parameters — a strictly larger
+region than treating the two parameters as independent would suggest, whenever they are correlated.
+
 == Example
 
 Fitting a single Gaussian stem:[y(x) = B \exp\left(-\left(\frac{x - E}{G}\right)^2\right)] — the same example

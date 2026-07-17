@@ -38,6 +38,8 @@ root cheaply.
 
 == Why the plain iteration can fail
 
+image::algorithms/newton-raphson-behavior.svg[alt="Three behaviors of the tangent-line step: (a) quadratic convergence near a well-behaved root, (b) a near-flat tangent at a local extremum sending the next estimate far away, (c) a nonconvergent cycle bouncing between two points",width=660]
+
 Far from the root, where the higher-order Taylor terms are no longer negligible, the tangent-line step can be
 badly wrong — most dramatically when a trial point lands near a local extremum, where stem:[f'(x) \approx 0]
 sends the next estimate flying off toward infinity with no hope of recovery. The plain

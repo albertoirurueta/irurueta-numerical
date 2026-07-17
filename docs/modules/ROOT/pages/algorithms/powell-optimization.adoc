@@ -29,6 +29,8 @@ stops decreasing — is workable but can be badly inefficient: for a function wh
 narrow, diagonally-oriented valley, this takes many tiny zig-zag steps to get anywhere, crossing and
 re-crossing the valley's true axis. What is needed instead is a set of *conjugate directions*.
 
+image::algorithms/powell-valley-zigzag.svg[alt="Coordinate-direction line minimization in a long, narrow, diagonally-oriented valley: alternating horizontal and vertical steps cross and re-cross the valley many times instead of heading straight for the minimum",width=640]
+
 Two directions stem:[\mathbf{u}] and stem:[\mathbf{v}] are conjugate (with respect to the local quadratic
 approximation of stem:[f], with Hessian stem:[A]) when:
 

@@ -66,6 +66,8 @@ periodic.
 the signal appears to bounce back and forth indefinitely.
 |===
 
+image::algorithms/convolution-edge-modes.svg[alt="The four ConvolverEdgeMethod strategies illustrated by how each extends a 5-sample signal past index 0: ZERO_EDGE pads with zero, CONSTANT_EDGE pads with a configured constant, REPEAT_EDGE wraps from the far end, and MIRROR_EDGE reflects the signal back on itself",width=620]
+
 [mermaid]
 ....
 flowchart TD
