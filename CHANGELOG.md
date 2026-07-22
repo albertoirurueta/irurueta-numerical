@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Migrated the build to Java 21 (source/target compatibility).
+
 ## [1.6.0] - 2026-07-15
 
 ### Added
