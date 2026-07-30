@@ -130,3 +130,22 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java[Source]
+
+|`GradientFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/GradientFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/GradientFunctionEvaluatorListener.java[Source]
+
+|`QuasiNewtonMultiOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/QuasiNewtonMultiOptimizer.java[Source]
+|===
+

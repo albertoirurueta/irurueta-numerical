@@ -125,3 +125,22 @@ final var listener = new SingleDimensionFunctionEvaluatorListener() {
 final var integrator = new RombergTrapezoidalQuadratureIntegrator(0.0, 2.0, listener);
 final var result = integrator.integrate();
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Integrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/Integrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/Integrator.java[Source]
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`RombergTrapezoidalQuadratureIntegrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/RombergTrapezoidalQuadratureIntegrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/RombergTrapezoidalQuadratureIntegrator.java[Source]
+|===
+

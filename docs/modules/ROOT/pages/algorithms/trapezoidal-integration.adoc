@@ -121,3 +121,30 @@ final var listener = new SingleDimensionFunctionEvaluatorListener() {
 final var integrator = new TrapezoidalQuadratureIntegrator(0.0, Math.PI, listener);
 final var result = integrator.integrate(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Integrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/Integrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/Integrator.java[Source]
+
+|`IntegratorType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/IntegratorType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/IntegratorType.java[Source]
+
+|`QuadratureType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/QuadratureType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/QuadratureType.java[Source]
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`TrapezoidalQuadratureIntegrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/TrapezoidalQuadratureIntegrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/TrapezoidalQuadratureIntegrator.java[Source]
+|===
+

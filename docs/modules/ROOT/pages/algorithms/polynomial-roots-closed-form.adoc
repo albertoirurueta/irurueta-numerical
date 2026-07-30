@@ -144,3 +144,14 @@ estimator.estimate();
 final var roots = estimator.getRoots(); // Complex[]{-2+0i, 2+0i}
 final var hasTwoRealRoots = estimator.hasTwoDistinctRealRoots(); // true
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SecondDegreePolynomialRootsEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java[Source]
+|===
+

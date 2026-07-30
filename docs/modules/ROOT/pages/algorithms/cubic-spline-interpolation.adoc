@@ -97,3 +97,14 @@ differencing — supplying it via `yp1`/`ypn` produces a more accurate spline ne
 final var interpolator = new CubicSplineInterpolator(x, y);
 final var value = interpolator.interpolate(target);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`CubicSplineInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/CubicSplineInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/CubicSplineInterpolator.java[Source]
+|===
+

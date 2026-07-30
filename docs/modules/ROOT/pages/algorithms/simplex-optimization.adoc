@@ -125,3 +125,18 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java[Source]
+
+|`SimplexMultiOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/SimplexMultiOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/SimplexMultiOptimizer.java[Source]
+|===
+

@@ -126,3 +126,18 @@ estimator.estimate();
 
 final var root = estimator.getRoot(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`SafeNewtonRaphsonSingleRootEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/SafeNewtonRaphsonSingleRootEstimator.java[Source]
+|===
+

@@ -122,3 +122,14 @@ estimator.estimate();
 
 final var roots = estimator.getRoots(); // Complex[]{1+0i, 2+0i, 3+0i}
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`LaguerrePolynomialRootsEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/LaguerrePolynomialRootsEstimator.java[Source]
+|===
+
