@@ -122,3 +122,18 @@ estimator.setConfidence(0.99);
 final var line = estimator.estimate(); // [a, b]
 final var threshold = estimator.getBestInliersData().getEstimatedThreshold(); // computed, not supplied
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`LMedSRobustEstimatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/LMedSRobustEstimatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/LMedSRobustEstimatorListener.java[Source]
+
+|`LMedSRobustEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/LMedSRobustEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/LMedSRobustEstimator.java[Source]
+|===
+

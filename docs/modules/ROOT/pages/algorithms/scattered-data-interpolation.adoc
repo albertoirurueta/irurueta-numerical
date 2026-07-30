@@ -198,3 +198,22 @@ final var kriging = new KrigingInterpolator(points, values);
 final var esterr = new double[1];
 final var krigedValue = kriging.interpolate(target, esterr);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiQuadricRadialBasisFunction`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/MultiQuadricRadialBasisFunction.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/MultiQuadricRadialBasisFunction.java[Source]
+
+|`RadialBasisFunctionInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/RadialBasisFunctionInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/RadialBasisFunctionInterpolator.java[Source]
+
+|`KrigingInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/KrigingInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/KrigingInterpolator.java[Source]
+|===
+

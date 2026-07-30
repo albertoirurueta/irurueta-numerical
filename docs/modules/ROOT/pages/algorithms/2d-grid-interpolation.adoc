@@ -101,3 +101,14 @@ need for higher accuracy or gradient smoothness is already known — it is by fa
 final var interpolator = new BilinearInterpolator(x1, x2, y);
 final var value = interpolator.interpolate(x1Target, x2Target);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`BilinearInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/BilinearInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/BilinearInterpolator.java[Source]
+|===
+

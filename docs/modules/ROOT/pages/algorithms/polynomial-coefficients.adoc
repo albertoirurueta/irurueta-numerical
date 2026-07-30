@@ -93,3 +93,18 @@ final var estimator = new SimpleInterpolatingPolynomialEstimator();
 final var polynomial = estimator.estimate(x, y); // Polynomial of degree x.length - 1
 final var value = polynomial.evaluate(target);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SimpleInterpolatingPolynomialEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/SimpleInterpolatingPolynomialEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/SimpleInterpolatingPolynomialEstimator.java[Source]
+
+|`Polynomial`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/polynomials/Polynomial.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/polynomials/Polynomial.java[Source]
+|===
+

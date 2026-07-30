@@ -130,3 +130,14 @@ for (final var z : measurements) { // measurements: double[] of noisy readings
 
 final var estimate = filter.getStatePost().getElementAtIndex(0);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`KalmanFilter`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/signal/processing/KalmanFilter.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/signal/processing/KalmanFilter.java[Source]
+|===
+

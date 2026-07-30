@@ -64,3 +64,14 @@ already connects stem:[\mathbf{x}_{N-1}] back to stem:[\mathbf{x}_0] itself.
 final var interpolator = new CurveInterpolator(points, false);
 final var pointAtHalfway = interpolator.interpolate(0.5); // coordinate array
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`CurveInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/CurveInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/CurveInterpolator.java[Source]
+|===
+

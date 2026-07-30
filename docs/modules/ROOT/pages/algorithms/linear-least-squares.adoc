@@ -153,3 +153,18 @@ final var params = fitter.getA();          // fitted [a0, a1, a2, a3]
 final var covariance = fitter.getCovar();  // covariance matrix of the parameters
 final var chiSq = fitter.getChisq();       // goodness-of-fit statistic
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`LinearFitterSingleDimensionFunctionEvaluator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/LinearFitterSingleDimensionFunctionEvaluator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/LinearFitterSingleDimensionFunctionEvaluator.java[Source]
+
+|`SimpleSingleDimensionLinearFitter`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitter.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/SimpleSingleDimensionLinearFitter.java[Source]
+|===
+

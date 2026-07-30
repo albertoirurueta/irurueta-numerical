@@ -149,3 +149,18 @@ final var estimator = new PROMedSRobustEstimator<>(listener);
 estimator.setConfidence(0.99);
 final var line = estimator.estimate(); // [a, b]
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`PROMedSRobustEstimatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/PROMedSRobustEstimatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/PROMedSRobustEstimatorListener.java[Source]
+
+|`PROMedSRobustEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/PROMedSRobustEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/PROMedSRobustEstimator.java[Source]
+|===
+

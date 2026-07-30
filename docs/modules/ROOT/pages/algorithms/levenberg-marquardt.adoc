@@ -232,6 +232,20 @@ final var covariance = fitter.getCovar();   // covariance matrix of the paramete
 final var chiSq = fitter.getChisq();        // goodness-of-fit statistic
 ----
 
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`LevenbergMarquardtSingleDimensionFunctionEvaluator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.java[Source]
+
+|`LevenbergMarquardtSingleDimensionFitter`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java[Source]
+|===
+
 == When to use it
 
 Levenberg-Marquardt requires a plausible initial guess and only finds a *local* minimum of stem:[\chi^2] — it

@@ -125,3 +125,14 @@ final var interpolator = new PolynomialInterpolator(x, y, 4);
 final var value = interpolator.interpolate(target);
 final var errorEstimate = interpolator.getDy();
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`PolynomialInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/PolynomialInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/PolynomialInterpolator.java[Source]
+|===
+

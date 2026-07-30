@@ -127,3 +127,18 @@ estimator.setConfidence(0.99);
 final var line = estimator.estimate(); // [a, b]
 final var inliers = estimator.getInliersData();
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`RANSACRobustEstimatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/RANSACRobustEstimatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimatorListener.java[Source]
+
+|`RANSACRobustEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/RANSACRobustEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimator.java[Source]
+|===
+
