@@ -13,18 +13,18 @@ package, and is described in xref:reference.adoc#press2007[Press et al., 2007], 
 == Why the normal equations can fail
 
 xref:algorithms/linear-least-squares.adoc[] solves for the parameters stem:[\mathbf{a}] via the normal
-equations stem:[\alpha\,\mathbf{a} = \beta] with stem:[\alpha = A^\top A]. This works well when the basis
+equations stem:[\boldsymbol{\alpha}\,\mathbf{a} = \boldsymbol{\beta}] with stem:[\boldsymbol{\alpha} = \mathbf{A}^\top \mathbf{A}]. This works well when the basis
 functions are clearly distinguishable, but two problems commonly arise in practice:
 
-* The condition number of stem:[\alpha = A^\top A] is the *square* of the condition number of the design
-  matrix stem:[A] itself, so the normal equations amplify roundoff error far more than the original,
+* The condition number of stem:[\boldsymbol{\alpha} = \mathbf{A}^\top \mathbf{A}] is the *square* of the condition number of the design
+  matrix stem:[\mathbf{A}] itself, so the normal equations amplify roundoff error far more than the original,
   overdetermined system does.
 * If the data cannot clearly distinguish between two (or two combinations of) basis functions — a very common
-  occurrence — stem:[\alpha] becomes singular or nearly so, producing a zero or near-zero pivot during
+  occurrence — stem:[\boldsymbol{\alpha}] becomes singular or nearly so, producing a zero or near-zero pivot during
   elimination: either no solution at all, or wildly large parameter values that delicately cancel out.
 
-SVD sidesteps both problems by working directly with the design matrix stem:[A], never forming
-stem:[A^\top A], and by producing the minimum-norm solution whenever the system is degenerate rather than an
+SVD sidesteps both problems by working directly with the design matrix stem:[\mathbf{A}], never forming
+stem:[\mathbf{A}^\top \mathbf{A}], and by producing the minimum-norm solution whenever the system is degenerate rather than an
 unstable, unbounded one.
 
 == Problem restated using the design matrix
@@ -40,22 +40,22 @@ minimizing stem:[\chi^2] is exactly the overdetermined least-squares problem:
 
 [stem]
 ++++
-\text{find } \mathbf{a} \text{ that minimizes } \chi^2 = |A\,\mathbf{a} - \mathbf{b}|^2
+\text{find } \mathbf{a} \text{ that minimizes } \chi^2 = |\mathbf{A}\,\mathbf{a} - \mathbf{b}|^2
 ++++
 
 == Solution via SVD
 
-Decomposing stem:[A = U\,W\,V^\top], where stem:[U^{(i)}] and stem:[V^{(i)}] denote the stem:[i]-th columns of
-stem:[U] and stem:[V] and stem:[w_i] are the singular values (the diagonal of stem:[W]), the least-squares
+Decomposing stem:[\mathbf{A} = \mathbf{U}\,\mathbf{W}\,\mathbf{V}^\top], where stem:[\mathbf{U}^{(i)}] and stem:[\mathbf{V}^{(i)}] denote the stem:[i]-th columns of
+stem:[\mathbf{U}] and stem:[\mathbf{V}] and stem:[w_i] are the singular values (the diagonal of stem:[W]), the least-squares
 solution is:
 
 [stem]
 ++++
-\mathbf{a} = \sum_{i=0}^{M-1} \left[\frac{U^{(i)} \cdot \mathbf{b}}{w_i}\right] V^{(i)}
+\mathbf{a} = \sum_{i=0}^{M-1} \left[\frac{\mathbf{U}^{(i)} \cdot \mathbf{b}}{w_i}\right] \mathbf{V}^{(i)}
 ++++
 
-The fitted parameters are a linear combination of the columns of stem:[V], with coefficients built from the
-dot products of the columns of stem:[U] with the weighted data. The variance and covariance of the fitted
+The fitted parameters are a linear combination of the columns of stem:[\mathbf{V}], with coefficients built from the
+dot products of the columns of stem:[\mathbf{U}] with the weighted data. The variance and covariance of the fitted
 parameters follow the same pattern:
 
 [stem]
@@ -123,7 +123,7 @@ normal-equations counterparts, and expose the same `getA()`, `getCovar()`, and `
   below which a singular value is treated as negligible; defaults to `1e-12`. Passing a non-positive value
   falls back to the singular value decomposer's own default threshold.
 
-TIP: Because SVD works directly with stem:[A] instead of stem:[A^\top A], xref:reference.adoc#press2007[Press
+TIP: Because SVD works directly with stem:[\mathbf{A}] instead of stem:[\mathbf{A}^\top \mathbf{A}], xref:reference.adoc#press2007[Press
 et al., 2007] recommends using it in preference to the normal equations for essentially all but the simplest,
 best-conditioned problems. The trade-off is extra storage for the design matrix and its decomposition, and
 generally slower execution than solving the normal equations directly — reserve

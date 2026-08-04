@@ -15,12 +15,12 @@ xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for ca
 
 == Running mean and covariance
 
-For each new sample stem:[x_{N+1}] (an `mp`-dimensional vector, with `mp` the number of measurement
+For each new sample stem:[\mathbf{x}_{N+1}] (an `mp`-dimensional vector, with `mp` the number of measurement
 dimensions), the sample count, average, and covariance are all updated in place. The average is updated first:
 
 [stem]
 ++++
-\bar{x}_{N+1} = \frac{N \cdot \bar{x}_N + x_{N+1}}{N + 1}
+\mathbf{\bar{x}}_{N+1} = \frac{N \cdot \mathbf{\bar{x}}_N + \mathbf{x}_{N+1}}{N + 1}
 ++++
 
 The covariance update then removes this *just-updated* mean from the new sample and folds its outer product
@@ -28,14 +28,14 @@ into the running covariance, rescaled for the new sample count:
 
 [stem]
 ++++
-\Sigma_{N+1} = \frac{N \cdot \Sigma_N + \left(x_{N+1} - \bar{x}_{N+1}\right)\left(x_{N+1} - \bar{x}_{N+1}\right)^T}{N + 1}
+\boldsymbol{\Sigma}_{N+1} = \frac{N \cdot \boldsymbol{\Sigma}_N + \left(\mathbf{x}_{N+1} - \mathbf{\bar{x}}_{N+1}\right)\left(\mathbf{x}_{N+1} - \mathbf{\bar{x}}_{N+1}\right)^T}{N + 1}
 ++++
 
 This is the exact recursive relationship implemented by `update(double[])`: `sampleAverage` is updated first,
 `sampleNoMean` is then computed against that already-updated average, and `measurementNoiseCov` is rescaled by
 `sampleCount`, has the new sample's outer product added, and is rescaled again by `1 / nextCount`.
 
-NOTE: Re-centering on the post-update mean stem:[\bar{x}_{N+1}] for *both* factors of the outer product (rather
+NOTE: Re-centering on the post-update mean stem:[\mathbf{\bar{x}}_{N+1}] for *both* factors of the outer product (rather
 than mixing the pre-update mean into one factor, as the classic Welford-style incremental algorithm described
 in xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for calculating variance] does)
 makes this a close, but not exact, running estimate of the batch sample covariance for a given finite stem:[N]:

@@ -14,22 +14,21 @@ Shanno (BFGS) variant, described in xref:reference.adoc#press2007[Press et al., 
 == From Newton's method to "quasi" Newton
 
 Newton's method for finding a zero of the gradient uses the local quadratic approximation
-stem:[f(\mathbf{x}) \approx f(\mathbf{x}_i) + (\mathbf{x}-\mathbf{x}_i)^\top\nabla f(\mathbf{x}_i) +
-\tfrac{1}{2}(\mathbf{x}-\mathbf{x}_i)^\top A (\mathbf{x}-\mathbf{x}_i)] to jump directly to where the gradient
+stem:[f(\mathbf{x}) \approx f(\mathbf{x}_i) + (\mathbf{x}-\mathbf{x}_i)^\top\nabla  (\mathbf{x}_i) + \tfrac{1}{2}(\mathbf{x}-\mathbf{x}_i)^\top A (\mathbf{x}-\mathbf{x}_i)] to jump directly to where the gradient
 should vanish:
 
 [stem]
 ++++
-\mathbf{x} - \mathbf{x}_i = -A^{-1}\nabla f(\mathbf{x}_i)
+\mathbf{x} - \mathbf{x}_i = -\mathbf{A}^{-1}\nabla f(\mathbf{x}_i)
 ++++
 
-The true Hessian stem:[A] is not known, so quasi-Newton methods instead build up a sequence of matrices
-stem:[H_i] converging toward stem:[A^{-1}] — ideally within stem:[N] iterations, as for a true quadratic form.
+The true Hessian stem:[\mathbf{A}] is not known, so quasi-Newton methods instead build up a sequence of matrices
+stem:[\mathbf{H}_i] converging toward stem:[\mathbf{A}^{-1}] — ideally within stem:[N] iterations, as for a true quadratic form.
 This turns out to be not just a practical necessity but often genuinely *better* than using the real Hessian:
-far from the minimum, stem:[A] need not be positive-definite, and taking the literal Newton step could move
-uphill. Starting stem:[H_0] as the identity matrix (positive-definite and symmetric) and updating it in a way
+far from the minimum, stem:[\mathbf{A}] need not be positive-definite, and taking the literal Newton step could move
+uphill. Starting stem:[\mathbf{H}_0] as the identity matrix (positive-definite and symmetric) and updating it in a way
 that provably preserves both properties guarantees the method always has a downhill direction available, and
-recovers Newton's quadratic convergence once close enough to the minimum for stem:[H_i] to have converged.
+recovers Newton's quadratic convergence once close enough to the minimum for stem:[\mathbf{H}_i] to have converged.
 
 == The BFGS update
 
@@ -41,8 +40,8 @@ approximation to behave, along the step just taken, exactly like stem:[A^{-1}] w
 
 [stem]
 ++++
-H_{i+1} = H_i + \frac{\Delta\mathbf{x}_i \otimes \Delta\mathbf{x}_i}{\Delta\mathbf{x}_i^\top \Delta\mathbf{g}_i}
-- \frac{(H_i\Delta\mathbf{g}_i) \otimes (H_i\Delta\mathbf{g}_i)}{\Delta\mathbf{g}_i^\top H_i \Delta\mathbf{g}_i}
+\mathbf{H}_{i+1} = \mathbf{H}_i + \frac{\Delta\mathbf{x}_i \otimes \Delta\mathbf{x}_i}{\Delta\mathbf{x}_i^\top \Delta\mathbf{g}_i}
+- \frac{(\mathbf{H}_i\Delta\mathbf{g}_i) \otimes (H_i\Delta\mathbf{g}_i)}{\Delta\mathbf{g}_i^\top \mathbf{H}_i \Delta\mathbf{g}_i}
 ++++
 
 where stem:[\otimes] is the outer product. BFGS — empirically the more robust of the two in practice, and the
@@ -50,19 +49,19 @@ variant this package implements — adds one further rank-one correction term:
 
 [stem]
 ++++
-+ \left(\Delta\mathbf{g}_i^\top H_i \Delta\mathbf{g}_i\right)\,\mathbf{u} \otimes \mathbf{u}, \qquad
++ \left(\Delta\mathbf{g}_i^\top \mathbf{H}_i \Delta\mathbf{g}_i\right)\,\mathbf{u} \otimes \mathbf{u}, \qquad
 \mathbf{u} \equiv \frac{\Delta\mathbf{x}_i}{\Delta\mathbf{x}_i^\top\Delta\mathbf{g}_i} -
-\frac{H_i\Delta\mathbf{g}_i}{\Delta\mathbf{g}_i^\top H_i \Delta\mathbf{g}_i}
+\frac{\mathbf{H}_i\Delta\mathbf{g}_i}{\Delta\mathbf{g}_i^\top \mathbf{H}_i \Delta\mathbf{g}_i}
 ++++
 
 The update is skipped on any iteration where stem:[\Delta\mathbf{x}_i^\top \Delta\mathbf{g}_i] is not
-comfortably positive — guarding against roundoff pushing stem:[H_i] toward becoming singular or indefinite.
+comfortably positive — guarding against roundoff pushing stem:[\mathbf{H}_i] toward becoming singular or indefinite.
 
 == An approximate line search
 
 Unlike xref:algorithms/powell-optimization.adoc[Powell's method] and
 xref:algorithms/conjugate-gradient-optimization.adoc[conjugate gradient], the quasi-Newton method does not
-need an accurate 1D line minimization along the Newton direction stem:[-H_i\nabla f(\mathbf{x}_i)] — only
+need an accurate 1D line minimization along the Newton direction stem:[-\mathbf{H}_i\nabla f(\mathbf{x}_i)] — only
 enough progress to guarantee the function actually decreases. This package's internal line search takes the
 full Newton step whenever it can, and backtracks (via a quadratic/cubic fit to the step already tried) whenever
 that step overshoots, is rejected by an Armijo-style sufficient-decrease condition, or exceeds a maximum

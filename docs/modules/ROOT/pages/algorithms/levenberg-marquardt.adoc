@@ -133,7 +133,7 @@ Stated as a recipe:
 
 [stem]
 ++++
-C \equiv \alpha^{-1}
+\mathbf{C} \equiv \boldsymbol{\alpha}^{-1}
 ++++
 
 == Library implementation
@@ -180,9 +180,9 @@ Convergence is tuned via `setNdone(int)` (consecutive negligible-improvement ite
 default 4), `setItmax(int)` (maximum iterations, default 5000), and `setTol(double)` (the "negligible" threshold
 on stem:[\chi^2], default 1e-3).
 
-TIP: By default (`setCovarianceAdjusted(true)`) the fitters additionally rescale the raw stem:[\alpha^{-1}]
+TIP: By default (`setCovarianceAdjusted(true)`) the fitters additionally rescale the raw stem:[\boldsymbol{\alpha}^{-1}]
 covariance using the input samples' Jacobians and standard deviations
-(stem:[\mathrm{Cov} = (J^\top W J)^{-1}]) to produce a covariance on the true scale of the problem, as discussed
+(stem:[\mathrm{Cov} = (\mathbf{J}^\top \mathbf{W} \mathbf{J})^{-1}]) to produce a covariance on the true scale of the problem, as discussed
 in xref:reference.adoc#press2007[Press et al., 2007], Section 15.6 (page 812).
 
 image::algorithms/confidence-ellipses.svg[alt="Nested joint confidence-region ellipses for two fitted parameters at increasing delta chi-squared thresholds; projecting the outer ellipse onto one axis gives that parameter's own individual confidence interval",width=620]

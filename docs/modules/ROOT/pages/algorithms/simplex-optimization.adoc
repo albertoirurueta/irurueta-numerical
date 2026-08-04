@@ -19,7 +19,7 @@ other stem:[N] vertices are:
 
 [stem]
 ++++
-P_i = P_0 + \lambda\,\mathbf{e}_i, \qquad i = 1, \ldots, N
+\mathbf{P}_i = \mathbf{P}_0 + \lambda\,\mathbf{e}_i, \qquad i = 1, \ldots, N
 ++++
 
 where stem:[\mathbf{e}_i] are the unit vectors. Unlike one-dimensional minimization, there is no way to

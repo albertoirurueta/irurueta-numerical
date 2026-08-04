@@ -109,13 +109,12 @@ distance:
 v(r) \approx \frac{1}{2}\left\langle \big[y(\mathbf{x}+\mathbf{r}) - y(\mathbf{x})\big]^2 \right\rangle
 ++++
 
-Writing stem:[v_{ij} \equiv v(\|\mathbf{x}_i - \mathbf{x}_j\|)] and stem:[v^*_j \equiv v(\|\mathbf{x}^* -
-\mathbf{x}_j\|)] for a query point stem:[\mathbf{x}^*], and defining the augmented vectors and matrix:
+Writing stem:[v_{ij} \equiv v(\|\mathbf{x}_i - \mathbf{x}_j\|)] and stem:[v^*_j \equiv v(\|\mathbf{x}^* - \mathbf{x}_j\|)] for a query point stem:[\mathbf{x}^*], and defining the augmented vectors and matrix:
 
 [stem]
 ++++
-Y = (y_0, \ldots, y_{N-1}, 0), \qquad V^* = (v^*_0, \ldots, v^*_{N-1}, 1), \qquad
-V = \begin{bmatrix} v_{00} & \cdots & v_{0,N-1} & 1 \\ \vdots & & \vdots & \vdots \\
+\mathbf{Y} = (y_0, \ldots, y_{N-1}, 0), \qquad \mathbf{V}^* = (v^*_0, \ldots, v^*_{N-1}, 1), \qquad
+\mathbf{V} = \begin{bmatrix} v_{00} & \cdots & v_{0,N-1} & 1 \\ \vdots & & \vdots & \vdots \\
 v_{N-1,0} & \cdots & v_{N-1,N-1} & 1 \\ 1 & \cdots & 1 & 0 \end{bmatrix}
 ++++
 
@@ -123,7 +122,7 @@ the kriging estimate and its variance are:
 
 [stem]
 ++++
-\hat{y}(\mathbf{x}^*) = V^{*\top} V^{-1} Y, \qquad \mathrm{Var}(\hat{y}(\mathbf{x}^*)) = V^{*\top} V^{-1} V^*
+\hat{y}(\mathbf{x}^*) = \mathbf{V}^{*\top} \mathbf{V}^{-1} \mathbf{Y}, \qquad \mathrm{Var}(\hat{y}(\mathbf{x}^*)) = \mathbf{V}^{*\top} \mathbf{V}^{-1} \mathbf{V}^*
 ++++
 
 The extra row/column of ones (and the corresponding zero) make this an *unbiased* estimator by automatically

@@ -49,15 +49,19 @@ Setting stem:[\partial \chi^2 / \partial a_k = 0] for every parameter gives the 
 
 [stem]
 ++++
-\sum_{j=0}^{M-1} \alpha_{kj}\, a_j = \beta_k, \qquad \text{i.e.} \qquad \alpha\,\mathbf{a} = \beta
+\sum_{j=0}^{M-1} \alpha_{kj}\, a_j = \beta_k, \qquad \text{or, equivalently,} \qquad \boldsymbol{\alpha}\,\mathbf{a} = \boldsymbol{\beta}
 ++++
 
 with
 
 [stem]
 ++++
-\alpha_{kj} = \sum_{i=0}^{N-1} \frac{X_j(x_i)\, X_k(x_i)}{\sigma_i^2} = A^\top A, \qquad
-\beta_k = \sum_{i=0}^{N-1} \frac{y_i\, X_k(x_i)}{\sigma_i^2} = A^\top b
+\alpha_{kj} = \sum_{i=0}^{N-1} \frac{X_j(x_i)\, X_k(x_i)}{\sigma_i^2} \qquad  \text{or, equivalently,} \qquad \boldsymbol{\alpha} = \mathbf{A}^\top \mathbf{A}
+++++
+
+[stem]
+++++
+\beta_k = \sum_{i=0}^{N-1} \frac{y_i\, X_k(x_i)}{\sigma_i^2} \qquad \text{or, equivalently,} \qquad \boldsymbol{\beta}  = \mathbf{A}^\top \mathbf{b}
 ++++
 
 Solving this stem:[M \times M] linear system for stem:[\mathbf{a}] (by Gauss-Jordan elimination, LU
@@ -72,7 +76,7 @@ form that also produces stem:[\alpha^{-1}] as a side effect, at essentially no e
 
 [stem]
 ++++
-C \equiv \alpha^{-1}
+\mathbf{C} \equiv \boldsymbol{\alpha}^{-1}
 ++++
 
 Its diagonal elements are the variances of the fitted parameters, stem:[\sigma^2(a_j) = C_{jj}], and its
@@ -113,11 +117,11 @@ values, not any derivative:
 After `fit()` completes:
 
 * `getA()` — the fitted parameters stem:[\mathbf{a}].
-* `getCovar()` — the covariance matrix stem:[C] of the fitted parameters.
+* `getCovar()` — the covariance matrix stem:[\mathbf{C}] of the fitted parameters.
 * `getChisq()` — the final stem:[\chi^2] value.
 
 TIP: Solving the normal equations directly is *susceptible to roundoff error*, because the condition number of
-stem:[\alpha = A^\top A] is the square of the condition number of stem:[A]. When the basis
+stem:[\boldsymbol{\alpha} = \mathbf{A}^\top \mathbf{A}] is the square of the condition number of stem:[\mathbf{A}]. When the basis
 functions are close to degenerate — a common occurrence — prefer the SVD-based
 `SvdSingleDimensionLinearFitter` / `SvdMultiDimensionLinearFitter` (xref:reference.adoc#press2007[Press et al.,
 2007], Section 15.4.2, page 794) instead, which solves the same problem in a way that cannot fail even when
