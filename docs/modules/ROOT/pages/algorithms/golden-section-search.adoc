@@ -1,4 +1,8 @@
 = Golden Section Search
+:description: Golden section search, the simplest reliable derivative-free method for one-dimensional function \
+minimization, implemented as GoldenSingleOptimizer.
+:keywords: golden section search, GoldenSingleOptimizer, one-dimensional minimization, bracketing a minimum, \
+BracketedSingleOptimizer, numerical optimization, golden ratio, derivative-free optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

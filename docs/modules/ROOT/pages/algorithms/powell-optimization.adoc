@@ -1,4 +1,8 @@
 = Powell's Method
+:description: Powell's derivative-free multivariate optimization method using conjugate direction sets and \
+line minimization, implemented by PowellMultiOptimizer.
+:keywords: Powell's method, multivariate optimization, derivative-free optimization, conjugate directions, \
+PowellMultiOptimizer, line minimization, function minimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

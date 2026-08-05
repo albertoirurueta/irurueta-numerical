@@ -1,4 +1,8 @@
 = PROSAC (Progressive Sample Consensus)
+:description: PROSAC speeds up RANSAC-style robust estimation by drawing samples progressively from the \
+best-quality data first, implemented as PROSACRobustEstimator.
+:keywords: PROSAC, PROSACRobustEstimator, progressive sample consensus, robust estimation, RANSAC, outlier \
+rejection, quality-guided sampling, com.irurueta.numerical.robust
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

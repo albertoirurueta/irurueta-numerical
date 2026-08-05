@@ -1,4 +1,7 @@
 = Installation
+:description: How to add irurueta-numerical as a Maven dependency, with coordinates for the latest release and \
+snapshot builds, and the required Java version.
+:keywords: Maven dependency, installation, Maven Central, pom.xml, irurueta-numerical, Java 17
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

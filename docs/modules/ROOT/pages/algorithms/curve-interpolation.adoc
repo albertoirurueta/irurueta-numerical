@@ -1,4 +1,8 @@
 = Curve Interpolation in Multiple Dimensions
+:description: Describes interpolating an ordered sequence of multidimensional points along a curve using \
+arc-length parameterized cubic splines, implemented as CurveInterpolator.
+:keywords: curve interpolation, CurveInterpolator, arc length parameterization, multidimensional \
+interpolation, cubic spline, open curve, closed curve, parametric curve
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

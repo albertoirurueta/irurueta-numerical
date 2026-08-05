@@ -1,4 +1,8 @@
 = Midpoint Rule Integration for Improper Integrals
+:description: The extended midpoint quadrature rule and its change-of-variable variants for integrating \
+improper integrals with infinite ranges or endpoint singularities.
+:keywords: midpoint rule, improper integrals, numerical integration, quadrature, MidPointQuadrature, \
+InfinityMidPointQuadrature, ExponentialMidPointQuadrature, endpoint singularity, infinite integration limits
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

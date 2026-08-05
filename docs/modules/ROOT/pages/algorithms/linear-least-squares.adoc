@@ -1,4 +1,8 @@
 = Linear Least-Squares Fitting Algorithm
+:description: Linear least-squares curve fitting by solving the normal equations directly, implemented as \
+SimpleSingleDimensionLinearFitter and MultiDimensionLinearFitter.
+:keywords: linear least squares, curve fitting, normal equations, SimpleSingleDimensionLinearFitter, \
+MultiDimensionLinearFitter, design matrix, chi-square, SvdSingleDimensionLinearFitter
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

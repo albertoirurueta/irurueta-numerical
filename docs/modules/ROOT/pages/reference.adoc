@@ -1,4 +1,8 @@
 = Reference
+:description: Links to irurueta-numerical's generated Javadoc, test and coverage reports, SonarCloud dashboard, \
+and the bibliography of books and papers its algorithms are adapted from.
+:keywords: Javadoc, JaCoCo coverage, SonarCloud, Maven site, Surefire report, bibliography, references, Numerical \
+Recipes
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

@@ -1,4 +1,8 @@
 = MSAC (M-estimator Sample Consensus)
+:description: MSAC robust estimation, a RANSAC variant using a bounded loss function and an LMedS-style median \
+criterion, implemented by MSACRobustEstimator.
+:keywords: MSAC, M-estimator sample consensus, robust estimation, RANSAC variant, MSACRobustEstimator, outlier \
+rejection, bounded loss function, LMedS, model fitting
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

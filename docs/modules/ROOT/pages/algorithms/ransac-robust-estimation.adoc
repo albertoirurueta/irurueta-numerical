@@ -1,4 +1,8 @@
 = RANSAC (Random Sample Consensus)
+:description: RANSAC, implemented as RANSACRobustEstimator, robustly fits a model to data containing outliers \
+by repeatedly sampling minimal subsets and keeping the candidate with the largest consensus set.
+:keywords: RANSAC, RANSACRobustEstimator, random sample consensus, robust estimation, outlier rejection, \
+consensus set, model fitting, com.irurueta.numerical.robust
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

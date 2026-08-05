@@ -1,4 +1,8 @@
 = Newton-Raphson Method
+:description: Newton-Raphson root finding using function and derivative evaluations, plus a bisection-guarded \
+safe variant, implemented by NewtonRaphsonSingleRootEstimator and SafeNewtonRaphsonSingleRootEstimator.
+:keywords: Newton-Raphson method, root finding, tangent line iteration, quadratic convergence, \
+NewtonRaphsonSingleRootEstimator, SafeNewtonRaphsonSingleRootEstimator, bisection fallback, numerical roots
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

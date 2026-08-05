@@ -1,4 +1,8 @@
 = Romberg Integration
+:description: Romberg integration, implemented as RombergIntegrator, generalizes Simpson's rule via Richardson \
+extrapolation of successive quadrature refinements for efficient numerical integration of smooth functions.
+:keywords: Romberg integration, RombergIntegrator, RombergMatrixIntegrator, Richardson extrapolation, numerical \
+integration, quadrature, Simpson's rule, trapezoidal rule, com.irurueta.numerical.integration
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

@@ -1,4 +1,8 @@
 = Measurement Noise Covariance Estimation
+:description: Incremental estimation of sample mean and covariance for measuring Kalman filter measurement \
+noise, implemented by MeasurementNoiseCovarianceEstimator.
+:keywords: measurement noise covariance, Kalman filter, running covariance, incremental mean and covariance, \
+MeasurementNoiseCovarianceEstimator, sensor noise estimation, signal processing, sample covariance
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
