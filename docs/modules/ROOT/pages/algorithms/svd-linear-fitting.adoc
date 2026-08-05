@@ -1,4 +1,9 @@
 = Linear Fitting by Singular Value Decomposition
+:description: Explains linear least-squares curve fitting via singular value decomposition for numerical \
+stability with degenerate basis functions, implemented as SvdSingleDimensionLinearFitter and \
+SvdMultiDimensionLinearFitter.
+:keywords: SVD linear fitting, singular value decomposition, linear least squares, SvdSingleDimensionLinearFitter, \
+SvdMultiDimensionLinearFitter, curve fitting, degenerate basis functions, numerical stability
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

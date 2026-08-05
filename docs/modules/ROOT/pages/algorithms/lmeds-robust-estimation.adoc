@@ -1,4 +1,8 @@
 = LMedS (Least Median of Squares)
+:description: LMedS (Least Median of Squares) robust estimation algorithm that requires no inlier threshold, \
+implemented as LMedSRobustEstimator in the robust estimation framework.
+:keywords: LMedS, least median of squares, robust estimation, LMedSRobustEstimator, outlier rejection, RANSAC \
+alternative, breakdown point, model fitting
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

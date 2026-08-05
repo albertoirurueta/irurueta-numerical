@@ -1,4 +1,8 @@
 = Brent's Method
+:description: Explains Brent's method for one-dimensional minimization without derivatives, combining \
+parabolic interpolation with golden section search, implemented as BrentSingleOptimizer.
+:keywords: Brent's method, optimization, minimization, BrentSingleOptimizer, parabolic interpolation, \
+golden section search, single-variable optimization, numerical optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

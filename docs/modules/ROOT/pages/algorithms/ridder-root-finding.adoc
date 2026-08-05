@@ -1,4 +1,8 @@
 = Ridder's Method
+:description: Ridder's method, implemented as RidderSingleRootEstimator, finds a bracketed root with quadratic \
+convergence by factoring out the exponential bend in the residual.
+:keywords: Ridder's method, RidderSingleRootEstimator, root finding, quadratic convergence, bracketed root, \
+false position, numerical root finding, com.irurueta.numerical.roots
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

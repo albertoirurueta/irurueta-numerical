@@ -1,4 +1,8 @@
 = Two-Dimensional Grid Interpolation
+:description: Covers bilinear, tensor-product polynomial, and bicubic spline interpolation on 2D rectangular \
+grids, implemented by BilinearInterpolator, Polynomial2DInterpolator, and BicubicSpline2DInterpolator.
+:keywords: 2D interpolation, grid interpolation, bilinear interpolation, BilinearInterpolator, \
+Polynomial2DInterpolator, BicubicSpline2DInterpolator, bicubic spline, tensor-product interpolation
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

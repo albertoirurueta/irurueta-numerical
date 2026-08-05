@@ -1,4 +1,8 @@
 = PROMedS (Progressive Least Median of Squares)
+:description: PROMedS combines PROSAC's progressive quality-guided sampling with LMedS's threshold-free median \
+residual scoring, implemented as PROMedSRobustEstimator for robust model estimation.
+:keywords: PROMedS, PROMedSRobustEstimator, progressive least median of squares, robust estimation, PROSAC, \
+LMedS, outlier rejection, RANSAC family, com.irurueta.numerical.robust
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

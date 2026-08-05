@@ -1,4 +1,8 @@
 = Brent's Method with Derivatives
+:description: Derivative-aware variant of Brent's method for 1D minimization, using the sign of f'(x) to pick \
+trial points within a bracket, implemented as DerivativeBrentSingleOptimizer.
+:keywords: Brent's method, derivative Brent, DerivativeBrentSingleOptimizer, one-dimensional minimization, \
+line search, DerivativeConjugateGradientMultiOptimizer, numerical optimization, bracketing
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

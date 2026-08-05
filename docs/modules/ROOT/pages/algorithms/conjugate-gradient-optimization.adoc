@@ -1,4 +1,9 @@
 = Conjugate Gradient Methods
+:description: Explains Fletcher-Reeves and Polak-Ribiere conjugate gradient methods for multivariable \
+optimization using gradients, implemented as ConjugateGradientMultiOptimizer and \
+DerivativeConjugateGradientMultiOptimizer.
+:keywords: conjugate gradient, Fletcher-Reeves, Polak-Ribiere, ConjugateGradientMultiOptimizer, \
+DerivativeConjugateGradientMultiOptimizer, multivariable optimization, gradient descent, numerical optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

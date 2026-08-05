@@ -1,4 +1,9 @@
 = Rational Function Interpolation
+:description: Covers rational function interpolation for data with poles, including the diagonal Bulirsch-Stoer \
+method (RationalInterpolator) and the pole-free barycentric variant (BarycentricRationalInterpolator).
+:keywords: rational function interpolation, RationalInterpolator, BarycentricRationalInterpolator, \
+Bulirsch-Stoer, barycentric interpolation, numerical interpolation, polynomial interpolation, \
+com.irurueta.numerical.interpolation
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

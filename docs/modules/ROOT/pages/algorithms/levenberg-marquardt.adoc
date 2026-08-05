@@ -1,4 +1,10 @@
 = Levenberg-Marquardt Fitting Algorithm
+:description: Levenberg-Marquardt algorithm for nonlinear least-squares curve fitting, implemented as \
+LevenbergMarquardtSingleDimensionFitter, LevenbergMarquardtMultiDimensionFitter, and \
+LevenbergMarquardtMultiVariateFitter.
+:keywords: Levenberg-Marquardt, nonlinear least squares, curve fitting, LevenbergMarquardtSingleDimensionFitter, \
+LevenbergMarquardtMultiDimensionFitter, LevenbergMarquardtMultiVariateFitter, chi-square minimization, damping \
+parameter
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

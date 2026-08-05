@@ -1,4 +1,8 @@
 = Quasi-Newton Method (BFGS)
+:description: Explains the BFGS quasi-Newton multivariate optimization method, implemented as \
+QuasiNewtonMultiOptimizer, which approximates the inverse Hessian to minimize a multi-dimensional function.
+:keywords: quasi-Newton method, BFGS, QuasiNewtonMultiOptimizer, multivariate optimization, inverse Hessian \
+approximation, numerical optimization, conjugate gradient, com.irurueta.numerical.optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

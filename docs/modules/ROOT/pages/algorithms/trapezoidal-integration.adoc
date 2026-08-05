@@ -1,4 +1,9 @@
 = Trapezoidal Rule Integration
+:description: Explains the extended trapezoidal rule for numerical quadrature and its role as the building \
+block for Simpson's rule and Romberg integration, implemented as TrapezoidalQuadrature and \
+TrapezoidalQuadratureIntegrator.
+:keywords: trapezoidal rule, numerical integration, quadrature, TrapezoidalQuadrature, \
+TrapezoidalQuadratureIntegrator, extended trapezoidal rule, Euler-Maclaurin formula
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

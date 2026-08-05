@@ -1,4 +1,10 @@
 = Scattered-Data Interpolation
+:description: Explains radial basis function (RBF) interpolation, kriging, and Shepard interpolation for \
+scattered N-dimensional data, implemented as RadialBasisFunctionInterpolator, KrigingInterpolator, and \
+ShepardInterpolator.
+:keywords: scattered data interpolation, radial basis function interpolation, RBF interpolation, kriging, \
+Gaussian process regression, Shepard interpolation, RadialBasisFunctionInterpolator, KrigingInterpolator, \
+ShepardInterpolator, variogram
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

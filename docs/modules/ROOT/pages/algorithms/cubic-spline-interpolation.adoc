@@ -1,4 +1,8 @@
 = Cubic Spline Interpolation
+:description: Explains cubic spline interpolation, which fits piecewise cubic polynomials with continuous \
+second derivatives through tabulated points, implemented as CubicSplineInterpolator.
+:keywords: cubic spline, spline interpolation, CubicSplineInterpolator, natural spline, tridiagonal system, \
+piecewise polynomial, numerical interpolation
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

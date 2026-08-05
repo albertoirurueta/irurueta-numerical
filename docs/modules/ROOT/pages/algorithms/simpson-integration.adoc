@@ -1,4 +1,8 @@
 = Simpson's Rule Integration
+:description: Explains Simpson's rule numerical integration via Richardson extrapolation of the trapezoidal \
+rule, implemented as the generic SimpsonIntegrator and SimpsonMatrixIntegrator base classes.
+:keywords: Simpson's rule, numerical integration, quadrature, Richardson extrapolation, SimpsonIntegrator, \
+SimpsonMatrixIntegrator, SimpsonTrapezoidalQuadratureIntegrator, composite Simpson's rule
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

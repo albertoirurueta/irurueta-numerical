@@ -1,4 +1,8 @@
 = 1D Discrete Convolution
+:description: Explains discrete 1D convolution and its edge-extension strategies, implemented by the \
+Convolver1D class in irurueta-numerical.
+:keywords: convolution, discrete convolution, signal processing, Convolver1D, ConvolverEdgeMethod, kernel, \
+edge extension, digital filtering
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

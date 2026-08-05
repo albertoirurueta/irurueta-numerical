@@ -1,4 +1,8 @@
 = Downhill Simplex Method (Nelder-Mead)
+:description: Explains the downhill simplex (Nelder-Mead) method for derivative-free multi-variable function \
+minimization, implemented as SimplexMultiOptimizer.
+:keywords: downhill simplex method, Nelder-Mead algorithm, derivative-free optimization, multi-variable \
+optimization, SimplexMultiOptimizer, function minimization, reflection expansion contraction shrink
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

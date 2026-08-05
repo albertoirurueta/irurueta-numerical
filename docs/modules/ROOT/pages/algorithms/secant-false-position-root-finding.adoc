@@ -1,4 +1,8 @@
 = Secant and False Position Methods
+:description: Explains the secant method and false position (regula falsi) method for single-variable root \
+finding, implemented as SecantSingleRootEstimator and FalsePositionSingleRootEstimator.
+:keywords: secant method, false position method, regula falsi, root finding, SecantSingleRootEstimator, \
+FalsePositionSingleRootEstimator, bracketed root estimator, linear interpolation
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

@@ -1,4 +1,8 @@
 = Bisection Method
+:description: Describes the bisection method for finding a root of a continuous function by repeatedly \
+halving a bracketing interval, implemented as BisectionSingleRootEstimator.
+:keywords: bisection method, root finding, BisectionSingleRootEstimator, bracketing, numerical roots, \
+interval halving, linear convergence
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
