@@ -1,4 +1,8 @@
 = Ridder's Method
+:description: Ridder's method, implemented as RidderSingleRootEstimator, finds a bracketed root with quadratic \
+convergence by factoring out the exponential bend in the residual.
+:keywords: Ridder's method, RidderSingleRootEstimator, root finding, quadratic convergence, bracketed root, \
+false position, numerical root finding, com.irurueta.numerical.roots
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -83,3 +87,18 @@ estimator.estimate();
 
 final var root = estimator.getRoot(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`RidderSingleRootEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/RidderSingleRootEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/RidderSingleRootEstimator.java[Source]
+|===
+

@@ -1,4 +1,8 @@
 = Double Exponential Rule Integration
+:description: Double exponential (DE) quadrature rule for numerical integration, handling endpoint \
+singularities via variable transformation, implemented as DoubleExponentialRuleQuadrature.
+:keywords: double exponential rule, DE quadrature, numerical integration, DoubleExponentialRuleQuadrature, \
+DoubleExponentialRuleQuadratureIntegrator, singular integrand, tanh-sinh quadrature, trapezoidal rule
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -139,3 +143,30 @@ final var listener = new SingleDimensionFunctionEvaluatorListener() {
 final var integrator = new DoubleExponentialRuleQuadratureIntegrator(0.0, 1.0, listener);
 final var result = integrator.integrate(); // converges to machine precision in a few dozen evaluations
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Integrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/Integrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/Integrator.java[Source]
+
+|`IntegratorType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/IntegratorType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/IntegratorType.java[Source]
+
+|`QuadratureType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/QuadratureType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/QuadratureType.java[Source]
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`DoubleExponentialRuleQuadratureIntegrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/DoubleExponentialRuleQuadratureIntegrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/DoubleExponentialRuleQuadratureIntegrator.java[Source]
+|===
+

@@ -1,4 +1,8 @@
 = Straight Line Fitting Algorithm
+:description: Explains closed-form straight line (linear regression) fitting with error estimation and \
+goodness of fit, implemented as StraightLineFitter.
+:keywords: straight line fitting, linear regression, least squares line fit, StraightLineFitter, chi-square \
+goodness of fit, curve fitting, closed-form linear fit
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -182,3 +186,14 @@ final var b = fitter.getB();       // slope
 final var chiSq = fitter.getChi2(); // goodness-of-fit statistic
 final var q = fitter.getQ();        // goodness-of-fit probability
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`StraightLineFitter`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/StraightLineFitter.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/StraightLineFitter.java[Source]
+|===
+

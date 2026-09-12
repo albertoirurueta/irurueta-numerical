@@ -1,4 +1,8 @@
 = Brent's Method (Root Finding)
+:description: Describes the van Wijngaarden-Dekker-Brent method for root finding, combining inverse \
+quadratic interpolation with bisection, implemented as BrentSingleRootEstimator.
+:keywords: Brent's method, root finding, BrentSingleRootEstimator, inverse quadratic interpolation, \
+bisection, bracketed root finder, numerical roots
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -97,3 +101,18 @@ estimator.estimate();
 
 final var root = estimator.getRoot(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`BrentSingleRootEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/BrentSingleRootEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/BrentSingleRootEstimator.java[Source]
+|===
+

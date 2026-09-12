@@ -1,4 +1,8 @@
 = Bisection Method
+:description: Describes the bisection method for finding a root of a continuous function by repeatedly \
+halving a bracketing interval, implemented as BisectionSingleRootEstimator.
+:keywords: bisection method, root finding, BisectionSingleRootEstimator, bracketing, numerical roots, \
+interval halving, linear convergence
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -17,6 +21,15 @@ xref:algorithms/ridder-root-finding.adoc[], and xref:algorithms/brent-root-findi
 prerequisite, and the same automatic bracket-search routine: given two starting points, it repeatedly moves
 whichever one has the smaller stem:[|f|] further away (by a factor of `1.6`) until the function changes sign
 or the search gives up after 50 tries.
+
+image::algorithms/bisection-brackets.svg[alt="Four scenarios encountered when bracketing a root: an isolated root, a hidden root pair, a choppy function with many roots, and a singularity mistaken for a root",width=640]
+
+A bracket is only as trustworthy as the assumptions behind it. (a) is the well-behaved case bisection is built
+for: a single, cleanly isolated root. (b) shows why a *single* sign change at the endpoints is not the same
+guarantee as "exactly one root inside" — an even number of roots can hide between two same-signed endpoints
+entirely undetected. (c) is the opposite danger: a sufficiently choppy function can pack far more roots into a
+bracket than a naive search expects. (d) is the case called out below — bisection cannot distinguish a genuine
+root from a singularity where the function's sign flips without ever passing through zero.
 
 Bisection additionally tolerates one case the other methods do not handle as gracefully: if the interval
 straddles a singularity rather than a genuine root (e.g. stem:[f(x) = 1/(x-c)]), bisection will still converge
@@ -98,3 +111,18 @@ estimator.estimate();
 
 final var root = estimator.getRoot(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`BisectionSingleRootEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/BisectionSingleRootEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/BisectionSingleRootEstimator.java[Source]
+|===
+

@@ -1,4 +1,8 @@
 = Secant and False Position Methods
+:description: Explains the secant method and false position (regula falsi) method for single-variable root \
+finding, implemented as SecantSingleRootEstimator and FalsePositionSingleRootEstimator.
+:keywords: secant method, false position method, regula falsi, root finding, SecantSingleRootEstimator, \
+FalsePositionSingleRootEstimator, bracketed root estimator, linear interpolation
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -31,6 +35,13 @@ methods differ only in *which* point is kept:
   newest estimate — so the two points always continue to bracket the root, at the cost of sometimes retaining
   an old, "stale" point for many iterations if the function is not well approximated by a straight line over
   the whole bracket.
+
+image::algorithms/secant-false-position.svg[alt="Geometric comparison of the secant method and false position: secant discards the older of the two most recent points on every iteration, while false position keeps point 1 bracketing the root across many iterations",width=640]
+
+Both panels start from the same two points 1 and 2. The secant method (a) always interpolates through the two
+*most recent* estimates, so the working pair slides steadily toward the root. False position (b) instead keeps
+point 1 fixed for as long as it remains on the opposite side of the root from the newest estimate — every new
+line is drawn back to that same anchor, which is why its estimates 3 and 4 creep in from one side only.
 
 [mermaid]
 ....
@@ -89,3 +100,18 @@ estimator.estimate();
 
 final var root = estimator.getRoot(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`SecantSingleRootEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/SecantSingleRootEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/SecantSingleRootEstimator.java[Source]
+|===
+

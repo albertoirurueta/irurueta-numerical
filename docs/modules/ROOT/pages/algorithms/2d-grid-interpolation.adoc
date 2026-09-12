@@ -1,4 +1,8 @@
 = Two-Dimensional Grid Interpolation
+:description: Covers bilinear, tensor-product polynomial, and bicubic spline interpolation on 2D rectangular \
+grids, implemented by BilinearInterpolator, Polynomial2DInterpolator, and BicubicSpline2DInterpolator.
+:keywords: 2D interpolation, grid interpolation, bilinear interpolation, BilinearInterpolator, \
+Polynomial2DInterpolator, BicubicSpline2DInterpolator, bicubic spline, tensor-product interpolation
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -101,3 +105,14 @@ need for higher accuracy or gradient smoothness is already known — it is by fa
 final var interpolator = new BilinearInterpolator(x1, x2, y);
 final var value = interpolator.interpolate(x1Target, x2Target);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`BilinearInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/BilinearInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/BilinearInterpolator.java[Source]
+|===
+

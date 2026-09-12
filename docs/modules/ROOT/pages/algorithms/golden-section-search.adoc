@@ -1,4 +1,8 @@
 = Golden Section Search
+:description: Golden section search, the simplest reliable derivative-free method for one-dimensional function \
+minimization, implemented as GoldenSingleOptimizer.
+:keywords: golden section search, GoldenSingleOptimizer, one-dimensional minimization, bracketing a minimum, \
+BracketedSingleOptimizer, numerical optimization, golden ratio, derivative-free optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -64,6 +68,8 @@ that same fractional position within the larger of the two current segments. Bec
 self-replicating, starting from any bracket quickly converges to it regardless of the triplet's initial
 proportions.
 
+image::algorithms/golden-section-bracketing.svg[alt="Successive bracketing of a minimum: starting from the triplet 1, 3, 2, each new trial point 4, 5, 6 replaces whichever outer point no longer helps, shrinking the bracket until it tightly encloses the minimum",width=640]
+
 Every new function evaluation shrinks the bracket by a fixed factor of stem:[0.61803] — reliable, but only
 *linearly* convergent (each new significant figure costs a comparable number of further evaluations), unlike
 the superlinear convergence of xref:algorithms/brent-optimization.adoc[].
@@ -123,3 +129,18 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately 2.0
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`GoldenSingleOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/GoldenSingleOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/GoldenSingleOptimizer.java[Source]
+|===
+

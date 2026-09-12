@@ -1,4 +1,8 @@
 = Robust Estimation Framework
+:description: Overview of the shared hypothesize-and-verify robust estimation framework in \
+com.irurueta.numerical.robust underlying RANSAC, LMedS, MSAC, PROSAC, and PROMedS.
+:keywords: robust estimation, RANSAC, LMedS, MSAC, PROSAC, PROMedS, outlier rejection, RobustEstimator, \
+consensus, com.irurueta.numerical.robust
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

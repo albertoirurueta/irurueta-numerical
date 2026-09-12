@@ -1,4 +1,8 @@
 = Polynomial Interpolation
+:description: Polynomial interpolation of tabulated data via Neville's algorithm, with ordered-table search and \
+linear interpolation, implemented by PolynomialInterpolator and LinearInterpolator.
+:keywords: polynomial interpolation, Neville's algorithm, linear interpolation, PolynomialInterpolator, \
+LinearInterpolator, table search, numerical interpolation, error estimate
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -55,6 +59,8 @@ Lagrange's classical formula, but evaluating it directly is both awkward to code
 *Neville's algorithm* builds the same polynomial recursively instead, via a triangular tableau of partial
 polynomials stem:[P_{i(i+1)\ldots(i+m)}] — the value at stem:[x] of the unique polynomial through
 stem:[m+1] consecutive tabulated points. Each entry is built from its two "parents" in the previous column:
+
+image::algorithms/neville-tableau.svg[alt="Neville's algorithm tableau for four points: P0..P3 combine pairwise into P01, P12, P23, which combine again into P012, P123, converging to the single interpolated value P0123",width=560]
 
 [stem]
 ++++
@@ -123,3 +129,14 @@ final var interpolator = new PolynomialInterpolator(x, y, 4);
 final var value = interpolator.interpolate(target);
 final var errorEstimate = interpolator.getDy();
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`PolynomialInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/PolynomialInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/PolynomialInterpolator.java[Source]
+|===
+

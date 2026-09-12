@@ -1,4 +1,9 @@
 = Conjugate Gradient Methods
+:description: Explains Fletcher-Reeves and Polak-Ribiere conjugate gradient methods for multivariable \
+optimization using gradients, implemented as ConjugateGradientMultiOptimizer and \
+DerivativeConjugateGradientMultiOptimizer.
+:keywords: conjugate gradient, Fletcher-Reeves, Polak-Ribiere, ConjugateGradientMultiOptimizer, \
+DerivativeConjugateGradientMultiOptimizer, multivariable optimization, gradient descent, numerical optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -14,20 +19,20 @@ and `DerivativeConjugateGradientMultiOptimizer` (derivative-aware line search) i
 
 == Why not just follow the gradient downhill?
 
-The obvious approach — repeatedly line-minimize along the local downhill gradient stem:[-\nabla f(P_i)], the
+The obvious approach — repeatedly line-minimize along the local downhill gradient stem:[-\nabla f(\mathbf{P}_i)], the
 *steepest descent* method — has the same problem as minimizing along the coordinate axes one at a time: the
 new gradient at any line minimum is, by construction, perpendicular to the direction just traversed. In a
 long, narrow valley this forces a sequence of right-angle turns, taking many small steps to reach the valley
 floor instead of running straight down it.
 
+image::algorithms/conjugate-gradient-valley.svg[alt="(a) Steepest descent zigzagging down a long narrow valley, crossing and re-crossing it many times; (b) the underlying reason: exact line search leaves the gradient perpendicular to the direction just traversed, forcing the next step to turn 90 degrees",width=640]
+
 == Constructing conjugate directions from gradients alone
 
-For the local quadratic approximation stem:[f(\mathbf{x}) \approx c - \mathbf{b}^\top\mathbf{x} +
-\tfrac{1}{2}\mathbf{x}^\top A\mathbf{x}], a remarkable fact makes this tractable without ever forming or storing
-the Hessian stem:[A]: if stem:[\mathbf{g}_i = -\nabla f(P_i)], and stem:[P_{i+1}] is the result of line-
-minimizing from stem:[P_i] along a direction stem:[\mathbf{h}_i], then setting stem:[\mathbf{g}_{i+1} =
--\nabla f(P_{i+1})] gives *exactly* the same vector that the classical conjugate-gradient recurrence for
-linear systems would have constructed using stem:[A] directly:
+For the local quadratic approximation stem:[f(\mathbf{x}) \approx c - \mathbf{b}^\top\mathbf{x} + \tfrac{1}{2}\mathbf{x}^\top A\mathbf{x}], a remarkable fact makes this tractable without ever forming or storing
+the Hessian stem:[\mathbf{A}]: if stem:[\mathbf{g}_i = -\nabla f(\mathbf{P}_i)], and stem:[\mathbf{P}_{i+1}] is the result of line-
+minimizing from stem:[\mathbf{P}_i] along a direction stem:[\mathbf{h}_i], then setting stem:[\mathbf{g}_{i+1} = -\nabla f(\mathbf{P}_{i+1})] gives *exactly* the same vector that the classical conjugate-gradient recurrence for
+linear systems would have constructed using stem:[\mathbf{A}] directly:
 
 [stem]
 ++++
@@ -139,3 +144,22 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java[Source]
+
+|`GradientFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/GradientFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/GradientFunctionEvaluatorListener.java[Source]
+
+|`ConjugateGradientMultiOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/ConjugateGradientMultiOptimizer.java[Source]
+|===
+

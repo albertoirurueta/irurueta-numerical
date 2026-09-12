@@ -1,4 +1,8 @@
 = RANSAC (Random Sample Consensus)
+:description: RANSAC, implemented as RANSACRobustEstimator, robustly fits a model to data containing outliers \
+by repeatedly sampling minimal subsets and keeping the candidate with the largest consensus set.
+:keywords: RANSAC, RANSACRobustEstimator, random sample consensus, robust estimation, outlier rejection, \
+consensus set, model fitting, com.irurueta.numerical.robust
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -127,3 +131,18 @@ estimator.setConfidence(0.99);
 final var line = estimator.estimate(); // [a, b]
 final var inliers = estimator.getInliersData();
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`RANSACRobustEstimatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/RANSACRobustEstimatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimatorListener.java[Source]
+
+|`RANSACRobustEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/RANSACRobustEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/RANSACRobustEstimator.java[Source]
+|===
+

@@ -1,4 +1,8 @@
 = Kalman Filter
+:description: Kalman filter for recursive state estimation of a discrete-time linear system from noisy \
+measurements, implemented as KalmanFilter with predict and correct steps.
+:keywords: Kalman filter, KalmanFilter, state estimation, predict-correct, signal processing, sensor fusion, \
+measurement noise covariance, linear dynamic system
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -17,15 +21,15 @@ The filter assumes the true state evolves linearly, and is observed only through
 
 [stem]
 ++++
-x_k = A x_{k-1} + B u_k + w_k, \qquad z_k = H x_k + v_k
+\mathbf{x}_k = \mathbf{A} \mathbf{x}_{k-1} + \mathbf{B} \mathbf{u}_k + \mathbf{w}_k, \qquad \mathbf{z}_k = \mathbf{H} \mathbf{x}_k + \mathbf{v}_k
 ++++
 
-where stem:[x_k] is the (unobserved) state at step stem:[k], stem:[u_k] is an optional external control input,
-stem:[z_k] is the measurement actually taken, and stem:[w_k \sim \mathcal{N}(0, Q)] and
-stem:[v_k \sim \mathcal{N}(0, R)] are independent, zero-mean Gaussian process and measurement noise. Neither
-noise term is observed directly — only their covariances stem:[Q] and stem:[R] are assumed known (typically
-stem:[R] is estimated from real sensor data by
-xref:algorithms/measurement-noise-covariance-estimation.adoc[], while stem:[Q] is chosen intuitively to reflect
+where stem:[\mathbf{x}_k] is the (unobserved) state at step stem:[k], stem:[\mathbf{u}_k] is an optional external control input,
+stem:[\mathbf{z}_k] is the measurement actually taken, and stem:[\mathbf{w}_k \sim \mathcal{N}(0, Q)] and
+stem:[\mathbf{v}_k \sim \mathcal{N}(0, R)] are independent, zero-mean Gaussian process and measurement noise. Neither
+noise term is observed directly — only their covariances stem:[\mathbf{Q}] and stem:[\mathbf{R}] are assumed known (typically
+stem:[\mathbf{R}] is estimated from real sensor data by
+xref:algorithms/measurement-noise-covariance-estimation.adoc[], while stem:[\mathbf{Q}] is chosen intuitively to reflect
 how much unmodeled dynamics the filter should tolerate).
 
 == Predict and correct
@@ -35,27 +39,27 @@ the system model, before any new measurement is available:
 
 [stem]
 ++++
-x'_k = A x_{k-1} + B u_k, \qquad P'_k = A P_{k-1} A^T + Q
+\mathbf{x}'_k = \mathbf{A} \mathbf{x}_{k-1} + \mathbf{B} \mathbf{u}_k, \qquad \mathbf{P}'_k = \mathbf{A} \mathbf{P}_{k-1} \mathbf{A}^T + \mathbf{Q}
 ++++
 
 *Correct* (measurement update) then folds in the new measurement stem:[z_k], weighted by the *Kalman gain*
-stem:[K_k]:
+stem:[\mathbf{K}_k]:
 
 [stem]
 ++++
-K_k = P'_k H^T \left(H P'_k H^T + R\right)^{-1}
+\mathbf{K}_k = \mathbf{P}'_k \mathbf{H}^T \left(\mathbf{H} \mathbf{P}'_k \mathbf{H}^T + \mathbf{R}\right)^{-1}
 ++++
 
 [stem]
 ++++
-x_k = x'_k + K_k \left(z_k - H x'_k\right), \qquad P_k = \left(I - K_k H\right) P'_k
+\mathbf{x}_k = \mathbf{x}'_k + \mathbf{K}_k \left(\mathbf{z}_k - \mathbf{H} \mathbf{x}'_k\right), \qquad \mathbf{P}_k = \left(\mathbf{I} - \mathbf{K}_k \mathbf{H}\right) \mathbf{P}'_k
 ++++
 
-stem:[z_k - H x'_k] is the *innovation* — the discrepancy between the actual measurement and what the model
-predicted it would be. The gain stem:[K_k] balances how much to trust that discrepancy against how much to
-trust the prediction: a large stem:[R] (noisy sensor) shrinks stem:[K_k], leaning on the model; a large
-stem:[P'_k] (uncertain prediction) grows stem:[K_k], leaning on the measurement. `KalmanFilter.correct(Matrix)`
-solves for stem:[K_k^T] via `Utils.solve` on stem:[\left(H P'_k H^T + R\right) K_k^T = H P'_k] rather than
+stem:[\mathbf{z}_k - \mathbf{H} \mathbf{x}'_k] is the *innovation* — the discrepancy between the actual measurement and what the model
+predicted it would be. The gain stem:[\mathbf{K}_k] balances how much to trust that discrepancy against how much to
+trust the prediction: a large stem:[\mathbf{R}] (noisy sensor) shrinks stem:[\mathbf{K}_k], leaning on the model; a large
+stem:[\mathbf{P}'_k] (uncertain prediction) grows stem:[\mathbf{K}_k], leaning on the measurement. `KalmanFilter.correct(Matrix)`
+solves for stem:[\mathbf{K}_k^T] via `Utils.solve` on stem:[\left(\mathbf{H} \mathbf{P}'_k \mathbf{H}^T + \mathbf{R}\right) \mathbf{K}_k^T = \mathbf{H} \mathbf{P}'_k] rather than
 forming the matrix inverse explicitly, which is the more numerically stable way to reach the same result.
 
 [mermaid]
@@ -96,14 +100,14 @@ state dimensions (`dp`) and `measureParams` measurement dimensions (`mp`); `cont
   `DEFAULT_MEASUREMENT_NOISE_VARIANCE` (`1e-1`) times identity — all meant to be overridden once the actual
   system's dynamics and sensor noise are known.
 
-TIP: A lower stem:[Q] makes the filter trust its own model more, producing a smoother but slower-to-react state
-estimate; a higher stem:[Q] lets it follow the true state more quickly at the cost of noisier output — the same
-trade-off applies to stem:[R], in the opposite direction, since a `KalmanFilter` weighs prediction against
+TIP: A lower stem:[\mathbf{Q}] makes the filter trust its own model more, producing a smoother but slower-to-react state
+estimate; a higher stem:[\mathbf{Q}] lets it follow the true state more quickly at the cost of noisier output — the same
+trade-off applies to stem:[\mathbf{R}], in the opposite direction, since a `KalmanFilter` weighs prediction against
 measurement purely through the ratio between the two.
 
 == Example
 
-Estimating a constant scalar value (stem:[dp = mp = 1], stem:[A = H = 1], no control) from repeated noisy
+Estimating a constant scalar value (stem:[dp = mp = 1], stem:[\mathbf{A} = \mathbf{H} = \mathbf{1}], no control) from repeated noisy
 measurements — the simplest possible instance of the model, and the introductory example used by
 xref:reference.adoc#welch1995[Welch and Bishop, 1995] themselves:
 
@@ -130,3 +134,14 @@ for (final var z : measurements) { // measurements: double[] of noisy readings
 
 final var estimate = filter.getStatePost().getElementAtIndex(0);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`KalmanFilter`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/signal/processing/KalmanFilter.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/signal/processing/KalmanFilter.java[Source]
+|===
+

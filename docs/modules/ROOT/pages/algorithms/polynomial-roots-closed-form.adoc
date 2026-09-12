@@ -1,4 +1,9 @@
 = Closed-Form Polynomial Roots
+:description: Exact closed-form root formulas for linear, quadratic, and cubic polynomials, implemented by \
+First/Second/ThirdDegreePolynomialRootsEstimator.
+:keywords: closed-form polynomial roots, quadratic formula, cubic equation, Cardano's formula, \
+FirstDegreePolynomialRootsEstimator, SecondDegreePolynomialRootsEstimator, ThirdDegreePolynomialRootsEstimator, \
+root finding
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -25,6 +30,8 @@ x = -\frac{b}{a}
 `FirstDegreePolynomialRootsEstimator` implements exactly this.
 
 == Quadratic equations
+
+image::algorithms/quadratic-cubic-discriminant.svg[alt="The quadratic discriminant classifies a parabola's roots as two crossings, one tangent point, or none; the cubic's h classifies it as three crossings or one crossing plus an inflection",width=640]
 
 For stem:[ax^2 + bx + c = 0], the discriminant stem:[\Delta = b^2 - 4ac] both solves the equation and
 classifies its roots:
@@ -142,3 +149,14 @@ estimator.estimate();
 final var roots = estimator.getRoots(); // Complex[]{-2+0i, 2+0i}
 final var hasTwoRealRoots = estimator.hasTwoDistinctRealRoots(); // true
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SecondDegreePolynomialRootsEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/roots/SecondDegreePolynomialRootsEstimator.java[Source]
+|===
+

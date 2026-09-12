@@ -1,4 +1,10 @@
 = Levenberg-Marquardt Fitting Algorithm
+:description: Levenberg-Marquardt algorithm for nonlinear least-squares curve fitting, implemented as \
+LevenbergMarquardtSingleDimensionFitter, LevenbergMarquardtMultiDimensionFitter, and \
+LevenbergMarquardtMultiVariateFitter.
+:keywords: Levenberg-Marquardt, nonlinear least squares, curve fitting, LevenbergMarquardtSingleDimensionFitter, \
+LevenbergMarquardtMultiDimensionFitter, LevenbergMarquardtMultiVariateFitter, chi-square minimization, damping \
+parameter
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -133,7 +139,7 @@ Stated as a recipe:
 
 [stem]
 ++++
-C \equiv \alpha^{-1}
+\mathbf{C} \equiv \boldsymbol{\alpha}^{-1}
 ++++
 
 == Library implementation
@@ -180,10 +186,17 @@ Convergence is tuned via `setNdone(int)` (consecutive negligible-improvement ite
 default 4), `setItmax(int)` (maximum iterations, default 5000), and `setTol(double)` (the "negligible" threshold
 on stem:[\chi^2], default 1e-3).
 
-TIP: By default (`setCovarianceAdjusted(true)`) the fitters additionally rescale the raw stem:[\alpha^{-1}]
+TIP: By default (`setCovarianceAdjusted(true)`) the fitters additionally rescale the raw stem:[\boldsymbol{\alpha}^{-1}]
 covariance using the input samples' Jacobians and standard deviations
-(stem:[\mathrm{Cov} = (J^\top W J)^{-1}]) to produce a covariance on the true scale of the problem, as discussed
+(stem:[\mathrm{Cov} = (\mathbf{J}^\top \mathbf{W} \mathbf{J})^{-1}]) to produce a covariance on the true scale of the problem, as discussed
 in xref:reference.adoc#press2007[Press et al., 2007], Section 15.6 (page 812).
+
+image::algorithms/confidence-ellipses.svg[alt="Nested joint confidence-region ellipses for two fitted parameters at increasing delta chi-squared thresholds; projecting the outer ellipse onto one axis gives that parameter's own individual confidence interval",width=620]
+
+The covariance matrix is what makes this picture possible: its diagonal gives each parameter's own variance,
+directly usable for stem:[\pm 1\sigma]-style intervals, while the full matrix (diagonal *and* off-diagonal
+terms) traces out the joint confidence ellipse shown above for any pair of parameters — a strictly larger
+region than treating the two parameters as independent would suggest, whenever they are correlated.
 
 == Example
 
@@ -224,6 +237,20 @@ final var params = fitter.getA();          // fitted [amplitude, center, width]
 final var covariance = fitter.getCovar();   // covariance matrix of the parameters
 final var chiSq = fitter.getChisq();        // goodness-of-fit statistic
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`LevenbergMarquardtSingleDimensionFunctionEvaluator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFunctionEvaluator.java[Source]
+
+|`LevenbergMarquardtSingleDimensionFitter`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/fitting/LevenbergMarquardtSingleDimensionFitter.java[Source]
+|===
 
 == When to use it
 

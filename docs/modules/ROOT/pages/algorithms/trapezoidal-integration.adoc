@@ -1,4 +1,9 @@
 = Trapezoidal Rule Integration
+:description: Explains the extended trapezoidal rule for numerical quadrature and its role as the building \
+block for Simpson's rule and Romberg integration, implemented as TrapezoidalQuadrature and \
+TrapezoidalQuadratureIntegrator.
+:keywords: trapezoidal rule, numerical integration, quadrature, TrapezoidalQuadrature, \
+TrapezoidalQuadratureIntegrator, extended trapezoidal rule, Euler-Maclaurin formula
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -31,6 +36,8 @@ rule*:
 
 This is a *closed* formula — it evaluates the integrand at both endpoints stem:[a] and stem:[b] — and requires
 the integrand to be well-behaved (no singularities) over the whole finite interval stem:[[a, b]].
+
+image::algorithms/trapezoidal-quadrature.svg[alt="(a) Closed formulas such as the trapezoidal rule evaluate the integrand at both endpoints, while open formulas (used for improper integrals, see midpoint integration) evaluate only interior points; (b) each refinement stage of the extended trapezoidal rule reuses every previous evaluation and adds only the new midpoints",width=640]
 
 == Incremental refinement
 
@@ -119,3 +126,30 @@ final var listener = new SingleDimensionFunctionEvaluatorListener() {
 final var integrator = new TrapezoidalQuadratureIntegrator(0.0, Math.PI, listener);
 final var result = integrator.integrate(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Integrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/Integrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/Integrator.java[Source]
+
+|`IntegratorType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/IntegratorType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/IntegratorType.java[Source]
+
+|`QuadratureType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/QuadratureType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/QuadratureType.java[Source]
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`TrapezoidalQuadratureIntegrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/TrapezoidalQuadratureIntegrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/TrapezoidalQuadratureIntegrator.java[Source]
+|===
+

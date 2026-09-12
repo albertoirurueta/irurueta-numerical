@@ -1,4 +1,10 @@
 = Scattered-Data Interpolation
+:description: Explains radial basis function (RBF) interpolation, kriging, and Shepard interpolation for \
+scattered N-dimensional data, implemented as RadialBasisFunctionInterpolator, KrigingInterpolator, and \
+ShepardInterpolator.
+:keywords: scattered data interpolation, radial basis function interpolation, RBF interpolation, kriging, \
+Gaussian process regression, Shepard interpolation, RadialBasisFunctionInterpolator, KrigingInterpolator, \
+ShepardInterpolator, variogram
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -109,13 +115,12 @@ distance:
 v(r) \approx \frac{1}{2}\left\langle \big[y(\mathbf{x}+\mathbf{r}) - y(\mathbf{x})\big]^2 \right\rangle
 ++++
 
-Writing stem:[v_{ij} \equiv v(\|\mathbf{x}_i - \mathbf{x}_j\|)] and stem:[v^*_j \equiv v(\|\mathbf{x}^* -
-\mathbf{x}_j\|)] for a query point stem:[\mathbf{x}^*], and defining the augmented vectors and matrix:
+Writing stem:[v_{ij} \equiv v(\|\mathbf{x}_i - \mathbf{x}_j\|)] and stem:[v^*_j \equiv v(\|\mathbf{x}^* - \mathbf{x}_j\|)] for a query point stem:[\mathbf{x}^*], and defining the augmented vectors and matrix:
 
 [stem]
 ++++
-Y = (y_0, \ldots, y_{N-1}, 0), \qquad V^* = (v^*_0, \ldots, v^*_{N-1}, 1), \qquad
-V = \begin{bmatrix} v_{00} & \cdots & v_{0,N-1} & 1 \\ \vdots & & \vdots & \vdots \\
+\mathbf{Y} = (y_0, \ldots, y_{N-1}, 0), \qquad \mathbf{V}^* = (v^*_0, \ldots, v^*_{N-1}, 1), \qquad
+\mathbf{V} = \begin{bmatrix} v_{00} & \cdots & v_{0,N-1} & 1 \\ \vdots & & \vdots & \vdots \\
 v_{N-1,0} & \cdots & v_{N-1,N-1} & 1 \\ 1 & \cdots & 1 & 0 \end{bmatrix}
 ++++
 
@@ -123,7 +128,7 @@ the kriging estimate and its variance are:
 
 [stem]
 ++++
-\hat{y}(\mathbf{x}^*) = V^{*\top} V^{-1} Y, \qquad \mathrm{Var}(\hat{y}(\mathbf{x}^*)) = V^{*\top} V^{-1} V^*
+\hat{y}(\mathbf{x}^*) = \mathbf{V}^{*\top} \mathbf{V}^{-1} \mathbf{Y}, \qquad \mathrm{Var}(\hat{y}(\mathbf{x}^*)) = \mathbf{V}^{*\top} \mathbf{V}^{-1} \mathbf{V}^*
 ++++
 
 The extra row/column of ones (and the corresponding zero) make this an *unbiased* estimator by automatically
@@ -198,3 +203,22 @@ final var kriging = new KrigingInterpolator(points, values);
 final var esterr = new double[1];
 final var krigedValue = kriging.interpolate(target, esterr);
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiQuadricRadialBasisFunction`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/MultiQuadricRadialBasisFunction.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/MultiQuadricRadialBasisFunction.java[Source]
+
+|`RadialBasisFunctionInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/RadialBasisFunctionInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/RadialBasisFunctionInterpolator.java[Source]
+
+|`KrigingInterpolator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/interpolation/KrigingInterpolator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/interpolation/KrigingInterpolator.java[Source]
+|===
+

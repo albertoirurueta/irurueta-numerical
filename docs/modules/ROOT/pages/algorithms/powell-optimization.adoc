@@ -1,4 +1,8 @@
 = Powell's Method
+:description: Powell's derivative-free multivariate optimization method using conjugate direction sets and \
+line minimization, implemented by PowellMultiOptimizer.
+:keywords: Powell's method, multivariate optimization, derivative-free optimization, conjugate directions, \
+PowellMultiOptimizer, line minimization, function minimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -11,9 +15,9 @@ the shared line-minimization machinery) and 10.7 (page 509, Powell's direction-s
 
 == Line minimization as a building block
 
-Given a point stem:[P] and a direction stem:[\mathbf{n}] in stem:[N]-dimensional space, any
+Given a point stem:[\mathbf{P}] and a direction stem:[\mathbf{n}] in stem:[N]-dimensional space, any
 xref:algorithms/brent-optimization.adoc[one-dimensional minimizer] can find the scalar stem:[\lambda] that
-minimizes stem:[f(P + \lambda\mathbf{n})] — reducing a multidimensional problem, along one direction, to a
+minimizes stem:[f(\mathbf{P} + \lambda\mathbf{n})] — reducing a multidimensional problem, along one direction, to a
 problem already solved. Multi-variable methods differ mainly in *how they pick the next direction* to line-
 minimize along. This package implements the shared line-minimization step once, in `LineMultiOptimizer`, and
 both xref:algorithms/powell-optimization.adoc[] (this page) and the non-derivative variant of
@@ -29,12 +33,14 @@ stops decreasing — is workable but can be badly inefficient: for a function wh
 narrow, diagonally-oriented valley, this takes many tiny zig-zag steps to get anywhere, crossing and
 re-crossing the valley's true axis. What is needed instead is a set of *conjugate directions*.
 
+image::algorithms/powell-valley-zigzag.svg[alt="Coordinate-direction line minimization in a long, narrow, diagonally-oriented valley: alternating horizontal and vertical steps cross and re-cross the valley many times instead of heading straight for the minimum",width=640]
+
 Two directions stem:[\mathbf{u}] and stem:[\mathbf{v}] are conjugate (with respect to the local quadratic
 approximation of stem:[f], with Hessian stem:[A]) when:
 
 [stem]
 ++++
-\mathbf{u}^\top A\, \mathbf{v} = 0
+\mathbf{u}^\top \mathbf{A}\, \mathbf{v} = 0
 ++++
 
 The useful property: after line-minimizing along stem:[\mathbf{u}], minimizing along a direction conjugate to
@@ -45,9 +51,9 @@ approximately quadratic near their minimum, repeated passes converge quadratical
 == Building conjugate directions without knowing the Hessian
 
 Powell's original basic procedure starts from the coordinate directions stem:[\mathbf{u}_i = \mathbf{e}_i] and
-repeats: save the starting point stem:[P_0]; line-minimize in turn along each current direction, arriving at
-stem:[P_N]; then discard the *first* direction, shift every other direction down by one slot, and set the new
-last direction to the net direction moved, stem:[P_N - P_0]. Powell showed that stem:[k] repetitions of this
+repeats: save the starting point stem:[\mathbf{P}_0]; line-minimize in turn along each current direction, arriving at
+stem:[\mathbf{P}_N]; then discard the *first* direction, shift every other direction down by one slot, and set the new
+last direction to the net direction moved, stem:[\mathbf{P}_N - \mathbf{P}_0]. Powell showed that stem:[k] repetitions of this
 procedure produce a set of directions whose last stem:[k] members are mutually conjugate — so, in principle,
 stem:[N] repetitions exactly minimize a quadratic form.
 
@@ -123,3 +129,18 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java[Source]
+
+|`PowellMultiOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/PowellMultiOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/PowellMultiOptimizer.java[Source]
+|===
+

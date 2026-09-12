@@ -33,7 +33,7 @@ class SecantSingleRootEstimatorTest {
     private static final double MIN_TOLERANCE = 3e-8;
     private static final double MAX_TOLERANCE = 1e-5;
 
-    private static final int TIMES = 10;
+    private static final int TIMES = 20;
 
     private double constant;
     private double root1;

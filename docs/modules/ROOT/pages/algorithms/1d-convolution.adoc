@@ -1,4 +1,8 @@
 = 1D Discrete Convolution
+:description: Explains discrete 1D convolution and its edge-extension strategies, implemented by the \
+Convolver1D class in irurueta-numerical.
+:keywords: convolution, discrete convolution, signal processing, Convolver1D, ConvolverEdgeMethod, kernel, \
+edge extension, digital filtering
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -66,6 +70,8 @@ periodic.
 the signal appears to bounce back and forth indefinitely.
 |===
 
+image::algorithms/convolution-edge-modes.svg[alt="The four ConvolverEdgeMethod strategies illustrated by how each extends a 5-sample signal past index 0: ZERO_EDGE pads with zero, CONSTANT_EDGE pads with a configured constant, REPEAT_EDGE wraps from the far end, and MIRROR_EDGE reflects the signal back on itself",width=620]
+
 [mermaid]
 ....
 flowchart TD
@@ -120,3 +126,18 @@ convolver.setEdgeMethod(ConvolverEdgeMethod.MIRROR_EDGE);
 
 final var smoothed = convolver.convolve();
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Convolver1D`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/signal/processing/Convolver1D.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/signal/processing/Convolver1D.java[Source]
+
+|`ConvolverEdgeMethod`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/signal/processing/ConvolverEdgeMethod.java[Source]
+|===
+

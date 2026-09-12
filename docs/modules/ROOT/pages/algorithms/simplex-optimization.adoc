@@ -1,4 +1,8 @@
 = Downhill Simplex Method (Nelder-Mead)
+:description: Explains the downhill simplex (Nelder-Mead) method for derivative-free multi-variable function \
+minimization, implemented as SimplexMultiOptimizer.
+:keywords: downhill simplex method, Nelder-Mead algorithm, derivative-free optimization, multi-variable \
+optimization, SimplexMultiOptimizer, function minimization, reflection expansion contraction shrink
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -19,7 +23,7 @@ other stem:[N] vertices are:
 
 [stem]
 ++++
-P_i = P_0 + \lambda\,\mathbf{e}_i, \qquad i = 1, \ldots, N
+\mathbf{P}_i = \mathbf{P}_0 + \lambda\,\mathbf{e}_i, \qquad i = 1, \ldots, N
 ++++
 
 where stem:[\mathbf{e}_i] are the unit vectors. Unlike one-dimensional minimization, there is no way to
@@ -27,6 +31,8 @@ where stem:[\mathbf{e}_i] are the unit vectors. Unlike one-dimensional minimizat
 initial guess, wherever that leads.
 
 == Reflect, expand, contract, shrink
+
+image::algorithms/simplex-moves.svg[alt="The four possible outcomes of a downhill simplex step, shown as a 2D triangle simplex: (a) reflection through the opposite face, (b) reflection followed by expansion, (c) contraction back toward the face, (d) multiple contraction shrinking every vertex toward the best one",width=640]
 
 Each step identifies the simplex's highest (worst), second-highest, and lowest (best) vertices by function
 value, then tries to replace the worst one by reflecting it through the centroid of all the others:
@@ -123,3 +129,18 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`MultiDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java[Source]
+
+|`SimplexMultiOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/SimplexMultiOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/SimplexMultiOptimizer.java[Source]
+|===
+

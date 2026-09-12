@@ -1,4 +1,8 @@
 = PROSAC (Progressive Sample Consensus)
+:description: PROSAC speeds up RANSAC-style robust estimation by drawing samples progressively from the \
+best-quality data first, implemented as PROSACRobustEstimator.
+:keywords: PROSAC, PROSACRobustEstimator, progressive sample consensus, robust estimation, RANSAC, outlier \
+rejection, quality-guided sampling, com.irurueta.numerical.robust
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -197,3 +201,18 @@ final var estimator = new PROSACRobustEstimator<>(listener);
 estimator.setConfidence(0.99);
 final var line = estimator.estimate(); // [a, b], typically found much faster than plain RANSAC
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`PROSACRobustEstimatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/PROSACRobustEstimatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/PROSACRobustEstimatorListener.java[Source]
+
+|`PROSACRobustEstimator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/robust/PROSACRobustEstimator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/robust/PROSACRobustEstimator.java[Source]
+|===
+

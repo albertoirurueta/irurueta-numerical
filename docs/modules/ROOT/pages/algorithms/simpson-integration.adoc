@@ -1,4 +1,8 @@
 = Simpson's Rule Integration
+:description: Explains Simpson's rule numerical integration via Richardson extrapolation of the trapezoidal \
+rule, implemented as the generic SimpsonIntegrator and SimpsonMatrixIntegrator base classes.
+:keywords: Simpson's rule, numerical integration, quadrature, Richardson extrapolation, SimpsonIntegrator, \
+SimpsonMatrixIntegrator, SimpsonTrapezoidalQuadratureIntegrator, composite Simpson's rule
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -121,3 +125,30 @@ final var listener = new SingleDimensionFunctionEvaluatorListener() {
 final var integrator = new SimpsonTrapezoidalQuadratureIntegrator(0.0, Math.PI, listener);
 final var result = integrator.integrate(); // approximately 2.0, in fewer stages than the plain quadrature integrator
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Integrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/Integrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/Integrator.java[Source]
+
+|`IntegratorType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/IntegratorType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/IntegratorType.java[Source]
+
+|`QuadratureType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/QuadratureType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/QuadratureType.java[Source]
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`SimpsonTrapezoidalQuadratureIntegrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/SimpsonTrapezoidalQuadratureIntegrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/SimpsonTrapezoidalQuadratureIntegrator.java[Source]
+|===
+

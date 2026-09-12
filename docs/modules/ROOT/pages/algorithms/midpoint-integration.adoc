@@ -1,4 +1,8 @@
 = Midpoint Rule Integration for Improper Integrals
+:description: The extended midpoint quadrature rule and its change-of-variable variants for integrating \
+improper integrals with infinite ranges or endpoint singularities.
+:keywords: midpoint rule, improper integrals, numerical integration, quadrature, MidPointQuadrature, \
+InfinityMidPointQuadrature, ExponentialMidPointQuadrature, endpoint singularity, infinite integration limits
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -9,6 +13,12 @@ cannot be evaluated exactly, infinite or semi-infinite ranges, and several stand
 singularity. It is described in xref:reference.adoc#press2007[Press et al., 2007], Sections 4.1 and 4.4 (pages
 161, 167–172), and implemented as `MidPointQuadrature` (and `MidPointMatrixQuadrature`) plus four derived
 quadratures that each apply a different change of variables.
+
+image::algorithms/trapezoidal-quadrature.svg[alt="Panel (a) contrasts closed formulas, which evaluate the integrand at both endpoints, with open formulas such as the midpoint rule, which use only interior points and so never need to evaluate the integrand exactly at a and b",width=640]
+
+Panel (a) above is the key distinction: because the midpoint rule never samples stem:[f] at stem:[x_0] or
+stem:[x_{N-1}], it keeps working even when the integrand is undefined, infinite, or singular exactly at an
+endpoint — the situations this page's five quadrature classes are built to handle.
 
 == What makes an integral "improper"
 
@@ -143,3 +153,30 @@ final var listener = new SingleDimensionFunctionEvaluatorListener() {
 final var integrator = new LowerSquareRootMidPointQuadratureIntegrator(0.0, 1.0, listener);
 final var result = integrator.integrate(); // approximately 2.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`Integrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/Integrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/Integrator.java[Source]
+
+|`IntegratorType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/IntegratorType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/IntegratorType.java[Source]
+
+|`QuadratureType`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/QuadratureType.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/QuadratureType.java[Source]
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`LowerSquareRootMidPointQuadratureIntegrator`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/integration/LowerSquareRootMidPointQuadratureIntegrator.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/integration/LowerSquareRootMidPointQuadratureIntegrator.java[Source]
+|===
+

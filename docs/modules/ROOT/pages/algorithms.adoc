@@ -1,4 +1,8 @@
 = Algorithms
+:description: Catalog of every numerical algorithm in irurueta-numerical, grouped by problem domain: fitting, \
+integration, interpolation, optimization, root finding, polynomials, robust estimation, and signal processing.
+:keywords: algorithm catalog, root finding, optimization, numerical integration, interpolation, curve fitting, \
+robust estimation, RANSAC, Kalman filter, polynomial estimation
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

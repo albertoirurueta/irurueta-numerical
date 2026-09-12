@@ -1,4 +1,8 @@
 = Brent's Method
+:description: Explains Brent's method for one-dimensional minimization without derivatives, combining \
+parabolic interpolation with golden section search, implemented as BrentSingleOptimizer.
+:keywords: Brent's method, optimization, minimization, BrentSingleOptimizer, parabolic interpolation, \
+golden section search, single-variable optimization, numerical optimization
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -12,6 +16,8 @@ golden section step otherwise. It is described in xref:reference.adoc#press2007[
 package.
 
 == Inverse parabolic interpolation
+
+image::algorithms/brent-parabolic-fit.svg[alt="Successive parabolic interpolation converging to a minimum: a parabola through points 1, 2, 3 lands at 4; a new parabola through 2, 3, 4 lands at 5, closer still to the true minimum",width=640]
 
 Given three points and their function values stem:[f(a)], stem:[f(b)], stem:[f(c)], the abscissa of the minimum
 of the parabola passing through them is:
@@ -98,3 +104,18 @@ optimizer.minimize();
 final var xmin = optimizer.getResult();          // approximately 2.0
 final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0
 ----
+
+.Classes used in this example
+[cols="2,1,1",options="header"]
+|===
+|Class |Javadoc |Source
+
+|`SingleDimensionFunctionEvaluatorListener`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/SingleDimensionFunctionEvaluatorListener.java[Source]
+
+|`BrentSingleOptimizer`
+|https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/BrentSingleOptimizer.html[Javadoc]
+|https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/BrentSingleOptimizer.java[Source]
+|===
+
