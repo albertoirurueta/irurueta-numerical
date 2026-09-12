@@ -56,11 +56,10 @@ Books and papers that the algorithms in xref:algorithms.adoc[] are adapted from 
 behind them.
 
 [[press2007]]Press, W.H., Teukolsky, S.A., Vetterling, W.T., and Flannery, B.P. (2007)::
-_Numerical Recipes: The Art of Scientific Computing_, 3rd ed. New York: Cambridge University Press.
-ISBN 978-0-521-88068-8. Source of the classical root-finding, optimization, integration, interpolation, and
-least-squares algorithms (linear and nonlinear, including the Levenberg-Marquardt method of
-xref:algorithms/levenberg-marquardt.adoc[]) that several estimators and fitters in this library are adapted
-from.
+_https://numerical.recipes[Numerical Recipes: The Art of Scientific Computing]_, 3rd ed. New York: Cambridge
+University Press. ISBN 978-0-521-88068-8. Source of the classical root-finding, optimization, integration,
+interpolation, and least-squares algorithms (linear and nonlinear, including the Levenberg-Marquardt method of
+xref:algorithms/levenberg-marquardt.adoc[]) that several estimators and fitters in this library are adapted from.
 
 [[wikipedia-quadratic]]Wikipedia contributors::
 https://en.wikipedia.org/wiki/Quadratic_function[Quadratic function]. _Wikipedia, The Free Encyclopedia_.
@@ -74,34 +73,38 @@ Source of the discriminant-based cubic solution used by `ThirdDegreePolynomialRo
 xref:algorithms/polynomial-roots-closed-form.adoc[].
 
 [[fischler1981]]Fischler, M.A., and Bolles, R.C. (1981)::
-"Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated
-Cartography." _Communications of the ACM_, 24(6), 381–395. The original RANSAC paper, source of the algorithm
-implemented by `RANSACRobustEstimator`, described in xref:algorithms/ransac-robust-estimation.adoc[].
+"https://dl.acm.org/doi/10.1145/358669.358692[Random Sample Consensus: A Paradigm for Model Fitting with
+Applications to Image Analysis and Automated Cartography]." _Communications of the ACM_, 24(6), 381–395. The
+original RANSAC paper, source of the algorithm implemented by `RANSACRobustEstimator`, described in
+xref:algorithms/ransac-robust-estimation.adoc[].
 
 [[rousseeuw1984]]Rousseeuw, P.J. (1984)::
 "Least Median of Squares Regression." _Journal of the American Statistical Association_, 79(388), 871–880.
-DOI: 10.1080/01621459.1984.10477105. Source of the LMedS criterion and its scale-estimation constant
-(`1.4826`) used by `LMedSRobustEstimator`, described in xref:algorithms/lmeds-robust-estimation.adoc[].
+https://www.tandfonline.com/doi/abs/10.1080/01621459.1984.10477105[DOI: 10.1080/01621459.1984.10477105]. Source
+of the LMedS criterion and its scale-estimation constant (`1.4826`) used by `LMedSRobustEstimator`, described in
+xref:algorithms/lmeds-robust-estimation.adoc[].
 
 [[torr2000]]Torr, P.H.S., and Zisserman, A. (2000)::
-"MLESAC: A New Robust Estimator with Application to Estimating Image Geometry." _Computer Vision and Image
-Understanding_, 78(1), 138–156. Introduces MSAC (M-estimator SAmple Consensus) as a bounded-loss refinement of
-RANSAC's scoring function, prior to the full maximum-likelihood MLESAC estimator; source of the algorithm
-implemented by `MSACRobustEstimator`, described in xref:algorithms/msac-robust-estimation.adoc[].
+"https://doi.org/10.1006/cviu.1999.0832[MLESAC: A New Robust Estimator with Application to Estimating Image
+Geometry]." _Computer Vision and Image Understanding_, 78(1), 138–156. Introduces MSAC (M-estimator SAmple
+Consensus) as a bounded-loss refinement of RANSAC's scoring function, prior to the full maximum-likelihood MLESAC
+estimator; source of the algorithm implemented by `MSACRobustEstimator`, described in
+xref:algorithms/msac-robust-estimation.adoc[].
 
 [[chum2005]]Chum, O., and Matas, J. (2005)::
-"Matching with PROSAC – Progressive Sample Consensus." _Proceedings of the IEEE Computer Society Conference on
-Computer Vision and Pattern Recognition (CVPR)_, 220–226. The original PROSAC paper, source of the algorithm
-implemented by `PROSACRobustEstimator`, described in xref:algorithms/prosac-robust-estimation.adoc[]. This
-library's implementation is itself based on
+"https://doi.org/10.1109/CVPR.2005.221[Matching with PROSAC – Progressive Sample Consensus]." _Proceedings of the
+IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR)_, 220–226. The original PROSAC
+paper, source of the algorithm implemented by `PROSACRobustEstimator`, described in
+xref:algorithms/prosac-robust-estimation.adoc[]. This library's implementation is itself based on
 https://web.archive.org/web/20210506083754/http://devernay.free.fr/vision/src/prosac.c[a reference C
 implementation by Frédéric Devernay], cited directly in the class's source code.
 
 [[irurueta2012]]Irurueta, A., and Morros, J.R. (2012)::
-"PROMEDS: An Adaptive Robust Fundamental Matrix Estimation Approach." _3DTV-Conference: The True Vision -
-Capture, Transmission and Display of 3D Video (3DTV-CON)_. Combines PROSAC's progressive, quality-guided
-sampling with the LMedS criterion; source of the algorithm implemented by `PROMedSRobustEstimator`, described
-in xref:algorithms/promeds-robust-estimation.adoc[]. This paper is by this library's own author.
+"https://ieeexplore.ieee.org/document/6365452/[PROMEDS: An Adaptive Robust Fundamental Matrix Estimation
+Approach]." _3DTV-Conference: The True Vision - Capture, Transmission and Display of 3D Video (3DTV-CON)_.
+Combines PROSAC's progressive, quality-guided sampling with the LMedS criterion; source of the algorithm
+implemented by `PROMedSRobustEstimator`, described in xref:algorithms/promeds-robust-estimation.adoc[]. This
+paper is by this library's own author.
 
 [[wikipedia-convolution]]Wikipedia contributors::
 https://en.wikipedia.org/wiki/Convolution[Convolution]. _Wikipedia, The Free Encyclopedia_. Describes the
@@ -110,7 +113,8 @@ xref:algorithms/1d-convolution.adoc[].
 
 [[kalman1960]]Kalman, R.E. (1960)::
 "A New Approach to Linear Filtering and Prediction Problems." _Journal of Basic Engineering_, 82(1), 35–45.
-DOI: 10.1115/1.3662552. The original paper introducing the recursive predict/correct filter implemented by
+https://asmedigitalcollection.asme.org/fluidsengineering/article/82/1/35/397706/A-New-Approach-to-Linear-Filtering-and-Prediction[DOI:
+10.1115/1.3662552]. The original paper introducing the recursive predict/correct filter implemented by
 `KalmanFilter`, described in xref:algorithms/kalman-filter.adoc[].
 
 [[welch1995]]Welch, G., and Bishop, G. (1995)::
