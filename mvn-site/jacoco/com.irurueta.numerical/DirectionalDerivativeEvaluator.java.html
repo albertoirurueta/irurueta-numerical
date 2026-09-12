@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DirectionalDerivativeEvaluator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">DirectionalDerivativeEvaluator.java</span></div><h1>DirectionalDerivativeEvaluator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+/**
+ * This class evaluates a multidimensional function and obtains its gradient
+ * along a line; such line is defined by an input point and a given direction.
+ * Using provided input point and direction, the multidimensional function's
+ * input parameters are determined, so they all lay on a line.
+ */
+public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
+
+    /**
+     * Listener to evaluate a multidimensional function's gradient.
+     */
+    private GradientFunctionEvaluatorListener gradientListener;
+
+    /**
+     * Array containing gradient at point p. This is used internally.
+     */
+    final double[] dft;
+
+    /**
+     * Constructor.
+     *
+     * @param listener         Listener to evaluate a multidimensional function.
+     * @param gradientListener Listener to evaluate a multidimensional
+     *                         function's gradient.
+     * @param point            Point used as a reference to determine the function's input
+     *                         parameters along a line.
+     * @param direction        Vector indicating the direction of the line where the
+     *                         function is evaluated.
+     * @throws IllegalArgumentException Raised if point and direction don't have
+     *                                  the same length.
+     */
+    public DirectionalDerivativeEvaluator(
+            final MultiDimensionFunctionEvaluatorListener listener,
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double[] direction) {
+<span class="fc" id="L52">        super(listener, point, direction);</span>
+
+<span class="fc" id="L54">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L55">        dft = new double[point.length];</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Returns gradient listener that evaluates a multidimensional function
+     * gradient.
+     * If the gradient expression is not known (e.g. is not a closed
+     * expression), then a GradientEstimator can be used internally in the
+     * listener implementation.
+     *
+     * @return Gradient listener.
+     */
+    public GradientFunctionEvaluatorListener getGradientListener() {
+<span class="fc" id="L68">        return gradientListener;</span>
+    }
+
+    /**
+     * Sets gradient listener that evaluates a multidimensional function
+     * gradient.
+     * If the gradient expression is not known (e.g. is not a closed
+     * expression), then a GradientEstimator can be used internally in the
+     * listener implementation being provided.
+     *
+     * @param gradientListener Gradient listener
+     */
+    public void setGradientListener(final GradientFunctionEvaluatorListener gradientListener) {
+<span class="nc" id="L81">        this.gradientListener = gradientListener;</span>
+<span class="nc" id="L82">    }</span>
+
+    /**
+     * Computes derivative on current direction of a function at distance x from
+     * current point and using current listener and gradient listener.
+     *
+     * @param x Distance from current point using current direction where
+     *          function is being evaluated.
+     * @return Result of evaluating function.
+     * @throws EvaluationException Thrown if function evaluation fails.
+     */
+    public double differentiateAt(final double x) throws EvaluationException {
+<span class="fc" id="L94">        final var length = point.length;</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (var i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L97">            p[i] = point[i] + x * direction[i];</span>
+        }
+
+        // Compute gradient at such point
+<span class="fc" id="L101">        gradientListener.evaluateGradient(p, dft);</span>
+
+        // Obtain 1D derivative on corresponding direction
+<span class="fc" id="L104">        var df1 = 0.0;</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (var i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L106">            df1 += dft[i] * direction[i];</span>
+        }
+<span class="fc" id="L108">        return df1;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JacobianEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">JacobianEstimator.java</span></div><h1>JacobianEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Class to estimate the Jacobian of a multi variate and multidimensional
+ * function.
+ * This class evaluates a function at very close locations of a given input
+ * point in order to determine the Jacobian at such point.
+ */
+public class JacobianEstimator {
+
+    /**
+     * Constant considered as machine precision.
+     */
+    public static final double EPS = 1e-8;
+
+    /**
+     * Listener to evaluate a multivariate function.
+     */
+    private final MultiVariateFunctionEvaluatorListener listener;
+
+    /**
+     * Internal array to hold input parameter's values.
+     */
+    private double[] xh;
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to evaluate a multivariate function.
+     */
+<span class="fc" id="L49">    public JacobianEstimator(final MultiVariateFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L50">        this.listener = listener;</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Returns the Jacobian of a multivariate function at provided point.
+     *
+     * @param point input point.
+     * @return jacobian.
+     * @throws EvaluationException raised if function cannot be evaluated.
+     */
+    public Matrix jacobian(final double[] point) throws EvaluationException {
+        try {
+<span class="fc" id="L62">            final var result = new Matrix(listener.getNumberOfVariables(), point.length);</span>
+<span class="fc" id="L63">            jacobian(point, result);</span>
+<span class="fc" id="L64">            return result;</span>
+<span class="nc" id="L65">        } catch (final WrongSizeException e) {</span>
+<span class="nc" id="L66">            throw new EvaluationException(e);</span>
+        }
+    }
+
+    /**
+     * Sets estimated jacobian in provided result matrix of a multivariate
+     * function at provided point.
+     * This method is preferred respect to jacobian(double[]) because result
+     * matrix can be reused and hence is more memory efficient.
+     *
+     * @param point  input point.
+     * @param result output matrix containing estimated jacobian. This parameter
+     *               must be a matrix having the same number of columns as the length of the
+     *               point and the same number of rows as the number of variables returned by
+     *               function evaluations.
+     * @throws EvaluationException      raised if function cannot be evaluated.
+     * @throws IllegalArgumentException if size of result is not valid.
+     */
+    public void jacobian(final double[] point, final Matrix result) throws EvaluationException {
+<span class="fc" id="L85">        final var numdims = point.length;</span>
+<span class="fc" id="L86">        final var numvars = listener.getNumberOfVariables();</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (result.getColumns() != numdims) {</span>
+<span class="nc" id="L88">            throw new IllegalArgumentException();</span>
+        }
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (result.getRows() != numvars) {</span>
+<span class="nc" id="L91">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L94">        final var fold = new double[numvars];</span>
+<span class="fc" id="L95">        final var fh = new double[numvars];</span>
+<span class="pc bpc" id="L96" title="1 of 4 branches missed.">        if (xh == null || xh.length != numdims) {</span>
+<span class="fc" id="L97">            xh = new double[numdims];</span>
+        }
+<span class="fc" id="L99">        System.arraycopy(point, 0, xh, 0, numdims);</span>
+
+        double temp;
+        double h;
+<span class="fc" id="L103">        listener.evaluate(point, fold);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (var j = 0; j &lt; numdims; j++) {</span>
+<span class="fc" id="L105">            temp = point[j];</span>
+<span class="fc" id="L106">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+<span class="nc" id="L108">                h = EPS;</span>
+            }
+<span class="fc" id="L110">            xh[j] = temp + h;</span>
+<span class="fc" id="L111">            h = xh[j] - temp;</span>
+<span class="fc" id="L112">            listener.evaluate(xh, fh);</span>
+<span class="fc" id="L113">            xh[j] = temp;</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            for (var i = 0; i &lt; numvars; i++) {</span>
+<span class="fc" id="L115">                result.setElementAt(i, j, (fh[i] - fold[i]) / h);</span>
+            }
+        }
+<span class="fc" id="L118">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

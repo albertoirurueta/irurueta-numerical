@@ -1,0 +1,1389 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.robust</a> &gt; <span class="el_source">PROMedSRobustEstimator.java</span></div><h1>PROMedSRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.robust;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.sorting.Sorter;
+import com.irurueta.sorting.SortingException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+
+/**
+ * This class implements PROMedS (PROgressive least Median Sample) algorithm
+ * to robustly estimate a data model.
+ * This algorithm is a mixture between LMedS and PROSAC, taking the best of
+ * both.
+ * Firstly, it has the advantage that no threshold is required to be set
+ * beforehand, the same as LMedS. Threshold to determine inliers is computed
+ * dynamically, which helps for an easier setup that is problem independent and
+ * depending on the accuracy of the inliers, results will be more accurate than
+ * RANSAC or PROSAC, just the same as LMedS.
+ * On the other hand, if certain information about the quality of the samples
+ * is available, as in PROSAC, the algorithm takes advantage of this additional
+ * information to prioritize the samples with higher quality in order to find
+ * a solution much faster than RANSAC or LMedS.
+ * Finally, if by any chance a threshold to determine inliers is also used, the
+ * algorithm will try to get the solution that better fits in a pure median of
+ * residuals model or in a threshold based one to determine inliers.
+ * Hence, PROMedS can be as fast as PROSAC (which is typically about 100x faster
+ * than RANSAC or LMedS), can obtain the same accuracy as LMedS (which can be
+ * much better than RANSAC or PROSAC in certain scenarios), and has an easier
+ * setup, which is problem independent because no threshold is required to be
+ * known beforehand although one can be provided as well.
+ *
+ * @param &lt;T&gt; type of object to be estimated.
+ */
+@SuppressWarnings(&quot;Duplicates&quot;)
+public class PROMedSRobustEstimator&lt;T&gt; extends RobustEstimator&lt;T&gt; {
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Indicates whether the algorithm must stop prematurely when dynamically
+     * computed threshold using median of residuals has a value lower than
+     * provided threshold in listener.
+     * When this flag is enabled accuracy of PROMedS worsens to a lever similar
+     * to PROSAC but the number of iterations is reduced (i.e. less
+     * computational cost). If more accuracy is desired at the expense of some
+     * additional computation cost, then disable this flag.
+     * By default, stop threshold is enabled, so that computational cost is
+     * similar to RANSAC and only accuracy gets better if inliers are more
+     * accurate.
+     */
+    public static final boolean DEFAULT_STOP_THRESHOLD_ENABLED = true;
+
+    /**
+     * Default maximum allowed outliers proportion in the input data. This is
+     * used do determine the number of required iterations.
+     */
+    public static final double DEFAULT_MAX_OUTLIERS_PROPORTION = 0.8;
+
+    /**
+     * Minimum allowed value for maximum allowed outliers proportion in the
+     * input data.
+     */
+    public static final double MIN_MAX_OUTLIERS_PROPORTION = 0.0;
+
+    /**
+     * Maximum allowed value for maximum allowed outliers proportion in the
+     * input data.
+     */
+    public static final double MAX_MAX_OUTLIERS_PROPORTION = 1.0;
+
+    /**
+     * Defines the default value for the maximum probability that a solution
+     * with more than inliersNStar in U_nStar exist and was not found after k
+     * samples.
+     */
+    public static final double DEFAULT_ETA0 = 0.05;
+
+    /**
+     * Minimum allowed value for eta0.
+     */
+    public static final double MIN_ETA0 = 0.0;
+
+    /**
+     * Maximum allowed value for eta0.
+     */
+    public static final double MAX_ETA0 = 1.0;
+
+    /**
+     * Defines the default value for beta, which is the probability that a
+     * match is declared inlier by mistake, i.e. the ratio of the &quot;inlier&quot;
+     * surface by the total surface. The inlier surface is a disc with radius
+     * 1.96s for homography/displacement computation, or a band with width
+     * 1.96*s*2 for epipolar geometry (s is the detection noise), and the total
+     * surface is the surface of the image.
+     */
+    public static final double DEFAULT_BETA = 0.01;
+
+    /**
+     * Minimum allowed value for beta.
+     */
+    public static final double MIN_BETA = 0.0;
+
+    /**
+     * Maximum allowed value for beta.
+     */
+    public static final double MAX_BETA = 1.0;
+
+    /**
+     * Default factor to normalize threshold to determine inliers. This factor
+     * can be used to increase or lower the dynamically computed threshold so
+     * that the algorithm becomes more or less accurate. The stricter the
+     * threshold (lower factor), the more time the algorithm will need to
+     * converge, if it can converge. By default, the factor is 1.0, which makes
+     * the threshold to be computed as the median of residuals.
+     */
+    public static final double DEFAULT_INLIER_FACTOR = 1.0; //1.5 would also be reasonable
+
+    /**
+     * Minimum allowed value for inlier factor.
+     */
+    public static final double MIN_INLER_FACTOR = 0.0;
+
+    /**
+     * Indicates whether the inlier threshold will be used to find inliers along
+     * with their median of residuals.
+     */
+    public static final boolean DEFAULT_USE_INLIER_THRESHOLD = true;
+
+    /**
+     * Constant to estimate standard deviation of residuals based on their
+     * median.
+     */
+    public static final double STD_CONSTANT = 1.4826;
+
+    /**
+     * Chi squared.
+     */
+    public static final double CHI_SQUARED = 2.706;
+
+    /**
+     * Amount of confidence expressed as a value between 0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    private double confidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    private int maxIterations;
+
+    /**
+     * In this implementation, PROSAC won't stop before having reached the
+     * corresponding inliers rate on the complete data set.
+     * Maximum allowed outliers proportion in the input data: used to compute
+     * nIters (can be as high as 0.95).
+     */
+    private double maxOutliersProportion;
+
+    /**
+     * eta0 is the maximum probability that a solution with more than
+     * inliersNStar inliers in U_nStar exists and was not found after k
+     * samples (typically set to 5%).
+     */
+    private double eta0;
+
+    /**
+     * beta is the probability that a match is declared inlier by mistake,
+     * i.e. the ratio of the &quot;inlier&quot; surface by the total surface. The
+     * inlier surface is a disc with radius 1.96s for homography/displacement
+     * computation, or a band with width 1.96s*2 for epipolar geometry (s is
+     * the detection noise), and the total surface is the surface of the image
+     * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!.
+     */
+    private double beta;
+
+    /**
+     * Instance in charge of picking random subsets of samples.
+     */
+    private SubsetSelector subsetSelector;
+
+    /**
+     * Number of iterations to be done to obtain required confidence.
+     */
+    private int iters;
+
+    /**
+     * Best solution that has been found so far during an estimation.
+     */
+    private T bestResult;
+
+    /**
+     * Data related to inliers found for best result.
+     */
+    private PROMedSInliersData bestInliersData;
+
+    /**
+     * Indicates whether the algorithm must stop prematurely when dynamically
+     * computed threshold using median of residuals has a value lower than
+     * provided threshold in listener.
+     * When this flag is enabled accuracy of PROMedS worsens to a lever similar
+     * to PROSAC but the number of iterations is reduced (i.e. less
+     * computational cost). If more accuracy is desired at the expense of some
+     * additional computation cost, then disable this flag.
+     */
+    private boolean stopThresholdEnabled;
+
+    /**
+     * Factor to normalize threshold to determine inliers. This factor can be
+     * used to increase or lower the dynamically computed threshold so that the
+     * algorithm becomes more or less accurate. The stricter the threshold
+     * (lower factor), the more time the algorithm will need to converge, if
+     * it can converge. By default, the factor is 1.0, which makes the threshold
+     * to be computed as the median of residuals.
+     */
+    private double inlierFactor;
+
+    /**
+     * Flag indicating whether thresholds to determine inliers are used, or if
+     * only median of residuals is used. When true, the algorithm will try
+     * to fit the best model, otherwise only median of residuals will be used.
+     */
+    private boolean useInlierThresholds;
+
+    /**
+     * Constructor.
+     */
+    public PROMedSRobustEstimator() {
+<span class="fc" id="L274">        super();</span>
+<span class="fc" id="L275">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L276">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L277">        maxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;</span>
+<span class="fc" id="L278">        eta0 = DEFAULT_ETA0;</span>
+<span class="fc" id="L279">        beta = DEFAULT_BETA;</span>
+<span class="fc" id="L280">        iters = maxIterations;</span>
+<span class="fc" id="L281">        bestResult = null;</span>
+<span class="fc" id="L282">        bestInliersData = null;</span>
+<span class="fc" id="L283">        stopThresholdEnabled = DEFAULT_STOP_THRESHOLD_ENABLED;</span>
+<span class="fc" id="L284">        inlierFactor = DEFAULT_INLIER_FACTOR;</span>
+<span class="fc" id="L285">        useInlierThresholds = DEFAULT_USE_INLIER_THRESHOLD;</span>
+<span class="fc" id="L286">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes, as well as in charge
+     *                 of picking samples and doing per-iteration estimations.
+     */
+    public PROMedSRobustEstimator(final PROMedSRobustEstimatorListener&lt;T&gt; listener) {
+<span class="fc" id="L296">        super(listener);</span>
+<span class="fc" id="L297">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L298">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L299">        maxOutliersProportion = DEFAULT_MAX_OUTLIERS_PROPORTION;</span>
+<span class="fc" id="L300">        eta0 = DEFAULT_ETA0;</span>
+<span class="fc" id="L301">        beta = DEFAULT_BETA;</span>
+<span class="fc" id="L302">        iters = maxIterations;</span>
+<span class="fc" id="L303">        bestResult = null;</span>
+<span class="fc" id="L304">        bestInliersData = null;</span>
+<span class="fc" id="L305">        stopThresholdEnabled = DEFAULT_STOP_THRESHOLD_ENABLED;</span>
+<span class="fc" id="L306">        inlierFactor = DEFAULT_INLIER_FACTOR;</span>
+<span class="fc" id="L307">        useInlierThresholds = DEFAULT_USE_INLIER_THRESHOLD;</span>
+<span class="fc" id="L308">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L319">        return confidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L335" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L336">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L338" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L339">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L341">        this.confidence = confidence;</span>
+<span class="fc" id="L342">    }</span>
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L352">        return maxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L366" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L367">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L370">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L372">        this.maxIterations = maxIterations;</span>
+<span class="fc" id="L373">    }</span>
+
+    /**
+     * Returns boolean indicating whether the algorithm must stop prematurely
+     * when dynamically computed threshold using median of residuals has a value
+     * lower than provided threshold in listener.
+     * When this flag is enabled accuracy of PROMedS worsens to a lever similar
+     * to PROSAC but the number of iterations is reduced (i.e. less
+     * computational cost). If more accuracy is desired at the expense of some
+     * additional computation cost, then disable this flag.
+     *
+     * @return true if stop threshold is enabled, false otherwise.
+     */
+    public boolean isStopThresholdEnabled() {
+<span class="fc" id="L387">        return stopThresholdEnabled;</span>
+    }
+
+    /**
+     * Sets boolean indicating whether the algorithm must stop prematurely when
+     * dynamically computed threshold using median of residuals has a value
+     * lower than provided threshold in listener.
+     * When this flag is enabled accuracy of PROMedS worsens to a lever similar
+     * to PROSAC but the number of iterations is reduced (i.e. less
+     * computational cost). If more accuracy is desired at the expense of some
+     * additional computation cost, then disable this flag.
+     *
+     * @param stopThresholdEnabled true if stop threshold is enabled, false
+     *                             otherwise.
+     * @throws LockedException if this estimator is locked because an estimation
+     *                         is being computed.
+     */
+    public void setStopThresholdEnabled(final boolean stopThresholdEnabled) throws LockedException {
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L406">            throw new LockedException();</span>
+        }
+<span class="fc" id="L408">        this.stopThresholdEnabled = stopThresholdEnabled;</span>
+<span class="fc" id="L409">    }</span>
+
+    /**
+     * Returns factor to normalize or adjust threshold to determine inliers.
+     * This factor can be used to increase or lower the dynamically computed
+     * threshold so that the algorithm becomes more or less accurate. The
+     * stricter the threshold (lower factor), the more time the algorithm will
+     * need to converge, if it can converge. By default, the factor is 1.0, which
+     * makes the threshold to be computed as the median of residuals.
+     *
+     * @return factor to normalize threshold to determine inliers.
+     */
+    public double getInlierFactor() {
+<span class="fc" id="L422">        return inlierFactor;</span>
+    }
+
+    /**
+     * Sets factor to normalize or adjust threshold to determine inliers.
+     * This factor can be used to increase or lower the dynamically computed
+     * threshold so that the algorithm becomes more or less accurate. The
+     * stricter the threshold (lower factor), the more time the algorithm will
+     * need to converge, if it can converge. By default, the factor is 1.0, which
+     * makes the threshold to be computed as the median of residuals.
+     *
+     * @param inlierFactor inlier factor to be set.
+     * @throws IllegalArgumentException if provided value is less or equal than
+     *                                  0.0.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setInlierFactor(final double inlierFactor) throws LockedException {
+<span class="pc bpc" id="L440" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L441">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L443" title="All 2 branches covered.">        if (inlierFactor &lt;= MIN_INLER_FACTOR) {</span>
+<span class="fc" id="L444">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L446">        this.inlierFactor = inlierFactor;</span>
+<span class="fc" id="L447">    }</span>
+
+    /**
+     * Returns flag indicating whether thresholds to determine inliers are used,
+     * or if only median of residuals is used. When true, the algorithm will try
+     * to fit the best model, otherwise only median of residuals will be used.
+     *
+     * @return true if best model is used (threshold or median), otherwise only
+     * median of residuals will be used.
+     */
+    public boolean isUseInlierThresholds() {
+<span class="fc" id="L458">        return useInlierThresholds;</span>
+    }
+
+    /**
+     * Sets flag indicating whether thresholds to determine inliers are used, or
+     * if only median of residuals is used. When true, the algorithm will try to
+     * fit the best model, otherwise only median of residuals will be used.
+     *
+     * @param useInlierThresholds true if best model is used (threshold or
+     *                            median), oitherwise only median of residuals will be used.
+     * @throws LockedException if this estimator is locked because an estimation
+     *                         is being computed.
+     */
+    public void setUseInlierThresholds(final boolean useInlierThresholds) throws LockedException {
+<span class="pc bpc" id="L472" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L473">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L476">        this.useInlierThresholds = useInlierThresholds;</span>
+<span class="fc" id="L477">    }</span>
+
+    /**
+     * Returns maximum allowed outliers proportion in the input data. This is
+     * used to compute number of iterations to be done (nIters). It typically
+     * can be as high as 0.95. Higher values, up to 1 are possible but not
+     * recommended.
+     * In this implementation, PROSAC won't stop before having reached the
+     * corresponding inliers rate on the complete data set.
+     *
+     * @return maximum allowed outliers proportion in the input data.
+     */
+    public double getMaxOutliersProportion() {
+<span class="fc" id="L490">        return maxOutliersProportion;</span>
+    }
+
+    /**
+     * Sets maximum allowed outliers proportion in the input data. This is used
+     * to compute number of iterations to be done (nIters). It typically can be
+     * as high as 0.95. Higher values, up to 1 are possible but not recommended.
+     * In this implementation, PROSAC won't stop before having reached the
+     * corresponding inliers rate on the complete data set.
+     *
+     * @param maxOutliersProportion maximum allowed outliers proportion in the
+     *                              input data.
+     * @throws IllegalArgumentException if provided value is less than 0.0 or
+     *                                  greater than 1.0.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxOutliersProportion(final double maxOutliersProportion) throws LockedException {
+<span class="fc bfc" id="L508" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L509">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L511" title="All 4 branches covered.">        if (maxOutliersProportion &lt; MIN_MAX_OUTLIERS_PROPORTION</span>
+                || maxOutliersProportion &gt; MAX_MAX_OUTLIERS_PROPORTION) {
+<span class="fc" id="L513">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L516">        this.maxOutliersProportion = maxOutliersProportion;</span>
+<span class="fc" id="L517">    }</span>
+
+    /**
+     * Return eta0, which is the maximum probability that a solution with more
+     * than inliersNStar inliers in U_nStar exists and was not found after k
+     * samples (typically set to 5%).
+     *
+     * @return eta0 value.
+     */
+    public double getEta0() {
+<span class="fc" id="L527">        return eta0;</span>
+    }
+
+    /**
+     * Sets eta0, which is the maximum probability that a solution with more
+     * than inliersNStar inliers in U_nStar exists and was not found after k
+     * samples (typically set to 5%).
+     *
+     * @param eta0 eta0 value to be set.
+     * @throws IllegalArgumentException if provided value is less than 0.0 or
+     *                                  greater than 1.0.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setEta0(final double eta0) throws LockedException {
+<span class="fc bfc" id="L542" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L543">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L545" title="All 4 branches covered.">        if (eta0 &lt; MIN_ETA0 || eta0 &gt; MAX_ETA0) {</span>
+<span class="fc" id="L546">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L549">        this.eta0 = eta0;</span>
+<span class="fc" id="L550">    }</span>
+
+    /**
+     * Returns beta, which is the probability that a match is declared inlier by
+     * mistake, i.e. the ratio of the &quot;inlier&quot; surface by the total surface. The
+     * inlier surface is a disc with radius 1.96s for homography/displacement
+     * computation, or a band with width 1.96s*2 for epipolar geometry (s is
+     * the detection noise), and the total surface is the surface of the image
+     * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!
+     *
+     * @return beta value.
+     */
+    public double getBeta() {
+<span class="fc" id="L563">        return beta;</span>
+    }
+
+    /**
+     * Sets beta, which is the probability that a match is declared inlier by
+     * mistake, i.e. the ratio of the &quot;inlier&quot; surface by the total surface. The
+     * inlier surface is a disc with radius 1.96s for homography/displacement
+     * computation, or a band with width 1.96s*2 for epipolar geometry (s is
+     * the detection noise), and the total surface is the surface of the image
+     * YOU MUST ADJUST THIS VALUE, DEPENDING ON YOUR PROBLEM!
+     *
+     * @param beta beta value to be set.
+     * @throws IllegalArgumentException if provided value is less than 0.0 or
+     *                                  greater than 1.0.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setBeta(final double beta) throws LockedException {
+<span class="fc bfc" id="L581" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L582">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L584" title="All 4 branches covered.">        if (beta &lt; MIN_BETA || beta &gt; MAX_BETA) {</span>
+<span class="fc" id="L585">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L588">        this.beta = beta;</span>
+<span class="fc" id="L589">    }</span>
+
+    /**
+     * Returns number of iterations to be done to obtain required confidence.
+     * This does not need to be equal to the actual number of iterations the
+     * algorithm finally required to obtain a solution.
+     *
+     * @return number of iterations to be done to obtain required confidence.
+     */
+    public int getNIters() {
+<span class="fc" id="L599">        return iters;</span>
+    }
+
+    /**
+     * Returns best solution that has been found so far during an estimation.
+     *
+     * @return best solution that has been found so far during an estimation.
+     */
+    public T getBestResult() {
+<span class="fc" id="L608">        return bestResult;</span>
+    }
+
+    /**
+     * Returns data related to inliers found for best result.
+     *
+     * @return data related to inliers found for best result.
+     */
+    protected PROMedSInliersData getBestInliersData() {
+<span class="fc" id="L617">        return bestInliersData;</span>
+    }
+
+    /**
+     * Indicates if estimator is ready to start the estimation process.
+     *
+     * @return true if ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L627" title="All 2 branches covered.">        if (!super.isReady()) {</span>
+<span class="fc" id="L628">            return false;</span>
+        }
+<span class="fc" id="L630">        return (listener instanceof PROMedSRobustEstimatorListener);</span>
+    }
+
+    /**
+     * Robustly estimates an instance of T.
+     *
+     * @return estimated object.
+     * @throws LockedException          if robust estimator is locked.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public T estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="pc bpc" id="L645" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L646">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L648" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L649">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L653">            var listener = (PROMedSRobustEstimatorListener&lt;T&gt;) this.listener;</span>
+
+<span class="fc" id="L655">            locked = true;</span>
+
+<span class="fc" id="L657">            listener.onEstimateStart(this);</span>
+
+            // N = CORRESPONDENCES
+<span class="fc" id="L660">            final var totalSamples = listener.getTotalSamples();</span>
+<span class="fc" id="L661">            final var subsetSize = listener.getSubsetSize();</span>
+
+<span class="fc" id="L663">            final var qualityScores = listener.getQualityScores();</span>
+            // check for invalid quality scores length
+<span class="pc bpc" id="L665" title="1 of 2 branches missed.">            if (qualityScores.length != totalSamples) {</span>
+<span class="nc" id="L666">                throw new RobustEstimatorException();</span>
+            }
+
+<span class="fc" id="L669">            var inlierThreshold = 0.0;</span>
+<span class="pc bpc" id="L670" title="1 of 2 branches missed.">            if (useInlierThresholds) {</span>
+<span class="fc" id="L671">                inlierThreshold = listener.getThreshold();</span>
+            }
+            // obtain indices referring to original samples position after sorting
+            // quality scores in descending order
+<span class="fc" id="L675">            final var sortedIndices = computeSortedQualityIndices(listener.getQualityScores());</span>
+
+            // reusable list that will contain preliminary solutions on each
+            // iteration
+<span class="fc" id="L679">            final var iterResults = new ArrayList&lt;T&gt;();</span>
+<span class="fc" id="L680">            bestResult = null;</span>
+<span class="fc" id="L681">            var previousProgress = 0.0f;</span>
+            float progress;
+            // subset indices obtained from a subset selector
+<span class="fc" id="L684">            final var subsetIndices = new int[subsetSize];</span>
+<span class="fc" id="L685">            final var residualsTemp = new double[totalSamples];</span>
+            // subset indices referred to the real samples positions after taking
+            // into account the sorted indices obtained from quality scores
+<span class="fc" id="L688">            final var transformedSubsetIndices = new int[subsetSize];</span>
+            // array containing inliers efficiently
+<span class="fc" id="L690">            final var inliers = new BitSet(totalSamples);</span>
+
+            // T_N
+<span class="fc" id="L693">            iters = Math.min(computeIterations(1.0 - maxOutliersProportion, subsetSize, confidence),</span>
+                    maxIterations);
+
+            // termination length
+<span class="fc" id="L697">            var sampleSizeStar = totalSamples;</span>
+            // number of inliers found within the first
+            // nStar data points
+<span class="fc" id="L700">            var inliersNStar = 0;</span>
+            // best number of inliers found so far
+            // (store the model that goes with it)
+<span class="fc" id="L703">            var inliersBest = -1;</span>
+            // threshold to stop algorithm
+<span class="fc" id="L705">            var threshold = Double.MAX_VALUE;</span>
+<span class="fc" id="L706">            final var inliersMin = (int) ((1.0 - maxOutliersProportion) * totalSamples);</span>
+            // iteration number (t)
+<span class="fc" id="L708">            var currentIter = 0;</span>
+            // (n) we draw samples from the set U_n
+            // of the top n (sampleSize) data points
+<span class="fc" id="L711">            var sampleSize = subsetSize;</span>
+            // average number of samples &quot;{M_i}_{i=1}^{Tn}&quot;
+            // that contains samples from U_n only
+<span class="fc" id="L714">            double tn = iters;</span>
+            // integer version of Tn
+<span class="fc" id="L716">            var tnPrime = 1;</span>
+            // number of samples to draw to reach the
+            // maximality constraint
+<span class="fc" id="L719">            var kNStar = iters;</span>
+
+            // initialize Tn
+<span class="fc bfc" id="L722" title="All 2 branches covered.">            for (var i = 0; i &lt; subsetSize; i++) {</span>
+<span class="fc" id="L723">                tn *= (double) (sampleSize - i) / (double) (totalSamples - i);</span>
+            }
+
+<span class="pc bpc" id="L726" title="1 of 2 branches missed.">            if (subsetSelector == null) {</span>
+                // create new subset selector
+<span class="fc" id="L728">                subsetSelector = SubsetSelector.create(totalSamples);</span>
+            } else {
+                // set number of samples to current subset selector
+<span class="nc" id="L731">                subsetSelector.setNumSamples(totalSamples);</span>
+            }
+
+            // data related to inliers
+<span class="fc" id="L735">            var inliersData = new PROMedSInliersData(totalSamples);</span>
+            // sorter to compute medians
+<span class="fc" id="L737">            final var sorter = Sorter.&lt;Double&gt;create();</span>
+
+            // indicates if result improved
+            boolean improved;
+<span class="fc" id="L741">            var continueIteration = true;</span>
+
+            // iterate until the expected number of inliers or the estimated
+            // number of iterations is reached
+<span class="fc bfc" id="L745" title="All 2 branches covered.">            while (continueIteration) {</span>
+<span class="pc bpc" id="L746" title="1 of 2 branches missed.">                if (kNStar &gt; 0) {</span>
+<span class="fc" id="L747">                    progress = Math.min((float) currentIter / (float) kNStar, 1.0f);</span>
+                } else {
+<span class="nc" id="L749">                    progress = 1.0f;</span>
+                }
+<span class="pc bpc" id="L751" title="1 of 2 branches missed.">                if (progress - previousProgress &gt; progressDelta) {</span>
+<span class="nc" id="L752">                    previousProgress = progress;</span>
+<span class="nc" id="L753">                    listener.onEstimateProgressChange(this, progress);</span>
+                }
+<span class="fc" id="L755">                currentIter++;</span>
+
+                // choice of the hypothesis generation set
+
+                // The growth function is defined as
+                // g(t) = min{n : TnPrime &gt; t} where n is sampleSize
+                // Thus sampleSize should be incremented if currentIter &gt; TnPrime
+<span class="pc bpc" id="L762" title="1 of 4 branches missed.">                if ((currentIter &gt; tnPrime) &amp;&amp; (sampleSize &lt; sampleSizeStar)) {</span>
+<span class="fc" id="L763">                    final var TnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);</span>
+<span class="fc" id="L764">                    sampleSize++;</span>
+<span class="fc" id="L765">                    tnPrime += (int) Math.ceil(TnPlus1 - tn);</span>
+<span class="fc" id="L766">                    tn = TnPlus1;</span>
+                }
+
+                // Draw semi-random sample
+<span class="pc bpc" id="L770" title="1 of 2 branches missed.">                if (currentIter &gt; tnPrime) {</span>
+                    // during the finishing stage (sampleSize == sampleSizeStar &amp;&amp;
+                    // currentIter &gt; TnPrime), draw a standard RANSAC sample
+                    // The sample contains subsetSize points selected from U_n at
+                    // random
+<span class="nc" id="L775">                    subsetSelector.computeRandomSubsets(subsetSize, subsetIndices);</span>
+                } else {
+                    // The sample contains subsetSize-1 points selected from
+                    // U_sampleSize_1 at random and u_sampleSize
+
+<span class="fc" id="L780">                    subsetSelector.computeRandomSubsetsInRange(0, sampleSize, subsetSize, true,</span>
+                            subsetIndices);
+                }
+
+<span class="fc" id="L784">                transformIndices(subsetIndices, sortedIndices, transformedSubsetIndices);</span>
+
+                // clear list of preliminary solutions before calling listener
+<span class="fc" id="L787">                iterResults.clear();</span>
+                // compute solution for current iteration
+<span class="fc" id="L789">                listener.estimatePreliminarSolutions(transformedSubsetIndices, iterResults);</span>
+
+                // total number of inliers for a
+                // given result
+                int inliersCurrent;
+
+                // iterate over all solutions that have been found
+<span class="fc" id="L796">                improved = false;</span>
+<span class="fc bfc" id="L797" title="All 2 branches covered.">                for (final var iterResult : iterResults) {</span>
+                    // compute inliers
+<span class="fc" id="L799">                    computeInliers(iterResult, subsetSize, inlierFactor, useInlierThresholds, inlierThreshold,</span>
+                            residualsTemp, listener, sorter, inliersData);
+<span class="fc" id="L801">                    inliersCurrent = inliersData.getNumInliers();</span>
+
+<span class="pc bpc" id="L803" title="1 of 2 branches missed.">                    if (inliersData.isMedianResidualImproved()) {</span>
+<span class="fc" id="L804">                        improved = true;</span>
+
+                        // keep current solution
+<span class="fc" id="L807">                        bestResult = iterResult;</span>
+
+                        // update estimated thresholds to be used as stop
+                        // criterion
+<span class="fc" id="L811">                        threshold = inliersData.getEstimatedThreshold();</span>
+                    }
+
+<span class="pc bpc" id="L814" title="1 of 2 branches missed.">                    if (inliersCurrent &gt; inliersBest) {</span>
+                        // update best number of inliers
+<span class="fc" id="L816">                        inliersBest = inliersCurrent;</span>
+                        // keep current solution
+<span class="fc" id="L818">                        bestResult = iterResult;</span>
+
+<span class="fc" id="L820">                        keepInliersData(inliersData, totalSamples);</span>
+                        // create new instance after keeping inlier data
+<span class="fc" id="L822">                        inliersData = inliersData.createCopy();</span>
+
+                        // select new termination length sampleSizeStar if possible
+                        // only when a new sample is better than the others found
+                        // so far
+
+                        // best value found so far in terms of inliers ratio
+<span class="fc" id="L829">                        var sampleSizeBest = totalSamples;</span>
+<span class="fc" id="L830">                        var inliersSampleSizeBest = inliersCurrent;</span>
+                        // test value for the termination length
+                        int sampleSizeTest;
+                        // number of inliers for that test value
+                        int inliersSampleSizeTest;
+<span class="fc" id="L835">                        var epsilonSampleSizeBest = (double) inliersSampleSizeBest / (double) sampleSizeBest;</span>
+
+<span class="fc" id="L837">                        for (sampleSizeTest = totalSamples, inliersSampleSizeTest = inliersCurrent;</span>
+<span class="fc bfc" id="L838" title="All 2 branches covered.">                             sampleSizeTest &gt; subsetSize; sampleSizeTest--) {</span>
+                            // Loop invariants:
+                            // - inliersSampleSizeTest is the number of inliers
+                            //   for the sampleSizeTest first correspondences
+                            // - sampleSizeBest is the value between
+                            //   sampleSizeTest+1 and totalSamples that maximizes
+                            //   the ratio inliersSampleSizeBest/sampleSizeBest
+
+                            // - Non-randomness: In &gt;= imin(n*)
+                            // - Maximality: the number of samples that were drawn
+                            //   so far must be enough so that the probability of
+                            //   having missed a set of inliers is below eta=0.01.
+                            //   This is the classical RANSAC termination criterion,
+                            //   except that it takes into account only the
+                            //   sampleSize first samples (not the total number
+                            //   of samples)
+                            //   kNStar = log(eta0) / log(1 - (inliersNStar/
+                            //   sampleSizeStar)^subsetSize
+                            //   We have to minimize kNStar, e.g. maximize
+                            //   inliersNStar/sampleSizeStar, a straightforward
+                            //   implementation would use the following test:
+                            //   if(inliersSampleSizeTest &gt; epsilonSampleSizeBest *
+                            //   sampleSizeTest){ ... blah blah blah
+                            //   However, since In is binomial, and in the case of
+                            //   evenly distributed inliers, a better test would be
+                            //   to reduce sampleSizeStar only if there's a
+                            //   significant improvement in epsilon. Thus, we use a
+                            //   Chi-squared test (P=0.10), together with the normal
+                            //   approximation to the binomial (mu =
+                            //   epsilonSampleSizeStart * sampleSizeTest, sigma =
+                            //   sqrt(sampleSizeTest * epsilonSampleSizeStar * (1 -
+                            //   epsilonSampleSizeStar))).
+                            //   There is a significant difference between the two
+                            //   tests (e.g. with the computeInliers function
+                            //   provided)
+                            //   We do the cheap test first, and the expensive test
+                            //   only if the cheap one passes
+<span class="fc bfc" id="L875" title="All 2 branches covered.">                            if ((inliersSampleSizeTest * sampleSizeBest &gt; inliersSampleSizeBest * sampleSizeTest)</span>
+                                    &amp;&amp; (inliersSampleSizeTest &gt; epsilonSampleSizeBest * sampleSizeTest
+<span class="fc bfc" id="L877" title="All 2 branches covered.">                                    + Math.sqrt(sampleSizeTest * epsilonSampleSizeBest</span>
+                                    * (1.0 - epsilonSampleSizeBest) * CHI_SQUARED))) {
+
+<span class="pc bpc" id="L880" title="1 of 2 branches missed.">                                if (inliersSampleSizeTest &lt; imin(subsetSize, sampleSizeTest, beta)) {</span>
+                                    // equation not satisfied, no need to test for
+                                    // smaller sampleSizeTest values anyway
+
+                                    // jump out of the for sampleSizeTest loop
+<span class="nc" id="L885">                                    break;</span>
+                                }
+<span class="fc" id="L887">                                sampleSizeBest = sampleSizeTest;</span>
+<span class="fc" id="L888">                                inliersSampleSizeBest = inliersSampleSizeTest;</span>
+<span class="fc" id="L889">                                epsilonSampleSizeBest = (double) inliersSampleSizeBest / (double) sampleSizeBest;</span>
+                            }
+
+                            // prepare for next loop iteration
+<span class="pc bpc" id="L893" title="1 of 2 branches missed.">                            inliersSampleSizeTest -= inliers.get(sortedIndices[sampleSizeTest - 1]) ? 1 : 0;</span>
+                        }
+
+                        // is the best one we found even better than sampleSizeStar?
+<span class="pc bpc" id="L897" title="1 of 2 branches missed.">                        if (inliersSampleSizeBest * sampleSizeStar &gt; inliersNStar * sampleSizeBest) {</span>
+
+                            // update all values
+<span class="fc" id="L900">                            sampleSizeStar = sampleSizeBest;</span>
+<span class="fc" id="L901">                            inliersNStar = inliersSampleSizeBest;</span>
+<span class="fc" id="L902">                            kNStar = computeIterations((double) inliersNStar</span>
+                                            / (double) sampleSizeStar, subsetSize, 1.0 - eta0);
+                        }
+                    }
+<span class="fc" id="L906">                }</span>
+
+<span class="pc bpc" id="L908" title="1 of 2 branches missed.">                continueIteration = (currentIter &lt; maxIterations);</span>
+<span class="pc bpc" id="L909" title="2 of 4 branches missed.">                if (useInlierThresholds &amp;&amp; stopThresholdEnabled) {</span>
+                    // if inlier threshold is being used, and stop threshold is
+                    // enabled, then stop the algorithm if threshold determined
+                    // by median of residuals has a value lower than inlier
+                    // threshold
+<span class="fc bfc" id="L914" title="All 2 branches covered.">                    continueIteration &amp;= (threshold &gt; inlierThreshold);</span>
+                }
+
+<span class="fc bfc" id="L917" title="All 2 branches covered.">                if (!improved) {</span>
+<span class="pc bpc" id="L918" title="4 of 6 branches missed.">                    continueIteration &amp;= ((inliersBest &lt; inliersMin) || (currentIter &lt; kNStar))</span>
+                            &amp;&amp; (currentIter &lt; iters);
+                }
+
+<span class="fc" id="L922">                listener.onEstimateNextIteration(this, currentIter);</span>
+            }
+
+            // no solution could be found after completing all iterations
+<span class="pc bpc" id="L926" title="1 of 2 branches missed.">            if (bestResult == null) {</span>
+<span class="nc" id="L927">                throw new RobustEstimatorException();</span>
+            }
+
+<span class="fc" id="L930">            listener.onEstimateEnd(this);</span>
+
+<span class="fc" id="L932">            return bestResult;</span>
+<span class="nc" id="L933">        } catch (final SubsetSelectorException | SortingException e) {</span>
+<span class="nc" id="L934">            throw new RobustEstimatorException(e);</span>
+        } finally {
+<span class="fc" id="L936">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns data about inliers once estimation has been done.
+     *
+     * @return data about inliers or null if estimation has not been done.
+     */
+    @Override
+    public InliersData getInliersData() {
+<span class="fc" id="L947">        return getBestInliersData();</span>
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L957">        return RobustEstimatorMethod.PROMEDS;</span>
+    }
+
+    /**
+     * Transforms indices picked by the subset selector into the indices where
+     * samples are actually localed by taking into account their original
+     * position before sorting quality scores.
+     *
+     * @param subsetIndices            indices picked by the subset selector. These are
+     *                                 positions after sorting. Must have the subset length.
+     * @param sortedIndices            indices relating sorted positions to their original
+     *                                 positions. Each position i-th in the array refers to the original
+     *                                 position before sorting. Must have the number of samples length.
+     * @param transformedSubsetIndices array where result is stored. Must have
+     *                                 the subset length.
+     */
+    private static void transformIndices(
+            final int[] subsetIndices, final int[] sortedIndices, final int[] transformedSubsetIndices) {
+<span class="fc" id="L975">        final var length = transformedSubsetIndices.length;</span>
+<span class="fc bfc" id="L976" title="All 2 branches covered.">        for (var i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L977">            transformedSubsetIndices[i] = sortedIndices[subsetIndices[i]];</span>
+        }
+<span class="fc" id="L979">    }</span>
+
+    /**
+     * Computes inliers data for current iteration.
+     *
+     * @param &lt;T&gt;                 type of result to be estimated.
+     * @param iterResult          result to be tested on current iteration.
+     * @param subsetSize          subset sample size to be picked on each iteration.
+     * @param inlierFactor        factor to adjust threshold to determine whether
+     *                            samples are inliers or not.
+     * @param useInlierThresholds true to use thresholds to determine inliers,
+     *                            false otherwise.
+     * @param inlierThreshold     threshold to determine which samples are inliers.
+     * @param residualsTemp       temporal array to store residuals, since median
+     *                            computation requires modifying the original array.
+     * @param listener            listener to obtain residuals for samples.
+     * @param sorter              sorter instance to compute median of residuals.
+     * @param inliersData         inliers data to be reused on each iteration
+     */
+    private static &lt;T&gt; void computeInliers(
+            final T iterResult, final int subsetSize, final double inlierFactor, final boolean useInlierThresholds,
+            final double inlierThreshold, final double[] residualsTemp, final LMedSRobustEstimatorListener&lt;T&gt; listener,
+            final Sorter&lt;Double&gt; sorter, final PROMedSInliersData inliersData) {
+
+<span class="fc" id="L1003">        final var residuals = inliersData.getResiduals();</span>
+<span class="fc" id="L1004">        final var lmedsInliers = inliersData.getInliersLMedS();</span>
+<span class="fc" id="L1005">        final var msacInliers = inliersData.getInliersMSAC();</span>
+<span class="fc" id="L1006">        var bestMedianResidual = inliersData.getBestMedianResidual();</span>
+<span class="fc" id="L1007">        var medianResidualImproved = false;</span>
+
+<span class="fc" id="L1009">        final var totalSamples = residuals.length;</span>
+
+<span class="fc bfc" id="L1011" title="All 2 branches covered.">        for (var i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc" id="L1012">            residuals[i] = Math.abs(listener.computeResidual(iterResult, i));</span>
+        }
+
+<span class="fc" id="L1015">        System.arraycopy(residuals, 0, residualsTemp, 0, residuals.length);</span>
+<span class="fc" id="L1016">        final var medianResidual = sorter.median(residualsTemp);</span>
+<span class="pc bpc" id="L1017" title="1 of 2 branches missed.">        if (medianResidual &lt; bestMedianResidual) {</span>
+<span class="fc" id="L1018">            bestMedianResidual = medianResidual;</span>
+<span class="fc" id="L1019">            medianResidualImproved = true;</span>
+        }
+
+<span class="fc" id="L1022">        final var standardDeviation = STD_CONSTANT * (1.0 + 5.0 / (totalSamples - subsetSize))</span>
+<span class="fc" id="L1023">                * Math.sqrt(medianResidual);</span>
+<span class="fc" id="L1024">        final var normEstimatedThreshold = inlierFactor * medianResidual;</span>
+
+        // determine which points are inliers
+<span class="fc" id="L1027">        var numInliers = 0;</span>
+        // by default if thresholds are not used
+<span class="fc" id="L1029">        var lmedsInlierModelEnabled = true;</span>
+<span class="pc bpc" id="L1030" title="1 of 2 branches missed.">        if (useInlierThresholds) {</span>
+<span class="fc" id="L1031">            var numInliersMsac = 0;</span>
+<span class="fc" id="L1032">            var numInliersLmedS = 0;</span>
+<span class="fc bfc" id="L1033" title="All 2 branches covered.">            for (var i = 0; i &lt; totalSamples; i++) {</span>
+<span class="fc bfc" id="L1034" title="All 2 branches covered.">                if (residuals[i] &lt;= normEstimatedThreshold) {</span>
+<span class="fc" id="L1035">                    numInliersLmedS++;</span>
+<span class="fc" id="L1036">                    lmedsInliers.set(i);</span>
+                } else {
+<span class="fc" id="L1038">                    lmedsInliers.clear(i);</span>
+                }
+<span class="fc bfc" id="L1040" title="All 2 branches covered.">                if (residuals[i] &lt;= inlierThreshold) {</span>
+<span class="fc" id="L1041">                    numInliersMsac++;</span>
+<span class="fc" id="L1042">                    msacInliers.set(i);</span>
+                } else {
+<span class="fc" id="L1044">                    msacInliers.clear(i);</span>
+                }
+            }
+
+            // keep model with smaller number of inliers (to be more restrictive)
+<span class="fc bfc" id="L1049" title="All 2 branches covered.">            lmedsInlierModelEnabled = numInliersLmedS &lt; numInliersMsac;</span>
+<span class="fc bfc" id="L1050" title="All 2 branches covered.">            numInliers = lmedsInlierModelEnabled ? numInliersLmedS : numInliersMsac;</span>
+<span class="fc" id="L1051">        } else {</span>
+
+<span class="nc bnc" id="L1053" title="All 2 branches missed.">            for (var i = 0; i &lt; totalSamples; i++) {</span>
+<span class="nc bnc" id="L1054" title="All 2 branches missed.">                if (residuals[i] &lt;= normEstimatedThreshold) {</span>
+<span class="nc" id="L1055">                    numInliers++;</span>
+<span class="nc" id="L1056">                    lmedsInliers.set(i);</span>
+                } else {
+<span class="nc" id="L1058">                    lmedsInliers.clear(i);</span>
+                }
+            }
+        }
+
+        // store values in inliers data, only if residuals improve
+<span class="pc bpc" id="L1064" title="1 of 2 branches missed.">        if (medianResidualImproved) {</span>
+<span class="fc" id="L1065">            inliersData.update(bestMedianResidual, standardDeviation, lmedsInlierModelEnabled, residuals, numInliers,</span>
+                    medianResidual, normEstimatedThreshold, true);
+        } else {
+<span class="nc" id="L1068">            inliersData.medianResidualImproved = false;</span>
+        }
+<span class="fc" id="L1070">    }</span>
+
+    /**
+     * Obtains indices of samples corresponding to samples ordered in descending
+     * quality scores.
+     *
+     * @param qualityScores quality scores associated to each sample to be used
+     *                      to obtain indices to sort samples in descending order of quality values.
+     * @return indices to sort samples in descending order of quality values.
+     * @throws SortingException if sorting fails.
+     */
+    private static int[] computeSortedQualityIndices(double[] qualityScores) throws SortingException {
+<span class="fc" id="L1082">        final var sorter = Sorter.&lt;Double&gt;create();</span>
+<span class="fc" id="L1083">        final var qualityScoresCopy = Arrays.copyOf(qualityScores, qualityScores.length);</span>
+        // this method modifies quality scores copy array because it gets sorted
+        // in ascending order. Indices contains indices of samples corresponding
+        // to quality scores ordered in ascending order
+<span class="fc" id="L1087">        final var indices = sorter.sortWithIndices(qualityScoresCopy);</span>
+
+        // reverse indices so we have indices of samples ordered in descending
+        // order of quality
+<span class="fc" id="L1091">        reverse(indices);</span>
+
+<span class="fc" id="L1093">        return indices;</span>
+    }
+
+    /**
+     * Reverses provided array.
+     *
+     * @param array array to be reversed.
+     */
+    private static void reverse(final int[] array) {
+<span class="fc" id="L1102">        var length = array.length;</span>
+<span class="fc bfc" id="L1103" title="All 2 branches covered.">        for (var i = 0; i &lt; length / 2; i++) {</span>
+<span class="fc" id="L1104">            var temp = array[i];</span>
+<span class="fc" id="L1105">            var pos = length - 1 - i;</span>
+<span class="fc" id="L1106">            array[i] = array[pos];</span>
+<span class="fc" id="L1107">            array[pos] = temp;</span>
+        }
+<span class="fc" id="L1109">    }</span>
+
+    /**
+     * Computes number of required iterations to achieve required confidence
+     * with current probability of inlier and sample subset size.
+     *
+     * @param probInlier probability of inlier.
+     * @param subsetSize sample subset size.
+     * @param confidence required confidence of result.
+     * @return number of required iterations.
+     */
+    private static int computeIterations(final double probInlier, final int subsetSize, final double confidence) {
+
+        // compute number of times the algorithm needs to be executed depending
+        // on number of inliers respect total points to achieve with probability
+        // confidence that we have all inliers and probability 1 - confidence
+        // that we have some outliers
+<span class="fc" id="L1126">        final var probSubsetAllInliers = Math.pow(probInlier, subsetSize);</span>
+<span class="pc bpc" id="L1127" title="2 of 4 branches missed.">        if (Math.abs(probSubsetAllInliers) &lt; Double.MIN_VALUE || Double.isNaN(probSubsetAllInliers)) {</span>
+<span class="nc" id="L1128">            return Integer.MAX_VALUE;</span>
+        } else {
+<span class="fc" id="L1130">            final var logProbSomeOutliers = Math.log(1.0 - probSubsetAllInliers);</span>
+<span class="pc bpc" id="L1131" title="1 of 4 branches missed.">            if (Math.abs(logProbSomeOutliers) &lt; Double.MIN_VALUE || Double.isNaN(logProbSomeOutliers)) {</span>
+<span class="fc" id="L1132">                return Integer.MAX_VALUE;</span>
+            } else {
+<span class="fc" id="L1134">                return (int) Math.ceil(Math.abs(Math.log(1.0 - confidence) / logProbSomeOutliers));</span>
+            }
+        }
+    }
+
+    /**
+     * Non randomness states that i-m (where i is the cardinal of the set of
+     * inliers for a wrong model) follows the binomial distribution B(n,beta).
+     * For n big enough, B(n,beta) approximates to normal distribution N(mu,
+     * sigma^2) by the central limit theorem, with mu = n*beta and sigma =
+     * sqrt(n*beta*(1 - beta)).
+     * Psi, the probability that In_star out of n_star data points are by chance
+     * inliers to an arbitrary incorrect model, is set to 0.05 (5%, as in the
+     * original paper), and you must change the Chi2 value if you chose a
+     * different value for psi.
+     *
+     * @param subsetSize sample subset size.
+     * @param sampleSize total number of samples.
+     * @param beta       beta value.
+     * @return i-m.
+     */
+    private static int imin(final int subsetSize, final int sampleSize, final double beta) {
+<span class="fc" id="L1156">        final var mu = sampleSize * beta;</span>
+<span class="fc" id="L1157">        final var sigma = Math.sqrt(sampleSize * beta * (1.0 - beta));</span>
+
+<span class="fc" id="L1159">        return (int) Math.ceil(subsetSize + mu + sigma * Math.sqrt(CHI_SQUARED));</span>
+    }
+
+    /**
+     * Keeps inliers data stored and initializes a new one with proper
+     * initial values.
+     *
+     * @param inliersData  inliers data to be stored.
+     * @param totalSamples total number of samples.
+     */
+    private void keepInliersData(PROMedSInliersData inliersData, final int totalSamples) {
+        // keep the best inliers data corresponding to best solution,
+        // in case it can be useful along with the result
+<span class="fc" id="L1172">        bestInliersData = inliersData;</span>
+
+        // create new inliers data instance until a new best solution
+        // is found
+<span class="fc" id="L1176">        final var bestMedianResidual = inliersData.getBestMedianResidual();</span>
+<span class="fc" id="L1177">        inliersData = new PROMedSInliersData(totalSamples);</span>
+        // update the best median residual on new instance so that
+        // only better solutions that are found later can update
+        // inliers data
+<span class="fc" id="L1181">        inliersData.update(bestMedianResidual, inliersData.getStandardDeviation(),</span>
+<span class="fc" id="L1182">                inliersData.isLMedSInlierModelEnabled(), inliersData.getResiduals(), inliersData.getNumInliers(),</span>
+<span class="fc" id="L1183">                bestMedianResidual, inliersData.getEstimatedThreshold(), false);</span>
+<span class="fc" id="L1184">    }</span>
+
+    /**
+     * Contains data related to inliers estimated in one iteration.
+     */
+    public static class PROMedSInliersData extends InliersData {
+        /**
+         * Best median of error found so far taking into account all provided
+         * samples.
+         */
+        private double bestMedianResidual;
+
+        /**
+         * Standard deviation of error among all provided samples respect to
+         * currently estimated result.
+         */
+        private double standardDeviation;
+
+        /**
+         * Inliers considering LMedS model.
+         */
+        private BitSet inliersLmeds;
+
+        /**
+         * Inliers considering MSAC model.
+         */
+        private BitSet inliersMsac;
+
+        /**
+         * Indicates whether LMedS or MSAC inlier model is enabled.
+         */
+        private boolean lmedsInlierModelEnabled;
+
+        /**
+         * Median of error found on current iteration among all provided
+         * samples.
+         */
+        private double medianResidual;
+
+        /**
+         * Estimated threshold to determine whether samples are inliers or not.
+         */
+        private double estimatedThreshold;
+
+        /**
+         * Indicates whether median residual computed in current iteration has
+         * improved respect to previous iterations.
+         */
+        private boolean medianResidualImproved;
+
+        /**
+         * Constructor.
+         *
+         * @param totalSamples total number of samples.
+         */
+<span class="fc" id="L1239">        PROMedSInliersData(final int totalSamples) {</span>
+<span class="fc" id="L1240">            bestMedianResidual = standardDeviation = medianResidual = estimatedThreshold = Double.MAX_VALUE;</span>
+<span class="fc" id="L1241">            inliersLmeds = new BitSet(totalSamples);</span>
+<span class="fc" id="L1242">            inliersMsac = new BitSet(totalSamples);</span>
+<span class="fc" id="L1243">            lmedsInlierModelEnabled = true;</span>
+<span class="fc" id="L1244">            residuals = new double[totalSamples];</span>
+<span class="fc" id="L1245">            numInliers = 0;</span>
+<span class="fc" id="L1246">            medianResidualImproved = false;</span>
+<span class="fc" id="L1247">        }</span>
+
+        /**
+         * Returns efficient array indicating which samples are considered
+         * inliers and which ones aren't.
+         *
+         * @return array indicating which samples are considered inliers and
+         * which ones aren't.
+         */
+        @Override
+        public BitSet getInliers() {
+<span class="fc bfc" id="L1258" title="All 2 branches covered.">            return lmedsInlierModelEnabled ? inliersLmeds : inliersMsac;</span>
+        }
+
+        /**
+         * Creates a copy of inlier data.
+         *
+         * @return copy of inlier data.
+         */
+        PROMedSInliersData createCopy() {
+<span class="fc" id="L1267">            final var result = new PROMedSInliersData(residuals.length);</span>
+<span class="fc" id="L1268">            result.bestMedianResidual = bestMedianResidual;</span>
+<span class="fc" id="L1269">            result.standardDeviation = standardDeviation;</span>
+<span class="fc" id="L1270">            result.medianResidual = medianResidual;</span>
+<span class="fc" id="L1271">            result.estimatedThreshold = estimatedThreshold;</span>
+<span class="fc" id="L1272">            result.inliersLmeds = (BitSet) inliersLmeds.clone();</span>
+<span class="fc" id="L1273">            result.inliersMsac = (BitSet) inliersMsac.clone();</span>
+<span class="fc" id="L1274">            result.lmedsInlierModelEnabled = lmedsInlierModelEnabled;</span>
+<span class="fc" id="L1275">            result.residuals = Arrays.copyOf(residuals, residuals.length);</span>
+<span class="fc" id="L1276">            result.numInliers = numInliers;</span>
+<span class="fc" id="L1277">            result.medianResidualImproved = medianResidualImproved;</span>
+
+<span class="fc" id="L1279">            return result;</span>
+        }
+
+        /**
+         * Returns best median of error found so far taking into account all
+         * provided samples.
+         *
+         * @return best median of error found so far taking into account all
+         * provided samples.
+         */
+        double getBestMedianResidual() {
+<span class="fc" id="L1290">            return bestMedianResidual;</span>
+        }
+
+        /**
+         * Returns standard deviation of error among all provided samples
+         * respect to currently estimated result.
+         *
+         * @return standard deviation of error among all provided samples
+         * respect to currently estimated result.
+         */
+        double getStandardDeviation() {
+<span class="fc" id="L1301">            return standardDeviation;</span>
+        }
+
+        /**
+         * Returns inliers considering LMedS model.
+         *
+         * @return inliers considering LMedS model.
+         */
+        BitSet getInliersLMedS() {
+<span class="fc" id="L1310">            return inliersLmeds;</span>
+        }
+
+        /**
+         * Returns inliers considering MSAC model.
+         *
+         * @return inliers considering MSAC model.
+         */
+        BitSet getInliersMSAC() {
+<span class="fc" id="L1319">            return inliersMsac;</span>
+        }
+
+        /**
+         * Returns boolean indicating whether LMedS or MSAC inlier model is
+         * enabled. If true, estimated threshold was used to determine inliers,
+         * if false only median of residuals was used.
+         *
+         * @return true if LMedS model is used, false if MSAC model is used.
+         */
+        boolean isLMedSInlierModelEnabled() {
+<span class="fc" id="L1330">            return lmedsInlierModelEnabled;</span>
+        }
+
+        /**
+         * Returns estimated threshold to determine whether samples are inliers
+         * or not.
+         *
+         * @return estimated threshold to determine whether samples are inliers
+         * or not.
+         */
+        public double getEstimatedThreshold() {
+<span class="fc" id="L1341">            return estimatedThreshold;</span>
+        }
+
+        /**
+         * Returns boolean indicating whether median residual computed in
+         * current iteration has improved respect to previous iterations.
+         *
+         * @return true if median residual improved, false otherwise.
+         */
+        boolean isMedianResidualImproved() {
+<span class="fc" id="L1351">            return medianResidualImproved;</span>
+        }
+
+        /**
+         * Updates data contained in this instance.
+         *
+         * @param bestMedianResidual      best median of error found so far taking
+         *                                into account all provided samples.
+         * @param standardDeviation       standard deviation of error among all
+         *                                provided samples respect to currently estimated result.
+         * @param lmedsInlierModelEnabled indicates whether the LMedS or MSAC
+         *                                inlier model is used.
+         * @param residuals               residuals obtained for each sample of data.
+         * @param numInliers              number of inliers found on current iteration.
+         * @param medianResidual          median of error found on current iteration
+         *                                among all provided samples.
+         * @param estimatedThreshold      estimated threshold to determine whether
+         *                                samples are inliers or not.
+         * @param medianResidualImproved  indicates whether median residual
+         *                                computed in current iteration has improved respect to previous
+         *                                iteration.
+         */
+        protected void update(
+                final double bestMedianResidual, final double standardDeviation, final boolean lmedsInlierModelEnabled,
+                final double[] residuals, final int numInliers, final double medianResidual,
+                final double estimatedThreshold, final boolean medianResidualImproved) {
+<span class="fc" id="L1377">            this.bestMedianResidual = bestMedianResidual;</span>
+<span class="fc" id="L1378">            this.standardDeviation = standardDeviation;</span>
+<span class="fc" id="L1379">            this.lmedsInlierModelEnabled = lmedsInlierModelEnabled;</span>
+<span class="fc" id="L1380">            this.residuals = residuals;</span>
+<span class="fc" id="L1381">            this.numInliers = numInliers;</span>
+<span class="fc" id="L1382">            this.medianResidual = medianResidual;</span>
+<span class="fc" id="L1383">            this.estimatedThreshold = estimatedThreshold;</span>
+<span class="fc" id="L1384">            this.medianResidualImproved = medianResidualImproved;</span>
+<span class="fc" id="L1385">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

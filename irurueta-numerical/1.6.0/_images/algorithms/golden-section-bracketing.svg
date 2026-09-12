@@ -1,0 +1,44 @@
+<svg viewBox="0 0 640 375" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .curve { fill:none; stroke:#1e293b; stroke-width:2.5; stroke-linecap:round; }
+    .path6 { fill:none; stroke:#2563eb; stroke-width:1.25; stroke-dasharray:3 4; }
+    .guide { stroke:#94a3b8; stroke-width:1; stroke-dasharray:3 3; }
+    .pt { fill:#ffffff; stroke:#2563eb; stroke-width:2; }
+    .ptfinal { fill:#2563eb; stroke:#2563eb; stroke-width:2; }
+    .lbl { fill:#334155; font-size:14px; font-weight:600; }
+    .cap { fill:#0f172a; font-size:15px; font-weight:600; }
+    .note { fill:#334155; font-size:12.5px; }
+  </style>
+
+  <text class="cap" x="20" y="26">Successive bracketing of a minimum</text>
+
+  <g transform="translate(20,30)">
+    <path class="curve" d="M 40 91.0 L 60 116.0 L 80 139.0 L 100 160.0 L 120 179.0 L 140 196.0 L 160 211.0 L 180 224.0 L 200 235.0 L 220 244.0 L 240 251.0 L 260 256.0 L 280 259.0 L 300 260.0 L 320 259.0 L 340 256.0 L 360 251.0 L 380 244.0 L 400 235.0 L 420 224.0 L 440 211.0 L 460 196.0 L 480 179.0 L 500 160.0 L 520 139.0 L 540 116.0 L 560 91.0"/>
+
+    <!-- search order: 1 -> 3 -> 2 -> 4 -> 5 -> 6 -->
+    <path class="path6" d="M 60 116 L 260 256 L 540 116 L 367 248.8 L 184 226.4 L 301 260"/>
+
+    <line class="guide" x1="60" y1="116" x2="60" y2="290"/>
+    <line class="guide" x1="540" y1="116" x2="540" y2="290"/>
+    <line class="guide" x1="260" y1="256" x2="260" y2="290"/>
+    <line class="guide" x1="367" y1="248.8" x2="367" y2="290"/>
+    <line class="guide" x1="184" y1="226.4" x2="184" y2="290"/>
+
+    <circle class="pt" cx="60" cy="116" r="5"/>
+    <circle class="pt" cx="540" cy="116" r="5"/>
+    <circle class="pt" cx="260" cy="256" r="5"/>
+    <circle class="pt" cx="367" cy="248.8" r="5"/>
+    <circle class="pt" cx="184" cy="226.4" r="5"/>
+    <circle class="ptfinal" cx="301" cy="260" r="5"/>
+
+    <text class="lbl" x="52" y="108">1</text>
+    <text class="lbl" x="532" y="108">2</text>
+    <text class="lbl" x="252" y="240">3</text>
+    <text class="lbl" x="373" y="240">4</text>
+    <text class="lbl" x="164" y="216">5</text>
+    <text class="lbl" x="295" y="280">6</text>
+
+    <text class="note" x="20" y="312">1, 3, 2 bracket the minimum; each new trial (4, 5, 6) replaces whichever outer</text>
+    <text class="note" x="20" y="328">point no longer helps, shrinking the bracket until it tightly encloses 6.</text>
+  </g>
+</svg>

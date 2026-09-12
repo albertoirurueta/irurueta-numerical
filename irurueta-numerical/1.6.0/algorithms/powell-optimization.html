@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Powell&#8217;s Method :: Irurueta Numerical</title>
+    <meta name="description" content="Powell's derivative-free multivariate optimization method using conjugate direction sets and line minimization, implemented by PowellMultiOptimizer.">
+    <meta name="keywords" content="Powell's method, multivariate optimization, derivative-free optimization, conjugate directions, PowellMultiOptimizer, line minimization, function minimization">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../../.."><img src="../../../_/img/logo.svg" alt="Irurueta Numerical" class="navbar-brand-logo">Irurueta Numerical</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-numerical" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Irurueta Numerical</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Irurueta Numerical</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../algorithms.html">Algorithms</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Fitting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="straight-line-fitting.html">Straight Line Fitting Algorithm</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="linear-least-squares.html">Linear Least-Squares Fitting Algorithm</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="svd-linear-fitting.html">Linear Fitting by Singular Value Decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="levenberg-marquardt.html">Levenberg-Marquardt Fitting Algorithm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Integration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="trapezoidal-integration.html">Trapezoidal Rule Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="simpson-integration.html">Simpson&#8217;s Rule Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="romberg-integration.html">Romberg Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="midpoint-integration.html">Midpoint Rule Integration for Improper Integrals</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="double-exponential-integration.html">Double Exponential Rule Integration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Interpolation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="polynomial-interpolation.html">Polynomial Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="cubic-spline-interpolation.html">Cubic Spline Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="rational-interpolation.html">Rational Function Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="polynomial-coefficients.html">Coefficients of the Interpolating Polynomial</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="2d-grid-interpolation.html">Two-Dimensional Grid Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="scattered-data-interpolation.html">Scattered-Data Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="curve-interpolation.html">Curve Interpolation in Multiple Dimensions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Optimization</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="golden-section-search.html">Golden Section Search</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="brent-optimization.html">Brent&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="derivative-brent-optimization.html">Brent&#8217;s Method with Derivatives</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="simplex-optimization.html">Downhill Simplex Method (Nelder-Mead)</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="3">
+    <a class="nav-link" href="powell-optimization.html">Powell&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="conjugate-gradient-optimization.html">Conjugate Gradient Methods</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="quasi-newton-optimization.html">Quasi-Newton Method (BFGS)</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Roots</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="bisection-root-finding.html">Bisection Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="secant-false-position-root-finding.html">Secant and False Position Methods</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="ridder-root-finding.html">Ridder&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="brent-root-finding.html">Brent&#8217;s Method (Root Finding)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="newton-raphson-root-finding.html">Newton-Raphson Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="polynomial-roots-closed-form.html">Closed-Form Polynomial Roots</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="laguerre-root-finding.html">Laguerre&#8217;s Method for Polynomial Roots</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Robust</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="robust-estimation-framework.html">Robust Estimation Framework</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="ransac-robust-estimation.html">RANSAC (Random Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="lmeds-robust-estimation.html">LMedS (Least Median of Squares)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="msac-robust-estimation.html">MSAC (M-estimator Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="prosac-robust-estimation.html">PROSAC (Progressive Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="promeds-robust-estimation.html">PROMedS (Progressive Least Median of Squares)</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Signal processing</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="1d-convolution.html">1D Discrete Convolution</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="kalman-filter.html">Kalman Filter</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="measurement-noise-covariance-estimation.html">Measurement Noise Covariance Estimation</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Numerical</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../index.html">Irurueta Numerical</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Irurueta Numerical</a></li>
+    <li><a href="../algorithms.html">Algorithms</a></li>
+    <li>Optimization</li>
+    <li><a href="powell-optimization.html">Powell&#8217;s Method</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-numerical/edit/develop/docs/modules/ROOT/pages/algorithms/powell-optimization.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Powell&#8217;s Method</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Powell&#8217;s method minimizes a function of several variables using only function evaluations — no gradient
+required — by repeatedly running one-dimensional line minimizations along a cleverly updated set of
+directions. It is described in <a href="../reference.html#press2007" class="xref page">Press et al., 2007</a>, Sections 10.6 (page 507,
+the shared line-minimization machinery) and 10.7 (page 509, Powell&#8217;s direction-set method), and implemented as
+<code>PowellMultiOptimizer</code> in the <code>com.irurueta.numerical.optimization</code> package.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_line_minimization_as_a_building_block"><a class="anchor" href="#_line_minimization_as_a_building_block"></a>Line minimization as a building block</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Given a point <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.778ex" height="1.552ex" role="img" focusable="false" viewBox="0 -686 786 686"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D40F" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H253Q435 686 470 685T536 678Q585 668 621 648T675 605T705 557T718 514T721 483T718 451T704 409T673 362T616 322T530 293Q500 288 399 287H304V62H412V0H400ZM553 475Q553 554 537 582T459 622Q451 623 373 624H298V343H372Q457 344 480 350Q527 362 540 390T553 475Z"></path></g></g></g></g></svg> </span> and a direction <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.446ex" height="1.018ex" role="img" focusable="false" viewBox="0 -450 639 450"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D427" d="M40 442Q217 450 218 450H224V407L225 365Q233 378 245 391T289 422T362 448Q374 450 398 450Q428 450 448 447T491 434T529 402T551 346Q553 335 554 198V62H623V0H614Q596 3 489 3Q374 3 365 0H356V62H425V194V275Q425 348 416 373T371 399Q326 399 288 370T238 290Q236 281 235 171V62H304V0H295Q277 3 171 3Q64 3 46 0H37V62H106V210V303Q106 353 104 363T91 376Q77 380 50 380H37V442H40Z"></path></g></g></g></g></svg> </span> in <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span>-dimensional space, any
+<a href="brent-optimization.html" class="xref page">one-dimensional minimizer</a> can find the scalar <span class="steminline"> <svg style="vertical-align: -0.027ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.319ex" height="1.597ex" role="img" focusable="false" viewBox="0 -694 583 706"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D706" d="M166 673Q166 685 183 694H202Q292 691 316 644Q322 629 373 486T474 207T524 67Q531 47 537 34T546 15T551 6T555 2T556 -2T550 -11H482Q457 3 450 18T399 152L354 277L340 262Q327 246 293 207T236 141Q211 112 174 69Q123 9 111 -1T83 -12Q47 -12 47 20Q47 37 61 52T199 187Q229 216 266 252T321 306L338 322Q338 323 288 462T234 612Q214 657 183 657Q166 657 166 673Z"></path></g></g></g></svg> </span> that
+minimizes <span class="steminline"> <svg style="vertical-align: -0.566ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="10.313ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 4558.4 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g><g data-mml-node="mo" transform="translate(550,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(939,0)"><g data-mml-node="mi"><path data-c="1D40F" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H253Q435 686 470 685T536 678Q585 668 621 648T675 605T705 557T718 514T721 483T718 451T704 409T673 362T616 322T530 293Q500 288 399 287H304V62H412V0H400ZM553 475Q553 554 537 582T459 622Q451 623 373 624H298V343H372Q457 344 480 350Q527 362 540 390T553 475Z"></path></g></g><g data-mml-node="mo" transform="translate(1947.2,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mi" transform="translate(2947.4,0)"><path data-c="1D706" d="M166 673Q166 685 183 694H202Q292 691 316 644Q322 629 373 486T474 207T524 67Q531 47 537 34T546 15T551 6T555 2T556 -2T550 -11H482Q457 3 450 18T399 152L354 277L340 262Q327 246 293 207T236 141Q211 112 174 69Q123 9 111 -1T83 -12Q47 -12 47 20Q47 37 61 52T199 187Q229 216 266 252T321 306L338 322Q338 323 288 462T234 612Q214 657 183 657Q166 657 166 673Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(3530.4,0)"><g data-mml-node="mi"><path data-c="1D427" d="M40 442Q217 450 218 450H224V407L225 365Q233 378 245 391T289 422T362 448Q374 450 398 450Q428 450 448 447T491 434T529 402T551 346Q553 335 554 198V62H623V0H614Q596 3 489 3Q374 3 365 0H356V62H425V194V275Q425 348 416 373T371 399Q326 399 288 370T238 290Q236 281 235 171V62H304V0H295Q277 3 171 3Q64 3 46 0H37V62H106V210V303Q106 353 104 363T91 376Q77 380 50 380H37V442H40Z"></path></g></g><g data-mml-node="mo" transform="translate(4169.4,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg> </span> — reducing a multidimensional problem, along one direction, to a
+problem already solved. Multi-variable methods differ mainly in <strong>how they pick the next direction</strong> to line-
+minimize along. This package implements the shared line-minimization step once, in <code>LineMultiOptimizer</code>, and
+both <a href="powell-optimization.html" class="xref page">Powell&#8217;s Method</a> (this page) and the non-derivative variant of
+<a href="conjugate-gradient-optimization.html" class="xref page">Conjugate Gradient Methods</a> build on it: it wraps the target point and direction in
+a 1D "directional evaluator", brackets and minimizes along it using
+<a href="brent-optimization.html" class="xref page"><code>BrentSingleOptimizer</code></a>, then updates the point and stores the actual
+distance moved.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_the_coordinate_directions_alone_are_a_bad_choice"><a class="anchor" href="#_why_the_coordinate_directions_alone_are_a_bad_choice"></a>Why the coordinate directions alone are a bad choice</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The naive approach — line-minimize along each of the <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span> unit vectors in turn, cycling until the function
+stops decreasing — is workable but can be badly inefficient: for a function whose contours form a long,
+narrow, diagonally-oriented valley, this takes many tiny zig-zag steps to get anywhere, crossing and
+re-crossing the valley&#8217;s true axis. What is needed instead is a set of <strong>conjugate directions</strong>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/algorithms/powell-valley-zigzag.svg" alt="Coordinate-direction line minimization in a long, narrow, diagonally-oriented valley: alternating horizontal and vertical steps cross and re-cross the valley many times instead of heading straight for the minimum" width="640">
+</div>
+</div>
+<div class="paragraph">
+<p>Two directions <span class="steminline"> <svg style="vertical-align: -0.014ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.446ex" height="1.032ex" role="img" focusable="false" viewBox="0 -450 639 456"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42E" d="M40 442L134 446Q228 450 229 450H235V273V165Q235 90 238 74T254 52Q268 46 304 46H319Q352 46 380 67T419 121L420 123Q424 135 425 199Q425 201 425 207Q425 233 425 249V316Q425 354 423 363T410 376Q396 380 369 380H356V442L554 450V267Q554 84 556 79Q561 62 610 62H623V31Q623 0 622 0Q603 0 527 -3T432 -6Q431 -6 431 25V56L420 45Q373 6 332 -1Q313 -6 281 -6Q208 -6 165 14T109 87L107 98L106 230Q106 358 104 366Q96 380 50 380H37V442H40Z"></path></g></g></g></g></svg> </span> and <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.373ex" height="1.005ex" role="img" focusable="false" viewBox="0 -444 607 444"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g></g></g></svg> </span> are conjugate (with respect to the local quadratic
+approximation of <span class="steminline"> <svg style="vertical-align: -0.464ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.244ex" height="2.059ex" role="img" focusable="false" viewBox="0 -705 550 910"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g></g></g></svg> </span>, with Hessian <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.697ex" height="1.62ex" role="img" focusable="false" viewBox="0 -716 750 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path></g></g></g></svg> </span>) when:</p>
+</div>
+  <div class="stemblock">
+    <div class="content halign-center valign-middle" style="padding-top: 1rem">
+      <svg style="vertical-align: -0.186ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="10.744ex" height="2.189ex" role="img" focusable="false" viewBox="0 -885.3 4748.7 967.3"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42E" d="M40 442L134 446Q228 450 229 450H235V273V165Q235 90 238 74T254 52Q268 46 304 46H319Q352 46 380 67T419 121L420 123Q424 135 425 199Q425 201 425 207Q425 233 425 249V316Q425 354 423 363T410 376Q396 380 369 380H356V442L554 450V267Q554 84 556 79Q561 62 610 62H623V31Q623 0 622 0Q603 0 527 -3T432 -6Q431 -6 431 25V56L420 45Q373 6 332 -1Q313 -6 281 -6Q208 -6 165 14T109 87L107 98L106 230Q106 358 104 366Q96 380 50 380H37V442H40Z"></path></g></g><g data-mml-node="mi" transform="translate(672,413) scale(0.707)"><path data-c="22A4" d="M55 642T55 648T59 659T66 666T71 668H708Q723 660 723 648T708 628H409V15Q402 2 391 0Q387 0 384 1T379 3T375 6T373 9T371 13T369 16V628H71Q70 628 67 630T59 637Z"></path></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1272.1,0)"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="mstyle" transform="translate(2141.1,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(2308.1,0)"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g><g data-mml-node="mo" transform="translate(3192.9,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mn" transform="translate(4248.7,0)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g></svg>
+    </div>
+  </div>
+<div class="paragraph">
+<p>The useful property: after line-minimizing along <span class="steminline"> <svg style="vertical-align: -0.014ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.446ex" height="1.032ex" role="img" focusable="false" viewBox="0 -450 639 456"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42E" d="M40 442L134 446Q228 450 229 450H235V273V165Q235 90 238 74T254 52Q268 46 304 46H319Q352 46 380 67T419 121L420 123Q424 135 425 199Q425 201 425 207Q425 233 425 249V316Q425 354 423 363T410 376Q396 380 369 380H356V442L554 450V267Q554 84 556 79Q561 62 610 62H623V31Q623 0 622 0Q603 0 527 -3T432 -6Q431 -6 431 25V56L420 45Q373 6 332 -1Q313 -6 281 -6Q208 -6 165 14T109 87L107 98L106 230Q106 358 104 366Q96 380 50 380H37V442H40Z"></path></g></g></g></g></svg> </span>, minimizing along a direction conjugate to
+it does not spoil the first minimization. A full pass of <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span> minimizations along <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span> mutually
+conjugate directions lands <strong>exactly</strong> on the minimum of a quadratic form — and, for functions that are only
+approximately quadratic near their minimum, repeated passes converge quadratically.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_building_conjugate_directions_without_knowing_the_hessian"><a class="anchor" href="#_building_conjugate_directions_without_knowing_the_hessian"></a>Building conjugate directions without knowing the Hessian</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Powell&#8217;s original basic procedure starts from the coordinate directions <span class="steminline"> <svg style="vertical-align: -0.357ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="7.135ex" height="1.676ex" role="img" focusable="false" viewBox="0 -583 3153.5 740.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42E" d="M40 442L134 446Q228 450 229 450H235V273V165Q235 90 238 74T254 52Q268 46 304 46H319Q352 46 380 67T419 121L420 123Q424 135 425 199Q425 201 425 207Q425 233 425 249V316Q425 354 423 363T410 376Q396 380 369 380H356V442L554 450V267Q554 84 556 79Q561 62 610 62H623V31Q623 0 622 0Q603 0 527 -3T432 -6Q431 -6 431 25V56L420 45Q373 6 332 -1Q313 -6 281 -6Q208 -6 165 14T109 87L107 98L106 230Q106 358 104 366Q96 380 50 380H37V442H40Z"></path></g></g><g data-mml-node="mi" transform="translate(672,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(1243.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="msub" transform="translate(2299.5,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D41E" d="M32 225Q32 332 102 392T272 452H283Q382 452 436 401Q494 343 494 243Q494 226 486 222T440 217Q431 217 394 217T327 218H175V209Q175 177 179 154T196 107T236 69T306 50Q312 49 323 49Q376 49 410 85Q421 99 427 111T434 127T442 133T463 135H468Q494 135 494 117Q494 110 489 97T468 66T431 32T373 5T292 -6Q181 -6 107 55T32 225ZM383 276Q377 346 348 374T280 402Q253 402 230 390T195 357Q179 331 176 279V266H383V276Z"></path></g></g><g data-mml-node="mi" transform="translate(560,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg> </span> and
+repeats: save the starting point <span class="steminline"> <svg style="vertical-align: -0.375ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.766ex" height="1.927ex" role="img" focusable="false" viewBox="0 -686 1222.6 851.6"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D40F" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H253Q435 686 470 685T536 678Q585 668 621 648T675 605T705 557T718 514T721 483T718 451T704 409T673 362T616 322T530 293Q500 288 399 287H304V62H412V0H400ZM553 475Q553 554 537 582T459 622Q451 623 373 624H298V343H372Q457 344 480 350Q527 362 540 390T553 475Z"></path></g></g><g data-mml-node="mn" transform="translate(819,-150) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g></g></svg> </span>; line-minimize in turn along each current direction, arriving at
+<span class="steminline"> <svg style="vertical-align: -0.339ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="3.387ex" height="1.891ex" role="img" focusable="false" viewBox="0 -686 1496.9 836"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D40F" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H253Q435 686 470 685T536 678Q585 668 621 648T675 605T705 557T718 514T721 483T718 451T704 409T673 362T616 322T530 293Q500 288 399 287H304V62H412V0H400ZM553 475Q553 554 537 582T459 622Q451 623 373 624H298V343H372Q457 344 480 350Q527 362 540 390T553 475Z"></path></g></g><g data-mml-node="mi" transform="translate(819,-150) scale(0.707)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></g></svg> </span>; then discard the <strong>first</strong> direction, shift every other direction down by one slot, and set the new
+last direction to the net direction moved, <span class="steminline"> <svg style="vertical-align: -0.375ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="8.918ex" height="1.927ex" role="img" focusable="false" viewBox="0 -686 3941.9 851.6"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D40F" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H253Q435 686 470 685T536 678Q585 668 621 648T675 605T705 557T718 514T721 483T718 451T704 409T673 362T616 322T530 293Q500 288 399 287H304V62H412V0H400ZM553 475Q553 554 537 582T459 622Q451 623 373 624H298V343H372Q457 344 480 350Q527 362 540 390T553 475Z"></path></g></g><g data-mml-node="mi" transform="translate(819,-150) scale(0.707)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g><g data-mml-node="mo" transform="translate(1719.1,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="msub" transform="translate(2719.4,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D40F" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H253Q435 686 470 685T536 678Q585 668 621 648T675 605T705 557T718 514T721 483T718 451T704 409T673 362T616 322T530 293Q500 288 399 287H304V62H412V0H400ZM553 475Q553 554 537 582T459 622Q451 623 373 624H298V343H372Q457 344 480 350Q527 362 540 390T553 475Z"></path></g></g><g data-mml-node="mn" transform="translate(819,-150) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g></g></svg> </span>. Powell showed that <span class="steminline"> <svg style="vertical-align: -0.025ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.179ex" height="1.595ex" role="img" focusable="false" viewBox="0 -694 521 705"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g></g></g></svg> </span> repetitions of this
+procedure produce a set of directions whose last <span class="steminline"> <svg style="vertical-align: -0.025ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="1.179ex" height="1.595ex" role="img" focusable="false" viewBox="0 -694 521 705"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g></g></g></svg> </span> members are mutually conjugate — so, in principle,
+<span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span> repetitions exactly minimize a quadratic form.</p>
+</div>
+<div class="paragraph">
+<p>In practice, though, always discarding the <strong>oldest</strong> direction this way tends to make the direction set fold up
+on itself and become linearly dependent — collapsing the search onto a lower-dimensional subspace and quietly
+returning the wrong answer. This library implements the heuristic fix <a href="../reference.html#press2007" class="xref page">Press et
+al., 2007</a> recommends: discard, instead, whichever direction produced the <strong>largest</strong> decrease during the pass —
+paradoxically, this is also the direction most likely to dominate the new "net movement" direction being
+added, so dropping it best avoids the buildup of linear dependence. Two additional safeguards decide whether
+to replace a direction at all:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the function value at a point extrapolated further along the net direction is no better than the
+starting value, the net direction is "played out" — keep the old direction set unchanged.</p>
+</li>
+<li>
+<p>If most of the pass&#8217;s decrease came from no single direction in particular, or the function appears to be
+near the bottom of the average direction&#8217;s own minimum, also keep the old direction set unchanged.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock"><div class="mermaid content" style=" ">flowchart TD
+    A["Save P0; directions initialized\nto the coordinate axes"] --> B["Line-minimize along each\ncurrent direction in turn, reaching P_N"]
+    B --> C{"decrease this pass below tolerance?"}
+    C -->|"yes"| D["Done: return current point"]
+    C -->|"no"| E["Evaluate f at an extrapolated point\nfurther along P_N - P0"]
+    E --> F{"does replacing the direction of\nlargest decrease look beneficial?"}
+    F -->|"yes"| G["Line-minimize along P_N - P0;\nreplace the largest-decrease direction with it"]
+    F -->|"no"| H["Keep the existing direction set unchanged"]
+    G --> B
+    H --> B</div></div>
+<div class="paragraph">
+<p>This trades away the strict quadratic-convergence guarantee of the "textbook" algorithm in exchange for
+directions that track long, twisting valleys well in practice — a good trade for exactly the kinds of
+functions where quadratic convergence would not have helped much anyway.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_library_implementation"><a class="anchor" href="#_library_implementation"></a>Library implementation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>PowellMultiOptimizer</code> extends <code>LineMultiOptimizer</code>, reusing its <code>linmin()</code> for every 1D sub-problem. The
+direction set can be supplied explicitly or left to default to the coordinate axes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>setPointAndDirections(point, directions)</code> — supply the starting point and an initial <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="6.784ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 2998.4 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(1110.2,0)"><path data-c="D7" d="M630 29Q630 9 609 9Q604 9 587 25T493 118L389 222L284 117Q178 13 175 11Q171 9 168 9Q160 9 154 15T147 29Q147 36 161 51T255 146L359 250L255 354Q174 435 161 449T147 471Q147 480 153 485T168 490Q173 490 175 489Q178 487 284 383L389 278L493 382Q570 459 587 475T609 491Q630 491 630 471Q630 464 620 453T522 355L418 250L522 145Q606 61 618 48T630 29Z"></path></g><g data-mml-node="mi" transform="translate(2110.4,0)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span>
+matrix of directions (its columns).</p>
+</li>
+<li>
+<p><code>setStartPoint(point)</code> — supply only the starting point; the coordinate axes are used as the initial
+directions.</p>
+</li>
+<li>
+<p><code>getDirections()</code> — the current direction set, after <code>minimize()</code> updates it.</p>
+</li>
+<li>
+<p><code>getTolerance()</code> / <code>setTolerance(double)</code> — the fractional tolerance on the function value; default <code>3e-8</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Up to <code>ITMAX = 200</code> passes (each consisting of <span class="steminline"> <svg style="vertical-align: 0; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg> </span> line minimizations) are attempted before the optimizer
+reports failure to converge.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<a href="../reference.html#press2007" class="xref page">Press et al., 2007</a> recommends Powell&#8217;s method whenever the function has
+some smoothness but computing gradients is inconvenient or unavailable — it is much faster than
+<a href="simplex-optimization.html" class="xref page">Downhill Simplex Method (Nelder-Mead)</a> in that situation. When gradients <strong>are</strong> available,
+<a href="conjugate-gradient-optimization.html" class="xref page">Conjugate Gradient Methods</a> or <a href="quasi-newton-optimization.html" class="xref page">Quasi-Newton Method (BFGS)</a> will
+typically do better still.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">final var listener = new MultiDimensionFunctionEvaluatorListener() {
+    @Override
+    public double evaluate(final double[] point) {
+        final var dx = point[0] - 1.0;
+        final var dy = point[1] + 2.0;
+        return dx * dx + dy * dy;
+    }
+};
+
+final var optimizer = new PowellMultiOptimizer(listener, 3e-8);
+optimizer.setStartPoint(new double[]{0.0, 0.0});
+optimizer.minimize();
+
+final var xmin = optimizer.getResult();          // approximately [1.0, -2.0]
+final var fmin = optimizer.getEvaluationAtResult(); // approximately 0.0</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Classes used in this example</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+<th class="tableblock halign-left valign-top">Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MultiDimensionFunctionEvaluatorListener</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.html">Javadoc</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/MultiDimensionFunctionEvaluatorListener.java">Source</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PowellMultiOptimizer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-numerical/mvn-site/apidocs/com/irurueta/numerical/optimization/PowellMultiOptimizer.html">Javadoc</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-numerical/blob/develop/src/main/java/com/irurueta/numerical/optimization/PowellMultiOptimizer.java">Source</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/vendor/lunr.js"></script>
+<script src="../../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../../.." data-snippet-length="100" data-stylesheet="../../../_/css/search.css"></script>
+<script async src="../../../search-index.js"></script>
+  </body>
+</html>

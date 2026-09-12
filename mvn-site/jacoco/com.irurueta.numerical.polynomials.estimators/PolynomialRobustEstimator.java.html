@@ -1,0 +1,965 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PolynomialRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">PolynomialRobustEstimator.java</span></div><h1>PolynomialRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best
+ * Polynomial for provided collection of evaluations.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+@SuppressWarnings(&quot;Duplicates&quot;)
+public abstract class PolynomialRobustEstimator {
+
+    /**
+     * Default robust estimator method when none is provided.
+     * In general for Polynomial estimation is best to use PROSAC or RANSAC
+     * than any other method, as it provides more robust methods.
+     */
+<span class="fc" id="L40">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROSAC;</span>
+
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default, this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Flag indicating whether geometric distance is used by default or not
+     * to find outliers.
+     */
+    public static final boolean DEFAULT_USE_GEOMETRIC_DISTANCE = false;
+
+    /**
+     * Collection of polynomial evaluations and their corresponding point of
+     * evaluation used to determine a polynomial of required degree.
+     */
+    protected List&lt;PolynomialEvaluation&gt; evaluations;
+
+    /**
+     * Internal non robust estimator of polynomial estimator.
+     */
+    protected final LMSEPolynomialEstimator polynomialEstimator;
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends or
+     * its progress significantly changes.
+     */
+    protected PolynomialRobustEstimatorListener listener;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected boolean locked;
+
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float progressDelta;
+
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double confidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int maxIterations;
+
+    /**
+     * Indicates whether geometric distance will be used to find outliers or
+     * algebraic distance will be used instead.
+     */
+    protected boolean useGeometricDistance;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L144">    protected PolynomialRobustEstimator() {</span>
+<span class="fc" id="L145">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L146">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L147">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L148">        useGeometricDistance = DEFAULT_USE_GEOMETRIC_DISTANCE;</span>
+<span class="fc" id="L149">        polynomialEstimator = new LMSEPolynomialEstimator();</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+<span class="fc" id="L158">    protected PolynomialRobustEstimator(final int degree) {</span>
+<span class="fc" id="L159">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L160">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L161">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L162">        useGeometricDistance = DEFAULT_USE_GEOMETRIC_DISTANCE;</span>
+<span class="fc" id="L163">        polynomialEstimator = new LMSEPolynomialEstimator(degree);</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    protected PolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L174">        this();</span>
+<span class="fc" id="L175">        internalSetEvaluations(evaluations);</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    protected PolynomialRobustEstimator(final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L185">        this();</span>
+<span class="fc" id="L186">        this.listener = listener;</span>
+<span class="fc" id="L187">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    protected PolynomialRobustEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L200">        this(degree);</span>
+<span class="fc" id="L201">        internalSetEvaluations(evaluations);</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    protected PolynomialRobustEstimator(
+            final int degree, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L214">        this(degree);</span>
+<span class="fc" id="L215">        this.listener = listener;</span>
+<span class="fc" id="L216">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    protected PolynomialRobustEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L229">        this(evaluations);</span>
+<span class="fc" id="L230">        this.listener = listener;</span>
+<span class="fc" id="L231">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    protected PolynomialRobustEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L246">        this(degree, evaluations);</span>
+<span class="fc" id="L247">        this.listener = listener;</span>
+<span class="fc" id="L248">    }</span>
+
+    /**
+     * Gets collection of polynomial evaluations and their corresponding point
+     * of evaluation used to determine a polynomial of required degree.
+     *
+     * @return collection of polynomial evaluations.
+     */
+    public List&lt;PolynomialEvaluation&gt; getEvaluations() {
+<span class="fc" id="L257">        return evaluations;</span>
+    }
+
+    /**
+     * Sets collection of polynomial evaluations and their corresponding point
+     * of evaluation used to determine a polynomial of required degree.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if provided list of evaluations does
+     *                                  not contain enough evaluations to estimate the polynomial using current
+     *                                  settings.
+     */
+    public void setEvaluations(final List&lt;PolynomialEvaluation&gt; evaluations) throws LockedException {
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L272">            throw new LockedException();</span>
+        }
+<span class="fc" id="L274">        internalSetEvaluations(evaluations);</span>
+<span class="fc" id="L275">    }</span>
+
+    /**
+     * Gets minimum number of evaluations required to estimate a polynomial of
+     * the specified degree.
+     *
+     * @return number of required evaluations.
+     */
+    public int getMinNumberOfEvaluations() {
+<span class="fc" id="L284">        return polynomialEstimator.getMinNumberOfEvaluations();</span>
+    }
+
+    /**
+     * Gets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public PolynomialRobustEstimatorListener getListener() {
+<span class="fc" id="L294">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     */
+    public void setListener(final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L304">        this.listener = listener;</span>
+<span class="fc" id="L305">    }</span>
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     *
+     * @return true if this estimator is locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L314">        return locked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L325">        return progressDelta;</span>
+    }
+
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L341">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L343" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || progressDelta &gt; MAX_PROGRESS_DELTA) {</span>
+<span class="fc" id="L344">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L346">        this.progressDelta = progressDelta;</span>
+<span class="fc" id="L347">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L358">        return confidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0 but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="pc bpc" id="L374" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L375">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L377" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L378">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L380">        this.confidence = confidence;</span>
+<span class="fc" id="L381">    }</span>
+
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L391">        return maxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L406">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L409">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L411">        this.maxIterations = maxIterations;</span>
+<span class="fc" id="L412">    }</span>
+
+    /**
+     * Indicates whether geometric distance will be used to find outliers or
+     * algebraic distance will be used instead.
+     *
+     * @return true if geometric distance is used, false otherwise.
+     */
+    public boolean isGeometricDistanceUsed() {
+<span class="fc" id="L421">        return useGeometricDistance;</span>
+    }
+
+    /**
+     * Specifies whether geometric distance will be used to find outliers or
+     * algebraic distance will be used instead.
+     *
+     * @param geometricDistanceUsed true if geometric distance is used, false
+     *                              otherwise.
+     * @throws LockedException if this estimator is locked.
+     */
+    public void setGeometricDistanceUsed(final boolean geometricDistanceUsed) throws LockedException {
+<span class="pc bpc" id="L433" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L434">            throw new LockedException();</span>
+        }
+<span class="fc" id="L436">        useGeometricDistance = geometricDistanceUsed;</span>
+<span class="fc" id="L437">    }</span>
+
+    /**
+     * Gets degree of polynomial to be estimated.
+     *
+     * @return degree of polynomial to be estimated.
+     */
+    public int getDegree() {
+<span class="fc" id="L445">        return polynomialEstimator.getDegree();</span>
+    }
+
+    /**
+     * Sets degree of polynomial to be estimated.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     * @throws LockedException          if this instance is locked.
+     */
+    public void setDegree(final int degree) throws LockedException {
+<span class="pc bpc" id="L456" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L457">            throw new LockedException();</span>
+        }
+<span class="fc" id="L459">        polynomialEstimator.setDegree(degree);</span>
+<span class="fc" id="L460">    }</span>
+
+    /**
+     * Determines whether estimation is ready to start with the given data and
+     * required degree of polynomial to be estimated.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="fc" id="L469">        final var nParams = polynomialEstimator.getDegree() + 1;</span>
+<span class="pc bpc" id="L470" title="1 of 4 branches missed.">        if (evaluations == null || evaluations.size() &lt; nParams) {</span>
+<span class="fc" id="L471">            return false;</span>
+        }
+
+        // also ensure that at least a direct or integral evaluation exists
+<span class="fc" id="L475">        var count = 0;</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">        for (final var eval : evaluations) {</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">            if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION</span>
+<span class="fc bfc" id="L478" title="All 2 branches covered.">                    || eval.getType() == PolynomialEvaluationType.INTEGRAL_EVALUATION</span>
+<span class="fc bfc" id="L479" title="All 2 branches covered.">                    || eval.getType() == PolynomialEvaluationType.INTEGRAL_INTERVAL) {</span>
+<span class="fc" id="L480">                count++;</span>
+            }
+<span class="fc" id="L482">        }</span>
+
+<span class="pc bpc" id="L484" title="2 of 4 branches missed.">        return count &gt;= 1 &amp;&amp; evaluations.size() &gt;= nParams;</span>
+    }
+
+    /**
+     * Returns quality scores corresponding to each polynomial evaluation.
+     * The larger the score value the better the quality of the evaluation.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @return quality scores corresponding to each evaluation.
+     */
+    public double[] getQualityScores() {
+        // quality scores ignored
+<span class="fc" id="L497">        return null;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each polynomial evaluation.
+     * The larger the score value the better the quality of the evaluation.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @param qualityScores quality scores corresponding to each evaluation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than minimum required number of evaluations.
+     */
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+        // quality scores ignored
+<span class="fc" id="L514">    }</span>
+
+    /**
+     * Estimates polynomial.
+     *
+     * @return estimated polynomial.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any other reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract Polynomial estimate() throws LockedException, NotReadyException, RobustEstimatorException;
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+
+    /**
+     * Creates a robust polynomial estimator using default method.
+     *
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create() {
+<span class="fc" id="L542">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree and default
+     * method.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(final int degree) {
+<span class="fc" id="L554">        return create(degree, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided evaluations and
+     * default method.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L565">        return create(evaluations, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided listener and default
+     * method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L577">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree, evaluations
+     * and default method.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L590">        return create(degree, evaluations, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree, listener
+     * and default method.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(final int degree, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L604">        return create(degree, listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided evaluations,
+     * listener and default method.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L618">        return create(evaluations, listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree, evaluations,
+     * listener and default method.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L635">        return create(degree, evaluations, listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided method.
+     *
+     * @param method method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L645" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L646">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator();</span>
+<span class="fc" id="L647">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator();</span>
+<span class="fc" id="L648">            case MSAC -&gt; new MSACPolynomialRobustEstimator();</span>
+<span class="fc" id="L649">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator();</span>
+<span class="fc" id="L650">            default -&gt; new PROSACPolynomialRobustEstimator();</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree and method.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @param method method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(final int degree, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L663" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L664">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L665">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L666">            case MSAC -&gt; new MSACPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L667">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(degree);</span>
+<span class="fc" id="L668">            default -&gt; new PROSACPolynomialRobustEstimator(degree);</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided evaluations and
+     * method.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param method      method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L682" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L683">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L684">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L685">            case MSAC -&gt; new MSACPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L686">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(evaluations);</span>
+<span class="fc" id="L687">            default -&gt; new PROSACPolynomialRobustEstimator(evaluations);</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided listener and method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(
+            final PolynomialRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L701" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L702">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L703">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L704">            case MSAC -&gt; new MSACPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L705">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(listener);</span>
+<span class="fc" id="L706">            default -&gt; new PROSACPolynomialRobustEstimator(listener);</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree, evaluations
+     * and method.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param method      method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L722" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L723">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L724">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L725">            case MSAC -&gt; new MSACPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L726">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(degree, evaluations);</span>
+<span class="fc" id="L727">            default -&gt; new PROSACPolynomialRobustEstimator(degree, evaluations);</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree, listener
+     * and method.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(
+            final int degree, final PolynomialRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L744" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L745">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L746">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L747">            case MSAC -&gt; new MSACPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L748">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(degree, listener);</span>
+<span class="fc" id="L749">            default -&gt; new PROSACPolynomialRobustEstimator(degree, listener);</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided evaluations,
+     * listener and method.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @param method      method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     */
+    public static PolynomialRobustEstimator create(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L766" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L767">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(evaluations, listener);</span>
+<span class="fc" id="L768">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(evaluations, listener);</span>
+<span class="fc" id="L769">            case MSAC -&gt; new MSACPolynomialRobustEstimator(evaluations, listener);</span>
+<span class="fc" id="L770">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(evaluations, listener);</span>
+<span class="fc" id="L771">            default -&gt; new PROSACPolynomialRobustEstimator(evaluations, listener);</span>
+        };
+    }
+
+    /**
+     * Creates a robust polynomial estimator using provided degree, evaluations,
+     * listener and method.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @param method      method of a robust polynomial estimator.
+     * @return an instance of a robust polynomial estimator.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public static PolynomialRobustEstimator create(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L790" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L791">            case RANSAC -&gt; new RANSACPolynomialRobustEstimator(degree, evaluations, listener);</span>
+<span class="fc" id="L792">            case LMEDS -&gt; new LMedSPolynomialRobustEstimator(degree, evaluations, listener);</span>
+<span class="fc" id="L793">            case MSAC -&gt; new MSACPolynomialRobustEstimator(degree, evaluations, listener);</span>
+<span class="fc" id="L794">            case PROMEDS -&gt; new PROMedSPolynomialRobustEstimator(degree, evaluations, listener);</span>
+<span class="fc" id="L795">            default -&gt; new PROSACPolynomialRobustEstimator(degree, evaluations, listener);</span>
+        };
+    }
+
+    /**
+     * Computes geometric or algebraic distance between provided polynomial
+     * and evaluation.
+     *
+     * @param eval       polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return distance.
+     */
+    protected double getDistance(final PolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc bfc" id="L808" title="All 2 branches covered.">        if (useGeometricDistance) {</span>
+<span class="fc" id="L809">            return getGeometricOrAlgebraicDistance(eval, polynomial);</span>
+        } else {
+<span class="fc" id="L811">            return getAlgebraicDistance(eval, polynomial);</span>
+        }
+    }
+
+    /**
+     * Computes algebraic distance between provided polynomial and evaluation.
+     *
+     * @param eval       polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return algebraic distance.
+     */
+    protected double getAlgebraicDistance(final PolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc bfc" id="L823" title="All 4 branches covered.">        return switch (eval.getType()) {</span>
+<span class="fc" id="L824">            case DIRECT_EVALUATION -&gt; getAlgebraicDistance((DirectPolynomialEvaluation) eval, polynomial);</span>
+<span class="fc" id="L825">            case DERIVATIVE_EVALUATION -&gt; getAlgebraicDistance((DerivativePolynomialEvaluation) eval, polynomial);</span>
+<span class="fc" id="L826">            case INTEGRAL_EVALUATION -&gt; getAlgebraicDistance((IntegralPolynomialEvaluation) eval, polynomial);</span>
+<span class="fc" id="L827">            case INTEGRAL_INTERVAL -&gt; getAlgebraicDistance((IntegralIntervalPolynomialEvaluation) eval, polynomial);</span>
+        };
+    }
+
+    /**
+     * Computes algebraic distance of between provided polynomial and direct
+     * evaluation.
+     *
+     * @param eval       direct polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return algebraic distance.
+     */
+    protected double getAlgebraicDistance(final DirectPolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc" id="L840">        final var x = eval.getX();</span>
+<span class="fc" id="L841">        final var y1 = eval.getEvaluation();</span>
+<span class="fc" id="L842">        final var y2 = polynomial.evaluate(x);</span>
+<span class="fc" id="L843">        return Math.abs(y2 - y1);</span>
+    }
+
+    /**
+     * Computes algebraic distance of a derivative between provided polynomial
+     * and evaluation.
+     *
+     * @param eval       derivative polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return algebraic distance.
+     */
+    protected double getAlgebraicDistance(final DerivativePolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc" id="L855">        final var x = eval.getX();</span>
+<span class="fc" id="L856">        final var order = eval.getDerivativeOrder();</span>
+<span class="fc" id="L857">        final var d1 = eval.getEvaluation();</span>
+<span class="fc" id="L858">        final var d2 = polynomial.evaluateNthDerivative(x, order);</span>
+<span class="fc" id="L859">        return Math.abs(d2 - d1);</span>
+    }
+
+    /**
+     * Computes algebraic distance of an integral between provided polynomial
+     * and evaluation.
+     *
+     * @param eval       integration polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return algebraic distance.
+     */
+    protected double getAlgebraicDistance(final IntegralPolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc" id="L871">        final var x = eval.getX();</span>
+<span class="fc" id="L872">        final var order = eval.getIntegralOrder();</span>
+<span class="fc" id="L873">        final var constants = eval.getConstants();</span>
+<span class="fc" id="L874">        final var i1 = eval.getEvaluation();</span>
+<span class="fc" id="L875">        final var i2 = polynomial.nthIntegrationAndReturnNew(order, constants).evaluate(x);</span>
+<span class="fc" id="L876">        return Math.abs(i2 - i1);</span>
+    }
+
+    /**
+     * Computes algebraic distance of an integration interval between provided
+     * polynomial and evaluation.
+     *
+     * @param eval       integration interval polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return algebraic distance.
+     */
+    protected double getAlgebraicDistance(final IntegralIntervalPolynomialEvaluation eval,
+                                          final Polynomial polynomial) {
+<span class="fc" id="L889">        final var startX = eval.getStartX();</span>
+<span class="fc" id="L890">        final var endX = eval.getEndX();</span>
+<span class="fc" id="L891">        final var order = eval.getIntegralOrder();</span>
+<span class="fc" id="L892">        final var constants = eval.getConstants();</span>
+<span class="fc" id="L893">        final var i1 = eval.getEvaluation();</span>
+<span class="fc" id="L894">        final var i2 = polynomial.nthOrderIntegrateInterval(startX, endX, order, constants);</span>
+<span class="fc" id="L895">        return Math.abs(i2 - i1);</span>
+    }
+
+    /**
+     * Commutes distance of evaluation respect to provided polynomial in
+     * a geometric sense if evaluation is direct, otherwise returns algebraic
+     * distance.
+     *
+     * @param eval       polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return geometric distance for direct evaluation or algebraic distance
+     * otherwise.
+     */
+    protected double getGeometricOrAlgebraicDistance(final PolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc bfc" id="L909" title="All 2 branches covered.">        if (eval.getType() == PolynomialEvaluationType.DIRECT_EVALUATION) {</span>
+<span class="fc" id="L910">            return getGeometricDistance((DirectPolynomialEvaluation) eval, polynomial);</span>
+        } else {
+<span class="fc" id="L912">            return getAlgebraicDistance(eval, polynomial);</span>
+        }
+    }
+
+    /**
+     * Computes distance of evaluation respect to provided polynomial in
+     * a geometric sense by computing a tangent line to polynomial at point x
+     * and comparing the distance of such line to provided evaluation point.
+     *
+     * @param eval       polynomial evaluation.
+     * @param polynomial polynomial.
+     * @return geometric distance.
+     */
+    protected double getGeometricDistance(final DirectPolynomialEvaluation eval, final Polynomial polynomial) {
+<span class="fc" id="L926">        final var x = eval.getX();</span>
+<span class="fc" id="L927">        final var y1 = eval.getEvaluation();</span>
+<span class="fc" id="L928">        final var y2 = polynomial.evaluate(x);</span>
+
+<span class="fc" id="L930">        final var slope = polynomial.evaluateDerivative(x);</span>
+        final double a;
+        final double b;
+        final double c;
+<span class="fc bfc" id="L934" title="All 2 branches covered.">        if (Math.abs(slope) &gt; 1.0) {</span>
+<span class="fc" id="L935">            a = 1.0;</span>
+<span class="fc" id="L936">            b = -1.0 / slope;</span>
+<span class="fc" id="L937">            c = -x + y2 / slope;</span>
+        } else {
+<span class="fc" id="L939">            a = -slope;</span>
+<span class="fc" id="L940">            b = 1.0;</span>
+<span class="fc" id="L941">            c = slope * x - y2;</span>
+        }
+
+<span class="fc" id="L944">        final var num = x * a + y1 * b + c;</span>
+<span class="fc" id="L945">        final var den = Math.sqrt(a * a + b * b);</span>
+
+<span class="fc" id="L947">        return Math.abs(num / den);</span>
+    }
+
+    /**
+     * Sets list of polynomial evaluations.
+     * This method does not check whether estimator is locked.
+     *
+     * @param evaluations list of polynomial evaluations to estimate polynomial.
+     * @throws IllegalArgumentException if provided list of polynomials is null
+     *                                  or too small.
+     */
+    private void internalSetEvaluations(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc bfc" id="L959" title="All 4 branches covered.">        if (evaluations == null || evaluations.size() &lt; getMinNumberOfEvaluations()) {</span>
+<span class="fc" id="L960">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L962">        this.evaluations = evaluations;</span>
+<span class="fc" id="L963">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

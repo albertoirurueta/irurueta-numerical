@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseRadialBasisFunctionInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">BaseRadialBasisFunctionInterpolator.java</span></div><h1>BaseRadialBasisFunctionInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+import com.irurueta.algebra.Matrix;
+
+/**
+ * Base class for interpolation methods based on Radial Basis Functions to interpolate sparse
+ * points.
+ */
+public abstract class BaseRadialBasisFunctionInterpolator {
+    /**
+     * Dimension of points to be interpolated.
+     */
+    protected final int dim;
+
+    /**
+     * Number of points provided in a matrix as a basis for interpolation.
+     */
+    protected final int n;
+
+    /**
+     * Matrix containing points to interpolate from.
+     * Each row contains one point.
+     * Matrix will have n points (rows) having a dimension (columns) equal to dim.
+     */
+    protected final Matrix pts;
+
+    /**
+     * ith point to make comparisons.
+     */
+    protected final double[] pi;
+
+    /**
+     * Constructor.
+     * @param ptss  Matrix containing points to interpolate from. Each row contains one point.
+     *              Matrix will have n points (rows) having a dimension (columns) equal to dim.
+     */
+<span class="fc" id="L52">    protected BaseRadialBasisFunctionInterpolator(final Matrix ptss) {</span>
+<span class="fc" id="L53">        this.dim = ptss.getColumns();</span>
+<span class="fc" id="L54">        n = ptss.getRows();</span>
+<span class="fc" id="L55">        pts = ptss;</span>
+
+<span class="fc" id="L57">        pi = new double[dim];</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Returns the interpolated function value at a dim-dimensional point pt.
+     *
+     * @param pt dim-dimensional point where interpolation must be computed.
+     * @return result of interpolation.
+     * @throws IllegalArgumentException if provided point has an invalid length.
+     */
+    public abstract double interpolate(final double[] pt);
+
+    /**
+     * Computes the euclidean distance between two points.
+     *
+     * @param p1 first point.
+     * @param p2 second point.
+     * @return euclidean distance.
+     */
+    protected double rad(final double[] p1, final double[] p2) {
+<span class="fc" id="L77">        var sum = 0.0;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L79">            final var value = p1[i] - p2[i];</span>
+<span class="fc" id="L80">            sum += value * value;</span>
+        }
+
+<span class="fc" id="L83">        return Math.sqrt(sum);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

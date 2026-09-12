@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiVariateFitter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.fitting</a> &gt; <span class="el_source">MultiVariateFitter.java</span></div><h1>MultiVariateFitter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.fitting;
+
+import com.irurueta.algebra.Matrix;
+
+import java.util.Arrays;
+
+/**
+ * Base class to fit a multi variate function [y1, y2, ...] = f([x1, x2, ...])
+ * by using provided data (x, y).
+ */
+public abstract class MultiVariateFitter extends Fitter {
+    /**
+     * Input points x where a multidimensional function f(x1, x2, ...) is
+     * evaluated where each column of the matrix represents each dimension of
+     * the point and each row is related to each sample corresponding to
+     * provided y pairs of values.
+     */
+    protected Matrix x;
+
+    /**
+     * Result of evaluation of multi variate function f(x1, x2, ...) at
+     * provided x points.
+     * Each row contains the function evaluation for a given point x, and
+     * each column contains values for each output variable f1, f2, ...
+     */
+    protected Matrix y;
+
+    /**
+     * Standard deviations of each pair of points (x, y).
+     */
+    protected double[] sig;
+
+    /**
+     * Number of samples (x, y) in provided input data.
+     */
+    protected int ndat;
+
+    /**
+     * Estimated parameters of linear single dimensional function.
+     */
+    protected double[] a;
+
+    /**
+     * Covariance of estimated parameters of linear single dimensional function.
+     */
+    protected Matrix covar;
+
+    /**
+     * Estimated chi square value of input data.
+     */
+    protected double chisq;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L71">    protected MultiVariateFitter() {</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where a multi variate function f(x1, x2, ...) is
+     *            evaluated.
+     * @param y   result of evaluation of multi variate function f(x1, x2, ...) at
+     *            provided x points.
+     * @param sig standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided matrix rows and arrays don't
+     *                                  have the same length.
+     */
+<span class="fc" id="L85">    protected MultiVariateFitter(final Matrix x, final Matrix y, final double[] sig) {</span>
+<span class="fc" id="L86">        setInputData(x, y, sig);</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where a multi variate function f(x1, x2, ...) is
+     *            evaluated.
+     * @param y   result of evaluation of multi variate function f(x1, x2, ...) at
+     *            provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided matrix rows and arrays don't
+     *                                  have the same length.
+     */
+<span class="fc" id="L101">    protected MultiVariateFitter(final Matrix x, final Matrix y, final double sig) {</span>
+<span class="fc" id="L102">        setInputData(x, y, sig);</span>
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Returns input points x where a multi variate function f(x1, x2, ...)
+     * is evaluated and where each column of the matrix represents
+     * each dimension of the point and each row is related to each sample
+     * corresponding to provided y pairs of values.
+     *
+     * @return input point x.
+     */
+    public Matrix getX() {
+<span class="fc" id="L114">        return x;</span>
+    }
+
+    /**
+     * Returns result of evaluation of multi variate function f(x) at provided
+     * x points. This is provided as input data along with x array.
+     *
+     * @return result of evaluation.
+     */
+    public Matrix getY() {
+<span class="fc" id="L124">        return y;</span>
+    }
+
+    /**
+     * Returns standard deviations of each pair of points (x,y).
+     *
+     * @return standard deviations of each pair of points (x,y).
+     */
+    public double[] getSig() {
+<span class="fc" id="L133">        return sig;</span>
+    }
+
+    /**
+     * Sets required input data to start function fitting.
+     *
+     * @param x   input points x where a multi variate function f(x1, x2, ...)
+     *            is evaluated and where each column of the matrix represents each
+     *            dimension of the point and each row is related to each sample
+     *            corresponding to provided y pairs of values.
+     * @param y   result of evaluation of multi variate function
+     *            f(x1, x2, ...) at provided x points. This is provided as input data along
+     *            with x array.
+     * @param sig standard deviations of each pair of points (x,y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  size.
+     */
+    public final void setInputData(final Matrix x, final Matrix y, final double[] sig) {
+<span class="fc bfc" id="L151" title="All 4 branches covered.">        if (x.getRows() != y.getRows() || sig.length != y.getRows()) {</span>
+<span class="fc" id="L152">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L155">        this.x = x;</span>
+<span class="fc" id="L156">        this.y = y;</span>
+<span class="fc" id="L157">        this.sig = sig;</span>
+
+<span class="fc" id="L159">        ndat = sig.length;</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Sets required input data to start function fitting and assuming constant
+     * standard deviation errors in input data.
+     *
+     * @param x   input points x where a multi variate function f(x1, x2, ...)
+     *            is evaluated and where each column of the matrix represents each
+     *            dimension of the point and each row is related to each sample
+     *            corresponding to provided y pairs of values.
+     * @param y   result of evaluation of multi variate function
+     *            f(x1, x2, ...) at provided x points. This is provided as input data along
+     *            with x array.
+     * @param sig standard deviations of each pair of points (x,y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  size.
+     */
+    public final void setInputData(final Matrix x, final Matrix y, final double sig) {
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (x.getRows() != y.getRows()) {</span>
+<span class="fc" id="L179">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L182">        this.x = x;</span>
+<span class="fc" id="L183">        this.y = y;</span>
+
+<span class="fc" id="L185">        ndat = y.getRows();</span>
+<span class="fc" id="L186">        this.sig = new double[ndat];</span>
+<span class="fc" id="L187">        Arrays.fill(this.sig, sig);</span>
+<span class="fc" id="L188">    }</span>
+
+    /**
+     * Returns estimated parameters of linear single dimensional function.
+     *
+     * @return estimated parameters.
+     */
+    public double[] getA() {
+<span class="fc" id="L196">        return a;</span>
+    }
+
+    /**
+     * Returns covariance of estimated parameters of linear single dimensional
+     * function.
+     *
+     * @return covariance of estimated parameters.
+     */
+    public Matrix getCovar() {
+<span class="fc" id="L206">        return covar;</span>
+    }
+
+    /**
+     * Returns estimated chi square value of input data.
+     *
+     * @return estimated chi square value of input data.
+     */
+    public double getChisq() {
+<span class="fc" id="L215">        return chisq;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

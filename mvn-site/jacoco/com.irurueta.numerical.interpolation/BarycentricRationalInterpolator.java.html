@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BarycentricRationalInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">BarycentricRationalInterpolator.java</span></div><h1>BarycentricRationalInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+/**
+ * Computes barycentric rational interpolation.
+ */
+public class BarycentricRationalInterpolator extends BaseInterpolator {
+
+    /**
+     * Weights for barycentric rational interpolation.
+     */
+    private final double[] w;
+
+    /**
+     * Order of desired approximation.
+     */
+    private final int d;
+
+    /**
+     * Constructor.
+     *
+     * @param x x values to interpolate to. Values in x must be monotonic (either increasing or
+     *          decreasing)
+     * @param y y values to interpolate to.
+     * @param d order of desired approximation.
+     */
+    public BarycentricRationalInterpolator(final double[] x, final double[] y, final int d) {
+<span class="fc" id="L42">        super(x, y, x.length);</span>
+<span class="fc" id="L43">        w = new double[n];</span>
+<span class="fc" id="L44">        this.d = d;</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (n &lt;= d) {</span>
+<span class="fc" id="L47">            throw new IllegalArgumentException(&quot;d too large for number of points&quot;);</span>
+        }
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (int k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L51">            var imin = Math.max(k - d, 0);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            var imax = k &gt;= n - d ? n - d - 1 : k;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            var temp = (imin &amp; 1) != 0 ? -1.0 : 1.0;</span>
+<span class="fc" id="L54">            var sum = 0.0;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            for (int i = imin; i &lt;= imax; i++) {</span>
+<span class="fc" id="L56">                var jmax = Math.min(i + d, n - 1);</span>
+<span class="fc" id="L57">                var term = 1.0;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">                for (var j = i; j &lt;= jmax; j++) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                    if (j == k) {</span>
+<span class="fc" id="L60">                        continue;</span>
+                    }
+<span class="fc" id="L62">                    term *= (xx[k] - xx[j]);</span>
+                }
+<span class="fc" id="L64">                term = temp / term;</span>
+<span class="fc" id="L65">                temp = -temp;</span>
+<span class="fc" id="L66">                sum += term;</span>
+            }
+<span class="fc" id="L68">            w[k] = sum;</span>
+        }
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * Gets order of desired approximation.
+     *
+     * @return order of desired approximation.
+     */
+    public int getD() {
+<span class="nc" id="L78">        return d;</span>
+    }
+
+    /**
+     * Given a value x, returns an interpolated value, using data pointed to by {@link #xx} and
+     * {@link #yy}.
+     *
+     * @param x value to obtain interpolation for.
+     * @return interpolated value.
+     */
+    @Override
+    public double interpolate(final double x) {
+<span class="fc" id="L90">        return rawinterp(1, x);</span>
+    }
+
+    /**
+     * Actual interpolation method.
+     *
+     * @param jlo index where value x to be interpolated in located in the array of xx.
+     * @param x   value to obtain interpolation for.
+     * @return interpolated value.
+     */
+    @Override
+    public double rawinterp(int jlo, double x) {
+<span class="fc" id="L102">        var num = 0.0;</span>
+<span class="fc" id="L103">        var den = 0.0;</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        for (var i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L105">            var h = x - xx[i];</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (h == 0.0) {</span>
+<span class="fc" id="L107">                return yy[i];</span>
+            } else {
+<span class="fc" id="L109">                var temp = w[i] / h;</span>
+<span class="fc" id="L110">                num += temp * yy[i];</span>
+<span class="fc" id="L111">                den += temp;</span>
+            }
+        }
+<span class="nc" id="L114">        return num / den;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

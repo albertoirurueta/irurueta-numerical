@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SvdSingleDimensionLinearFitter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.fitting</a> &gt; <span class="el_source">SvdSingleDimensionLinearFitter.java</span></div><h1>SvdSingleDimensionLinearFitter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.fitting;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.NotReadyException;
+
+/**
+ * Fits provided data (x,y) to a function made of a linear combination of
+ * functions used as a basis (i.e. f(x) = a * f0(x) + b * f1(x) + ...).
+ * Where f0, f1, ... is the function basis which ideally should be formed by
+ * orthogonal function.
+ * This is an improvement on SimpleLinearFitter for cases where basis functions
+ * cannot be clearly distinguished from provided data, to avoid matrix
+ * singularities and obtain better results.
+ * This class is based on the implementation available at Numerical Recipes
+ * 3rd Ed, page 795.
+ */
+public class SvdSingleDimensionLinearFitter extends SingleDimensionLinearFitter {
+
+    /**
+     * Default tolerance.
+     */
+    public static final double DEFAULT_TOL = 1e-12;
+
+    /**
+     * Tolerance to define convergence threshold for SVD.
+     */
+    private double tol;
+
+    /**
+     * Constructor.
+     */
+    public SvdSingleDimensionLinearFitter() {
+<span class="fc" id="L51">        super();</span>
+<span class="fc" id="L52">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
+<span class="fc" id="L67">        super(x, y, sig);</span>
+<span class="fc" id="L68">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
+<span class="fc" id="L84">        super(x, y, sig);</span>
+<span class="fc" id="L85">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @throws FittingException if evaluation fails.
+     */
+    public SvdSingleDimensionLinearFitter(final LinearFitterSingleDimensionFunctionEvaluator evaluator)
+            throws FittingException {
+<span class="fc" id="L97">        super(evaluator);</span>
+<span class="fc" id="L98">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double[] sig) throws FittingException {
+<span class="fc" id="L119">        super(evaluator, x, y, sig);</span>
+<span class="fc" id="L120">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SvdSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double sig) throws FittingException {
+<span class="fc" id="L141">        super(evaluator, x, y, sig);</span>
+<span class="fc" id="L142">        tol = DEFAULT_TOL;</span>
+<span class="fc" id="L143">    }</span>
+
+    /**
+     * Returns tolerance to define convergence threshold for SVD.
+     *
+     * @return tolerance to define convergence threshold for SVD.
+     */
+    public double getTol() {
+<span class="fc" id="L151">        return tol;</span>
+    }
+
+    /**
+     * Sets tolerance to define convergence threshold for SVD.
+     *
+     * @param tol tolerance to define convergence threshold for SVD.
+     */
+    public void setTol(final double tol) {
+<span class="fc" id="L160">        this.tol = tol;</span>
+<span class="fc" id="L161">    }</span>
+
+    /**
+     * Fits a function to provided data so that parameters associated to that
+     * function can be estimated along with their covariance matrix and chi
+     * square value.
+     *
+     * @throws FittingException  if fitting fails.
+     * @throws NotReadyException if enough input data has not yet been provided.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public void fit() throws FittingException, NotReadyException {
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L175">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L179">            resultAvailable = false;</span>
+
+            int i;
+            int j;
+            int k;
+            double tmp;
+            final double thresh;
+            double sum;
+<span class="fc" id="L187">            final var aa = new Matrix(ndat, ma);</span>
+<span class="fc" id="L188">            final var b = new double[ndat];</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L190">                evaluator.evaluate(x[i], afunc);</span>
+<span class="fc" id="L191">                tmp = 1.0 / sig[i];</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L193">                    aa.setElementAt(i, j, afunc[j] * tmp);</span>
+                }
+<span class="fc" id="L195">                b[i] = y[i] * tmp;</span>
+            }
+
+<span class="fc" id="L198">            final var svd = new SingularValueDecomposer(aa);</span>
+<span class="fc" id="L199">            svd.decompose();</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            thresh = (tol &gt; 0.0 ? tol * svd.getSingularValues()[0] : -1.0);</span>
+<span class="fc" id="L201">            svd.solve(b, thresh, a);</span>
+<span class="fc" id="L202">            chisq = 0.0;</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L204">                sum = 0.0;</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L206">                    sum += aa.getElementAt(i, j) * a[j];</span>
+                }
+<span class="fc" id="L208">                chisq += Math.pow(sum - b[i], 2.0);</span>
+            }
+<span class="fc bfc" id="L210" title="All 2 branches covered.">            for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L212">                    sum = 0.0;</span>
+<span class="fc" id="L213">                    final var w = svd.getSingularValues();</span>
+<span class="fc" id="L214">                    final var tsh = svd.getNegligibleSingularValueThreshold();</span>
+<span class="fc" id="L215">                    final var v = svd.getV();</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">                    for (k = 0; k &lt; ma; k++) {</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">                        if (w[k] &gt; tsh) {</span>
+<span class="fc" id="L218">                            sum += v.getElementAt(i, k) * v.getElementAt(j, k) / Math.pow(w[k], 2.0);</span>
+                        }
+                    }
+<span class="fc" id="L221">                    covar.setElementAt(j, i, sum);</span>
+<span class="fc" id="L222">                    covar.setElementAt(i, j, sum);</span>
+                }
+            }
+
+<span class="fc" id="L226">            resultAvailable = true;</span>
+
+<span class="nc" id="L228">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L229">            throw new FittingException(e);</span>
+<span class="fc" id="L230">        }</span>
+<span class="fc" id="L231">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

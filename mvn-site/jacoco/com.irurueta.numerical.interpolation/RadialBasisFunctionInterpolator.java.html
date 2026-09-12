@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RadialBasisFunctionInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">RadialBasisFunctionInterpolator.java</span></div><h1>RadialBasisFunctionInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.LUDecomposer;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Interpolates sparsely defined points of dimension &quot;dim&quot; using a Radial Basis Function.
+ */
+public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInterpolator {
+    /**
+     * Computed weights to compute interpolation from provided points.
+     */
+    private final Matrix w;
+
+    /**
+     * Radial basis function defining a value based on the distance of two points.
+     */
+    private final RadialBasisFunction fn;
+
+    /**
+     * Indicates whether normalized Radial Basis Function (RBF) must be used or not.
+     */
+    private final boolean norm;
+
+    /**
+     * Constructor.
+     *
+     * @param ptss  Matrix containing points to interpolate from. Each row contains one point.
+     *              Matrix will have n points (rows) having a dimension (columns) equal to dim.
+     * @param valss values of function at provided points. Must have the same length as the number
+     *              of rows of provided points matrix.
+     * @param func  function to be used as Radial Basis Function (RBF).
+     * @param nrbf  true to normalize RBF, false otherwise.
+     * @throws InterpolationException   if provided points are redundant and result in a degenerate
+     *                                  solution.
+     * @throws IllegalArgumentException if provided values array does not match the number of
+     *                                  points (rows) in provided matrix.
+     */
+    public RadialBasisFunctionInterpolator(
+            final Matrix ptss, final double[] valss, final RadialBasisFunction func, final boolean nrbf)
+            throws InterpolationException {
+<span class="fc" id="L59">        super(ptss);</span>
+
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (valss.length != n) {</span>
+<span class="nc" id="L62">            throw new IllegalArgumentException(&quot;wrong length of values&quot;);</span>
+        }
+
+        try {
+<span class="fc" id="L66">            w = new Matrix(n, 1);</span>
+<span class="fc" id="L67">            fn = func;</span>
+<span class="fc" id="L68">            norm = nrbf;</span>
+
+<span class="fc" id="L70">            final var pj = new double[dim];</span>
+
+            int i;
+            int j;
+            double sum;
+<span class="fc" id="L75">            final var rbf = new Matrix(n, n);</span>
+<span class="fc" id="L76">            final var rhs = new Matrix(n, 1);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            for (i = 0; i &lt; n; i++) {</span>
+                // Fill the matrix phi(|ri - rj|) and the right hand sisde (rhs) vector
+<span class="fc" id="L79">                sum = 0.;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L81">                    final var endCol = dim - 1;</span>
+<span class="fc" id="L82">                    pts.getSubmatrixAsArray(i, 0, i, endCol, pi);</span>
+<span class="fc" id="L83">                    pts.getSubmatrixAsArray(j, 0, j, endCol, pj);</span>
+<span class="fc" id="L84">                    final var value = fn.evaluate(rad(pi, pj));</span>
+<span class="fc" id="L85">                    rbf.setElementAt(i, j, value);</span>
+<span class="fc" id="L86">                    sum += value;</span>
+                }
+
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">                if (norm) {</span>
+<span class="nc" id="L90">                    rhs.setElementAtIndex(i, sum * valss[i]);</span>
+                } else {
+<span class="fc" id="L92">                    rhs.setElementAtIndex(i, valss[i]);</span>
+                }
+            }
+
+            // Solve the set of linear equations
+<span class="fc" id="L97">            final var lu = new LUDecomposer(rbf);</span>
+<span class="fc" id="L98">            lu.decompose();</span>
+<span class="fc" id="L99">            lu.solve(rhs, w);</span>
+<span class="nc" id="L100">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L101">            throw new InterpolationException(e);</span>
+<span class="fc" id="L102">        }</span>
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param ptss  Matrix containing points to interpolate from. Each row contains one point.
+     *              Matrix will have n points (rows) having a dimension (columns) equal to dim.
+     * @param valss values of function at provided points. Must have the same length as the number
+     *              of rows of provided points matrix.
+     * @param func  function to be used as Radial Basis Function (RBF).
+     * @throws InterpolationException   if provided points are redundant and result in a degenerate
+     *                                  solution.
+     * @throws IllegalArgumentException if provided values array does not match the number of
+     *                                  points (rows) in provided matrix.
+     */
+    public RadialBasisFunctionInterpolator(
+            final Matrix ptss, final double[] valss, final RadialBasisFunction func) throws InterpolationException {
+<span class="fc" id="L120">        this(ptss, valss, func, false);</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Returns the interpolated function value at a dim-dimensional point pt.
+     *
+     * @param pt dim-dimensional point where interpolation must be computed.
+     * @return result of interpolation.
+     * @throws IllegalArgumentException if provided point has an invalid length.
+     */
+    @Override
+    public double interpolate(final double[] pt) {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (pt.length != dim) {</span>
+<span class="nc" id="L133">            throw new IllegalArgumentException(&quot;Wrong point length&quot;);</span>
+        }
+
+        double fval;
+<span class="fc" id="L137">        var sum = 0.0;</span>
+<span class="fc" id="L138">        var sumw = 0.0;</span>
+
+        try {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            for (var i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L142">                final var endCol = dim - 1;</span>
+<span class="fc" id="L143">                pts.getSubmatrixAsArray(i, 0, i, endCol, pi);</span>
+<span class="fc" id="L144">                fval = fn.evaluate(rad(pt, pi));</span>
+<span class="fc" id="L145">                sumw += w.getElementAtIndex(i) * fval;</span>
+<span class="fc" id="L146">                sum += fval;</span>
+            }
+<span class="nc" id="L148">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L150">        }</span>
+
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        return norm ? sumw / sum : sumw;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

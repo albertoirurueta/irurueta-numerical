@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DerivativePolynomialEvaluation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">DerivativePolynomialEvaluation.java</span></div><h1>DerivativePolynomialEvaluation.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+/**
+ * Contains an evaluation of the derivative of a given order of a polynomial and
+ * the point where such derivative has been evaluated.
+ */
+public class DerivativePolynomialEvaluation extends PolynomialEvaluation {
+
+    /**
+     * Minimum allowed derivative order.
+     */
+    public static final int MIN_DERIVATIVE_ORDER = 1;
+
+    /**
+     * Point where derivative of a given order has been evaluated.
+     */
+    private double x;
+
+    /**
+     * Order of derivative.
+     */
+    private int derivativeOrder;
+
+    /**
+     * Constructor.
+     */
+    public DerivativePolynomialEvaluation() {
+<span class="fc" id="L43">        super();</span>
+<span class="fc" id="L44">        setDerivativeOrder(MIN_DERIVATIVE_ORDER);</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x               point where derivative of polynomial has been evaluated.
+     * @param evaluation      evaluation of nth-derivative of polynomial at point x.
+     * @param derivativeOrder order of derivative.
+     * @throws IllegalArgumentException if order of derivative is less than 1.
+     */
+    public DerivativePolynomialEvaluation(final double x, final double evaluation, final int derivativeOrder) {
+<span class="fc" id="L56">        super(evaluation);</span>
+<span class="fc" id="L57">        this.x = x;</span>
+<span class="fc" id="L58">        setDerivativeOrder(derivativeOrder);</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * @param x          point where derivative of polynomial has been evaluated.
+     * @param evaluation evaluation of nth-derivative of polynomial at point x.
+     */
+    public DerivativePolynomialEvaluation(final double x, final double evaluation) {
+<span class="fc" id="L66">        this(x, evaluation, MIN_DERIVATIVE_ORDER);</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Gets point where polynomial derivative has been evaluated.
+     *
+     * @return point where polynomial derivative has been evaluated.
+     */
+    public double getX() {
+<span class="fc" id="L75">        return x;</span>
+    }
+
+    /**
+     * Sets point where polynomial derivative has been evaluated.
+     *
+     * @param x point where polynomial derivative has been evaluated.
+     */
+    public void setX(final double x) {
+<span class="fc" id="L84">        this.x = x;</span>
+<span class="fc" id="L85">    }</span>
+
+    /**
+     * Gets order of derivative.
+     *
+     * @return order of derivative.
+     */
+    public int getDerivativeOrder() {
+<span class="fc" id="L93">        return derivativeOrder;</span>
+    }
+
+    /**
+     * Sets order of derivative.
+     *
+     * @param derivativeOrder order of derivative.
+     * @throws IllegalArgumentException if order of derivative is less than 1.
+     */
+    public final void setDerivativeOrder(final int derivativeOrder) {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (derivativeOrder &lt; MIN_DERIVATIVE_ORDER) {</span>
+<span class="fc" id="L104">            throw new IllegalArgumentException(&quot;derivative order must be at least 1&quot;);</span>
+        }
+
+<span class="fc" id="L107">        this.derivativeOrder = derivativeOrder;</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Gets type of polynomial evaluation.
+     *
+     * @return type of polynomial evaluation.
+     */
+    @Override
+    public PolynomialEvaluationType getType() {
+<span class="fc" id="L117">        return PolynomialEvaluationType.DERIVATIVE_EVALUATION;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleSingleDimensionLinearFitter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.fitting</a> &gt; <span class="el_source">SimpleSingleDimensionLinearFitter.java</span></div><h1>SimpleSingleDimensionLinearFitter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.fitting;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.GaussJordanElimination;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.NotReadyException;
+
+import java.util.Arrays;
+
+/**
+ * Fits provided data (x,y) to a function made of a linear combination of
+ * functions used as a basis (i.e. f(x) = a * f0(x) + b * f1(x) + ...).
+ * Where f0, f1, ... is the function basis which ideally should be formed by
+ * orthogonal function.
+ * This class is based on the implementation available at Numerical Recipes
+ * 3rd Ed, page 791
+ */
+public class SimpleSingleDimensionLinearFitter extends SingleDimensionLinearFitter {
+
+    /**
+     * Determines which parameters can be modified during estimation (if true)
+     * and which ones are locked (if false)
+     */
+    private boolean[] ia;
+
+
+    /**
+     * Constructor.
+     */
+    public SimpleSingleDimensionLinearFitter() {
+<span class="fc" id="L47">        super();</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviations of each pair of points (x, y).
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SimpleSingleDimensionLinearFitter(final double[] x, final double[] y, final double[] sig) {
+<span class="fc" id="L62">        super(x, y, sig);</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x   input points x where a linear single dimensional function f(x) =
+     *            a * f0(x) + b * f1(x) + ...
+     * @param y   result of evaluation of linear single dimensional function f(x)
+     *            at provided x points.
+     * @param sig standard deviation of all pair of points assuming that
+     *            standard deviations are constant.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SimpleSingleDimensionLinearFitter(final double[] x, final double[] y, final double sig) {
+<span class="fc" id="L78">        super(x, y, sig);</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @throws FittingException if evaluation fails.
+     */
+    public SimpleSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
+<span class="fc" id="L90">        super();</span>
+<span class="fc" id="L91">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length .
+     */
+    public SimpleSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double[] sig) throws FittingException {
+<span class="fc" id="L112">        super(x, y, sig);</span>
+<span class="fc" id="L113">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluator evaluator to evaluate function at provided point and
+     *                  obtain the evaluation of function basis at such point.
+     * @param x         input points x where a linear single dimensional function f(x) =
+     *                  a * f0(x) + b * f1(x) + ...
+     * @param y         result of evaluation of linear single dimensional function f(x)
+     *                  at provided x points.
+     * @param sig       standard deviation of all pair of points assuming that
+     *                  standard deviations are constant.
+     * @throws FittingException         if evaluation fails.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     *                                  length.
+     */
+    public SimpleSingleDimensionLinearFitter(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator, final double[] x, final double[] y,
+            final double sig) throws FittingException {
+<span class="fc" id="L134">        super(x, y, sig);</span>
+<span class="fc" id="L135">        setFunctionEvaluator(evaluator);</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Sets function evaluator to evaluate function at a given point and obtain
+     * the evaluation of function basis at such point.
+     *
+     * @param evaluator function evaluator.
+     * @throws FittingException if evaluation fails.
+     */
+    @Override
+    public final void setFunctionEvaluator(
+            final LinearFitterSingleDimensionFunctionEvaluator evaluator) throws FittingException {
+<span class="fc" id="L148">        super.setFunctionEvaluator(evaluator);</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">        if (ma &gt; 0) {</span>
+<span class="fc" id="L150">            ia = new boolean[ma];</span>
+<span class="fc" id="L151">            Arrays.fill(ia, true);</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Fits a function to provided data so that parameters associated to that
+     * function can be estimated along with their covariance matrix and chi
+     * square value.
+     *
+     * @throws FittingException  if fitting fails.
+     * @throws NotReadyException if enough input data has not yet been provided.
+     */
+    @Override
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public void fit() throws FittingException, NotReadyException {
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L167">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L171">            resultAvailable = false;</span>
+
+            int i;
+            int j;
+            int k;
+            int l;
+            int m;
+<span class="fc" id="L178">            var mfit = 0;</span>
+            double ym;
+            double wt;
+            double sum;
+            double sig2i;
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">                if (ia[j]) {</span>
+<span class="fc" id="L185">                    mfit++;</span>
+                }
+            }
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            if (mfit == 0) {</span>
+<span class="fc" id="L189">                throw new FittingException(&quot;lfit: no parameters to be fitted&quot;);</span>
+            }
+<span class="fc" id="L191">            final var temp = new Matrix(mfit, mfit);</span>
+<span class="fc" id="L192">            final var beta = new Matrix(mfit, 1);</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L194">                evaluator.evaluate(x[i], afunc);</span>
+<span class="fc" id="L195">                ym = y[i];</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">                if (mfit &lt; ma) {</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">                    for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">                        if (!ia[j]) ym -= a[j] * afunc[j];</span>
+                    }
+                }
+<span class="fc" id="L201">                sig2i = 1.0 / Math.pow(sig[i], 2.0);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">                    if (ia[l]) {</span>
+<span class="fc" id="L204">                        wt = afunc[l] * sig2i;</span>
+                        int index;
+<span class="fc bfc" id="L206" title="All 2 branches covered.">                        for (k = 0, m = 0; m &lt;= l; m++) {</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">                            if (ia[m]) {</span>
+<span class="fc" id="L208">                                index = temp.getIndex(j, k++);</span>
+<span class="fc" id="L209">                                temp.getBuffer()[index] += wt * afunc[m];</span>
+                            }
+                        }
+<span class="fc" id="L212">                        index = beta.getIndex(j++, 0);</span>
+<span class="fc" id="L213">                        beta.getBuffer()[index] += ym * wt;</span>
+                    }
+                }
+            }
+<span class="fc bfc" id="L217" title="All 2 branches covered.">            for (j = 1; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                for (k = 0; k &lt; j; k++) {</span>
+<span class="fc" id="L219">                    temp.setElementAt(k, j, temp.getElementAt(j, k));</span>
+                }
+            }
+<span class="fc" id="L222">            GaussJordanElimination.process(temp, beta);</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            for (j = 0, l = 0; l &lt; ma; l++) {</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                if (ia[l]) {</span>
+<span class="fc" id="L225">                    a[l] = beta.getElementAt(j++, 0);</span>
+                }
+            }
+<span class="fc" id="L228">            chisq = 0.0;</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">            for (i = 0; i &lt; ndat; i++) {</span>
+<span class="fc" id="L230">                evaluator.evaluate(x[i], afunc);</span>
+<span class="fc" id="L231">                sum = 0.0;</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">                for (j = 0; j &lt; ma; j++) {</span>
+<span class="fc" id="L233">                    sum += a[j] * afunc[j];</span>
+                }
+<span class="fc" id="L235">                chisq += Math.pow((y[i] - sum) / sig[i], 2.0);</span>
+            }
+<span class="fc bfc" id="L237" title="All 2 branches covered.">            for (j = 0; j &lt; mfit; j++) {</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">                for (k = 0; k &lt; mfit; k++) {</span>
+<span class="fc" id="L239">                    covar.setElementAt(j, k, temp.getElementAt(j, k));</span>
+                }
+            }
+<span class="fc bfc" id="L242" title="All 2 branches covered.">            for (i = mfit; i &lt; ma; i++) {</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">                for (j = 0; j &lt; i + 1; j++) {</span>
+<span class="fc" id="L244">                    covar.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L245">                    covar.setElementAt(j, i, 0.0);</span>
+                }
+            }
+<span class="fc" id="L248">            k = mfit - 1;</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            for (j = ma - 1; j &gt;= 0; j--) {</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">                if (ia[j]) {</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">                    for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L252">                        swap(covar.getBuffer(), covar.getBuffer(),</span>
+<span class="fc" id="L253">                                covar.getIndex(i, k), covar.getIndex(i, j));</span>
+                    }
+<span class="fc bfc" id="L255" title="All 2 branches covered.">                    for (i = 0; i &lt; ma; i++) {</span>
+<span class="fc" id="L256">                        swap(covar.getBuffer(), covar.getBuffer(),</span>
+<span class="fc" id="L257">                                covar.getIndex(k, i), covar.getIndex(j, i));</span>
+                    }
+<span class="fc" id="L259">                    k--;</span>
+                }
+            }
+
+<span class="fc" id="L263">            resultAvailable = true;</span>
+
+<span class="nc" id="L265">        } catch (final AlgebraException | EvaluationException e) {</span>
+<span class="nc" id="L266">            throw new FittingException(e);</span>
+<span class="fc" id="L267">        }</span>
+<span class="fc" id="L268">    }</span>
+
+    /**
+     * Prevents parameter at position i of linear combination of basis functions
+     * to be modified during function fitting.
+     *
+     * @param i   position of parameter to be retained.
+     * @param val value to be set for parameter at position i.
+     */
+    public void hold(final int i, final double val) {
+<span class="fc" id="L278">        ia[i] = false;</span>
+<span class="fc" id="L279">        a[i] = val;</span>
+<span class="fc" id="L280">    }</span>
+
+    /**
+     * Releases parameter at position i of linear combination of basis functions,
+     * so it can be modified again if needed.
+     *
+     * @param i position of parameter to be released.
+     */
+    public void free(final int i) {
+<span class="fc" id="L289">        ia[i] = true;</span>
+<span class="fc" id="L290">    }</span>
+
+    /**
+     * Swaps values of arrays at provided positions.
+     *
+     * @param array1 1st array.
+     * @param array2 2nd array.
+     * @param pos1   1st position.
+     * @param pos2   2nd position.
+     */
+    private static void swap(final double[] array1, final double[] array2, final int pos1, final int pos2) {
+<span class="fc" id="L301">        final var value1 = array1[pos1];</span>
+<span class="fc" id="L302">        final var value2 = array2[pos2];</span>
+<span class="fc" id="L303">        array1[pos1] = value2;</span>
+<span class="fc" id="L304">        array2[pos2] = value1;</span>
+<span class="fc" id="L305">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

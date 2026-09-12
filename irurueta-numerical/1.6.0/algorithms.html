@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Algorithms :: Irurueta Numerical</title>
+    <meta name="description" content="Catalog of every numerical algorithm in irurueta-numerical, grouped by problem domain: fitting, integration, interpolation, optimization, root finding, polynomials, robust estimation, and signal processing.">
+    <meta name="keywords" content="algorithm catalog, root finding, optimization, numerical integration, interpolation, curve fitting, robust estimation, RANSAC, Kalman filter, polynomial estimation">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Numerical" class="navbar-brand-logo">Irurueta Numerical</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-numerical" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Numerical</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Irurueta Numerical</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="algorithms.html">Algorithms</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Fitting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/straight-line-fitting.html">Straight Line Fitting Algorithm</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/linear-least-squares.html">Linear Least-Squares Fitting Algorithm</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/svd-linear-fitting.html">Linear Fitting by Singular Value Decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/levenberg-marquardt.html">Levenberg-Marquardt Fitting Algorithm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Integration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/trapezoidal-integration.html">Trapezoidal Rule Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/simpson-integration.html">Simpson&#8217;s Rule Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/romberg-integration.html">Romberg Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/midpoint-integration.html">Midpoint Rule Integration for Improper Integrals</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/double-exponential-integration.html">Double Exponential Rule Integration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Interpolation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/polynomial-interpolation.html">Polynomial Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/cubic-spline-interpolation.html">Cubic Spline Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/rational-interpolation.html">Rational Function Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/polynomial-coefficients.html">Coefficients of the Interpolating Polynomial</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/2d-grid-interpolation.html">Two-Dimensional Grid Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/scattered-data-interpolation.html">Scattered-Data Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/curve-interpolation.html">Curve Interpolation in Multiple Dimensions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Optimization</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/golden-section-search.html">Golden Section Search</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/brent-optimization.html">Brent&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/derivative-brent-optimization.html">Brent&#8217;s Method with Derivatives</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/simplex-optimization.html">Downhill Simplex Method (Nelder-Mead)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/powell-optimization.html">Powell&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/conjugate-gradient-optimization.html">Conjugate Gradient Methods</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/quasi-newton-optimization.html">Quasi-Newton Method (BFGS)</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Roots</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/bisection-root-finding.html">Bisection Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/secant-false-position-root-finding.html">Secant and False Position Methods</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/ridder-root-finding.html">Ridder&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/brent-root-finding.html">Brent&#8217;s Method (Root Finding)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/newton-raphson-root-finding.html">Newton-Raphson Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/polynomial-roots-closed-form.html">Closed-Form Polynomial Roots</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/laguerre-root-finding.html">Laguerre&#8217;s Method for Polynomial Roots</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Robust</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/robust-estimation-framework.html">Robust Estimation Framework</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/ransac-robust-estimation.html">RANSAC (Random Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/lmeds-robust-estimation.html">LMedS (Least Median of Squares)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/msac-robust-estimation.html">MSAC (M-estimator Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/prosac-robust-estimation.html">PROSAC (Progressive Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/promeds-robust-estimation.html">PROMedS (Progressive Least Median of Squares)</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Signal processing</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/1d-convolution.html">1D Discrete Convolution</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/kalman-filter.html">Kalman Filter</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="algorithms/measurement-noise-covariance-estimation.html">Measurement Noise Covariance Estimation</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Numerical</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Numerical</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Numerical</a></li>
+    <li><a href="algorithms.html">Algorithms</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-numerical/edit/develop/docs/modules/ROOT/pages/algorithms.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Algorithms</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>irurueta-numerical</code> packages a broad set of classical numerical-analysis algorithms behind consistent,
+listener-based APIs. This page groups them by problem domain (mirroring the library&#8217;s package structure) and
+gives a one-line summary of what each one does. Some algorithms with more elaborate theory have a dedicated,
+detailed page — linked where available.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fitting_algorithms_fitting"><a class="anchor" href="#_fitting_algorithms_fitting"></a>Fitting algorithms (<code>fitting</code>)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Straight line fitting</strong> — closed-form fit of <code>y = a + b*x</code>, with parameter variances, covariance, and a
+goodness-of-fit probability. See <a href="algorithms/straight-line-fitting.html" class="xref page">Straight Line Fitting Algorithm</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StraightLineFitter</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Linear least-squares fitters</strong> — fit a linear combination of user-supplied basis functions by solving the
+normal equations directly (no iteration required). See <a href="algorithms/linear-least-squares.html" class="xref page">Linear Least-Squares Fitting Algorithm</a> for a
+detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SimpleSingleDimensionLinearFitter</code> / <code>MultiDimensionLinearFitter</code> — solved via Gauss-Jordan elimination.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Linear fitting by singular value decomposition</strong> — the same linear least-squares problem, solved via SVD
+instead of the normal equations for robustness to (near-)degenerate basis sets. See
+<a href="algorithms/svd-linear-fitting.html" class="xref page">Linear Fitting by Singular Value Decomposition</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SvdSingleDimensionLinearFitter</code> / <code>SvdMultiDimensionLinearFitter</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Levenberg-Marquardt fitters</strong> — iterative nonlinear least-squares fitting. See
+<a href="algorithms/levenberg-marquardt.html" class="xref page">Levenberg-Marquardt Fitting Algorithm</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LevenbergMarquardtSingleDimensionFitter</code> — model <code>y = f(x | a)</code>.</p>
+</li>
+<li>
+<p><code>LevenbergMarquardtMultiDimensionFitter</code> — model <code>y = f(x | a)</code> with vector-valued <code>x</code>.</p>
+</li>
+<li>
+<p><code>LevenbergMarquardtMultiVariateFitter</code> — model <code>y = f(x | a)</code> with vector-valued <code>x</code> and <code>y</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integration_algorithms_integration"><a class="anchor" href="#_integration_algorithms_integration"></a>Integration algorithms (<code>integration</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every algorithm below pairs a <strong>quadrature rule</strong> (a strategy for sampling the integrand) with an <strong>integration
+method</strong> (a strategy for combining successive samplings into an increasingly accurate estimate). Any rule can be
+paired with any applicable method, either by instantiating a concrete
+<code>{Method}{Rule}\{Scalar|Matrix}Integrator</code> class directly, or via the <code>Integrator.create(&#8230;&#8203;)</code> /
+<code>MatrixIntegrator.create(&#8230;&#8203;)</code> factory methods using the <code>IntegratorType</code> / <code>QuadratureType</code> enums. Every
+combination has both a scalar and a <code>Matrix</code>-valued variant.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Trapezoidal rule</strong> — the simplest quadrature rule, sampling the integrand at evenly spaced points over a
+finite, non-singular interval; the basic building block that the other integration methods refine. See
+<a href="algorithms/trapezoidal-integration.html" class="xref page">Trapezoidal Rule Integration</a> for a detailed description.</p>
+</li>
+<li>
+<p><strong>Simpson&#8217;s rule</strong> — combines two successive trapezoidal-rule refinements with a fixed Richardson-extrapolation
+weighting, converging faster on smooth integrands at essentially no extra cost. See
+<a href="algorithms/simpson-integration.html" class="xref page">Simpson&#8217;s Rule Integration</a> for a detailed description.</p>
+</li>
+<li>
+<p><strong>Romberg integration</strong> — generalizes Simpson&#8217;s rule to a full polynomial extrapolation of several successive
+refinements to the continuum limit; typically the fastest-converging option for sufficiently smooth,
+non-singular integrands. See <a href="algorithms/romberg-integration.html" class="xref page">Romberg Integration</a> for a detailed description.</p>
+</li>
+<li>
+<p><strong>Midpoint rule</strong> — an open quadrature formula (never evaluates the integrand at the interval&#8217;s endpoints),
+with four variants that handle improper integrals: semi-infinite/infinite ranges, an inverse square-root
+singularity at either bound, and exponential decay to infinity. See
+<a href="algorithms/midpoint-integration.html" class="xref page">Midpoint Rule Integration for Improper Integrals</a> for a detailed description.</p>
+</li>
+<li>
+<p><strong>Double exponential rule</strong> — a variable transformation that suppresses arbitrary endpoint singularities and
+converges exponentially fast, without needing to tailor the substitution to the specific singularity. See
+<a href="algorithms/double-exponential-integration.html" class="xref page">Double Exponential Rule Integration</a> for a detailed description.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interpolation_algorithms_interpolation"><a class="anchor" href="#_interpolation_algorithms_interpolation"></a>Interpolation algorithms (<code>interpolation</code>)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Polynomial interpolation</strong> — draws the unique low-order polynomial through the nearest few tabulated points,
+via Neville&#8217;s algorithm; also covers plain linear interpolation and the shared table-search machinery every
+1D interpolator below builds on. See <a href="algorithms/polynomial-interpolation.html" class="xref page">Polynomial Interpolation</a> for a detailed
+description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LinearInterpolator</code>, <code>PolynomialInterpolator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cubic spline interpolation</strong> — a piecewise cubic curve with continuous first and second derivatives across
+tabulated points. See <a href="algorithms/cubic-spline-interpolation.html" class="xref page">Cubic Spline Interpolation</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CubicSplineInterpolator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Rational function interpolation</strong> — quotients of polynomials, better suited than plain polynomials to
+functions with poles; includes a pole-free barycentric variant. See
+<a href="algorithms/rational-interpolation.html" class="xref page">Rational Function Interpolation</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RationalInterpolator</code> (Bulirsch-Stoer), <code>BarycentricRationalInterpolator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Coefficients of the interpolating polynomial</strong> — the narrower problem of recovering the polynomial&#8217;s actual
+coefficients rather than just evaluating it. See <a href="algorithms/polynomial-coefficients.html" class="xref page">Coefficients of the Interpolating Polynomial</a> for a
+detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SimpleInterpolatingPolynomialEstimator</code> (O(N²)), <code>AccurateInterpolatingPolynomialEstimator</code> (O(N³), more
+stable).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Two-dimensional grid interpolation</strong> — bilinear, tensor-product polynomial, and bicubic-spline interpolation
+on a complete rectangular grid. See <a href="algorithms/2d-grid-interpolation.html" class="xref page">Two-Dimensional Grid Interpolation</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>BilinearInterpolator</code>, <code>Polynomial2DInterpolator</code>, <code>BicubicSpline2DInterpolator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Scattered-data interpolation</strong> — radial basis function interpolation, Shepard interpolation, and kriging, for
+data with no grid structure. See <a href="algorithms/scattered-data-interpolation.html" class="xref page">Scattered-Data Interpolation</a> for a detailed
+description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RadialBasisFunctionInterpolator</code> (pluggable <code>GaussianRadialBasisFunction</code>, <code>MultiQuadricRadialBasisFunction</code>,
+<code>InverseMultiQuadricRadialBasisFunction</code>, <code>ThinPlateRadialBasisFunction</code>), <code>ShepardInterpolator</code>,
+<code>KrigingInterpolator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Curve interpolation in multiple dimensions</strong> — cubic-spline interpolation along an ordered, arc-length
+parameterized curve through scattered points. See <a href="algorithms/curve-interpolation.html" class="xref page">Curve Interpolation in Multiple Dimensions</a> for a detailed
+description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CurveInterpolator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_optimization_algorithms_optimization"><a class="anchor" href="#_optimization_algorithms_optimization"></a>Optimization algorithms (<code>optimization</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Single-variable (bracketing) optimizers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Golden section search</strong> — the simplest reliable minimizer, needing only function evaluations; also covers
+the downhill bracketing routine shared by every optimizer below. See
+<a href="algorithms/golden-section-search.html" class="xref page">Golden Section Search</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>GoldenSingleOptimizer</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Brent&#8217;s method</strong> — parabolic interpolation with a golden-section fallback, superlinearly convergent. See
+<a href="algorithms/brent-optimization.html" class="xref page">Brent&#8217;s Method</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>BrentSingleOptimizer</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Brent&#8217;s method with derivatives</strong> — the same method, using the sign of the derivative to pick better trial
+points. See <a href="algorithms/derivative-brent-optimization.html" class="xref page">Brent&#8217;s Method with Derivatives</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>DerivativeBrentSingleOptimizer</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Multi-variable optimizers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Downhill simplex method (Nelder-Mead)</strong> — a self-contained, derivative-free method that crawls downhill
+using a simplex of <code>N+1</code> points; slow but robust. See <a href="algorithms/simplex-optimization.html" class="xref page">Downhill Simplex Method (Nelder-Mead)</a> for a
+detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SimplexMultiOptimizer</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Powell&#8217;s method</strong> — direction-set method built on repeated 1D line minimizations, requiring no gradient. See
+<a href="algorithms/powell-optimization.html" class="xref page">Powell&#8217;s Method</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>PowellMultiOptimizer</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Conjugate gradient methods</strong> — Fletcher-Reeves and Polak-Ribière variants, building conjugate directions
+from gradient evaluations in O(N) storage. See <a href="algorithms/conjugate-gradient-optimization.html" class="xref page">Conjugate Gradient Methods</a> for a
+detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ConjugateGradientMultiOptimizer</code> (non-derivative line search), <code>DerivativeConjugateGradientMultiOptimizer</code>
+(derivative-aware line search).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Quasi-Newton method (BFGS)</strong> — builds up an approximate inverse Hessian from gradient evaluations in O(N²)
+storage. See <a href="algorithms/quasi-newton-optimization.html" class="xref page">Quasi-Newton Method (BFGS)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>QuasiNewtonMultiOptimizer</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_root_finding_roots"><a class="anchor" href="#_root_finding_roots"></a>Root finding (<code>roots</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bracketed single-variable root finders:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Bisection method</strong> — halves the bracket every iteration; slow but cannot fail. See
+<a href="algorithms/bisection-root-finding.html" class="xref page">Bisection Method</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>BisectionSingleRootEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Secant and false position methods</strong> — linear interpolation between two points, differing in which point is
+kept from one iteration to the next. See <a href="algorithms/secant-false-position-root-finding.html" class="xref page">Secant and False Position Methods</a> for a
+detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SecantSingleRootEstimator</code> (unbracketed), <code>FalsePositionSingleRootEstimator</code> (bracketed).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Ridder&#8217;s method</strong> — exponential interpolation, quadratically convergent while always staying bracketed. See
+<a href="algorithms/ridder-root-finding.html" class="xref page">Ridder&#8217;s Method</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RidderSingleRootEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Brent&#8217;s method</strong> — combines bisection, secant interpolation, and inverse quadratic interpolation for
+reliability and speed. See <a href="algorithms/brent-root-finding.html" class="xref page">Brent&#8217;s Method (Root Finding)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>BrentSingleRootEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Newton-Raphson method</strong> — quadratically convergent tangent-line iteration requiring the function&#8217;s
+derivative, plus a "safe" variant with a bisection fallback. See
+<a href="algorithms/newton-raphson-root-finding.html" class="xref page">Newton-Raphson Method</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>NewtonRaphsonSingleRootEstimator</code>, <code>SafeNewtonRaphsonSingleRootEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Polynomial root finders:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Closed-form polynomial roots</strong> — exact solutions for degree 1–3 polynomials, requiring no iteration. See
+<a href="algorithms/polynomial-roots-closed-form.html" class="xref page">Closed-Form Polynomial Roots</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>FirstDegreePolynomialRootsEstimator</code>, <code>SecondDegreePolynomialRootsEstimator</code>,
+<code>ThirdDegreePolynomialRootsEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Laguerre&#8217;s method</strong> — finds all (real and complex) roots of a polynomial of arbitrary degree, via deflation
+and polishing. See <a href="algorithms/laguerre-root-finding.html" class="xref page">Laguerre&#8217;s Method for Polynomial Roots</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LaguerrePolynomialRootsEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_polynomials_polynomials_polynomials_estimators"><a class="anchor" href="#_polynomials_polynomials_polynomials_estimators"></a>Polynomials (<code>polynomials</code>, <code>polynomials.estimators</code>)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><code>Polynomial</code> — core value type: arithmetic, evaluation, roots, derivatives, and integrals.</p>
+</li>
+<li>
+<p><code>LMSEPolynomialEstimator</code> / <code>WeightedPolynomialEstimator</code> — least mean square error fit of a polynomial to
+(possibly weighted) value/derivative/integral evaluations.</p>
+</li>
+<li>
+<p>Robust polynomial fitting, built on the <code>robust</code> framework below: <code>RANSACPolynomialRobustEstimator</code>,
+<code>LMedSPolynomialRobustEstimator</code>, <code>MSACPolynomialRobustEstimator</code>, <code>PROSACPolynomialRobustEstimator</code>,
+<code>PROMedSPolynomialRobustEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_robust_estimation_robust"><a class="anchor" href="#_robust_estimation_robust"></a>Robust estimation (<code>robust</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A generic, domain-agnostic outlier-resilient estimation framework, specialized by other packages
+(e.g. <code>polynomials.estimators</code>) rather than reimplemented. See <a href="algorithms/robust-estimation-framework.html" class="xref page">Robust Estimation Framework</a>
+for the shared hypothesize-and-verify loop, listener hierarchy, and subset selection that every algorithm below
+builds on.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>RANSAC</strong> — random sampling and consensus, requires a fixed inlier threshold. See
+<a href="algorithms/ransac-robust-estimation.html" class="xref page">RANSAC (Random Sample Consensus)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RANSACRobustEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>LMedS</strong> — least median of squares, no threshold required, computed dynamically instead. See
+<a href="algorithms/lmeds-robust-estimation.html" class="xref page">LMedS (Least Median of Squares)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LMedSRobustEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>MSAC</strong> — M-estimator sample consensus, a bounded-loss/median hybrid of RANSAC and LMedS. See
+<a href="algorithms/msac-robust-estimation.html" class="xref page">MSAC (M-estimator Sample Consensus)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>MSACRobustEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>PROSAC</strong> — progressive sample consensus, exploits a quality ordering of the samples for large speedups over
+RANSAC. See <a href="algorithms/prosac-robust-estimation.html" class="xref page">PROSAC (Progressive Sample Consensus)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>PROSACRobustEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>PROMedS</strong> — combines PROSAC&#8217;s progressive sampling with LMedS&#8217;s threshold-free median criterion. See
+<a href="algorithms/promeds-robust-estimation.html" class="xref page">PROMedS (Progressive Least Median of Squares)</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>PROMedSRobustEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>FastRandomSubsetSelector</code> (and the <code>SubsetSelector</code> framework) — minimal-subset sampling shared by all of
+the above.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_signal_processing_signal_processing"><a class="anchor" href="#_signal_processing_signal_processing"></a>Signal processing (<code>signal.processing</code>)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1D convolution</strong> — discrete convolution of a signal with a kernel, with configurable edge-handling (zero,
+constant, repeat, mirror). See <a href="algorithms/1d-convolution.html" class="xref page">1D Discrete Convolution</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Convolver1D</code>, <code>ConvolverEdgeMethod</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Kalman filter</strong> — recursive linear state estimator (predict/correct) for discrete-time linear systems. See
+<a href="algorithms/kalman-filter.html" class="xref page">Kalman Filter</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>KalmanFilter</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Measurement noise covariance estimation</strong> — running estimate of a sensor&#8217;s measurement noise covariance from
+samples taken while the underlying state is constant. See
+<a href="algorithms/measurement-noise-covariance-estimation.html" class="xref page">Measurement Noise Covariance Estimation</a> for a detailed description.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>MeasurementNoiseCovarianceEstimator</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

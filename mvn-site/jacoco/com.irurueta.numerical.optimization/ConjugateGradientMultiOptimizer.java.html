@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConjugateGradientMultiOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.optimization</a> &gt; <span class="el_source">ConjugateGradientMultiOptimizer.java</span></div><h1>ConjugateGradientMultiOptimizer.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.optimization;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientFunctionEvaluatorListener;
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.NotReadyException;
+
+/**
+ * This class searches for a multi dimension function local minimum.
+ * The local minimum is searched by starting the algorithm at a start point
+ * and a given direction which should be close and point to the local minimum to
+ * be found to achieve the best accuracy with the lowest number of iterations.
+ * NOTE: this algorithm might not have proper convergence in some situations,
+ * but it is ensured to provide faster convergence than other algorithms such
+ * as Brent because gradient information is also provided.
+ * The implementation of this class is based on Numerical Recipes 3rd ed.
+ * Section 10.8 page 515.
+ */
+public class ConjugateGradientMultiOptimizer extends LineMultiOptimizer {
+    /**
+     * Constant defining default tolerance or accuracy to be achieved on the
+     * minimum being estimated by this class.
+     */
+    public static final double DEFAULT_TOLERANCE = 3e-8;
+
+    /**
+     * Minimum allowed tolerance value.
+     */
+    public static final double MIN_TOLERANCE = 0.0;
+
+    /**
+     * Maximum allowed iterations.
+     */
+    public static final int ITMAX = 200;
+
+    /**
+     * Constant defining a value to be considered as machine precision.
+     */
+    public static final double EPS = 1e-18;
+
+    /**
+     * Convergence criterion for the zero gradient test.
+     */
+    public static final double GTOL = 1e-8;
+
+    /**
+     * Defines whether Polak-Ribiere is used if true, otherwise Fletcher-Reeves
+     * will be used.
+     */
+    public static final boolean DEFAULT_USE_POLAK_RIBIERE = true;
+
+    /**
+     * The fractional tolerance in the function value such that failure to
+     * decrease by more than this amount on one iteration signals done-ness.
+     */
+    private double tolerance;
+
+    /**
+     * Member contains number of iterations that were needed to estimate a
+     * minimum.
+     */
+    private int iter;
+
+    /**
+     * Value of the function at the minimum.
+     */
+    private double fret;
+
+    /**
+     * Listener to obtain gradient values for the multi dimension function being
+     * evaluated.
+     * If the gradient is unknown (e.g. doesn't have a closed expression), the
+     * provided listener could use a GradientEstimator to obtain one.
+     */
+    private GradientFunctionEvaluatorListener gradientListener;
+
+    /**
+     * Boolean indicating whether Polak-Ribiere method is used if true,
+     * otherwise Fletcher-Reeves will be used.
+     */
+    private boolean usePolakRibiere;
+
+    /**
+     * Empty constructor.
+     */
+    public ConjugateGradientMultiOptimizer() {
+<span class="fc" id="L104">        super();</span>
+<span class="fc" id="L105">        tolerance = DEFAULT_TOLERANCE;</span>
+<span class="fc" id="L106">        usePolakRibiere = DEFAULT_USE_POLAK_RIBIERE;</span>
+<span class="fc" id="L107">        gradientListener = null;</span>
+<span class="fc" id="L108">        iter = 0;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener         Listener to evaluate a multi-dimension function.
+     * @param gradientListener Listener to obtain gradient value for the
+     *                         multi-dimension function being evaluated.
+     * @param point            Start point where algorithm will be started. Start point
+     *                         should be close to the local minimum to be found. Provided array must
+     *                         have a length equal to the number of dimensions of the function being
+     *                         evaluated, otherwise and exception will be raised when searching for the
+     *                         minimum.
+     * @param direction        Direction to start looking for a minimum. Provided array
+     *                         must have the same length as the number of dimensions of the function
+     *                         being evaluated. Provided direction is considered as a vector pointing
+     *                         to the minimum to be found.
+     * @param tolerance        Tolerance or accuracy to be expected on estimated local
+     *                         minimum.
+     * @param usePolakRibiere  True if Polak-Ribiere method is used, otherwise
+     *                         Fletcher-Reeves will be used.
+     * @throws IllegalArgumentException Raised if provided point and direction
+     *                                  don't have the same length or if provided tolerance is negative.
+     */
+    public ConjugateGradientMultiOptimizer(
+            final MultiDimensionFunctionEvaluatorListener listener,
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double[] direction,
+            final double tolerance, final boolean usePolakRibiere) {
+<span class="fc" id="L137">        super(listener, point, direction);</span>
+<span class="fc" id="L138">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L139">        this.usePolakRibiere = usePolakRibiere;</span>
+<span class="fc" id="L140">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L141">        iter = 0;</span>
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener         Listener to evaluate a multidimensional function.
+     * @param gradientListener Listener to obtain gradient value for the
+     *                         multidimensional function being evaluated.
+     * @param point            Start point where algorithm will be started. Start point
+     *                         should be close to the local minimum to be found. Provided array must
+     *                         have a length equal to the number of dimensions of the function being
+     *                         evaluated, otherwise and exception will be raised when searching for the
+     *                         minimum.
+     * @param tolerance        Tolerance or accuracy to be expected on estimated local
+     *                         minimum.
+     * @param usePolakRibiere  True if Polak-Ribiere method is used, otherwise
+     *                         Fletcher-Reeves will be used.
+     * @throws IllegalArgumentException Raised if tolerance is negative.
+     */
+    public ConjugateGradientMultiOptimizer(
+            final MultiDimensionFunctionEvaluatorListener listener,
+            final GradientFunctionEvaluatorListener gradientListener, final double[] point, final double tolerance,
+            final boolean usePolakRibiere) {
+<span class="fc" id="L165">        super(listener);</span>
+<span class="fc" id="L166">        internalSetStartPoint(point);</span>
+<span class="fc" id="L167">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L168">        this.usePolakRibiere = usePolakRibiere;</span>
+<span class="fc" id="L169">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L170">        iter = 0;</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * This function estimates a function minimum.
+     * Implementations of this class will usually search a local minimum close
+     * to a start point and will start looking into provided start direction.
+     * Minimization of a function f. Input consists of an initial starting point
+     * p. The initial matrix xi, whose columns contain the initial set of
+     * directions, is set to the identity. Returned is the best point found, at
+     * which point fret is the minimum function value and iter is the number of
+     * iterations taken.
+     *
+     * @throws LockedException       Raised if this instance is locked, because
+     *                               estimation is being computed.
+     * @throws NotReadyException     Raised if this instance is not ready, because
+     *                               a listener, a gradient listener and a start point haven't been provided.
+     * @throws OptimizationException Raised if the algorithm failed because of
+     *                               lack of convergence or because function couldn't be evaluated.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public void minimize() throws LockedException, NotReadyException, OptimizationException {
+
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L195">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L198">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L201">        locked = true;</span>
+
+<span class="fc" id="L203">        final var n = p.length;</span>
+
+        // set vector of directions
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if (!isDirectionAvailable()) {</span>
+<span class="fc" id="L207">            xi = new double[n];</span>
+        } else {
+<span class="nc bnc" id="L209" title="All 2 branches missed.">            if (xi.length != n) {</span>
+<span class="nc" id="L210">                xi = new double[n];</span>
+            }
+        }
+
+<span class="fc" id="L214">        var validResult = false;</span>
+        try {
+            double gg;
+            double dgg;
+
+<span class="fc" id="L219">            final var g = new double[n];</span>
+<span class="fc" id="L220">            final var h = new double[n];</span>
+
+<span class="fc" id="L222">            var fp = listener.evaluate(p);</span>
+<span class="fc" id="L223">            gradientListener.evaluateGradient(p, xi);</span>
+
+<span class="fc bfc" id="L225" title="All 2 branches covered.">            for (var j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L226">                g[j] = -xi[j];</span>
+<span class="fc" id="L227">                h[j] = g[j];</span>
+<span class="fc" id="L228">                xi[j] = h[j];</span>
+            }
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">            for (var its = 0; its &lt; ITMAX; its++) {</span>
+<span class="fc" id="L231">                iter = its;</span>
+<span class="fc" id="L232">                fret = linmin();</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">                if (2.0 * Math.abs(fret - fp) &lt;= tolerance * (Math.abs(fret) + Math.abs(fp) + EPS)) {</span>
+                    // minimum found
+<span class="fc" id="L235">                    validResult = true;</span>
+
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">                    if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L238">                        iterationCompletedListener.onIterationCompleted(this, its, ITMAX);</span>
+                    }
+                    break;
+                }
+
+<span class="fc" id="L243">                fp = fret;</span>
+
+<span class="fc" id="L245">                gradientListener.evaluateGradient(p, xi);</span>
+
+<span class="fc" id="L247">                var test = 0.0;</span>
+<span class="fc" id="L248">                final var den = Math.max(Math.abs(fp), 1.0);</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">                for (var j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L250">                    final var temp = Math.abs(xi[j]) * Math.max(Math.abs(p[j]), 1.0) / den;</span>
+
+<span class="fc bfc" id="L252" title="All 2 branches covered.">                    if (temp &gt; test) {</span>
+<span class="fc" id="L253">                        test = temp;</span>
+                    }
+                }
+<span class="fc bfc" id="L256" title="All 2 branches covered.">                if (test &lt; GTOL) {</span>
+                    // minimum found
+<span class="fc" id="L258">                    validResult = true;</span>
+
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                    if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L261">                        iterationCompletedListener.onIterationCompleted(this, its, ITMAX);</span>
+                    }
+                    break;
+                }
+
+<span class="fc" id="L266">                dgg = gg = 0.0;</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                for (var j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L268">                    gg += g[j] * g[j];</span>
+
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">                    if (isPolakRibiereEnabled()) {</span>
+                        // This statement for Polak-Ribiere
+<span class="fc" id="L272">                        dgg += (xi[j] + g[j]) * xi[j];</span>
+                    } else {
+                        // This statement for Fletcher-Reeves
+<span class="nc" id="L275">                        dgg += xi[j] * xi[j];</span>
+                    }
+                }
+
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">                if (gg == 0.0) {</span>
+                    // minimum found
+<span class="nc" id="L281">                    validResult = true;</span>
+
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                    if (iterationCompletedListener != null) {</span>
+<span class="nc" id="L284">                        iterationCompletedListener.onIterationCompleted(this, its, ITMAX);</span>
+                    }
+                    break;
+                }
+
+<span class="fc" id="L289">                final var gam = dgg / gg;</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">                for (var j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L291">                    g[j] = -xi[j];</span>
+<span class="fc" id="L292">                    h[j] = g[j] + gam * h[j];</span>
+<span class="fc" id="L293">                    xi[j] = h[j];</span>
+                }
+
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">                if (iterationCompletedListener != null) {</span>
+<span class="fc" id="L297">                    iterationCompletedListener.onIterationCompleted(this, its, ITMAX);</span>
+                }
+            }
+
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">            if (!validResult) {</span>
+                // too many iterations
+<span class="nc" id="L303">                locked = false;</span>
+<span class="nc" id="L304">                throw new OptimizationException();</span>
+            }
+<span class="nc" id="L306">        } catch (final EvaluationException e) {</span>
+<span class="nc" id="L307">            throw new OptimizationException(e);</span>
+        } finally {
+<span class="fc" id="L309">            locked = false;</span>
+        }
+
+        // set result
+<span class="fc" id="L313">        xmin = p;</span>
+<span class="fc" id="L314">        resultAvailable = true;</span>
+<span class="fc" id="L315">        fmin = fret;</span>
+<span class="fc" id="L316">    }</span>
+
+    /**
+     * Returns boolean indicating whether this instance is ready to start the
+     * estimation of a local minimum.
+     * An instance is ready once a listener, a gradient listener and a start
+     * point are provided.
+     *
+     * @return True if this instance is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L328" title="All 6 branches covered.">        return isListenerAvailable() &amp;&amp; isGradientListenerAvailable() &amp;&amp; isStartPointAvailable();</span>
+    }
+
+    /**
+     * Returns tolerance or accuracy to be expected on estimated local minimum.
+     *
+     * @return Tolerance or accuracy to be expected on estimated local minimum.
+     */
+    public double getTolerance() {
+<span class="fc" id="L337">        return tolerance;</span>
+    }
+
+    /**
+     * Sets tolerance or accuracy to be expected on estimated local minimum.
+     *
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     *                  minimum.
+     * @throws LockedException          Raised if this instance is locked.
+     * @throws IllegalArgumentException Raised if provided tolerance is
+     *                                  negative.
+     */
+    public void setTolerance(final double tolerance) throws LockedException {
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L351">            throw new LockedException();</span>
+        }
+<span class="fc" id="L353">        internalSetTolerance(tolerance);</span>
+<span class="fc" id="L354">    }</span>
+
+    /**
+     * Returns gradient listener in charge of obtaining gradient values for the
+     * function to be evaluated.
+     *
+     * @return Gradient listener.
+     * @throws NotAvailableException Raised if gradient listener has not yet
+     *                               been provided.
+     */
+    public GradientFunctionEvaluatorListener getGradientListener() throws NotAvailableException {
+<span class="fc bfc" id="L365" title="All 2 branches covered.">        if (!isGradientListenerAvailable()) {</span>
+<span class="fc" id="L366">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L368">        return gradientListener;</span>
+    }
+
+    /**
+     * Sets gradient listener in charge of obtaining gradient values for the
+     * function to be evaluated.
+     *
+     * @param gradientListener Gradient listener.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setGradientListener(final GradientFunctionEvaluatorListener gradientListener) throws LockedException {
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L380">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L383">        this.gradientListener = gradientListener;</span>
+<span class="fc" id="L384">    }</span>
+
+    /**
+     * Returns boolean indicating whether a gradient listener has already been
+     * provided and is available for retrieval.
+     *
+     * @return True if available, false otherwise.
+     */
+    public boolean isGradientListenerAvailable() {
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        return gradientListener != null;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether Polak-Ribiere method is used or
+     * Fletcher-Reeves is used instead.
+     *
+     * @return If true, Polak-Ribiere method is used, otherwise Fletcher-Reeves
+     * is used.
+     */
+    public boolean isPolakRibiereEnabled() {
+<span class="fc" id="L404">        return usePolakRibiere;</span>
+    }
+
+    /**
+     * Sets boolean indicating whether Polak-Ribiere method or Fletcher-Reeves
+     * method is used.
+     * If provided value is true, Polak-Ribiere method will be used, otherwise
+     * Flecther-Reeves method will be used.
+     *
+     * @param useIt Boolean to determine method.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setUsePolakRibiere(final boolean useIt) throws LockedException {
+<span class="pc bpc" id="L417" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L418">            throw new LockedException();</span>
+        }
+<span class="fc" id="L420">        usePolakRibiere = useIt;</span>
+<span class="fc" id="L421">    }</span>
+
+    /**
+     * Sets start point where local minimum is searched nearby.
+     *
+     * @param point Start point to search for a local minimum.
+     * @throws LockedException Raised if this instance is locked.
+     */
+    public void setStartPoint(final double[] point) throws LockedException {
+<span class="pc bpc" id="L430" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L431">            throw new LockedException();</span>
+        }
+<span class="fc" id="L433">        internalSetStartPoint(point);</span>
+<span class="fc" id="L434">    }</span>
+
+    /**
+     * Return number of iterations that were needed to estimate a minimum.
+     *
+     * @return number of iterations that were needed.
+     */
+    public int getIterations() {
+<span class="fc" id="L442">        return iter;</span>
+    }
+
+    /**
+     * Internal method to set tolerance or accuracy to be expected on estimated
+     * local minimum.
+     * This method does not check whether this instance is locked.
+     *
+     * @param tolerance Tolerance or accuracy to be expected on estimated local
+     *                  minimum.
+     * @throws IllegalArgumentException Raised if provided tolerance is
+     *                                  negative.
+     */
+    private void internalSetTolerance(final double tolerance) {
+<span class="fc bfc" id="L456" title="All 2 branches covered.">        if (tolerance &lt; MIN_TOLERANCE) {</span>
+<span class="fc" id="L457">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L459">        this.tolerance = tolerance;</span>
+<span class="fc" id="L460">    }</span>
+
+    /**
+     * Internal method to set start point where local minimum is searched
+     * nearby.
+     * This method does not check whether this instance is locked.
+     *
+     * @param point Start point to search for a local minimum.
+     */
+    private void internalSetStartPoint(final double[] point) {
+<span class="fc" id="L470">        p = point;</span>
+<span class="fc" id="L471">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

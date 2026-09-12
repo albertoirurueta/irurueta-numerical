@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Robust Estimation Framework :: Irurueta Numerical</title>
+    <meta name="description" content="Overview of the shared hypothesize-and-verify robust estimation framework in com.irurueta.numerical.robust underlying RANSAC, LMedS, MSAC, PROSAC, and PROMedS.">
+    <meta name="keywords" content="robust estimation, RANSAC, LMedS, MSAC, PROSAC, PROMedS, outlier rejection, RobustEstimator, consensus, com.irurueta.numerical.robust">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../../.."><img src="../../../_/img/logo.svg" alt="Irurueta Numerical" class="navbar-brand-logo">Irurueta Numerical</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-numerical" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Irurueta Numerical</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Irurueta Numerical</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../algorithms.html">Algorithms</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Fitting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="straight-line-fitting.html">Straight Line Fitting Algorithm</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="linear-least-squares.html">Linear Least-Squares Fitting Algorithm</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="svd-linear-fitting.html">Linear Fitting by Singular Value Decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="levenberg-marquardt.html">Levenberg-Marquardt Fitting Algorithm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Integration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="trapezoidal-integration.html">Trapezoidal Rule Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="simpson-integration.html">Simpson&#8217;s Rule Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="romberg-integration.html">Romberg Integration</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="midpoint-integration.html">Midpoint Rule Integration for Improper Integrals</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="double-exponential-integration.html">Double Exponential Rule Integration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Interpolation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="polynomial-interpolation.html">Polynomial Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="cubic-spline-interpolation.html">Cubic Spline Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="rational-interpolation.html">Rational Function Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="polynomial-coefficients.html">Coefficients of the Interpolating Polynomial</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="2d-grid-interpolation.html">Two-Dimensional Grid Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="scattered-data-interpolation.html">Scattered-Data Interpolation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="curve-interpolation.html">Curve Interpolation in Multiple Dimensions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Optimization</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="golden-section-search.html">Golden Section Search</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="brent-optimization.html">Brent&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="derivative-brent-optimization.html">Brent&#8217;s Method with Derivatives</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="simplex-optimization.html">Downhill Simplex Method (Nelder-Mead)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="powell-optimization.html">Powell&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="conjugate-gradient-optimization.html">Conjugate Gradient Methods</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="quasi-newton-optimization.html">Quasi-Newton Method (BFGS)</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Roots</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="bisection-root-finding.html">Bisection Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="secant-false-position-root-finding.html">Secant and False Position Methods</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="ridder-root-finding.html">Ridder&#8217;s Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="brent-root-finding.html">Brent&#8217;s Method (Root Finding)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="newton-raphson-root-finding.html">Newton-Raphson Method</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="polynomial-roots-closed-form.html">Closed-Form Polynomial Roots</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="laguerre-root-finding.html">Laguerre&#8217;s Method for Polynomial Roots</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Robust</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="3">
+    <a class="nav-link" href="robust-estimation-framework.html">Robust Estimation Framework</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="ransac-robust-estimation.html">RANSAC (Random Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="lmeds-robust-estimation.html">LMedS (Least Median of Squares)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="msac-robust-estimation.html">MSAC (M-estimator Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="prosac-robust-estimation.html">PROSAC (Progressive Sample Consensus)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="promeds-robust-estimation.html">PROMedS (Progressive Least Median of Squares)</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Signal processing</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="1d-convolution.html">1D Discrete Convolution</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="kalman-filter.html">Kalman Filter</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="measurement-noise-covariance-estimation.html">Measurement Noise Covariance Estimation</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Numerical</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../index.html">Irurueta Numerical</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Irurueta Numerical</a></li>
+    <li><a href="../algorithms.html">Algorithms</a></li>
+    <li>Robust</li>
+    <li><a href="robust-estimation-framework.html">Robust Estimation Framework</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-numerical/edit/develop/docs/modules/ROOT/pages/algorithms/robust-estimation-framework.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Robust Estimation Framework</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Ordinary estimators (curve fitters, geometric model fitters, etc.) assume every data sample is trustworthy.
+In practice, samples are often contaminated with <strong>outliers</strong> — matches from feature detectors are sometimes
+wrong, sensor readings sometimes glitch — and a single bad sample can throw off an estimator that averages
+over all of them. The <code>com.irurueta.numerical.robust</code> package provides a reusable, domain-agnostic framework
+for <strong>robust</strong> estimation: finding the model that best explains the data despite an unknown fraction of it being
+wrong, without needing to know in advance which samples are the bad ones.</p>
+</div>
+<div class="paragraph">
+<p>This page describes the shared machinery behind all five algorithms in the package —
+<a href="ransac-robust-estimation.html" class="xref page">RANSAC</a>, <a href="lmeds-robust-estimation.html" class="xref page">LMedS</a>,
+<a href="msac-robust-estimation.html" class="xref page">MSAC</a>, <a href="prosac-robust-estimation.html" class="xref page">PROSAC</a>, and
+<a href="promeds-robust-estimation.html" class="xref page">PROMedS</a> — each of which has its own detailed page covering what
+makes it different.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_hypothesize_and_verify_loop"><a class="anchor" href="#_the_hypothesize_and_verify_loop"></a>The hypothesize-and-verify loop</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Every algorithm in this package is a variation on the same basic strategy: repeatedly guess a candidate model
+from a small random subset of the data, check how well that candidate explains <strong>all</strong> the data, and keep
+whichever candidate does best. The five algorithms differ only in <strong>how</strong> they sample subsets and <strong>how</strong> they
+score a candidate:</p>
+</div>
+<div class="imageblock"><div class="mermaid content" style=" ">flowchart TD
+    A["Start: N data samples"] --> B["Select a minimal random subset\n(just enough points to fit one candidate model)"]
+    B --> C["Fit one or more candidate models to the subset"]
+    C --> D["Score each candidate against ALL N samples"]
+    D --> E{"Better than the best candidate so far?"}
+    E -->|"yes"| F["Keep as the new best model"]
+    E -->|"no"| G["Discard this candidate"]
+    F --> H{"Stopping criterion met?"}
+    G --> H
+    H -->|"no"| B
+    H -->|"yes"| I["Return the best model found\n(plus its inlier set / residuals)"]</div></div>
+<div class="paragraph">
+<p>This generic loop is what makes the package&#8217;s design reusable across domains: fitting a line, a homography, a
+fundamental matrix, or a polynomial (see <a href="polynomial-roots-closed-form.html" class="xref page">Closed-Form Polynomial Roots</a> and
+<a href="laguerre-root-finding.html" class="xref page">Laguerre&#8217;s Method for Polynomial Roots</a>'s neighbors in <code>polynomials.estimators</code>, which specialize this
+same framework) are all, from the framework&#8217;s point of view, just different implementations of "fit a
+candidate to a minimal subset" and "score a candidate against a sample."</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_differs_between_the_five_algorithms"><a class="anchor" href="#_what_differs_between_the_five_algorithms"></a>What differs between the five algorithms</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 28.5714%;">
+<col style="width: 28.5714%;">
+<col style="width: 28.5715%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Algorithm</th>
+<th class="tableblock halign-left valign-top">Sampling strategy</th>
+<th class="tableblock halign-left valign-top">Scoring criterion</th>
+<th class="tableblock halign-left valign-top">Needs a threshold?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="ransac-robust-estimation.html" class="xref page">RANSAC</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uniform random</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count of inliers (residual below a fixed threshold)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="lmeds-robust-estimation.html" class="xref page">LMedS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uniform random</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Median of squared residuals</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No — computed dynamically</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="msac-robust-estimation.html" class="xref page">MSAC</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uniform random</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Median of a <strong>bounded</strong> residual (capped at a fixed threshold)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="prosac-robust-estimation.html" class="xref page">PROSAC</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Progressive, guided by a per-sample quality score</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count of inliers (as RANSAC), plus PROSAC-specific stopping tests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="promeds-robust-estimation.html" class="xref page">PROMedS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Progressive, guided by a per-sample quality score (as PROSAC)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Median of residuals (as LMedS), optionally cross-checked against a threshold</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No (optional)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_shared_building_blocks"><a class="anchor" href="#_shared_building_blocks"></a>Shared building blocks</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_listener_hierarchy"><a class="anchor" href="#_the_listener_hierarchy"></a>The listener hierarchy</h3>
+<div class="paragraph">
+<p>Every algorithm is generic over the type <code>T</code> of the model being estimated (a line&#8217;s coefficients, a matrix, a
+polynomial&#8217;s parameters — whatever <code>T</code> the caller is fitting), and none of them are handed the data directly.
+Instead, the caller implements a listener that knows how to turn a subset of sample indices into candidate
+models and how to score any candidate against any sample. Each algorithm&#8217;s listener interface extends the
+previous one, adding exactly the extra information <strong>that</strong> algorithm needs:</p>
+</div>
+<div class="imageblock"><div class="mermaid content" style=" ">flowchart TD
+    A["RobustEstimatorListener&lt;T&gt;\n(lifecycle callbacks: start, end, iteration, progress)"] --> B["LMedSRobustEstimatorListener&lt;T&gt;\n+ getTotalSamples(), getSubsetSize()\n+ estimatePreliminarSolutions(), computeResidual()"]
+    B --> C["RANSACRobustEstimatorListener&lt;T&gt;\n+ getThreshold()"]
+    C --> D["MSACRobustEstimatorListener&lt;T&gt;\n(no new methods)"]
+    C --> E["PROSACRobustEstimatorListener&lt;T&gt;\n+ getQualityScores()"]
+    E --> F["PROMedSRobustEstimatorListener&lt;T&gt;\n(no new methods)"]</div></div>
+<div class="paragraph">
+<p>The two methods every listener must implement are the actual model-fitting logic:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>estimatePreliminarSolutions(int[] samplesIndices, List&lt;T&gt; solutions)</code> — given the indices of a randomly (or
+progressively) selected minimal subset, compute one or more candidate models and add them to <code>solutions</code>.</p>
+</li>
+<li>
+<p><code>computeResidual(T currentEstimation, int i)</code> — given a candidate model and a sample index, return how far
+that sample is from what the model predicts.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_subset_selection"><a class="anchor" href="#_subset_selection"></a>Subset selection</h3>
+<div class="paragraph">
+<p>Every algorithm needs to repeatedly pick a random, non-repeating subset of sample indices — either from the
+whole dataset (RANSAC, LMedS, MSAC) or from a growing prefix of quality-sorted samples (PROSAC, PROMedS). This
+is implemented once, in <code>SubsetSelector</code> / <code>FastRandomSubsetSelector</code>, using simple rejection sampling: draw a
+random index, and if it has already been picked, draw again, until the requested number of distinct indices
+has been collected. <code>SubsetSelector.create(numSamples)</code> is the standard way to obtain one.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_library_implementation"><a class="anchor" href="#_library_implementation"></a>Library implementation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>RobustEstimator&lt;T&gt;</code> is the abstract base every concrete algorithm extends, providing:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>setListener(RobustEstimatorListener&lt;T&gt;)</code> — attach the model-fitting/scoring logic described above.</p>
+</li>
+<li>
+<p><code>isReady()</code> / <code>isLocked()</code> — the same readiness/locking protocol used throughout this library (see
+<a href="../index.html" class="xref page">Irurueta Numerical</a>'s Core Concepts).</p>
+</li>
+<li>
+<p><code>setProgressDelta(float)</code> — how often (as a fraction of expected work) to invoke the listener&#8217;s progress
+callback; default <code>0.05</code> (every 5%).</p>
+</li>
+<li>
+<p><code>estimate()</code> — runs the algorithm and returns the best model found.</p>
+</li>
+<li>
+<p><code>getInliersData()</code> — the inlier flags and residuals associated with the best model.</p>
+</li>
+<li>
+<p><code>getMethod()</code> — which <code>RobustEstimatorMethod</code> this instance implements.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All five algorithms additionally share a <code>getConfidence()</code> / <code>setConfidence(double)</code> parameter (default <code>0.99</code>)
+and a <code>getMaxIterations()</code> / <code>setMaxIterations(int)</code> cap (default <code>5000</code>) — the target probability of having
+sampled at least one all-inlier subset, and the hard ceiling on how long to keep trying if that confidence is
+never reached.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If a per-sample quality score is available (e.g. a descriptor-matching similarity), always prefer
+<a href="prosac-robust-estimation.html" class="xref page">PROSAC</a> or <a href="promeds-robust-estimation.html" class="xref page">PROMedS</a>
+over their non-progressive counterparts — the speedup can be two orders of magnitude on typical problems. If no
+threshold can be guessed in advance, <a href="lmeds-robust-estimation.html" class="xref page">LMedS</a> or
+<a href="promeds-robust-estimation.html" class="xref page">PROMedS</a> avoid needing one.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/vendor/lunr.js"></script>
+<script src="../../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../../.." data-snippet-length="100" data-stylesheet="../../../_/css/search.css"></script>
+<script async src="../../../search-index.js"></script>
+  </body>
+</html>
