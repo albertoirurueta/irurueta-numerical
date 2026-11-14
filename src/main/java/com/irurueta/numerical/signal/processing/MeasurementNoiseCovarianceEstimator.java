@@ -21,7 +21,9 @@ import com.irurueta.algebra.Matrix;
 
 /**
  * Estimates noise covariance matrix for a given set of measures.
- * Covariance matrix is updated each time that measures are added.
+ * Covariance matrix is updated each time that measures are added, and it is
+ * always the exact running population covariance of all the samples added so
+ * far.
  * This class also computes average values of samples to estimate the bias
  * on given noise samples.
  * This class should only be used for samples obtained while system state is
@@ -50,8 +52,10 @@ public class MeasurementNoiseCovarianceEstimator {
     private long sampleCount;
 
     /**
-     * A sample after removing its mean. This is used internally, and it is
-     * kept as an instance variable for reuse purposes.
+     * A sample after removing the mean estimated before the sample was added
+     * (i.e. the difference between the sample and the previous average). This
+     * is used internally, and it is kept as an instance variable for reuse
+     * purposes.
      */
     private final double[] sampleNoMean;
 
@@ -107,6 +111,10 @@ public class MeasurementNoiseCovarianceEstimator {
     /**
      * Updates currently estimated covariance matrix by adding provided sample
      * data.
+     * After each update, the returned covariance matrix is the exact running
+     * population covariance of all samples added so far (i.e. it matches the
+     * batch population covariance, with N as divisor, of those samples), and
+     * the sample average is the exact mean of those samples.
      *
      * @param sample sample to be added to update covariance matrix.
      * @return covariance matrix after update.
@@ -122,13 +130,13 @@ public class MeasurementNoiseCovarianceEstimator {
 
         final var nextCount = sampleCount + 1;
 
+        // compute sample without mean, using the mean prior to this update
+        ArrayUtils.subtract(sample, sampleAverage, sampleNoMean);
+
         // update sample average
         for (int i = 0; i < mp; i++) {
             sampleAverage[i] = (sampleAverage[i] * sampleCount + sample[i]) / nextCount;
         }
-
-        // compute sample without mean
-        ArrayUtils.subtract(sample, sampleAverage, sampleNoMean);
 
         // copy sample without mean into matrix form
         sampleMatrix.setSubmatrix(0, 0, mp - 1, 0, sampleNoMean);
@@ -138,6 +146,9 @@ public class MeasurementNoiseCovarianceEstimator {
         try {
             // compute covariance matrix for a single sample
             sampleMatrix.multiply(transposedSampleMatrix, singleCov);
+
+            // weight by N / (N + 1) to obtain (x - oldMean)(x - newMean)^T
+            singleCov.multiplyByScalar((double) sampleCount / nextCount);
 
             // update covariance matrix
             measurementNoiseCov.multiplyByScalar(sampleCount);

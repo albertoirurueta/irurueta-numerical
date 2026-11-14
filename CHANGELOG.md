@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Migrated the build to Java 21 (source/target compatibility).
 
+### Fixed
+
+- Fixed `MeasurementNoiseCovarianceEstimator` running covariance under-weighting new samples (bias for small
+  sample counts), now exactly matching the batch population covariance (#17).
+
 ## [1.6.0] - 2026-07-15
 
 ### Added
