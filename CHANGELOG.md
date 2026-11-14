@@ -7,9 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-11-14
+
 ### Changed
 
-- Migrated the build to Java 21 (source/target compatibility).
+- Raised the minimum Java version from 17 to 21 (source/target compatibility).
+- Updated runtime dependencies: `irurueta-algebra` 1.4.1, `irurueta-statistics` 1.4.1, `irurueta-sorting` 1.4.1.
+- Rewrote the measurement noise covariance documentation to describe the corrected update formula, and added
+  diagrams and bibliography links to the algorithm pages.
 
 ### Fixed
 
@@ -101,7 +106,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - Curve/surface fitting (Levenberg-Marquardt and linear/SVD-based fitters).
   - Signal processing utilities: `KalmanFilter`, 1D convolution, and measurement noise covariance estimation.
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.0...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.1...HEAD
+[1.6.1]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.3.2...1.4.0
