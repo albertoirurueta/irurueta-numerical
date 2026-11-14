@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-`irurueta-numerical` is a Java 17 Maven library providing numerical utilities: root finding, single/multi-variable
+`irurueta-numerical` is a Java 21 Maven library providing numerical utilities: root finding, single/multi-variable
 optimization, quadrature integration, interpolation, polynomial fitting/estimation, robust (RANSAC-family)
 estimation, curve fitting, and Kalman-filter based signal processing. It is part of the `com.irurueta` family of
 libraries and depends on `irurueta-algebra`, `irurueta-statistics`, and `irurueta-sorting` (also
@@ -41,7 +41,7 @@ mvn site -Djacoco.skip -DskipTests -P '!extras'
 ```
 
 Notes:
-- Java source/target level is 17 (`maven.compiler.source/target`).
+- Java source/target level is 21 (`maven.compiler.source/target`).
 - Checkstyle rules live in `checkstyle.xml` at the repo root (tabs forbidden, 120-char line limit, mandatory
   package-info.java per package, Javadoc enforcement, etc.) — run it before committing non-trivial changes.
 - Tests use JUnit Jupiter (5.x) via `maven-surefire-plugin`; there is no separate integration-test source set,
