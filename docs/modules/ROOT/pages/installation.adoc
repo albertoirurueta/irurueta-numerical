@@ -14,7 +14,7 @@ NOTE: This documentation was generated with the assistance of AI. Please report 
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
     <scope>compile</scope>
 </dependency>
 ----

@@ -5,6 +5,15 @@ behavior changes for each version.
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
+== 1.6.1
+
+* 🐛 Fixed a bias in `MeasurementNoiseCovarianceEstimator`: the running covariance under-weighted each new sample
+  and now exactly matches the batch population covariance after every update.
+* ♻️ Raised the minimum Java version from 17 to 21.
+* ⬆️ Updated `irurueta-algebra`, `irurueta-statistics` and `irurueta-sorting` to 1.4.1.
+* 📚 Rewrote the measurement noise covariance documentation and added diagrams and bibliography links to the
+  algorithm pages.
+
 == 1.6.0
 
 * 📚 Added the Antora documentation site (this site), including a full algorithm catalog with one page per
