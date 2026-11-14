@@ -20,42 +20,42 @@ xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for ca
 == Running mean and covariance
 
 For each new sample stem:[\mathbf{x}_{N+1}] (an `mp`-dimensional vector, with `mp` the number of measurement
-dimensions), the sample count, average, and covariance are all updated in place. The average is updated first:
+dimensions), the sample count, average, and covariance are all updated in place. The average is updated as:
 
 [stem]
 ++++
 \mathbf{\bar{x}}_{N+1} = \frac{N \cdot \mathbf{\bar{x}}_N + \mathbf{x}_{N+1}}{N + 1}
 ++++
 
-The covariance update then removes this *just-updated* mean from the new sample and folds its outer product
-into the running covariance, rescaled for the new sample count:
+The covariance update folds the outer product of the new sample's deviation from the *previous* mean and from the
+*updated* mean into the running covariance, rescaled for the new sample count:
 
 [stem]
 ++++
-\boldsymbol{\Sigma}_{N+1} = \frac{N \cdot \boldsymbol{\Sigma}_N + \left(\mathbf{x}_{N+1} - \mathbf{\bar{x}}_{N+1}\right)\left(\mathbf{x}_{N+1} - \mathbf{\bar{x}}_{N+1}\right)^T}{N + 1}
+\boldsymbol{\Sigma}_{N+1} = \frac{N \cdot \boldsymbol{\Sigma}_N + \left(\mathbf{x}_{N+1} - \mathbf{\bar{x}}_N\right)\left(\mathbf{x}_{N+1} - \mathbf{\bar{x}}_{N+1}\right)^T}{N + 1}
 ++++
 
-This is the exact recursive relationship implemented by `update(double[])`: `sampleAverage` is updated first,
-`sampleNoMean` is then computed against that already-updated average, and `measurementNoiseCov` is rescaled by
-`sampleCount`, has the new sample's outer product added, and is rescaled again by `1 / nextCount`.
+Since stem:[\mathbf{x}_{N+1} - \mathbf{\bar{x}}_{N+1} = \frac{N}{N+1}\boldsymbol{\delta}] with
+stem:[\boldsymbol{\delta} = \mathbf{x}_{N+1} - \mathbf{\bar{x}}_N], the outer product above is equivalent to
+stem:[\boldsymbol{\delta}\boldsymbol{\delta}^T \cdot \frac{N}{N+1}]. This is the Welford-style recursive
+relationship described in xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for calculating variance],
+and the result equals the batch population covariance of all samples seen so far at every step.
 
-NOTE: Re-centering on the post-update mean stem:[\mathbf{\bar{x}}_{N+1}] for *both* factors of the outer product (rather
-than mixing the pre-update mean into one factor, as the classic Welford-style incremental algorithm described
-in xref:reference.adoc#wikipedia-variance[Wikipedia contributors, Algorithms for calculating variance] does)
-makes this a close, but not exact, running estimate of the batch sample covariance for a given finite stem:[N]:
-it under-weights each new sample's contribution by a factor of stem:[N / (N+1)]. The discrepancy shrinks as
-more samples accumulate, so the estimate is best relied on after collecting a reasonably large number of
-at-rest samples, rather than after only two or three.
+This is the relationship implemented by `update(double[])`: `sampleNoMean` is first computed as the new sample minus
+the pre-update `sampleAverage`, `sampleAverage` is then updated, the outer product of `sampleNoMean` is scaled by
+`N / (N + 1)`, and `measurementNoiseCov` is rescaled by `sampleCount`, has that term added, and is rescaled again by
+`1 / nextCount`.
 
 [mermaid]
 ....
 flowchart TD
-    A["New sample x arrives; N = current sampleCount"] --> B["average = (average * N + x) / (N + 1)"]
-    B --> C["noMean = x - average"]
-    C --> D["singleCov = noMean * noMean^T"]
-    D --> E["cov = (cov * N + singleCov) / (N + 1)"]
-    E --> F["sampleCount = N + 1"]
-    F --> G["Return updated covariance"]
+    A["New sample x arrives; N = current sampleCount"] --> B["delta = x - average"]
+    B --> C["singleCov = delta * delta^T"]
+    C --> D["singleCov = singleCov * N / (N + 1)"]
+    D --> E["average = (average * N + x) / (N + 1)"]
+    E --> F["cov = (cov * N + singleCov) / (N + 1)"]
+    F --> G["sampleCount = N + 1"]
+    G --> H["Return updated covariance"]
 ....
 
 == Library implementation
