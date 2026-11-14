@@ -1,7 +1,0 @@
-  - package-ecosystem: gradle
-    directories: [ "/", "/build-logic" ]
-    schedule:
-      interval: weekly
-    groups:
-      gradle-dependencies:
-        patterns: [ "*" ]

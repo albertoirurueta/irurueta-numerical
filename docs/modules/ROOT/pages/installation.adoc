@@ -35,4 +35,4 @@ Snapshot builds are published from the `develop` branch and may change at any ti
 
 == Requirements
 
-* Java 21 or later.
+* Java 17 or later.

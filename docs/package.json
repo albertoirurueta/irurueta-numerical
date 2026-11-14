@@ -1,18 +1,10 @@
 {
-  "scripts": {
-    "build": "antora antora-playbook.yml",
-    "search:index": "pagefind --site build/site",
-    "validate:mermaid": "node scripts/mermaid/validate-mermaid.mjs modules --render"
-  },
-  "engines": {
-    "node": ">=20"
-  },
   "devDependencies": {
-    "antora": "3.2.2"
+    "antora": "3.1.15"
   },
   "dependencies": {
-    "@djencks/asciidoctor-mathjax": "0.0.9",
-    "@sntke/antora-mermaid-extension": "0.0.13",
-    "pagefind": "1.6.0"
+    "@antora/lunr-extension": "^1.0.0-alpha.13",
+    "@djencks/asciidoctor-mathjax": "^0.0.9",
+    "@sntke/antora-mermaid-extension": "^0.0.13"
   }
 }

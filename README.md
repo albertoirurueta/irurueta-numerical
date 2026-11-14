@@ -25,7 +25,7 @@ Numerical utilities
 
 | | |
 | --- | --- |
-| Language | Java 21 |
+| Language | Java 17 |
 | Build tool | Maven |
 | Current development version | `1.7.0-SNAPSHOT` |
 | Latest release | `1.6.0` |

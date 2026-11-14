@@ -1,6 +1,5 @@
 target
 .idea
 /docs/build/
-/docs/node_modules/
 
 src/main/resources/com/irurueta/numerical/build-info.properties
