@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +32,9 @@ class MeasurementNoiseCovarianceEstimatorTest {
 
     private static final double ABSOLUTE_ERROR = 1e-6;
 
-    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double RELATIVE_ERROR = 1e-9;
+
+    private static final double TIGHT_ERROR = 1e-12;
 
     @Test
     void testConstructor() throws SignalProcessingException {
@@ -83,26 +86,101 @@ class MeasurementNoiseCovarianceEstimatorTest {
         // check correctness of average
         assertArrayEquals(sampleAverage, sampleAverage2, ABSOLUTE_ERROR);
 
-        // compute covariance
-
-        // copy all acceleration samples into a matrix (each column contains a
-        // sample)
-        final var samples = new Matrix(3, data.numSamples);
+        // compute centered batch population covariance
+        final var samples = new double[data.numSamples][3];
         for (var i = 0; i < data.numSamples; i++) {
-            samples.setElementAt(0, i, data.accelerationX[i]);
-            samples.setElementAt(1, i, data.accelerationY[i]);
-            samples.setElementAt(2, i, data.accelerationZ[i]);
+            samples[i][0] = data.accelerationX[i];
+            samples[i][1] = data.accelerationY[i];
+            samples[i][2] = data.accelerationZ[i];
         }
-
-        final var transSamples = samples.transposeAndReturnNew();
-
-        final var cov = samples.multiplyAndReturnNew(transSamples);
-        cov.multiplyByScalar(1.0 / data.numSamples);
+        final var cov = batchCovariance(samples, sampleAverage2);
 
         // compare matrices
-        for (var i = 0; i < 3; i++) {
-            for (var j = 0; j < 3; j++) {
-                assertEquals(measurementNoiseCov.getElementAt(i, j), cov.getElementAt(i, j), LARGE_ABSOLUTE_ERROR);
+        assertMatrixEquals(cov, measurementNoiseCov, RELATIVE_ERROR);
+    }
+
+    @Test
+    void testUpdateKnownSamples() throws SignalProcessingException {
+        final var estimator = new MeasurementNoiseCovarianceEstimator(1);
+
+        final var expectedVariances = new double[]{0.0, 1.0, 8.0 / 3.0};
+        final var expectedMeans = new double[]{0.0, 1.0, 2.0};
+        final var values = new double[]{0.0, 2.0, 4.0};
+
+        for (var i = 0; i < values.length; i++) {
+            final var cov = estimator.update(new double[]{values[i]});
+
+            assertEquals(i + 1, estimator.getSampleCount());
+            assertEquals(expectedVariances[i], cov.getElementAt(0, 0), TIGHT_ERROR);
+            assertEquals(expectedMeans[i], estimator.getSampleAverage()[0], TIGHT_ERROR);
+        }
+    }
+
+    @Test
+    void testUpdateMultivariate() throws SignalProcessingException, WrongSizeException {
+        final var estimator = new MeasurementNoiseCovarianceEstimator(3);
+
+        final var samples = new double[][]{
+                {1.0, -2.0, 0.5},
+                {3.0, 4.0, -1.5},
+                {-2.0, 0.0, 2.5},
+                {0.5, 1.5, 3.0},
+                {4.0, -3.5, 0.0},
+                {2.5, 2.0, -2.0}
+        };
+
+        for (var n = 1; n <= samples.length; n++) {
+            final var cov = estimator.update(samples[n - 1]);
+
+            final var subset = Arrays.copyOf(samples, n);
+            final var mean = new double[3];
+            for (final var sample : subset) {
+                for (var j = 0; j < 3; j++) {
+                    mean[j] += sample[j] / n;
+                }
+            }
+
+            assertArrayEquals(mean, estimator.getSampleAverage(), TIGHT_ERROR);
+            assertMatrixEquals(batchCovariance(subset, mean), cov, TIGHT_ERROR);
+
+            // covariance must be symmetric
+            for (var i = 0; i < 3; i++) {
+                for (var j = i + 1; j < 3; j++) {
+                    assertEquals(cov.getElementAt(i, j), cov.getElementAt(j, i), TIGHT_ERROR);
+                }
+            }
+        }
+    }
+
+    @Test
+    void testUpdateWrongSampleSize() throws SignalProcessingException {
+        final var estimator = new MeasurementNoiseCovarianceEstimator(2);
+
+        final var sample = new double[3];
+        assertThrows(IllegalArgumentException.class, () -> estimator.update(sample));
+    }
+
+    private static Matrix batchCovariance(final double[][] samples, final double[] mean) throws WrongSizeException {
+        final var dims = mean.length;
+        final var cov = new Matrix(dims, dims);
+        for (final var sample : samples) {
+            for (var i = 0; i < dims; i++) {
+                for (var j = 0; j < dims; j++) {
+                    cov.setElementAt(i, j, cov.getElementAt(i, j)
+                            + (sample[i] - mean[i]) * (sample[j] - mean[j]) / samples.length);
+                }
+            }
+        }
+        return cov;
+    }
+
+    private static void assertMatrixEquals(final Matrix expected, final Matrix actual, final double relativeError) {
+        assertEquals(expected.getRows(), actual.getRows());
+        assertEquals(expected.getColumns(), actual.getColumns());
+        for (var i = 0; i < expected.getRows(); i++) {
+            for (var j = 0; j < expected.getColumns(); j++) {
+                final var e = expected.getElementAt(i, j);
+                assertEquals(e, actual.getElementAt(i, j), relativeError * Math.max(1.0, Math.abs(e)));
             }
         }
     }

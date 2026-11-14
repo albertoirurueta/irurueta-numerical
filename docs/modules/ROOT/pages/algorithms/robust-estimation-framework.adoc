@@ -96,11 +96,11 @@ previous one, adding exactly the extra information *that* algorithm needs:
 [mermaid]
 ....
 flowchart TD
-    A["RobustEstimatorListener&lt;T&gt;\n(lifecycle callbacks: start, end, iteration, progress)"] --> B["LMedSRobustEstimatorListener&lt;T&gt;\n+ getTotalSamples(), getSubsetSize()\n+ estimatePreliminarSolutions(), computeResidual()"]
-    B --> C["RANSACRobustEstimatorListener&lt;T&gt;\n+ getThreshold()"]
-    C --> D["MSACRobustEstimatorListener&lt;T&gt;\n(no new methods)"]
-    C --> E["PROSACRobustEstimatorListener&lt;T&gt;\n+ getQualityScores()"]
-    E --> F["PROMedSRobustEstimatorListener&lt;T&gt;\n(no new methods)"]
+    A["RobustEstimatorListener&amp;lt;T&amp;gt;\n(lifecycle callbacks: start, end, iteration, progress)"] --> B["LMedSRobustEstimatorListener&amp;lt;T&amp;gt;\n+ getTotalSamples(), getSubsetSize()\n+ estimatePreliminarSolutions(), computeResidual()"]
+    B --> C["RANSACRobustEstimatorListener&amp;lt;T&amp;gt;\n+ getThreshold()"]
+    C --> D["MSACRobustEstimatorListener&amp;lt;T&amp;gt;\n(no new methods)"]
+    C --> E["PROSACRobustEstimatorListener&amp;lt;T&amp;gt;\n+ getQualityScores()"]
+    E --> F["PROMedSRobustEstimatorListener&amp;lt;T&amp;gt;\n(no new methods)"]
 ....
 
 The two methods every listener must implement are the actual model-fitting logic:
