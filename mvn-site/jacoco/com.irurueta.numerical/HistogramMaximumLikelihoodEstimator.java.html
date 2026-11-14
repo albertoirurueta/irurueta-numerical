@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HistogramMaximumLikelihoodEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">HistogramMaximumLikelihoodEstimator.java</span></div><h1>HistogramMaximumLikelihoodEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.algebra.ArrayUtils;
+
+import java.util.Arrays;
+
+/**
+ * Class to estimate the most likely value from a series of samples assumed to
+ * be normally distributed.
+ * This implementation will compute a histogram of the probability distribution
+ * function of all the provided samples.
+ * The probability distribution function is computed by aggregating all the
+ * samples as a series of Gaussian functions with a small sigma and centered at
+ * the exact value of the sample.
+ */
+public class HistogramMaximumLikelihoodEstimator extends MaximumLikelihoodEstimator {
+
+    /**
+     * Default number of bins to be used on the histogram.
+     */
+    public static final int DEFAULT_NUMBER_OF_BINS = 100;
+
+    /**
+     * Minimum number of bins allowed on the histogram.
+     */
+    public static final int MIN_NUMBER_OF_BINS = 2;
+
+    /**
+     * Value to be considered as the machine precision.
+     */
+    public static final double EPS = 1e-9;
+
+    /**
+     * Number of bins to be used on the histogram. The larger the value the
+     * more precise results will be but more data will be needed to obtain
+     * statistically meaningful data so that enough samples are present on each
+     * bin.
+     */
+    private int numberOfBins;
+
+    /**
+     * Number of samples contained on each bin. The number of samples is not
+     * an integer because the Gaussians of each sample will only have a value
+     * equal to one on their respective centers, but at other locations, only
+     * the fractional part is added to each bin. Using Gaussians on each sample
+     * behave as an interpolation of the location of each sample around a
+     * certain value.
+     */
+    private double[] bins;
+
+    /**
+     * Array containing the Gaussian values corresponding to each bin for a
+     * single sample. The values of each array are updated for each sample and
+     * aggregated to the values of the bins array.
+     */
+    private double[] gaussian;
+
+    /**
+     * Empty constructor.
+     */
+    public HistogramMaximumLikelihoodEstimator() {
+<span class="fc" id="L77">        super();</span>
+<span class="fc" id="L78">        numberOfBins = DEFAULT_NUMBER_OF_BINS;</span>
+<span class="fc" id="L79">        bins = null;</span>
+<span class="fc" id="L80">        gaussian = null;</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
+     * @param numberOfBins  Number of bins to be used on the histogram.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero, or if provided number of bins is smaller than the
+     *                                  minimum allowed number of bins.
+     */
+    public HistogramMaximumLikelihoodEstimator(final double gaussianSigma, final int numberOfBins) {
+<span class="fc" id="L93">        super(gaussianSigma);</span>
+<span class="fc" id="L94">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L95">        bins = null;</span>
+<span class="fc" id="L96">        gaussian = null;</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputData     Array containing input data where most likely value must
+     *                      be estimated from.
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
+     * @param numberOfBins  Number of bins to be used on the histogram.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero, or if provided number of bins is smaller than the
+     *                                  minimum allowed number of bins.
+     */
+    public HistogramMaximumLikelihoodEstimator(final double[] inputData, final double gaussianSigma,
+                                               final int numberOfBins) {
+<span class="fc" id="L112">        super(inputData, gaussianSigma);</span>
+<span class="fc" id="L113">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L114">        bins = null;</span>
+<span class="fc" id="L115">        gaussian = null;</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param minValue      Minimum value assumed to be contained within input data
+     *                      array.
+     * @param maxValue      Maximum value assumed to be contained within input data
+     *                      array.
+     * @param inputData     Array containing input data where most likely value must
+     *                      be estimated from.
+     * @param gaussianSigma Gaussian sigma to be used on each sample.
+     * @param numberOfBins  Number of bins to be used on the histogram.
+     * @throws IllegalArgumentException Raised if provided Gaussian sigma is
+     *                                  negative or zero, or if provided number of bins is smaller than the
+     *                                  minimum allowed number of bins or if minValue &amp;lt; maxValue.
+     */
+    public HistogramMaximumLikelihoodEstimator(
+            final double minValue, final double maxValue, final double[] inputData, final double gaussianSigma,
+            final int numberOfBins) {
+<span class="fc" id="L136">        super(minValue, maxValue, inputData, gaussianSigma);</span>
+<span class="fc" id="L137">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L138">        bins = null;</span>
+<span class="fc" id="L139">        gaussian = null;</span>
+<span class="fc" id="L140">    }</span>
+
+
+    /**
+     * Returns method to be used for maximum likelihood estimation, which for
+     * this class is MaximumLikelihoodEstimatorMethod.
+     * HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR.
+     *
+     * @return Method for maximum likelihood estimation.
+     */
+    @Override
+    public MaximumLikelihoodEstimatorMethod getMethod() {
+<span class="fc" id="L152">        return MaximumLikelihoodEstimatorMethod.HISTOGRAM_MAXIMUM_LIKELIHOOD_ESTIMATOR;</span>
+    }
+
+    /**
+     * Returns number of bins to be used on the histogram. The larger the value
+     * the more precise results will be but more data will be needed to obtain
+     * statistically meaningful data so that enough samples are present on each
+     * bin.
+     *
+     * @return Number of bins to be used on the histogram.
+     */
+    public int getNumberOfBins() {
+<span class="fc" id="L164">        return numberOfBins;</span>
+    }
+
+    /**
+     * Sets number of bins to be used on the histogram. The larger the provided
+     * value being set the more precise results will be but more data will be
+     * needed to obtain statistically meaningful data so that enough samples are
+     * present on each bin.
+     *
+     * @param numberOfBins Number of bins to be used on the histogram.
+     * @throws LockedException          Exception raised if this instance is locked.
+     *                                  This method can only be executed when computations finish and this
+     *                                  instance becomes unlocked.
+     * @throws IllegalArgumentException Raised if provided value is lower than
+     *                                  the allowed minimum.
+     */
+    public void setNumberOfBins(final int numberOfBins) throws LockedException {
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L182">            throw new LockedException();</span>
+        }
+<span class="fc" id="L184">        internalSetNumberOfBins(numberOfBins);</span>
+<span class="fc" id="L185">    }</span>
+
+    /**
+     * Starts the estimation of the most likely value contained within provided
+     * input data array.
+     *
+     * @return The most likely value.
+     * @throws LockedException   Exception raised if this instance is locked.
+     *                           This method can only be executed when computations finish and this
+     *                           instance becomes unlocked.
+     * @throws NotReadyException Exception raised if this instance is not yet
+     *                           ready.
+     * @see #isReady()
+     */
+    @Override
+    public double estimate() throws LockedException, NotReadyException {
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L202">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L205">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L208">        locked = true;</span>
+
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        if (!areMinMaxAvailable) {</span>
+<span class="fc" id="L211">            computeMinMaxValues();</span>
+        }
+
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if ((maxValue - minValue) &lt; EPS) {</span>
+            // min-max limits are almost equal, so we return it as the solution
+<span class="nc" id="L216">            locked = false;</span>
+<span class="nc" id="L217">            return (minValue + maxValue) * 0.5;</span>
+        }
+
+        // Create histogram (initialized to 0.0)
+<span class="pc bpc" id="L221" title="3 of 4 branches missed.">        if (bins == null || bins.length != numberOfBins) {</span>
+<span class="fc" id="L222">            bins = new double[numberOfBins];</span>
+        }
+<span class="fc" id="L224">        Arrays.fill(bins, 0.0);</span>
+
+
+        // Vector containing gaussians being added to histogram
+        // Data is added to histogram as if it was convoluted with a gaussian
+        // to add smoothness to results
+<span class="pc bpc" id="L230" title="3 of 4 branches missed.">        if (gaussian == null || gaussian.length != numberOfBins) {</span>
+<span class="fc" id="L231">            gaussian = new double[numberOfBins];</span>
+        }
+
+        // set of data values between bins
+<span class="fc" id="L235">        final var delta = (maxValue - minValue) / (numberOfBins - 1);</span>
+
+        // iterate over input data to add data to histogram
+        double gaussianCenterPos;
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        for (var data : inputData) {</span>
+<span class="fc" id="L240">            gaussianCenterPos = (data - minValue) / delta;</span>
+<span class="fc" id="L241">            computeGaussian(gaussian, gaussianCenterPos);</span>
+
+            // add gaussian centered at input data value to histogram bins
+<span class="fc" id="L244">            ArrayUtils.sum(bins, gaussian, bins);</span>
+        }
+
+        // find location of maximum in histogram
+<span class="fc" id="L248">        var maxBin = 0.0;</span>
+        final double maxFuncValue;
+<span class="fc" id="L250">        int maxPos = 0;</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        for (var i = 0; i &lt; numberOfBins; i++) {</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">            if (bins[i] &gt; maxBin) {</span>
+<span class="fc" id="L253">                maxBin = bins[i];</span>
+<span class="fc" id="L254">                maxPos = i;</span>
+            }
+        }
+
+<span class="fc" id="L258">        maxFuncValue = minValue + maxPos * delta;</span>
+
+<span class="fc" id="L260">        locked = false;</span>
+<span class="fc" id="L261">        return maxFuncValue;</span>
+    }
+
+    /**
+     * Internal method to compute values of Gaussian vector assumed to be
+     * centered at provided value. Gaussian values are stored in provided array
+     * so that array can be reused.
+     *
+     * @param gaussian  Array containing Gaussian values
+     * @param centerPos Value where Gaussian is centered
+     */
+    protected void computeGaussian(final double[] gaussian, final double centerPos) {
+<span class="fc" id="L273">        final var length = gaussian.length;</span>
+
+        double x;
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        for (var i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L277">            x = i - centerPos;</span>
+<span class="fc" id="L278">            gaussian[i] = Math.exp(-x * x / (2.0 * gaussianSigma * gaussianSigma))</span>
+<span class="fc" id="L279">                    / (Math.sqrt(2.0 * Math.PI) * gaussianSigma);</span>
+        }
+<span class="fc" id="L281">    }</span>
+
+    /**
+     * Internal method to set number of bins to be used on the histogram. The
+     * larger the value being set the more precise results will be but more data
+     * will be needed to obtain statistically meaningful data so that enough
+     * samples are present on each bin.
+     *
+     * @param numberOfBins Number of bins to be used on the histogram.
+     * @throws IllegalArgumentException Raised if provided value is lower than
+     *                                  the allowed minimum.
+     */
+    private void internalSetNumberOfBins(final int numberOfBins) {
+<span class="fc bfc" id="L294" title="All 2 branches covered.">        if (numberOfBins &lt; MIN_NUMBER_OF_BINS) {</span>
+<span class="fc" id="L295">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L298">        this.numberOfBins = numberOfBins;</span>
+<span class="fc" id="L299">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

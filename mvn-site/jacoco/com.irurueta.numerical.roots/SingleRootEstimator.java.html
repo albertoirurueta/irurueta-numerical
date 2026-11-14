@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleRootEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.roots</a> &gt; <span class="el_source">SingleRootEstimator.java</span></div><h1>SingleRootEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.roots;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotAvailableException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Abstract class to find roots of single dimension functions.
+ * A root is the locus of points (set of points) where the value of a given
+ * function equals to zero.
+ * A single dimension function is one containing a single parameter and
+ * returning a single value (i.e. f(x)).
+ * Usually root estimators will only find a single root around an initial
+ * coarsely estimated solution.
+ */
+public abstract class SingleRootEstimator extends RootEstimator {
+
+    /**
+     * Listener that evaluates a single dimension function in order to find its
+     * root.
+     */
+    protected SingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Boolean indicating that a root has been computed and is available to be
+     * retrieved.
+     */
+    protected boolean rootAvailable;
+
+    /**
+     * Root that has been found.
+     */
+    protected double root;
+
+    /**
+     * Empty constructor.
+     */
+    protected SingleRootEstimator() {
+<span class="fc" id="L54">        super();</span>
+<span class="fc" id="L55">        listener = null;</span>
+<span class="fc" id="L56">        rootAvailable = false;</span>
+<span class="fc" id="L57">        root = 0.0;</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener Listener that evaluates a single dimension function in
+     *                 order to find its root.
+     */
+    protected SingleRootEstimator(final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L67">        super();</span>
+<span class="fc" id="L68">        this.listener = listener;</span>
+<span class="fc" id="L69">        rootAvailable = false;</span>
+<span class="fc" id="L70">        root = 0.0;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Returns listener that evaluates a single dimension function in order to
+     * find its root.
+     *
+     * @return Listener that evaluates a single dimension function.
+     * @throws NotAvailableException Raised if listener has not yet been
+     *                               provided.
+     */
+    public SingleDimensionFunctionEvaluatorListener getListener() throws NotAvailableException {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (!isListenerAvailable()) {</span>
+<span class="fc" id="L83">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L85">        return listener;</span>
+    }
+
+    /**
+     * Sets listener that evaluates a single dimension function in order to find
+     * its root.
+     *
+     * @param listener Listener that evaluates a single dimension function.
+     * @throws LockedException Raised if this instance is already locked.
+     */
+    public void setListener(final SingleDimensionFunctionEvaluatorListener listener) throws LockedException {
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L97">            throw new LockedException();</span>
+        }
+<span class="fc" id="L99">        this.listener = listener;</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Returns boolean indicating whether a listener has been provided.
+     *
+     * @return True if listener is available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether enough parameters have been provided
+     * in order to start the estimation of the roots of a function.
+     *
+     * @return True if this instance is ready to start the root estimation,
+     * false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="nc" id="L120">        return isListenerAvailable();</span>
+    }
+
+    /**
+     * Returns boolean indicating whether a root has been estimated and is
+     * available for retrieval.
+     *
+     * @return True if root is available, false otherwise.
+     */
+    public boolean isRootAvailable() {
+<span class="fc" id="L130">        return rootAvailable;</span>
+    }
+
+    /**
+     * Returns estimated root for a single dimension function inside a given
+     * bracket of values.
+     *
+     * @return Estimated root.
+     * @throws NotAvailableException Raised if root has not yet been estimated.
+     */
+    public double getRoot() throws NotAvailableException {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (!isRootAvailable()) {</span>
+<span class="fc" id="L142">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L144">        return root;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

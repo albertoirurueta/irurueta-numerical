@@ -1,0 +1,10 @@
+com.irurueta.numerical
+com.irurueta.numerical.fitting
+com.irurueta.numerical.integration
+com.irurueta.numerical.interpolation
+com.irurueta.numerical.optimization
+com.irurueta.numerical.polynomials
+com.irurueta.numerical.polynomials.estimators
+com.irurueta.numerical.robust
+com.irurueta.numerical.roots
+com.irurueta.numerical.signal.processing

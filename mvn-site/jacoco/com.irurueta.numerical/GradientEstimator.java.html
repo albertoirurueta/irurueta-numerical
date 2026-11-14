@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GradientEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">GradientEstimator.java</span></div><h1>GradientEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+/**
+ * Class to estimate the gradient of a multidimensional function.
+ * This class evaluates a function at very close locations of a given input
+ * point in order to determine the gradient at such point.
+ */
+public class GradientEstimator {
+
+    /**
+     * Constant considered as machine precision.
+     */
+    public static final double EPS = 1e-8;
+
+    /**
+     * Listener to evaluate a multidimensional function.
+     */
+    protected final MultiDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Internal array to hold input parameter's values.
+     */
+    private double[] xh;
+
+    /**
+     * Constructor.
+     *
+     * @param listener Listener to evaluate a multidimensional function.
+     */
+<span class="fc" id="L45">    public GradientEstimator(final MultiDimensionFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L46">        this.listener = listener;</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Returns the gradient of a multidimensional function at provided point.
+     *
+     * @param point Input point.
+     * @return Gradient.
+     * @throws EvaluationException Raised if function cannot be evaluated.
+     */
+    public double[] gradient(final double[] point) throws EvaluationException {
+<span class="fc" id="L57">        final var result = new double[point.length];</span>
+<span class="fc" id="L58">        gradient(point, result);</span>
+<span class="fc" id="L59">        return result;</span>
+    }
+
+    /**
+     * Sets estimated gradient in provided result array of a multidimensional
+     * function at provided point.
+     * This method is preferred respect to gradient(double[]) because result
+     * array can be reused and hence is more memory efficient.
+     *
+     * @param point  Input point.
+     * @param result Output parameter containing estimated array. This parameter
+     *               must be an array of length equal to point.
+     * @throws EvaluationException      Raised if function cannot be evaluated.
+     * @throws IllegalArgumentException Raised if length of result and point are
+     *                                  not equal.
+     */
+    public void gradient(final double[] point, final double[] result) throws EvaluationException {
+<span class="fc" id="L76">        final var length = point.length;</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (result.length != length) {</span>
+<span class="nc" id="L78">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">        if (xh == null || xh.length != length) {</span>
+<span class="fc" id="L82">            xh = new double[length];</span>
+        }
+<span class="fc" id="L84">        System.arraycopy(point, 0, xh, 0, length);</span>
+
+        double temp;
+        double h;
+        double fh;
+<span class="fc" id="L89">        final var fold = listener.evaluate(point);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for (var j = 0; j &lt; length; j++) {</span>
+<span class="fc" id="L91">            temp = point[j];</span>
+<span class="fc" id="L92">            h = EPS * Math.abs(temp);</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (h == 0.0) {</span>
+<span class="nc" id="L94">                h = EPS;</span>
+            }
+<span class="fc" id="L96">            xh[j] = temp + h;</span>
+<span class="fc" id="L97">            h = xh[j] - temp;</span>
+<span class="fc" id="L98">            fh = listener.evaluate(xh);</span>
+<span class="fc" id="L99">            xh[j] = temp;</span>
+<span class="fc" id="L100">            result[j] = (fh - fold) / h;</span>
+        }
+<span class="fc" id="L102">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

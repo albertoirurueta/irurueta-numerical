@@ -1,0 +1,48 @@
+<svg viewBox="0 0 640 560" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .contour { fill:none; stroke:#94a3b8; stroke-width:1.25; }
+    .zigzag { fill:none; stroke:#2563eb; stroke-width:2; }
+    .pt { fill:#ffffff; stroke:#2563eb; stroke-width:2; }
+    .lbl { fill:#334155; font-size:13px; }
+    .cap { fill:#0f172a; font-size:15px; font-weight:600; }
+    .note { fill:#334155; font-size:12.5px; }
+    .panel-card { fill:none; stroke:#e2e8f0; stroke-width:1.5; }
+    .right-angle { fill:none; stroke:#334155; stroke-width:1.25; }
+  </style>
+
+  <text class="cap" x="20" y="26">(a) steepest descent in a long, narrow valley</text>
+
+  <g transform="translate(20,40)">
+    <g transform="rotate(-28 560 90)">
+      <ellipse class="contour" cx="560" cy="90" rx="430" ry="150"/>
+      <ellipse class="contour" cx="560" cy="90" rx="330" ry="110"/>
+      <ellipse class="contour" cx="560" cy="90" rx="230" ry="75"/>
+      <ellipse class="contour" cx="560" cy="90" rx="130" ry="42"/>
+      <ellipse class="contour" cx="560" cy="90" rx="45" ry="15"/>
+    </g>
+
+    <path class="zigzag" d="M 120 290 L 300 240 L 250 175 L 420 150 L 390 105 L 500 95 L 480 72 L 560 90"/>
+    <circle class="pt" cx="120" cy="290" r="5"/>
+    <circle cx="560" cy="90" r="4" fill="#2563eb" stroke="none"/>
+    <rect class="panel-card" x="365" y="80" width="70" height="60" stroke="#f97316" stroke-dasharray="4 3"/>
+
+    <text class="lbl" x="80" y="312">start</text>
+    <text class="lbl" x="566" y="82">minimum</text>
+    <text class="note" x="0" y="196">many perpendicular</text>
+    <text class="note" x="0" y="212">sweeps are needed to</text>
+    <text class="note" x="0" y="228">cross a narrow valley</text>
+  </g>
+
+  <text class="cap" x="20" y="405">(b) each new direction is perpendicular to the last</text>
+  <g transform="translate(20,425)">
+    <rect class="panel-card" x="0" y="0" width="220" height="95" rx="8" stroke="#f97316"/>
+    <line class="zigzag" x1="25" y1="75" x2="115" y2="30"/>
+    <line class="zigzag" x1="115" y1="30" x2="155" y2="80"/>
+    <path class="right-angle" d="M 105 38 L 113 42 L 109 50"/>
+    <circle class="pt" cx="25" cy="75" r="3.5"/>
+    <circle class="pt" cx="115" cy="30" r="3.5"/>
+    <circle class="pt" cx="155" cy="80" r="3.5"/>
+  </g>
+  <text class="note" x="260" y="450">exact line search along one direction leaves the gradient there</text>
+  <text class="note" x="260" y="467">perpendicular to it, so the very next step must turn 90&#176;</text>
+</svg>

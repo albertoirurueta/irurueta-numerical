@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrapezoidalQuadrature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">TrapezoidalQuadrature.java</span></div><h1>TrapezoidalQuadrature.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Implementation of quadrature using trapezoidal algorithm.
+ * This implementation is suitable for non-improper integrands, which consist
+ * of functions with not known singularities that can be evaluated on all the integration
+ * interval, which must be finite.
+ */
+public class TrapezoidalQuadrature extends Quadrature {
+
+   /**
+    * Lower limit of integration.
+    */
+   private final double a;
+
+   /**
+    * Upper limit of integration.
+    */
+   private final double b;
+
+   /**
+    * Current value of integral.
+    */
+   private double s;
+
+   /**
+    * Listener to evaluate single dimension functions at required points.
+    */
+   private final SingleDimensionFunctionEvaluatorListener listener;
+
+   /**
+    * Constructor.
+    *
+    * @param a Lower limit of integration.
+    * @param b Upper limit of integration.
+    * @param listener listener to evaluate a single dimension function at required points.
+    */
+   public TrapezoidalQuadrature(
+<span class="fc" id="L57">           final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {</span>
+<span class="fc" id="L58">      this.n = 0;</span>
+<span class="fc" id="L59">      this.a = a;</span>
+<span class="fc" id="L60">      this.b = b;</span>
+<span class="fc" id="L61">      this.s = 0;</span>
+<span class="fc" id="L62">      this.listener = listener;</span>
+<span class="fc" id="L63">   }</span>
+
+   /**
+    * Gets lower limit of integration.
+    *
+    * @return lower limit of integration.
+    */
+   public double getA() {
+<span class="nc" id="L71">      return a;</span>
+   }
+
+   /**
+    * Gets upper limit of integration.
+    *
+    * @return upper limit of integration.
+    */
+   public double getB() {
+<span class="nc" id="L80">      return b;</span>
+   }
+
+   /**
+    * Gets current value of integral.
+    * @return current value of integral.
+    */
+   public double getS() {
+<span class="nc" id="L88">      return s;</span>
+   }
+
+   /**
+    * Returns the value of the integral at the nth stage of refinement.
+    *
+    * @return the value of the integral at the nth stage of refinement.
+    * @throws EvaluationException Raised if something failed during the evaluation.
+    */
+   @Override
+   public double next() throws EvaluationException {
+      double x;
+      double tnm;
+      double sum;
+      double del;
+      int it;
+      int j;
+<span class="fc" id="L105">      n++;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">      if (n == 1) {</span>
+<span class="fc" id="L107">         s = 0.5 * (b - a) * (listener.evaluate(a) + listener.evaluate(b));</span>
+<span class="fc" id="L108">         return s;</span>
+      } else {
+<span class="fc bfc" id="L110" title="All 2 branches covered.">         for (it = 1, j = 1; j &lt; n - 1; j++) {</span>
+<span class="fc" id="L111">            it &lt;&lt;= 1;</span>
+         }
+<span class="fc" id="L113">         tnm = it;</span>
+         // This is the spacing of the points to be added
+<span class="fc" id="L115">         del = (b - a) / tnm;</span>
+<span class="fc" id="L116">         x = a + 0.5 * del;</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">         for (sum = 0.0, j = 0; j &lt; it; j++, x += del) {</span>
+<span class="fc" id="L118">            sum += listener.evaluate(x);</span>
+         }
+         // This replaces s by its refined value
+<span class="fc" id="L121">         s = 0.5 * (s + (b - a) * sum / tnm);</span>
+<span class="fc" id="L122">         return s;</span>
+      }
+   }
+
+   /**
+    * Gets type of quadrature.
+    *
+    * @return type of quadrature.
+    */
+   @Override
+   public QuadratureType getType() {
+<span class="fc" id="L133">      return QuadratureType.TRAPEZOIDAL;</span>
+   }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

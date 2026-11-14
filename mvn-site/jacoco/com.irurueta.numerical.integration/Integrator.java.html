@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Integrator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">Integrator.java</span></div><h1>Integrator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+
+/**
+ * Integrates single dimension functions over a specified interval.
+ */
+<span class="fc" id="L23">public abstract class Integrator {</span>
+
+    /**
+     * Default integrator type. Picks the safest option when no prior knowledge about the integrand
+     * is known.
+     */
+<span class="fc" id="L29">    public static final IntegratorType DEFAULT_INTEGRATOR_TYPE = IntegratorType.ROMBERG;</span>
+
+    /**
+     * Default quadrature type. Picks the safest option when no prior knowledge about the integrand
+     * is known.
+     */
+<span class="fc" id="L35">    public static final QuadratureType DEFAULT_QUADRATURE_TYPE = QuadratureType.TRAPEZOIDAL;</span>
+
+    /**
+     * Gets type of integrator.
+     *
+     * @return type of integrator.
+     */
+    public abstract IntegratorType getIntegratorType();
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    public abstract QuadratureType getQuadratureType();
+
+    /**
+     * Integrates function between provided lower and upper limits.
+     *
+     * @return result of integration.
+     * @throws IntegrationException if integration fails for numerical reasons.
+     */
+    public abstract double integrate() throws IntegrationException;
+
+    /**
+     * Creates an integrator using provided integrator and quadrature types.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type for Romberg's integration method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param eps            required accuracy.
+     * @param integratorType integrator type.
+     * @param quadratureType quadrature type.
+     * @return created integrator.
+     * @throws IllegalArgumentException if provided quadrature type is not supported for required
+     *                                  integrator type.
+     */
+    public static Integrator create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final IntegratorType integratorType, final QuadratureType quadratureType) {
+<span class="fc bfc" id="L77" title="All 3 branches covered.">        return switch (integratorType) {</span>
+<span class="fc" id="L78">            case ROMBERG -&gt; RombergIntegrator.create(a, b, listener, eps, quadratureType);</span>
+<span class="fc" id="L79">            case SIMPSON -&gt; SimpsonIntegrator.create(a, b, listener, eps, quadratureType);</span>
+<span class="fc" id="L80">            default -&gt; QuadratureIntegrator.create(a, b, listener, eps, quadratureType);</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using provided integrator and quadrature types with default accuracy.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type for Romberg's integration method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param integratorType integrator type.
+     * @param quadratureType quadrature type.
+     * @return created integrator.
+     * @throws IllegalArgumentException if provided quadrature type is not supported for required
+     *                                  integrator type.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public static Integrator create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
+            final IntegratorType integratorType, final QuadratureType quadratureType) {
+<span class="fc bfc" id="L102" title="All 3 branches covered.">        return switch (integratorType) {</span>
+<span class="fc" id="L103">            case ROMBERG -&gt; RombergIntegrator.create(a, b, listener, quadratureType);</span>
+<span class="fc" id="L104">            case SIMPSON -&gt; SimpsonIntegrator.create(a, b, listener, quadratureType);</span>
+<span class="fc" id="L105">            default -&gt; QuadratureIntegrator.create(a, b, listener, quadratureType);</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using provided integrator type and using default quadrature type.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type for Romberg's integration method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param eps            required accuracy.
+     * @param integratorType integrator type.
+     * @return created integrator.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    public static Integrator create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps,
+            final IntegratorType integratorType) {
+<span class="fc bfc" id="L125" title="All 3 branches covered.">        return switch (integratorType) {</span>
+<span class="fc" id="L126">            case ROMBERG -&gt; RombergIntegrator.create(a, b, listener, eps);</span>
+<span class="fc" id="L127">            case SIMPSON -&gt; SimpsonIntegrator.create(a, b, listener, eps);</span>
+<span class="fc" id="L128">            default -&gt; QuadratureIntegrator.create(a, b, listener, eps);</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using provided integrator type with default accuracy and using default
+     * quadrature type.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type for Romberg's integration method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param integratorType integrator type.
+     * @return created integrator.
+     */
+    public static Integrator create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener,
+            final IntegratorType integratorType) {
+<span class="fc bfc" id="L147" title="All 3 branches covered.">        return switch (integratorType) {</span>
+<span class="fc" id="L148">            case ROMBERG -&gt; RombergIntegrator.create(a, b, listener);</span>
+<span class="fc" id="L149">            case SIMPSON -&gt; SimpsonIntegrator.create(a, b, listener);</span>
+<span class="fc" id="L150">            default -&gt; QuadratureIntegrator.create(a, b, listener);</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using default integrator and quadrature types.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type for Romberg's integration method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param eps            required accuracy.
+     * @return created integrator.
+     */
+    public static Integrator create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+<span class="fc" id="L167">        return create(a, b, listener, eps, DEFAULT_INTEGRATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an integrator using default integrator and quadrature types with default accuracy.
+     * It must be noticed that upper limit of integration is ignored when using exponential
+     * mid-point quadrature type for Romberg's integration method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @return created integrator.
+     */
+    public static Integrator create(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L182">        return create(a, b, listener, DEFAULT_INTEGRATOR_TYPE);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

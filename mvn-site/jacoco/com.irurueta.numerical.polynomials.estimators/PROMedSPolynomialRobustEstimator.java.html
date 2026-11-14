@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSPolynomialRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">PROMedSPolynomialRobustEstimator.java</span></div><h1>PROMedSPolynomialRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+import com.irurueta.numerical.LockedException;
+import com.irurueta.numerical.NotReadyException;
+import com.irurueta.numerical.polynomials.Polynomial;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best polynomial using PROMedS algorithm.
+ */
+public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-6;
+
+    /**
+     * Minimum allowed stop threshold value
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results
+     */
+    private double stopThreshold;
+
+    /**
+     * Quality scores corresponding to each provided polynomial evaluation.
+     * The larger the score value the better the quality of the sample.
+     */
+    private double[] qualityScores;
+
+    /**
+     * Constructor.
+     */
+    public PROMedSPolynomialRobustEstimator() {
+<span class="fc" id="L86">        super();</span>
+<span class="fc" id="L87">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree degree of polynomial to be estimated.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public PROMedSPolynomialRobustEstimator(final int degree) {
+<span class="fc" id="L97">        super(degree);</span>
+<span class="fc" id="L98">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    public PROMedSPolynomialRobustEstimator(final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L109">        super(evaluations);</span>
+<span class="fc" id="L110">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROMedSPolynomialRobustEstimator(final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L120">        super(listener);</span>
+<span class="fc" id="L121">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    public PROMedSPolynomialRobustEstimator(final int degree, final List&lt;PolynomialEvaluation&gt; evaluations) {
+<span class="fc" id="L134">        super(degree, evaluations);</span>
+<span class="fc" id="L135">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree   degree of polynomial to be estimated.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1.
+     */
+    public PROMedSPolynomialRobustEstimator(final int degree, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L147">        super(degree, listener);</span>
+<span class="fc" id="L148">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided number of evaluations is
+     *                                  less than the required minimum.
+     */
+    public PROMedSPolynomialRobustEstimator(
+            final List&lt;PolynomialEvaluation&gt; evaluations, final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L162">        super(evaluations, listener);</span>
+<span class="fc" id="L163">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param degree      degree of polynomial to be estimated.
+     * @param evaluations collection of polynomial evaluations.
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided degree is less than 1 or if
+     *                                  provided number of evaluations is less than the required minimum for
+     *                                  provided degree.
+     */
+    public PROMedSPolynomialRobustEstimator(
+            final int degree, final List&lt;PolynomialEvaluation&gt; evaluations,
+            final PolynomialRobustEstimatorListener listener) {
+<span class="fc" id="L180">        super(degree, evaluations, listener);</span>
+<span class="fc" id="L181">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L204">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached
+     * @throws IllegalArgumentException if provided value is zero or negative
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L231">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L234">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L237">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L238">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point
+     *
+     * @return quality scores corresponding to each point
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L248">        return qualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point.
+     *
+     * @param qualityScores quality scores corresponding to each point.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than required minimum size.
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L264">            throw new LockedException();</span>
+        }
+<span class="fc" id="L266">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L267">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the polynomial estimation.
+     * This is true when input data (i.e. polynomial evaluations and quality
+     * scores) are provided and enough data is available.
+     *
+     * @return true if estimator is ready, false otherwise
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L278" title="1 of 6 branches missed.">        return super.isReady() &amp;&amp; qualityScores != null &amp;&amp; qualityScores.length == evaluations.size();</span>
+    }
+
+    /**
+     * Estimates polynomial.
+     *
+     * @return estimated polynomial.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any other reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Polynomial estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L295">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L298">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L301">        final PROMedSRobustEstimator&lt;Polynomial&gt; innerEstimator = new PROMedSRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L302">                new PROMedSRobustEstimatorListener&lt;&gt;() {</span>
+
+                    // subset of evaluations picked on each iteration
+<span class="fc" id="L305">                    private final List&lt;PolynomialEvaluation&gt; subsetEvaluations = new ArrayList&lt;&gt;();</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L309">                        return stopThreshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L314">                        return evaluations.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L319">                        return polynomialEstimator.getMinNumberOfEvaluations();</span>
+                    }
+
+                    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;Polynomial&gt; solutions) {
+<span class="fc" id="L326">                        subsetEvaluations.clear();</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">                        for (var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L328">                            subsetEvaluations.add(evaluations.get(samplesIndex));</span>
+                        }
+
+                        try {
+<span class="fc" id="L332">                            polynomialEstimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L333">                            polynomialEstimator.setEvaluations(subsetEvaluations);</span>
+
+<span class="fc" id="L335">                            final var polynomial = polynomialEstimator.estimate();</span>
+<span class="fc" id="L336">                            solutions.add(polynomial);</span>
+<span class="fc" id="L337">                        } catch (final Exception e) {</span>
+                            // if anything fails, no solution is added
+<span class="fc" id="L339">                        }</span>
+<span class="fc" id="L340">                    }</span>
+
+                    @Override
+                    public double computeResidual(final Polynomial currentEstimation, int i) {
+<span class="fc" id="L344">                        final var eval = evaluations.get(i);</span>
+<span class="fc" id="L345">                        return getDistance(eval, currentEstimation);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L350">                        return PROMedSPolynomialRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L356">                            listener.onEstimateStart(PROMedSPolynomialRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L358">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;Polynomial&gt; estimator) {
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L363">                            listener.onEstimateEnd(PROMedSPolynomialRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L365">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;Polynomial&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L371">                            listener.onEstimateNextIteration(PROMedSPolynomialRobustEstimator.this, iteration);</span>
+                        }
+<span class="fc" id="L373">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;Polynomial&gt; estimator, final float progress) {
+<span class="nc bnc" id="L378" title="All 2 branches missed.">                        if (listener != null) {</span>
+<span class="nc" id="L379">                            listener.onEstimateProgressChange(PROMedSPolynomialRobustEstimator.this, progress);</span>
+                        }
+<span class="nc" id="L381">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L385">                        return qualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L390">            locked = true;</span>
+<span class="fc" id="L391">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L392">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L393">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L394">            return innerEstimator.estimate();</span>
+        } finally {
+<span class="fc" id="L396">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L407">        return RobustEstimatorMethod.PROMEDS;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each provided polynomial evaluation.
+     * This method is used internally and does not check whether instance is
+     * locked or not
+     *
+     * @param qualityScores quality scores to be set
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than required minimum size.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        if (qualityScores.length &lt; polynomialEstimator.getMinNumberOfEvaluations()) {</span>
+<span class="fc" id="L421">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L424">        this.qualityScores = qualityScores;</span>
+<span class="fc" id="L425">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

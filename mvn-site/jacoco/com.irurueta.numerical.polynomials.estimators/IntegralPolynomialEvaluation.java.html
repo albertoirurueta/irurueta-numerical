@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntegralPolynomialEvaluation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.polynomials.estimators</a> &gt; <span class="el_source">IntegralPolynomialEvaluation.java</span></div><h1>IntegralPolynomialEvaluation.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.polynomials.estimators;
+
+/**
+ * Contains an evaluation of the nth-integral of a polynomial and the
+ * point where such integral has been evaluated.
+ */
+public class IntegralPolynomialEvaluation extends PolynomialEvaluation {
+
+    /**
+     * Minimum allowed integral order.
+     */
+    public static final int MIN_INTEGRAL_ORDER = 1;
+
+    /**
+     * Point where integral of a given order has been evaluated.
+     */
+    private double x;
+
+    /**
+     * Constant terms of integral.
+     */
+    private double[] constants;
+
+    /**
+     * Order of integral.
+     */
+    private int integralOrder;
+
+    /**
+     * Constructor.
+     */
+    public IntegralPolynomialEvaluation() {
+<span class="fc" id="L48">        super();</span>
+<span class="fc" id="L49">        setIntegralOrder(MIN_INTEGRAL_ORDER);</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x             point where integral of polynomial has been evaluated.
+     * @param evaluation    evaluation of nth-integral of polynomial at point x.
+     * @param constants     constant terms of nth-integral.
+     * @param integralOrder order of integral.
+     * @throws IllegalArgumentException if order of integral is less than 1.
+     */
+    public IntegralPolynomialEvaluation(
+            final double x, final double evaluation, final double[] constants, final int integralOrder) {
+<span class="fc" id="L63">        super(evaluation);</span>
+<span class="fc" id="L64">        this.x = x;</span>
+<span class="fc" id="L65">        this.constants = constants;</span>
+<span class="fc" id="L66">        setIntegralOrder(integralOrder);</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x          point where integral of polynomial has been evaluated.
+     * @param evaluation evaluation of nth-integral of polynomial at point x.
+     * @param constants  constant terms of nth-integral.
+     */
+    public IntegralPolynomialEvaluation(final double x, final double evaluation, final double[] constants) {
+<span class="fc" id="L77">        this(x, evaluation, constants, MIN_INTEGRAL_ORDER);</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x             point where integral of polynomial has been evaluated.
+     * @param evaluation    evaluation of nth-integral of polynomial at point x.
+     * @param integralOrder order of integral.
+     * @throws IllegalArgumentException if order of integral is less than 1.
+     */
+    public IntegralPolynomialEvaluation(final double x, final double evaluation, final int integralOrder) {
+<span class="fc" id="L89">        this(x, evaluation, null, integralOrder);</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x          point where integral of polynomial has been evaluated.
+     * @param evaluation evaluation of nth-integral of polynomial at point x.
+     */
+    public IntegralPolynomialEvaluation(final double x, final double evaluation) {
+<span class="fc" id="L99">        this(x, evaluation, null, MIN_INTEGRAL_ORDER);</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Gets point where nth-polynomial integral has been evaluated.
+     *
+     * @return point where nth-polynomial integral has been evaluated.
+     */
+    public double getX() {
+<span class="fc" id="L108">        return x;</span>
+    }
+
+    /**
+     * Sets point where nth-polynomial integral has been evaluated.
+     *
+     * @param x point where nth-polynomial integral has been evaluated.
+     */
+    public void setX(final double x) {
+<span class="fc" id="L117">        this.x = x;</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Gets constant terms of integral.
+     *
+     * @return constant terms of integral.
+     */
+    public double[] getConstants() {
+<span class="fc" id="L126">        return constants;</span>
+    }
+
+    /**
+     * Sets constant terms of integral.
+     *
+     * @param constants constant terms of integral.
+     */
+    public void setConstant(final double[] constants) {
+<span class="fc" id="L135">        this.constants = constants;</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Gets integral order.
+     *
+     * @return integral order.
+     */
+    public int getIntegralOrder() {
+<span class="fc" id="L144">        return integralOrder;</span>
+    }
+
+    /**
+     * Sets integral order.
+     *
+     * @param integralOrder integral order.
+     * @throws IllegalArgumentException if integral order is less than 1.
+     */
+    public final void setIntegralOrder(final int integralOrder) {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (integralOrder &lt; MIN_INTEGRAL_ORDER) {</span>
+<span class="fc" id="L155">            throw new IllegalArgumentException(&quot;integral order must be at least 1&quot;);</span>
+        }
+
+<span class="fc" id="L158">        this.integralOrder = integralOrder;</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * Gets type of polynomial evaluation.
+     *
+     * @return type of polynomial evaluation.
+     */
+    @Override
+    public PolynomialEvaluationType getType() {
+<span class="fc" id="L168">        return PolynomialEvaluationType.INTEGRAL_EVALUATION;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

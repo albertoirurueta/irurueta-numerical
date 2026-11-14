@@ -1,0 +1,54 @@
+<svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .panel-card { fill:none; stroke:#e2e8f0; stroke-width:1.5; }
+    .curve { fill:none; stroke:#1e293b; stroke-width:2.25; stroke-linecap:round; }
+    .axis { stroke:#94a3b8; stroke-width:1.1; }
+    .pt { fill:#2563eb; }
+    .lbl { fill:#334155; font-size:11.5px; }
+    .cap { fill:#0f172a; font-size:13px; font-weight:600; }
+    .sec { fill:#0f172a; font-size:14px; font-weight:600; }
+  </style>
+
+  <text class="sec" x="10" y="20">Quadratic: the discriminant &#916; = b&#178; - 4ac classifies the roots</text>
+  <g transform="translate(10,35)">
+    <rect class="panel-card" x="0" y="0" width="196" height="130" rx="8"/>
+    <text class="cap" x="10" y="20">&#916; &gt; 0</text>
+    <line class="axis" x1="20" y1="90" x2="176" y2="90"/>
+    <path class="curve" d="M 30 50 Q 98 210 166 50"/>
+    <circle class="pt" cx="63" cy="90" r="3.5"/>
+    <circle class="pt" cx="133" cy="90" r="3.5"/>
+    <text class="lbl" x="30" y="118">2 distinct real roots</text>
+  </g>
+  <g transform="translate(222,35)">
+    <rect class="panel-card" x="0" y="0" width="196" height="130" rx="8"/>
+    <text class="cap" x="10" y="20">&#916; = 0</text>
+    <line class="axis" x1="20" y1="90" x2="176" y2="90"/>
+    <path class="curve" d="M 30 50 Q 98 90 166 50"/>
+    <circle class="pt" cx="98" cy="90" r="3.5"/>
+    <text class="lbl" x="35" y="118">1 real double root</text>
+  </g>
+  <g transform="translate(434,35)">
+    <rect class="panel-card" x="0" y="0" width="196" height="130" rx="8"/>
+    <text class="cap" x="10" y="20">&#916; &lt; 0</text>
+    <line class="axis" x1="20" y1="90" x2="176" y2="90"/>
+    <path class="curve" d="M 30 30 Q 98 60 166 30"/>
+    <text class="lbl" x="18" y="118">2 complex conjugate roots</text>
+  </g>
+
+  <text class="sec" x="10" y="195">Cubic: the sign of h = g&#178;/4 + f&#179;/27 classifies the roots</text>
+  <g transform="translate(10,210)">
+    <rect class="panel-card" x="0" y="0" width="196" height="100" rx="8"/>
+    <text class="cap" x="10" y="20">h &#8804; 0</text>
+    <line class="axis" x1="20" y1="65" x2="176" y2="65"/>
+    <path class="curve" d="M 25 45 C 40 80, 50 95, 60 65 C 70 40, 80 25, 90 65 C 100 95, 110 95, 120 65 C 130 40, 140 25, 145 45"/>
+    <text class="lbl" x="20" y="90">3 distinct real roots</text>
+  </g>
+  <g transform="translate(222,210)">
+    <rect class="panel-card" x="0" y="0" width="196" height="100" rx="8"/>
+    <text class="cap" x="10" y="20">h &gt; 0</text>
+    <line class="axis" x1="20" y1="65" x2="176" y2="65"/>
+    <path class="curve" d="M 25 95 C 55 75, 70 68, 98 65 C 122 62, 140 50, 165 20"/>
+    <circle class="pt" cx="98" cy="65" r="3.5"/>
+    <text class="lbl" x="10" y="90">1 real root + complex pair</text>
+  </g>
+</svg>

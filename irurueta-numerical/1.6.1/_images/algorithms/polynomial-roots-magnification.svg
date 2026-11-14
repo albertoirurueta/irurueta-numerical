@@ -1,0 +1,46 @@
+<svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .panel-card { fill:none; stroke:#e2e8f0; stroke-width:1.5; }
+    .axis { stroke:#94a3b8; stroke-width:1.25; }
+    .guide { stroke:#94a3b8; stroke-width:1; stroke-dasharray:4 3; }
+    .lin { fill:none; stroke:#2563eb; stroke-width:2.25; }
+    .quad { fill:none; stroke:#f97316; stroke-width:2.25; }
+    .cub { fill:none; stroke:#16a34a; stroke-width:2.25; }
+    .pt { fill:#ffffff; stroke-width:2; }
+    .lbl { fill:#334155; font-size:12px; }
+    .cap { fill:#0f172a; font-size:14px; font-weight:600; }
+    .note { fill:#334155; font-size:11px; }
+  </style>
+
+  <!-- panel (a): at normal scale, all three look like a single simple crossing -->
+  <g transform="translate(20,20)">
+    <rect class="panel-card" x="0" y="0" width="280" height="220" rx="10"/>
+    <text class="cap" x="12" y="24">(a) normal scale</text>
+    <line class="axis" x1="20" y1="130" x2="260" y2="130"/>
+    <path class="lin" d="M 40 190 L 240 70"/>
+    <path class="quad" d="M 40 90 C 100 128, 160 128, 240 60"/>
+    <path class="cub" d="M 40 185 C 110 140, 150 120, 240 65"/>
+    <rect x="118" y="108" width="24" height="24" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="3 2"/>
+    <text class="lbl" x="150" y="172" fill="#2563eb">linear</text>
+    <text class="lbl" x="90" y="90" fill="#f97316">quadratic</text>
+    <text class="lbl" x="170" y="145" fill="#16a34a">cubic</text>
+    <text class="note" x="12" y="207">all three look like one clean crossing</text>
+  </g>
+
+  <!-- panel (b): magnifying the dashed box reveals the true root structure -->
+  <g transform="translate(340,20)">
+    <rect class="panel-card" x="0" y="0" width="280" height="220" rx="10"/>
+    <text class="cap" x="12" y="24">(b) magnified</text>
+    <line class="axis" x1="20" y1="120" x2="260" y2="120"/>
+    <path class="lin" d="M 30 155 L 250 85"/>
+    <path class="quad" d="M 30 95 C 90 130, 110 150, 140 150 C 170 150, 190 130, 250 90"/>
+    <path class="cub" d="M 30 150 C 90 118, 100 112, 140 112 C 180 112, 190 118, 250 82"/>
+    <circle class="pt" cx="140" cy="120" r="3.5" stroke="#2563eb"/>
+    <circle class="pt" cx="107" cy="120" r="3.5" stroke="#f97316"/>
+    <circle class="pt" cx="173" cy="120" r="3.5" stroke="#f97316"/>
+    <circle class="pt" cx="140" cy="112" r="3.5" stroke="#16a34a"/>
+    <text class="lbl" x="30" y="168" fill="#2563eb">linear: 1 root</text>
+    <text class="lbl" x="30" y="188" fill="#f97316">quadratic: 2 close roots, not 0</text>
+    <text class="lbl" x="30" y="208" fill="#16a34a">cubic: flat, ill-conditioned</text>
+  </g>
+</svg>

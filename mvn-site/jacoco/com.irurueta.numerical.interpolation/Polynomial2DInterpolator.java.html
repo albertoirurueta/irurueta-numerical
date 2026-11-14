@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Polynomial2DInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">Polynomial2DInterpolator.java</span></div><h1>Polynomial2DInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Interpolation in two dimensions.
+ * This implementation uses a higher order than {@link BilinearInterpolator} for accuracy reasons.
+ */
+public class Polynomial2DInterpolator {
+
+    /**
+     * Length of x1v array.
+     */
+    private final int m;
+
+    /**
+     * Length of x2v array.
+     */
+    private final int n;
+
+    /**
+     * Number of rows of sub-block of ym values to be processed.
+     */
+    private final int mm;
+
+    /**
+     * Number of columns of sub-block of ym values to be processed.
+     */
+    private final int nn;
+
+    /**
+     * Matrix of tabulated function values yij.
+     */
+    private final Matrix y;
+
+    /**
+     * Temporary array containing interpolated values in one direction.
+     */
+    private final double[] yv;
+
+    /**
+     * One dimensional interpolator for x1v.
+     */
+    private final PolynomialInterpolator x1terp;
+
+    /**
+     * One dimensional interpolator for x2v.
+     */
+    private final PolynomialInterpolator x2terp;
+
+    /**
+     * Constructor.
+     *
+     * @param x1v array of x1v.
+     * @param x2v array of x2v.
+     * @param ym  matrix of tabulated function values yij.
+     * @param mp  defines number of rows of sub-block of ym values to be processed.
+     * @param np  defined number of columns of sub-block of ym values to be processed.
+     */
+    public Polynomial2DInterpolator(final double[] x1v, final double[] x2v, final Matrix ym, final int mp,
+<span class="fc" id="L77">                                    final int np) {</span>
+<span class="fc" id="L78">        m = x1v.length;</span>
+<span class="fc" id="L79">        n = x2v.length;</span>
+<span class="fc" id="L80">        mm = mp;</span>
+<span class="fc" id="L81">        nn = np;</span>
+<span class="fc" id="L82">        y = ym;</span>
+<span class="fc" id="L83">        yv = new double[m];</span>
+        // Dummy 1-dim interpolations for their locate and hunt functions
+<span class="fc" id="L85">        x1terp = new PolynomialInterpolator(x1v, yv, mm);</span>
+<span class="fc" id="L86">        x2terp = new PolynomialInterpolator(x2v, new double[n], nn);</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param x1v array of x1v.
+     * @param x2v array of x2v.
+     * @param ym  matrix of tabulated function values yij.
+     */
+    public Polynomial2DInterpolator(final double[] x1v, final double[] x2v, final Matrix ym) {
+<span class="fc" id="L97">        this(x1v, x2v, ym, x1v.length, x2v.length);</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Gets length of x1v array.
+     *
+     * @return length of x1v array.
+     */
+    public int getM() {
+<span class="fc" id="L106">        return m;</span>
+    }
+
+    /**
+     * Gets length of x2v array.
+     *
+     * @return length of x2v array.
+     */
+    public int getN() {
+<span class="fc" id="L115">        return n;</span>
+    }
+
+    /**
+     * Gets number of rows of sub-block of ym values to be processed.
+     *
+     * @return number of rows of sub-block of ym values to be processed.
+     */
+    public int getMm() {
+<span class="fc" id="L124">        return mm;</span>
+    }
+
+    /**
+     * Gets number of columns of sub-block of ym values to be processed.
+     *
+     * @return number of columns of sub-block of ym values to be processed.
+     */
+    public int getNn() {
+<span class="fc" id="L133">        return nn;</span>
+    }
+
+    /**
+     * Given values x1p an x2p, returns an interpolated value.
+     *
+     * @param x1p x1p value where interpolation is estimated.
+     * @param x2p x2p value where interpolation is estimated.
+     * @return interpolated value.
+     * @throws InterpolationException if interpolation fails.
+     */
+    public double interpolate(final double x1p, final double x2p) throws InterpolationException {
+        try {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">            final var i = x1terp.cor != 0 ? x1terp.hunt(x1p) : x1terp.locate(x1p);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            final var j = x2terp.cor != 0 ? x2terp.hunt(x2p) : x2terp.locate(x2p);</span>
+            int k;
+
+            // Find grid block
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            for (k = i; k &lt; i + mm; k++) {</span>
+                // &quot;mm&quot; interpolations in the x2 direction.
+                // copy k-row of matrix y
+<span class="fc" id="L154">                y.getSubmatrixAsArray(k, 0, k, y.getColumns() - 1, x2terp.yy);</span>
+<span class="fc" id="L155">                yv[k] = x2terp.rawinterp(j, x2p);</span>
+            }
+
+            // A final interpolation in the x1 direction.
+<span class="fc" id="L159">            return x1terp.rawinterp(i, x1p);</span>
+<span class="nc" id="L160">        } catch (final WrongSizeException e) {</span>
+<span class="nc" id="L161">            throw new InterpolationException(e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

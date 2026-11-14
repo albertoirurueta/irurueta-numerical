@@ -1,0 +1,85 @@
+<svg viewBox="0 0 640 460" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <!--
+    House style for irurueta-numerical algorithm illustrations (original redraws, not copies):
+    - curve:      #1e293b (slate-800), stroke-width 2.5
+    - axis/grid:  #94a3b8 (slate-400), stroke-width 1.25
+    - guide/dash: #94a3b8 (slate-400), stroke-width 1, dash 4 3
+    - highlight:  #2563eb (blue-600), accepted / valid bracket, current best point
+    - danger:     #dc2626 (red-600), failure mode, non-root sign change, divergence
+    - point fill: #ffffff, stroke matches series color, r=4
+    - panel card: stroke #e2e8f0 (slate-200), rx=10, fill none
+    - label text: #334155 (slate-700), 13px; panel caption: #0f172a, 14px font-weight 600
+  -->
+  <style>
+    .panel-card { fill:none; stroke:#e2e8f0; stroke-width:1.5; }
+    .curve { fill:none; stroke:#1e293b; stroke-width:2.5; stroke-linecap:round; }
+    .axis { stroke:#94a3b8; stroke-width:1.25; }
+    .guide { stroke:#94a3b8; stroke-width:1; stroke-dasharray:4 3; }
+    .highlight { stroke:#2563eb; }
+    .danger { stroke:#dc2626; }
+    .pt { fill:#ffffff; stroke-width:2; }
+    .lbl { fill:#334155; font-size:13px; }
+    .cap { fill:#0f172a; font-size:14px; font-weight:600; }
+  </style>
+
+  <!-- panel (a): isolated root cleanly bracketed -->
+  <g transform="translate(20,30)">
+    <rect class="panel-card" x="0" y="0" width="280" height="180" rx="10"/>
+    <text class="cap" x="12" y="24">(a) isolated root</text>
+    <line class="axis" x1="20" y1="110" x2="260" y2="110"/>
+    <path class="curve" d="M 30 145 C 80 138, 110 118, 130 110 C 155 100, 190 58, 250 28"/>
+    <line class="guide" x1="130" y1="110" x2="130" y2="158"/>
+    <circle class="pt highlight" cx="130" cy="110" r="4"/>
+    <circle class="pt" cx="30" cy="145" r="4" stroke="#1e293b"/>
+    <circle class="pt" cx="250" cy="28" r="4" stroke="#1e293b"/>
+    <text class="lbl" x="22" y="165">a</text>
+    <text class="lbl" x="242" y="165">b</text>
+    <text class="lbl" x="118" y="172" fill="#2563eb">x&#8321;</text>
+  </g>
+
+  <!-- panel (b): same-sign endpoints hiding two roots -->
+  <g transform="translate(340,30)">
+    <rect class="panel-card" x="0" y="0" width="280" height="180" rx="10"/>
+    <text class="cap" x="12" y="24">(b) hidden root pair</text>
+    <line class="axis" x1="20" y1="110" x2="260" y2="110"/>
+    <path class="curve" d="M 30 60 C 60 78, 80 98, 95 110 C 112 124, 118 150, 130 152 C 142 150, 148 124, 165 110 C 180 98, 200 78, 250 60"/>
+    <line class="guide" x1="95" y1="110" x2="95" y2="130"/>
+    <line class="guide" x1="165" y1="110" x2="165" y2="130"/>
+    <circle class="pt highlight" cx="95" cy="110" r="4"/>
+    <circle class="pt highlight" cx="165" cy="110" r="4"/>
+    <circle class="pt" cx="30" cy="60" r="4" stroke="#1e293b"/>
+    <circle class="pt" cx="250" cy="60" r="4" stroke="#1e293b"/>
+    <text class="lbl" x="22" y="165">a</text>
+    <text class="lbl" x="242" y="165">b</text>
+    <text class="lbl" x="105" y="145" fill="#2563eb" font-size="11">2 roots, same sign</text>
+  </g>
+
+  <!-- panel (c): oscillatory pathological function, many roots -->
+  <g transform="translate(20,240)">
+    <rect class="panel-card" x="0" y="0" width="280" height="190" rx="10"/>
+    <text class="cap" x="12" y="24">(c) many roots (choppy)</text>
+    <line class="axis" x1="20" y1="120" x2="260" y2="120"/>
+    <path class="curve" d="M 30 60 C 45 100, 55 140, 65 120 C 75 100, 85 60, 95 100
+                           C 100 130, 108 150, 118 120 C 126 95, 132 70, 142 100
+                           C 150 125, 158 145, 168 120 C 176 98, 184 75, 194 105
+                           C 202 128, 210 145, 220 120 C 228 100, 236 82, 250 108"/>
+    <text class="lbl" x="55" y="150" font-size="11">a</text>
+    <text class="lbl" x="235" y="150" font-size="11">b</text>
+    <text class="lbl" x="70" y="178" fill="#2563eb" font-size="11">many crossings inside one bracket</text>
+  </g>
+
+  <!-- panel (d): singularity mistaken for a root -->
+  <g transform="translate(340,240)">
+    <rect class="panel-card" x="0" y="0" width="280" height="190" rx="10"/>
+    <text class="cap" x="12" y="24">(d) singularity, not a root</text>
+    <line class="axis" x1="20" y1="120" x2="260" y2="120"/>
+    <line class="guide danger" x1="150" y1="20" x2="150" y2="165"/>
+    <path class="curve" d="M 30 128 C 90 133, 125 138, 145 150 C 148 152, 150 160, 150 165"/>
+    <path class="curve" d="M 155 75 C 155 70, 157 50, 165 40 C 190 20, 230 15, 250 12"/>
+    <circle class="pt" cx="30" cy="128" r="4" stroke="#1e293b"/>
+    <circle class="pt" cx="250" cy="12" r="4" stroke="#1e293b"/>
+    <text class="lbl" x="22" y="150" font-size="11">a</text>
+    <text class="lbl" x="235" y="150" font-size="11">b</text>
+    <text class="lbl" x="158" y="180" fill="#dc2626" font-size="11">pole: sign changes, no root</text>
+  </g>
+</svg>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShepardInterpolator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.interpolation</a> &gt; <span class="el_source">ShepardInterpolator.java</span></div><h1>ShepardInterpolator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.interpolation;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Interpolates sparsely defined points of dimension &quot;dim&quot; using Shepard interpolation, which is
+ * a simplification of Radial Basis Function interpolation that achieves less accurate results but
+ * having less computational cost.
+ */
+public class ShepardInterpolator extends BaseRadialBasisFunctionInterpolator {
+    /**
+     * Values of function at provided points. Must have the same length as the number of rows of
+     * provided points matrix.
+     */
+    private final double[] vals;
+
+    /**
+     * Negative value of p parameter controlling Shepard power-law function phi(r) = r^-p.
+     * Typically, p lies between 1 and 3.
+     */
+    private final double pneg;
+
+    /**
+     * Constructor.
+     *
+     * @param ptss  Matrix containing points to interpolate from. Each row contains one point.
+     *              Matrix will have n points (rows) having a dimension (columns) equal to dim.
+     * @param valss values of function at provided points. Must have the same length as the number
+     *              of rows of provided points matrix.
+     * @param p     p parameter controlling Shepard power-law function phi(r) = r^-p. Typically, p
+     *              lies between 1 and 3.
+     * @throws IllegalArgumentException if provided values array does not match the number of
+     *                                  points (rows) in provided matrix.
+     */
+    public ShepardInterpolator(final Matrix ptss, final double[] valss, final double p) {
+<span class="fc" id="L52">        super(ptss);</span>
+
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (valss.length != n) {</span>
+<span class="nc" id="L55">            throw new IllegalArgumentException(&quot;wrong length of values&quot;);</span>
+        }
+
+<span class="fc" id="L58">        vals = valss;</span>
+<span class="fc" id="L59">        pneg = -p;</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Constructor using default p parameter, which is equal to 2.0.
+     *
+     * @param ptss  Matrix containing points to interpolate from. Each row contains one point.
+     *              Matrix will have n points (rows) having a dimension (columns) equal to dim.
+     * @param valss values of function at provided points. Must have the same length as the number
+     *              of rows of provided points matrix.
+     * @throws IllegalArgumentException if provided values array does not match the number of
+     *                                  points (rows) in provided matrix.
+     */
+    public ShepardInterpolator(final Matrix ptss, final double[] valss) {
+<span class="fc" id="L73">        this(ptss, valss, 2.0);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Returns the interpolated function value at a dim-dimensional point pt.
+     *
+     * @param pt dim-dimensional point where interpolation must be computed.
+     * @return result of interpolation.
+     * @throws IllegalArgumentException if provided point has an invalid length.
+     */
+    public double interpolate(final double[] pt) {
+        double r;
+        double w;
+<span class="fc" id="L86">        var sum = 0.0;</span>
+<span class="fc" id="L87">        var sumw = 0.0;</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (pt.length != dim) {</span>
+<span class="nc" id="L89">            throw new IllegalArgumentException(&quot;Wrong point length&quot;);</span>
+        }
+
+        try {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for (var i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L94">                final var endCol = dim - 1;</span>
+<span class="fc" id="L95">                pts.getSubmatrixAsArray(i, 0, i, endCol, pi);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                if ((r = rad(pt, pi)) == 0.0) return vals[i];</span>
+<span class="fc" id="L97">                sum += (w = Math.pow(r, pneg));</span>
+<span class="fc" id="L98">                sumw += w * vals[i];</span>
+            }
+<span class="nc" id="L100">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L102">        }</span>
+
+<span class="fc" id="L104">        return sumw / sum;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

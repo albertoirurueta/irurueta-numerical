@@ -1,0 +1,76 @@
+<svg viewBox="0 0 640 580" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .curve { fill:none; stroke:#1e293b; stroke-width:2.5; stroke-linecap:round; }
+    .area { fill:#2563eb; opacity:0.08; stroke:none; }
+    .axis { stroke:#94a3b8; stroke-width:1.25; }
+    .tick { stroke:#94a3b8; stroke-width:1; }
+    .bracket { fill:none; stroke:#334155; stroke-width:1.25; }
+    .pt { fill:#1e293b; }
+    .ptopen { fill:#2563eb; }
+    .lbl { fill:#334155; font-size:12.5px; }
+    .cap { fill:#0f172a; font-size:15px; font-weight:600; }
+    .note { fill:#334155; font-size:12px; }
+  </style>
+
+  <text class="cap" x="20" y="26">(a) closed vs. open quadrature formulas</text>
+  <g transform="translate(20,40)">
+    <path class="area" d="M 40 140 C 100 60, 160 50, 220 70 C 280 90, 340 40, 400 60 C 440 75, 460 90, 480 100 L 480 160 L 40 160 Z"/>
+    <path class="curve" d="M 40 140 C 100 60, 160 50, 220 70 C 280 90, 340 40, 400 60 C 440 75, 460 90, 480 100"/>
+    <line class="axis" x1="30" y1="160" x2="490" y2="160"/>
+
+    <line class="tick" x1="40" y1="140" x2="40" y2="160"/>
+    <line class="tick" x1="128" y1="63" x2="128" y2="160"/>
+    <line class="tick" x1="216" y1="72" x2="216" y2="160"/>
+    <line class="tick" x1="304" y1="65" x2="304" y2="160"/>
+    <line class="tick" x1="392" y1="55" x2="392" y2="160"/>
+    <line class="tick" x1="480" y1="100" x2="480" y2="160"/>
+
+    <circle class="pt" cx="40" cy="140" r="4"/>
+    <circle class="pt" cx="128" cy="63" r="4"/>
+    <circle class="pt" cx="216" cy="72" r="4"/>
+    <circle class="pt" cx="304" cy="65" r="4"/>
+    <circle class="pt" cx="392" cy="55" r="4"/>
+    <circle class="pt" cx="480" cy="100" r="4"/>
+
+    <text class="lbl" x="32" y="178">x0</text>
+    <text class="lbl" x="120" y="178">x1</text>
+    <text class="lbl" x="208" y="178">x2</text>
+    <text class="lbl" x="296" y="178">x3</text>
+    <text class="lbl" x="382" y="178">x4</text>
+    <text class="lbl" x="468" y="178">x5</text>
+
+    <path class="bracket" d="M 40 198 L 40 205 L 480 205 L 480 198"/>
+    <text class="lbl" x="150" y="220">closed formulas use these points (incl. endpoints)</text>
+
+    <path class="bracket" d="M 128 232 L 128 239 L 392 239 L 392 232"/>
+    <text class="lbl" x="175" y="254" fill="#2563eb">open formulas use only these points</text>
+  </g>
+
+  <text class="cap" x="20" y="330">(b) successive refinement reuses every previous evaluation</text>
+  <g transform="translate(20,345)">
+    <text class="lbl" x="0" y="14">N=1</text>
+    <line class="axis" x1="60" y1="10" x2="520" y2="10"/>
+    <circle class="pt" cx="60" cy="10" r="4"/><circle class="pt" cx="520" cy="10" r="4"/>
+
+    <text class="lbl" x="0" y="54">N=2</text>
+    <line class="axis" x1="60" y1="50" x2="520" y2="50"/>
+    <circle class="pt" cx="60" cy="50" r="4"/><circle class="pt" cx="520" cy="50" r="4"/>
+    <circle class="ptopen" cx="290" cy="50" r="4.5"/>
+
+    <text class="lbl" x="0" y="94">N=3</text>
+    <line class="axis" x1="60" y1="90" x2="520" y2="90"/>
+    <circle class="pt" cx="60" cy="90" r="4"/><circle class="pt" cx="290" cy="90" r="4"/><circle class="pt" cx="520" cy="90" r="4"/>
+    <circle class="ptopen" cx="175" cy="90" r="4.5"/><circle class="ptopen" cx="405" cy="90" r="4.5"/>
+
+    <text class="lbl" x="0" y="134">N=4</text>
+    <line class="axis" x1="60" y1="130" x2="520" y2="130"/>
+    <circle class="pt" cx="60" cy="130" r="4"/><circle class="pt" cx="175" cy="130" r="4"/><circle class="pt" cx="290" cy="130" r="4"/><circle class="pt" cx="405" cy="130" r="4"/><circle class="pt" cx="520" cy="130" r="4"/>
+    <circle class="ptopen" cx="117.5" cy="130" r="4.5"/><circle class="ptopen" cx="232.5" cy="130" r="4.5"/><circle class="ptopen" cx="347.5" cy="130" r="4.5"/><circle class="ptopen" cx="462.5" cy="130" r="4.5"/>
+
+    <circle class="pt" cx="560" cy="165" r="4"/><text class="lbl" x="570" y="169">already evaluated</text>
+    <circle class="ptopen" cx="560" cy="185" r="4.5"/><text class="lbl" x="570" y="189" fill="#2563eb">newly evaluated this stage</text>
+
+    <text class="note" x="0" y="165">Doubling the number of intervals only requires evaluating the function at the</text>
+    <text class="note" x="0" y="182">new midpoints &#8212; every previous evaluation is kept and reused.</text>
+  </g>
+</svg>
