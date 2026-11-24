@@ -59,6 +59,18 @@ class SimpsonMidPointQuadratureIntegratorTest {
      */
     private static final double EPS_EXPONENTIAL = 1e-8;
 
+    /**
+     * Minimum absolute value of lambda used in the small lambda (near-constant integrand) exponential test.
+     */
+    private static final double MIN_SMALL_LAMBDA = 1e-6;
+
+    /**
+     * Minimum distance between the root of the first degree polynomial and the middle of the integration interval,
+     * so that the expected integral is not close to zero (the relative convergence criterion of the integrator
+     * cannot be met for integrals close to zero).
+     */
+    private static final double MIN_ROOT_DISTANCE = 1.0;
+
     private static final double ABSOLUTE_ERROR_1 = 1e-10;
 
     private static final double ABSOLUTE_ERROR_EXPONENTIAL = 1e-6;
@@ -92,6 +104,14 @@ class SimpsonMidPointQuadratureIntegratorTest {
             // integrator convergence is relative, so scale tolerance with result magnitude
             final var tolerance = ABSOLUTE_ERROR_EXPONENTIAL * Math.max(1.0, Math.abs(expected));
             assertEquals(expected, result, tolerance);
+        }
+    }
+
+    @Test
+    void integrate_whenExponentialWithSmallLambda_returnsExpectedResult() throws IntegrationException {
+        final var randomizer = new UniformRandomizer(new Random(SEED));
+        for (var t = 0; t < TIMES; t++) {
+            assertSmallLambdaExponentialIntegration(randomizer);
         }
     }
 
@@ -131,13 +151,19 @@ class SimpsonMidPointQuadratureIntegratorTest {
     }
 
     private static void assertPolynomialIntegration() throws IntegrationException {
-        final var polynomial = buildPolynomial();
-        final var integrationPolynomial = polynomial.integrationAndReturnNew();
+        final var randomizer = new UniformRandomizer(new Random(SEED));
+        for (var t = 0; t < TIMES; t++) {
+            assertPolynomialIntegration(randomizer);
+        }
+    }
 
+    private static void assertPolynomialIntegration(final UniformRandomizer randomizer) throws IntegrationException {
         // set integration interval
-        final var randomizer = new UniformRandomizer();
-        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE - MIN_INTERVAL);
+        final var b = randomizer.nextDouble(a + MIN_INTERVAL, MAX_VALUE);
+
+        final var polynomial = buildPolynomial(randomizer, a, b);
+        final var integrationPolynomial = polynomial.integrationAndReturnNew();
 
         final var expected = integrationPolynomial.evaluate(b) - integrationPolynomial.evaluate(a);
 
@@ -147,9 +173,38 @@ class SimpsonMidPointQuadratureIntegratorTest {
         assertEquals(expected, result, SimpsonMidPointQuadratureIntegratorTest.ABSOLUTE_ERROR_1);
     }
 
-    private static Polynomial buildPolynomial() {
-        final var randomizer = new UniformRandomizer();
-        final var root = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+    private static void assertSmallLambdaExponentialIntegration(final UniformRandomizer randomizer)
+            throws IntegrationException {
+        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE - MIN_INTERVAL);
+        final var b = randomizer.nextDouble(a + MIN_INTERVAL, MAX_VALUE);
+        final var lambda = randomizer.nextDouble(MIN_SMALL_LAMBDA, MIN_ABS_LAMBDA)
+                * (randomizer.nextBoolean() ? 1.0 : -1.0);
+
+        // expm1 avoids the cancellation of exp(lambda * b) - exp(lambda * a) when lambda is small
+        final var expected = Math.exp(lambda * a) * Math.expm1(lambda * (b - a)) / lambda;
+
+        final var integrator = new SimpsonMidPointQuadratureIntegrator(a, b, point -> Math.exp(lambda * point),
+                EPS_EXPONENTIAL);
+        final var result = integrator.integrate();
+
+        // integrator convergence is relative, so scale tolerance with result magnitude
+        final var tolerance = ABSOLUTE_ERROR_EXPONENTIAL * Math.max(1.0, Math.abs(expected));
+        assertEquals(expected, result, tolerance);
+    }
+
+    /**
+     * Builds a first degree polynomial whose root is at least {@link #MIN_ROOT_DISTANCE} away from the middle of
+     * the integration interval [a, b], so that its integral over that interval is not close to zero.
+     *
+     * @param randomizer randomizer.
+     * @param a          start of integration interval.
+     * @param b          end of integration interval.
+     * @return first degree polynomial.
+     */
+    private static Polynomial buildPolynomial(final UniformRandomizer randomizer, final double a, final double b) {
+        final var middle = 0.5 * (a + b);
+        final var distance = randomizer.nextDouble(MIN_ROOT_DISTANCE, MAX_VALUE);
+        final var root = randomizer.nextBoolean() ? middle + distance : middle - distance;
         return new Polynomial(-root, 1.0);
     }
 }

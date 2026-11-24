@@ -95,3 +95,20 @@ The project-wide static-analysis baseline was unchanged by this work: 4241 issue
 PMD 35, SpotBugs 264). The user chose to file follow-up issues: #39 (Checkstyle; the CLI run ignores `checkstyle.xml`),
 #40 (PMD) and #41 (SpotBugs). The deviation in Task 1 (assert tolerance scaled by `max(1, |expected|)`) was reviewed and
 accepted by the user. No docs update is needed: the change is test-only.
+
+## Follow-up from PR review (#42)
+
+Addressed in the same PR after the automated review:
+- First-degree polynomial tests in `SimpsonMidPointQuadratureIntegratorTest`/`SimpsonMidPointQuadratureMatrixIntegratorTest`:
+  seeded 20-trial loop, interval width >= 0.5, polynomial root kept >= 1.0 from the interval midpoint so the integral is
+  never close to 0.
+- New `integrate_whenExponentialWithSmallLambda_returnsExpectedResult` in both classes (`|lambda| in [1e-6, 0.1)`, expected
+  value via `Math.expm1` to avoid cancellation).
+- `SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest` / `SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest`
+  exponential tests: seeded 10-trial loop, interval redrawn until `|sin(b)-sin(a)|` and `|cos(b)-cos(a)|` are >= 0.1. The lower
+  test now gives the integrator `eps = 1e-7` (it previously used the 1e-4 assert tolerance as eps and missed it in about 0.3% of
+  draws).
+- `SimpsonInfinityMidPointQuadratureIntegratorTest`: seeded 20-trial loop, `a >= 0.5`, interval width >= 0.5, draws redrawn until
+  the expected integral is >= 1e-3.
+- Stress check (not committed): 1000 seeds per test, 0 failures. Full suite: 1172 tests green.
+- Not addressed (production code, out of scope): Simpson Richardson coefficient for step-tripling mid-point quadratures.
