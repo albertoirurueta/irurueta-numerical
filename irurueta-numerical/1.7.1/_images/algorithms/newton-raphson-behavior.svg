@@ -1,0 +1,67 @@
+<svg viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrow-cycle" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f97316"/>
+    </marker>
+  </defs>
+  <style>
+    .panel-card { fill:none; stroke:#e2e8f0; stroke-width:1.5; }
+    .curve { fill:none; stroke:#1e293b; stroke-width:2.5; stroke-linecap:round; }
+    .axis { stroke:#94a3b8; stroke-width:1.25; }
+    .guide { stroke:#94a3b8; stroke-width:1; stroke-dasharray:4 3; }
+    .tangent { stroke:#2563eb; stroke-width:1.5; stroke-dasharray:5 4; fill:none; }
+    .danger { stroke:#dc2626; stroke-width:1.5; stroke-dasharray:5 4; fill:none; }
+    .cycle { stroke:#f97316; stroke-width:1.5; fill:none; }
+    .pt { fill:#ffffff; stroke-width:2; }
+    .lbl { fill:#334155; font-size:13px; }
+    .cap { fill:#0f172a; font-size:13px; font-weight:600; }
+    .note { fill:#334155; font-size:10.5px; }
+  </style>
+
+  <!-- panel (a): normal case, tangent extrapolation converges quickly -->
+  <g transform="translate(15,15)">
+    <rect class="panel-card" x="0" y="0" width="200" height="230" rx="10"/>
+    <text class="cap" x="10" y="20">(a) quadratic convergence</text>
+    <line class="axis" x1="15" y1="150" x2="185" y2="150"/>
+    <path class="curve" d="M 25 190 C 65 182, 90 162, 108 150 C 128 136, 150 90, 178 30"/>
+    <line class="tangent" x1="45" y1="180" x2="150" y2="150"/>
+    <line class="guide" x1="108" y1="150" x2="108" y2="200"/>
+    <circle class="pt" cx="45" cy="180" r="4" stroke="#2563eb"/>
+    <circle class="pt highlight" cx="150" cy="150" r="4" stroke="#2563eb"/>
+    <text class="lbl" x="38" y="197">1</text>
+    <text class="lbl" x="145" y="167">2</text>
+    <text class="note" x="10" y="216">tangent line at 1 lands almost on the root</text>
+  </g>
+
+  <!-- panel (b): local extremum sends the tangent step far away -->
+  <g transform="translate(230,15)">
+    <rect class="panel-card" x="0" y="0" width="200" height="230" rx="10"/>
+    <text class="cap" x="10" y="20">(b) extremum overshoot</text>
+    <line class="axis" x1="15" y1="150" x2="185" y2="150"/>
+    <path class="curve" d="M 20 195 C 50 175, 75 140, 95 120 C 112 106, 128 102, 142 106 C 160 111, 172 130, 182 155"/>
+    <path class="danger" d="M 130 104 L 195 118" marker-end="url(#arrow-danger)"/>
+    <circle class="pt" cx="130" cy="104" r="4" stroke="#dc2626"/>
+    <text class="lbl" x="122" y="96">1</text>
+    <text class="note" x="10" y="209">near-flat tangent sends step 2</text>
+    <text class="note" x="10" y="221">far outside the panel</text>
+  </g>
+
+  <!-- panel (c): oscillation between two points, never converging -->
+  <g transform="translate(445,15)">
+    <rect class="panel-card" x="0" y="0" width="200" height="230" rx="10"/>
+    <text class="cap" x="10" y="20">(c) nonconvergent cycle</text>
+    <line class="axis" x1="15" y1="150" x2="185" y2="150"/>
+    <path class="curve" d="M 20 120 C 40 175, 60 175, 75 140 C 90 105, 105 95, 120 130 C 135 165, 150 165, 165 130 C 172 113, 178 105, 182 100"/>
+    <path class="cycle" d="M 62 165 C 90 210, 130 210, 148 168" marker-end="url(#arrow-cycle)"/>
+    <path class="cycle" d="M 148 138 C 130 95, 90 95, 66 135" marker-end="url(#arrow-cycle)"/>
+    <circle class="pt" cx="62" cy="165" r="4" stroke="#f97316"/>
+    <circle class="pt" cx="148" cy="138" r="4" stroke="#f97316"/>
+    <text class="lbl" x="52" y="184">1</text>
+    <text class="lbl" x="152" y="128">2</text>
+    <text class="note" x="10" y="209">tangent steps bounce between</text>
+    <text class="note" x="10" y="221">1 and 2 forever</text>
+  </g>
+</svg>

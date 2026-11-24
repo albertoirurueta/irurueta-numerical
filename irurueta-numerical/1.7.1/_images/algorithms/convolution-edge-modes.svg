@@ -1,0 +1,84 @@
+<svg viewBox="0 0 620 340" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .axis { stroke:#94a3b8; stroke-width:1.25; }
+    .bar-in { fill:#1e293b; }
+    .bar-out { fill:#94a3b8; }
+    .lbl { fill:#334155; font-size:12.5px; }
+    .rowlbl { fill:#0f172a; font-size:13px; font-weight:600; }
+    .cap { fill:#0f172a; font-size:15px; font-weight:600; }
+    .note { fill:#334155; font-size:12px; }
+    .boundary { stroke:#dc2626; stroke-width:1.25; stroke-dasharray:4 3; }
+  </style>
+
+  <text class="cap" x="10" y="24">Extending the signal past its boundary for each edge method</text>
+
+  <!-- shared x positions: 3 extended (left) + 5 in-range -->
+  <!-- xs: -3,-2,-1 | 0,1,2,3,4 -->
+  <g font-size="11" fill="#334155" text-anchor="middle">
+    <text x="130" y="322">&#8592; before index 0</text>
+    <text x="430" y="322">signal[0..4]</text>
+  </g>
+  <line class="boundary" x1="230" y1="45" x2="230" y2="300"/>
+
+  <!-- row template values (heights) -->
+  <!-- signal heights for s0..s4: 30,55,20,45,35 (arbitrary) -->
+
+  <!-- ZERO_EDGE -->
+  <text class="rowlbl" x="10" y="60">ZERO_EDGE</text>
+  <g transform="translate(0,20)">
+    <line class="axis" x1="40" y1="60" x2="590" y2="60"/>
+    <rect class="bar-out" x="105" y="58" width="30" height="2"/>
+    <rect class="bar-out" x="165" y="58" width="30" height="2"/>
+    <rect class="bar-out" x="225" y="58" width="30" height="2"/>
+    <rect class="bar-in" x="285" y="30" width="30" height="30"/>
+    <rect class="bar-in" x="345" y="5"  width="30" height="55"/>
+    <rect class="bar-in" x="405" y="40" width="30" height="20"/>
+    <rect class="bar-in" x="465" y="15" width="30" height="45"/>
+    <rect class="bar-in" x="525" y="25" width="30" height="35"/>
+  </g>
+
+  <!-- REPEAT_EDGE -->
+  <text class="rowlbl" x="10" y="128">REPEAT_EDGE</text>
+  <g transform="translate(0,88)">
+    <line class="axis" x1="40" y1="60" x2="590" y2="60"/>
+    <rect class="bar-out" x="105" y="40" width="30" height="20"/>
+    <rect class="bar-out" x="165" y="15" width="30" height="45"/>
+    <rect class="bar-out" x="225" y="25" width="30" height="35"/>
+    <rect class="bar-in" x="285" y="30" width="30" height="30"/>
+    <rect class="bar-in" x="345" y="5"  width="30" height="55"/>
+    <rect class="bar-in" x="405" y="40" width="30" height="20"/>
+    <rect class="bar-in" x="465" y="15" width="30" height="45"/>
+    <rect class="bar-in" x="525" y="25" width="30" height="35"/>
+    <text class="note" x="105" y="76">wraps from the far end: s2, s3, s4</text>
+  </g>
+
+  <!-- MIRROR_EDGE -->
+  <text class="rowlbl" x="10" y="196">MIRROR_EDGE</text>
+  <g transform="translate(0,156)">
+    <line class="axis" x1="40" y1="60" x2="590" y2="60"/>
+    <rect class="bar-out" x="105" y="40" width="30" height="20"/>
+    <rect class="bar-out" x="165" y="5" width="30" height="55"/>
+    <rect class="bar-out" x="225" y="30" width="30" height="30"/>
+    <rect class="bar-in" x="285" y="30" width="30" height="30"/>
+    <rect class="bar-in" x="345" y="5"  width="30" height="55"/>
+    <rect class="bar-in" x="405" y="40" width="30" height="20"/>
+    <rect class="bar-in" x="465" y="15" width="30" height="45"/>
+    <rect class="bar-in" x="525" y="25" width="30" height="35"/>
+    <text class="note" x="105" y="76">reflects: s2, s1, s0</text>
+  </g>
+
+  <!-- CONSTANT_EDGE -->
+  <text class="rowlbl" x="10" y="264">CONSTANT_EDGE</text>
+  <g transform="translate(0,224)">
+    <line class="axis" x1="40" y1="60" x2="590" y2="60"/>
+    <rect class="bar-out" x="105" y="48" width="30" height="12"/>
+    <rect class="bar-out" x="165" y="48" width="30" height="12"/>
+    <rect class="bar-out" x="225" y="48" width="30" height="12"/>
+    <rect class="bar-in" x="285" y="30" width="30" height="30"/>
+    <rect class="bar-in" x="345" y="5"  width="30" height="55"/>
+    <rect class="bar-in" x="405" y="40" width="30" height="20"/>
+    <rect class="bar-in" x="465" y="15" width="30" height="45"/>
+    <rect class="bar-in" x="525" y="25" width="30" height="35"/>
+    <text class="note" x="105" y="76">a caller-configured constant value</text>
+  </g>
+</svg>

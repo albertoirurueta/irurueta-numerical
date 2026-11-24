@@ -1,0 +1,62 @@
+<svg viewBox="0 0 580 420" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .bracket { fill:none; stroke:#334155; stroke-width:2; }
+    .grid { stroke:#e2e8f0; stroke-width:1; }
+    .hdr { fill:#0f172a; font-size:13px; font-weight:600; text-anchor:middle; }
+    .rowlbl { fill:#334155; font-size:13px; font-style:italic; }
+    .cell { fill:#334155; font-size:12.5px; text-anchor:middle; }
+    .cap { fill:#0f172a; font-size:15px; font-weight:600; }
+    .note { fill:#334155; font-size:12px; }
+    .dots { fill:#94a3b8; font-size:14px; text-anchor:middle; }
+  </style>
+
+  <text class="cap" x="10" y="24">The design matrix A: one row per data point, one column per basis function</text>
+
+  <g transform="translate(120,110)">
+    <!-- column headers -->
+    <text class="hdr" x="70"  y="-25">X0()</text>
+    <text class="hdr" x="210" y="-25">X1()</text>
+    <text class="hdr" x="350" y="-25">XM-1()</text>
+
+    <!-- left bracket -->
+    <path class="bracket" d="M 0 -12 L -14 -12 L -14 212 L 0 212"/>
+    <!-- right bracket -->
+    <path class="bracket" d="M 420 -12 L 434 -12 L 434 212 L 420 212"/>
+
+    <!-- grid lines -->
+    <line class="grid" x1="0" y1="50" x2="420" y2="50"/>
+    <line class="grid" x1="0" y1="100" x2="420" y2="100"/>
+    <line class="grid" x1="0" y1="150" x2="420" y2="150"/>
+    <line class="grid" x1="140" y1="0" x2="140" y2="200"/>
+    <line class="grid" x1="280" y1="0" x2="280" y2="200"/>
+
+    <!-- row labels -->
+    <text class="rowlbl" x="-75" y="30">x0</text>
+    <text class="rowlbl" x="-75" y="80">x1</text>
+    <text class="rowlbl" x="-70" y="130">&#8942;</text>
+    <text class="rowlbl" x="-95" y="180">xN-1</text>
+
+    <!-- cells row 0 -->
+    <text class="cell" x="70"  y="30">X0(x0)/&#963;0</text>
+    <text class="cell" x="210" y="30">X1(x0)/&#963;0</text>
+    <text class="dots" x="350" y="30">&#8943;</text>
+
+    <!-- row 1 -->
+    <text class="cell" x="70"  y="80">X0(x1)/&#963;1</text>
+    <text class="cell" x="210" y="80">X1(x1)/&#963;1</text>
+    <text class="dots" x="350" y="80">&#8943;</text>
+
+    <!-- row of dots -->
+    <text class="dots" x="70"  y="130">&#8942;</text>
+    <text class="dots" x="210" y="130">&#8942;</text>
+    <text class="dots" x="350" y="130">&#8945;</text>
+
+    <!-- last row -->
+    <text class="cell" x="70"  y="180">X0(xN-1)/&#963;N-1</text>
+    <text class="cell" x="210" y="180">X1(xN-1)/&#963;N-1</text>
+    <text class="dots" x="350" y="180">&#8943;</text>
+  </g>
+
+  <text class="note" x="10" y="378">Each column is one basis function sampled at every data point, scaled by that point's</text>
+  <text class="note" x="10" y="396">measurement uncertainty &#963;i &#8212; the normal equations A&#7488;A a = A&#7488;b are built directly from this matrix.</text>
+</svg>

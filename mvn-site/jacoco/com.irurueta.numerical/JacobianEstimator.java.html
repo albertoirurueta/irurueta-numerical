@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JacobianEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">JacobianEstimator.java</span></div><h1>JacobianEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Class to estimate the Jacobian of a multi variate and multidimensional
+ * function.
+ * This class evaluates a function at very close locations of a given input
+ * point in order to determine the Jacobian at such point.
+ * &lt;p&gt;
+ * For each input parameter {@code x}, the finite difference step is computed as
+ * {@code h = max(relativeStep * |x|, minStep)}. If the resulting step is exactly zero
+ * (e.g. when {@code x == 0.0} and {@code minStep == 0.0}), {@code relativeStep} is used as
+ * step. The step is finally adjusted to the value that is exactly representable
+ * as the difference between the perturbed and the original parameter.
+ * &lt;p&gt;
+ * By default {@code relativeStep} is {@link #EPS} and {@code minStep} is {@code 0.0},
+ * which preserves the behaviour of a purely relative step.
+ * Setting an absolute minimum step assumes that parameters are scaled to order 1,
+ * since the same absolute step is used regardless of the magnitude of the parameter's
+ * natural scale.
+ * &lt;p&gt;
+ * Instances of this class reuse internal work arrays between calls to avoid
+ * allocations, hence they are not thread-safe nor re-entrant: a single instance
+ * must not be used concurrently from several threads, nor from within the
+ * evaluated function itself.
+ */
+public class JacobianEstimator {
+
+    /**
+     * Constant considered as machine precision.
+     * This is the default relative step used to estimate the Jacobian.
+     */
+    public static final double EPS = 1e-8;
+
+    /**
+     * Default minimum absolute step.
+     */
+    private static final double DEFAULT_MIN_STEP = 0.0;
+
+    /**
+     * Listener to evaluate a multivariate function.
+     */
+    private final MultiVariateFunctionEvaluatorListener listener;
+
+    /**
+     * Relative step respect to the magnitude of each parameter.
+     */
+<span class="fc" id="L65">    private double relativeStep = EPS;</span>
+
+    /**
+     * Minimum absolute step.
+     */
+<span class="fc" id="L70">    private double minStep = DEFAULT_MIN_STEP;</span>
+
+    /**
+     * Internal array to hold input parameter's values.
+     */
+    private double[] xh;
+
+    /**
+     * Internal array to hold function values at the evaluated point.
+     */
+    private double[] fold;
+
+    /**
+     * Internal array to hold function values at the perturbed point.
+     */
+    private double[] fh;
+
+    /**
+     * Constructor.
+     * Uses {@link #EPS} as relative step and {@code 0.0} as minimum step.
+     *
+     * @param listener listener to evaluate a multivariate function.
+     */
+    public JacobianEstimator(final MultiVariateFunctionEvaluatorListener listener) {
+<span class="fc" id="L94">        this(listener, EPS, DEFAULT_MIN_STEP);</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     listener to evaluate a multivariate function.
+     * @param relativeStep relative step respect to the magnitude of each parameter. Must be
+     *                     strictly positive.
+     * @param minStep      minimum absolute step. Must be positive or zero.
+     * @throws IllegalArgumentException if {@code relativeStep} is not strictly positive (or is
+     *                                  NaN or infinite), or {@code minStep} is negative (or is NaN or infinite).
+     */
+    public JacobianEstimator(
+<span class="fc" id="L108">            final MultiVariateFunctionEvaluatorListener listener, final double relativeStep, final double minStep) {</span>
+<span class="fc" id="L109">        this.listener = listener;</span>
+<span class="fc" id="L110">        this.relativeStep = checkRelativeStep(relativeStep);</span>
+<span class="fc" id="L111">        this.minStep = checkMinStep(minStep);</span>
+<span class="fc" id="L112">    }</span>
+
+    /**
+     * Gets relative step respect to the magnitude of each parameter.
+     * Default value is {@link #EPS}.
+     *
+     * @return relative step.
+     */
+    public double getRelativeStep() {
+<span class="fc" id="L121">        return relativeStep;</span>
+    }
+
+    /**
+     * Sets relative step respect to the magnitude of each parameter.
+     *
+     * @param relativeStep relative step. Must be strictly positive.
+     * @throws IllegalArgumentException if provided value is not strictly positive, or is NaN or infinite.
+     */
+    public void setRelativeStep(final double relativeStep) {
+<span class="fc" id="L131">        this.relativeStep = checkRelativeStep(relativeStep);</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Gets minimum absolute step.
+     * Default value is {@code 0.0}.
+     * An absolute minimum step assumes that parameters are scaled to order 1.
+     *
+     * @return minimum absolute step.
+     */
+    public double getMinStep() {
+<span class="fc" id="L142">        return minStep;</span>
+    }
+
+    /**
+     * Sets minimum absolute step.
+     * An absolute minimum step assumes that parameters are scaled to order 1.
+     *
+     * @param minStep minimum absolute step. Must be positive or zero.
+     * @throws IllegalArgumentException if provided value is negative, NaN or infinite.
+     */
+    public void setMinStep(final double minStep) {
+<span class="fc" id="L153">        this.minStep = checkMinStep(minStep);</span>
+<span class="fc" id="L154">    }</span>
+
+    /**
+     * Returns the Jacobian of a multivariate function at provided point.
+     *
+     * @param point input point.
+     * @return jacobian.
+     * @throws EvaluationException raised if function cannot be evaluated.
+     */
+    public Matrix jacobian(final double[] point) throws EvaluationException {
+        try {
+<span class="fc" id="L165">            final var result = new Matrix(listener.getNumberOfVariables(), point.length);</span>
+<span class="fc" id="L166">            jacobian(point, result);</span>
+<span class="fc" id="L167">            return result;</span>
+<span class="nc" id="L168">        } catch (final WrongSizeException e) {</span>
+<span class="nc" id="L169">            throw new EvaluationException(e);</span>
+        }
+    }
+
+    /**
+     * Sets estimated jacobian in provided result matrix of a multivariate
+     * function at provided point.
+     * This method is preferred respect to jacobian(double[]) because result
+     * matrix can be reused and hence is more memory efficient.
+     * The step used for each parameter {@code x} is
+     * {@code max(relativeStep * |x|, minStep)}, or {@code relativeStep} if such value is zero.
+     *
+     * @param point  input point.
+     * @param result output matrix containing estimated jacobian. This parameter
+     *               must be a matrix having the same number of columns as the length of the
+     *               point and the same number of rows as the number of variables returned by
+     *               function evaluations.
+     * @throws EvaluationException      raised if function cannot be evaluated.
+     * @throws IllegalArgumentException if size of result is not valid.
+     */
+    public void jacobian(final double[] point, final Matrix result) throws EvaluationException {
+<span class="fc" id="L190">        final var numdims = point.length;</span>
+<span class="fc" id="L191">        final var numvars = listener.getNumberOfVariables();</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (result.getColumns() != numdims) {</span>
+<span class="nc" id="L193">            throw new IllegalArgumentException();</span>
+        }
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (result.getRows() != numvars) {</span>
+<span class="nc" id="L196">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L199" title="All 4 branches covered.">        if (fold == null || fold.length != numvars) {</span>
+<span class="fc" id="L200">            fold = new double[numvars];</span>
+<span class="fc" id="L201">            fh = new double[numvars];</span>
+        }
+<span class="pc bpc" id="L203" title="1 of 4 branches missed.">        if (xh == null || xh.length != numdims) {</span>
+<span class="fc" id="L204">            xh = new double[numdims];</span>
+        }
+<span class="fc" id="L206">        System.arraycopy(point, 0, xh, 0, numdims);</span>
+
+        double temp;
+        double h;
+<span class="fc" id="L210">        listener.evaluate(point, fold);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        for (var j = 0; j &lt; numdims; j++) {</span>
+<span class="fc" id="L212">            temp = point[j];</span>
+<span class="fc" id="L213">            h = computeStep(temp);</span>
+<span class="fc" id="L214">            xh[j] = temp + h;</span>
+<span class="fc" id="L215">            h = xh[j] - temp;</span>
+<span class="fc" id="L216">            listener.evaluate(xh, fh);</span>
+<span class="fc" id="L217">            xh[j] = temp;</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">            for (var i = 0; i &lt; numvars; i++) {</span>
+<span class="fc" id="L219">                result.setElementAt(i, j, (fh[i] - fold[i]) / h);</span>
+            }
+        }
+<span class="fc" id="L222">    }</span>
+
+    /**
+     * Computes the step used to perturb an input parameter.
+     * The step is {@code max(relativeStep * |x|, minStep)}, and if such value is zero, then
+     * {@code relativeStep} is used instead.
+     * Notice that the actually applied step might differ slightly because of finite machine precision.
+     *
+     * @param x value of the input parameter to be perturbed.
+     * @return step to be used.
+     */
+    protected double computeStep(final double x) {
+<span class="fc" id="L234">        final var h = Math.max(relativeStep * Math.abs(x), minStep);</span>
+        // Trick to reduce finite-precision error
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        return h == 0.0 ? relativeStep : h;</span>
+    }
+
+    /**
+     * Validates a relative step.
+     *
+     * @param relativeStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is not strictly positive, or is NaN or infinite.
+     */
+    private static double checkRelativeStep(final double relativeStep) {
+<span class="fc bfc" id="L247" title="All 4 branches covered.">        if (!(relativeStep &gt; 0.0) || Double.isInfinite(relativeStep)) {</span>
+<span class="fc" id="L248">            throw new IllegalArgumentException(&quot;relativeStep must be strictly positive and finite&quot;);</span>
+        }
+<span class="fc" id="L250">        return relativeStep;</span>
+    }
+
+    /**
+     * Validates a minimum step.
+     *
+     * @param minStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is negative, NaN or infinite.
+     */
+    private static double checkMinStep(final double minStep) {
+<span class="fc bfc" id="L261" title="All 4 branches covered.">        if (!(minStep &gt;= 0.0) || Double.isInfinite(minStep)) {</span>
+<span class="fc" id="L262">            throw new IllegalArgumentException(&quot;minStep must be positive or zero and finite&quot;);</span>
+        }
+<span class="fc" id="L264">        return minStep;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

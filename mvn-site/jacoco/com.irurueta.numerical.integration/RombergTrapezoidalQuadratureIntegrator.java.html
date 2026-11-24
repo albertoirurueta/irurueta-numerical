@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RombergTrapezoidalQuadratureIntegrator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">RombergTrapezoidalQuadratureIntegrator.java</span></div><h1>RombergTrapezoidalQuadratureIntegrator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.interpolation.InterpolationException;
+import com.irurueta.numerical.interpolation.PolynomialInterpolator;
+
+/**
+ * Computes function integration by using Romberg integration.
+ */
+public class RombergTrapezoidalQuadratureIntegrator extends RombergIntegrator&lt;TrapezoidalQuadrature&gt; {
+
+    /**
+     * Default accuracy.
+     */
+    public static final double EPS = 1e-10;
+
+    /**
+     * Maximum number of allowed steps.
+     */
+    private static final int JMAX = 20;
+
+    /**
+     * Maximum number of allowed steps + 1.
+     */
+    private static final int JMAXP = JMAX + 1;
+
+    /**
+     * Minimum required number of steps.
+     */
+    private static final int K = 5;
+
+    /**
+     * Successive trapezoidal approximations.
+     */
+<span class="fc" id="L51">    private final double[] s = new double[JMAX];</span>
+
+    /**
+     * Successive trapezoidal step sizes.
+     */
+<span class="fc" id="L56">    private final double[] h = new double[JMAXP];</span>
+
+    /**
+     * Polynomial interpolator.
+     */
+<span class="fc" id="L61">    private final PolynomialInterpolator interpolator = new PolynomialInterpolator(h, s, K, false);</span>
+
+    /**
+     * Constructor.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     * @param eps      required accuracy.
+     */
+    public RombergTrapezoidalQuadratureIntegrator(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
+<span class="fc" id="L73">        super(new TrapezoidalQuadrature(a, b, listener), eps);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Constructor with default accuracy.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     */
+    public RombergTrapezoidalQuadratureIntegrator(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L85">        this(a, b, listener, EPS);</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Integrates function between lower and upper limits defined by provided quadrature.
+     * This implementation is suitable for closed intervals.
+     *
+     * @return result of integration.
+     * @throws IntegrationException if integration fails for numerical reasons.
+     */
+    @Override
+    public double integrate() throws IntegrationException {
+        try {
+<span class="fc" id="L98">            h[0] = 1.0;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            for (var j = 1; j &lt;= JMAX; j++) {</span>
+<span class="fc" id="L100">                s[j - 1] = q.next();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                if (j &gt;= K) {</span>
+<span class="fc" id="L102">                    final var ss = interpolator.rawinterp(j - K, 0.0);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">                    if (Math.abs(interpolator.getDy()) &lt;= eps * Math.abs(ss)) {</span>
+<span class="fc" id="L104">                        return ss;</span>
+                    }
+                }
+<span class="fc" id="L107">                h[j] = 0.25 * h[j - 1];</span>
+            }
+<span class="nc" id="L109">        } catch (final EvaluationException | InterpolationException e) {</span>
+<span class="nc" id="L110">            throw new IntegrationException(e);</span>
+<span class="fc" id="L111">        }</span>
+
+        // Too many steps
+<span class="fc" id="L114">        throw new IntegrationException();</span>
+    }
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    @Override
+    public QuadratureType getQuadratureType() {
+<span class="fc" id="L124">        return QuadratureType.TRAPEZOIDAL;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

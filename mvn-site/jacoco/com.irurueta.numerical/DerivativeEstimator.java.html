@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DerivativeEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical</a> &gt; <span class="el_source">DerivativeEstimator.java</span></div><h1>DerivativeEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical;
+
+/**
+ * Class to estimate the derivative of a single dimension function at a given
+ * point.
+ * The algorithm used in this implementation is valid for continuous functions
+ * only, otherwise inaccurate results might be obtained.
+ * This implementation is faster although less accurate than
+ * SymmetricDerivativeEstimator.
+ * The step used to perturb the evaluation point is computed as
+ * {@code max(relativeStep * |x|, minStep)}. By default the relative step is
+ * {@link #EPS} and the minimum step is zero, which preserves the historical
+ * behaviour. Setting a minimum step prevents catastrophic loss of precision
+ * when evaluating derivatives at points close to zero. Notice that an
+ * absolute minimum step assumes that parameters are scaled to order 1.
+ */
+public class DerivativeEstimator {
+
+    /**
+     * Constant defining machine precision for this algorithm.
+     */
+    public static final double EPS = 1e-8;
+
+    /**
+     * Listener to evaluate a single dimension function.
+     */
+    protected final SingleDimensionFunctionEvaluatorListener listener;
+
+    /**
+     * Relative step, which is multiplied by the absolute value of the
+     * evaluation point to obtain the step used to perturb such point.
+     */
+    private double relativeStep;
+
+    /**
+     * Minimum absolute step used to perturb the evaluation point.
+     */
+    private double minStep;
+
+    /**
+     * Constructor using default relative step ({@link #EPS}) and no minimum
+     * step.
+     *
+     * @param listener listener to evaluate a single dimension function
+     */
+    public DerivativeEstimator(final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L62">        this(listener, EPS, 0.0);</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     listener to evaluate a single dimension function
+     * @param relativeStep relative step, which is multiplied by the absolute
+     *                     value of the evaluation point. Must be strictly
+     *                     positive.
+     * @param minStep      minimum absolute step. Must be zero or positive.
+     *                     Notice that an absolute minimum step assumes that
+     *                     parameters are scaled to order 1.
+     * @throws IllegalArgumentException if relative step is not strictly
+     *                                  positive, or minimum step is negative
+     *                                  or NaN or infinite
+     */
+    public DerivativeEstimator(
+            final SingleDimensionFunctionEvaluatorListener listener, final double relativeStep,
+<span class="fc" id="L81">            final double minStep) {</span>
+<span class="fc" id="L82">        this.listener = listener;</span>
+<span class="fc" id="L83">        this.relativeStep = checkRelativeStep(relativeStep);</span>
+<span class="fc" id="L84">        this.minStep = checkMinStep(minStep);</span>
+<span class="fc" id="L85">    }</span>
+
+    /**
+     * Gets relative step, which is multiplied by the absolute value of the
+     * evaluation point to obtain the perturbation step.
+     *
+     * @return relative step
+     */
+    public double getRelativeStep() {
+<span class="fc" id="L94">        return relativeStep;</span>
+    }
+
+    /**
+     * Sets relative step, which is multiplied by the absolute value of the
+     * evaluation point to obtain the perturbation step.
+     *
+     * @param relativeStep relative step. Must be strictly positive.
+     * @throws IllegalArgumentException if provided value is not strictly
+     *                                  positive, or is NaN or infinite
+     */
+    public void setRelativeStep(final double relativeStep) {
+<span class="fc" id="L106">        this.relativeStep = checkRelativeStep(relativeStep);</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Gets minimum absolute step used to perturb the evaluation point.
+     *
+     * @return minimum step
+     */
+    public double getMinStep() {
+<span class="fc" id="L115">        return minStep;</span>
+    }
+
+    /**
+     * Sets minimum absolute step used to perturb the evaluation point.
+     * Notice that an absolute minimum step assumes that parameters are scaled
+     * to order 1.
+     *
+     * @param minStep minimum step. Must be zero or positive.
+     * @throws IllegalArgumentException if provided value is negative, NaN or infinite
+     */
+    public void setMinStep(final double minStep) {
+<span class="fc" id="L127">        this.minStep = checkMinStep(minStep);</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Computes the function derivative at provided point x.
+     *
+     * @param x Point where derivative is estimated
+     * @return Derivative of function at provided point
+     * @throws EvaluationException Raised if function cannot be properly
+     *                             evaluated
+     */
+    public double derivative(final double x) throws EvaluationException {
+<span class="fc" id="L139">        final var fold = listener.evaluate(x);</span>
+
+<span class="fc" id="L141">        final var xh = x + computeStep(x);</span>
+<span class="fc" id="L142">        final var h = xh - x;</span>
+
+<span class="fc" id="L144">        final var fh = listener.evaluate(xh);</span>
+<span class="fc" id="L145">        return (fh - fold) / h;</span>
+    }
+
+    /**
+     * Computes the step used to perturb the evaluation point, which is
+     * {@code max(relativeStep * |x|, minStep)}. If such value is zero, the
+     * relative step is used instead to reduce finite-precision error.
+     *
+     * @param x point where derivative is estimated
+     * @return step to perturb the evaluation point
+     */
+    protected double computeStep(final double x) {
+<span class="fc" id="L157">        final var h = Math.max(relativeStep * Math.abs(x), minStep);</span>
+        // Trick to reduce finite-precision error
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        return h == 0.0 ? relativeStep : h;</span>
+    }
+
+    /**
+     * Validates a relative step.
+     *
+     * @param relativeStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is not strictly positive, or is NaN or infinite.
+     */
+    private static double checkRelativeStep(final double relativeStep) {
+<span class="fc bfc" id="L170" title="All 4 branches covered.">        if (!(relativeStep &gt; 0.0) || Double.isInfinite(relativeStep)) {</span>
+<span class="fc" id="L171">            throw new IllegalArgumentException(&quot;relative step must be strictly positive and finite&quot;);</span>
+        }
+<span class="fc" id="L173">        return relativeStep;</span>
+    }
+
+    /**
+     * Validates a minimum step.
+     *
+     * @param minStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is negative, or is NaN or infinite.
+     */
+    private static double checkMinStep(final double minStep) {
+<span class="fc bfc" id="L184" title="All 4 branches covered.">        if (!(minStep &gt;= 0.0) || Double.isInfinite(minStep)) {</span>
+<span class="fc" id="L185">            throw new IllegalArgumentException(&quot;minimum step must be zero or positive and finite&quot;);</span>
+        }
+<span class="fc" id="L187">        return minStep;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

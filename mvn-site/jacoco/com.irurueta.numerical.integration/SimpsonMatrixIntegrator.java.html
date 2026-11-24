@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpsonMatrixIntegrator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">SimpsonMatrixIntegrator.java</span></div><h1>SimpsonMatrixIntegrator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.numerical.EvaluationException;
+
+/**
+ * Base integrator for implementations based on Simpson's method.
+ * Simpson's method is an optimization of Trapezoidal quadrature integrator.
+ * Implementations of this class will in general be more efficient than
+ * Trapezoidal quadrature matrix integrators (i.e., require fewer function evaluations) when the
+ * matrix function to be integrated has a finite fourth derivative (i.e., a continuous third
+ * derivative).
+ *
+ * &lt;p&gt;
+ * The extrapolation step combines the current quadrature estimate {@code st} and the previous one {@code ost} as
+ * {@code s = (ratio * st - ost) / (ratio - 1)}. The ratio is the factor by which the quadrature error is reduced
+ * on each refinement: {@code 2^2 = 4} for quadratures halving their step (e.g., trapezoidal), which yields
+ * {@code (4 * st - ost) / 3}, and {@code 3^2 = 9} for quadratures tripling their step (e.g., mid-point), which
+ * yields {@code (9 * st - ost) / 8}.
+ * See Numerical Recipes, 3rd ed., section 4.2 (p. 165) and section 4.4 (p. 169).
+ *
+ * @param &lt;T&gt; a quadrature.
+ */
+public abstract class SimpsonMatrixIntegrator&lt;T extends MatrixQuadrature&gt; extends MatrixIntegrator {
+
+    /**
+     * Default accuracy.
+     */
+    public static final double EPS = 1e-10;
+
+    /**
+     * Extrapolation ratio for quadratures that halve their step on each refinement (2^2).
+     * Leads to extrapolation {@code (4 * st - ost) / 3}.
+     */
+    protected static final double TRAPEZOIDAL_RATIO = SimpsonIntegrator.TRAPEZOIDAL_RATIO;
+
+    /**
+     * Extrapolation ratio for quadratures that triple their step on each refinement (3^2).
+     * Leads to extrapolation {@code (9 * st - ost) / 8}.
+     */
+    protected static final double TRIPLING_RATIO = SimpsonIntegrator.TRIPLING_RATIO;
+
+    /**
+     * Default maximum number of allowed steps.
+     */
+    protected static final int DEFAULT_JMAX = SimpsonIntegrator.DEFAULT_JMAX;
+
+    /**
+     * Maximum number of allowed steps for quadratures tripling their step on each refinement.
+     */
+    protected static final int TRIPLING_JMAX = SimpsonIntegrator.TRIPLING_JMAX;
+
+    /**
+     * Minimum required number of steps.
+     */
+    private static final int JMIN = 5;
+
+    /**
+     * Quadrature used for integration.
+     */
+    private final T q;
+
+    /**
+     * Required accuracy.
+     */
+    private final double eps;
+
+    /**
+     * Extrapolation ratio.
+     */
+    private final double ratio;
+
+    /**
+     * Maximum number of allowed steps.
+     */
+    private final int jmax;
+
+    /**
+     * Constructor using halving step extrapolation ratio and default maximum number of steps.
+     *
+     * @param q   Quadrature used for integration.
+     * @param eps Required accuracy.
+     */
+    protected SimpsonMatrixIntegrator(final T q, final double eps) {
+<span class="fc" id="L102">        this(q, eps, TRAPEZOIDAL_RATIO, DEFAULT_JMAX);</span>
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param q     Quadrature used for integration.
+     * @param eps   Required accuracy.
+     * @param ratio Extrapolation ratio (4.0 for quadratures halving their step, 9.0 for tripling their step).
+     *              Must be greater than 1; otherwise the extrapolation divides by zero (or flips sign) and
+     *              integration never converges.
+     * @param jmax  Maximum number of allowed steps. Must be greater than 6, since convergence is only checked
+     *              after the minimum number of steps; otherwise integration always fails.
+     */
+<span class="fc" id="L116">    protected SimpsonMatrixIntegrator(final T q, final double eps, final double ratio, final int jmax) {</span>
+<span class="fc" id="L117">        this.q = q;</span>
+<span class="fc" id="L118">        this.eps = eps;</span>
+<span class="fc" id="L119">        this.ratio = ratio;</span>
+<span class="fc" id="L120">        this.jmax = jmax;</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Integrates function between provided lower and upper limits.
+     *
+     * @param result instance where result of integration will be stored.
+     * @throws IntegrationException if integration fails for numerical reasons.
+     */
+    @SuppressWarnings(&quot;Duplicates&quot;)
+    @Override
+    public void integrate(final Matrix result) throws IntegrationException {
+        try {
+<span class="fc" id="L133">            final var rows = q.getRows();</span>
+<span class="fc" id="L134">            final var columns = q.getColumns();</span>
+<span class="fc" id="L135">            final var st = new Matrix(rows, columns);</span>
+<span class="fc" id="L136">            final var s = new Matrix(rows, columns);</span>
+<span class="fc" id="L137">            final var ost = new Matrix(rows, columns);</span>
+<span class="fc" id="L138">            final var os = new Matrix(rows, columns);</span>
+<span class="fc" id="L139">            final var tmp = new Matrix(rows, columns);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            for (var j = 0; j &lt; jmax; j++) {</span>
+<span class="fc" id="L141">                q.next(st);</span>
+
+                // s = (ratio * st - ost) / (ratio - 1.0)
+<span class="fc" id="L144">                tmp.copyFrom(st);</span>
+<span class="fc" id="L145">                tmp.multiplyByScalar(ratio);</span>
+<span class="fc" id="L146">                tmp.subtract(ost);</span>
+<span class="fc" id="L147">                tmp.multiplyByScalar(1.0 / (ratio - 1.0));</span>
+<span class="fc" id="L148">                s.copyFrom(tmp);</span>
+
+<span class="fc bfc" id="L150" title="All 4 branches covered.">                if (j &gt; JMIN &amp;&amp; (Math.abs(normMin(s) - normMin(os)) &lt; eps * normMin(os)</span>
+<span class="pc bpc" id="L151" title="1 of 4 branches missed.">                        || (normMin(s) == 0.0 &amp;&amp; normMin(os) == 0.0))) {</span>
+<span class="fc" id="L152">                    result.copyFrom(s);</span>
+<span class="fc" id="L153">                    return;</span>
+                }
+<span class="fc" id="L155">                os.copyFrom(s);</span>
+<span class="fc" id="L156">                ost.copyFrom(st);</span>
+            }
+<span class="nc" id="L158">        } catch (final EvaluationException | AlgebraException e) {</span>
+<span class="nc" id="L159">            throw new IntegrationException(e);</span>
+<span class="fc" id="L160">        }</span>
+
+        // Too many steps
+<span class="fc" id="L163">        throw new IntegrationException();</span>
+    }
+
+    /**
+     * Gets type of integrator.
+     *
+     * @return type of integrator.
+     */
+    @Override
+    public IntegratorType getIntegratorType() {
+<span class="fc" id="L173">        return IntegratorType.SIMPSON;</span>
+    }
+
+    /**
+     * Creates an integrator using Simpson's method.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param eps            required accuracy.
+     * @param quadratureType quadrature type.
+     * @return created integrator.
+     * @throws IllegalArgumentException if provided quadrature type is not supported.
+     * @throws WrongSizeException       if size notified by provided listener is invalid.
+     */
+    public static SimpsonMatrixIntegrator&lt;MatrixQuadrature&gt; create(
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps, final QuadratureType quadratureType) throws WrongSizeException {
+<span class="fc bfc" id="L191" title="All 7 branches covered.">        return switch (quadratureType) {</span>
+<span class="fc" id="L192">            case TRAPEZOIDAL -&gt; cast(new SimpsonTrapezoidalQuadratureMatrixIntegrator(a, b, listener, eps));</span>
+<span class="fc" id="L193">            case MID_POINT -&gt; cast(new SimpsonMidPointQuadratureMatrixIntegrator(a, b, listener, eps));</span>
+<span class="fc" id="L194">            case INFINITY_MID_POINT -&gt; cast(new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener, eps));</span>
+            case LOWER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L196">                    cast(new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));</span>
+            case UPPER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L198">                    cast(new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener, eps));</span>
+            case DOUBLE_EXPONENTIAL_RULE -&gt;
+<span class="fc" id="L200">                    cast(new SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener, eps));</span>
+<span class="fc" id="L201">            default -&gt; throw new IllegalArgumentException();</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using Simpson's method and having default accuracy.
+     *
+     * @param a              Lower limit of integration.
+     * @param b              Upper limit of integration.
+     * @param listener       listener to evaluate a single dimension function at required points.
+     * @param quadratureType quadrature type.
+     * @return created integrator.
+     * @throws IllegalArgumentException if provided quadrature type is not supported.
+     * @throws WrongSizeException       if size notified by provided listener is invalid.
+     */
+    public static SimpsonMatrixIntegrator&lt;MatrixQuadrature&gt; create(
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final QuadratureType quadratureType) throws WrongSizeException {
+<span class="fc bfc" id="L219" title="All 7 branches covered.">        return switch (quadratureType) {</span>
+<span class="fc" id="L220">            case TRAPEZOIDAL -&gt; cast(new SimpsonTrapezoidalQuadratureMatrixIntegrator(a, b, listener));</span>
+<span class="fc" id="L221">            case MID_POINT -&gt; cast(new SimpsonMidPointQuadratureMatrixIntegrator(a, b, listener));</span>
+<span class="fc" id="L222">            case INFINITY_MID_POINT -&gt; cast(new SimpsonInfinityMidPointQuadratureMatrixIntegrator(a, b, listener));</span>
+            case LOWER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L224">                    cast(new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));</span>
+            case UPPER_SQUARE_ROOT_MID_POINT -&gt;
+<span class="fc" id="L226">                    cast(new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener));</span>
+            case DOUBLE_EXPONENTIAL_RULE -&gt;
+<span class="fc" id="L228">                    cast(new SimpsonDoubleExponentialRuleQuadratureMatrixIntegrator(a, b, listener));</span>
+<span class="fc" id="L229">            default -&gt; throw new IllegalArgumentException();</span>
+        };
+    }
+
+    /**
+     * Creates an integrator using Simpson's method and default quadrature type.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     * @param eps      required accuracy.
+     * @return created integrator.
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public static SimpsonMatrixIntegrator&lt;MatrixQuadrature&gt; create(
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
+            final double eps) throws WrongSizeException {
+<span class="fc" id="L246">        return create(a, b, listener, eps, DEFAULT_QUADRATURE_TYPE);</span>
+    }
+
+    /**
+     * Creates an integrator using Simpson's method and having default accuracy and quadrature type.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     * @return created integrator.
+     * @throws WrongSizeException if size notified by provided listener is invalid.
+     */
+    public static SimpsonMatrixIntegrator&lt;MatrixQuadrature&gt; create(
+            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener)
+            throws WrongSizeException {
+<span class="fc" id="L261">        return create(a, b, listener, DEFAULT_QUADRATURE_TYPE);</span>
+    }
+
+    /**
+     * Estimates smallest norm of provided matrix.
+     * Smallest norm is used to ensure convergence of all elements in matrix.
+     *
+     * @param a matrix to compute min norm for.
+     * @return estimated min norm.
+     */
+    private static double normMin(final Matrix a) {
+<span class="fc" id="L272">        var min = Double.MAX_VALUE;</span>
+<span class="fc" id="L273">        var buffer = a.getBuffer();</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        for (var v : buffer) {</span>
+<span class="fc" id="L275">            final var value = Math.abs(v);</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">            if (Double.isNaN(value)) {</span>
+<span class="fc" id="L277">                return value;</span>
+            }
+
+<span class="fc bfc" id="L280" title="All 2 branches covered.">            if (value &lt; min) {</span>
+<span class="fc" id="L281">                min = value;</span>
+            }
+        }
+<span class="fc" id="L284">        return min;</span>
+    }
+
+    /**
+     * Casts integrator to a quadrature integrator without wildcard parameter.
+     *
+     * @param integrator integrator to be cast.
+     * @return cast integrator.
+     */
+    private static SimpsonMatrixIntegrator&lt;MatrixQuadrature&gt; cast(final SimpsonMatrixIntegrator&lt;?&gt; integrator) {
+        //noinspection unchecked
+<span class="fc" id="L295">        return (SimpsonMatrixIntegrator&lt;MatrixQuadrature&gt;) integrator;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,40 @@
+<svg viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg" font-family="'Helvetica Neue', Arial, sans-serif">
+  <style>
+    .ell { fill:none; stroke-width:2; }
+    .axis { stroke:#94a3b8; stroke-width:1.25; }
+    .tangent { stroke:#334155; stroke-width:1.25; stroke-dasharray:5 4; }
+    .lbl { fill:#334155; font-size:13px; }
+    .cap { fill:#0f172a; font-size:15px; font-weight:600; }
+    .note { fill:#334155; font-size:12.5px; }
+    .pt { fill:#0f172a; }
+  </style>
+
+  <text class="cap" x="10" y="24">Confidence regions for two fitted parameters</text>
+
+  <g transform="translate(0,10)">
+    <line class="axis" x1="90" y1="190" x2="530" y2="190"/>
+    <line class="axis" x1="300" y1="70" x2="300" y2="320"/>
+    <text class="lbl" x="536" y="194">a1</text>
+    <text class="lbl" x="288" y="62">a2</text>
+
+    <g transform="rotate(-20 300 190)">
+      <ellipse class="ell" cx="300" cy="190" rx="150" ry="70" stroke="#94a3b8"/>
+      <ellipse class="ell" cx="300" cy="190" rx="90" ry="42" stroke="#2563eb"/>
+      <ellipse class="ell" cx="300" cy="190" rx="60" ry="28" stroke="#16a34a"/>
+    </g>
+
+    <line class="tangent" x1="157" y1="70" x2="157" y2="320"/>
+    <line class="tangent" x1="443" y1="70" x2="443" y2="320"/>
+    <circle class="pt" cx="157" cy="190" r="3"/>
+    <circle class="pt" cx="443" cy="190" r="3"/>
+    <text class="lbl" x="140" y="335">Z</text>
+    <text class="lbl" x="436" y="335">Z'</text>
+
+    <text class="lbl" x="452" y="120" fill="#94a3b8">&#916;&#967;&#178; = 6.63</text>
+    <text class="lbl" x="378" y="152" fill="#2563eb">&#916;&#967;&#178; = 2.30</text>
+    <text class="lbl" x="330" y="163" fill="#16a34a">&#916;&#967;&#178; = 1.00</text>
+  </g>
+
+  <text class="note" x="10" y="385">Each ellipse is a joint confidence boundary for (a1, a2) at a fixed &#916;&#967;&#178;. Projecting the outer</text>
+  <text class="note" x="10" y="402">ellipse onto one axis (Z to Z') gives that parameter's own confidence interval.</text>
+</svg>

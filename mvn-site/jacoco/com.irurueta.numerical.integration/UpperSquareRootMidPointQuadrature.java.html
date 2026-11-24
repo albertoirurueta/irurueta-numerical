@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpperSquareRootMidPointQuadrature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-numerical</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.numerical.integration</a> &gt; <span class="el_source">UpperSquareRootMidPointQuadrature.java</span></div><h1>UpperSquareRootMidPointQuadrature.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2023 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.numerical.integration;
+
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
+/**
+ * This is an exact replacement for MidPointQuadrature, except that it allows for an inverse
+ * square-root singularity in the integrand at the upper limit b.
+ */
+public class UpperSquareRootMidPointQuadrature extends MidPointQuadrature {
+
+    /**
+     * Original upper bound of integration.
+     */
+    private final double borig;
+
+    /**
+     * Constructor.
+     *
+     * @param a        Lower limit of integration.
+     * @param b        Upper limit of integration.
+     * @param listener listener to evaluate a single dimension function at required points.
+     */
+    public UpperSquareRootMidPointQuadrature(
+            final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener) {
+<span class="fc" id="L40">        super(0.0, Math.sqrt(b - a), listener);</span>
+<span class="fc" id="L41">        borig = b;</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Gets type of quadrature.
+     *
+     * @return type of quadrature.
+     */
+    @Override
+    public QuadratureType getType() {
+<span class="fc" id="L51">        return QuadratureType.UPPER_SQUARE_ROOT_MID_POINT;</span>
+    }
+
+    /**
+     * Evaluates function at 2*x*f(a0+x^2).
+     *
+     * @param x point where function is evaluated.
+     * @return result of evaluation.
+     * @throws EvaluationException if evaluation fails.
+     */
+    @Override
+    protected double func(final double x) throws EvaluationException {
+<span class="fc" id="L63">        return 2.0 * x * listener.evaluate(borig - x * x);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
