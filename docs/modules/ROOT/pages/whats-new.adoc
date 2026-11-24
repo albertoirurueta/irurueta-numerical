@@ -5,6 +5,13 @@ behavior changes for each version.
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
+== 1.7.0
+
+* ✨ Added configurable `relativeStep` and `minStep` to `JacobianEstimator`, `GradientEstimator`,
+  `DerivativeEstimator` and their symmetric and Savitzky-Golay variants, improving accuracy for small non-zero
+  parameters. Defaults keep the previous behavior.
+* 📚 Added a documentation page on numerical derivatives, gradients and Jacobians.
+
 == 1.6.1
 
 * 🐛 Fixed a bias in `MeasurementNoiseCovarianceEstimator`: the running covariance under-weighted each new sample

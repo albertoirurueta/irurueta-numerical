@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Configurable `relativeStep` (default `EPS`, must be > 0) and `minStep` (default `0.0`, must be >= 0) for
+  `JacobianEstimator`, `GradientEstimator`, `SymmetricGradientEstimator`, `SavitzkyGolayGradientEstimator`,
+  `DerivativeEstimator`, `SymmetricDerivativeEstimator` and `SavitzkyGolayDerivativeEstimator`, with new
+  `(listener, relativeStep, minStep)` constructors; defaults keep the previous behavior (#34).
+
 ## [1.6.1] - 2026-11-14
 
 ### Changed

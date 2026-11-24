@@ -30,6 +30,14 @@ detailed page — linked where available.
 ** `LevenbergMarquardtMultiDimensionFitter` — model `y = f(x | a)` with vector-valued `x`.
 ** `LevenbergMarquardtMultiVariateFitter` — model `y = f(x | a)` with vector-valued `x` and `y`.
 
+== Numerical derivatives (`numerical`)
+
+* *Numerical derivatives, gradients and Jacobians* — finite-difference estimation with a configurable relative and
+  minimum step. See xref:algorithms/numerical-derivatives.adoc[] for a detailed description.
+** `DerivativeEstimator`, `SymmetricDerivativeEstimator`, `SavitzkyGolayDerivativeEstimator`.
+** `GradientEstimator`, `SymmetricGradientEstimator`, `SavitzkyGolayGradientEstimator`.
+** `JacobianEstimator`.
+
 == Integration algorithms (`integration`)
 
 Every algorithm below pairs a *quadrature rule* (a strategy for sampling the integrand) with an *integration

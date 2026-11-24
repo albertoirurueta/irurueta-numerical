@@ -52,6 +52,22 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
     }
 
     /**
+     * Constructor.
+     *
+     * @param listener     Listener to evaluate a multidimensional function.
+     * @param relativeStep Relative step respect to the absolute value of each input parameter. Must be
+     *                     strictly greater than zero.
+     * @param minStep      Minimum step used to perturb each input parameter. Must be zero or positive.
+     * @throws IllegalArgumentException Raised if relative step is not strictly positive or if minimum step is
+     *                                  negative, NaN or infinite.
+     */
+    public SavitzkyGolayGradientEstimator(
+            final MultiDimensionFunctionEvaluatorListener listener, final double relativeStep,
+            final double minStep) {
+        super(listener, relativeStep, minStep);
+    }
+
+    /**
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
@@ -92,11 +108,7 @@ public class SavitzkyGolayGradientEstimator extends GradientEstimator {
 
         for (var j = 0; j < n; j++) {
             final var temp = point[j];
-            var h = EPS * Math.abs(temp);
-            if (h == 0.0) {
-                // Trick to reduce finite-precision error
-                h = EPS;
-            }
+            final var h = computeStep(temp);
 
             final var p1 = xh1[j] = temp + h;
             final var p2 = xh2[j] = temp - h;

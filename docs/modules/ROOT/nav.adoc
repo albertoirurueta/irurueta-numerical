@@ -7,6 +7,8 @@
 *** xref:algorithms/linear-least-squares.adoc[]
 *** xref:algorithms/svd-linear-fitting.adoc[]
 *** xref:algorithms/levenberg-marquardt.adoc[]
+** Numerical derivatives
+*** xref:algorithms/numerical-derivatives.adoc[]
 ** Integration
 *** xref:algorithms/trapezoidal-integration.adoc[]
 *** xref:algorithms/simpson-integration.adoc[]

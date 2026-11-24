@@ -19,9 +19,17 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
 
@@ -44,11 +52,66 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
 
     private static final int TIMES = 100;
 
+    /**
+     * Default relative step expected for a new estimator.
+     */
+    private static final double DEFAULT_RELATIVE_STEP = 1e-8;
+
+    /**
+     * Default minimum step expected for a new estimator.
+     */
+    private static final double DEFAULT_MIN_STEP = 0.0;
+
+    /**
+     * Custom step used both as relative and as minimum step.
+     */
+    private static final double CUSTOM_STEP = 1e-7;
+
+    /**
+     * Tolerance when comparing a step with its nominal value, accounting for rounding of the perturbed parameter.
+     */
+    private static final double STEP_TOLERANCE = 1e-13;
+
+    /**
+     * Constant offset of the linear function used by the small parameter case.
+     */
+    private static final double LINEAR_OFFSET = 1.0;
+
+    /**
+     * Slope of the linear function used by the small parameter case.
+     */
+    private static final double LINEAR_SLOPE = 3.0;
+
+    /**
+     * Small parameter values used to compare the accuracy of different steps.
+     */
+    private static final double[] SMALL_PARAMETERS = {1e-5, 1e-7, 1e-10};
+
+    /**
+     * Maximum error expected from the estimation using a minimum step of {@link #CUSTOM_STEP}.
+     */
+    private static final double SMALL_PARAMETER_ERROR = 1e-6;
+
+    /**
+     * Number of dimensions used by tests recording perturbations.
+     */
+    private static final int RECORDING_DIMS = 3;
+
     private int ndims;
     private int nvars;
     private Matrix minimums;
     private Matrix widths;
     private double[] offsets;
+
+    /**
+     * When not null, every point received by {@link #evaluate(double[], double[])} is recorded here.
+     */
+    private List<double[]> recordedPoints;
+
+    /**
+     * When true, {@link #evaluate(double[], double[])} evaluates a linear function of the first parameter.
+     */
+    private boolean linearMode;
 
     @Test
     void testConstructor() throws WrongSizeException {
@@ -104,8 +167,205 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
         }
     }
 
+    /**
+     * Checks that a new estimator uses the default steps.
+     */
+    @Test
+    void constructor_whenDefault_usesDefaultSteps() {
+        final var estimator = new JacobianEstimator(this);
+
+        assertEquals(DEFAULT_RELATIVE_STEP, JacobianEstimator.EPS, 0.0);
+        assertEquals(JacobianEstimator.EPS, estimator.getRelativeStep(), 0.0);
+        assertEquals(DEFAULT_MIN_STEP, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that the constructor stores valid steps.
+     */
+    @Test
+    void constructor_whenValidSteps_storesSteps() {
+        final var estimator = new JacobianEstimator(this, CUSTOM_STEP, 2.0 * CUSTOM_STEP);
+
+        assertEquals(CUSTOM_STEP, estimator.getRelativeStep(), 0.0);
+        assertEquals(2.0 * CUSTOM_STEP, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that the constructor rejects a non strictly positive relative step.
+     *
+     * @param relativeStep invalid relative step.
+     */
+    @ParameterizedTest
+    @ValueSource(doubles = {0.0, -1e-8, Double.NaN, Double.POSITIVE_INFINITY})
+    void constructor_whenInvalidRelativeStep_throwsIllegalArgumentException(final double relativeStep) {
+        assertThrows(IllegalArgumentException.class, () -> new JacobianEstimator(this, relativeStep, 0.0));
+    }
+
+    /**
+     * Checks that the constructor rejects a negative minimum step.
+     *
+     * @param minStep invalid minimum step.
+     */
+    @ParameterizedTest
+    @ValueSource(doubles = {-1e-8, Double.NaN, Double.POSITIVE_INFINITY})
+    void constructor_whenInvalidMinStep_throwsIllegalArgumentException(final double minStep) {
+        assertThrows(IllegalArgumentException.class, () -> new JacobianEstimator(this, CUSTOM_STEP, minStep));
+    }
+
+    /**
+     * Checks that setters store valid values.
+     */
+    @Test
+    void setSteps_whenValid_updatesSteps() {
+        final var estimator = new JacobianEstimator(this);
+
+        estimator.setRelativeStep(CUSTOM_STEP);
+        estimator.setMinStep(0.0);
+        assertEquals(CUSTOM_STEP, estimator.getRelativeStep(), 0.0);
+        assertEquals(0.0, estimator.getMinStep(), 0.0);
+
+        estimator.setMinStep(CUSTOM_STEP);
+        assertEquals(CUSTOM_STEP, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that the relative step setter rejects non strictly positive values and keeps previous value.
+     *
+     * @param relativeStep invalid relative step.
+     */
+    @ParameterizedTest
+    @ValueSource(doubles = {0.0, -1e-8, Double.NaN, Double.POSITIVE_INFINITY})
+    void setRelativeStep_whenInvalid_throwsIllegalArgumentException(final double relativeStep) {
+        final var estimator = new JacobianEstimator(this);
+
+        assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(relativeStep));
+        assertEquals(JacobianEstimator.EPS, estimator.getRelativeStep(), 0.0);
+    }
+
+    /**
+     * Checks that the minimum step setter rejects negative values and keeps previous value.
+     *
+     * @param minStep invalid minimum step.
+     */
+    @ParameterizedTest
+    @ValueSource(doubles = {-1e-8, Double.NaN, Double.POSITIVE_INFINITY})
+    void setMinStep_whenInvalid_throwsIllegalArgumentException(final double minStep) {
+        final var estimator = new JacobianEstimator(this);
+
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(minStep));
+        assertEquals(DEFAULT_MIN_STEP, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that with default steps results are bit-for-bit equal to the original step rule.
+     */
+    @Test
+    void jacobian_whenDefaultSteps_matchesOriginalRuleExactly() throws EvaluationException, WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        for (var t = 0; t < TIMES; t++) {
+            setUpFunction(RECORDING_DIMS, MAX_VARS);
+            final var point = new double[RECORDING_DIMS];
+            randomizer.fill(point, MIN_EVAL_POINT, MAX_EVAL_POINT);
+            point[0] = 0.0;
+
+            final var estimator = new JacobianEstimator(this);
+            final var result = estimator.jacobian(point);
+            final var expected = originalRuleJacobian(point);
+
+            for (var i = 0; i < nvars; i++) {
+                for (var j = 0; j < RECORDING_DIMS; j++) {
+                    assertEquals(expected.getElementAt(i, j), result.getElementAt(i, j), 0.0);
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks that a parameter exactly equal to zero still gets a non-zero step with default values.
+     */
+    @Test
+    void jacobian_whenParameterIsZeroAndDefaultSteps_usesNonZeroStep() throws EvaluationException {
+        setUpFunction(RECORDING_DIMS, 1);
+        final var point = new double[RECORDING_DIMS];
+        final var estimator = new JacobianEstimator(this);
+
+        recordedPoints = new ArrayList<>();
+        estimator.jacobian(point);
+
+        assertEquals(RECORDING_DIMS + 1, recordedPoints.size());
+        for (var j = 0; j < RECORDING_DIMS; j++) {
+            final var step = recordedPoints.get(j + 1)[j] - point[j];
+            assertNotEquals(0.0, step);
+            assertEquals(JacobianEstimator.EPS, step, 0.0);
+        }
+    }
+
+    /**
+     * Checks that using the same relative and minimum step yields a step of {@code step * max(1, |x|)}.
+     */
+    @Test
+    void jacobian_whenRelativeAndMinStepAreEqual_usesStepTimesMaxOfOneAndAbsoluteValue() throws EvaluationException {
+        setUpFunction(RECORDING_DIMS, 1);
+        final var point = new double[]{0.5, -3.0, 20.0};
+        final var estimator = new JacobianEstimator(this, CUSTOM_STEP, CUSTOM_STEP);
+
+        recordedPoints = new ArrayList<>();
+        estimator.jacobian(point);
+
+        assertEquals(RECORDING_DIMS + 1, recordedPoints.size());
+        for (var j = 0; j < RECORDING_DIMS; j++) {
+            final var step = recordedPoints.get(j + 1)[j] - point[j];
+            final var expected = CUSTOM_STEP * Math.max(1.0, Math.abs(point[j]));
+            assertEquals(expected, step, STEP_TOLERANCE);
+        }
+    }
+
+    /**
+     * Checks that for small parameters a minimum step is closer to the analytical Jacobian than defaults.
+     */
+    @Test
+    void jacobian_whenSmallParametersAndMinStep_isMoreAccurateThanDefaults() throws EvaluationException {
+        linearMode = true;
+        nvars = 1;
+        final var defaults = new JacobianEstimator(this);
+        final var withMinStep = new JacobianEstimator(this, CUSTOM_STEP, CUSTOM_STEP);
+
+        for (final var value : SMALL_PARAMETERS) {
+            final var point = new double[]{value};
+
+            final var defaultsError = Math.abs(defaults.jacobian(point).getElementAt(0, 0) - LINEAR_SLOPE);
+            final var minStepError = Math.abs(withMinStep.jacobian(point).getElementAt(0, 0) - LINEAR_SLOPE);
+
+            assertTrue(minStepError < defaultsError);
+            assertTrue(minStepError < SMALL_PARAMETER_ERROR);
+        }
+    }
+
+    /**
+     * Checks that the estimator can be reused when the number of function variables changes.
+     */
+    @Test
+    void jacobian_whenNumberOfVariablesChanges_resizesInternalBuffers() throws EvaluationException {
+        final var point = new double[RECORDING_DIMS];
+        final var estimator = new JacobianEstimator(this);
+
+        setUpFunction(RECORDING_DIMS, MIN_VARS);
+        assertEquals(MIN_VARS, estimator.jacobian(point).getRows());
+
+        setUpFunction(RECORDING_DIMS, MAX_VARS);
+        assertEquals(MAX_VARS, estimator.jacobian(point).getRows());
+    }
+
     @Override
     public void evaluate(final double[] point, final double[] result) {
+        if (recordedPoints != null) {
+            recordedPoints.add(point.clone());
+        }
+        if (linearMode) {
+            result[0] = LINEAR_OFFSET + LINEAR_SLOPE * point[0];
+            return;
+        }
+
         final var dims = Math.min(Math.min(point.length, minimums.getColumns()), widths.getColumns());
         final var vars = result.length;
 
@@ -124,6 +384,58 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
     @Override
     public int getNumberOfVariables() {
         return nvars;
+    }
+
+    /**
+     * Sets up the quadratic test function with deterministic parameters.
+     *
+     * @param dims number of input dimensions.
+     * @param vars number of function variables.
+     */
+    private void setUpFunction(final int dims, final int vars) {
+        ndims = dims;
+        nvars = vars;
+        linearMode = false;
+        recordedPoints = null;
+        try {
+            minimums = new Matrix(vars, dims);
+            widths = Matrix.createWithUniformRandomValues(vars, dims, MIN_WIDTH, MAX_WIDTH);
+        } catch (final WrongSizeException e) {
+            throw new IllegalStateException(e);
+        }
+        offsets = new double[vars];
+    }
+
+    /**
+     * Estimates the Jacobian using the original step rule: {@code EPS * |x|}, or {@code EPS} if zero.
+     *
+     * @param point input point.
+     * @return estimated Jacobian.
+     * @throws WrongSizeException if matrix cannot be created.
+     */
+    private Matrix originalRuleJacobian(final double[] point) throws WrongSizeException {
+        final var numdims = point.length;
+        final var fold = new double[nvars];
+        final var fh = new double[nvars];
+        final var xh = point.clone();
+        final var result = new Matrix(nvars, numdims);
+
+        evaluate(point, fold);
+        for (var j = 0; j < numdims; j++) {
+            final var temp = point[j];
+            var h = DEFAULT_RELATIVE_STEP * Math.abs(temp);
+            if (h == 0.0) {
+                h = DEFAULT_RELATIVE_STEP;
+            }
+            xh[j] = temp + h;
+            h = xh[j] - temp;
+            evaluate(xh, fh);
+            xh[j] = temp;
+            for (var i = 0; i < nvars; i++) {
+                result.setElementAt(i, j, (fh[i] - fold[i]) / h);
+            }
+        }
+        return result;
     }
 
     private Matrix jacobian(final double[] params) {
