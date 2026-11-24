@@ -181,4 +181,73 @@ class SimpsonMatrixIntegratorTest {
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
+
+    @Test
+    void constants_haveExpectedValues() {
+        assertEquals(4.0, SimpsonMatrixIntegrator.TRAPEZOIDAL_RATIO, 0.0);
+        assertEquals(9.0, SimpsonMatrixIntegrator.TRIPLING_RATIO, 0.0);
+        assertEquals(20, SimpsonMatrixIntegrator.DEFAULT_JMAX);
+        assertEquals(14, SimpsonMatrixIntegrator.TRIPLING_JMAX);
+    }
+
+
+    @Test
+    void constructor_whenDefault_usesTrapezoidalBehavior() throws WrongSizeException, IntegrationException {
+        final var defaultIntegrator = new TestIntegrator(
+                new TrapezoidalMatrixQuadrature(0.0, 1.0, new SquareListener()), EPS);
+        final var explicitIntegrator = new TestIntegrator(
+                new TrapezoidalMatrixQuadrature(0.0, 1.0, new SquareListener()), EPS,
+                SimpsonMatrixIntegrator.TRAPEZOIDAL_RATIO, SimpsonMatrixIntegrator.DEFAULT_JMAX);
+
+        final var result = new Matrix(1, 1);
+        defaultIntegrator.integrate(result);
+        assertEquals(1.0 / 3.0, result.getElementAt(0, 0), 1e-6);
+
+        final var explicitResult = new Matrix(1, 1);
+        explicitIntegrator.integrate(explicitResult);
+        assertEquals(explicitResult.getElementAt(0, 0), result.getElementAt(0, 0), 0.0);
+    }
+
+    @Test
+    void integrate_whenJmaxTooSmall_throwsIntegrationException() throws WrongSizeException {
+        final var integrator = new TestIntegrator(
+                new TrapezoidalMatrixQuadrature(0.0, 1.0, new SquareListener()), 1e-14, 4.0, 6);
+
+        final var result = new Matrix(1, 1);
+        assertThrows(IntegrationException.class, () -> integrator.integrate(result));
+    }
+
+    private static class SquareListener implements MatrixSingleDimensionFunctionEvaluatorListener {
+
+        @Override
+        public void evaluate(final double point, final Matrix result) {
+            result.setElementAt(0, 0, point * point);
+        }
+
+        @Override
+        public int getRows() {
+            return 1;
+        }
+
+        @Override
+        public int getColumns() {
+            return 1;
+        }
+    }
+
+    private static class TestIntegrator extends SimpsonMatrixIntegrator<TrapezoidalMatrixQuadrature> {
+
+        TestIntegrator(final TrapezoidalMatrixQuadrature q, final double eps) {
+            super(q, eps);
+        }
+
+        TestIntegrator(final TrapezoidalMatrixQuadrature q, final double eps, final double ratio, final int jmax) {
+            super(q, eps, ratio, jmax);
+        }
+
+        @Override
+        public QuadratureType getQuadratureType() {
+            return QuadratureType.TRAPEZOIDAL;
+        }
+    }
 }

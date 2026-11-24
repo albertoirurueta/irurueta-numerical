@@ -132,4 +132,50 @@ class SimpsonIntegratorTest {
         assertEquals(IntegratorType.SIMPSON, integrator.getIntegratorType());
         assertEquals(QuadratureType.TRAPEZOIDAL, integrator.getQuadratureType());
     }
+
+    @Test
+    void constants_haveExpectedValues() {
+        assertEquals(4.0, SimpsonIntegrator.TRAPEZOIDAL_RATIO, 0.0);
+        assertEquals(9.0, SimpsonIntegrator.TRIPLING_RATIO, 0.0);
+        assertEquals(20, SimpsonIntegrator.DEFAULT_JMAX);
+        assertEquals(14, SimpsonIntegrator.TRIPLING_JMAX);
+    }
+
+
+    @Test
+    void constructor_whenDefault_usesTrapezoidalBehavior() throws IntegrationException {
+        final SingleDimensionFunctionEvaluatorListener listener = point -> point * point;
+
+        final var defaultIntegrator = new TestIntegrator(new TrapezoidalQuadrature(0.0, 1.0, listener), EPS);
+        final var explicitIntegrator = new TestIntegrator(new TrapezoidalQuadrature(0.0, 1.0, listener), EPS,
+                SimpsonIntegrator.TRAPEZOIDAL_RATIO, SimpsonIntegrator.DEFAULT_JMAX);
+
+        final var result = defaultIntegrator.integrate();
+        assertEquals(1.0 / 3.0, result, 1e-6);
+        assertEquals(explicitIntegrator.integrate(), result, 0.0);
+    }
+
+    @Test
+    void integrate_whenJmaxTooSmall_throwsIntegrationException() {
+        final SingleDimensionFunctionEvaluatorListener listener = point -> point * point;
+        final var integrator = new TestIntegrator(new TrapezoidalQuadrature(0.0, 1.0, listener), 1e-14, 4.0, 6);
+
+        assertThrows(IntegrationException.class, integrator::integrate);
+    }
+
+    private static class TestIntegrator extends SimpsonIntegrator<TrapezoidalQuadrature> {
+
+        TestIntegrator(final TrapezoidalQuadrature q, final double eps) {
+            super(q, eps);
+        }
+
+        TestIntegrator(final TrapezoidalQuadrature q, final double eps, final double ratio, final int jmax) {
+            super(q, eps, ratio, jmax);
+        }
+
+        @Override
+        public QuadratureType getQuadratureType() {
+            return QuadratureType.TRAPEZOIDAL;
+        }
+    }
 }

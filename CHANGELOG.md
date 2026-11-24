@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- `SimpsonMidPointQuadratureIntegrator`, `SimpsonInfinityMidPointQuadratureIntegrator`,
+  `SimpsonLowerSquareRootMidPointQuadratureIntegrator`, `SimpsonUpperSquareRootMidPointQuadratureIntegrator` and
+  their matrix counterparts: use the extrapolation `(9 * st - ost) / 8` that matches the tripling step of the
+  mid-point rules instead of the step-halving `(4 * st - ost) / 3`, and cap the number of stages at 14 (#43). Integrands that previously needed more than 14 stages with
+  these integrators now throw `IntegrationException` sooner instead of running up to 20 stages.
+
 ## [1.7.0] - 2026-11-24
 
 ### Added

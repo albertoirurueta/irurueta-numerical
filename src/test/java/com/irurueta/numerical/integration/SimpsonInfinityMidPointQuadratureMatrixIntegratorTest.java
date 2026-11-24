@@ -113,4 +113,53 @@ class SimpsonInfinityMidPointQuadratureMatrixIntegratorTest {
         final var integrator = new SimpsonInfinityMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(QuadratureType.INFINITY_MID_POINT, integrator.getQuadratureType());
     }
+
+    /**
+     * Maximum number of function evaluations expected when integrating a smooth function. Mid-point quadratures
+     * triple the number of points on each refinement, so a 9/8 extrapolation with a reduced maximum number of
+     * refinements must converge with fewer evaluations than the former 4/3 extrapolation did.
+     * Note: 729 (3^6) evaluations is the minimum possible, since convergence is first checked
+     * at the 7th stage (after JMIN); smooth integrands converge there. Before the fix this took
+     * 6561 to 59049 evaluations.
+     */
+    private static final int MAX_EVALUATIONS = 1000;
+
+    @Test
+    void integrate_whenSmoothFunction_returnsExpectedResultWithFewEvaluations()
+            throws IntegrationException, WrongSizeException {
+        final var expected0 = Math.exp(-1.0) - Math.exp(-2.0);
+        final var expected1 = 0.5 * (Math.exp(-2.0) - Math.exp(-4.0));
+        final var counter = new int[1];
+
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
+
+            @Override
+            public void evaluate(final double point, final Matrix result) {
+                counter[0]++;
+                result.setElementAtIndex(0, Math.exp(-point));
+                result.setElementAtIndex(1, Math.exp(-2.0 * point));
+            }
+
+            @Override
+            public int getRows() {
+                return 2;
+            }
+
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
+
+        final var integrator = new SimpsonInfinityMidPointQuadratureMatrixIntegrator(1.0, 2.0, listener, 1e-8);
+
+        final var integrationResult = new Matrix(2, 1);
+        integrator.integrate(integrationResult);
+
+        assertEquals(expected0, integrationResult.getElementAtIndex(0),
+                1e-6 * Math.max(1.0, Math.abs(expected0)));
+        assertEquals(expected1, integrationResult.getElementAtIndex(1),
+                1e-6 * Math.max(1.0, Math.abs(expected1)));
+        assertTrue(counter[0] <= MAX_EVALUATIONS);
+    }
 }
