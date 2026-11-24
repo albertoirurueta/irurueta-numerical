@@ -5,6 +5,16 @@ behavior changes for each version.
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
+== 1.7.1
+
+* 🐛 Fixed the mid-point Simpson integrators (plain, infinity, lower/upper square-root mid-point, and their matrix
+  variants): they now use the extrapolation that matches the tripling step of the mid-point rules, so smooth
+  integrands converge with far fewer evaluations. The number of stages is capped at 14, so integrands that need
+  more now throw `IntegrationException` sooner.
+* 🐛 Fixed a possible integer overflow in `BaseInterpolator`'s binary search on very large index ranges.
+* 📚 Documented the single-threaded contract of robust estimators and their listeners.
+* ♻️ Cleaned up Checkstyle, PMD and SpotBugs findings, with no API change.
+
 == 1.7.0
 
 * ✨ Added configurable `relativeStep` and `minStep` to `JacobianEstimator`, `GradientEstimator`,
