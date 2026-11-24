@@ -19,7 +19,6 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -155,7 +154,8 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
      * converge, if it can converge. By default, the factor is 1.0, which makes
      * the threshold to be computed as the median of residuals.
      */
-    public static final double DEFAULT_INLIER_FACTOR = 1.0; //1.5 would also be reasonable
+    // 1.5 would also be reasonable
+    public static final double DEFAULT_INLIER_FACTOR = 1.0;
 
     /**
      * Minimum allowed value for inlier factor.

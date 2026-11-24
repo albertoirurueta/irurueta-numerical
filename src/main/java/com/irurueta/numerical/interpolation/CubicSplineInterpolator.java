@@ -27,10 +27,19 @@ public class CubicSplineInterpolator extends BaseInterpolator {
      */
     private static final int M = 2;
 
+    /**
+     * Default first derivative at the first point (natural spline).
+     */
     private static final double YP1 = 1.e99;
 
+    /**
+     * Default first derivative at the last point (natural spline).
+     */
     private static final double YPN = 1.e99;
 
+    /**
+     * Second derivatives of the interpolating function at the tabulated points.
+     */
     private final double[] y2;
 
     /**

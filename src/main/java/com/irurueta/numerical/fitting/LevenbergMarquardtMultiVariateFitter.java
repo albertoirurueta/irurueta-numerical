@@ -23,7 +23,6 @@ import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.ChiSqDist;
 import com.irurueta.statistics.MaxIterationsExceededException;
-
 import java.util.Arrays;
 
 /**
@@ -55,6 +54,11 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
      * Indicates whether covariance must be adjusted or not after fitting is finished.
      */
     public static final boolean DEFAULT_ADJUST_COVARIANCE = true;
+
+    /**
+     * Jacobian of function at a given point.
+     */
+    Matrix jacobian;
 
     /**
      * Convergence parameter.
@@ -95,7 +99,7 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
     /**
      * Number of parameters ot be fitted.
      */
-    private int mfit = 0;
+    private int mfit;
 
     /**
      * An input point to be evaluated.
@@ -108,14 +112,9 @@ public class LevenbergMarquardtMultiVariateFitter extends MultiVariateFitter {
     private double[] ymod;
 
     /**
-     * Jacobian of function at a given point.
-     */
-    Matrix jacobian;
-
-    /**
      * Mean square error.
      */
-    private double mse = 0.0;
+    private double mse;
 
     /**
      * Indicates whether covariance must be adjusted or not.

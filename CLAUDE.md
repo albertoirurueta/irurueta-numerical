@@ -53,6 +53,45 @@ Notes:
 - CI (`.github/workflows/develop.yml`, `master.yml`) runs on `develop` (deploys SNAPSHOT) and `master` (release),
   reporting to SonarCloud and publishing the Maven site to GitHub Pages plus artifacts to Maven Central.
 
+### Checkstyle baseline
+
+`mvn checkstyle:checkstyle` now applies the repository's `checkstyle.xml` (the plugin is configured under
+`<build><plugins>` in `pom.xml`, not only under `<reporting>`). Measured on 2026-11-24 at version 1.8.0-SNAPSHOT
+(`src/main` only, before the fixes of this PR): 1010 violations in total.
+
+| Check | Violations |
+|-------|-----------|
+| HiddenField | 443 |
+| Indentation | 203 |
+| MagicNumber | 101 |
+| JavadocStyle | 87 |
+| RedundantModifier | 67 |
+| ImportOrder | 28 |
+| ThrowsCount | 14 |
+| JavadocVariable | 12 |
+| DeclarationOrder | 11 |
+| ParameterAssignment | 9 |
+| ExplicitInitialization | 9 |
+| JavadocPackage | 7 |
+| TrailingComment | 4 |
+| VisibilityModifier | 4 |
+| ParameterNumber | 3 |
+| NeedBraces | 2 |
+| NewlineAtEndOfFile | 2 |
+| WhitespaceAround | 1 |
+| ConstantName | 1 |
+| MultipleStringLiterals | 1 |
+| JavadocMethod | 1 |
+
+After Group 3 (`HiddenField` configured to ignore constructor parameters and setters, intentionally): `HiddenField`
+drops from 443 to 113 and the total from 1010 to 680 (re-measured 2026-11-24, `src/main` only).
+
+After Group 4 (mechanical fixes: `JavadocPackage`, `JavadocVariable`, `JavadocMethod`, `NewlineAtEndOfFile`, `NeedBraces`,
+`WhitespaceAround`, `ConstantName`, `TrailingComment`, `ExplicitInitialization`, `ImportOrder`, `DeclarationOrder` are all
+at 0): the total drops from 680 to 602 (re-measured 2026-11-24, `src/main` only). Remaining categories, left for
+follow-up PRs: Indentation 203, HiddenField 113, MagicNumber 101, JavadocStyle 87, RedundantModifier 67, ThrowsCount 14,
+ParameterAssignment 9, VisibilityModifier 4, ParameterNumber 3, MultipleStringLiterals 1.
+
 ## Architecture
 
 ### Package map (`com.irurueta.numerical.*`)

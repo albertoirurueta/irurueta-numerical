@@ -29,11 +29,10 @@ public abstract class BaseInterpolator {
      */
     protected final int mm;
 
-    protected int cor = 0;
-
-    private int jsav = 0;
-
-    private final int dj;
+    /**
+     * Indicates (non-zero) whether the last located value was correlated with the previous one.
+     */
+    protected int cor;
 
     /**
      * X values to be used for interpolation estimation. Must be monotonic (either increasing or
@@ -45,6 +44,16 @@ public abstract class BaseInterpolator {
      * Y values to be used for interpolation estimation.
      */
     protected final double[] yy;
+
+    /**
+     * Saved index of the last located value.
+     */
+    private int jsav;
+
+    /**
+     * Threshold to decide whether a hunt or a bisection locate must be used.
+     */
+    private final int dj;
 
     /**
      * Constructor.

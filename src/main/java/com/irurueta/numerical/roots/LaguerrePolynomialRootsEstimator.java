@@ -18,7 +18,6 @@ package com.irurueta.numerical.roots;
 import com.irurueta.algebra.Complex;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
-
 import java.util.Arrays;
 
 /**
@@ -70,7 +69,7 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
     /**
      * Array containing values for Laguerre method.
      */
-    private static final double[] frac =
+    private static final double[] FRAC =
             {0.0, 0.5, 0.25, 0.75, 0.13, 0.38, 0.62, 0.88, 1.0};
 
 
@@ -322,8 +321,8 @@ public class LaguerrePolynomialRootsEstimator extends PolynomialRootsEstimator {
             if (iter % MT != 0) {
                 x.copyFrom(x1);
             } else {
-                int pos = Math.min(iter / MT, frac.length - 1);
-                x.subtract(dx.multiplyByScalarAndReturnNew(frac[pos]));
+                int pos = Math.min(iter / MT, FRAC.length - 1);
+                x.subtract(dx.multiplyByScalarAndReturnNew(FRAC[pos]));
             }
         }
         // too many iterations in Laguerre

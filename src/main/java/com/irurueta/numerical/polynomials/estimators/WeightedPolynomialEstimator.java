@@ -23,7 +23,6 @@ import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.numerical.robust.WeightSelection;
 import com.irurueta.sorting.SortingException;
-
 import java.util.List;
 
 /**

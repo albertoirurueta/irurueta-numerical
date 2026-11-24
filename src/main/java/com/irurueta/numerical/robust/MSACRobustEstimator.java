@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
-
 import java.util.ArrayList;
 import java.util.BitSet;
 
@@ -296,7 +295,8 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
             // reusable list that will contain preliminary solutions on each
             // iteration
             final var iterResults = new ArrayList<T>();
-            bestResult = null; // best result found so far
+            // best result found so far
+            bestResult = null;
             int currentInliers;
             // progress and previous progress to determine when progress
             // notification must occur

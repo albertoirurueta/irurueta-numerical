@@ -36,6 +36,11 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 public class MidPointQuadrature extends Quadrature {
 
     /**
+     * Listener to evaluate single dimension functions at required points.
+     */
+    protected final SingleDimensionFunctionEvaluatorListener listener;
+
+    /**
      * Lower limit of integration.
      */
     private final double a;
@@ -49,11 +54,6 @@ public class MidPointQuadrature extends Quadrature {
      * Current value of integral.
      */
     private double s;
-
-    /**
-     * Listener to evaluate single dimension functions at required points.
-     */
-    protected final SingleDimensionFunctionEvaluatorListener listener;
 
     /**
      * Constructor.

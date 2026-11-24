@@ -23,7 +23,6 @@ import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.statistics.ChiSqDist;
 import com.irurueta.statistics.MaxIterationsExceededException;
-
 import java.util.Arrays;
 
 /**
@@ -95,7 +94,7 @@ public class LevenbergMarquardtMultiDimensionFitter extends MultiDimensionFitter
     /**
      * Number of parameters ot be fitted.
      */
-    private int mfit = 0;
+    private int mfit;
 
     /**
      * An input point to be evaluated.
@@ -106,7 +105,7 @@ public class LevenbergMarquardtMultiDimensionFitter extends MultiDimensionFitter
     /**
      * Mean square error.
      */
-    private double mse = 0.0;
+    private double mse;
 
     /**
      * Indicates whether covariance must be adjusted or not.

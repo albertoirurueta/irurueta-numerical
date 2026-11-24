@@ -172,6 +172,7 @@ public class CurveInterpolator {
      * @param pm +1 or -1.
      * @param xoff offset of x.
      * @param yoff offset of y.
+     * @return estimated derivative at the endpoint.
      */
     private double fprime(final double[] x, final double[] y, final int pm, final int xoff, final int yoff) {
         final var s1 = x[xoff] - x[xoff + pm];

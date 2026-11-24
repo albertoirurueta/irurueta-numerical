@@ -17,7 +17,6 @@ package com.irurueta.numerical.robust;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
-
 import java.util.ArrayList;
 import java.util.BitSet;
 

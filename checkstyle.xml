@@ -48,7 +48,12 @@
 		<!-- coding -->
 		<module name="EmptyStatement"/>
 		<module name="EqualsHashCode"/>
-		<module name="HiddenField"/>
+		<!-- Intentional: parameters named after fields are the project convention for constructors and setters. -->
+		<module name="HiddenField">
+			<property name="ignoreConstructorParameter" value="true"/>
+			<property name="ignoreSetter" value="true"/>
+			<property name="setterCanReturnItsClass" value="true"/>
+		</module>
 		<module name="MagicNumber"/>
 		<module name="MissingSwitchDefault"/>
 		<module name="ModifiedControlVariable"/>

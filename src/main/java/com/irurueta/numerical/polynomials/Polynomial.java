@@ -24,7 +24,6 @@ import com.irurueta.numerical.roots.PolynomialRootsEstimator;
 import com.irurueta.numerical.roots.SecondDegreePolynomialRootsEstimator;
 import com.irurueta.numerical.roots.ThirdDegreePolynomialRootsEstimator;
 import com.irurueta.numerical.signal.processing.Convolver1D;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -35,11 +34,6 @@ import java.util.ArrayList;
 public class Polynomial implements Serializable {
 
     /**
-     * Minimum derivative / integration order.
-     */
-    private static final int MIN_ORDER = 1;
-
-    /**
      * Minimum allowed length in polynomial parameters.
      */
     public static final int MIN_VALID_POLY_PARAMS_LENGTH = 1;
@@ -48,6 +42,11 @@ public class Polynomial implements Serializable {
      * Constant defining machine precision
      */
     public static final double EPS = 1e-10;
+
+    /**
+     * Minimum derivative / integration order.
+     */
+    private static final int MIN_ORDER = 1;
 
     /**
      * Array containing parameters defining a polynomial.

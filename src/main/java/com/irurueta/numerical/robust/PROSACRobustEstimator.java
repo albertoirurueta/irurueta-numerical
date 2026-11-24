@@ -19,7 +19,6 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
