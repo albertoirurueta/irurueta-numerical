@@ -20,6 +20,11 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
 /**
  * Computes function integration by using Simpson's rule an Upper Square Root mid-point quadrature
  * when upper integration bound lies at a function singularity.
+ * <p>
+ * Because mid-point quadratures refine the step by a factor of 3 on each iteration, successive
+ * estimates are combined using a 9/8 extrapolation (instead of the 4/3 used with trapezoidal quadratures),
+ * and the maximum number of refinements is reduced accordingly.
+ * See Numerical Recipes, 3rd ed., section 4.4, p. 169.
  */
 public class SimpsonUpperSquareRootMidPointQuadratureIntegrator
         extends SimpsonIntegrator<UpperSquareRootMidPointQuadrature> {
@@ -34,7 +39,7 @@ public class SimpsonUpperSquareRootMidPointQuadratureIntegrator
      */
     public SimpsonUpperSquareRootMidPointQuadratureIntegrator(
             final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
-        super(new UpperSquareRootMidPointQuadrature(a, b, listener), eps);
+        super(new UpperSquareRootMidPointQuadrature(a, b, listener), eps, TRIPLING_RATIO, TRIPLING_JMAX);
     }
 
     /**

@@ -16,6 +16,7 @@
 package com.irurueta.numerical.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.irurueta.statistics.NormalDist;
 import com.irurueta.statistics.UniformRandomizer;
@@ -96,5 +97,27 @@ class SimpsonInfinityMidPointQuadratureIntegratorTest {
         final var result = integrator.integrate();
 
         assertEquals(expected, result, ABSOLUTE_ERROR_GAUSSIAN);
+    }
+
+    /**
+     * Maximum number of function evaluations expected when integrating a smooth function. Mid-point quadratures
+     * triple the number of points on each refinement, so a 9/8 extrapolation with a reduced maximum number of
+     * refinements must converge with fewer evaluations than the former 4/3 extrapolation did.
+     */
+    private static final int MAX_EVALUATIONS = 1000;
+
+    @Test
+    void integrate_whenSmoothFunction_returnsExpectedResultWithFewEvaluations() throws IntegrationException {
+        final var expected = Math.exp(-1.0) - Math.exp(-2.0);
+        final var counter = new int[1];
+
+        final var integrator = new SimpsonInfinityMidPointQuadratureIntegrator(1.0, 2.0, point -> {
+            counter[0]++;
+            return Math.exp(-point);
+        }, 1e-8);
+        final var result = integrator.integrate();
+
+        assertEquals(expected, result, 1e-6 * Math.max(1.0, Math.abs(expected)));
+        assertTrue(counter[0] <= MAX_EVALUATIONS);
     }
 }
