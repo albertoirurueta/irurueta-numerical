@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-11-24
+
+### Changed
+
+- Javadoc documents that robust estimators and their listeners are single-threaded by contract, and every package
+  now has a `package-info.java` (#41, #39).
+- Checkstyle, PMD and SpotBugs cleanups with no API change (#39, #40, #41).
+
 ### Fixed
 
 - `SimpsonMidPointQuadratureIntegrator`, `SimpsonInfinityMidPointQuadratureIntegrator`,
@@ -14,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   their matrix counterparts: use the extrapolation `(9 * st - ost) / 8` that matches the tripling step of the
   mid-point rules instead of the step-halving `(4 * st - ost) / 3`, and cap the number of stages at 14 (#43). Integrands that previously needed more than 14 stages with
   these integrators now throw `IntegrationException` sooner instead of running up to 20 stages.
+- `BaseInterpolator`: the binary-search midpoint uses an unsigned shift (`>>>`) so it cannot overflow on very
+  large index ranges (#41).
 
 ## [1.7.0] - 2026-11-24
 
@@ -124,7 +134,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - Curve/surface fitting (Levenberg-Marquardt and linear/SVD-based fitters).
   - Signal processing utilities: `KalmanFilter`, 1D convolution, and measurement noise covariance estimation.
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.7.0...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.7.1...HEAD
+[1.7.1]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.1...1.7.0
 [1.6.1]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.5.0...1.6.0
