@@ -28,6 +28,14 @@ import com.irurueta.numerical.EvaluationException;
  * matrix function to be integrated has a finite fourth derivative (i.e., a continuous third
  * derivative).
  *
+ * <p>
+ * The extrapolation step combines the current quadrature estimate {@code st} and the previous one {@code ost} as
+ * {@code s = (ratio * st - ost) / (ratio - 1)}. The ratio is the factor by which the quadrature error is reduced
+ * on each refinement: {@code 2^2 = 4} for quadratures halving their step (e.g., trapezoidal), which yields
+ * {@code (4 * st - ost) / 3}, and {@code 3^2 = 9} for quadratures tripling their step (e.g., mid-point), which
+ * yields {@code (9 * st - ost) / 8}.
+ * See Numerical Recipes, 3rd ed., section 4.2 (p. 165) and section 4.4 (p. 169).
+ *
  * @param <T> a quadrature.
  */
 public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extends MatrixIntegrator {
@@ -38,14 +46,31 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
     public static final double EPS = 1e-10;
 
     /**
+     * Extrapolation ratio for quadratures that halve their step on each refinement (2^2).
+     * Leads to extrapolation {@code (4 * st - ost) / 3}.
+     */
+    protected static final double TRAPEZOIDAL_RATIO = SimpsonIntegrator.TRAPEZOIDAL_RATIO;
+
+    /**
+     * Extrapolation ratio for quadratures that triple their step on each refinement (3^2).
+     * Leads to extrapolation {@code (9 * st - ost) / 8}.
+     */
+    protected static final double TRIPLING_RATIO = SimpsonIntegrator.TRIPLING_RATIO;
+
+    /**
+     * Default maximum number of allowed steps.
+     */
+    protected static final int DEFAULT_JMAX = SimpsonIntegrator.DEFAULT_JMAX;
+
+    /**
+     * Maximum number of allowed steps for quadratures tripling their step on each refinement.
+     */
+    protected static final int TRIPLING_JMAX = SimpsonIntegrator.TRIPLING_JMAX;
+
+    /**
      * Minimum required number of steps.
      */
     private static final int JMIN = 5;
-
-    /**
-     * Maximum number of allowed steps.
-     */
-    private static final int JMAX = 20;
 
     /**
      * Quadrature used for integration.
@@ -58,14 +83,41 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
     private final double eps;
 
     /**
-     * Constructor.
+     * Extrapolation ratio.
+     */
+    private final double ratio;
+
+    /**
+     * Maximum number of allowed steps.
+     */
+    private final int jmax;
+
+    /**
+     * Constructor using halving step extrapolation ratio and default maximum number of steps.
      *
      * @param q   Quadrature used for integration.
      * @param eps Required accuracy.
      */
     protected SimpsonMatrixIntegrator(final T q, final double eps) {
+        this(q, eps, TRAPEZOIDAL_RATIO, DEFAULT_JMAX);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param q     Quadrature used for integration.
+     * @param eps   Required accuracy.
+     * @param ratio Extrapolation ratio (4.0 for quadratures halving their step, 9.0 for tripling their step).
+     *              Must be greater than 1; otherwise the extrapolation divides by zero (or flips sign) and
+     *              integration never converges.
+     * @param jmax  Maximum number of allowed steps. Must be greater than 6, since convergence is only checked
+     *              after the minimum number of steps; otherwise integration always fails.
+     */
+    protected SimpsonMatrixIntegrator(final T q, final double eps, final double ratio, final int jmax) {
         this.q = q;
         this.eps = eps;
+        this.ratio = ratio;
+        this.jmax = jmax;
     }
 
     /**
@@ -85,14 +137,14 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
             final var ost = new Matrix(rows, columns);
             final var os = new Matrix(rows, columns);
             final var tmp = new Matrix(rows, columns);
-            for (var j = 0; j < JMAX; j++) {
+            for (var j = 0; j < jmax; j++) {
                 q.next(st);
 
-                // s = (4.0 * st - ost) / 3.0
+                // s = (ratio * st - ost) / (ratio - 1.0)
                 tmp.copyFrom(st);
-                tmp.multiplyByScalar(4.0);
+                tmp.multiplyByScalar(ratio);
                 tmp.subtract(ost);
-                tmp.multiplyByScalar(1.0 / 3.0);
+                tmp.multiplyByScalar(1.0 / (ratio - 1.0));
                 s.copyFrom(tmp);
 
                 if (j > JMIN && (Math.abs(normMin(s) - normMin(os)) < eps * normMin(os)

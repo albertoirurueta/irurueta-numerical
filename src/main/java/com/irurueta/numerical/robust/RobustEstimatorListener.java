@@ -18,6 +18,9 @@ package com.irurueta.numerical.robust;
 /**
  * Listener to be notified of events on a robust estimator such as when
  * estimation starts, ends or when progress changes.
+ * All methods are invoked on the same thread that started the estimation, so
+ * implementations do not need to be thread-safe, and the estimator must not be
+ * reconfigured from another thread while an estimation is in progress.
  *
  * @param <T> type of instance being estimated.
  */

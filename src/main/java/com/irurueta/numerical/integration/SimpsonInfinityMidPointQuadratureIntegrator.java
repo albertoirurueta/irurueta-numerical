@@ -29,6 +29,11 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * SimpsonInfinityMidPointQuadratureIntegrator integrator2 =
  * new SimpsonInfinityMidPointQuadratureIntegrator(2.0, 1e99, listener);
  * double integral = integrator1.integrate() + integrator2.integrate();
+ * <p>
+ * Because mid-point quadratures refine the step by a factor of 3 on each iteration, successive
+ * estimates are combined using a 9/8 extrapolation (instead of the 4/3 used with trapezoidal quadratures),
+ * and the maximum number of refinements is reduced accordingly.
+ * See Numerical Recipes, 3rd ed., section 4.4, p. 169.
  */
 public class SimpsonInfinityMidPointQuadratureIntegrator extends SimpsonIntegrator<InfinityMidPointQuadrature> {
 
@@ -42,7 +47,7 @@ public class SimpsonInfinityMidPointQuadratureIntegrator extends SimpsonIntegrat
      */
     public SimpsonInfinityMidPointQuadratureIntegrator(
             final double a, final double b, final SingleDimensionFunctionEvaluatorListener listener, final double eps) {
-        super(new InfinityMidPointQuadrature(a, b, listener), eps);
+        super(new InfinityMidPointQuadrature(a, b, listener), eps, TRIPLING_RATIO, TRIPLING_JMAX);
     }
 
     /**

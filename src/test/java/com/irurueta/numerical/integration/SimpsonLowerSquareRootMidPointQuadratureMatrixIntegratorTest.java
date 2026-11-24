@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,36 @@ class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
 
     private static final double MAX_VALUE = 10.0;
 
+    /**
+     * Fixed seed used to make randomized exponential integration tests deterministic.
+     */
+    private static final long SEED = 3_141_592_653L;
+
+    /**
+     * Number of randomized trials executed by exponential integration tests.
+     */
+    private static final int TIMES = 10;
+
+    /**
+     * Minimum length of the integration interval used in exponential integration tests.
+     */
+    private static final double MIN_INTERVAL = 0.5;
+
+    /**
+     * Minimum absolute value of sin(b) - sin(a) and cos(b) - cos(a) in exponential integration tests. The
+     * integrator uses a relative convergence criterion based on the smallest absolute element of the result, which
+     * cannot be met when any element of the expected integral is close to zero.
+     */
+    private static final double MIN_ABS_DIFF = 0.1;
+
     private static final double ABSOLUTE_ERROR_EXPONENTIAL = 1e-4;
+
+    /**
+     * Relative convergence accuracy used by the integrator in the exponential integration test. It is tighter than
+     * {@link #ABSOLUTE_ERROR_EXPONENTIAL}, because convergence is only checked on the smallest absolute element of
+     * the result and the remaining elements may still have a larger error.
+     */
+    private static final double EPS_EXPONENTIAL = 1e-7;
 
     private static final double ABSOLUTE_ERROR_IMPROPER_1 = 1e-5;
 
@@ -39,9 +69,7 @@ class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
         // for single dimension functions, integral of f(t) = e^(a*t) is f(t) = 1/a*e^(a*t)
         // Consequently, for matrix function f(t) = e^(A*t) where A is a matrix, should be:
         // f(t) = A^-1 * e^(A*t)
-        final var randomizer = new UniformRandomizer();
-        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer(new Random(SEED));
 
         // for matrix A = [0    1]
         //                [-1   0]
@@ -91,22 +119,28 @@ class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
 
         // F(b) - F(a) = [sin(b) - sin(a)       -cos(b) + cos(a)]
         //               [cos(b) - cos(a)        sin(b) - sin(a)]
-        final var expectedResult = new Matrix(2, 2);
-        final var sinDiff = Math.sin(b) - Math.sin(a);
-        final var cosDiff = Math.cos(b) - Math.cos(a);
-        expectedResult.setElementAtIndex(0, sinDiff);
-        expectedResult.setElementAtIndex(1, cosDiff);
-        expectedResult.setElementAtIndex(2, -cosDiff);
-        expectedResult.setElementAtIndex(3, sinDiff);
+        for (var t = 0; t < TIMES; t++) {
+            final var interval = drawInterval(randomizer);
+            final var a = interval[0];
+            final var b = interval[1];
 
-        final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
-                ABSOLUTE_ERROR_EXPONENTIAL);
+            final var expectedResult = new Matrix(2, 2);
+            final var sinDiff = Math.sin(b) - Math.sin(a);
+            final var cosDiff = Math.cos(b) - Math.cos(a);
+            expectedResult.setElementAtIndex(0, sinDiff);
+            expectedResult.setElementAtIndex(1, cosDiff);
+            expectedResult.setElementAtIndex(2, -cosDiff);
+            expectedResult.setElementAtIndex(3, sinDiff);
 
-        final var integrationResult = new Matrix(2, 2);
-        integrator.integrate(integrationResult);
+            final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
+                    EPS_EXPONENTIAL);
 
-        // check
-        assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_EXPONENTIAL));
+            final var integrationResult = new Matrix(2, 2);
+            integrator.integrate(integrationResult);
+
+            // check
+            assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_EXPONENTIAL));
+        }
     }
 
     @Test
@@ -189,5 +223,72 @@ class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegratorTest {
 
         final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(QuadratureType.LOWER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
+    }
+
+    /**
+     * Draws an integration interval [a, b], at least {@link #MIN_INTERVAL} long, where neither sin(b) - sin(a)
+     * nor cos(b) - cos(a) is close to zero.
+     *
+     * @param randomizer randomizer.
+     * @return array containing a and b.
+     */
+    private static double[] drawInterval(final UniformRandomizer randomizer) {
+        double a;
+        double b;
+        do {
+            a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE - MIN_INTERVAL);
+            b = randomizer.nextDouble(a + MIN_INTERVAL, MAX_VALUE);
+        } while (Math.abs(Math.sin(b) - Math.sin(a)) < MIN_ABS_DIFF
+                || Math.abs(Math.cos(b) - Math.cos(a)) < MIN_ABS_DIFF);
+        return new double[]{a, b};
+    }
+
+    /**
+     * Maximum number of function evaluations expected when integrating a smooth function. Mid-point quadratures
+     * triple the number of points on each refinement, so a 9/8 extrapolation with a reduced maximum number of
+     * refinements must converge with fewer evaluations than the former 4/3 extrapolation did.
+     * Note: 729 (3^6) evaluations is the minimum possible, since convergence is first checked
+     * at the 7th stage (after JMIN); smooth integrands converge there. Before the fix this took
+     * 6561 to 59049 evaluations.
+     */
+    private static final int MAX_EVALUATIONS = 1000;
+
+    @Test
+    void integrate_whenSmoothFunction_returnsExpectedResultWithFewEvaluations()
+            throws IntegrationException, WrongSizeException {
+        final var expected0 = Math.exp(2.0) - Math.exp(1.0);
+        final var expected1 = 0.5 * (Math.exp(4.0) - Math.exp(2.0));
+        final var counter = new int[1];
+
+        final var listener = new MatrixSingleDimensionFunctionEvaluatorListener() {
+
+            @Override
+            public void evaluate(final double point, final Matrix result) {
+                counter[0]++;
+                result.setElementAtIndex(0, Math.exp(point));
+                result.setElementAtIndex(1, Math.exp(2.0 * point));
+            }
+
+            @Override
+            public int getRows() {
+                return 2;
+            }
+
+            @Override
+            public int getColumns() {
+                return 1;
+            }
+        };
+
+        final var integrator = new SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(1.0, 2.0, listener, 1e-8);
+
+        final var integrationResult = new Matrix(2, 1);
+        integrator.integrate(integrationResult);
+
+        assertEquals(expected0, integrationResult.getElementAtIndex(0),
+                1e-6 * Math.max(1.0, Math.abs(expected0)));
+        assertEquals(expected1, integrationResult.getElementAtIndex(1),
+                1e-6 * Math.max(1.0, Math.abs(expected1)));
+        assertTrue(counter[0] <= MAX_EVALUATIONS);
     }
 }

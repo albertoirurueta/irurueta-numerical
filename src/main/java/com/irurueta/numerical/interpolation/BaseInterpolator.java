@@ -29,11 +29,10 @@ public abstract class BaseInterpolator {
      */
     protected final int mm;
 
-    protected int cor = 0;
-
-    private int jsav = 0;
-
-    private final int dj;
+    /**
+     * Indicates (non-zero) whether the last located value was correlated with the previous one.
+     */
+    protected int cor;
 
     /**
      * X values to be used for interpolation estimation. Must be monotonic (either increasing or
@@ -45,6 +44,16 @@ public abstract class BaseInterpolator {
      * Y values to be used for interpolation estimation.
      */
     protected final double[] yy;
+
+    /**
+     * Saved index of the last located value.
+     */
+    private int jsav;
+
+    /**
+     * Threshold to decide whether a hunt or a bisection locate must be used.
+     */
+    private final int dj;
 
     /**
      * Constructor.
@@ -130,7 +139,7 @@ public abstract class BaseInterpolator {
         int jm;
         int jl;
         // True if ascending order of table, false otherwise.
-        final var ascend = (xx[n - 1] >= xx[0]);
+        final var ascend = xx[n - 1] >= xx[0];
 
         // Initialize lower and upper limits.
         jl = 0;
@@ -138,7 +147,7 @@ public abstract class BaseInterpolator {
 
         while (ju - jl > 1) {
             // If we are not yet done, compute a midpoint
-            jm = (ju + jl) >> 1;
+            jm = (ju + jl) >>> 1;
             if (x >= xx[jm] == ascend) {
                 // and replace either the lower limit
                 jl = jm;
@@ -179,7 +188,7 @@ public abstract class BaseInterpolator {
         var inc = 1;
 
         // Ture if ascending order of table, false otherwise
-        final var ascnd = (xx[n - 1] >= xx[0]);
+        final var ascnd = xx[n - 1] >= xx[0];
         if (jl < 0 || jl > n - 1) {
             // Input guess not useful. Go immediately to bisection
             jl = 0;
@@ -225,7 +234,7 @@ public abstract class BaseInterpolator {
 
         // Hunt is done, so begin the final bisection phase
         while (ju - jl > 1) {
-            jm = (ju + jl) >> 1;
+            jm = (ju + jl) >>> 1;
             if (x >= xx[jm] == ascnd) {
                 jl = jm;
             } else {

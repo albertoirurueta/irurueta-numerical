@@ -20,7 +20,6 @@ import com.irurueta.algebra.GaussJordanElimination;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.NotReadyException;
-
 import java.util.Arrays;
 
 /**
@@ -195,7 +194,9 @@ public class SimpleSingleDimensionLinearFitter extends SingleDimensionLinearFitt
                 ym = y[i];
                 if (mfit < ma) {
                     for (j = 0; j < ma; j++) {
-                        if (!ia[j]) ym -= a[j] * afunc[j];
+                        if (!ia[j]) {
+                            ym -= a[j] * afunc[j];
+                        }
                     }
                 }
                 sig2i = 1.0 / Math.pow(sig[i], 2.0);

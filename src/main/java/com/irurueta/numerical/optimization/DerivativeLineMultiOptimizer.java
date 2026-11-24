@@ -45,16 +45,16 @@ public abstract class DerivativeLineMultiOptimizer extends MultiOptimizer {
     protected double[] xi;
 
     /**
-     * Number of dimensions on function being evaluated.
-     */
-    private int n;
-
-    /**
      * Listener to evaluate the function's gradient. If the function's
      * gradient is not know (e.g. does not have a closed expression), then
      * a GradientEstimator might be used inside the listener implementation.
      */
     protected GradientFunctionEvaluatorListener gradientListener;
+
+    /**
+     * Number of dimensions on function being evaluated.
+     */
+    private int n;
 
     /**
      * Class in charge of evaluating a function through a given line.

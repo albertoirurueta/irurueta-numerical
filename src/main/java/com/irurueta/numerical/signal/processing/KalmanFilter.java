@@ -19,7 +19,6 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
-
 import java.io.Serializable;
 
 /**
@@ -575,7 +574,7 @@ public class KalmanFilter implements Serializable {
      */
     public void setControlMatrix(final Matrix controlMatrix) {
         if (cp > 0) {
-            if (controlMatrix == null || (controlMatrix.getRows() != dp || controlMatrix.getColumns() != cp)) {
+            if (controlMatrix == null || controlMatrix.getRows() != dp || controlMatrix.getColumns() != cp) {
                 throw new IllegalArgumentException();
             }
         } else {

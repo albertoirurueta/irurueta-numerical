@@ -17,7 +17,6 @@ package com.irurueta.numerical.robust;
 
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
-
 import java.util.ArrayList;
 import java.util.BitSet;
 
@@ -306,7 +305,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof RANSACRobustEstimatorListener);
+        return listener instanceof RANSACRobustEstimatorListener;
     }
 
     /**

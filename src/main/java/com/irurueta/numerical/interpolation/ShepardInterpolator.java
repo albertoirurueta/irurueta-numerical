@@ -93,11 +93,14 @@ public class ShepardInterpolator extends BaseRadialBasisFunctionInterpolator {
             for (var i = 0; i < n; i++) {
                 final var endCol = dim - 1;
                 pts.getSubmatrixAsArray(i, 0, i, endCol, pi);
-                if ((r = rad(pt, pi)) == 0.0) return vals[i];
-                sum += (w = Math.pow(r, pneg));
+                if ((r = rad(pt, pi)) == 0.0) {
+                    return vals[i];
+                }
+                w = Math.pow(r, pneg);
+                sum += w;
                 sumw += w * vals[i];
             }
-        } catch (final WrongSizeException ignore) {
+        } catch (final WrongSizeException ignored) {
             // never happens
         }
 

@@ -20,7 +20,6 @@ import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-
 import java.util.List;
 
 /**
@@ -28,6 +27,12 @@ import java.util.List;
  * Polynomial for provided collection of evaluations.
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
+ *
+ * <p>Threading: an estimator instance is not meant to be shared across threads.
+ * Configuration (setters), estimation and listener notifications are all
+ * expected to happen on the same thread, so the listener is always called back
+ * on the thread that invoked the estimation. No synchronization (or volatile
+ * fields) is used for configuration state such as the progress delta.</p>
  */
 @SuppressWarnings("Duplicates")
 public abstract class PolynomialRobustEstimator {

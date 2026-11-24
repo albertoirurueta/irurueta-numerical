@@ -56,10 +56,19 @@ public class KrigingInterpolator {
      */
     private double lasterr;
 
+    /**
+     * Solution of the kriging system used to estimate the error of the last interpolation.
+     */
     private final Matrix dstar;
 
+    /**
+     * Variogram values between data points and the point being interpolated.
+     */
     private final Matrix vstar;
 
+    /**
+     * Solution of the kriging system for the observed data values.
+     */
     private final Matrix yvi;
 
     /**

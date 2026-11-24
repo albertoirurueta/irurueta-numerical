@@ -500,7 +500,7 @@ public abstract class BracketedSingleOptimizer extends SingleOptimizer {
     public void computeBracket() throws LockedException, NotReadyException, OptimizationException {
         try {
             computeBracket(DEFAULT_MIN_EVAL_POINT, DEFAULT_MIDDLE_EVAL_POINT);
-        } catch (InvalidBracketRangeException ignore) {
+        } catch (InvalidBracketRangeException ignored) {
             //never happens
         }
     }

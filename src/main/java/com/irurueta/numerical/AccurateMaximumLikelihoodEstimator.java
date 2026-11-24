@@ -226,7 +226,7 @@ public class AccurateMaximumLikelihoodEstimator extends MaximumLikelihoodEstimat
             try {
                 localMinValue = internalEstimator.getMinValue();
                 localMaxValue = internalEstimator.getMaxValue();
-            } catch (final NotAvailableException ignore) {
+            } catch (final NotAvailableException ignored) {
                 // never happens
             }
 
@@ -274,7 +274,7 @@ public class AccurateMaximumLikelihoodEstimator extends MaximumLikelihoodEstimat
             optimizer.setBracket(minEvalPoint, middleEvalPoint, maxEvalPoint);
             optimizer.minimize();
             solution = optimizer.getResult();
-        } catch (final Exception ignore) {
+        } catch (final Exception ignored) {
             // if optimization fails, pick coarse solution if available
             if (useHistogramInitialSolution) {
                 solution = middleEvalPoint;

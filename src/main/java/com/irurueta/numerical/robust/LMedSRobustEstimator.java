@@ -18,7 +18,6 @@ package com.irurueta.numerical.robust;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
-
 import java.util.ArrayList;
 import java.util.BitSet;
 
@@ -95,7 +94,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
      * converge, if it can converge. By default, the factor is 1.0, which makes
      * the threshold to be computed as the median of residuals.
      */
-    public static final double DEFAULT_INLIER_FACTOR = 1.0; // 1.5 would also be reasonable
+    // 1.5 would also be reasonable
+    public static final double DEFAULT_INLIER_FACTOR = 1.0;
 
     /**
      * Minimum allowed value for inlier factor.
@@ -369,7 +369,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof LMedSRobustEstimatorListener);
+        return listener instanceof LMedSRobustEstimatorListener;
     }
 
     /**
@@ -408,7 +408,8 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
             // reusable list that will contain preliminary solutions on each
             // iteration
             final var iterResults = new ArrayList<T>();
-            bestResult = null; // best result found so far
+            // best result found so far
+            bestResult = null;
             // progress and previous progress to determine when progress
             // notification must occur
             var previousProgress = 0.0f;

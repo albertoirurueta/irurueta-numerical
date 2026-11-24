@@ -16,7 +16,6 @@
 package com.irurueta.numerical.fitting;
 
 import com.irurueta.algebra.Matrix;
-
 import java.util.Arrays;
 
 /**

@@ -41,7 +41,7 @@ public class ExponentialMatrixEstimator {
      * Number of rows of matrix to be estimated. Every time the number of rows change, reused
      * matrices are re-instantiated for computational efficiency.
      */
-    private int rows = 0;
+    private int rows;
 
     /**
      * Scaled version of provided input matrix. This instance is reused as long as provided input

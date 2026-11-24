@@ -54,13 +54,35 @@ shared by every quadrature rule in this package (each one is derived from either
 or the extended midpoint rule, both of which have this property). That is why `SimpsonIntegrator<T extends
 Quadrature>` in the library is generic over *any* `Quadrature`, not hardwired to the trapezoidal rule.
 
+== Step-dependent extrapolation
+
+The stem:[4/3] and stem:[1/3] weights above assume that each refinement *halves* the step size, which holds for
+the trapezoidal rule and the double-exponential rule. The mid-point family of rules (plain, infinity, and lower
+and upper square-root) instead divides the step size by *3* between stages (each refinement evaluates the
+integrand at three times as many points). For a step ratio stem:[r = 3] the error series is in powers of
+stem:[h^2], so the leading term is cancelled by:
+
+[stem]
+++++
+S = \frac{9 S_{3N} - S_N}{8}
+++++
+
+i.e. stem:[(9 \cdot st_n - st_{n-1})/8] rather than stem:[(4 \cdot st_n - st_{n-1})/3]. In general the combination
+is stem:[(\rho \cdot st_n - st_{n-1})/(\rho - 1)], where stem:[\rho] is the squared step ratio (`4.0` for
+step halving, `9.0` for step tripling). Using the wrong ratio leaves a spurious error term, so each Simpson class
+configures the `SimpsonIntegrator` (and `SimpsonMatrixIntegrator`) with the ratio matching its quadrature rule.
+
+The maximum number of stages also depends on the rule: `20` for the trapezoidal and double-exponential rules, and
+`14` for the mid-point family, since every mid-point stage triples the number of function evaluations and further
+stages would be both prohibitively expensive and beyond double-precision accuracy.
+
 == Algorithm
 
 [mermaid]
 ....
 flowchart TD
-    A["st_n = quadrature.next() (stage n estimate from the underlying rule)"] --> B["s_n = (4 * st_n - st_(n-1)) / 3"]
-    B --> C{"|s_n - s_(n-1)| < eps * |s_(n-1)| ?\n(checked after 5 stages, up to 20)"}
+    A["st_n = quadrature.next() (stage n estimate from the underlying rule)"] --> B["s_n = (ratio * st_n - st_(n-1)) / (ratio - 1)\n(ratio = 4 or 9)"]
+    B --> C{"|s_n - s_(n-1)| < eps * |s_(n-1)| ?\n(checked after 5 stages, up to jmax: 20 or 14)"}
     C -->|No| A
     C -->|Yes| D["Return s_n"]
 ....
@@ -68,8 +90,9 @@ flowchart TD
 == Library implementation
 
 `SimpsonIntegrator<T extends Quadrature>` wraps any of the package's quadrature rules and applies the
-stem:[(4 \cdot s_n - s_{n-1})/3] combination every stage, checking convergence after a minimum of 5 stages and
-up to a maximum of 20, to a relative tolerance `eps` (default `1e-10`). `SimpsonMatrixIntegrator` does the same
+stem:[(\rho \cdot st_n - st_{n-1})/(\rho - 1)] combination every stage (stem:[\rho = 4] for the trapezoidal and
+double-exponential rules, stem:[\rho = 9] for the mid-point family), checking convergence after a minimum of 5
+stages and up to a maximum of 20 stages (14 for the mid-point family), to a relative tolerance `eps` (default `1e-10`). `SimpsonMatrixIntegrator` does the same
 for matrix-valued integrands. Six concrete classes pair this method with each applicable quadrature rule:
 
 [cols="1,2", options="header"]

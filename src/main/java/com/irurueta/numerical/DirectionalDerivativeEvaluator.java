@@ -24,14 +24,14 @@ package com.irurueta.numerical;
 public class DirectionalDerivativeEvaluator extends DirectionalEvaluator {
 
     /**
-     * Listener to evaluate a multidimensional function's gradient.
-     */
-    private GradientFunctionEvaluatorListener gradientListener;
-
-    /**
      * Array containing gradient at point p. This is used internally.
      */
     final double[] dft;
+
+    /**
+     * Listener to evaluate a multidimensional function's gradient.
+     */
+    private GradientFunctionEvaluatorListener gradientListener;
 
     /**
      * Constructor.

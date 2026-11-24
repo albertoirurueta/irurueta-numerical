@@ -4,7 +4,7 @@
 
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-numerical</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -169,6 +169,9 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.6.0</version>
+                <configuration>
+                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+                </configuration>
             </plugin>
             <!-- SonarCloud analysis -->
             <plugin>
@@ -276,6 +279,16 @@
                     <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
+
+            <!-- makes CLI runs (mvn checkstyle:checkstyle) use the project's rules, same as the site report -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
    
@@ -325,6 +338,9 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.6.0</version>
+                <configuration>
+                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

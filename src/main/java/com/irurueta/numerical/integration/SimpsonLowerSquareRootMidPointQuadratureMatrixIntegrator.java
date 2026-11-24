@@ -20,6 +20,11 @@ import com.irurueta.algebra.WrongSizeException;
 /**
  * Computes function integration by using Simpson's rule and Lower Square Root mid-point quadrature
  * when lower integration bound lies at a function singularity.
+ * <p>
+ * Because mid-point quadratures refine the step by a factor of 3 on each iteration, successive
+ * estimates are combined using a 9/8 extrapolation (instead of the 4/3 used with trapezoidal quadratures),
+ * and the maximum number of refinements is reduced accordingly.
+ * See Numerical Recipes, 3rd ed., section 4.4, p. 169.
  */
 public class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator
         extends SimpsonMatrixIntegrator<LowerSquareRootMidPointMatrixQuadrature> {
@@ -37,7 +42,7 @@ public class SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator
    public SimpsonLowerSquareRootMidPointQuadratureMatrixIntegrator(
            final double a, final double b, final MatrixSingleDimensionFunctionEvaluatorListener listener,
            final double eps) throws WrongSizeException {
-      super(new LowerSquareRootMidPointMatrixQuadrature(a, b, listener), eps);
+      super(new LowerSquareRootMidPointMatrixQuadrature(a, b, listener), eps, TRIPLING_RATIO, TRIPLING_JMAX);
    }
 
    /**

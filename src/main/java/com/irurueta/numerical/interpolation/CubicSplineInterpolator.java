@@ -27,10 +27,19 @@ public class CubicSplineInterpolator extends BaseInterpolator {
      */
     private static final int M = 2;
 
+    /**
+     * Default first derivative at the first point (natural spline).
+     */
     private static final double YP1 = 1.e99;
 
+    /**
+     * Default first derivative at the last point (natural spline).
+     */
     private static final double YPN = 1.e99;
 
+    /**
+     * Second derivatives of the interpolating function at the tabulated points.
+     */
     private final double[] y2;
 
     /**
@@ -82,7 +91,8 @@ public class CubicSplineInterpolator extends BaseInterpolator {
         // Cubic spline polynomial is now evaluated
         final var a = (xx[khi] - x) / h;
         final var b = (x - xx[jl]) / h;
-        return a * yy[jl] + b * yy[khi] + ((a * a * a - a) * y2[jl] + (b * b * b - b) * y2[khi]) * (h * h) / 6.0;
+        final var hh = h * h;
+        return a * yy[jl] + b * yy[khi] + ((a * a * a - a) * y2[jl] + (b * b * b - b) * y2[khi]) * hh / 6.0;
     }
 
     /**
@@ -114,7 +124,7 @@ public class CubicSplineInterpolator extends BaseInterpolator {
         } else {
             // or else to have a specified first derivative
             y2[0] = -0.5;
-            u[0] = (3.0 / (xv[1] - xv[0])) * ((yv[1] - yv[0]) / (xv[1] - xv[0]) - yp1);
+            u[0] = 3.0 / (xv[1] - xv[0]) * ((yv[1] - yv[0]) / (xv[1] - xv[0]) - yp1);
         }
 
         for (i = 1; i < n - 1; i++) {
@@ -133,7 +143,7 @@ public class CubicSplineInterpolator extends BaseInterpolator {
         } else {
             // or else to have a specified first derivative
             qn = 0.5;
-            un = (3.0 / (xv[n - 1] - xv[n - 2])) * (ypn - (yv[n - 1] - yv[n - 2]) / (xv[n - 1] - xv[n - 2]));
+            un = 3.0 / (xv[n - 1] - xv[n - 2]) * (ypn - (yv[n - 1] - yv[n - 2]) / (xv[n - 1] - xv[n - 2]));
         }
         y2[n - 1] = (un - qn * u[n - 2]) / (qn * y2[n - 2] + 1.0);
         for (k = n - 2; k >= 0; k--) {

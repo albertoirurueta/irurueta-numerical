@@ -23,7 +23,6 @@ import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
 import com.irurueta.numerical.robust.RobustEstimator;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -273,7 +272,7 @@ public class LMedSPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
                             final var polynomial = polynomialEstimator.estimate();
                             solutions.add(polynomial);
-                        } catch (final Exception e) {
+                        } catch (final Exception ignored) {
                             // if anything fails, no solution is added
                         }
                     }

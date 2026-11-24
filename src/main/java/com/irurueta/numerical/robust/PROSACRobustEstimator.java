@@ -19,7 +19,6 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -523,7 +522,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof PROSACRobustEstimatorListener);
+        return listener instanceof PROSACRobustEstimatorListener;
     }
 
     /**
@@ -652,7 +651,7 @@ public class PROSACRobustEstimator<T> extends RobustEstimator<T> {
                 // g(t) = min{n : tnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > tnPrime
                 if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
-                    var tnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
+                    var tnPlus1 = tn * (sampleSize + 1) / (sampleSize + 1 - subsetSize);
                     sampleSize++;
                     tnPrime += (int) Math.ceil(tnPlus1 - tn);
                     tn = tnPlus1;

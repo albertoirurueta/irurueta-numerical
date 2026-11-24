@@ -16,7 +16,6 @@
 package com.irurueta.numerical.robust;
 
 import com.irurueta.statistics.UniformRandomizer;
-
 import java.util.HashSet;
 import java.util.Set;
 

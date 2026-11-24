@@ -17,7 +17,6 @@ package com.irurueta.numerical.robust;
 
 import com.irurueta.sorting.Sorter;
 import com.irurueta.sorting.SortingException;
-
 import java.util.Arrays;
 
 /**

@@ -423,7 +423,7 @@ public class PowellMultiOptimizer extends LineMultiOptimizer {
 
         try {
             ximat = Matrix.identity(n, n);
-        } catch (final WrongSizeException ignore) {
+        } catch (final WrongSizeException ignored) {
             // never happens
         }
     }

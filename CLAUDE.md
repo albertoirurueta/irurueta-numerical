@@ -53,6 +53,70 @@ Notes:
 - CI (`.github/workflows/develop.yml`, `master.yml`) runs on `develop` (deploys SNAPSHOT) and `master` (release),
   reporting to SonarCloud and publishing the Maven site to GitHub Pages plus artifacts to Maven Central.
 
+### Checkstyle baseline
+
+`mvn checkstyle:checkstyle` now applies the repository's `checkstyle.xml` (the plugin is configured under
+`<build><plugins>` in `pom.xml`, not only under `<reporting>`). Measured on 2026-11-24 at version 1.8.0-SNAPSHOT
+(`src/main` only, before the fixes of this PR): 1010 violations in total.
+
+| Check | Violations |
+|-------|-----------|
+| HiddenField | 443 |
+| Indentation | 203 |
+| MagicNumber | 101 |
+| JavadocStyle | 87 |
+| RedundantModifier | 67 |
+| ImportOrder | 28 |
+| ThrowsCount | 14 |
+| JavadocVariable | 12 |
+| DeclarationOrder | 11 |
+| ParameterAssignment | 9 |
+| ExplicitInitialization | 9 |
+| JavadocPackage | 7 |
+| TrailingComment | 4 |
+| VisibilityModifier | 4 |
+| ParameterNumber | 3 |
+| NeedBraces | 2 |
+| NewlineAtEndOfFile | 2 |
+| WhitespaceAround | 1 |
+| ConstantName | 1 |
+| MultipleStringLiterals | 1 |
+| JavadocMethod | 1 |
+
+After Group 3 (`HiddenField` configured to ignore constructor parameters and setters, intentionally): `HiddenField`
+drops from 443 to 113 and the total from 1010 to 680 (re-measured 2026-11-24, `src/main` only).
+
+After Group 4 (mechanical fixes: `JavadocPackage`, `JavadocVariable`, `JavadocMethod`, `NewlineAtEndOfFile`, `NeedBraces`,
+`WhitespaceAround`, `ConstantName`, `TrailingComment`, `ExplicitInitialization`, `ImportOrder`, `DeclarationOrder` are all
+at 0): the total drops from 680 to 602 (re-measured 2026-11-24, `src/main` only). Remaining categories, left for
+follow-up PRs: Indentation 203, HiddenField 113, MagicNumber 101, JavadocStyle 87, RedundantModifier 67, ThrowsCount 14,
+ParameterAssignment 9, VisibilityModifier 4, ParameterNumber 3, MultipleStringLiterals 1.
+
+### PMD baseline
+
+`mvn pmd:pmd` (default rules, no custom ruleset, report-only: no `failOnViolation` gate and no `<build>` binding) needs
+JDK 21: set `JAVA_HOME` to a JDK 21 (on macOS: `export JAVA_HOME=$(/usr/libexec/java_home -v 21)`). Measured on
+2026-11-24 at version 1.8.0-SNAPSHOT (`src/main` only): 35 violations before the fixes of issue #40 (UselessParentheses
+23, EmptyCatchBlock 11, UnnecessaryModifier 1), 0 after. Convention: intentionally empty catch blocks name the parameter
+`ignored` (PMD's default `allowExceptionNameRegex` is `^(ignored|expected)$`) and keep an explanatory comment; no
+suppressions are used.
+
+### SpotBugs baseline
+
+`mvn clean compile spotbugs:spotbugs` (report-only: no `check` goal bound, no `failOnError`; needs JDK 21, set
+`JAVA_HOME=$(/usr/libexec/java_home -v 21)` on macOS) reported 264 findings on 2026-11-24 at version 1.8.0-SNAPSHOT
+(`src/main` only): CT_CONSTRUCTOR_THROW 118, EI_EXPOSE_REP 75, EI_EXPOSE_REP2 53, REC_CATCH_EXCEPTION 6,
+DE_MIGHT_IGNORE 5, FE_FLOATING_POINT_EQUALITY 4, IM_AVERAGE_COMPUTATION_COULD_OVERFLOW 2,
+AT_STALE_THREAD_WRITE_OF_PRIMITIVE 1. Issue #41 fixed the real bug (`BaseInterpolator` uses `>>>` for the binary search
+midpoint) and excluded the rest through `spotbugs-exclude.xml` (configured on the plugin in `pom.xml`), each entry with
+a rationale comment. The design-level types (`CT_CONSTRUCTOR_THROW`, `EI_EXPOSE_REP`, `EI_EXPOSE_REP2`) are excluded
+project-wide on purpose, so **new classes are not checked for these three bug types**: review constructor validation
+and array/matrix sharing by hand when adding classes. Everything else (the Numerical Recipes exact comparisons, the
+"failed subset yields no solution" catch blocks and `RobustEstimator`'s `AT_STALE_THREAD_WRITE_OF_PRIMITIVE`) is
+scoped to the reviewed class *and* method, so new occurrences elsewhere are still reported. Robust estimators
+and their listeners are single-threaded by contract (documented in their Javadoc), so no `volatile` fields are added
+for configuration state. Result: 0 unfiltered findings. No `@SuppressFBWarnings` annotations are used.
+
 ## Architecture
 
 ### Package map (`com.irurueta.numerical.*`)

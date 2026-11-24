@@ -50,7 +50,15 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * Scaled maximum step length allowed in line searches.
      */
     public static final double STPMX = 100.0;
+
+    /**
+     * Sufficient decrease factor used in line searches.
+     */
     public static final double ALF = 1e-4;
+
+    /**
+     * Convergence tolerance on step length used in line searches.
+     */
     public static final double TOLX2 = 1e-12;
 
     /**
@@ -63,6 +71,19 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * Minimum allowed tolerance value.
      */
     public static final double MIN_TOLERANCE = 0.0;
+
+    /**
+     * Listener to obtain gradient values for the multi dimension function being
+     * evaluated.
+     * If the gradient is unknown (e.g. doesn't have a closed expression), the
+     * provided listener could use a GradientEstimator to obtain one.
+     */
+    GradientFunctionEvaluatorListener gradientListener;
+
+    /**
+     * value of the function at the minimum.
+     */
+    double fret;
 
     /**
      * n-dimensional start point.
@@ -80,19 +101,6 @@ public class QuasiNewtonMultiOptimizer extends MultiOptimizer {
      * minimum.
      */
     private int iter;
-
-    /**
-     * Listener to obtain gradient values for the multi dimension function being
-     * evaluated.
-     * If the gradient is unknown (e.g. doesn't have a closed expression), the
-     * provided listener could use a GradientEstimator to obtain one.
-     */
-    GradientFunctionEvaluatorListener gradientListener;
-
-    /**
-     * value of the function at the minimum.
-     */
-    double fret;
 
     /**
      * Empty constructor.
