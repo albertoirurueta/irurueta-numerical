@@ -51,6 +51,9 @@ class SimpsonLowerSquareRootMidPointQuadratureIntegratorTest {
      * Maximum number of function evaluations expected when integrating a smooth function. Mid-point quadratures
      * triple the number of points on each refinement, so a 9/8 extrapolation with a reduced maximum number of
      * refinements must converge with fewer evaluations than the former 4/3 extrapolation did.
+     * Note: 729 (3^6) evaluations is the minimum possible, since convergence is first checked
+     * at the 7th stage (after JMIN); smooth integrands converge there. Before the fix this took
+     * 6561 to 59049 evaluations.
      */
     private static final int MAX_EVALUATIONS = 1000;
 

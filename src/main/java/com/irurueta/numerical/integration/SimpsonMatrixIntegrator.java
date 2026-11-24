@@ -35,6 +35,7 @@ import com.irurueta.numerical.EvaluationException;
  * {@code (4 * st - ost) / 3}, and {@code 3^2 = 9} for quadratures tripling their step (e.g., mid-point), which
  * yields {@code (9 * st - ost) / 8}.
  * See Numerical Recipes, 3rd ed., section 4.2 (p. 165) and section 4.4 (p. 169).
+ *
  * @param <T> a quadrature.
  */
 public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extends MatrixIntegrator {
@@ -48,23 +49,23 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * Extrapolation ratio for quadratures that halve their step on each refinement (2^2).
      * Leads to extrapolation {@code (4 * st - ost) / 3}.
      */
-    protected static final double TRAPEZOIDAL_RATIO = 4.0;
+    protected static final double TRAPEZOIDAL_RATIO = SimpsonIntegrator.TRAPEZOIDAL_RATIO;
 
     /**
      * Extrapolation ratio for quadratures that triple their step on each refinement (3^2).
      * Leads to extrapolation {@code (9 * st - ost) / 8}.
      */
-    protected static final double TRIPLING_RATIO = 9.0;
+    protected static final double TRIPLING_RATIO = SimpsonIntegrator.TRIPLING_RATIO;
 
     /**
      * Default maximum number of allowed steps.
      */
-    protected static final int DEFAULT_JMAX = 20;
+    protected static final int DEFAULT_JMAX = SimpsonIntegrator.DEFAULT_JMAX;
 
     /**
      * Maximum number of allowed steps for quadratures tripling their step on each refinement.
      */
-    protected static final int TRIPLING_JMAX = 14;
+    protected static final int TRIPLING_JMAX = SimpsonIntegrator.TRIPLING_JMAX;
 
     /**
      * Minimum required number of steps.
@@ -107,7 +108,10 @@ public abstract class SimpsonMatrixIntegrator<T extends MatrixQuadrature> extend
      * @param q     Quadrature used for integration.
      * @param eps   Required accuracy.
      * @param ratio Extrapolation ratio (4.0 for quadratures halving their step, 9.0 for tripling their step).
-     * @param jmax  Maximum number of allowed steps.
+     *              Must be greater than 1; otherwise the extrapolation divides by zero (or flips sign) and
+     *              integration never converges.
+     * @param jmax  Maximum number of allowed steps. Must be greater than 6, since convergence is only checked
+     *              after the minimum number of steps; otherwise integration always fails.
      */
     protected SimpsonMatrixIntegrator(final T q, final double eps, final double ratio, final int jmax) {
         this.q = q;

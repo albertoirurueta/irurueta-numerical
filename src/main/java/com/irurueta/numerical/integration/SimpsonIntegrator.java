@@ -32,6 +32,7 @@ import com.irurueta.numerical.SingleDimensionFunctionEvaluatorListener;
  * {@code (4 * st - ost) / 3}, and {@code 3^2 = 9} for quadratures tripling their step (e.g., mid-point), which
  * yields {@code (9 * st - ost) / 8}.
  * See Numerical Recipes, 3rd ed., section 4.2 (p. 165) and section 4.4 (p. 169).
+ *
  * @param <T> a quadrature.
  */
 public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator {
@@ -104,7 +105,10 @@ public abstract class SimpsonIntegrator<T extends Quadrature> extends Integrator
      * @param q     Quadrature used for integration.
      * @param eps   Required accuracy.
      * @param ratio Extrapolation ratio (4.0 for quadratures halving their step, 9.0 for tripling their step).
-     * @param jmax  Maximum number of allowed steps.
+     *              Must be greater than 1; otherwise the extrapolation divides by zero (or flips sign) and
+     *              integration never converges.
+     * @param jmax  Maximum number of allowed steps. Must be greater than 6, since convergence is only checked
+     *              after the minimum number of steps; otherwise integration always fails.
      */
     protected SimpsonIntegrator(final T q, final double eps, final double ratio, final int jmax) {
         this.q = q;

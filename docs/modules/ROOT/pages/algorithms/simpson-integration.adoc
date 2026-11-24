@@ -58,7 +58,7 @@ Quadrature>` in the library is generic over *any* `Quadrature`, not hardwired to
 
 The stem:[4/3] and stem:[1/3] weights above assume that each refinement *halves* the step size, which holds for
 the trapezoidal rule and the double-exponential rule. The mid-point family of rules (plain, infinity, and lower
-and upper square-root) instead *triples* the step size ratio between stages (each refinement evaluates the
+and upper square-root) instead divides the step size by *3* between stages (each refinement evaluates the
 integrand at three times as many points). For a step ratio stem:[r = 3] the error series is in powers of
 stem:[h^2], so the leading term is cancelled by:
 
