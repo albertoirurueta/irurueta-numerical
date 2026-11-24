@@ -147,7 +147,7 @@ public abstract class BaseInterpolator {
 
         while (ju - jl > 1) {
             // If we are not yet done, compute a midpoint
-            jm = (ju + jl) >> 1;
+            jm = (ju + jl) >>> 1;
             if (x >= xx[jm] == ascend) {
                 // and replace either the lower limit
                 jl = jm;
@@ -234,7 +234,7 @@ public abstract class BaseInterpolator {
 
         // Hunt is done, so begin the final bisection phase
         while (ju - jl > 1) {
-            jm = (ju + jl) >> 1;
+            jm = (ju + jl) >>> 1;
             if (x >= xx[jm] == ascnd) {
                 jl = jm;
             } else {

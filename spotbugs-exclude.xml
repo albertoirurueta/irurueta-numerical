@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SpotBugs exclude filter. SpotBugs is report-only in this project (see CLAUDE.md, "SpotBugs baseline"). -->
+<FindBugsFilter>
+    <!--
+    Project-wide, by bug type (deliberately, also for classes added in the future): these come from the library's
+    design, not from individual mistakes. New classes are therefore NOT checked for these three bug types.
+    -->
+    <!-- Validating constructors throw by design; making every class final would be a breaking API change. -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <!-- Arrays and matrices are returned/shared on purpose for performance and are part of the public API contract. -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!--
+    Everything below is scoped to the reviewed method only, so new occurrences elsewhere in the same class are still
+    reported.
+    -->
+
+    <!-- Numerical Recipes exact comparisons of values copied from one another or deliberate "no progress" tests. -->
+    <Match>
+        <Class name="com.irurueta.numerical.optimization.BrentSingleOptimizer"/>
+        <Method name="minimize"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+    <Match>
+        <Class name="com.irurueta.numerical.optimization.DerivativeBrentSingleOptimizer"/>
+        <Method name="minimize"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+    <Match>
+        <Class name="com.irurueta.numerical.roots.BrentSingleRootEstimator"/>
+        <Method name="estimate"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+    <Match>
+        <Class name="com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator"/>
+        <Method name="estimate"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+
+    <!-- Listeners must never abort the robust search: a failed subset simply yields no solution. -->
+    <Match>
+        <Class name="~com\.irurueta\.numerical\.polynomials\.estimators\.(LMedS|MSAC|PROMedS|PROSAC|RANSAC)PolynomialRobustEstimator\$1"/>
+        <Method name="estimatePreliminarSolutions"/>
+        <Bug pattern="REC_CATCH_EXCEPTION,DE_MIGHT_IGNORE"/>
+    </Match>
+
+    <!-- Estimators are single-threaded by contract (see RobustEstimator Javadoc): configuration, estimation and
+         listener callbacks happen on the same thread, so progressDelta needs no volatile/synchronization. -->
+    <Match>
+        <Class name="com.irurueta.numerical.robust.RobustEstimator"/>
+        <Method name="setProgressDelta"/>
+        <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE"/>
+    </Match>
+
+    <!-- Any optimization failure falls back to the coarse solution. -->
+    <Match>
+        <Class name="com.irurueta.numerical.AccurateMaximumLikelihoodEstimator"/>
+        <Method name="estimate"/>
+        <Bug pattern="REC_CATCH_EXCEPTION"/>
+    </Match>
+</FindBugsFilter>

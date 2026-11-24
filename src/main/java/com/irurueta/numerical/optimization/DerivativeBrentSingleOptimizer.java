@@ -364,6 +364,7 @@ public class DerivativeBrentSingleOptimizer extends BracketedSingleOptimizer {
                     } else {
                         b = u;
                     }
+                    // exact comparison intended (Numerical Recipes): w and x are copied from one another
                     if (fu <= fw || w == x) {
                         v1[0] = v;
                         v2[0] = fv;

@@ -298,6 +298,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                     } else {
                         b = u;
                     }
+                    // exact comparison intended (Numerical Recipes): w and x are copied from one another
                     if (fu <= fw || w == x) {
                         v = w;
                         w = u;

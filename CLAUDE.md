@@ -101,6 +101,22 @@ JDK 21: set `JAVA_HOME` to a JDK 21 (on macOS: `export JAVA_HOME=$(/usr/libexec/
 `ignored` (PMD's default `allowExceptionNameRegex` is `^(ignored|expected)$`) and keep an explanatory comment; no
 suppressions are used.
 
+### SpotBugs baseline
+
+`mvn clean compile spotbugs:spotbugs` (report-only: no `check` goal bound, no `failOnError`; needs JDK 21, set
+`JAVA_HOME=$(/usr/libexec/java_home -v 21)` on macOS) reported 264 findings on 2026-11-24 at version 1.8.0-SNAPSHOT
+(`src/main` only): CT_CONSTRUCTOR_THROW 118, EI_EXPOSE_REP 75, EI_EXPOSE_REP2 53, REC_CATCH_EXCEPTION 6,
+DE_MIGHT_IGNORE 5, FE_FLOATING_POINT_EQUALITY 4, IM_AVERAGE_COMPUTATION_COULD_OVERFLOW 2,
+AT_STALE_THREAD_WRITE_OF_PRIMITIVE 1. Issue #41 fixed the real bug (`BaseInterpolator` uses `>>>` for the binary search
+midpoint) and excluded the rest through `spotbugs-exclude.xml` (configured on the plugin in `pom.xml`), each entry with
+a rationale comment. The design-level types (`CT_CONSTRUCTOR_THROW`, `EI_EXPOSE_REP`, `EI_EXPOSE_REP2`) are excluded
+project-wide on purpose, so **new classes are not checked for these three bug types**: review constructor validation
+and array/matrix sharing by hand when adding classes. Everything else (the Numerical Recipes exact comparisons, the
+"failed subset yields no solution" catch blocks and `RobustEstimator`'s `AT_STALE_THREAD_WRITE_OF_PRIMITIVE`) is
+scoped to the reviewed class *and* method, so new occurrences elsewhere are still reported. Robust estimators
+and their listeners are single-threaded by contract (documented in their Javadoc), so no `volatile` fields are added
+for configuration state. Result: 0 unfiltered findings. No `@SuppressFBWarnings` annotations are used.
+
 ## Architecture
 
 ### Package map (`com.irurueta.numerical.*`)

@@ -235,6 +235,7 @@ public class SafeNewtonRaphsonSingleRootEstimator extends DerivativeSingleRootEs
                 dxold = dx;
                 dx = 0.5 * (xh - xl);
                 rts = xl + dx;
+                // exact comparison intended (Numerical Recipes): bisection made no progress
                 if (xl == rts) {
                     root = rts;
                     rootAvailable = true;

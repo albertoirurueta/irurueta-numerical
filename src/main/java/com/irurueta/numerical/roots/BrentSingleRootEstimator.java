@@ -208,6 +208,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
             }
             if (Math.abs(e) >= tol1 && Math.abs(fa) > Math.abs(fb)) {
                 s = fb / fa;
+                // exact comparison intended (Numerical Recipes): c is assigned from a when they coincide
                 if (a == c) {
                     p = 2.0 * xm * s;
                     q = 1.0 - s;
