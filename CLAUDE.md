@@ -107,11 +107,12 @@ suppressions are used.
 `JAVA_HOME=$(/usr/libexec/java_home -v 21)` on macOS) reported 264 findings on 2026-11-24 at version 1.8.0-SNAPSHOT
 (`src/main` only): CT_CONSTRUCTOR_THROW 118, EI_EXPOSE_REP 75, EI_EXPOSE_REP2 53, REC_CATCH_EXCEPTION 6,
 DE_MIGHT_IGNORE 5, FE_FLOATING_POINT_EQUALITY 4, IM_AVERAGE_COMPUTATION_COULD_OVERFLOW 2,
-AT_STALE_THREAD_WRITE_OF_PRIMITIVE 1. Issue #41 fixed the real bugs (`RobustEstimator.progressDelta` is now `volatile`;
-`BaseInterpolator` uses `>>>` for the binary search midpoint) and excluded the rest through `spotbugs-exclude.xml`
-(configured on the plugin in `pom.xml`), each entry with a rationale comment: design-level types project-wide, the
-Numerical Recipes exact comparisons and the "failed subset yields no solution" catch blocks class-scoped. Result: 0
-unfiltered findings. No `@SuppressFBWarnings` annotations are used.
+AT_STALE_THREAD_WRITE_OF_PRIMITIVE 1. Issue #41 fixed the real bug (`BaseInterpolator` uses `>>>` for the binary search
+midpoint) and excluded the rest through `spotbugs-exclude.xml` (configured on the plugin in `pom.xml`), each entry with
+a rationale comment: design-level types project-wide; the Numerical Recipes exact comparisons, the "failed subset yields
+no solution" catch blocks and `RobustEstimator`'s `AT_STALE_THREAD_WRITE_OF_PRIMITIVE` class-scoped. Robust estimators
+and their listeners are single-threaded by contract (documented in their Javadoc), so no `volatile` fields are added
+for configuration state. Result: 0 unfiltered findings. No `@SuppressFBWarnings` annotations are used.
 
 ## Architecture
 

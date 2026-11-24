@@ -19,7 +19,13 @@ import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 
 /**
- * Robust estimator to estimate some object in a robust manner
+ * Robust estimator to estimate some object in a robust manner.
+ *
+ * <p>Threading: an estimator instance is not meant to be shared across threads.
+ * Configuration (setters), estimation and listener notifications are all
+ * expected to happen on the same thread, so the listener is always called back
+ * on the thread that invoked the estimation. No synchronization (or volatile
+ * fields) is used for configuration state such as the progress delta.</p>
  *
  * @param <T> Object to be estimated (i.e. lines, cameras, etc)
  */
@@ -57,7 +63,7 @@ public abstract class RobustEstimator<T> {
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected volatile float progressDelta;
+    protected float progressDelta;
 
     /**
      * Constructor.

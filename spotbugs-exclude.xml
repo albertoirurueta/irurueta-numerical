@@ -33,10 +33,15 @@
 
     <!-- Listeners must never abort the robust search: a failed subset simply yields no solution. -->
     <Match>
-        <Or>
-            <Class name="~com\.irurueta\.numerical\.polynomials\.estimators\.(LMedS|MSAC|PROMedS|PROSAC|RANSAC)PolynomialRobustEstimator(\$.*)?"/>
-        </Or>
+        <Class name="~com\.irurueta\.numerical\.polynomials\.estimators\.(LMedS|MSAC|PROMedS|PROSAC|RANSAC)PolynomialRobustEstimator(\$.*)?"/>
         <Bug pattern="REC_CATCH_EXCEPTION,DE_MIGHT_IGNORE"/>
+    </Match>
+
+    <!-- Estimators are single-threaded by contract (see RobustEstimator Javadoc): configuration, estimation and
+         listener callbacks happen on the same thread, so progressDelta needs no volatile/synchronization. -->
+    <Match>
+        <Class name="com.irurueta.numerical.robust.RobustEstimator"/>
+        <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE"/>
     </Match>
 
     <!-- Any optimization failure falls back to the coarse solution. -->
