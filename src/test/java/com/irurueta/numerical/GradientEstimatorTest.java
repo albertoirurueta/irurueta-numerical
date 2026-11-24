@@ -18,8 +18,17 @@ package com.irurueta.numerical;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
 
@@ -38,6 +47,41 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
     private static final double ABSOLUTE_ERROR = 1e-1;
 
     private static final int TIMES = 100;
+
+    /**
+     * Relative step and minimum step used to obtain steps equal to 1e-7 * max(1, |x|).
+     */
+    private static final double CUSTOM_STEP = 1e-7;
+
+    /**
+     * Machine precision constant used by default as relative step.
+     */
+    private static final double DEFAULT_EPS = GradientEstimator.EPS;
+
+    /**
+     * Position, among the points evaluated by the estimator, of the first perturbed one.
+     */
+    private static final int PERTURBED_INDEX = 1;
+
+    /**
+     * Relative tolerance when comparing expected steps with the steps actually applied.
+     */
+    private static final double RELATIVE_STEP_ERROR = 1e-6;
+
+    /**
+     * Small non-zero parameter values where default steps collapse.
+     */
+    private static final double[] SMALL_VALUES = {1e-5, 1e-8, 1e-10};
+
+    /**
+     * Parameter values used to check computed steps.
+     */
+    private static final double[] STEP_VALUES = {0.0, 1e-9, 1e-3, 1.0, 50.0, -50.0};
+
+    /**
+     * Maximum error expected when minimum step is configured.
+     */
+    private static final double SMALL_VALUE_ERROR = 1e-6;
 
     private int ndims;
     private double[] minimum;
@@ -94,6 +138,173 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
         }
     }
 
+        /**
+     * Checks default settings.
+     */
+    @Test
+    void constructor_whenDefault_hasDefaultSettings() {
+        final var estimator = new GradientEstimator(this);
+
+        assertEquals(DEFAULT_EPS, estimator.getRelativeStep(), 0.0);
+        assertEquals(0.0, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that settings are stored by the constructor.
+     */
+    @Test
+    void constructor_whenCustomSettings_setsValues() {
+        final var estimator = new GradientEstimator(this, CUSTOM_STEP, 2.0 * CUSTOM_STEP);
+
+        assertEquals(CUSTOM_STEP, estimator.getRelativeStep(), 0.0);
+        assertEquals(2.0 * CUSTOM_STEP, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that an invalid relative step is rejected by the constructor.
+     */
+    @Test
+    void constructor_whenInvalidRelativeStep_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, 0.0, 0.0));
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, -CUSTOM_STEP, 0.0));
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, Double.NaN, 0.0));
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, Double.POSITIVE_INFINITY, 0.0));
+    }
+
+    /**
+     * Checks that an invalid minimum step is rejected by the constructor.
+     */
+    @Test
+    void constructor_whenInvalidMinStep_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, -CUSTOM_STEP));
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, Double.NaN));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GradientEstimator(this, CUSTOM_STEP, Double.POSITIVE_INFINITY));
+    }
+
+    /**
+     * Checks that relative step can be set and invalid values are rejected leaving the value unchanged.
+     */
+    @Test
+    void setRelativeStep_whenValidOrInvalid_setsOrThrows() {
+        final var estimator = new GradientEstimator(this);
+
+        estimator.setRelativeStep(CUSTOM_STEP);
+        assertEquals(CUSTOM_STEP, estimator.getRelativeStep(), 0.0);
+
+        assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(0.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(-CUSTOM_STEP));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(Double.NaN));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(Double.POSITIVE_INFINITY));
+        assertEquals(CUSTOM_STEP, estimator.getRelativeStep(), 0.0);
+    }
+
+    /**
+     * Checks that minimum step can be set and invalid values are rejected leaving the value unchanged.
+     */
+    @Test
+    void setMinStep_whenValidOrInvalid_setsOrThrows() {
+        final var estimator = new GradientEstimator(this);
+
+        estimator.setMinStep(CUSTOM_STEP);
+        assertEquals(CUSTOM_STEP, estimator.getMinStep(), 0.0);
+        estimator.setMinStep(0.0);
+        assertEquals(0.0, estimator.getMinStep(), 0.0);
+
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(-CUSTOM_STEP));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(Double.NaN));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(Double.POSITIVE_INFINITY));
+        assertEquals(0.0, estimator.getMinStep(), 0.0);
+    }
+
+    /**
+     * Checks that with relative and minimum steps equal to 1e-7 the step is 1e-7 * max(1, |x|).
+     *
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    @Test
+    void gradient_whenCustomSettings_usesRelativeStepWithMinimum() throws EvaluationException {
+        for (final var x : STEP_VALUES) {
+            final var points = evaluatedPoints(
+                    listener -> new GradientEstimator(listener, CUSTOM_STEP, CUSTOM_STEP), x);
+
+            final var expected = CUSTOM_STEP * Math.max(1.0, Math.abs(x));
+            final var applied = points.get(PERTURBED_INDEX) - x;
+            assertEquals(expected, applied, expected * RELATIVE_STEP_ERROR);
+        }
+    }
+
+    /**
+     * Checks that with default settings the step is EPS * |x|, and EPS when x is zero.
+     *
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    @Test
+    void gradient_whenDefaultSettings_usesLegacyStep() throws EvaluationException {
+        for (final var x : STEP_VALUES) {
+            final var points = evaluatedPoints(
+                    listener -> new GradientEstimator(listener), x);
+
+            final var expected = x == 0.0 ? DEFAULT_EPS : DEFAULT_EPS * Math.abs(x);
+            final var applied = points.get(PERTURBED_INDEX) - x;
+            assertEquals(expected, applied, expected * RELATIVE_STEP_ERROR);
+        }
+    }
+
+    /**
+     * Checks that explicitly providing default settings gives identical results to the default constructor.
+     *
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    @Test
+    void gradient_whenExplicitDefaultSettings_resultsAreIdentical() throws EvaluationException {
+        final MultiDimensionFunctionEvaluatorListener listener = GradientEstimatorTest::exp;
+        final var defaultEstimator = new GradientEstimator(listener);
+        final var explicitEstimator = new GradientEstimator(listener, DEFAULT_EPS, 0.0);
+
+        for (final var x : STEP_VALUES) {
+            final var point = new double[]{x};
+            assertArrayEquals(defaultEstimator.gradient(point), explicitEstimator.gradient(point), 0.0);
+        }
+    }
+
+    /**
+     * Checks that a zero valued parameter is still perturbed, both with default and custom settings.
+     *
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    @Test
+    void gradient_whenZeroParameter_isStillPerturbed() throws EvaluationException {
+        final var defaultPoints = evaluatedPoints(listener -> new GradientEstimator(listener), 0.0);
+        assertNotEquals(0.0, defaultPoints.get(PERTURBED_INDEX), 0.0);
+
+        final var customPoints = evaluatedPoints(
+                listener -> new GradientEstimator(listener, CUSTOM_STEP, 0.0), 0.0);
+        assertNotEquals(0.0, customPoints.get(PERTURBED_INDEX), 0.0);
+        assertEquals(CUSTOM_STEP, customPoints.get(PERTURBED_INDEX), CUSTOM_STEP * RELATIVE_STEP_ERROR);
+
+        final var minPoints = evaluatedPoints(
+                listener -> new GradientEstimator(listener, DEFAULT_EPS, CUSTOM_STEP), 0.0);
+        assertEquals(CUSTOM_STEP, minPoints.get(PERTURBED_INDEX), CUSTOM_STEP * RELATIVE_STEP_ERROR);
+    }
+
+    /**
+     * Checks that for small non-zero parameters a minimum step is more accurate than default settings.
+     *
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    @Test
+    void gradient_whenSmallParameterAndMinStep_isMoreAccurateThanDefault() throws EvaluationException {
+        final MultiDimensionFunctionEvaluatorListener listener = GradientEstimatorTest::exp;
+        for (final var x : SMALL_VALUES) {
+            final var defaultError = expError(new GradientEstimator(listener), x);
+            final var minStepError = expError(new GradientEstimator(listener, CUSTOM_STEP, CUSTOM_STEP), x);
+
+            assertTrue(minStepError < SMALL_VALUE_ERROR, "x=" + x + " error=" + minStepError);
+            assertFalse(defaultError <= minStepError, "x=" + x + " default=" + defaultError);
+        }
+    }
+
     @Override
     public double evaluate(final double[] point) {
         final var dims = Math.min(Math.min(point.length, minimum.length), width.length);
@@ -127,5 +338,50 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
         }
 
         return gradient;
+    }
+
+    /**
+     * Evaluates exp(x) on the first coordinate of provided point.
+     *
+     * @param point point to evaluate.
+     * @return evaluated value.
+     */
+    private static double exp(final double[] point) {
+        return Math.exp(point[0]);
+    }
+
+    /**
+     * Estimates the gradient of exp(x) at provided value using provided estimator factory and returns
+     * the absolute error respect to the analytical gradient.
+     *
+     * @param estimator estimator to be used.
+     * @param x         point where gradient is estimated.
+     * @return absolute error.
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    private static double expError(final GradientEstimator estimator, final double x) throws EvaluationException {
+        final var gradient = estimator.gradient(new double[]{x});
+        return Math.abs(gradient[0] - Math.exp(x));
+    }
+
+    /**
+     * Gets the first coordinate of the points where a function is evaluated when estimating the gradient
+     * at provided value.
+     *
+     * @param factory factory creating the estimator from a recording listener.
+     * @param x       point where gradient is estimated.
+     * @return list containing the first coordinate of each evaluated point, in evaluation order.
+     * @throws EvaluationException if function cannot be evaluated.
+     */
+    private static List<Double> evaluatedPoints(
+            final Function<MultiDimensionFunctionEvaluatorListener, GradientEstimator> factory,
+            final double x) throws EvaluationException {
+        final var points = new ArrayList<Double>();
+        final MultiDimensionFunctionEvaluatorListener recorder = point -> {
+            points.add(point[0]);
+            return exp(point);
+        };
+        factory.apply(recorder).gradient(new double[]{x});
+        return points;
     }
 }

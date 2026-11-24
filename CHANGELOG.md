@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-11-24
+
+### Added
+
+- Configurable `relativeStep` (default `EPS`, must be > 0) and `minStep` (default `0.0`, must be >= 0) for
+  `JacobianEstimator`, `GradientEstimator`, `SymmetricGradientEstimator`, `SavitzkyGolayGradientEstimator`,
+  `DerivativeEstimator`, `SymmetricDerivativeEstimator` and `SavitzkyGolayDerivativeEstimator`, with new
+  `(listener, relativeStep, minStep)` constructors; defaults keep the previous behavior (#34).
+- Added an Antora documentation page on numerical derivatives, gradients and Jacobians.
+
 ## [1.6.1] - 2026-11-14
 
 ### Changed
@@ -106,7 +116,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - Curve/surface fitting (Levenberg-Marquardt and linear/SVD-based fitters).
   - Signal processing utilities: `KalmanFilter`, 1D convolution, and measurement noise covariance estimation.
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.1...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.7.0...HEAD
+[1.7.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.1...1.7.0
 [1.6.1]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/albertoirurueta/irurueta-numerical/compare/1.4.0...1.5.0

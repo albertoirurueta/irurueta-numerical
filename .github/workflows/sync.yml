@@ -34,9 +34,34 @@ jobs:
             exit 1
           fi
 
+          # Default next development version: the release's minor bumped (1.6.0 -> 1.7.0-SNAPSHOT).
           NEXT_MINOR=$((MINOR + 1))
           NEXT_SNAPSHOT="${MAJOR}.${NEXT_MINOR}.0-SNAPSHOT"
-          SYNC_BRANCH="sync_${MAJOR}.${NEXT_MINOR}.0"
+
+          # A patch release (e.g. 1.6.1) is cut while develop is already on the next minor's snapshot
+          # (1.7.0-SNAPSHOT) or later. Never move develop backwards or sideways: keep its own snapshot when
+          # it is at or beyond the computed default.
+          git fetch --quiet origin develop
+          DEVELOP_VERSION="$(git show origin/develop:pom.xml | python3 -c '
+          import re, sys
+          text = sys.stdin.read()
+          parent = re.search(r"<parent>.*?</parent>", text, flags=re.DOTALL)
+          if parent:
+              text = text[:parent.start()] + text[parent.end():]
+          m = re.search(r"<version>([^<]*)</version>", text)
+          print(m.group(1) if m else "")
+          ')"
+          DEVELOP_BASE="${DEVELOP_VERSION%-SNAPSHOT}"
+          NEXT_BASE="${NEXT_SNAPSHOT%-SNAPSHOT}"
+          if [ -n "$DEVELOP_BASE" ] && \
+             [ "$(printf '%s\n%s\n' "$NEXT_BASE" "$DEVELOP_BASE" | sort -V | tail -1)" = "$DEVELOP_BASE" ]; then
+            NEXT_SNAPSHOT="${DEVELOP_BASE}-SNAPSHOT"
+          fi
+
+          # Name the sync branch after the release, not the next snapshot: several releases (1.6.0, 1.6.1, ...)
+          # can share the same next snapshot, and a snapshot-named branch from an earlier release would make
+          # every later one look already synced.
+          SYNC_BRANCH="sync_${RELEASE_VERSION}"
 
           echo "release_version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
           echo "next_snapshot=$NEXT_SNAPSHOT" >> "$GITHUB_OUTPUT"
@@ -46,12 +71,27 @@ jobs:
         id: guard
         run: |
           set -euo pipefail
-          if git ls-remote --exit-code --heads origin "${{ steps.versions.outputs.sync_branch }}" >/dev/null 2>&1; then
-            echo "::notice::${{ steps.versions.outputs.sync_branch }} already exists on origin; skipping."
+          SYNC_BRANCH="${{ steps.versions.outputs.sync_branch }}"
+          git fetch --quiet origin develop master
+          if git merge-base --is-ancestor origin/master origin/develop; then
+            echo "::notice::master is already merged into develop; nothing to sync."
             echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          if git ls-remote --exit-code --heads origin "$SYNC_BRANCH" >/dev/null 2>&1; then
+            git fetch --quiet origin "$SYNC_BRANCH"
+            if git merge-base --is-ancestor origin/master "origin/$SYNC_BRANCH"; then
+              echo "::notice::$SYNC_BRANCH already contains this release and awaits merge into develop; skipping."
+              echo "exists=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            # A leftover branch of the same name from an earlier release (the old snapshot-based naming produced
+            # sync_1.7.0 for the 1.6.0 release); don't reuse or delete it, pick a fresh name instead.
+            echo "::warning::$SYNC_BRANCH exists but predates this release; using ${SYNC_BRANCH}_${{ github.run_number }}."
+            SYNC_BRANCH="${SYNC_BRANCH}_${{ github.run_number }}"
+          fi
+          echo "sync_branch=$SYNC_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "exists=false" >> "$GITHUB_OUTPUT"
 
       - name: Configure git identity
         if: steps.guard.outputs.exists == 'false'
@@ -63,7 +103,7 @@ jobs:
         if: steps.guard.outputs.exists == 'false'
         run: |
           git fetch origin develop master
-          git checkout -b "${{ steps.versions.outputs.sync_branch }}" "origin/develop"
+          git checkout -b "${{ steps.guard.outputs.sync_branch }}" "origin/develop"
 
       - name: Merge the released branch into the sync branch
         if: steps.guard.outputs.exists == 'false'
@@ -93,7 +133,7 @@ jobs:
 
       - name: Push sync branch
         if: steps.guard.outputs.exists == 'false'
-        run: git push origin "${{ steps.versions.outputs.sync_branch }}"
+        run: git push origin "${{ steps.guard.outputs.sync_branch }}"
 
       - name: Ensure the sync label exists
         if: steps.guard.outputs.exists == 'false'
@@ -110,7 +150,7 @@ jobs:
         run: |
           gh pr create \
             --base develop \
-            --head "${{ steps.versions.outputs.sync_branch }}" \
+            --head "${{ steps.guard.outputs.sync_branch }}" \
             --title "Sync ${{ steps.versions.outputs.next_snapshot }}" \
             --body "Merges \`master\` back into \`develop\` after releasing \`${{ steps.versions.outputs.release_version }}\`, and bumps the development snapshot version to \`${{ steps.versions.outputs.next_snapshot }}\` in \`pom.xml\`, \`README.md\`, and the Antora docs." \
             --label sync

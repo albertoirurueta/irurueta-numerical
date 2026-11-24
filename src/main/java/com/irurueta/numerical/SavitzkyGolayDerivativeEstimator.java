@@ -51,6 +51,26 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
     }
 
     /**
+     * Constructor.
+     *
+     * @param listener     listener to evaluate a single dimension function.
+     * @param relativeStep relative step, which is multiplied by the absolute
+     *                     value of the evaluation point. Must be strictly
+     *                     positive.
+     * @param minStep      minimum absolute step. Must be zero or positive.
+     *                     Notice that an absolute minimum step assumes that
+     *                     parameters are scaled to order 1.
+     * @throws IllegalArgumentException if relative step is not strictly
+     *                                  positive, or minimum step is negative
+     *                                  or NaN or infinite.
+     */
+    public SavitzkyGolayDerivativeEstimator(
+            final SingleDimensionFunctionEvaluatorListener listener, final double relativeStep,
+            final double minStep) {
+        super(listener, relativeStep, minStep);
+    }
+
+    /**
      * Computes the function derivative at provided point x.
      *
      * @param x Point where derivative is estimated.
@@ -62,11 +82,7 @@ public class SavitzkyGolayDerivativeEstimator extends DerivativeEstimator {
     @SuppressWarnings("Duplicates")
     public double derivative(final double x) throws EvaluationException {
         // fit a polynomial of degree 2 by evaluating function at x-h, x and x+h
-        var h = EPS * Math.abs(x);
-        if (h == 0.0) {
-            // Trick to reduce finite-precision error
-            h = EPS;
-        }
+        final var h = computeStep(x);
 
         final var xh1 = x + h;
         final var xh2 = x - h;

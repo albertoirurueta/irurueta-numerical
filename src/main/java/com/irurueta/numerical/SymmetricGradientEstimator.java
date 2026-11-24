@@ -46,6 +46,22 @@ public class SymmetricGradientEstimator extends GradientEstimator {
     }
 
     /**
+     * Constructor.
+     *
+     * @param listener     Listener to evaluate a multidimensional function.
+     * @param relativeStep Relative step respect to the absolute value of each input parameter. Must be
+     *                     strictly greater than zero.
+     * @param minStep      Minimum step used to perturb each input parameter. Must be zero or positive.
+     * @throws IllegalArgumentException Raised if relative step is not strictly positive or if minimum step is
+     *                                  negative, NaN or infinite.
+     */
+    public SymmetricGradientEstimator(
+            final MultiDimensionFunctionEvaluatorListener listener, final double relativeStep,
+            final double minStep) {
+        super(listener, relativeStep, minStep);
+    }
+
+    /**
      * Sets estimated gradient in provided result array of a multidimensional
      * function at provided point.
      * This method is preferred respect to gradient(double[]) because result
@@ -84,11 +100,7 @@ public class SymmetricGradientEstimator extends GradientEstimator {
 
         for (var j = 0; j < n; j++) {
             temp = point[j];
-            h = EPS * Math.abs(temp);
-            if (h == 0.0) {
-                // Trick to reduce finite-precision error
-                h = EPS;
-            }
+            h = computeStep(temp);
             xh1[j] = temp + h;
             xh2[j] = temp - h;
             // because of machine precision h could be different in both cases
