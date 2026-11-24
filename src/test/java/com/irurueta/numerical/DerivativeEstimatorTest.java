@@ -119,8 +119,10 @@ class DerivativeEstimatorTest implements SingleDimensionFunctionEvaluatorListene
         assertThrows(IllegalArgumentException.class, () -> new DerivativeEstimator(this, Double.NaN, MIN_STEP));
         assertThrows(IllegalArgumentException.class, () -> new DerivativeEstimator(this, RELATIVE_STEP, -MIN_STEP));
         assertThrows(IllegalArgumentException.class, () -> new DerivativeEstimator(this, RELATIVE_STEP, Double.NaN));
-        assertThrows(IllegalArgumentException.class, () -> new DerivativeEstimator(this, Double.POSITIVE_INFINITY, MIN_STEP));
-        assertThrows(IllegalArgumentException.class, () -> new DerivativeEstimator(this, RELATIVE_STEP, Double.POSITIVE_INFINITY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new DerivativeEstimator(this, Double.POSITIVE_INFINITY, MIN_STEP));
+        assertThrows(IllegalArgumentException.class,
+                () -> new DerivativeEstimator(this, RELATIVE_STEP, Double.POSITIVE_INFINITY));
     }
 
     /**

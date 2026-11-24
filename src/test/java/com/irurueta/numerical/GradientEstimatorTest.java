@@ -178,7 +178,8 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
     void constructor_whenInvalidMinStep_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, -CUSTOM_STEP));
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, Double.NaN));
-        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, Double.POSITIVE_INFINITY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GradientEstimator(this, CUSTOM_STEP, Double.POSITIVE_INFINITY));
     }
 
     /**
