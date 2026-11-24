@@ -57,7 +57,7 @@ public abstract class RobustEstimator<T> {
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float progressDelta;
+    protected volatile float progressDelta;
 
     /**
      * Constructor.

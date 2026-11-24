@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SpotBugs exclude filter. SpotBugs is report-only in this project (see CLAUDE.md, "SpotBugs baseline"). -->
+<FindBugsFilter>
+    <!-- Validating constructors throw by design; making every class final would be a breaking API change. -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <!-- Arrays and matrices are returned/shared on purpose for performance and are part of the public API contract. -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!-- Numerical Recipes exact comparisons of values copied from one another or deliberate "no progress" tests. -->
+    <Match>
+        <Class name="com.irurueta.numerical.optimization.BrentSingleOptimizer"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+    <Match>
+        <Class name="com.irurueta.numerical.optimization.DerivativeBrentSingleOptimizer"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+    <Match>
+        <Class name="com.irurueta.numerical.roots.BrentSingleRootEstimator"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+    <Match>
+        <Class name="com.irurueta.numerical.roots.SafeNewtonRaphsonSingleRootEstimator"/>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+    </Match>
+
+    <!-- Listeners must never abort the robust search: a failed subset simply yields no solution. -->
+    <Match>
+        <Or>
+            <Class name="~com\.irurueta\.numerical\.polynomials\.estimators\.(LMedS|MSAC|PROMedS|PROSAC|RANSAC)PolynomialRobustEstimator(\$.*)?"/>
+        </Or>
+        <Bug pattern="REC_CATCH_EXCEPTION,DE_MIGHT_IGNORE"/>
+    </Match>
+
+    <!-- Any optimization failure falls back to the coarse solution. -->
+    <Match>
+        <Class name="com.irurueta.numerical.AccurateMaximumLikelihoodEstimator"/>
+        <Bug pattern="REC_CATCH_EXCEPTION,DE_MIGHT_IGNORE"/>
+    </Match>
+</FindBugsFilter>
