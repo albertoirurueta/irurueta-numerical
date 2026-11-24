@@ -24,6 +24,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.ExponentialMatrixEstimator;
 import com.irurueta.statistics.UniformRandomizer;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +33,28 @@ class SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest {
     private static final double MIN_VALUE = -10.0;
 
     private static final double MAX_VALUE = 10.0;
+
+    /**
+     * Fixed seed used to make randomized exponential integration tests deterministic.
+     */
+    private static final long SEED = 3_141_592_653L;
+
+    /**
+     * Number of randomized trials executed by exponential integration tests.
+     */
+    private static final int TIMES = 10;
+
+    /**
+     * Minimum length of the integration interval used in exponential integration tests.
+     */
+    private static final double MIN_INTERVAL = 0.5;
+
+    /**
+     * Minimum absolute value of sin(b) - sin(a) and cos(b) - cos(a) in exponential integration tests. The
+     * integrator uses a relative convergence criterion based on the smallest absolute element of the result, which
+     * cannot be met when any element of the expected integral is close to zero.
+     */
+    private static final double MIN_ABS_DIFF = 0.1;
 
     private static final double ABSOLUTE_ERROR_EXPONENTIAL = 1e-3;
 
@@ -42,9 +65,7 @@ class SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest {
         // for single dimension functions, integral of f(t) = e^(a*t) is f(t) = 1/a*e^(a*t)
         // Consequently, for matrix function f(t) = e^(A*t) where A is a matrix, should be:
         // f(t) = A^-1 * e^(A*t)
-        final var randomizer = new UniformRandomizer();
-        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer(new Random(SEED));
 
         // for matrix A = [0    1]
         //                [-1   0]
@@ -94,22 +115,28 @@ class SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest {
 
         // F(b) - F(a) = [sin(b) - sin(a)       -cos(b) + cos(a)]
         //               [cos(b) - cos(a)        sin(b) - sin(a)]
-        final var expectedResult = new Matrix(2, 2);
-        final var sinDiff = Math.sin(b) - Math.sin(a);
-        final var cosDiff = Math.cos(b) - Math.cos(a);
-        expectedResult.setElementAtIndex(0, sinDiff);
-        expectedResult.setElementAtIndex(1, cosDiff);
-        expectedResult.setElementAtIndex(2, -cosDiff);
-        expectedResult.setElementAtIndex(3, sinDiff);
+        for (var t = 0; t < TIMES; t++) {
+            final var interval = drawInterval(randomizer);
+            final var a = interval[0];
+            final var b = interval[1];
 
-        final var integrator = new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
-                ABSOLUTE_ERROR_EXPONENTIAL);
+            final var expectedResult = new Matrix(2, 2);
+            final var sinDiff = Math.sin(b) - Math.sin(a);
+            final var cosDiff = Math.cos(b) - Math.cos(a);
+            expectedResult.setElementAtIndex(0, sinDiff);
+            expectedResult.setElementAtIndex(1, cosDiff);
+            expectedResult.setElementAtIndex(2, -cosDiff);
+            expectedResult.setElementAtIndex(3, sinDiff);
 
-        final var integrationResult = new Matrix(2, 2);
-        integrator.integrate(integrationResult);
+            final var integrator = new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
+                    ABSOLUTE_ERROR_EXPONENTIAL);
 
-        // check
-        assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_EXPONENTIAL));
+            final var integrationResult = new Matrix(2, 2);
+            integrator.integrate(integrationResult);
+
+            // check
+            assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_EXPONENTIAL));
+        }
     }
 
     @Test
@@ -117,9 +144,7 @@ class SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest {
         // for single dimension functions, integral of f(t) = e^(a*t) is f(t) = 1/a*e^(a*t)
         // Consequently, for matrix function f(t) = e^(A*t) where A is a matrix, should be:
         // f(t) = A^-1 * e^(A*t)
-        final var randomizer = new UniformRandomizer();
-        final var a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-        final var b = randomizer.nextDouble(a, MAX_VALUE);
+        final var randomizer = new UniformRandomizer(new Random(SEED));
 
         // for matrix A = [0    1]
         //                [-1   0]
@@ -180,22 +205,28 @@ class SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest {
 
         // F(b) - F(a) = [sin(b) - sin(a)       -cos(b) + cos(a)]
         //               [cos(b) - cos(a)        sin(b) - sin(a)]
-        final var expectedResult = new Matrix(2, 2);
-        final var sinDiff = Math.sin(b) - Math.sin(a);
-        final var cosDiff = Math.cos(b) - Math.cos(a);
-        expectedResult.setElementAtIndex(0, sinDiff);
-        expectedResult.setElementAtIndex(1, cosDiff);
-        expectedResult.setElementAtIndex(2, -cosDiff);
-        expectedResult.setElementAtIndex(3, sinDiff);
+        for (var t = 0; t < TIMES; t++) {
+            final var interval = drawInterval(randomizer);
+            final var a = interval[0];
+            final var b = interval[1];
 
-        final var integrator = new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
-                ABSOLUTE_ERROR_EXPONENTIAL);
+            final var expectedResult = new Matrix(2, 2);
+            final var sinDiff = Math.sin(b) - Math.sin(a);
+            final var cosDiff = Math.cos(b) - Math.cos(a);
+            expectedResult.setElementAtIndex(0, sinDiff);
+            expectedResult.setElementAtIndex(1, cosDiff);
+            expectedResult.setElementAtIndex(2, -cosDiff);
+            expectedResult.setElementAtIndex(3, sinDiff);
 
-        final var integrationResult = new Matrix(2, 2);
-        integrator.integrate(integrationResult);
+            final var integrator = new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(a, b, listener,
+                    ABSOLUTE_ERROR_EXPONENTIAL);
 
-        // check
-        assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_EXPONENTIAL));
+            final var integrationResult = new Matrix(2, 2);
+            integrator.integrate(integrationResult);
+
+            // check
+            assertTrue(expectedResult.equals(integrationResult, ABSOLUTE_ERROR_EXPONENTIAL));
+        }
     }
 
     @Test
@@ -278,5 +309,23 @@ class SimpsonUpperSquareRootMidPointQuadratureMatrixIntegratorTest {
 
         final var integrator = new SimpsonUpperSquareRootMidPointQuadratureMatrixIntegrator(0.0, 1.0, listener);
         assertEquals(QuadratureType.UPPER_SQUARE_ROOT_MID_POINT, integrator.getQuadratureType());
+    }
+
+    /**
+     * Draws an integration interval [a, b], at least {@link #MIN_INTERVAL} long, where neither sin(b) - sin(a)
+     * nor cos(b) - cos(a) is close to zero.
+     *
+     * @param randomizer randomizer.
+     * @return array containing a and b.
+     */
+    private static double[] drawInterval(final UniformRandomizer randomizer) {
+        double a;
+        double b;
+        do {
+            a = randomizer.nextDouble(MIN_VALUE, MAX_VALUE - MIN_INTERVAL);
+            b = randomizer.nextDouble(a + MIN_INTERVAL, MAX_VALUE);
+        } while (Math.abs(Math.sin(b) - Math.sin(a)) < MIN_ABS_DIFF
+                || Math.abs(Math.cos(b) - Math.cos(a)) < MIN_ABS_DIFF);
+        return new double[]{a, b};
     }
 }
