@@ -92,6 +92,15 @@ at 0): the total drops from 680 to 602 (re-measured 2026-11-24, `src/main` only)
 follow-up PRs: Indentation 203, HiddenField 113, MagicNumber 101, JavadocStyle 87, RedundantModifier 67, ThrowsCount 14,
 ParameterAssignment 9, VisibilityModifier 4, ParameterNumber 3, MultipleStringLiterals 1.
 
+### PMD baseline
+
+`mvn pmd:pmd` (default rules, no custom ruleset, report-only: no `failOnViolation` gate and no `<build>` binding) needs
+JDK 21: set `JAVA_HOME` to a JDK 21 (on macOS: `export JAVA_HOME=$(/usr/libexec/java_home -v 21)`). Measured on
+2026-11-24 at version 1.8.0-SNAPSHOT (`src/main` only): 35 violations before the fixes of issue #40 (UselessParentheses
+23, EmptyCatchBlock 11, UnnecessaryModifier 1), 0 after. Convention: intentionally empty catch blocks name the parameter
+`ignored` (PMD's default `allowExceptionNameRegex` is `^(ignored|expected)$`) and keep an explanatory comment; no
+suppressions are used.
+
 ## Architecture
 
 ### Package map (`com.irurueta.numerical.*`)

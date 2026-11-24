@@ -333,7 +333,7 @@ public class PROMedSPolynomialRobustEstimator extends PolynomialRobustEstimator 
 
                             final var polynomial = polynomialEstimator.estimate();
                             solutions.add(polynomial);
-                        } catch (final Exception e) {
+                        } catch (final Exception ignored) {
                             // if anything fails, no solution is added
                         }
                     }

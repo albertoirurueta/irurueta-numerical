@@ -369,7 +369,7 @@ public class LMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof LMedSRobustEstimatorListener);
+        return listener instanceof LMedSRobustEstimatorListener;
     }
 
     /**

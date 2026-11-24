@@ -574,7 +574,7 @@ public class KalmanFilter implements Serializable {
      */
     public void setControlMatrix(final Matrix controlMatrix) {
         if (cp > 0) {
-            if (controlMatrix == null || (controlMatrix.getRows() != dp || controlMatrix.getColumns() != cp)) {
+            if (controlMatrix == null || controlMatrix.getRows() != dp || controlMatrix.getColumns() != cp) {
                 throw new IllegalArgumentException();
             }
         } else {

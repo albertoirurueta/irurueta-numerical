@@ -240,7 +240,7 @@ public class RANSACPolynomialRobustEstimator extends PolynomialRobustEstimator {
 
                             final var polynomial = polynomialEstimator.estimate();
                             solutions.add(polynomial);
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                             // if anything fails, no solution is added
                         }
                     }

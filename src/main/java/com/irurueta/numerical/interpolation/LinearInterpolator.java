@@ -41,7 +41,7 @@ public class LinearInterpolator extends BaseInterpolator {
         if (xx[j] == xx[j + 1]) {
             return yy[j];
         } else {
-            return yy[j] + ((x - xx[j]) / (xx[j + 1] - xx[j])) * (yy[j + 1] - yy[j]);
+            return yy[j] + (x - xx[j]) / (xx[j + 1] - xx[j]) * (yy[j + 1] - yy[j]);
         }
     }
 }
