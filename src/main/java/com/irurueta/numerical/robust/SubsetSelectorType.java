@@ -20,5 +20,8 @@ package com.irurueta.numerical.robust;
  * samples for robust estimators.
  */
 public enum SubsetSelectorType {
+    /**
+     * Selects random subsets using a fast random algorithm.
+     */
     FAST_RANDOM_SUBSET_SELECTOR
 }

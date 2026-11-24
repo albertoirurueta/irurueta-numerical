@@ -19,7 +19,6 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
-
 import java.util.Arrays;
 import java.util.List;
 

@@ -276,6 +276,16 @@
                     <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
+
+            <!-- makes CLI runs (mvn checkstyle:checkstyle) use the project's rules, same as the site report -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
    

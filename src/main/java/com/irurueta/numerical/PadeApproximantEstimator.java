@@ -155,7 +155,7 @@ public class PadeApproximantEstimator {
 
         try {
             // Based on Numerical Recipes section 5.12 Padé Approximants page 245.
-            final var nPlusOne = n +1;
+            final var nPlusOne = n + 1;
             if (numeratorResult.length != nPlusOne || denominatorResult.length != nPlusOne) {
                 throw new IllegalArgumentException("Wrong numerator or denominator array length");
             }

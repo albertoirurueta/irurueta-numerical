@@ -21,7 +21,6 @@ import com.irurueta.algebra.Utils;
 import com.irurueta.numerical.LockedException;
 import com.irurueta.numerical.NotReadyException;
 import com.irurueta.numerical.polynomials.Polynomial;
-
 import java.util.List;
 
 /**

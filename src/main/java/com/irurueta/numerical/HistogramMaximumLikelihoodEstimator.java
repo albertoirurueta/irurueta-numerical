@@ -16,7 +16,6 @@
 package com.irurueta.numerical;
 
 import com.irurueta.algebra.ArrayUtils;
-
 import java.util.Arrays;
 
 /**

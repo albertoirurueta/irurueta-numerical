@@ -36,6 +36,11 @@ import com.irurueta.numerical.EvaluationException;
  */
 public class MidPointMatrixQuadrature extends MatrixQuadrature {
     /**
+     * Listener to evaluate single dimension matrix functions at required points.
+     */
+    protected final MatrixSingleDimensionFunctionEvaluatorListener listener;
+
+    /**
      * Lower limit of integration.
      */
     private final double a;
@@ -59,11 +64,6 @@ public class MidPointMatrixQuadrature extends MatrixQuadrature {
      * Current value of integral.
      */
     private final Matrix s;
-
-    /**
-     * Listener to evaluate single dimension matrix functions at required points.
-     */
-    protected final MatrixSingleDimensionFunctionEvaluatorListener listener;
 
     /**
      * Temporary value storing evaluation at mid-point.
