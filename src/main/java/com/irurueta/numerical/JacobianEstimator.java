@@ -23,13 +23,31 @@ import com.irurueta.algebra.WrongSizeException;
  * function.
  * This class evaluates a function at very close locations of a given input
  * point in order to determine the Jacobian at such point.
+ * <p>
+ * For each input parameter {@code x}, the finite difference step is computed as
+ * {@code h = max(relativeStep * |x|, minStep)}. If the resulting step is exactly zero
+ * (e.g. when {@code x == 0.0} and {@code minStep == 0.0}), {@code relativeStep} is used as
+ * step. The step is finally adjusted to the value that is exactly representable
+ * as the difference between the perturbed and the original parameter.
+ * <p>
+ * By default {@code relativeStep} is {@link #EPS} and {@code minStep} is {@code 0.0},
+ * which preserves the behaviour of a purely relative step.
+ * Setting an absolute minimum step assumes that parameters are scaled to order 1,
+ * since the same absolute step is used regardless of the magnitude of the parameter's
+ * natural scale.
  */
 public class JacobianEstimator {
 
     /**
      * Constant considered as machine precision.
+     * This is the default relative step used to estimate the Jacobian.
      */
     public static final double EPS = 1e-8;
+
+    /**
+     * Default minimum absolute step.
+     */
+    private static final double DEFAULT_MIN_STEP = 0.0;
 
     /**
      * Listener to evaluate a multivariate function.
@@ -37,17 +55,97 @@ public class JacobianEstimator {
     private final MultiVariateFunctionEvaluatorListener listener;
 
     /**
+     * Relative step respect to the magnitude of each parameter.
+     */
+    private double relativeStep = EPS;
+
+    /**
+     * Minimum absolute step.
+     */
+    private double minStep = DEFAULT_MIN_STEP;
+
+    /**
      * Internal array to hold input parameter's values.
      */
     private double[] xh;
 
     /**
+     * Internal array to hold function values at the evaluated point.
+     */
+    private double[] fold;
+
+    /**
+     * Internal array to hold function values at the perturbed point.
+     */
+    private double[] fh;
+
+    /**
      * Constructor.
+     * Uses {@link #EPS} as relative step and {@code 0.0} as minimum step.
      *
      * @param listener listener to evaluate a multivariate function.
      */
     public JacobianEstimator(final MultiVariateFunctionEvaluatorListener listener) {
+        this(listener, EPS, DEFAULT_MIN_STEP);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param listener     listener to evaluate a multivariate function.
+     * @param relativeStep relative step respect to the magnitude of each parameter. Must be
+     *                     strictly positive.
+     * @param minStep      minimum absolute step. Must be positive or zero.
+     * @throws IllegalArgumentException if {@code relativeStep} is not strictly positive (or is
+     *                                  NaN), or {@code minStep} is negative (or is NaN).
+     */
+    public JacobianEstimator(
+            final MultiVariateFunctionEvaluatorListener listener, final double relativeStep, final double minStep) {
         this.listener = listener;
+        this.relativeStep = checkRelativeStep(relativeStep);
+        this.minStep = checkMinStep(minStep);
+    }
+
+    /**
+     * Gets relative step respect to the magnitude of each parameter.
+     * Default value is {@link #EPS}.
+     *
+     * @return relative step.
+     */
+    public double getRelativeStep() {
+        return relativeStep;
+    }
+
+    /**
+     * Sets relative step respect to the magnitude of each parameter.
+     *
+     * @param relativeStep relative step. Must be strictly positive.
+     * @throws IllegalArgumentException if provided value is not strictly positive or is NaN.
+     */
+    public void setRelativeStep(final double relativeStep) {
+        this.relativeStep = checkRelativeStep(relativeStep);
+    }
+
+    /**
+     * Gets minimum absolute step.
+     * Default value is {@code 0.0}.
+     * An absolute minimum step assumes that parameters are scaled to order 1.
+     *
+     * @return minimum absolute step.
+     */
+    public double getMinStep() {
+        return minStep;
+    }
+
+    /**
+     * Sets minimum absolute step.
+     * An absolute minimum step assumes that parameters are scaled to order 1.
+     *
+     * @param minStep minimum absolute step. Must be positive or zero.
+     * @throws IllegalArgumentException if provided value is negative or NaN.
+     */
+    public void setMinStep(final double minStep) {
+        this.minStep = checkMinStep(minStep);
     }
 
     /**
@@ -72,6 +170,8 @@ public class JacobianEstimator {
      * function at provided point.
      * This method is preferred respect to jacobian(double[]) because result
      * matrix can be reused and hence is more memory efficient.
+     * The step used for each parameter {@code x} is
+     * {@code max(relativeStep * |x|, minStep)}, or {@code relativeStep} if such value is zero.
      *
      * @param point  input point.
      * @param result output matrix containing estimated jacobian. This parameter
@@ -91,8 +191,10 @@ public class JacobianEstimator {
             throw new IllegalArgumentException();
         }
 
-        final var fold = new double[numvars];
-        final var fh = new double[numvars];
+        if (fold == null || fold.length != numvars) {
+            fold = new double[numvars];
+            fh = new double[numvars];
+        }
         if (xh == null || xh.length != numdims) {
             xh = new double[numdims];
         }
@@ -103,9 +205,9 @@ public class JacobianEstimator {
         listener.evaluate(point, fold);
         for (var j = 0; j < numdims; j++) {
             temp = point[j];
-            h = EPS * Math.abs(temp);
+            h = Math.max(relativeStep * Math.abs(temp), minStep);
             if (h == 0.0) {
-                h = EPS;
+                h = relativeStep;
             }
             xh[j] = temp + h;
             h = xh[j] - temp;
@@ -115,5 +217,33 @@ public class JacobianEstimator {
                 result.setElementAt(i, j, (fh[i] - fold[i]) / h);
             }
         }
+    }
+
+    /**
+     * Validates a relative step.
+     *
+     * @param relativeStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is not strictly positive or is NaN.
+     */
+    private static double checkRelativeStep(final double relativeStep) {
+        if (!(relativeStep > 0.0)) {
+            throw new IllegalArgumentException("relativeStep must be strictly positive");
+        }
+        return relativeStep;
+    }
+
+    /**
+     * Validates a minimum step.
+     *
+     * @param minStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is negative or NaN.
+     */
+    private static double checkMinStep(final double minStep) {
+        if (!(minStep >= 0.0)) {
+            throw new IllegalArgumentException("minStep must be positive or zero");
+        }
+        return minStep;
     }
 }
