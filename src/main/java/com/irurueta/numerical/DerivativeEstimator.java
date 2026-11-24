@@ -74,14 +74,14 @@ public class DerivativeEstimator {
      *                     parameters are scaled to order 1.
      * @throws IllegalArgumentException if relative step is not strictly
      *                                  positive, or minimum step is negative
-     *                                  or NaN
+     *                                  or NaN or infinite
      */
     public DerivativeEstimator(
             final SingleDimensionFunctionEvaluatorListener listener, final double relativeStep,
             final double minStep) {
         this.listener = listener;
-        setRelativeStep(relativeStep);
-        setMinStep(minStep);
+        this.relativeStep = checkRelativeStep(relativeStep);
+        this.minStep = checkMinStep(minStep);
     }
 
     /**
@@ -100,13 +100,10 @@ public class DerivativeEstimator {
      *
      * @param relativeStep relative step. Must be strictly positive.
      * @throws IllegalArgumentException if provided value is not strictly
-     *                                  positive or is NaN
+     *                                  positive, or is NaN or infinite
      */
     public void setRelativeStep(final double relativeStep) {
-        if (!(relativeStep > 0.0)) {
-            throw new IllegalArgumentException("relative step must be strictly positive");
-        }
-        this.relativeStep = relativeStep;
+        this.relativeStep = checkRelativeStep(relativeStep);
     }
 
     /**
@@ -124,13 +121,10 @@ public class DerivativeEstimator {
      * to order 1.
      *
      * @param minStep minimum step. Must be zero or positive.
-     * @throws IllegalArgumentException if provided value is negative or NaN
+     * @throws IllegalArgumentException if provided value is negative, NaN or infinite
      */
     public void setMinStep(final double minStep) {
-        if (!(minStep >= 0.0)) {
-            throw new IllegalArgumentException("minimum step must be zero or positive");
-        }
-        this.minStep = minStep;
+        this.minStep = checkMinStep(minStep);
     }
 
     /**
@@ -163,5 +157,33 @@ public class DerivativeEstimator {
         final var h = Math.max(relativeStep * Math.abs(x), minStep);
         // Trick to reduce finite-precision error
         return h == 0.0 ? relativeStep : h;
+    }
+
+    /**
+     * Validates a relative step.
+     *
+     * @param relativeStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is not strictly positive, or is NaN or infinite.
+     */
+    private static double checkRelativeStep(final double relativeStep) {
+        if (!(relativeStep > 0.0) || Double.isInfinite(relativeStep)) {
+            throw new IllegalArgumentException("relative step must be strictly positive and finite");
+        }
+        return relativeStep;
+    }
+
+    /**
+     * Validates a minimum step.
+     *
+     * @param minStep value to be checked.
+     * @return provided value if valid.
+     * @throws IllegalArgumentException if value is negative, or is NaN or infinite.
+     */
+    private static double checkMinStep(final double minStep) {
+        if (!(minStep >= 0.0) || Double.isInfinite(minStep)) {
+            throw new IllegalArgumentException("minimum step must be zero or positive and finite");
+        }
+        return minStep;
     }
 }

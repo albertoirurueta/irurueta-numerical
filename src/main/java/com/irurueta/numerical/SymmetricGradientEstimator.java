@@ -53,7 +53,7 @@ public class SymmetricGradientEstimator extends GradientEstimator {
      *                     strictly greater than zero.
      * @param minStep      Minimum step used to perturb each input parameter. Must be zero or positive.
      * @throws IllegalArgumentException Raised if relative step is not strictly positive or if minimum step is
-     *                                  negative or NaN.
+     *                                  negative, NaN or infinite.
      */
     public SymmetricGradientEstimator(
             final MultiDimensionFunctionEvaluatorListener listener, final double relativeStep,

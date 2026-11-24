@@ -46,7 +46,7 @@ public class SymmetricDerivativeEstimator extends DerivativeEstimator {
      *                     parameters are scaled to order 1.
      * @throws IllegalArgumentException if relative step is not strictly
      *                                  positive, or minimum step is negative
-     *                                  or NaN.
+     *                                  or NaN or infinite.
      */
     public SymmetricDerivativeEstimator(
             final SingleDimensionFunctionEvaluatorListener listener, final double relativeStep,

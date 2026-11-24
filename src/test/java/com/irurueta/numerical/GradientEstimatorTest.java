@@ -168,6 +168,7 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, 0.0, 0.0));
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, -CUSTOM_STEP, 0.0));
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, Double.NaN, 0.0));
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, Double.POSITIVE_INFINITY, 0.0));
     }
 
     /**
@@ -177,6 +178,7 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
     void constructor_whenInvalidMinStep_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, -CUSTOM_STEP));
         assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, Double.NaN));
+        assertThrows(IllegalArgumentException.class, () -> new GradientEstimator(this, CUSTOM_STEP, Double.POSITIVE_INFINITY));
     }
 
     /**
@@ -192,6 +194,7 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
         assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(0.0));
         assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(-CUSTOM_STEP));
         assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(Double.NaN));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setRelativeStep(Double.POSITIVE_INFINITY));
         assertEquals(CUSTOM_STEP, estimator.getRelativeStep(), 0.0);
     }
 
@@ -209,6 +212,7 @@ class GradientEstimatorTest implements MultiDimensionFunctionEvaluatorListener {
 
         assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(-CUSTOM_STEP));
         assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(Double.NaN));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMinStep(Double.POSITIVE_INFINITY));
         assertEquals(0.0, estimator.getMinStep(), 0.0);
     }
 

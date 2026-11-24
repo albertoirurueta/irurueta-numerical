@@ -35,6 +35,11 @@ import com.irurueta.algebra.WrongSizeException;
  * Setting an absolute minimum step assumes that parameters are scaled to order 1,
  * since the same absolute step is used regardless of the magnitude of the parameter's
  * natural scale.
+ * <p>
+ * Instances of this class reuse internal work arrays between calls to avoid
+ * allocations, hence they are not thread-safe nor re-entrant: a single instance
+ * must not be used concurrently from several threads, nor from within the
+ * evaluated function itself.
  */
 public class JacobianEstimator {
 
@@ -97,7 +102,7 @@ public class JacobianEstimator {
      *                     strictly positive.
      * @param minStep      minimum absolute step. Must be positive or zero.
      * @throws IllegalArgumentException if {@code relativeStep} is not strictly positive (or is
-     *                                  NaN), or {@code minStep} is negative (or is NaN).
+     *                                  NaN or infinite), or {@code minStep} is negative (or is NaN or infinite).
      */
     public JacobianEstimator(
             final MultiVariateFunctionEvaluatorListener listener, final double relativeStep, final double minStep) {
@@ -120,7 +125,7 @@ public class JacobianEstimator {
      * Sets relative step respect to the magnitude of each parameter.
      *
      * @param relativeStep relative step. Must be strictly positive.
-     * @throws IllegalArgumentException if provided value is not strictly positive or is NaN.
+     * @throws IllegalArgumentException if provided value is not strictly positive, or is NaN or infinite.
      */
     public void setRelativeStep(final double relativeStep) {
         this.relativeStep = checkRelativeStep(relativeStep);
@@ -142,7 +147,7 @@ public class JacobianEstimator {
      * An absolute minimum step assumes that parameters are scaled to order 1.
      *
      * @param minStep minimum absolute step. Must be positive or zero.
-     * @throws IllegalArgumentException if provided value is negative or NaN.
+     * @throws IllegalArgumentException if provided value is negative, NaN or infinite.
      */
     public void setMinStep(final double minStep) {
         this.minStep = checkMinStep(minStep);
@@ -205,10 +210,7 @@ public class JacobianEstimator {
         listener.evaluate(point, fold);
         for (var j = 0; j < numdims; j++) {
             temp = point[j];
-            h = Math.max(relativeStep * Math.abs(temp), minStep);
-            if (h == 0.0) {
-                h = relativeStep;
-            }
+            h = computeStep(temp);
             xh[j] = temp + h;
             h = xh[j] - temp;
             listener.evaluate(xh, fh);
@@ -220,15 +222,30 @@ public class JacobianEstimator {
     }
 
     /**
+     * Computes the step used to perturb an input parameter.
+     * The step is {@code max(relativeStep * |x|, minStep)}, and if such value is zero, then
+     * {@code relativeStep} is used instead.
+     * Notice that the actually applied step might differ slightly because of finite machine precision.
+     *
+     * @param x value of the input parameter to be perturbed.
+     * @return step to be used.
+     */
+    protected double computeStep(final double x) {
+        final var h = Math.max(relativeStep * Math.abs(x), minStep);
+        // Trick to reduce finite-precision error
+        return h == 0.0 ? relativeStep : h;
+    }
+
+    /**
      * Validates a relative step.
      *
      * @param relativeStep value to be checked.
      * @return provided value if valid.
-     * @throws IllegalArgumentException if value is not strictly positive or is NaN.
+     * @throws IllegalArgumentException if value is not strictly positive, or is NaN or infinite.
      */
     private static double checkRelativeStep(final double relativeStep) {
-        if (!(relativeStep > 0.0)) {
-            throw new IllegalArgumentException("relativeStep must be strictly positive");
+        if (!(relativeStep > 0.0) || Double.isInfinite(relativeStep)) {
+            throw new IllegalArgumentException("relativeStep must be strictly positive and finite");
         }
         return relativeStep;
     }
@@ -238,11 +255,11 @@ public class JacobianEstimator {
      *
      * @param minStep value to be checked.
      * @return provided value if valid.
-     * @throws IllegalArgumentException if value is negative or NaN.
+     * @throws IllegalArgumentException if value is negative, NaN or infinite.
      */
     private static double checkMinStep(final double minStep) {
-        if (!(minStep >= 0.0)) {
-            throw new IllegalArgumentException("minStep must be positive or zero");
+        if (!(minStep >= 0.0) || Double.isInfinite(minStep)) {
+            throw new IllegalArgumentException("minStep must be positive or zero and finite");
         }
         return minStep;
     }

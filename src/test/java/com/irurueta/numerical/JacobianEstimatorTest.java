@@ -196,7 +196,7 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
      * @param relativeStep invalid relative step.
      */
     @ParameterizedTest
-    @ValueSource(doubles = {0.0, -1e-8, Double.NaN})
+    @ValueSource(doubles = {0.0, -1e-8, Double.NaN, Double.POSITIVE_INFINITY})
     void constructor_whenInvalidRelativeStep_throwsIllegalArgumentException(final double relativeStep) {
         assertThrows(IllegalArgumentException.class, () -> new JacobianEstimator(this, relativeStep, 0.0));
     }
@@ -207,7 +207,7 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
      * @param minStep invalid minimum step.
      */
     @ParameterizedTest
-    @ValueSource(doubles = {-1e-8, Double.NaN})
+    @ValueSource(doubles = {-1e-8, Double.NaN, Double.POSITIVE_INFINITY})
     void constructor_whenInvalidMinStep_throwsIllegalArgumentException(final double minStep) {
         assertThrows(IllegalArgumentException.class, () -> new JacobianEstimator(this, CUSTOM_STEP, minStep));
     }
@@ -234,7 +234,7 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
      * @param relativeStep invalid relative step.
      */
     @ParameterizedTest
-    @ValueSource(doubles = {0.0, -1e-8, Double.NaN})
+    @ValueSource(doubles = {0.0, -1e-8, Double.NaN, Double.POSITIVE_INFINITY})
     void setRelativeStep_whenInvalid_throwsIllegalArgumentException(final double relativeStep) {
         final var estimator = new JacobianEstimator(this);
 
@@ -248,7 +248,7 @@ class JacobianEstimatorTest implements MultiVariateFunctionEvaluatorListener {
      * @param minStep invalid minimum step.
      */
     @ParameterizedTest
-    @ValueSource(doubles = {-1e-8, Double.NaN})
+    @ValueSource(doubles = {-1e-8, Double.NaN, Double.POSITIVE_INFINITY})
     void setMinStep_whenInvalid_throwsIllegalArgumentException(final double minStep) {
         final var estimator = new JacobianEstimator(this);
 
