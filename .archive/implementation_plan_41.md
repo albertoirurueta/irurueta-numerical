@@ -124,6 +124,14 @@ Under `src/main/java/com/irurueta/numerical/`:
   - [x] Task 6.3. Check JaCoCo coverage did not drop below the 80% bar (`iru-java-coverage`), and run
     `mvn clean compile checkstyle:checkstyle pmd:pmd` to confirm no new Checkstyle/PMD violations were introduced.
 
+> **Verification note (added after implementation, PR #47 review):** Tasks 2.2 and 6.1–6.3 were not run through the
+> `iru-gate-runner` agent or `iru-java-coverage`. Maven was run directly instead: `mvn clean compile spotbugs:spotbugs`
+> (0 findings), the full `mvn clean jacoco:prepare-agent install jacoco:report javadoc:jar source:jar -P '!extras'`
+> (1186 tests, 0 failures, 93.2% overall line coverage from `jacoco.csv`, no per-class coverage run), Checkstyle (601
+> vs. the documented 602) and PMD (0). For Task 3.3 no new tests were added; the existing tests were relied on.
+> Follow-up review changes (single-threaded estimator contract documented instead of `volatile progressDelta`; filter
+> matches scoped to methods) were verified the same way.
+
 ### Group 3 (Parallelizable: yes — single task)
 
 - [x] Task 7. Record the SpotBugs baseline in `CLAUDE.md`

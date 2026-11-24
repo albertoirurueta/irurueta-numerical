@@ -109,8 +109,11 @@ suppressions are used.
 DE_MIGHT_IGNORE 5, FE_FLOATING_POINT_EQUALITY 4, IM_AVERAGE_COMPUTATION_COULD_OVERFLOW 2,
 AT_STALE_THREAD_WRITE_OF_PRIMITIVE 1. Issue #41 fixed the real bug (`BaseInterpolator` uses `>>>` for the binary search
 midpoint) and excluded the rest through `spotbugs-exclude.xml` (configured on the plugin in `pom.xml`), each entry with
-a rationale comment: design-level types project-wide; the Numerical Recipes exact comparisons, the "failed subset yields
-no solution" catch blocks and `RobustEstimator`'s `AT_STALE_THREAD_WRITE_OF_PRIMITIVE` class-scoped. Robust estimators
+a rationale comment. The design-level types (`CT_CONSTRUCTOR_THROW`, `EI_EXPOSE_REP`, `EI_EXPOSE_REP2`) are excluded
+project-wide on purpose, so **new classes are not checked for these three bug types**: review constructor validation
+and array/matrix sharing by hand when adding classes. Everything else (the Numerical Recipes exact comparisons, the
+"failed subset yields no solution" catch blocks and `RobustEstimator`'s `AT_STALE_THREAD_WRITE_OF_PRIMITIVE`) is
+scoped to the reviewed class *and* method, so new occurrences elsewhere are still reported. Robust estimators
 and their listeners are single-threaded by contract (documented in their Javadoc), so no `volatile` fields are added
 for configuration state. Result: 0 unfiltered findings. No `@SuppressFBWarnings` annotations are used.
 
