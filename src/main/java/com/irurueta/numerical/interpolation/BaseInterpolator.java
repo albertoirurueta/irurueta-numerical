@@ -139,7 +139,7 @@ public abstract class BaseInterpolator {
         int jm;
         int jl;
         // True if ascending order of table, false otherwise.
-        final var ascend = (xx[n - 1] >= xx[0]);
+        final var ascend = xx[n - 1] >= xx[0];
 
         // Initialize lower and upper limits.
         jl = 0;
@@ -188,7 +188,7 @@ public abstract class BaseInterpolator {
         var inc = 1;
 
         // Ture if ascending order of table, false otherwise
-        final var ascnd = (xx[n - 1] >= xx[0]);
+        final var ascnd = xx[n - 1] >= xx[0];
         if (jl < 0 || jl > n - 1) {
             // Input guess not useful. Go immediately to bisection
             jl = 0;

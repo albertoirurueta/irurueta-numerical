@@ -483,7 +483,7 @@ public class ThirdDegreePolynomialRootsEstimator extends PolynomialRootsEstimato
             final var p = -(b / (3 * a));
 
             // print solutions
-            x1.setRealAndImaginary((s + u) + p, 0.0);
+            x1.setRealAndImaginary(s + u + p, 0.0);
             final var real = -(s + u) / 2 + p;
             x2.setReal(real);
             x3.setReal(real);

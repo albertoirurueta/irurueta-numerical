@@ -96,10 +96,10 @@ public class ShepardInterpolator extends BaseRadialBasisFunctionInterpolator {
                 if ((r = rad(pt, pi)) == 0.0) {
                     return vals[i];
                 }
-                sum += (w = Math.pow(r, pneg));
+                sum += w = Math.pow(r, pneg);
                 sumw += w * vals[i];
             }
-        } catch (final WrongSizeException ignore) {
+        } catch (final WrongSizeException ignored) {
             // never happens
         }
 

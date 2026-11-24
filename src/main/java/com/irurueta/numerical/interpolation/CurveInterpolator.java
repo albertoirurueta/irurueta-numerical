@@ -181,8 +181,8 @@ public class CurveInterpolator {
         final var s12 = s1 - s2;
         final var s13 = s1 - s3;
         final var s23 = s2 - s3;
-        return -(s1 * s2 / (s13 * s23 * s3)) * y[yoff + pm * 3] + (s1 * s3 / (s12 * s2 * s23)) * y[yoff + pm * 2]
-                - (s2 * s3 / (s1 * s12 * s13)) * y[yoff + pm] + (1.0 / s1 + 1.0 / s2 + 1.0 / s3) * y[yoff];
+        return -(s1 * s2 / (s13 * s23 * s3)) * y[yoff + pm * 3] + s1 * s3 / (s12 * s2 * s23) * y[yoff + pm * 2]
+                - s2 * s3 / (s1 * s12 * s13) * y[yoff + pm] + (1.0 / s1 + 1.0 / s2 + 1.0 / s3) * y[yoff];
     }
 
     /**

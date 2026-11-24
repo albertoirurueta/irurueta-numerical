@@ -145,7 +145,7 @@ public class RadialBasisFunctionInterpolator extends BaseRadialBasisFunctionInte
                 sumw += w.getElementAtIndex(i) * fval;
                 sum += fval;
             }
-        } catch (final WrongSizeException ignore) {
+        } catch (final WrongSizeException ignored) {
             // never happens
         }
 

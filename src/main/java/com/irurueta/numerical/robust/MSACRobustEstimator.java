@@ -249,7 +249,7 @@ public class MSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof MSACRobustEstimatorListener);
+        return listener instanceof MSACRobustEstimatorListener;
     }
 
     /**

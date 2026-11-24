@@ -627,7 +627,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof PROMedSRobustEstimatorListener);
+        return listener instanceof PROMedSRobustEstimatorListener;
     }
 
     /**
@@ -760,7 +760,7 @@ public class PROMedSRobustEstimator<T> extends RobustEstimator<T> {
                 // g(t) = min{n : TnPrime > t} where n is sampleSize
                 // Thus sampleSize should be incremented if currentIter > TnPrime
                 if ((currentIter > tnPrime) && (sampleSize < sampleSizeStar)) {
-                    final var TnPlus1 = (tn * (sampleSize + 1)) / (sampleSize + 1 - subsetSize);
+                    final var TnPlus1 = tn * (sampleSize + 1) / (sampleSize + 1 - subsetSize);
                     sampleSize++;
                     tnPrime += (int) Math.ceil(TnPlus1 - tn);
                     tn = TnPlus1;

@@ -246,7 +246,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                             p <= q * (a - x) || p >= q * (b - x)) {
                         //noinspection all
                         e = x >= xm ? a - x : b - x;
-                        d = CGOLD * (e);
+                        d = CGOLD * e;
                         //The above conditions determine the acceptability of
                         //the parabolic fit. Here we take the golden section 
                         //step into the larger of the two segments.
@@ -262,7 +262,7 @@ public class BrentSingleOptimizer extends BracketedSingleOptimizer {
                 } else {
                     //noinspection all
                     e = x >= xm ? a - x : b - x;
-                    d = CGOLD * (e);
+                    d = CGOLD * e;
                 }
 
                 u = Math.abs(d) >= tol1 ? x + d : x + sign(tol1, d);

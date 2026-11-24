@@ -305,7 +305,7 @@ public class RANSACRobustEstimator<T> extends RobustEstimator<T> {
         if (!super.isReady()) {
             return false;
         }
-        return (listener instanceof RANSACRobustEstimatorListener);
+        return listener instanceof RANSACRobustEstimatorListener;
     }
 
     /**

@@ -828,7 +828,7 @@ public class Convolver1D {
         }
 
         times = pos / signalLength;
-        final var reversed = (times % 2 != 0);
+        final var reversed = times % 2 != 0;
 
         pos = pos % signalLength;
         if (pos < 0) {

@@ -226,7 +226,7 @@ public class AccurateMaximumLikelihoodEstimator extends MaximumLikelihoodEstimat
             try {
                 localMinValue = internalEstimator.getMinValue();
                 localMaxValue = internalEstimator.getMaxValue();
-            } catch (final NotAvailableException ignore) {
+            } catch (final NotAvailableException ignored) {
                 // never happens
             }
 

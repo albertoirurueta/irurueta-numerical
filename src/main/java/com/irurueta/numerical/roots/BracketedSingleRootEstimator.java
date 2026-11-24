@@ -302,7 +302,7 @@ public abstract class BracketedSingleRootEstimator extends SingleRootEstimator {
     public void computeBracket() throws LockedException, NotReadyException, RootEstimationException {
         try {
             computeBracket(0.0, BRACKET_EPS);
-        } catch (final InvalidBracketRangeException ignore) {
+        } catch (final InvalidBracketRangeException ignored) {
             // never happens
         }
     }

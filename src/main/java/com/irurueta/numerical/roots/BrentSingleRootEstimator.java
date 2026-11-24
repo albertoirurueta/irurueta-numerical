@@ -223,7 +223,7 @@ public class BrentSingleRootEstimator extends BracketedSingleRootEstimator {
                 p = Math.abs(p);
                 final double min1 = 3.0 * xm * q - Math.abs(tol1 * q);
                 final double min2 = Math.abs(e * q);
-                if (2.0 * p < (Math.min(min1, min2))) {
+                if (2.0 * p < Math.min(min1, min2)) {
                     e = d;
                     d = p / q;
                 } else {
